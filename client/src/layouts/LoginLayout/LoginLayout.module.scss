@@ -1,0 +1,33 @@
+@use "assets/styles/variables";
+
+.content {
+  padding: 40px 0;
+}
+
+.icon {
+  width: 40px;
+  height: 50px;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+
+  strong {
+    margin: 14px 0 6px;
+    color: variables.$primary-dark;
+  }
+}
+
+mark {
+  font-weight: 500;
+}
+
+.conveniences {
+  gap: 40px 0;
+}
+
+.convenience {
+  border-radius: 10px;
+  padding: 20px 10px;
+}

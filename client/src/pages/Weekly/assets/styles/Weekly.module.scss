@@ -1,0 +1,95 @@
+@use "assets/styles/variables";
+@use "assets/styles/mixins";
+
+.weekly-page {
+  margin-bottom: 30px;
+
+  &__content {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    display: flex;
+  }
+
+  :global(.image-wrapper) {
+    width: 100%;
+    aspect-ratio: 1.25/1;
+  }
+}
+
+.notice-wrapper {
+  border-bottom: 1px solid variables.$border-gray;
+  padding: 20px 0;
+  img {
+    $size: 24px;
+    width: $size;
+    height: $size;
+    margin-right: 20px;
+  }
+  span {
+    font-weight: 700;
+  }
+}
+
+.day {
+  @include mixins.centerFlexBox();
+  flex: 0 0 calc(100% / 7);
+  font-weight: 700;
+  padding: 20px 0;
+  border: 1px solid variables.$gray-500;
+  border-right: 0;
+  border-radius: 0;
+  position: relative;
+
+  + .day {
+    margin-left: 0;
+  }
+
+  &:last-child {
+    border-right: 1px solid variables.$gray-500;
+  }
+
+  &.active,
+  &:not(.active):hover {
+    background-color: variables.$primary;
+    color: variables.$txt-white;
+  }
+
+  &.today {
+    &::before {
+      position: absolute;
+      content: "Hôm nay";
+      top: -45%;
+      left: 50%;
+      transform: translate(-50%, 50%);
+      width: 80px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #febd04;
+      border-radius: 100vmax;
+      color: #000;
+      font-size: 0.8em;
+      opacity: 0;
+    }
+
+    &::after {
+      position: absolute;
+      content: "";
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top: 5px solid #febd04;
+      opacity: 0;
+    }
+  }
+
+  &.today.active,
+  &.today:hover {
+    &::before,
+    &::after {
+      opacity: 1;
+    }
+  }
+}

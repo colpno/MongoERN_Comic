@@ -1,0 +1,46 @@
+@use "assets/styles/variables";
+@use "assets/styles/mixins";
+
+.chapters {
+  margin-top: calc(variables.$header-height + 60px);
+  margin-bottom: 30px;
+
+  &__header {
+    margin-bottom: 20px;
+
+    > * {
+      @include mixins.centerFlexBox();
+    }
+  }
+
+  &__general {
+    margin: 60px 0 20px;
+
+    &__box {
+      &:first-child {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+      }
+
+      &:last-child {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        height: 42px;
+
+        svg {
+          font-size: 24px;
+        }
+      }
+    }
+  }
+
+  &__general__total {
+    font-weight: 500;
+  }
+
+  &__general__total__number {
+    font-weight: 700;
+  }
+}

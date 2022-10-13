@@ -1,0 +1,49 @@
+@use "assets/styles/variables";
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0 40px;
+  color: #898989;
+  font-weight: 700;
+  font-size: 0.9rem;
+
+  * {
+    user-select: none;
+  }
+}
+
+.page {
+  height: 32px;
+  min-width: 32px;
+  padding: 0 9px;
+  border-radius: 6px;
+  margin-left: 4px;
+  color: inherit;
+
+  &.current {
+    background-color: variables.$primary;
+    color: #fff;
+    cursor: default;
+  }
+}
+
+.prev,
+.next {
+  font-weight: inherit;
+  color: inherit;
+  &:disabled {
+    opacity: 0.4;
+    cursor: default;
+    pointer-events: none;
+  }
+}
+
+.prev {
+  margin-right: 15px;
+}
+
+.next {
+  margin-left: 15px;
+}

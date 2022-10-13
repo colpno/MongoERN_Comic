@@ -1,0 +1,42 @@
+@use "./variables";
+@use "./mixins";
+
+img {
+  width: 100%;
+  height: 100%;
+}
+
+img[alt="Logo"] {
+  transform: translateY(-4px);
+}
+
+.skip-header {
+  margin-top: variables.$header-height;
+  min-height: calc(
+    100vh - (variables.$header-height + variables.$footer-height)
+  );
+}
+
+.like,
+.view {
+  color: variables.$primary;
+  display: flex;
+  align-items: center;
+
+  svg {
+    margin-right: 4px;
+  }
+}
+
+:where(.line-clamp) {
+  @include mixins.singleLineClamp();
+}
+:where(.line-clamp-2) {
+  @include mixins.multiLineClamp(2);
+}
+:where(.line-clamp-3) {
+  @include mixins.multiLineClamp(3);
+}
+:where(.line-clamp-4) {
+  @include mixins.multiLineClamp(4);
+}

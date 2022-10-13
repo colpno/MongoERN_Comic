@@ -1,0 +1,32 @@
+@use "assets/styles/variables";
+
+.coin-history {
+  margin-top: 20px;
+  margin-bottom: 50px;
+
+  &__row {
+    border-bottom: 1px solid variables.$border-gray;
+    padding: 20px 10px;
+    display: flex;
+    align-items: center;
+  }
+
+  &__row__content {
+    * {
+      margin: 5px 0;
+    }
+  }
+
+  &__row__quantity {
+    display: flex;
+    justify-content: flex-end;
+    color: variables.$clr-green;
+    font-size: 1.3em;
+  }
+}
+
+.coin-icon {
+  $size: 40px;
+  width: $size;
+  height: $size;
+}

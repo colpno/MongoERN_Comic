@@ -1,0 +1,38 @@
+.follow__container__content {
+  display: flex;
+  align-items: center;
+
+  &__title-info {
+    display: flex;
+    align-items: center;
+  }
+
+  .col:not(:first-child) {
+    display: flex;
+    justify-content: center;
+  }
+
+  .box-img {
+    width: 110px;
+    height: 80px;
+    margin-right: 15px;
+  }
+
+  .title {
+    font-weight: 500;
+  }
+
+  .authors {
+    color: #888;
+  }
+
+  .trash-can-button {
+    background-color: #4d4d4d;
+    color: #fff;
+    font-size: 1.2em;
+    $size: 40px;
+    width: $size;
+    height: $size;
+    border-radius: 100%;
+  }
+}

@@ -1,0 +1,13 @@
+@use "assets/styles/variables";
+
+.follow {
+  margin-top: 20px;
+  margin-bottom: 30px;
+
+  .grid-table__head {
+    .col:not(:first-child) {
+      display: flex;
+      justify-content: center;
+    }
+  }
+}

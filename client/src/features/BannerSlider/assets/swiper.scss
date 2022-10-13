@@ -1,0 +1,32 @@
+@use "assets/styles/variables";
+@import "swiper/css";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
+@import "swiper/css/thumbs";
+@import "swiper/css/autoplay";
+
+.swiper-button-prev,
+.swiper-button-next {
+  color: #fff;
+  opacity: 0.7;
+  transition: opacity 0.3s;
+  &.swiper-button-prev {
+    left: 20%;
+    &:hover {
+      opacity: 1;
+    }
+  }
+  &.swiper-button-next {
+    right: 20%;
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+.swiper-pagination-bullet {
+  width: 10px;
+  height: 10px;
+}
+.swiper-pagination-bullet-active {
+  background: variables.$primary;
+}

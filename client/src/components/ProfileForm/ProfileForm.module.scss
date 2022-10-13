@@ -1,0 +1,22 @@
+@use "assets/styles/variables";
+
+.form {
+  width: 800px;
+  margin: calc(variables.$header-height + 30px) auto 30px;
+  padding: 20px 55px;
+  border: 1px solid variables.$border-gray;
+
+  &__head-title {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  &__group {
+    margin-bottom: 20px;
+  }
+
+  &__submit {
+    margin-top: 30px;
+    width: 100%;
+  }
+}

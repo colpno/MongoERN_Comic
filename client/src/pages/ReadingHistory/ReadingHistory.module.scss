@@ -1,0 +1,40 @@
+.reading-history {
+  margin-top: 20px;
+  margin-bottom: 30px;
+
+  .col:not(:first-child) {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__container__content {
+    display: flex;
+    align-items: center;
+
+    &__title-info {
+      display: flex;
+      align-items: center;
+    }
+
+    .box-img {
+      width: 110px;
+      height: 80px;
+      margin-right: 15px;
+    }
+
+    .title {
+      font-weight: 500;
+    }
+
+    .chapter-number {
+      display: flex;
+      align-items: center;
+      color: #888;
+    }
+
+    .bookmark-icon {
+      font-size: 17px;
+      margin-right: 5px;
+    }
+  }
+}

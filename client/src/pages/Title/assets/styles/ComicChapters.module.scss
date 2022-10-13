@@ -1,0 +1,124 @@
+@use "assets/styles/variables";
+@use "assets/styles/mixins";
+
+.chapters {
+  padding: 20px 20px 0 20px;
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 30px 0 25px;
+    font-weight: 500;
+    &__total__number {
+      margin-left: 5px;
+      color: variables.$orange;
+      font-weight: 700;
+    }
+
+    &__sorting {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      svg {
+        font-size: 25px;
+        margin-right: 5px;
+      }
+    }
+  }
+
+  &__content {
+    border: 1px solid #ddd;
+
+    &__chapter {
+      display: flex;
+      align-items: center;
+
+      &:not(:first-child) {
+        border-top: 1px solid #ddd;
+      }
+
+      &__box-img {
+        min-width: 198px;
+        height: 147px;
+        border-right: 1px solid #ddd;
+      }
+
+      &__info {
+        margin: 0 40px 0 20px;
+        flex: 1;
+
+        small {
+          color: variables.$clr-gray;
+        }
+      }
+
+      &__price {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 20px;
+
+        &__free,
+        &__charge {
+          font-weight: 700;
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        &__point,
+        &__coin {
+          display: flex;
+          align-items: center;
+          span {
+            color: variables.$orange;
+            font-weight: 700;
+            font-size: 20px;
+          }
+
+          svg {
+            $size: 28px;
+            width: $size;
+            height: $size;
+            margin-left: 5px;
+          }
+        }
+
+        .charge__icon {
+          margin-right: 8px;
+          font-size: 0.9em;
+          position: relative;
+
+          .charge-icon {
+            $size: 32px;
+            width: $size;
+            height: $size;
+          }
+
+          &__label {
+            @include mixins.centerByPosition(absolute);
+            color: #fff;
+          }
+        }
+
+        .divider {
+          width: 2px;
+          height: 25px;
+          background-color: #ddd;
+          margin: 0 15px;
+        }
+      }
+
+      .title {
+        font-size: 1.3em;
+      }
+    }
+  }
+}
+
+.like {
+  margin: 12px 0;
+  font-weight: 700;
+}

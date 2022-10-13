@@ -1,0 +1,37 @@
+@use "assets/styles/mixins";
+
+.my-title {
+  margin-top: 30px;
+  margin-bottom: 30px;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding: 0;
+  }
+
+  &__header__total {
+    font-weight: 500;
+
+    &__number {
+      font-weight: 700;
+    }
+  }
+
+  &__header__create {
+    height: 42px;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      color: #fff;
+    }
+
+    svg {
+      font-size: 24px;
+      margin-right: 5px;
+    }
+  }
+}

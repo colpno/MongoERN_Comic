@@ -1,0 +1,24 @@
+@use "assets/styles/mixins";
+
+.notice-figure {
+  margin-bottom: 2rem;
+  .box-img {
+    box-shadow: 0 1px 2px 1px rgb(0 0 0 / 0.2);
+    border-radius: 10px;
+    overflow: hidden;
+    width: 100%;
+    img {
+      max-height: 200px;
+    }
+  }
+
+  .title {
+    font-weight: 600;
+    margin-top: 10px;
+  }
+
+  .content {
+    margin-top: 5px;
+    @include mixins.multiLineClamp(1);
+  }
+}

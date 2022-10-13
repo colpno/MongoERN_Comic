@@ -1,0 +1,32 @@
+@use "assets/styles/variables";
+@use "assets/styles/mixins";
+
+.cards-wrapper {
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 17px;
+    position: relative;
+
+    &::before {
+      position: absolute;
+      content: "";
+      top: 0;
+      bottom: 0;
+      left: 0;
+      background-color: variables.$primary;
+      width: 4px;
+      border-radius: 100vmax;
+    }
+
+    &__title {
+      padding-left: 20px;
+      @include mixins.singleLineClamp();
+    }
+  }
+
+  &__cards {
+    gap: 40px 0;
+  }
+}

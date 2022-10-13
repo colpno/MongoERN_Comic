@@ -1,0 +1,53 @@
+@use "assets/styles/variables";
+
+.wrapper {
+  position: relative;
+}
+
+.select {
+  height: 45px;
+  border: 1px solid variables.$gray-400;
+  padding-right: 4px !important;
+}
+
+.chevron-down {
+  margin-left: 4px;
+  transition: 0.2s ease-in-out;
+
+  &.active {
+    rotate: x 0.5turn;
+  }
+}
+
+.options {
+  margin-top: 6px;
+  box-shadow: 0 1px 6px 1px rgb(0 0 0 / 0.2);
+  border-radius: 4px;
+  width: max-content;
+  background-color: #fff;
+
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  right: 0;
+}
+
+.option {
+  text-align: start;
+  padding: 4px 30px 4px 10px;
+  border: 0;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid variables.$border-gray-dark;
+  }
+
+  + .option {
+    margin-left: 0;
+  }
+
+  &:hover {
+    color: variables.$primary-dark;
+  }
+}

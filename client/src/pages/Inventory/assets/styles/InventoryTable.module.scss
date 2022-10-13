@@ -1,0 +1,34 @@
+@use "assets/styles/variables";
+
+.inventory__container__content {
+  border-top: 1px solid variables.$border-gray;
+  padding: 15px 10px;
+  display: flex;
+  align-items: center;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+}
+
+.box-img {
+  $size: 60px;
+  width: $size;
+  height: $size;
+  margin-right: 15px;
+}
+
+.begin-time,
+.expired-time {
+  color: #888;
+}
+
+.ticket {
+  color: variables.$orange;
+}
+
+.separate {
+  margin: 0 5px;
+}

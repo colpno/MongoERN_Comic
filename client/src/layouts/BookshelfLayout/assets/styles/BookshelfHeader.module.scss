@@ -1,0 +1,43 @@
+@use "assets/styles/variables";
+
+.wrapper {
+  border-bottom: 1px solid #ccc;
+
+  .header {
+    height: calc(variables.$header-height - 15px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &__title {
+      display: flex;
+      align-items: center;
+    }
+
+    &__title__image {
+      $size: 36px;
+      font-size: $size;
+      width: $size;
+      height: $size;
+      margin-right: 30px;
+    }
+
+    &__title__label {
+      font-size: 1.3em;
+      font-weight: 500;
+    }
+
+    &__navbar__link {
+      font-weight: 600;
+
+      &:not(:first-child) {
+        margin-left: 60px;
+      }
+
+      &.active,
+      &:not(.active):hover {
+        color: variables.$primary-dark;
+      }
+    }
+  }
+}

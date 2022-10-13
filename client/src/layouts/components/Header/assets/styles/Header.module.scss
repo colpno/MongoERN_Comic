@@ -1,0 +1,54 @@
+@use "assets/styles/variables";
+
+.header {
+  background: variables.$primary;
+  color: variables.$txt-white;
+  height: variables.$header-height;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 5;
+}
+
+.desktop-screen {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  width: 60%;
+  max-width: 150px;
+  padding-right: 25px;
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  flex: 1;
+  li {
+    a {
+      color: inherit;
+      padding: calc(variables.$header-height / 2 - 10px) 22px;
+      font-weight: 700;
+      position: relative;
+    }
+    &:hover a::before,
+    a.active::before {
+      position: absolute;
+      content: "";
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background-color: rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
+.desktop-screen {
+  position: relative;
+  height: variables.$header-height;
+}

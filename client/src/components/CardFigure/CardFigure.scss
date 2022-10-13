@@ -1,0 +1,84 @@
+@use "assets/styles/variables";
+@use "assets/styles/mixins";
+
+.card-figure {
+  &.horizontal {
+    display: flex;
+
+    :global(.image-wrapper) {
+      margin: 0 15px 0 8px;
+    }
+
+    .card-figure__content {
+      display: flex;
+      justify-content: space-between;
+      flex-direction: column;
+
+      &__title {
+        margin-top: 0;
+      }
+    }
+  }
+
+  :global(.image-wrapper) {
+    align-self: center;
+    $size: 180px;
+    width: $size;
+    height: $size;
+    box-shadow: 0 0 0 1px rgb(0 0 0 / 0.1);
+    @include mixins.imageScale();
+  }
+
+  &__content {
+    &__author {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      overflow: hidden;
+    }
+
+    &__title {
+      height: 50px;
+      @include mixins.multiLineClamp(2);
+    }
+
+    &__summary {
+      color: #555;
+      @include mixins.multiLineClamp(2);
+    }
+
+    &__author {
+      color: #777;
+      @include mixins.multiLineClamp(1);
+    }
+
+    &__title,
+    &__author {
+      line-height: 1.4;
+      margin-top: 8px;
+    }
+
+    &__counting {
+      margin-top: 6px;
+      font-size: inherit;
+      display: flex;
+      align-items: center;
+      flex: 1;
+
+      &__view,
+      &__like {
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+
+        &__icon {
+          font-size: 1.3em;
+        }
+      }
+
+      &__like {
+        margin-right: 10px;
+      }
+    }
+  }
+}

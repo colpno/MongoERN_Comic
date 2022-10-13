@@ -1,0 +1,44 @@
+@use "assets/styles/variables";
+@use "assets/styles/mixins";
+
+.notice-page {
+  padding: 30px 0 200px;
+  width: 700px;
+  max-width: 700px;
+  margin: 0 auto;
+
+  .box-img {
+    width: 100%;
+    height: 340px;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  &__beginning {
+    border-bottom: 1px solid variables.$border-gray;
+    margin-bottom: 20px;
+
+    &__head {
+      .title {
+        margin: 20px 0 5px;
+      }
+
+      .subtitle {
+        color: #888;
+      }
+    }
+
+    &__time {
+      display: flex;
+      align-items: center;
+      margin: 20px 0;
+      color: #888;
+      font-size: 1.1em;
+
+      .clock-icon {
+        margin-right: 10px;
+        font-size: 24px;
+      }
+    }
+  }
+}

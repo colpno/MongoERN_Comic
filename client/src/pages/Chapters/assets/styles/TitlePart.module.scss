@@ -1,0 +1,47 @@
+@use "assets/styles/variables";
+@use "assets/styles/mixins";
+
+.chapters__title {
+  border: 1px solid variables.$border-gray-dark;
+  margin: 0;
+  padding: 20px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  span {
+    font-weight: 600;
+    font-size: 1.2em;
+  }
+}
+
+.box-img {
+  $size: 100px;
+  width: $size;
+  height: $size;
+  margin-right: 20px;
+}
+
+.chapters__title__box {
+  display: flex;
+  align-items: center;
+}
+
+:global(.col).chapters__title__box {
+  justify-content: flex-end;
+}
+
+.chapters__title-accelerate__button {
+  padding-left: 30px;
+  padding-right: 30px;
+
+  svg {
+    margin-right: 5px;
+    font-size: 20px;
+  }
+}
+
+.title {
+  width: 70%;
+  @include mixins.multiLineClamp(2);
+}

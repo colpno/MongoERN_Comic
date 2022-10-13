@@ -1,0 +1,40 @@
+@mixin multiLineClamp($lines) {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $lines;
+  overflow: hidden;
+}
+
+@mixin singleLineClamp() {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@mixin centerByPosition($position) {
+  position: $position;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@mixin centerFlexBox() {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin containerFullWidth($bg-color) {
+  box-shadow: 0 0 0 100vmax $bg-color;
+  clip-path: inset(0 -100vmax);
+}
+
+@mixin imageScale() {
+  overflow: hidden;
+  img {
+    transition: all 0.4s ease-out;
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+}

@@ -1,0 +1,5 @@
+@use "assets/styles/variables";
+
+.comic :global(.navigator.active) {
+  border-bottom: 0;
+}

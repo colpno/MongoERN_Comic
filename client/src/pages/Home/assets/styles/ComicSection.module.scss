@@ -1,0 +1,11 @@
+@media (max-width: 1280px) {
+  .follow,
+  .action,
+  .section {
+    :global(.row) {
+      overflow-x: scroll;
+      flex-wrap: nowrap;
+      width: 100%;
+    }
+  }
+}

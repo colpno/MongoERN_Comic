@@ -1,0 +1,36 @@
+@use "assets/styles/variables";
+@use "assets/styles/mixins";
+
+.grid-table {
+  border: 1px solid variables.$border-gray-dark;
+
+  &__head {
+    font-weight: 500;
+  }
+
+  :global(.row) {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+
+    &:not(:first-child) {
+      border-top: 1px solid variables.$border-gray-dark;
+    }
+  }
+
+  :global(.actions) {
+    @include mixins.centerFlexBox();
+    flex-direction: row;
+  }
+
+  :global(.action) {
+    padding: 10px;
+    font-size: 1.3em;
+  }
+
+  :global(.center) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

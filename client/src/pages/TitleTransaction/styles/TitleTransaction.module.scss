@@ -1,0 +1,31 @@
+@use "assets/styles/variables";
+
+.transaction {
+  margin-top: 20px;
+  margin-bottom: 30px;
+
+  &__container__content {
+    display: flex;
+    align-items: center;
+  }
+
+  :global(.tabs__tab) {
+    $horizon-padding: 50px;
+    padding-right: $horizon-padding;
+    padding-left: $horizon-padding;
+  }
+}
+
+.box-img {
+  width: 110px;
+  height: 80px;
+  margin-right: 15px;
+}
+
+.title {
+  font-weight: 500;
+}
+
+.authors {
+  color: #888;
+}

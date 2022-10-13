@@ -1,0 +1,49 @@
+@use "assets/styles/variables";
+
+.label {
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.radio {
+  margin-right: 10px;
+  opacity: 0;
+}
+
+.radio,
+.custom-radio {
+  $radioSize: 24px;
+  width: $radioSize;
+  height: $radioSize;
+}
+
+.custom-radio {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid variables.$gray-500;
+  border-radius: 100%;
+  pointer-events: none;
+}
+
+.radio:checked + .custom-radio {
+  border: 1px solid variables.$primary;
+
+  &::before {
+    position: absolute;
+    content: "";
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    height: 70%;
+    border-radius: 100%;
+    background-color: red;
+  }
+}

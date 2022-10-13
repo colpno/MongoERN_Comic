@@ -1,0 +1,97 @@
+@use "assets/styles/variables";
+
+.btn {
+  background-color: transparent;
+  padding: 9.5px 25px;
+  outline: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+
+  font-weight: 700;
+  font-size: 1rem;
+
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  + .btn {
+    margin-left: 10px;
+  }
+}
+
+// Type
+.primary {
+  border: 1px solid variables.$primary-dark;
+  background-color: variables.$primary;
+  color: variables.$white;
+  box-shadow: 1px 1px variables.$primary-dark;
+
+  &:hover {
+    color: variables.$white;
+  }
+}
+
+.gray {
+  background-color: #d7d7d7;
+  color: variables.$gray-600;
+}
+
+.outline {
+  border-color: variables.$primary-dark;
+  color: variables.$primary-dark;
+
+  &:hover {
+    color: variables.$primary-dark;
+  }
+}
+
+.outline.gray {
+  border: 1px solid #ccc;
+  background-color: transparent;
+  color: variables.$gray-600;
+}
+
+.text {
+  padding: 0;
+  min-width: fit-content;
+  font-weight: 400;
+  display: inline-block;
+}
+
+.outline.success {
+  background-color: transparent;
+  border-color: variables.$clr-green;
+  color: variables.$clr-green;
+}
+
+.wrapper {
+  background-color: transparent;
+  border: 0;
+}
+
+.rounded {
+  border-radius: 20vmax !important;
+}
+
+// Size
+.large {
+  padding: 11px 70px;
+  border-radius: 8px;
+  font-size: 1.15rem;
+}
+
+.small {
+  padding: 4px 20px;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+// Attributes
+.disabled {
+  background-color: #efefef4d;
+  color: #1010104d;
+  border: 0;
+  box-shadow: none;
+  pointer-events: none;
+}

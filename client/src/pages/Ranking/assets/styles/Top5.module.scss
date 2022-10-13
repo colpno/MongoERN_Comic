@@ -1,0 +1,52 @@
+@use "assets/styles/variables";
+@use "assets/styles/mixins";
+
+.top5-wrapper__cards__card {
+  &:nth-child(1),
+  &:nth-child(2) {
+    margin-bottom: 12px;
+
+    .ranking-figure {
+      height: 200px;
+    }
+
+    :global(.icon-bookmark) {
+      width: 31px;
+      height: 34px;
+      font-size: 1rem;
+    }
+
+    .ranking-figure__content {
+      padding-top: 15px;
+      .title {
+        font-size: 1.4em;
+      }
+
+      .summary {
+        @include mixins.multiLineClamp(2);
+      }
+    }
+
+    :global(.card-figure__content) {
+      padding: 20px 0;
+    }
+
+    :global(.image-wrapper) {
+      $image-size: 182px;
+      width: $image-size !important;
+      height: $image-size !important;
+    }
+  }
+
+  &:nth-child(1) :global(.icon-bookmark) {
+    background-color: variables.$primary;
+  }
+
+  &:nth-child(2) :global(.icon-bookmark) {
+    background-color: variables.$yellow;
+  }
+
+  &:nth-child(3) :global(.icon-bookmark) {
+    background-color: variables.$blue;
+  }
+}

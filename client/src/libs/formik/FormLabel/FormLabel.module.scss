@@ -1,0 +1,18 @@
+@use "assets/styles/variables";
+
+.field {
+  &__label {
+    font-weight: 500;
+    margin: 20px 0 10px;
+  }
+
+  &__label--required {
+    color: variables.$red;
+  }
+
+  &__label__sub-label {
+    color: #aaa;
+    font-weight: 400;
+    font-size: 0.9em;
+  }
+}

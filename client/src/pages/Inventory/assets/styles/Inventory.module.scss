@@ -1,0 +1,124 @@
+@use "assets/styles/variables";
+
+.inventory {
+  margin-bottom: 30px;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    height: calc(variables.$header-height - 15px);
+    border-bottom: 1px solid variables.$border-gray-dark;
+
+    .container {
+      display: flex;
+      align-items: center;
+    }
+
+    &__image {
+      margin-right: 30px;
+    }
+
+    &__label {
+      font-size: 1.3em;
+      font-weight: 500;
+    }
+  }
+
+  .ticket {
+    display: flex;
+    align-items: center;
+
+    span {
+      color: variables.$orange;
+      font-weight: 700;
+      font-size: 20px;
+    }
+
+    strong {
+      color: variables.$orange;
+      margin: 0 5px;
+    }
+
+    img {
+      width: 55px;
+      height: 30px;
+    }
+  }
+
+  &__general__tickets {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+
+    .question-icon {
+      color: #b2b2b2;
+      font-size: 24px;
+      pointer-events: visible;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+
+    .tickets {
+      display: flex;
+      align-items: center;
+      margin-left: 20px;
+    }
+
+    .title {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  &__general__options {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    &__redirect {
+      margin-right: 15px;
+      color: variables.$primary;
+      text-decoration: underline;
+
+      &:hover {
+        color: variables.$primary;
+      }
+    }
+
+    &__select {
+      $padding-top-bottom: 6px;
+
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .icon {
+        font-size: 20px;
+        color: #888;
+        border: 1px solid variables.$border-gray-dark;
+        border-right: 0;
+        padding: $padding-top-bottom 0;
+        width: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .select {
+        border: 1px solid variables.$border-gray-dark;
+        outline: none;
+        height: fit-content;
+        font-size: 0.9rem;
+        padding: $padding-top-bottom 10px;
+      }
+    }
+  }
+
+  .divider {
+    width: 1px;
+    height: 30px;
+    background-color: variables.$border-gray;
+    margin: 0 20px;
+  }
+}
