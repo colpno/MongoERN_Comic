@@ -14,29 +14,27 @@ function MyTitleTable({ data }) {
   return (
     <>
       {data.map((title) => {
+        const { id, coverImage, titleName, totalChapter, titleStatusId } =
+          title;
         const timeObj = formatTime(new Date(2022, 7, 16, 23, 16, 0, 0));
         return (
-          <Row key={title.id} className={cx("my-title__container__content")}>
+          <Row key={id} className={cx("my-title__container__content")}>
             <Col>
               <div className={cx("box-img")}>
-                <img src={title.coverImage} alt={title.titleName} />
+                <img src={coverImage} alt={titleName} />
               </div>
             </Col>
             <Col md={3}>
-              <Button
-                text
-                to={`/comic/title/${title.id}`}
-                className={cx("title")}
-              >
-                {title.titleName}
+              <Button text to={`/comic/title/${id}`} className={cx("title")}>
+                {titleName}
               </Button>
             </Col>
             <Col>
-              <span className={cx("total-chapter")}>{title.totalChapter}</span>
+              <span className={cx("total-chapter")}>{totalChapter}</span>
             </Col>
             <Col>
-              <span className={cx("approve-status")}>
-                {approveStatusString(title.titleStatusId)}
+              <span className={cx(`approve-status status-${titleStatusId}`)}>
+                {approveStatusString(titleStatusId)}
               </span>
             </Col>
             <Col>
@@ -53,7 +51,7 @@ function MyTitleTable({ data }) {
               <Button
                 outline
                 gray
-                to={`update/${title.id}`}
+                to={`update/${id}`}
                 className="action"
                 title="Chỉnh sửa truyện"
               >
@@ -62,7 +60,7 @@ function MyTitleTable({ data }) {
               <Button
                 outline
                 gray
-                to={`${title.id}`}
+                to={`${id}`}
                 className="action"
                 title="Xem danh sách chương"
               >

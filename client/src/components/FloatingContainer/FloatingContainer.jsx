@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import classNames from "classnames/bind";
+import { memo } from "react";
 
 import styles from "./FloatingContainer.module.scss";
 
@@ -22,4 +23,4 @@ FloatingContainer.defaultProps = {
   cn: "",
 };
 
-export default FloatingContainer;
+export default memo(FloatingContainer);

@@ -9,7 +9,7 @@
 }
 
 .content {
-  padding: 40px 20px;
+  padding: calc(40px - var.$floating-container-margin-top) 20px 40px;
   min-height: calc(100vh - var.$header-height);
   width: 100%;
   margin-left: var.$sidebar-width;

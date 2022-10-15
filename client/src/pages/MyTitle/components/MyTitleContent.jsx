@@ -1,7 +1,8 @@
 import PropTypes from "prop-types";
+import { memo } from "react";
 
 import { GridTable } from "components";
-import { Pagination } from "react-bootstrap";
+import Pagination from "features/Pagination";
 import MyTitleTable from "./MyTitleTable";
 
 function MyTitleContent({ titles, pagination, setPagination }) {
@@ -62,4 +63,4 @@ MyTitleContent.propTypes = {
   setPagination: PropTypes.func.isRequired,
 };
 
-export default MyTitleContent;
+export default memo(MyTitleContent);

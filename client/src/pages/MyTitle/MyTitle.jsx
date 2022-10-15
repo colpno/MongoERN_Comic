@@ -1,5 +1,5 @@
 import classNames from "classnames/bind";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Container } from "react-bootstrap";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useDispatch } from "react-redux";
@@ -25,26 +25,14 @@ function BtnCreate() {
 
 function MyTitle() {
   const dispatch = useDispatch();
+  const TITLES_PER_PAGE = 50;
   const { titles } = getTitles();
-  const [limitTitles, setLimitTitles] = useState([]);
-  const [pagination, setPagination] = useState({
-    page: 1,
-    limit: 50,
-    total: limitTitles.length,
-  });
-  const hasData = limitTitles.length > 0;
-
-  useEffect(() => {
-    const paginate = () => {
-      const data = titles.slice(
-        (pagination.page - 1) * pagination.limit,
-        pagination.page * pagination.limit
-      );
-      setLimitTitles(data);
-    };
-
-    titles.length > 0 && paginate();
-  }, [titles, pagination.page]);
+  const {
+    titles: titlesByPage,
+    pagination,
+    setPagination,
+  } = getTitles(TITLES_PER_PAGE);
+  const hasData = titlesByPage?.length > 0;
 
   useEffect(() => {
     const dispatchStatisticCount = () => {
@@ -64,13 +52,14 @@ function MyTitle() {
         <MyTitleHeader cx={cx} totalTitle={pagination.total} />
         {hasData && <BtnCreate />}
       </Container>
-
       {hasData ? (
-        <MyTitleContent
-          titles={limitTitles}
-          pagination={pagination}
-          setPagination={setPagination}
-        />
+        <Container>
+          <MyTitleContent
+            titles={titlesByPage}
+            pagination={pagination}
+            setPagination={setPagination}
+          />
+        </Container>
       ) : (
         <NoData>
           <h5>Hiện tại chưa có truyện nào!</h5>

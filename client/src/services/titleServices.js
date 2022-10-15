@@ -3,10 +3,9 @@ import { useEffect, useState } from "react";
 
 export const getTitles = (limit, ...dependencies) => {
   const [titles, setTitles] = useState([]);
-  const TITLES_PER_PAGE = 50;
   const [pagination, setPagination] = useState({
     page: 1,
-    limit: limit || TITLES_PER_PAGE,
+    limit,
     total: 0,
   });
 
@@ -25,6 +24,9 @@ export const getTitles = (limit, ...dependencies) => {
         } else {
           const response = await titleApi.getAll();
           setTitles(response);
+          setPagination((prev) => {
+            return { ...prev, total: response.length };
+          });
         }
       } catch (error) {
         throw new Error(error);

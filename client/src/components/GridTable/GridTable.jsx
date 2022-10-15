@@ -1,14 +1,14 @@
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
 import { memo } from "react";
-import { Col, Container, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import styles from "./GridTable.module.scss";
 
 const cx = classNames.bind(styles);
 
 function GridTable({ head, children }) {
   return (
-    <Container className={cx("grid-table")}>
+    <div className={cx("grid-table")}>
       <Row className={cx("grid-table__head")}>
         {head.map((item, index) => {
           return (
@@ -27,7 +27,7 @@ function GridTable({ head, children }) {
         })}
       </Row>
       {children}
-    </Container>
+    </div>
   );
 }
 

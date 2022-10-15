@@ -6,8 +6,9 @@ import Button from "components/Button";
 import { createArrayFromTo } from "utils";
 import styles from "./assets/Pagination.module.scss";
 
+const cx = classNames.bind(styles);
+
 function Pagination({ pagination, onPageChange }) {
-  const cx = classNames.bind(styles);
   const { page, limit, total } = pagination;
   const totalPage = Math.ceil(total / limit);
   const LIMIT_NEARBY_PAGES = 2;
@@ -32,9 +33,7 @@ function Pagination({ pagination, onPageChange }) {
   const pages = createArrayFromTo(firstPage, lastPage);
 
   const handlePageChange = (newPage) => {
-    if (onPageChange) {
-      onPageChange(newPage);
-    }
+    onPageChange(newPage);
   };
 
   return (

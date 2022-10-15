@@ -1,5 +1,10 @@
 @use "assets/styles/variables" as var;
 
+.content {
+  display: flex;
+  justify-content: space-between;
+}
+
 .icon {
   $size: 2.2rem;
   width: $size;
@@ -16,13 +21,12 @@
 
 .label {
   font-weight: 500;
-  margin-bottom: 0.2em;
 }
 
 .amount {
   font-weight: 700;
-  font-size: 1.6em;
-  margin-bottom: 1.2rem;
+  font-size: 2em;
+  margin-bottom: 0.8rem;
 }
 
 .sub-label {
@@ -31,4 +35,7 @@
 }
 
 .chart-wrapper {
+  $size: 100px;
+  width: $size;
+  height: $size;
 }

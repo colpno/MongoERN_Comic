@@ -1,35 +1,37 @@
-/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
-import { Col, Container, Row } from "react-bootstrap";
+import { Container, Row } from "react-bootstrap";
 
-import { topSales } from "assets/images";
 import { FloatingContainer } from "components";
-import AdminCard from "layouts/AdminLayout/components/AdminCard";
 import MyTitleContent from "pages/MyTitle/components/MyTitleContent";
 import { getTitles } from "services/titleServices";
-
+import TitleManagementCards from "./components/TitleManagementCards";
+import {
+  getContinuingCardData,
+  getFinishedCardData,
+  getPausedCardData,
+} from "./const";
 import styles from "./styles/TitleManagement.module.scss";
 
 const cx = classNames.bind(styles);
 
 function TitleManagement() {
-  const { titles, pagination, setPagination } = getTitles(50);
+  const TITLES_PER_PAGE = 50;
+  const { titles, pagination, setPagination } = getTitles(TITLES_PER_PAGE);
+  const total = 214;
+  const continuingCardData = getContinuingCardData(total, 123);
+  const pausedCardData = getPausedCardData(total, 23);
+  const finishedCardData = getFinishedCardData(total, 50);
 
   return (
-    <>
-      <Container className={cx("wrapper")}>
-        <Row>
-          <Col md={4}>
-            <AdminCard icon={topSales} label="Continuing" amount="123" />
-          </Col>
-          <Col md={4}>
-            <AdminCard icon={topSales} label="Continuing" amount="123" />
-          </Col>
-          <Col md={4}>
-            <AdminCard icon={topSales} label="Continuing" amount="123" />
-          </Col>
-        </Row>
-      </Container>
+    <Container>
+      <TitleManagementCards
+        continuingCardData={continuingCardData}
+        pausedCardData={pausedCardData}
+        finishedCardData={finishedCardData}
+      />
+      <Row>
+        <h4 className={cx("label")}>All Titles</h4>
+      </Row>
       <FloatingContainer>
         <MyTitleContent
           titles={titles}
@@ -37,7 +39,7 @@ function TitleManagement() {
           setPagination={setPagination}
         />
       </FloatingContainer>
-    </>
+    </Container>
   );
 }
 
