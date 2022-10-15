@@ -5,14 +5,14 @@ import { AiFillCaretDown } from "react-icons/ai";
 
 import Button from "components/Button";
 import CardList from "components/CardList";
-import titleService from "services/titleService";
+import { getTitles } from "services/titleServices";
 import styles from "./assets/styles/Recommend.module.scss";
 
 const cx = classNames.bind(styles);
 
 function Recommend() {
   const [isExpand, setIsExpand] = useState(false);
-  const { titles } = titleService();
+  const { titles } = getTitles(18);
   const unFoldList = titles.slice(6);
   const foldList = titles.slice(0, 6);
 

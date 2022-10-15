@@ -1,30 +1,16 @@
-import * as Yup from "yup";
 import classNames from "classnames/bind";
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import * as Yup from "yup";
 
-import titleApi from "api/titleApi";
 import TitleForm from "components/TitleForm";
+import { getTitleByID } from "services/titleServices";
 import styles from "./UpdateTitle.module.scss";
 
 const cx = classNames.bind(styles);
 
 function UpdateTitle() {
-  const [title, setTitle] = useState();
-  const id = useParams().titleId;
-
-  useEffect(() => {
-    const fetchTitle = async () => {
-      try {
-        const response = await titleApi.getOneById(id);
-        setTitle(response);
-      } catch (error) {
-        throw new Error(error);
-      }
-    };
-
-    fetchTitle();
-  }, []);
+  const { titleId } = useParams();
+  const { title } = getTitleByID(titleId);
 
   const handleSubmit = (values, { setSubmitting }) => {
     console.log(values);

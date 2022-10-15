@@ -263,6 +263,7 @@ $cyan-900: shade-color($cyan, 80%);
 
 $primary: hsl(0, 100%, 48%);
 $primary-dark: hsl(0, 100%, 40%);
+$primary-admin: #fa5973;
 $secondary: $gray-600;
 $success: $green;
 $info: $cyan;
@@ -282,6 +283,9 @@ $dark: $gray-900;
 //   "dark": $dark,
 // );
 
+$layout-transition-time: 0.2s;
+$sidebar-width: 300px;
+$bgc-admin: #f1f6f9;
 $clr-green: hsl(151, 81%, 46%);
 $clr-gray: #636363;
 $clr-gray-faded: #eaeaea;

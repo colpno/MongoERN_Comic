@@ -1,0 +1,27 @@
+@use "assets/styles/variables" as var;
+
+.sidebar {
+  width: 300px;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  &--toggle {
+    position: absolute;
+    font-size: 2rem;
+    left: 0;
+  }
+}
+
+.logo {
+  fill: #000;
+  width: 150px;
+  height: var.$header-height;
+  padding-left: 18px;
+
+  &-wrapper {
+    width: 100%;
+    border-bottom: 1px solid var.$gray-200;
+  }
+}

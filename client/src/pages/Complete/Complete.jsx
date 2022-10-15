@@ -1,29 +1,15 @@
-import titleApi from "api/titleApi";
 import classNames from "classnames/bind";
 import CardList from "components/CardList";
 import NoData from "features/NoData";
-import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
+import { getTitles } from "services/titleServices";
 import styles from "./assets/styles/Complete.module.scss";
 
 const cx = classNames.bind(styles);
 
 function Complete() {
-  const [titles, setTitles] = useState([]);
+  const { titles } = getTitles();
   const hasData = titles.length;
-
-  useEffect(() => {
-    const fetchTitles = async () => {
-      try {
-        const response = await titleApi.search("titleStatusId", 1);
-        setTitles(response);
-      } catch (error) {
-        throw new Error(error);
-      }
-    };
-
-    fetchTitles();
-  }, []);
 
   return (
     <Container className={cx("complete-page")}>

@@ -5,12 +5,12 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { useParams } from "react-router-dom";
 
 import chapterApi from "api/chapterApi";
-import titleApi from "api/titleApi";
 import Button from "components/Button";
 import GridTable from "components/GridTable";
 import NoData from "features/NoData";
 import Pagination from "features/Pagination";
 import Popup from "features/Popup";
+import { getTitleByID } from "services/titleServices";
 import styles from "./assets/styles/Chapters.module.scss";
 import ChaptersTable from "./components/ChapterTable";
 import TitlePart from "./components/TitlePart";
@@ -27,7 +27,8 @@ function BtnCreate() {
 }
 
 function Chapters() {
-  const [title, setTitle] = useState({});
+  const { titleId } = useParams();
+  const { title } = getTitleByID(titleId);
   const [chapters, setChapters] = useState([]);
   // eslint-disable-next-line no-unused-vars
   const [isConfirm, setIsConfirm] = useState(false);
@@ -37,7 +38,6 @@ function Chapters() {
     title: "",
     content: "",
   });
-  const { titleId } = useParams();
   const hasData = chapters.length > 0;
 
   const [pagination, setPagination] = useState({
@@ -49,19 +49,6 @@ function Chapters() {
   const onPageChange = (newPage) => {
     setPagination({ ...pagination, page: newPage });
   };
-
-  useEffect(() => {
-    const fetchTitle = async () => {
-      try {
-        const titleResponse = await titleApi.getOneById(titleId);
-        setTitle(titleResponse);
-      } catch (error) {
-        throw new Error(error);
-      }
-    };
-
-    fetchTitle();
-  }, []);
 
   useEffect(() => {
     const fetchChapters = async () => {

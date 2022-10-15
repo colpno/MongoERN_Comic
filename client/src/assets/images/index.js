@@ -3,7 +3,7 @@ export { ReactComponent as CircleP } from "./circle-p.svg";
 export { ReactComponent as BuyTicket } from "./buy-ticket.svg";
 export { ReactComponent as RentTicket } from "./rent-ticket.svg";
 export { ReactComponent as ChargeIcon } from "./charge.svg";
-export { default as Logo } from "./img-logo-white.svg";
+export { ReactComponent as Logo } from "./img-logo-white.svg";
 export { default as Image1 } from "./title1.jpg";
 export { default as Image2 } from "./title2.png";
 export { default as AStore } from "./title2.png";

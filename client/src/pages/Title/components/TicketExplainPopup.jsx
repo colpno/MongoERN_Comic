@@ -8,7 +8,7 @@ function TicketExplainPopup() {
   return (
     <div className={cx("popup")}>
       <div className={cx("ticket-buy")}>
-        <div sm={3} className={cx("box-img")}>
+        <div className={cx("box-img")}>
           <BuyTicket />
         </div>
         <p>Vé mua được sử dụng để mua chương.</p>

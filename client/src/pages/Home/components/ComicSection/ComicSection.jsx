@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 
 import genreApi from "api/genreApi";
-import titleApi from "api/titleApi";
 import CardList from "components/CardList";
+import { getTitles } from "services/titleServices";
 import styles from "../../assets/styles/ComicSection.module.scss";
 import ComicActionSection from "./components/ComicActionSection";
 import ComicFollowSection from "./components/ComicFollowSection";
@@ -15,9 +15,9 @@ const cx = classNames.bind(styles);
 
 function ComicSection() {
   const [genres, setGenres] = useState([]);
-  const [titles, setTitles] = useState([]);
+  const { titles } = getTitles();
   const hasData = genres.length > 0 && titles.length > 0;
-  const top5 = titles?.filter((title) => title.rank <= 5);
+  const top5 = hasData && titles.filter((title) => title.rank <= 5);
 
   useEffect(() => {
     const fetchGenres = async () => {
@@ -29,19 +29,6 @@ function ComicSection() {
       }
     };
     fetchGenres();
-  }, []);
-
-  useEffect(() => {
-    const fetchTitles = async () => {
-      try {
-        const response = await titleApi.getAll();
-        setTitles(response);
-      } catch (error) {
-        throw new Error(error);
-      }
-    };
-
-    fetchTitles();
   }, []);
 
   const fillTitlesByGenre = (genreID) => {

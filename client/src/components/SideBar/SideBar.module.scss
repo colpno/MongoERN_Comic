@@ -1,0 +1,54 @@
+@use "assets/styles/variables" as var;
+
+.tabs {
+  padding: 40px 0 0 18px;
+
+  > .tab-wrapper:not(:first-child) {
+    margin-top: 20px;
+  }
+}
+
+.active {
+  background-color: var.$bgc-admin;
+  position: relative;
+
+  &::before {
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-color: hsl(203, 56%, 79%);
+  }
+}
+
+.tab {
+  width: 100%;
+  margin: 6px 0;
+  padding: 6px 0 6px 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  &-icon {
+    $size: 1.2em;
+    margin-right: 8px;
+    color: var.$white;
+    width: $size;
+    height: $size;
+  }
+
+  &-label {
+    font-size: 1em;
+    color: var.$gray-600;
+  }
+}
+
+.group-label {
+  font-size: 0.8em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var.$gray-600;
+}

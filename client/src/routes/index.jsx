@@ -1,4 +1,5 @@
 import {
+  AdminLayout,
   BookshelfLayout,
   ComicLayout,
   HistoryLayout,
@@ -36,6 +37,7 @@ import {
   Login,
   Register,
   ForgotPassword,
+  TitleManagement,
 } from "pages";
 
 export const publicRoutes = [
@@ -160,6 +162,11 @@ export const publicRoutes = [
     path: "/my-title/notice",
     component: MyNotice,
     layout: MyTitleLayout,
+  },
+  {
+    path: "/admin",
+    component: TitleManagement,
+    layout: AdminLayout,
   },
 ];
 

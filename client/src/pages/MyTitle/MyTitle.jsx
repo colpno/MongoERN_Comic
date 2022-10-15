@@ -1,18 +1,16 @@
-/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 
-import titleApi from "api/titleApi";
 import Button from "components/Button";
-import GridTable from "components/GridTable";
 import NoData from "features/NoData";
-import Pagination from "features/Pagination";
 import { addStatisticCountData } from "libs/redux/slices/statisticCountSlice";
+import { getTitles } from "services/titleServices";
 import styles from "./assets/styles/MyTitle.module.scss";
-import MyTitleTable from "./components/MyTitleTable";
+import MyTitleContent from "./components/MyTitleContent";
+import MyTitleHeader from "./components/MyTitleHeader";
 
 const cx = classNames.bind(styles);
 
@@ -27,91 +25,59 @@ function BtnCreate() {
 
 function MyTitle() {
   const dispatch = useDispatch();
-  const [allTitles, setAllTitles] = useState([]);
-  const [titles, setTitles] = useState([]);
+  const { titles } = getTitles();
+  const [limitTitles, setLimitTitles] = useState([]);
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 50,
-    total: titles.length,
+    total: limitTitles.length,
   });
-  const hasData = titles.length > 0;
-
-  const onPageChange = (newPage) => {
-    setPagination({ ...pagination, page: newPage });
-  };
-
-  useEffect(() => {
-    const fetchTitles = async () => {
-      try {
-        const response = await titleApi.search("userId", 1);
-        setAllTitles(response);
-        setPagination({ ...pagination, total: response.length });
-      } catch (error) {
-        throw new Error(error);
-      }
-    };
-
-    fetchTitles();
-  }, []);
-
-  useEffect(() => {
-    const likes = allTitles.reduce((total, title) => total + title.like, 0);
-    const views = allTitles.reduce((total, title) => total + title.view, 0);
-    dispatch(
-      addStatisticCountData({ totalChapters: allTitles.length, likes, views })
-    );
-  }, [allTitles]);
+  const hasData = limitTitles.length > 0;
 
   useEffect(() => {
     const paginate = () => {
-      const data = allTitles.slice(
+      const data = titles.slice(
         (pagination.page - 1) * pagination.limit,
         pagination.page * pagination.limit
       );
-      setTitles(data);
+      setLimitTitles(data);
     };
 
-    paginate();
-  }, [allTitles, pagination.page]);
+    titles.length > 0 && paginate();
+  }, [titles, pagination.page]);
+
+  useEffect(() => {
+    const dispatchStatisticCount = () => {
+      const likes = titles.reduce((total, title) => total + title.like, 0);
+      const views = titles.reduce((total, title) => total + title.view, 0);
+      dispatch(
+        addStatisticCountData({ totalChapters: titles.length, likes, views })
+      );
+    };
+
+    titles.length > 0 && dispatchStatisticCount();
+  }, [titles]);
 
   return (
-    <>
-      <div className={cx("my-title")}>
-        <Container className={cx("my-title__header")}>
-          <span className={cx("my-title__header__total")}>
-            Tổng số truyện:{" "}
-            <span className={cx("my-title__header__total__number")}>
-              {pagination.total}
-            </span>
-          </span>
-          {hasData && <BtnCreate />}
-        </Container>
+    <div className={cx("my-title")}>
+      <Container className={cx("my-title__header")}>
+        <MyTitleHeader cx={cx} totalTitle={pagination.total} />
+        {hasData && <BtnCreate />}
+      </Container>
 
-        {hasData ? (
-          <GridTable
-            head={[
-              { label: "Ảnh bìa" },
-              { label: "Tiêu đề", md: 3 },
-              { label: "Số chương" },
-              { label: "Trạng thái" },
-              { label: "Ngày đăng" },
-              { label: "Ngày cập nhật" },
-              { label: "" },
-            ]}
-          >
-            <MyTitleTable data={titles} />
-          </GridTable>
-        ) : (
-          <NoData>
-            <h5>Hiện tại chưa có truyện nào!</h5>
-            <BtnCreate />
-          </NoData>
-        )}
-        <Pagination pagination={pagination} onPageChange={onPageChange} />
-      </div>
-
-      <div className={cx("")} />
-    </>
+      {hasData ? (
+        <MyTitleContent
+          titles={limitTitles}
+          pagination={pagination}
+          setPagination={setPagination}
+        />
+      ) : (
+        <NoData>
+          <h5>Hiện tại chưa có truyện nào!</h5>
+          <BtnCreate />
+        </NoData>
+      )}
+    </div>
   );
 }
 

@@ -1,0 +1,13 @@
+@use "assets/styles/variables" as var;
+
+.header {
+  padding: 0 1rem;
+  background-color: #fff;
+  height: var.$header-height;
+  border-bottom: 1px solid var.$gray-200;
+  margin-left: var.$sidebar-width;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

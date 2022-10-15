@@ -6,6 +6,7 @@
   align-items: center;
   justify-content: center;
   position: relative;
+  color: inherit;
 }
 
 .avatar {
@@ -16,6 +17,7 @@
   align-items: center;
   justify-content: flex-end;
   position: relative;
+  color: inherit;
 
   &:hover::before,
   &.active::before {
@@ -33,22 +35,16 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    color: variables.$txt-white;
-    display: block;
+    color: inherit;
     max-width: 120px;
-    z-index: -1;
     font-weight: 600;
-  }
-
-  svg {
-    color: #fff;
   }
 
   &__chevron-icon {
     position: absolute;
-    z-index: -1;
     right: 0px;
     font-size: 20px;
+    color: inherit;
   }
 
   &__icon {

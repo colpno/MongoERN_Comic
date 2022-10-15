@@ -1,12 +1,11 @@
-/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 
-import titleApi from "api/titleApi";
 import CardList from "components/CardList";
 import BannerSlider from "features/BannerSlider";
 import NoData from "features/NoData";
 import { Container } from "react-bootstrap";
+import { searchTitle } from "services/titleServices";
 import Calendar from "./assets/images/icons8-new-year-calendar-24.png";
 import styles from "./assets/styles/Weekly.module.scss";
 import DaysOfWeek from "./components/DaysOfWeek";
@@ -16,8 +15,8 @@ const cx = classNames.bind(styles);
 function Weekly() {
   const COMIC_PER_PAGE = 15;
   const today = new Date().getDay();
-  const [titles, setTitles] = useState();
   const [limit, setLimit] = useState(COMIC_PER_PAGE);
+
   const [dayFilter, setDayFilter] = useState(() => {
     switch (today) {
       case 0:
@@ -38,20 +37,7 @@ function Weekly() {
         return "T2";
     }
   });
-
-  useEffect(() => {
-    let response;
-    const fetchTitles = async () => {
-      try {
-        response = await titleApi.search({ schedule: dayFilter });
-        setTitles(response);
-      } catch (error) {
-        throw new Error(error);
-      }
-    };
-
-    fetchTitles();
-  }, [dayFilter]);
+  const { titles } = searchTitle("schedule", dayFilter, dayFilter);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -83,37 +69,34 @@ function Weekly() {
     });
 
   return (
-    <>
-      <div className={cx("weekly-page")}>
-        <div className={cx("slider")}>
-          {titles && <BannerSlider images={slider} />}
-        </div>
-        <div className={cx("notice-wrapper")}>
-          <Container>
-            <img src={Calendar} alt="Calendar" />
-            <span>Chương mới sẽ được cập nhật mỗi tuần theo lịch!</span>
-          </Container>
-        </div>
-        <DaysOfWeek
-          cx={cx}
-          handleDayClick={handleDayClick}
-          date={{
-            day: dayFilter,
-            today,
-          }}
-        />
-        {titles ? (
-          <Container className="cards-content">
-            <CardList data={titles.slice(0, limit)} col={{ md: 20 }} />
-          </Container>
-        ) : (
-          <NoData>
-            <h5>Không có dữ liệu để hiển thị</h5>
-          </NoData>
-        )}
+    <div className={cx("weekly-page")}>
+      <div className={cx("slider")}>
+        {titles && <BannerSlider images={slider} />}
       </div>
-      <div />
-    </>
+      <div className={cx("notice-wrapper")}>
+        <Container>
+          <img src={Calendar} alt="Calendar" />
+          <span>Chương mới sẽ được cập nhật mỗi tuần theo lịch!</span>
+        </Container>
+      </div>
+      <DaysOfWeek
+        cx={cx}
+        handleDayClick={handleDayClick}
+        date={{
+          day: dayFilter,
+          today,
+        }}
+      />
+      {titles ? (
+        <Container className="cards-content">
+          <CardList data={titles.slice(0, limit)} col={{ md: 20 }} />
+        </Container>
+      ) : (
+        <NoData>
+          <h5>Không có dữ liệu để hiển thị</h5>
+        </NoData>
+      )}
+    </div>
   );
 }
 

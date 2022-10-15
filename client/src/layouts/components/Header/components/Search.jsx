@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { IoSearchOutline } from "react-icons/io5";
 
-import titleApi from "api/titleApi";
 import styles from "layouts/components/Header/assets/styles/Search.module.scss";
+import { getTitles } from "services/titleServices";
 import SearchDropdownList from "./SearchDropdownList";
 
 const cx = classNames.bind(styles);
@@ -14,7 +14,7 @@ function Search() {
   const [searchValue, setSearchValue] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [showResult, setShowResult] = useState(true);
-  const [titles, setTitles] = useState([]);
+  const { titles } = getTitles();
   const debounced = useDebounce(searchValue, 500);
 
   const searchRef = useClickOutSide(
@@ -26,19 +26,6 @@ function Search() {
     setSearchValue("");
     setShowResult(false);
   };
-
-  useEffect(() => {
-    const fetchTitles = async () => {
-      try {
-        const response = await titleApi.getAll();
-        setTitles(response);
-      } catch (error) {
-        throw new Error(error);
-      }
-    };
-
-    fetchTitles();
-  }, []);
 
   useEffect(() => {
     if (debounced.length > 0) {

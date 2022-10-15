@@ -5,25 +5,24 @@ import { useParams } from "react-router-dom";
 
 import chapterApi from "api/chapterApi";
 import genreApi from "api/genreApi";
-import titleApi from "api/titleApi";
 import { Fullsize } from "assets/images";
 import { UserArray } from "database";
 import Pagination from "features/Pagination";
 import Popup from "features/Popup";
 import Recommend from "features/Recommend";
 import styles from "pages/Title/assets/styles/Title.module.scss";
+import { getTitleByID } from "services/titleServices";
 import { ComicChapters, Introduction, TitleAbout } from "./components";
 
 const cx = classNames.bind(styles);
 
 function Title() {
-  const [title, setTitle] = useState({});
+  const { titleId } = useParams();
+  const { title } = getTitleByID(titleId);
   const user = UserArray()[0];
   const [genres, setGenres] = useState("");
   const [chapters, setChapters] = useState([]);
   const [isDESCSorting, setIsDESCSorting] = useState(false);
-  const params = useParams();
-  const { titleId } = params;
   const hasData = Object.keys(title).length > 0;
 
   const [popup, setPopup] = useState({
@@ -66,19 +65,6 @@ function Title() {
 
     Object.keys(title).length > 0 && fetchGenres();
   }, [title]);
-
-  useEffect(() => {
-    const fetchTitle = async () => {
-      try {
-        const response = await titleApi.getOneById(titleId);
-        setTitle(response);
-      } catch (error) {
-        throw new Error(error);
-      }
-    };
-
-    fetchTitle();
-  }, []);
 
   useEffect(() => {
     const fetchChapters = async () => {

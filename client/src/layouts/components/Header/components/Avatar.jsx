@@ -18,6 +18,7 @@ function Avatar() {
   const [user, setUser] = useState({
     avatar: guessAvatar,
     userName: "Đăng nhập",
+    role: "",
     point: 0,
     coin: 0,
   });

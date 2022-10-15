@@ -22,7 +22,7 @@ function Header() {
         <div className={cx("desktop-screen")}>
           <div className={cx("logo")}>
             <a href="/">
-              <img src={Logo} alt="Logo" />
+              <Logo className={cx("logo")} />
             </a>
           </div>
           <ul className={cx("nav-menu")}>

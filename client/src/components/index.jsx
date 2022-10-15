@@ -14,3 +14,4 @@ export { default as Scrollbar } from "./Scrollbar/Scrollbar";
 export { default as TabsContainer } from "./TabsContainer/TabsContainer";
 export { default as TitleForm } from "./TitleForm/TitleForm";
 export { default as SideBar } from "./SideBar/SideBar";
+export { default as FloatingContainer } from "./FloatingContainer/FloatingContainer";
