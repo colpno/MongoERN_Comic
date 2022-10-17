@@ -10,7 +10,7 @@ import styles from "./Select.module.scss";
 const cx = classNames.bind(styles);
 
 // eslint-disable-next-line no-unused-vars
-function Select({ field, options, cn, onChange }) {
+function Select({ field, options, className, onChange }) {
   const [selectedOption, setSelectedOption] = useState({
     value: options[0].value,
     label: options[0].label,
@@ -35,7 +35,7 @@ function Select({ field, options, cn, onChange }) {
     <div className={cx("wrapper")} ref={selectRef}>
       <Button
         wrapper
-        className={`${cx("select")} ${cn}`}
+        className={`${cx("select")} ${className}`}
         onClick={() => setShowOptions(!showOptions)}
       >
         {selectedOption.label}
@@ -74,13 +74,13 @@ Select.propTypes = {
       label: PropTypes.string.isRequired,
     }).isRequired
   ).isRequired,
-  cn: PropTypes.string,
+  className: PropTypes.string,
   onChange: PropTypes.func,
 };
 
 Select.defaultProps = {
   field: {},
-  cn: "",
+  className: "",
   onChange: () => {},
 };
 

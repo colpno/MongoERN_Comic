@@ -12,19 +12,19 @@ function TitleManagementCards({
       <Col md={4}>
         <AdminCard
           rawData={continuingCardData.rawData}
-          chartData={continuingCardData.chartData}
+          chartProps={continuingCardData.chartProps}
         />
       </Col>
       <Col md={4}>
         <AdminCard
           rawData={pausedCardData.rawData}
-          chartData={pausedCardData.chartData}
+          chartProps={pausedCardData.chartProps}
         />
       </Col>
       <Col md={4}>
         <AdminCard
           rawData={finishedCardData.rawData}
-          chartData={finishedCardData.chartData}
+          chartProps={finishedCardData.chartProps}
         />
       </Col>
     </Row>
@@ -39,18 +39,7 @@ TitleManagementCards.propTypes = {
       subLabel: PropTypes.string,
       amount: PropTypes.number.isRequired,
     }).isRequired,
-    chartData: PropTypes.shape({
-      data: PropTypes.shape({
-        labels: PropTypes.arrayOf(PropTypes.string.isRequired),
-        datasets: PropTypes.arrayOf(
-          PropTypes.shape({
-            data: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
-            backgroundColor: PropTypes.arrayOf(PropTypes.string.isRequired)
-              .isRequired,
-          }).isRequired
-        ).isRequired,
-      }).isRequired,
-    }).isRequired,
+    chartProps: PropTypes.shape({}).isRequired,
   }).isRequired,
   pausedCardData: PropTypes.shape({
     rawData: PropTypes.shape({
@@ -59,18 +48,7 @@ TitleManagementCards.propTypes = {
       subLabel: PropTypes.string,
       amount: PropTypes.number.isRequired,
     }).isRequired,
-    chartData: PropTypes.shape({
-      data: PropTypes.shape({
-        labels: PropTypes.arrayOf(PropTypes.string.isRequired),
-        datasets: PropTypes.arrayOf(
-          PropTypes.shape({
-            data: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
-            backgroundColor: PropTypes.arrayOf(PropTypes.string.isRequired)
-              .isRequired,
-          }).isRequired
-        ).isRequired,
-      }).isRequired,
-    }).isRequired,
+    chartProps: PropTypes.shape({}).isRequired,
   }).isRequired,
   finishedCardData: PropTypes.shape({
     rawData: PropTypes.shape({
@@ -79,18 +57,7 @@ TitleManagementCards.propTypes = {
       subLabel: PropTypes.string,
       amount: PropTypes.number.isRequired,
     }).isRequired,
-    chartData: PropTypes.shape({
-      data: PropTypes.shape({
-        labels: PropTypes.arrayOf(PropTypes.string.isRequired),
-        datasets: PropTypes.arrayOf(
-          PropTypes.shape({
-            data: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
-            backgroundColor: PropTypes.arrayOf(PropTypes.string.isRequired)
-              .isRequired,
-          }).isRequired
-        ).isRequired,
-      }).isRequired,
-    }).isRequired,
+    chartProps: PropTypes.shape({}).isRequired,
   }).isRequired,
 };
 

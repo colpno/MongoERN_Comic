@@ -5,6 +5,9 @@ const url = "/titles";
 const titleApi = {
   getAll: (params) => axiosClient.get(url, { params }),
 
+  getAllByUserID: (ID, params) =>
+    axiosClient.get(`${url}?userId=${ID}`, { params }),
+
   getOneById: (id) =>
     axiosClient.get(`${url}/${id}?_expand=genre&_expand=titleStatus`),
 

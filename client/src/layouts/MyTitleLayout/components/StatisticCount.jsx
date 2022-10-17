@@ -1,24 +1,26 @@
-/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
+import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
-import { BsQuestionCircle } from "react-icons/bs";
-import { useSelector } from "react-redux";
 import { roundNumByUnit } from "utils";
-import {
-  BookLine,
-  ChatLine,
-  DollarLine,
-  EyeLine,
-  ThumbUpLine,
-} from "../assets/images";
+
+import { getTitlesByUerID } from "services/titleServices";
+import { BookLine, EyeLine, ThumbUpLine } from "../assets/images";
 import styles from "../assets/styles/StatisticCount.module.scss";
 
 const cx = classNames.bind(styles);
 
 function StatisticCount() {
-  const { totalChapters, likes, views } = useSelector(
-    (state) => state.statisticCount
-  );
+  const userID = 1;
+  const { titles } = getTitlesByUerID(userID);
+  const [data, setData] = useState({ likes: 0, views: 0, totalTitles: 0 });
+
+  useEffect(() => {
+    if (titles.length > 0) {
+      const likes = titles.reduce((total, title) => total + title.like, 0);
+      const views = titles.reduce((total, title) => total + title.view, 0);
+      setData({ likes, views, totalTitles: titles.length });
+    }
+  }, [titles]);
 
   return (
     <Container className={cx("statistic-count")}>
@@ -29,21 +31,21 @@ function StatisticCount() {
             Tổng số truyện
           </p>
           <strong className={cx("statistic-count__total-title__number")}>
-            {totalChapters}
+            {data.totalTitles}
           </strong>
         </Col>
         <Col className={cx("statistic-count__col")}>
           <EyeLine className={cx("statistic-count__view__icon")} />
           <p className={cx("statistic-count__view__label")}>Lượt xem</p>
           <strong className={cx("statistic-count__view__number")}>
-            {roundNumByUnit(likes)}
+            {roundNumByUnit(data.likes)}
           </strong>
         </Col>
         <Col className={cx("statistic-count__col")}>
           <ThumbUpLine className={cx("statistic-count__view__icon")} />
           <p className={cx("statistic-count__like__label")}>Lượt thích</p>
           <strong className={cx("statistic-count__like__number", "active")}>
-            {roundNumByUnit(views)}
+            {roundNumByUnit(data.views)}
           </strong>
         </Col>
         {/* <Col className={cx("statistic-count__col")}>

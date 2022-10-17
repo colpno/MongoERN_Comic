@@ -1,0 +1,28 @@
+@use "assets/styles/variables" as var;
+
+.input {
+  height: var.$field-height;
+  width: 100%;
+  border: 1px solid var.$gray-400;
+  padding: var.$field-padding;
+  color: #777;
+  outline: none;
+  border-radius: 4px;
+
+  &.small {
+    height: calc(var.$field-height - 0.8rem);
+  }
+}
+
+.input.is-invalid + .letter-counter {
+  right: 35px;
+}
+
+.letter-counter {
+  position: absolute;
+  top: calc(var.$field-height / 2);
+  right: 20px;
+  transform: translateY(-50%);
+  color: #ccc;
+  pointer-events: none;
+}

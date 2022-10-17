@@ -39,6 +39,44 @@ export const getTitles = (limit, ...dependencies) => {
   return { titles, setTitles, pagination, setPagination };
 };
 
+export const getTitlesByUerID = (ID, limit, ...dependencies) => {
+  const [titles, setTitles] = useState([]);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit,
+    total: 0,
+  });
+
+  useEffect(() => {
+    const fetchTitles = async () => {
+      try {
+        if (limit) {
+          const response = await titleApi.getAllByUserID(ID, {
+            _page: pagination.page,
+            _limit: pagination.limit,
+          });
+          setTitles(response.data);
+          setPagination((prev) => {
+            return { ...prev, total: response.pagination.total };
+          });
+        } else {
+          const response = await titleApi.getAllByUserID(ID);
+          setTitles(response);
+          setPagination((prev) => {
+            return { ...prev, total: response.length };
+          });
+        }
+      } catch (error) {
+        throw new Error(error);
+      }
+    };
+
+    fetchTitles();
+  }, [pagination.page, ...dependencies]);
+
+  return { titles, setTitles, pagination, setPagination };
+};
+
 export const getTitleByID = (ID, ...dependencies) => {
   const [title, setTitle] = useState({});
 

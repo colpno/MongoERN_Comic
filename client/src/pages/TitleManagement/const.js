@@ -8,7 +8,7 @@ export const getContinuingCardData = (totalOfTitles, amount) => {
       amount,
       subLabel: "All time",
     },
-    chartData: {
+    chartProps: {
       data: {
         labels: ["Continuing titles", "All titles"],
         datasets: [
@@ -17,6 +17,13 @@ export const getContinuingCardData = (totalOfTitles, amount) => {
             backgroundColor: ["hsl(151, 81%, 46%)", "transparent"],
           },
         ],
+      },
+      options: {
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
       },
     },
   };
@@ -30,7 +37,7 @@ export const getPausedCardData = (totalOfTitles, amount) => {
       amount,
       subLabel: "All time",
     },
-    chartData: {
+    chartProps: {
       data: {
         labels: ["Paused titles", "All titles"],
         datasets: [
@@ -39,6 +46,13 @@ export const getPausedCardData = (totalOfTitles, amount) => {
             backgroundColor: ["rgb(240 240 0)", "transparent"],
           },
         ],
+      },
+      options: {
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
       },
     },
   };
@@ -52,7 +66,7 @@ export const getFinishedCardData = (totalOfTitles, amount) => {
       amount,
       subLabel: "All time",
     },
-    chartData: {
+    chartProps: {
       data: {
         labels: ["Finished titles", "All titles"],
         datasets: [
@@ -61,6 +75,13 @@ export const getFinishedCardData = (totalOfTitles, amount) => {
             backgroundColor: ["#f90000", "transparent"],
           },
         ],
+      },
+      options: {
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
       },
     },
   };

@@ -1,19 +1,16 @@
-@use "assets/styles/variables";
+@use "assets/styles/variables" as var;
 @use "components/Scrollbar/Scrollbar.module.scss" as scl;
 
 .field {
   position: relative;
-  $fieldSize: 45px;
 
-  &__input,
   &__select {
-    height: $fieldSize;
+    height: var.$field-height;
   }
 
-  &__input,
   &__textarea {
     width: 100%;
-    border: 1px solid variables.$gray-400;
+    border: 1px solid var.$gray-400;
     padding: 15px;
     color: #777;
     outline: none;
@@ -21,19 +18,6 @@
   }
 
   // Input field
-
-  &__input.is-invalid + &__input__length {
-    right: 35px;
-  }
-
-  &__input__length {
-    position: absolute;
-    top: calc($fieldSize / 2);
-    right: 20px;
-    transform: translateY(-50%);
-    color: #ccc;
-    pointer-events: none;
-  }
 
   // Select field
   &__select {

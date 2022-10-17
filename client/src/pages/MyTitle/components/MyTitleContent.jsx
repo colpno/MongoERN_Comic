@@ -49,7 +49,15 @@ MyTitleContent.propTypes = {
   titles: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
-      titleName: PropTypes.string.isRequired,
+      titleName: PropTypes.oneOfType([
+        PropTypes.string.isRequired,
+        PropTypes.arrayOf(
+          PropTypes.oneOfType([
+            PropTypes.node.isRequired,
+            PropTypes.string.isRequired,
+          ]).isRequired
+        ).isRequired,
+      ]).isRequired,
       coverImage: PropTypes.string.isRequired,
       totalChapter: PropTypes.number.isRequired,
       titleStatusId: PropTypes.number.isRequired,
