@@ -4,7 +4,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 
 import Button from "components/Button";
 import NoData from "features/NoData";
-import { getTitlesByUerID } from "services/titleServices";
+import { sortTitles } from "services/titleServices";
 import styles from "./assets/styles/MyTitle.module.scss";
 import MyTitleContent from "./components/MyTitleContent";
 import MyTitleHeader from "./components/MyTitleHeader";
@@ -23,12 +23,13 @@ function BtnCreate() {
 function MyTitle() {
   const userID = 1;
   const TITLES_PER_PAGE = 50;
-  const {
-    titles: titlesByPage,
-    pagination,
-    setPagination,
-  } = getTitlesByUerID(userID, TITLES_PER_PAGE);
-  const hasData = titlesByPage?.length > 0;
+  const { titles, pagination, setPagination, sorting } = sortTitles(
+    "index",
+    true,
+    TITLES_PER_PAGE,
+    userID
+  );
+  const hasData = titles?.length > 0;
 
   return (
     <div className={cx("my-title")}>
@@ -39,7 +40,8 @@ function MyTitle() {
       {hasData ? (
         <Container>
           <MyTitleContent
-            titles={titlesByPage}
+            sorting={sorting}
+            titles={titles}
             pagination={pagination}
             setPagination={setPagination}
           />

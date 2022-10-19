@@ -6,9 +6,11 @@ import styles from "./FloatingContainer.module.scss";
 
 const cx = classNames.bind(styles);
 
-function FloatingContainer({ children, cn }) {
+function FloatingContainer({ children, className }) {
   return (
-    <div className={`${cx("floating-container")}${cn && ` ${cn}`}`}>
+    <div
+      className={`${cx("floating-container")}${className && ` ${className}`}`}
+    >
       {children}
     </div>
   );
@@ -16,11 +18,11 @@ function FloatingContainer({ children, cn }) {
 
 FloatingContainer.propTypes = {
   children: PropTypes.node.isRequired,
-  cn: PropTypes.string,
+  className: PropTypes.string,
 };
 
 FloatingContainer.defaultProps = {
-  cn: "",
+  className: "",
 };
 
 export default memo(FloatingContainer);

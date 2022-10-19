@@ -1,11 +1,15 @@
-import searchReducer from "./slices/searchSlice";
-import statisticCountReducer from "./slices/statisticCountSlice";
-import userReducer from "./slices/userSlice";
+import {
+  myTitlesReducer,
+  searchReducer,
+  statisticCountReducer,
+  userReducer,
+} from "./slices";
 
 const rootReducer = {
   user: userReducer,
   statisticCount: statisticCountReducer,
   search: searchReducer,
+  myTitles: myTitlesReducer,
 };
 
 export default rootReducer;

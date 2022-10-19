@@ -14,11 +14,21 @@ function MyTitleTable({ data }) {
   return (
     <>
       {data.map((title) => {
-        const { id, coverImage, titleName, totalChapter, titleStatusId } =
-          title;
+        const {
+          index,
+          id,
+          coverImage,
+          titleName,
+          totalChapter,
+          titleStatusId,
+        } = title;
         const timeObj = formatTime(new Date(2022, 7, 16, 23, 16, 0, 0));
+
         return (
           <Row key={id} className={cx("my-title__container__content")}>
+            <Col sm={1}>
+              <span>{index}</span>
+            </Col>
             <Col>
               <div className={cx("box-img")}>
                 <img src={coverImage} alt={titleName} />
@@ -77,6 +87,7 @@ function MyTitleTable({ data }) {
 MyTitleTable.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
+      index: PropTypes.number.isRequired,
       id: PropTypes.number.isRequired,
       titleName: PropTypes.oneOfType([
         PropTypes.string.isRequired,

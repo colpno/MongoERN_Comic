@@ -20,8 +20,8 @@ function InventoryInteract({ cx, handleSort, sortOptions, handleFilter }) {
         </Button>
         <Select
           options={sortOptions}
-          cn={cx("select")}
-          onChange={handleFilter}
+          field={{ onChange: handleFilter }}
+          height={34}
         />
       </div>
     </Col>

@@ -1,6 +1,6 @@
 import AdminCard from "layouts/AdminLayout/components/AdminCard";
 import PropTypes from "prop-types";
-import { Col, Row } from "react-bootstrap";
+import { Col } from "react-bootstrap";
 
 function TitleManagementCards({
   continuingCardData,
@@ -8,7 +8,7 @@ function TitleManagementCards({
   finishedCardData,
 }) {
   return (
-    <Row>
+    <>
       <Col md={4}>
         <AdminCard
           rawData={continuingCardData.rawData}
@@ -27,7 +27,7 @@ function TitleManagementCards({
           chartProps={finishedCardData.chartProps}
         />
       </Col>
-    </Row>
+    </>
   );
 }
 

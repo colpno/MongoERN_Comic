@@ -16,9 +16,9 @@ function CreateTitle() {
     summary: "",
     titleStatusId: "",
     genreId: [],
-    // coverImageTemp: "",
-    // largeCoverImageTemp: "",
-    // email: "",
+    coverImageTemp: "",
+    largeCoverImageTemp: "",
+    email: "",
   };
 
   const VALIDATION_SCHEMA = Yup.object({

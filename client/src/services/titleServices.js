@@ -96,26 +96,52 @@ export const getTitleByID = (ID, ...dependencies) => {
   return { title, setTitle };
 };
 
-export const sortTitles = (key, asc = "asc", ...dependencies) => {
+export const sortTitles = (col, isAsc, limit = 50, userID = null) => {
   const [titles, setTitles] = useState([]);
+  const [sort, setSort] = useState({ isAsc, col });
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit,
+    total: 0,
+  });
+
+  const sorting = (column) => {
+    setSort({ isAsc: !sort.isAsc, col: column });
+  };
+
+  const sortOrder = () => (sort.isAsc ? "asc" : "desc");
+
+  const fetchTitles = async () => {
+    try {
+      const response = userID
+        ? // get titles by userID with sorted data
+          await titleApi.sortByUserID(userID, sort.col, sortOrder(), {
+            _page: pagination.page,
+            _limit: pagination.limit,
+          })
+        : // get titles with sorted data
+          await titleApi.sort(sort.col, sortOrder(), {
+            _page: pagination.page,
+            _limit: pagination.limit,
+          });
+      setTitles(response.data);
+      setPagination({ ...pagination, total: response.pagination.total });
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
 
   useEffect(() => {
-    const fetchTitles = async () => {
-      try {
-        const response = await titleApi.sort(key, asc, {
-          _limit: 50,
-          _page: 1,
-        });
-        setTitles(response.data);
-      } catch (error) {
-        throw new Error(error);
-      }
-    };
-
     fetchTitles();
-  }, [...dependencies]);
+  }, [pagination.page, sort.isAsc, sort.col]);
 
-  return { titles, setTitles };
+  return {
+    titles,
+    setTitles,
+    pagination,
+    setPagination,
+    sorting,
+  };
 };
 
 export const searchTitle = (key, value, ...dependencies) => {

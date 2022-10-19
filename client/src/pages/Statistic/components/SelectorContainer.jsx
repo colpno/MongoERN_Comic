@@ -7,9 +7,11 @@ function SelectorContainer({ cx, titleLabel, options, handleChange }) {
     <div className={cx("selector-container")}>
       <h4>{titleLabel}:</h4>
       <Select
+        className={cx("select")}
         options={options}
-        onChange={handleChange}
-        className={cx("title-selector")}
+        field={{ onChange: handleChange }}
+        searchable
+        height={30}
       />
     </div>
   );

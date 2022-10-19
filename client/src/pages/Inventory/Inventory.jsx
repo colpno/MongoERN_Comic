@@ -8,6 +8,7 @@ import GridTable from "components/GridTable";
 import { UserArray } from "database";
 import Popup from "features/Popup";
 import TicketExplainPopup from "pages/Title/components/TicketExplainPopup";
+import { sort } from "utils/arrayMethods";
 import { ReactComponent as TicketLogo } from "./assets/images/ticket.svg";
 import styles from "./assets/styles/Inventory.module.scss";
 import InventoryInteract from "./components/InventoryInteract";
@@ -44,9 +45,9 @@ function Inventory() {
   const sorting = (array, asc, key) => {
     switch (asc) {
       case true:
-        return array.sort((a, b) => a[key].localeCompare(b[key]));
+        return sort(array, key, "asc");
       case false:
-        return array.sort((a, b) => b[key].localeCompare(a[key]));
+        return sort(array, key, "desc");
       default:
         return array;
     }
@@ -69,9 +70,8 @@ function Inventory() {
     setTitles(data);
   };
 
-  const handleFilter = (e) => {
-    const { value } = e.target;
-
+  const handleFilter = (selected) => {
+    const { value } = selected;
     if (sorter.key !== value) {
       const data = [...hiredTitles, ...purchasedTitles];
 

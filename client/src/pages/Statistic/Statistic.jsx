@@ -1,17 +1,16 @@
 import classNames from "classnames/bind";
 import { Col, Container, Row } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
-import NoData from "features/NoData";
-import { getTitlesByUerID } from "services/titleServices";
 import LineChart from "features/LineChart/LineChart";
+import NoData from "features/NoData";
 import SelectorContainer from "./components/SelectorContainer";
 import styles from "./styles/Statistic.module.scss";
 
 const cx = classNames.bind(styles);
 
 function Statistic() {
-  const userID = 1;
-  const { titles } = getTitlesByUerID(userID);
+  const titles = useSelector((state) => state.myTitles.titles);
   const hasData = titles.length > 0;
 
   const monthsLabel = [

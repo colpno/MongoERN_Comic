@@ -1,12 +1,9 @@
 import classNames from "classnames/bind";
-import { useEffect } from "react";
 import { Container, Row } from "react-bootstrap";
-import { useDispatch } from "react-redux";
 
 import { FloatingContainer } from "components";
-import { setSearchResult } from "libs/redux/slices/searchSlice";
 import MyTitleContent from "pages/MyTitle/components/MyTitleContent";
-import { getTitles } from "services/titleServices";
+import { sortTitles } from "services/titleServices";
 import TitleManagementCards from "./components/TitleManagementCards";
 import {
   getContinuingCardData,
@@ -19,35 +16,41 @@ const cx = classNames.bind(styles);
 
 function TitleManagement() {
   const TITLES_PER_PAGE = 50;
-  const { titles, pagination, setPagination } = getTitles(TITLES_PER_PAGE);
-  const { titles: allTitles } = getTitles();
+  const { titles, pagination, setPagination, sorting } = sortTitles(
+    "index",
+    true,
+    TITLES_PER_PAGE
+  );
+  const hasData = titles?.length > 0;
   const total = 214;
   const continuingCardData = getContinuingCardData(total, 123);
   const pausedCardData = getPausedCardData(total, 23);
   const finishedCardData = getFinishedCardData(total, 50);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(setSearchResult([...allTitles]));
-  }, []);
 
   return (
     <Container>
-      <TitleManagementCards
-        continuingCardData={continuingCardData}
-        pausedCardData={pausedCardData}
-        finishedCardData={finishedCardData}
-      />
-      <Row>
-        <h4 className={cx("label")}>All Titles</h4>
-      </Row>
-      <FloatingContainer>
-        <MyTitleContent
-          titles={titles}
-          pagination={pagination}
-          setPagination={setPagination}
-        />
-      </FloatingContainer>
+      {hasData && (
+        <>
+          <Row>
+            <TitleManagementCards
+              continuingCardData={continuingCardData}
+              pausedCardData={pausedCardData}
+              finishedCardData={finishedCardData}
+            />
+          </Row>
+          <Row>
+            <h4 className={cx("label")}>All Titles</h4>
+          </Row>
+          <FloatingContainer>
+            <MyTitleContent
+              sorting={sorting}
+              titles={titles}
+              pagination={pagination}
+              setPagination={setPagination}
+            />
+          </FloatingContainer>
+        </>
+      )}
     </Container>
   );
 }

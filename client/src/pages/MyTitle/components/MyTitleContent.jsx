@@ -5,7 +5,7 @@ import { GridTable } from "components";
 import Pagination from "features/Pagination";
 import MyTitleTable from "./MyTitleTable";
 
-function MyTitleContent({ titles, pagination, setPagination }) {
+function MyTitleContent({ titles, pagination, setPagination, sorting }) {
   const onPageChange = (newPage) => {
     setPagination({ ...pagination, page: newPage });
   };
@@ -15,28 +15,40 @@ function MyTitleContent({ titles, pagination, setPagination }) {
       <GridTable
         head={[
           {
+            label: "#",
+            name: "index",
+            sm: 1,
+          },
+          {
             label: "Ảnh bìa",
           },
           {
             label: "Tiêu đề",
+            name: "titleName",
             md: 3,
           },
           {
             label: "Số chương",
+            name: "totalChapter",
           },
           {
             label: "Trạng thái",
+            name: "titleStatusId",
           },
           {
             label: "Ngày đăng",
+            name: "createdAt",
           },
           {
             label: "Ngày cập nhật",
+            name: "updatedAt",
           },
           {
             label: "",
           },
         ]}
+        sorting={sorting}
+        border
       >
         <MyTitleTable data={titles} />
       </GridTable>
@@ -69,6 +81,11 @@ MyTitleContent.propTypes = {
     total: PropTypes.number.isRequired,
   }).isRequired,
   setPagination: PropTypes.func.isRequired,
+  sorting: PropTypes.func,
+};
+
+MyTitleContent.defaultProps = {
+  sorting: () => {},
 };
 
 export default memo(MyTitleContent);

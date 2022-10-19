@@ -1,0 +1,23 @@
+@use "components/Scrollbar/Scrollbar.module.scss" as scl;
+
+.textarea {
+  position: relative;
+
+  &.is-invalid {
+    border-color: red;
+  }
+}
+
+.text-length {
+  padding-bottom: 30px;
+  @extend .scrollbar;
+
+  position: absolute;
+  bottom: 10px;
+  right: 20px;
+  color: #ccc;
+
+  .textarea.is-invalid + .text-length {
+    bottom: 36px;
+  }
+}

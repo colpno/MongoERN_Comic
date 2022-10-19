@@ -20,25 +20,8 @@
   // Input field
 
   // Select field
-  &__select {
-  }
 
   // Textarea field
-  &__textarea {
-    padding-bottom: 30px;
-    @extend .scrollbar;
-  }
-
-  &__textarea__length {
-    position: absolute;
-    bottom: 10px;
-    right: 20px;
-    color: #ccc;
-  }
-
-  &__textarea.is-invalid + &__textarea__length {
-    bottom: 36px;
-  }
 
   // Radio / Checkbox
   &__group {

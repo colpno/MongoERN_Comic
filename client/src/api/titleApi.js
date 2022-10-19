@@ -16,7 +16,14 @@ const titleApi = {
   delete: (id) => axiosClient.get(`${url}/${id}`),
 
   sort: (key, order, params) =>
-    axiosClient.get(`${url}?_sort=${key}&_order=${order}`, { params }),
+    axiosClient.get(`${url}?_sort=${key}&_order=${order}`, {
+      params,
+    }),
+
+  sortByUserID: (ID, key, order, params) =>
+    axiosClient.get(`${url}?userID=${ID}&_sort=${key}&_order=${order}`, {
+      params,
+    }),
 
   filter: (filterObj) => {
     const key = Object.keys(filterObj)[0];

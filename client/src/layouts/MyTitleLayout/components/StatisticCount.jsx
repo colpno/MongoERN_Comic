@@ -1,8 +1,10 @@
 import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 import { roundNumByUnit } from "utils";
 
+import { setMyTitles } from "libs/redux/slices/myTitlesSlice";
 import { getTitlesByUerID } from "services/titleServices";
 import { BookLine, EyeLine, ThumbUpLine } from "../assets/images";
 import styles from "../assets/styles/StatisticCount.module.scss";
@@ -10,9 +12,14 @@ import styles from "../assets/styles/StatisticCount.module.scss";
 const cx = classNames.bind(styles);
 
 function StatisticCount() {
+  const dispatch = useDispatch();
   const userID = 1;
   const { titles } = getTitlesByUerID(userID);
   const [data, setData] = useState({ likes: 0, views: 0, totalTitles: 0 });
+
+  useEffect(() => {
+    titles.length > 0 && dispatch(setMyTitles(titles));
+  }, [titles]);
 
   useEffect(() => {
     if (titles.length > 0) {

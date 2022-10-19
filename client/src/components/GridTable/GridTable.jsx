@@ -2,26 +2,41 @@ import classNames from "classnames/bind";
 import PropTypes from "prop-types";
 import { memo } from "react";
 import { Col, Row } from "react-bootstrap";
+import { FaSort } from "react-icons/fa";
+
+import { Button } from "components";
 import styles from "./GridTable.module.scss";
 
 const cx = classNames.bind(styles);
 
-function GridTable({ head, children }) {
+function GridTable({ head, children, border, sorting }) {
+  const classes = cx("grid-table", { border });
+
   return (
-    <div className={cx("grid-table")}>
+    <div className={classes}>
       <Row className={cx("grid-table__head")}>
         {head.map((item, index) => {
+          const { label, name, center, sm, md, lg, xl, xxl } = item;
+
           return (
             <Col
-              sm={item.sm}
-              md={item.md}
-              lg={item.lg}
-              xl={item.xl}
-              xxl={item.xxl}
+              sm={sm}
+              md={md}
+              lg={lg}
+              xl={xl}
+              xxl={xxl}
               key={index}
-              className={item.center && "center"}
+              className={center && "center"}
+              onClick={() => name && sorting(name)}
             >
-              {item.label}
+              {name ? (
+                <Button text className={cx("wrapper--sort")}>
+                  <span>{label}</span>
+                  <FaSort className={cx("sort-icon")} />
+                </Button>
+              ) : (
+                <span>{label}</span>
+              )}
             </Col>
           );
         })}
@@ -35,6 +50,7 @@ GridTable.propTypes = {
   head: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string.isRequired,
+      name: PropTypes.string,
       sm: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       md: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       lg: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
@@ -44,6 +60,9 @@ GridTable.propTypes = {
     }).isRequired
   ),
   children: PropTypes.node.isRequired,
+  sorting: PropTypes.func.isRequired,
+
+  border: PropTypes.bool,
 };
 
 GridTable.defaultProps = {
@@ -57,6 +76,8 @@ GridTable.defaultProps = {
       center: false,
     },
   ],
+
+  border: false,
 };
 
 export default memo(GridTable);
