@@ -6,6 +6,7 @@ const randomTitles = (numberOfTitle) => {
 
   Array.from(new Array(numberOfTitle)).forEach(() => {
     const title = {
+      index,
       id: index,
       userId: 1,
       coverImage: faker.image.animals(275, 275),
