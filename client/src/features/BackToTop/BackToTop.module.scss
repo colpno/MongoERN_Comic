@@ -1,0 +1,30 @@
+@use "assets/styles/variables" as var;
+
+.back-to-top {
+  $size: 60px;
+  $position: 40px;
+
+  background: var.$primary;
+  height: $size;
+  width: $size;
+  outline: none;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 0 4px 1px rgb(0 0 0 / 0.5), 0 0 4px 1px rgb(255 255 255 / 0.4);
+
+  position: fixed;
+  bottom: $position;
+  right: $position;
+  z-index: 5;
+  cursor: pointer;
+  transition: opacity 0.2s ease-in-out;
+  opacity: 1;
+
+  svg {
+    font-size: 35px;
+  }
+
+  &.disabled {
+    opacity: 0;
+  }
+}

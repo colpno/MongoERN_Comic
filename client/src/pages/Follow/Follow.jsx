@@ -6,9 +6,7 @@ import followApi from "api/followApi";
 import { noFavorite } from "assets/images";
 import GridTable from "components/GridTable";
 import TabsContainer from "components/TabsContainer";
-import NoData from "features/NoData";
-import Pagination from "features/Pagination";
-import Popup from "features/Popup";
+import { NoData, Pagination, Popup } from "features";
 import styles from "./assets/styles/Follow.module.scss";
 import FollowTable from "./components/FollowTable";
 

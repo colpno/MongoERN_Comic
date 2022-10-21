@@ -2,10 +2,9 @@ import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 
 import CardList from "components/CardList";
-import BannerSlider from "features/BannerSlider";
-import NoData from "features/NoData";
+import { BannerSlider, NoData } from "features";
 import { Container } from "react-bootstrap";
-import { searchTitle } from "services/titleServices";
+import { searchTitle } from "services/title";
 import Calendar from "./assets/images/icons8-new-year-calendar-24.png";
 import styles from "./assets/styles/Weekly.module.scss";
 import DaysOfWeek from "./components/DaysOfWeek";

@@ -7,7 +7,7 @@ import { useLocation } from "react-router-dom";
 
 import { ChargeIcon, CircleC, CircleP } from "assets/images";
 import Button from "components/Button";
-import NoData from "features/NoData";
+import { NoData } from "features";
 import styles from "pages/Title/assets/styles/ComicChapters.module.scss";
 import separateNumber from "utils/separateNumber";
 

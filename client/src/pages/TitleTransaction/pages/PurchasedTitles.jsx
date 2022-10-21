@@ -4,7 +4,7 @@ import { Col, Row } from "react-bootstrap";
 
 import GridTable from "components/GridTable";
 import purchaseTitleApi from "api/purchaseTitleApi";
-import NoData from "features/NoData";
+import { NoData } from "features";
 
 function PurchasedTitles({ cx }) {
   const userId = 1;

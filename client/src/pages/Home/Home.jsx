@@ -2,7 +2,7 @@ import classNames from "classnames/bind";
 import { Container } from "react-bootstrap";
 
 import { Fullsize } from "assets/images";
-import BannerSlider from "features/BannerSlider";
+import { BannerSlider } from "features";
 import styles from "pages/Home/assets/styles/Home.module.scss";
 import { ComicSection, Notification } from "./components";
 

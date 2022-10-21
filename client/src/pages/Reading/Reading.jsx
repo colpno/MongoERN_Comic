@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import chapterApi from "api/chapterApi";
-import Recommend from "features/Recommend";
+import { Recommend } from "features";
 import styles from "pages/Reading/assets/styles/Reading.module.scss";
 import GGPlay from "./assets/images/icons8-google-play-48.png";
 import {

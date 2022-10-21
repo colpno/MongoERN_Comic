@@ -8,7 +8,7 @@ import styles from "./assets/Pagination.module.scss";
 
 const cx = classNames.bind(styles);
 
-function Pagination({ pagination, onPageChange }) {
+function Pagination({ pagination, setPagination }) {
   const { page, limit, total } = pagination;
   const totalPage = Math.ceil(total / limit);
   const LIMIT_NEARBY_PAGES = 2;
@@ -33,7 +33,7 @@ function Pagination({ pagination, onPageChange }) {
   const pages = createArrayFromTo(firstPage, lastPage);
 
   const handlePageChange = (newPage) => {
-    onPageChange(newPage);
+    setPagination({ ...pagination, page: newPage });
   };
 
   return (
@@ -108,7 +108,7 @@ Pagination.propTypes = {
     limit: PropTypes.number.isRequired,
     total: PropTypes.number.isRequired,
   }).isRequired,
-  onPageChange: PropTypes.func.isRequired,
+  setPagination: PropTypes.func.isRequired,
 };
 
 export default memo(Pagination);

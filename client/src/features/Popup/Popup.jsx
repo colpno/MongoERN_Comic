@@ -1,6 +1,6 @@
 import classNames from "classnames/bind";
 import Button from "components/Button";
-import { Dialog } from "components/Dialog";
+import { Dialog } from "features";
 import PropTypes from "prop-types";
 import styles from "./assets/styles/Popup.module.scss";
 import YesNoPopupButtons from "./components/YesNoPopupButtons";

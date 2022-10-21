@@ -3,13 +3,8 @@ import { Container, Row } from "react-bootstrap";
 
 import { FloatingContainer } from "components";
 import MyTitleContent from "pages/MyTitle/components/MyTitleContent";
-import { sortTitles } from "services/titleServices";
+import { sortTitles } from "services/title";
 import TitleManagementCards from "./components/TitleManagementCards";
-import {
-  getContinuingCardData,
-  getFinishedCardData,
-  getPausedCardData,
-} from "./const";
 import styles from "./styles/TitleManagement.module.scss";
 
 const cx = classNames.bind(styles);
@@ -22,21 +17,13 @@ function TitleManagement() {
     TITLES_PER_PAGE
   );
   const hasData = titles?.length > 0;
-  const total = 214;
-  const continuingCardData = getContinuingCardData(total, 123);
-  const pausedCardData = getPausedCardData(total, 23);
-  const finishedCardData = getFinishedCardData(total, 50);
 
   return (
     <Container>
       {hasData && (
         <>
           <Row>
-            <TitleManagementCards
-              continuingCardData={continuingCardData}
-              pausedCardData={pausedCardData}
-              finishedCardData={finishedCardData}
-            />
+            <TitleManagementCards totalTitles={pagination.total} />
           </Row>
           <Row>
             <h4 className={cx("label")}>All Titles</h4>

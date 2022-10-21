@@ -38,6 +38,9 @@ import {
   Register,
   ForgotPassword,
   TitleManagement,
+  ChapterManagement,
+  AdminManagement,
+  MemberManagement,
 } from "pages";
 
 export const publicRoutes = [
@@ -164,8 +167,23 @@ export const publicRoutes = [
     layout: MyTitleLayout,
   },
   {
-    path: "/admin",
+    path: "/admin/titles",
     component: TitleManagement,
+    layout: AdminLayout,
+  },
+  {
+    path: "/admin/chapters",
+    component: ChapterManagement,
+    layout: AdminLayout,
+  },
+  {
+    path: "/admin/members",
+    component: MemberManagement,
+    layout: AdminLayout,
+  },
+  {
+    path: "/admin/administrators",
+    component: AdminManagement,
     layout: AdminLayout,
   },
 ];

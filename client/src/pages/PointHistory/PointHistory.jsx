@@ -4,7 +4,7 @@ import { Col, Container, Row } from "react-bootstrap";
 
 import pointHistoryApi from "api/pointHistoryApi";
 import { CircleP } from "assets/images";
-import NoData from "features/NoData";
+import { NoData } from "features";
 import { formatToDateTimeString } from "utils/convertTime";
 import styles from "./assets/styles/PointHistory.module.scss";
 

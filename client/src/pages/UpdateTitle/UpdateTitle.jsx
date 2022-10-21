@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import * as Yup from "yup";
 
 import TitleForm from "components/TitleForm";
-import { getTitleByID } from "services/titleServices";
+import { getTitleByID } from "services/title";
 import styles from "./UpdateTitle.module.scss";
 
 const cx = classNames.bind(styles);

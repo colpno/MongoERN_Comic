@@ -1,4 +1,3 @@
-export { default as Dialog } from "./Dialog/Dialog";
 export { default as Image } from "./Image/Image";
 export { default as Button } from "./Button/Button";
 export { default as InputImage } from "./InputImage/InputImage";
@@ -13,5 +12,4 @@ export { default as ProfileForm } from "./ProfileForm/ProfileForm";
 export { default as Scrollbar } from "./Scrollbar/Scrollbar";
 export { default as TabsContainer } from "./TabsContainer/TabsContainer";
 export { default as TitleForm } from "./TitleForm/TitleForm";
-export { default as SideBar } from "./SideBar/SideBar";
 export { default as FloatingContainer } from "./FloatingContainer/FloatingContainer";

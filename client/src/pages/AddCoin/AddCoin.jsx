@@ -1,6 +1,6 @@
 import classNames from "classnames/bind";
 import { Button, Radio } from "components";
-import NoData from "features/NoData";
+import { NoData } from "features";
 import { useState } from "react";
 import { Container } from "react-bootstrap";
 import styles from "./assets/styles/AddCoin.module.scss";

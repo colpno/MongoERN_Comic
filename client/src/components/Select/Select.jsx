@@ -1,5 +1,9 @@
 import PropTypes from "prop-types";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import ReactSelect from "react-select";
+
+import { setSelectedOption } from "libs/redux/slices/selectFieldSlice";
 
 function Select({
   className,
@@ -12,6 +16,12 @@ function Select({
   autoFocus,
   height,
 }) {
+  const dispatch = useDispatch();
+
+  const [value, setValue] = useState({
+    value: options[0].value,
+    label: options[0].label,
+  });
   const styles = {
     control: (base) => ({
       ...base,
@@ -43,12 +53,19 @@ function Select({
     }),
   };
 
+  const handleChange = (selected) => {
+    setValue(selected);
+    dispatch(setSelectedOption(selected));
+  };
+
   return (
     <ReactSelect
       className={className}
       styles={styles}
       {...field}
-      defaultValue={defaultValue.label ? defaultValue : options[0]}
+      value={value}
+      onChange={handleChange}
+      defaultValue={defaultValue.label ? defaultValue : "Select"}
       options={options}
       isMulti={multi}
       isDisabled={disabled}
@@ -101,7 +118,7 @@ export default Select;
 /* Custom select */
 
 // function Select({ field, options, className, onChange }) {
-// const [selectedOption, setSelectedOption] = useState({
+// const [value, setValue] = useState({
 //   value: options[0].value,
 //   label: options[0].label,
 // });
@@ -109,7 +126,7 @@ export default Select;
 // const selectRef = useClickOutSide(showOptions, () => setShowOptions(false));
 
 // const handleSelect = (option) => {
-//   setSelectedOption({ value: option.value, label: option.label });
+//   setValue({ value: option.value, label: option.label });
 
 //   const fakeEvent = {
 //     target: {
@@ -128,7 +145,7 @@ export default Select;
 //     className={`${cx("select")} ${className}`}
 //     onClick={() => setShowOptions(!showOptions)}
 //   >
-//     {selectedOption.label}
+//     {value.label}
 //     <BiChevronDown
 //       className={cx("chevron-down", showOptions ? "active" : "")}
 //     />

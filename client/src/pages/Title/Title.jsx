@@ -7,11 +7,9 @@ import chapterApi from "api/chapterApi";
 import genreApi from "api/genreApi";
 import { Fullsize } from "assets/images";
 import { UserArray } from "database";
-import Pagination from "features/Pagination";
-import Popup from "features/Popup";
-import Recommend from "features/Recommend";
+import { Pagination, Popup, Recommend } from "features";
 import styles from "pages/Title/assets/styles/Title.module.scss";
-import { getTitleByID } from "services/titleServices";
+import { getTitleByID } from "services/title";
 import { ComicChapters, Introduction, TitleAbout } from "./components";
 
 const cx = classNames.bind(styles);

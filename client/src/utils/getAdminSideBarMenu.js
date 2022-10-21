@@ -1,76 +1,55 @@
 import { CircleC } from "assets/images";
 
 export default function getAdminSideBarMenu() {
+  const baseURL = "/admin";
   return [
     {
-      groupLabel: "Group 1",
+      groupLabel: "Management",
       subMenu: [
         {
-          to: "sanpham",
+          to: `${baseURL}/titles`,
           icon: CircleC,
-          label: "Sản phẩm",
-          tab: "sanpham2",
+          label: "Titles",
         },
         {
-          to: "sanpham",
+          to: `${baseURL}/chapters`,
           icon: CircleC,
-          label: "Sản phẩm",
-          tab: "sanpham",
+          label: "Chapters",
         },
-      ],
-    },
-    {
-      groupLabel: "Group 1",
-      subMenu: [
         {
-          to: "nhapxuat",
+          to: `${baseURL}/members`,
           icon: CircleC,
-          label: "Nhập xuất",
-          tab: "nhapxuat",
+          label: "Members",
+        },
+        {
+          to: `${baseURL}/admins`,
+          icon: CircleC,
+          label: "Administrators",
         },
       ],
     },
     {
-      groupLabel: "Group 1",
+      groupLabel: "Stats",
       subMenu: [
         {
-          to: "taikhoan",
+          to: `${baseURL}/income`,
           icon: CircleC,
-          label: "Tài khoản",
-          tab: "taikhoan",
+          label: "Income",
+        },
+        {
+          to: `${baseURL}/visit`,
+          icon: CircleC,
+          label: "Visits",
         },
       ],
     },
     {
-      groupLabel: "Group 1",
+      groupLabel: "User",
       subMenu: [
         {
-          to: "doitac",
+          to: `${baseURL}/profile`,
           icon: CircleC,
-          label: "Đối tác",
-          tab: "doitac",
-        },
-      ],
-    },
-    {
-      groupLabel: "Group 1",
-      subMenu: [
-        {
-          to: "thongke",
-          icon: CircleC,
-          label: "Thống kê",
-          tab: "thongke",
-        },
-      ],
-    },
-    {
-      groupLabel: "Group 1",
-      subMenu: [
-        {
-          to: "quyen",
-          icon: CircleC,
-          label: "Quyền",
-          tab: "quyen",
+          label: "Profile",
         },
       ],
     },

@@ -2,8 +2,7 @@ import classNames from "classnames/bind";
 import { Col, Container, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
-import LineChart from "features/LineChart/LineChart";
-import NoData from "features/NoData";
+import { LineChart, NoData } from "features";
 import SelectorContainer from "./components/SelectorContainer";
 import styles from "./styles/Statistic.module.scss";
 

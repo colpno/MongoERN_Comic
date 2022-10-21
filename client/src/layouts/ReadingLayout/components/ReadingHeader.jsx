@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import chapterApi from "api/chapterApi";
 import { Logo } from "assets/images";
 import Button from "components/Button";
-import { getTitleByID } from "services/titleServices";
+import { getTitleByID } from "services/title";
 import styles from "../assets/styles/ReadingHeader.module.scss";
 import ReadingNav from "./ReadingNav";
 import ReadingTools from "./ReadingTools";

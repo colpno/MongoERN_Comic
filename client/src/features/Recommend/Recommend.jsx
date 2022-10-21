@@ -5,7 +5,7 @@ import { AiFillCaretDown } from "react-icons/ai";
 
 import Button from "components/Button";
 import CardList from "components/CardList";
-import { getTitles } from "services/titleServices";
+import { getTitles } from "services/title";
 import styles from "./assets/styles/Recommend.module.scss";
 
 const cx = classNames.bind(styles);

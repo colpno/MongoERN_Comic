@@ -3,8 +3,8 @@ import { Container } from "react-bootstrap";
 import { AiOutlinePlus } from "react-icons/ai";
 
 import Button from "components/Button";
-import NoData from "features/NoData";
-import { sortTitles } from "services/titleServices";
+import { NoData } from "features";
+import { sortTitles } from "services/title";
 import styles from "./assets/styles/MyTitle.module.scss";
 import MyTitleContent from "./components/MyTitleContent";
 import MyTitleHeader from "./components/MyTitleHeader";

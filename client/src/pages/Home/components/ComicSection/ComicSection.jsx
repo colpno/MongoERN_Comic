@@ -5,7 +5,7 @@ import { Container } from "react-bootstrap";
 
 import genreApi from "api/genreApi";
 import CardList from "components/CardList";
-import { getTitles } from "services/titleServices";
+import { getTitles } from "services/title";
 import styles from "../../assets/styles/ComicSection.module.scss";
 import ComicActionSection from "./components/ComicActionSection";
 import ComicFollowSection from "./components/ComicFollowSection";

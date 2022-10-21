@@ -5,7 +5,7 @@ import { BiBookmark } from "react-icons/bi";
 
 import readingHistoriesApi from "api/readingHistoryApi";
 import GridTable from "components/GridTable";
-import NoData from "features/NoData";
+import { NoData } from "features";
 import { countdown } from "utils/convertTime";
 import styles from "./ReadingHistory.module.scss";
 

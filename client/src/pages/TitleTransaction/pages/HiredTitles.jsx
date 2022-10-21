@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import GridTable from "components/GridTable";
 import { useEffect, useState } from "react";
 import hiredTitleApi from "api/hiredTitleApi";
-import NoData from "features/NoData";
+import { NoData } from "features";
 
 function HiredTitles({ cx }) {
   const userId = 1;

@@ -6,7 +6,7 @@ import hiredTitleApi from "api/hiredTitleApi";
 import purchaseTitleApi from "api/purchaseTitleApi";
 import GridTable from "components/GridTable";
 import { UserArray } from "database";
-import Popup from "features/Popup";
+import { Popup } from "features";
 import TicketExplainPopup from "pages/Title/components/TicketExplainPopup";
 import { sort } from "utils/arrayMethods";
 import { ReactComponent as TicketLogo } from "./assets/images/ticket.svg";

@@ -77,7 +77,7 @@ GridTable.defaultProps = {
     },
   ],
 
-  border: false,
+  border: true,
 };
 
 export default memo(GridTable);

@@ -1,11 +1,11 @@
-import PropTypes from "prop-types";
 import classNames from "classnames/bind";
+import PropTypes from "prop-types";
 
 import { noSearchResult } from "assets/images";
 import { Scrollbar } from "components/Scrollbar";
-import NoData from "features/NoData";
-import SearchDropdownGroup from "./SearchDropdownGroup";
+import { NoData } from "features";
 import styles from "../assets/styles/SearchDropdownList.module.scss";
+import SearchDropdownGroup from "./SearchDropdownGroup";
 
 const cx = classNames.bind(styles);
 

@@ -28,3 +28,6 @@ export { default as Login } from "./Login";
 export { default as Register } from "./Register";
 export { default as ForgotPassword } from "./ForgotPassword";
 export { default as TitleManagement } from "./TitleManagement/TitleManagement";
+export { default as ChapterManagement } from "./ChapterManagement/ChapterManagement";
+export { default as MemberManagement } from "./MembersManagement/MemberManagement";
+export { default as AdminManagement } from "./AdminManagement/AdminManagement";

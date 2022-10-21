@@ -1,13 +1,15 @@
 import { Button } from "components";
 import PropTypes from "prop-types";
+import { useLocation } from "react-router-dom";
 
-function NonGroupStructure({ cx, group, currentTab, setCurrentTab }) {
+function NonGroupStructure({ cx, group }) {
+  const urlPath = useLocation().pathname;
+
   return (
     <Button
       wrapper
       to={group.to}
-      className={cx("tab-wrapper", currentTab === group.tab && "active")}
-      onClick={() => setCurrentTab(group.tab)}
+      className={cx("tab-wrapper", urlPath.includes(group.tab) && "active")}
     >
       {/* <Icon className={cx("tab-icon")} /> */}
       <span>{group.label}</span>
@@ -24,8 +26,6 @@ NonGroupStructure.propTypes = {
     icon: PropTypes.shape({}).isRequired,
     tab: PropTypes.string.isRequired,
   }).isRequired,
-  currentTab: PropTypes.string.isRequired,
-  setCurrentTab: PropTypes.func.isRequired,
 };
 
 export default NonGroupStructure;

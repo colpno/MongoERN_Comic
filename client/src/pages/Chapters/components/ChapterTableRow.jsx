@@ -3,16 +3,17 @@ import PropTypes from "prop-types";
 import { Col, Row } from "react-bootstrap";
 import { BsTrash } from "react-icons/bs";
 import { HiOutlinePencil } from "react-icons/hi";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 import Button from "components/Button";
 import { approveStatusString } from "database";
 import { formatTime } from "utils/convertTime";
-import styles from "../assets/styles/ChaptersTable.module.scss";
+import styles from "../assets/styles/ChaptersTableRow.module.scss";
 
 const cx = classNames.bind(styles);
 
-function ChaptersTable({ popup, setPopup, title, chapters }) {
+function ChaptersTableRow({ popup, setPopup, chapters }) {
+  const { titleId } = useParams();
   const pathName = useLocation().pathname;
   const handlePopup = () => {
     setPopup({
@@ -47,7 +48,7 @@ function ChaptersTable({ popup, setPopup, title, chapters }) {
             <Col>
               <Button
                 text
-                to={`/comic/title/${title.id}/${chapter.order}`}
+                to={`/comic/title/${titleId}/${chapter.order}`}
                 className={cx("title")}
               >
                 {chapter.titleName}
@@ -100,16 +101,13 @@ function ChaptersTable({ popup, setPopup, title, chapters }) {
   );
 }
 
-ChaptersTable.propTypes = {
+ChaptersTableRow.propTypes = {
   popup: PropTypes.shape({
     trigger: PropTypes.bool.isRequired,
     title: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired,
   }).isRequired,
   setPopup: PropTypes.func.isRequired,
-  title: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-  }).isRequired,
   chapters: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
@@ -124,4 +122,4 @@ ChaptersTable.propTypes = {
   ).isRequired,
 };
 
-export default ChaptersTable;
+export default ChaptersTableRow;

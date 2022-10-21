@@ -5,7 +5,7 @@ import { AiFillCloseCircle } from "react-icons/ai";
 import { IoSearchOutline } from "react-icons/io5";
 
 import styles from "layouts/components/Header/assets/styles/Search.module.scss";
-import { getTitles } from "services/titleServices";
+import { getTitles } from "services/title";
 import SearchDropdownList from "./SearchDropdownList";
 
 const cx = classNames.bind(styles);

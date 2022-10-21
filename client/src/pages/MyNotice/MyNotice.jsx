@@ -1,5 +1,5 @@
 import { noNotification } from "assets/images";
-import NoData from "features/NoData";
+import { NoData } from "features";
 
 function MyNotice() {
   return (

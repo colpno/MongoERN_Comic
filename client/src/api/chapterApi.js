@@ -14,10 +14,15 @@ const chapterApi = {
 
   delete: (id) => axiosClient.get(`${url}/${id}`),
 
-  sort: (titleId, { key, order }, params) =>
-    axiosClient.get(`${url}?titleId=${titleId}&_sort=${key}&_order=${order}`, {
-      params,
-    }),
+  sort: (titleId, key, order, params) => {
+    const titleIdQuery = titleId ? `titleId=${titleId}&` : "";
+    return axiosClient.get(
+      `${url}?${titleIdQuery}_sort=${key}&_order=${order}`,
+      {
+        params,
+      }
+    );
+  },
 
   filter: (filterObj) => {
     const key = Object.keys(filterObj)[0];

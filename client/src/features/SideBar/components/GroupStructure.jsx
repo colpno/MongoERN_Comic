@@ -1,23 +1,26 @@
 import { Button } from "components";
 import PropTypes from "prop-types";
+import { useLocation } from "react-router-dom";
 
-function GroupStructure({ group, cx, currentTab, setCurrentTab }) {
+function GroupStructure({ group, cx }) {
+  const urlPath = useLocation().pathname;
+
   return (
     <>
       <p className={cx("group-label")}>{group.groupLabel}</p>
       <ul className={cx("sub-menu")}>
-        {group.subMenu.map((tab, index2) => {
-          const Icon = tab.icon;
+        {group.subMenu.map((tab, index) => {
+          const { icon: Icon, to, label } = tab;
+
           return (
-            <li className={cx("tab-wrapper")} key={index2}>
+            <li className={cx("tab-wrapper")} key={index}>
               <Button
                 wrapper
-                to={tab.to}
-                className={cx("tab", currentTab === tab.tab && "active")}
-                onClick={() => setCurrentTab(tab.tab)}
+                to={to}
+                className={cx("tab", urlPath.includes(to) && "active")}
               >
                 <Icon className={cx("tab-icon")} />
-                <span className={cx("tab-label")}>{tab.label}</span>
+                <span className={cx("tab-label")}>{label}</span>
               </Button>
             </li>
           );
@@ -33,15 +36,13 @@ GroupStructure.propTypes = {
     groupLabel: PropTypes.string.isRequired,
     subMenu: PropTypes.arrayOf(
       PropTypes.shape({
-        to: PropTypes.string.isRequired,
+        to: PropTypes.string,
         href: PropTypes.string,
         label: PropTypes.string.isRequired,
         icon: PropTypes.shape({}).isRequired,
       }).isRequired
     ).isRequired,
   }).isRequired,
-  currentTab: PropTypes.string.isRequired,
-  setCurrentTab: PropTypes.func.isRequired,
 };
 
 export default GroupStructure;

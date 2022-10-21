@@ -1,6 +1,6 @@
 import classNames from "classnames/bind";
 import { Container } from "react-bootstrap";
-import { sortTitles } from "services/titleServices";
+import { sortTitles } from "services/title";
 import styles from "./assets/styles/Ranking.module.scss";
 import RankingList from "./components/RankingList";
 import Top5 from "./components/Top5";
