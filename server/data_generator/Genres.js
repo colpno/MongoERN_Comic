@@ -6,7 +6,7 @@ const randomGenres = (numberOfGenres) => {
 
   Array.from(new Array(numberOfGenres)).forEach(() => {
     const genre = {
-      id: index,
+      id: `${index}`,
       genre: faker.music.genre(),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
