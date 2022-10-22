@@ -7,9 +7,9 @@ const randomBoughtTitle = (numberOfBoughtTitle) => {
   Array.from(new Array(numberOfBoughtTitle)).forEach(() => {
     const boughtTitle = {
       id: faker.datatype.uuid(),
-      userId: 1,
-      titleId: index,
-      ticketId: 1,
+      userId: '1',
+      titleId: `${index}`,
+      ticketId: '1',
       expiredDay: '',
       createdAt: faker.date.past(0),
       updatedAt: new Date().toISOString(),

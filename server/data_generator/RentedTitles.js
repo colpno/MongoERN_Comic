@@ -11,9 +11,9 @@ const randomRentedTitles = (numberOfRentedTitles) => {
   Array.from(new Array(numberOfRentedTitles)).forEach(() => {
     const rentedTitle = {
       id: faker.datatype.uuid(),
-      userId: 1,
-      titleId: arr[0],
-      ticketId: 2,
+      userId: '1',
+      titleId: `${arr[0]}`,
+      ticketId: '2',
       expiredDay: faker.date.future(0),
       createdAt: faker.date.past(0),
       updatedAt: new Date().toISOString(),

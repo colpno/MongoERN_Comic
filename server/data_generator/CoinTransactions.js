@@ -7,10 +7,10 @@ const randomCoinTransaction = (numberOfCoinTransactions) => {
   Array.from(new Array(numberOfCoinTransactions)).forEach(() => {
     const coinTransaction = {
       id: faker.datatype.uuid(),
-      userId: 1,
+      userId: '1',
       source: faker.helpers.arrayElement(['hệ thống nạp', 'sự kiện']),
       detail: faker.helpers.arrayElement(['ZaloPay', 'MoMo', 'SMS', 'Thẻ ATM']),
-      amount: faker.datatype.number({ min: 25, max: 40 }),
+      amount: `${faker.datatype.number({ min: 25, max: 40 })}`,
       createdAt: faker.date.past(0),
       updatedAt: new Date().toISOString(),
     };

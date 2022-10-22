@@ -7,7 +7,7 @@ const randomFollowTitle = (numberOfTitle) => {
   Array.from(new Array(numberOfTitle)).forEach(() => {
     const title = {
       id: faker.datatype.uuid(),
-      userId: 1,
+      userId: '1',
       titleId: index,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),

@@ -23,7 +23,7 @@ faker.setLocale('vi');
   // random data
   const titles = randomTitles(60);
   const chapters = randomChapters(120);
-  const users = randomUsers(1);
+  const users = randomUsers(50);
   const genres = randomGenres(10);
   const titleStatuses = randomTitleStatus();
   const boughtTitles = randomBoughtTitle(4);

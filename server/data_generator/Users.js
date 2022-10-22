@@ -6,14 +6,16 @@ const randomUsers = (numberOfUser) => {
 
   Array.from(new Array(numberOfUser)).forEach(() => {
     const user = {
-      id: index,
+      index: `${index}`,
+      id: `${index}`,
       avatar: faker.image.avatar(),
       userName: faker.name.firstName(),
+      role: faker.helpers.arrayElement(['member', 'administrator']),
       dateOfBirth: faker.date.birthdate({ min: 12, max: 40, mode: 'age' }),
-      buyTicket: faker.datatype.number({ min: 0, max: 2 }),
-      rentTicket: faker.datatype.number({ min: 0, max: 4 }),
-      coin: faker.datatype.number({ min: 0, max: 100 }),
-      point: faker.datatype.number({ min: 0, max: 300 }),
+      buyTicket: `${faker.datatype.number({ min: 0, max: 2 })}`,
+      rentTicket: `${faker.datatype.number({ min: 0, max: 4 })}`,
+      coin: `${faker.datatype.number({ min: 0, max: 100 })}`,
+      point: `${faker.datatype.number({ min: 0, max: 300 })}`,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };

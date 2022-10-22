@@ -1,9 +1,9 @@
 @baseUrl = http://localhost:3001/api
-@table = /ticket-histories
+@table = /titles
 
 # @name getAll
 
-GET {{baseUrl}}{{table}}?userId=1&_sort=createdAt&_order=desc HTTP/1.1
+GET {{baseUrl}}{{table}} HTTP/1.1
 
 ###
 

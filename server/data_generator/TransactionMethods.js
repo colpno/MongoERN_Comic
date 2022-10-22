@@ -6,7 +6,7 @@ const randomTransactionMethods = (numberOfTransactionMethods) => {
 
   Array.from(new Array(numberOfTransactionMethods)).forEach(() => {
     const transactionMethod = {
-      id: index,
+      id: `${index}`,
       method: faker.commerce.productName(),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
