@@ -87,7 +87,11 @@ export function formatTime(timeString) {
   return { day, month, year, hour, minute };
 }
 
-export function formatToDateTimeString(
+export function convertToDateString(day, month, year, separator = "/") {
+  return `${day}${separator}${month}${separator}${year}`;
+}
+
+export function convertToDateTimeString(
   timeString,
   daySeparator = ".",
   timeSeparator = ":"

@@ -48,6 +48,4 @@ function Avatar() {
   );
 }
 
-Avatar.propTypes = {};
-
 export default Avatar;

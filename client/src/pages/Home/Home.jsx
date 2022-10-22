@@ -9,13 +9,7 @@ import { ComicSection, Notification } from "./components";
 const cx = classNames.bind(styles);
 
 function Home() {
-  const bannerImages = [
-    { id: 1, src: Fullsize },
-    { id: 2, src: Fullsize },
-    { id: 3, src: Fullsize },
-    { id: 4, src: Fullsize },
-    { id: 5, src: Fullsize },
-  ];
+  const bannerImages = [Fullsize, Fullsize, Fullsize, Fullsize, Fullsize];
 
   return (
     <main className={cx("home")}>

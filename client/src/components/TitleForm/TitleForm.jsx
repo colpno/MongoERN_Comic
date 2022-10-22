@@ -7,7 +7,7 @@ import Button from "components/Button";
 import { CheckBoxGroup, InputField, TextAreaField } from "libs/formik";
 import FileField from "libs/formik/FileField";
 import FormLabel from "libs/formik/FormLabel";
-import genreServices from "services/genreServices";
+import { getAllGenres } from "services/genre";
 import titleStatusServices from "services/titleStatusServices";
 import styles from "./assets/styles/TitleForm.module.scss";
 
@@ -19,7 +19,10 @@ function TitleForm({
   handleSubmit,
   imageBlob,
 }) {
-  const { genres } = genreServices();
+  const { genres } = getAllGenres();
+  const options = genres.map((genre) => {
+    return { value: `${genre.id}`, label: genre.genre };
+  });
   // eslint-disable-next-line no-unused-vars
   const { titleStatuses } = titleStatusServices();
 
@@ -53,7 +56,7 @@ function TitleForm({
               </>
             )} */}
 
-            {genres && (
+            {options && (
               <>
                 <FormLabel
                   name="genreId"
@@ -64,7 +67,7 @@ function TitleForm({
                 <FastField
                   name="genreId"
                   component={CheckBoxGroup}
-                  options={genres}
+                  options={options}
                   col={{ sm: 6, md: 4 }}
                 />
               </>

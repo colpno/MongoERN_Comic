@@ -1,5 +1,6 @@
 import titleApi from "api/titleApi";
 import { useEffect, useState } from "react";
+import { convertTitlesPropertyToString } from "utils/convertArrayPropertyToString";
 
 const sortTitles = (col, isAsc, limit = 50, userID = null) => {
   const hasUserID = !!userID;
@@ -23,7 +24,8 @@ const sortTitles = (col, isAsc, limit = 50, userID = null) => {
         _limit: pagination.limit,
         _page: pagination.page,
       });
-      setTitles(response.data);
+      const converted = convertTitlesPropertyToString(response.data);
+      setTitles(converted);
       setPagination({ ...pagination, total: response.pagination.total });
     } catch (error) {
       throw new Error(error);
@@ -41,7 +43,8 @@ const sortTitles = (col, isAsc, limit = 50, userID = null) => {
           _page: pagination.page,
         }
       );
-      setTitles(response.data);
+      const converted = convertTitlesPropertyToString(response.data);
+      setTitles(converted);
       setPagination({ ...pagination, total: response.pagination.total });
     } catch (error) {
       throw new Error(error);

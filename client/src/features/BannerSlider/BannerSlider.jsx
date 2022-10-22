@@ -23,11 +23,11 @@ function BannerSlider({ images, clickable, delay }) {
       slidesPerView={1}
       className={cx("slider")}
     >
-      {images.map((img) => {
+      {images.map((img, index) => {
         return (
-          <SwiperSlide key={img.id}>
+          <SwiperSlide key={index}>
             <div className={cx("slide")}>
-              <img src={img.src} alt="title" />
+              <img src={img} alt="title" />
             </div>
           </SwiperSlide>
         );
@@ -37,12 +37,7 @@ function BannerSlider({ images, clickable, delay }) {
 }
 
 BannerSlider.propTypes = {
-  images: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-      src: PropTypes.string,
-    }).isRequired
-  ).isRequired,
+  images: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
   clickable: PropTypes.bool,
   delay: PropTypes.number,
 };

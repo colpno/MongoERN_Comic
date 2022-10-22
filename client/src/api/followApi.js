@@ -3,7 +3,9 @@ import axiosClient from "libs/axios/axiosClient";
 const url = "/follows";
 
 const followApi = {
-  getAll: (userId, params) =>
+  getAll: (params) => axiosClient.get(`${url}?_expand=title`, { params }),
+
+  getAllByUserID: (userId, params) =>
     axiosClient.get(`${url}?userId=${userId}&_expand=title`, { params }),
 
   add: (title) => axiosClient.post(url, title),

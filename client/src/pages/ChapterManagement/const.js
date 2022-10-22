@@ -4,13 +4,13 @@ export const getContinuingCardData = (totalOfTitles, amount) => {
   return {
     rawData: {
       icon: topSales,
-      label: "Continuing",
+      label: "Waiting",
       amount,
       subLabel: "All time",
     },
     chartProps: {
       data: {
-        labels: ["Continuing titles", "All titles"],
+        labels: ["Waiting chapters", "All chapters"],
         datasets: [
           {
             data: [amount, totalOfTitles],

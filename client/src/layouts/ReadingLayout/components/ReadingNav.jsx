@@ -6,13 +6,13 @@ import {
   IoChevronForwardCircleOutline,
 } from "react-icons/io5";
 
-function ReadingNav({ cx, chapter, title, titleId }) {
+function ReadingNav({ cx, chapter, totalChapter, titleId }) {
   return (
     <div className={cx("reading-header__nav")}>
       <Button
         text
         to={`/comic/title/${titleId}/${
-          chapter.order > 1 ? chapter.order - 1 : title.totalChapter
+          chapter.order > 1 ? chapter.order - 1 : totalChapter
         }`}
         className={cx(
           "reading-header__nav__left",
@@ -30,13 +30,11 @@ function ReadingNav({ cx, chapter, title, titleId }) {
       <Button
         text
         to={`/comic/title/${titleId}/${
-          chapter.order < title.totalChapter
-            ? chapter.order + 1
-            : title.totalChapter
+          chapter.order < totalChapter ? chapter.order + 1 : totalChapter
         }`}
         className={cx(
           "reading-header__nav__right",
-          chapter.order >= title.totalChapter ? "disabled" : ""
+          chapter.order >= totalChapter ? "disabled" : ""
         )}
       >
         <IoChevronForwardCircleOutline />
@@ -54,9 +52,7 @@ ReadingNav.propTypes = {
       titleName: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
-  title: PropTypes.shape({
-    totalChapter: PropTypes.number.isRequired,
-  }).isRequired,
+  totalChapter: PropTypes.number.isRequired,
   titleId: PropTypes.string.isRequired,
 };
 

@@ -1,7 +1,8 @@
 import chapterApi from "api/chapterApi";
 import { useEffect, useState } from "react";
+import { convertChaptersPropertyToString } from "utils/convertArrayPropertyToString";
 
-const getChapters = (titleID, limit) => {
+const getLimitedChapters = (titleID, limit) => {
   const [chapters, setChapters] = useState([]);
   const [pagination, setPagination] = useState({
     page: 1,
@@ -9,22 +10,14 @@ const getChapters = (titleID, limit) => {
     total: 0,
   });
 
-  const fetchAllChapters = async () => {
-    try {
-      const response = await chapterApi.getAll(titleID);
-      setChapters(response);
-    } catch (error) {
-      throw new Error(error);
-    }
-  };
-
   const fetchLimitChapters = async () => {
     try {
       const response = await chapterApi.getAll(titleID, {
         _page: pagination.page,
         _limit: pagination.limit,
       });
-      setChapters(response.data);
+      const converted = convertChaptersPropertyToString(response);
+      setChapters(converted);
       setPagination((prev) => {
         return { ...prev, total: response.pagination.total };
       });
@@ -34,10 +27,10 @@ const getChapters = (titleID, limit) => {
   };
 
   useEffect(() => {
-    limit ? fetchLimitChapters() : fetchAllChapters();
+    fetchLimitChapters();
   }, [pagination.page]);
 
   return { chapters, setChapters, pagination, setPagination };
 };
 
-export default getChapters;
+export default getLimitedChapters;

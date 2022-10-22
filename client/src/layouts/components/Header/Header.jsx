@@ -2,6 +2,7 @@ import classNames from "classnames/bind";
 import { useLocation } from "react-router-dom";
 
 import { Logo } from "assets/images";
+import { Button } from "components";
 import styles from "layouts/components/Header/assets/styles/Header.module.scss";
 import Avatar from "./components/Avatar";
 import Search from "./components/Search";
@@ -21,22 +22,23 @@ function Header() {
       <div className={cx("container")}>
         <div className={cx("desktop-screen")}>
           <div className={cx("logo")}>
-            <a href="/">
+            <Button wrapper to="/">
               <Logo className={cx("logo")} />
-            </a>
+            </Button>
           </div>
           <ul className={cx("nav-menu")}>
             {headerNavigation.map((nav) => {
               return (
                 <li key={nav.label}>
-                  <a
-                    href={nav.href}
+                  <Button
+                    wrapper
+                    to={nav.href}
                     className={cx(
                       url.includes(nav.href.split("/")[1]) ? "active" : ""
                     )}
                   >
                     {nav.label}
-                  </a>
+                  </Button>
                 </li>
               );
             })}

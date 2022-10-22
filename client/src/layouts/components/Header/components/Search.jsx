@@ -5,7 +5,7 @@ import { AiFillCloseCircle } from "react-icons/ai";
 import { IoSearchOutline } from "react-icons/io5";
 
 import styles from "layouts/components/Header/assets/styles/Search.module.scss";
-import { getTitles } from "services/title";
+import { getAllTitles } from "services/title";
 import SearchDropdownList from "./SearchDropdownList";
 
 const cx = classNames.bind(styles);
@@ -14,7 +14,7 @@ function Search() {
   const [searchValue, setSearchValue] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [showResult, setShowResult] = useState(true);
-  const { titles } = getTitles();
+  const { titles } = getAllTitles();
   const debounced = useDebounce(searchValue, 500);
 
   const searchRef = useClickOutSide(
@@ -64,7 +64,5 @@ function Search() {
     </div>
   );
 }
-
-Search.propTypes = {};
 
 export default Search;

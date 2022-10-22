@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { roundNumByUnit } from "utils";
 
 import { setMyTitles } from "libs/redux/slices/myTitlesSlice";
-import { getTitlesByUserID } from "services/title";
+import { getAllTitlesByUserID } from "services/title";
 import { BookLine, EyeLine, ThumbUpLine } from "../assets/images";
 import styles from "../assets/styles/StatisticCount.module.scss";
 
@@ -14,7 +14,7 @@ const cx = classNames.bind(styles);
 function StatisticCount() {
   const dispatch = useDispatch();
   const userID = 1;
-  const { titles } = getTitlesByUserID(userID);
+  const { titles } = getAllTitlesByUserID(userID);
   const [data, setData] = useState({ likes: 0, views: 0, totalTitles: 0 });
 
   useEffect(() => {

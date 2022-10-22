@@ -1,5 +1,6 @@
 import titleApi from "api/titleApi";
 import { useEffect, useState } from "react";
+import { convertTitlePropertyToString } from "utils/convertArrayPropertyToString";
 
 const searchTitle = (key, value) => {
   const [titles, setTitles] = useState([]);
@@ -8,7 +9,8 @@ const searchTitle = (key, value) => {
     const fetchTitles = async () => {
       try {
         const response = await titleApi.search({ [key]: value });
-        setTitles(response);
+        const converted = convertTitlePropertyToString(response);
+        setTitles(converted);
       } catch (error) {
         throw new Error(error);
       }

@@ -1,14 +1,14 @@
 import classNames from "classnames/bind";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Container } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 
-import chapterApi from "api/chapterApi";
-import genreApi from "api/genreApi";
 import { Fullsize } from "assets/images";
 import { UserArray } from "database";
 import { Pagination, Popup, Recommend } from "features";
 import styles from "pages/Title/assets/styles/Title.module.scss";
+import { sortChapters } from "services/chapter";
+import { getAllGenres } from "services/genre";
 import { getTitleByID } from "services/title";
 import { ComicChapters, Introduction, TitleAbout } from "./components";
 
@@ -17,21 +17,20 @@ const cx = classNames.bind(styles);
 function Title() {
   const { titleId } = useParams();
   const { title } = getTitleByID(titleId);
+  const { genres } = getAllGenres();
   const user = UserArray()[0];
-  const [genres, setGenres] = useState("");
-  const [chapters, setChapters] = useState([]);
   const [isDESCSorting, setIsDESCSorting] = useState(false);
   const hasData = Object.keys(title).length > 0;
 
+  const { chapters, pagination, setPagination, sorting } = sortChapters(
+    titleId,
+    "order",
+    true
+  );
   const [popup, setPopup] = useState({
     trigger: false,
     title: "",
     content: "",
-  });
-  const [pagination, setPagination] = useState({
-    page: 1,
-    limit: 50,
-    total: 0,
   });
   const backgroundImageCSS = {
     backgroundImage: `url(${Fullsize})`,
@@ -45,52 +44,16 @@ function Title() {
     right: "0",
   };
 
-  useEffect(() => {
-    const fetchGenres = async () => {
-      try {
-        const response = await genreApi.getAll();
-        const genreString = title?.genreId?.reduce((str, id, index) => {
-          const genre = response.find((res) => res.id === id);
-          return index === 0
-            ? `${str}${genre.genre}`
-            : `${str}, ${genre.genre}`;
-        }, "");
-        setGenres(genreString);
-      } catch (error) {
-        throw new Error(error);
-      }
-    };
-
-    Object.keys(title).length > 0 && fetchGenres();
-  }, [title]);
-
-  useEffect(() => {
-    const fetchChapters = async () => {
-      try {
-        const response = await chapterApi.sort(
-          titleId,
-          {
-            key: "order",
-            order: isDESCSorting ? "desc" : "asc",
-          },
-          { _limit: pagination.limit, _page: pagination.page }
-        );
-        setChapters(response.data);
-        setPagination({ ...pagination, total: response.pagination.total });
-      } catch (error) {
-        throw new Error(error);
-      }
-    };
-
-    fetchChapters();
-  }, [pagination.page, isDESCSorting]);
-
-  const handlePageChange = (newPage) => {
-    setPagination({ ...pagination, page: newPage });
-  };
-
   const handleSort = () => {
     setIsDESCSorting(!isDESCSorting);
+  };
+
+  const convertGenreIdToString = () => {
+    const genreString = title.genreId.reduce((str, id, index) => {
+      const genre = genres.find((res) => res.id === id);
+      return index === 0 ? `${str}${genre.genre}` : `${str}, ${genre.genre}`;
+    }, "");
+    return genreString;
   };
 
   return (
@@ -99,7 +62,11 @@ function Title() {
         <>
           <div style={backgroundImageCSS} />
           <div className={cx("title-page__wrapper")}>
-            <Introduction title={title} genres={genres} setPopup={setPopup} />
+            <Introduction
+              title={title}
+              genres={convertGenreIdToString()}
+              setPopup={setPopup}
+            />
             <Container className={cx("title-page__wrapper__content")}>
               <TitleAbout title={title} setPopup={setPopup} />
               <div className={cx("title-page__wrapper__content__chapters")}>
@@ -107,12 +74,13 @@ function Title() {
                   title={title}
                   chapters={chapters}
                   user={user}
+                  sorting={sorting}
                   isDESCSorting={isDESCSorting}
                   handleSort={handleSort}
                 />
                 <Pagination
                   pagination={pagination}
-                  onPageChange={handlePageChange}
+                  setPagination={setPagination}
                 />
               </div>
             </Container>

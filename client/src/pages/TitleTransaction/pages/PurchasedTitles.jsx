@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 
 import GridTable from "components/GridTable";
-import purchaseTitleApi from "api/purchaseTitleApi";
+import purchaseTitleApi from "api/purchasedTitleApi";
 import { NoData } from "features";
 
 function PurchasedTitles({ cx }) {

@@ -5,10 +5,13 @@ const url = "/titles";
 const titleApi = {
   getAll: (params) => axiosClient.get(url, { params }),
 
+  getAllByProperty: (property, value, params) =>
+    axiosClient.get(`${url}?${property}_like=${value}`, { params }),
+
   getAllByUserID: (ID, params) =>
     axiosClient.get(`${url}?userId=${ID}`, { params }),
 
-  getOneById: (id) =>
+  getOneByID: (id) =>
     axiosClient.get(`${url}/${id}?_expand=genre&_expand=titleStatus`),
 
   add: (title) => axiosClient.post(url, title),

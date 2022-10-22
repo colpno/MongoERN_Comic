@@ -5,7 +5,7 @@ import { Col, Container, Row } from "react-bootstrap";
 import coinHistoryApi from "api/coinHistoryApi";
 import { CircleC } from "assets/images";
 import { NoData } from "features";
-import { formatToDateTimeString } from "utils/convertTime";
+import { convertToDateTimeString } from "utils/convertTime";
 import styles from "./assets/styles/CoinHistory.module.scss";
 
 const cx = classNames.bind(styles);
@@ -47,7 +47,7 @@ function CoinHistory() {
                 </Col>
                 <Col className={cx("coin-history__row__content")}>
                   <h5>Nhận Coin từ {source}</h5>
-                  <small>{formatToDateTimeString(createdAt)}</small>
+                  <small>{convertToDateTimeString(createdAt)}</small>
                   <p>[{detail}]</p>
                 </Col>
                 <Col className={cx("coin-history__row__quantity")}>
@@ -66,7 +66,5 @@ function CoinHistory() {
     </>
   );
 }
-
-CoinHistory.propTypes = {};
 
 export default CoinHistory;

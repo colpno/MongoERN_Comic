@@ -2,11 +2,11 @@ import axiosClient from "libs/axios/axiosClient";
 
 const url = "/bought-titles";
 
-const purchaseTitleApi = {
+const purchasedTitleApi = {
   getAll: (userId, params) =>
     axiosClient.get(`${url}?userId=${userId}&_expand=title`, { params }),
 
-  getOneById: (id) => axiosClient.get(`${url}/${id}`),
+  getOneByID: (id) => axiosClient.get(`${url}/${id}`),
 
   add: (title) => axiosClient.post(url, title),
 
@@ -25,4 +25,4 @@ const purchaseTitleApi = {
   },
 };
 
-export default purchaseTitleApi;
+export default purchasedTitleApi;

@@ -1,11 +1,10 @@
-/* eslint-disable no-unused-vars */
+import { Logo } from "assets/images";
 import classNames from "classnames/bind";
-import { useEffect, useState } from "react";
+import { Button } from "components";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 
-import chapterApi from "api/chapterApi";
-import { Logo } from "assets/images";
-import Button from "components/Button";
+import { getChapterByID } from "services/chapter";
 import { getTitleByID } from "services/title";
 import styles from "../assets/styles/ReadingHeader.module.scss";
 import ReadingNav from "./ReadingNav";
@@ -17,22 +16,9 @@ function ReadingHeader() {
   const slugs = useParams(0);
   const { chapterId, titleId } = slugs;
   const { title } = getTitleByID(titleId);
-  const [chapter, setChapter] = useState({});
+  const { chapter } = getChapterByID(chapterId, titleId);
   const [darkTheme, setDarkTheme] = useState(false);
   const [isLike, setIsLike] = useState(false);
-
-  useEffect(() => {
-    const fetchChapter = async () => {
-      try {
-        const response = await chapterApi.getOneById(chapterId);
-        setChapter(response);
-      } catch (error) {
-        throw new Error(error);
-      }
-    };
-
-    fetchChapter();
-  }, []);
 
   const handleChangeTheme = () => {
     setDarkTheme(!darkTheme);
@@ -46,11 +32,9 @@ function ReadingHeader() {
     <>
       {Object.keys(chapter).length > 0 && Object.keys(title).length > 0 && (
         <header className={cx("reading-header")}>
-          <div className={cx("reading-header__logo")}>
-            <Button wrapper to="/">
-              <img src={Logo} alt="Logo" />
-            </Button>
-          </div>
+          <Button wrapper to="/" className={cx("reading-header__logo")}>
+            <Logo className={cx("logo")} />
+          </Button>
           <div className={cx("reading-header__title")}>
             <Button
               text
@@ -63,7 +47,7 @@ function ReadingHeader() {
           <ReadingNav
             cx={cx}
             chapter={chapter}
-            title={title}
+            totalChapter={title.totalChapter}
             titleId={slugs.titleId}
           />
           <ReadingTools

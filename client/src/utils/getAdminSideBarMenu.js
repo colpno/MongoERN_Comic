@@ -22,7 +22,7 @@ export default function getAdminSideBarMenu() {
           label: "Members",
         },
         {
-          to: `${baseURL}/admins`,
+          to: `${baseURL}/administrators`,
           icon: CircleC,
           label: "Administrators",
         },

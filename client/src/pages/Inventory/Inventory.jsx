@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Container, Row } from "react-bootstrap";
 
 import hiredTitleApi from "api/hiredTitleApi";
-import purchaseTitleApi from "api/purchaseTitleApi";
+import purchaseTitleApi from "api/purchasedTitleApi";
 import GridTable from "components/GridTable";
 import { UserArray } from "database";
 import { Popup } from "features";

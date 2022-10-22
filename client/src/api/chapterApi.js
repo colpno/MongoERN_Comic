@@ -8,7 +8,10 @@ const chapterApi = {
       params,
     }),
 
-  getOneById: (id) => axiosClient.get(`${url}/${id}?_expand=title`),
+  getOneByID: (chapterID, titleID) => {
+    const queryStr = `?${titleID ? `titleId=${titleID}&` : ""}_expand=title`;
+    return axiosClient.get(`${url}/${chapterID}${queryStr}`);
+  },
 
   add: (title) => axiosClient.post(url, title),
 

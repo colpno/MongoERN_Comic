@@ -10,10 +10,11 @@ import Button from "components/Button";
 import { NoData } from "features";
 import styles from "pages/Title/assets/styles/ComicChapters.module.scss";
 import separateNumber from "utils/separateNumber";
+import { convertToDateString, formatTime } from "utils/convertTime";
 
 const cx = classNames.bind(styles);
 
-function ComicChapters({ title, chapters, user, isDESCSorting, handleSort }) {
+function ComicChapters({ title, chapters, user, isDESCSorting, sorting }) {
   return (
     <>
       {chapters.length > 0 ? (
@@ -29,7 +30,7 @@ function ComicChapters({ title, chapters, user, isDESCSorting, handleSort }) {
             <Button
               text
               className={cx("chapters__head__sorting")}
-              onClick={handleSort}
+              onClick={() => sorting("order")}
             >
               {isDESCSorting ? <BsSortNumericUp /> : <BsSortNumericDown />}
               <span>Sắp xếp</span>
@@ -41,6 +42,7 @@ function ComicChapters({ title, chapters, user, isDESCSorting, handleSort }) {
               const chargeVisible = !user.paid && chapter.charge;
               const coinVisible = !user.paid && chapter.coin;
               const pointVisible = !user.paid && chapter.point;
+              const { day, month, year } = formatTime(chapter.releaseDay);
 
               return (
                 <Button
@@ -59,7 +61,7 @@ function ComicChapters({ title, chapters, user, isDESCSorting, handleSort }) {
                       <span>{separateNumber(chapter.like)}</span>
                     </div>
                     <small className={cx("release-date")}>
-                      {chapter.releaseDay}
+                      {convertToDateString(day, month, year)}
                     </small>
                   </div>
                   {/* TODO: if chapter cost coin or point then show pop up when click on a chapter */}
@@ -161,7 +163,7 @@ ComicChapters.propTypes = {
     paid: PropTypes.bool.isRequired,
   }).isRequired,
   isDESCSorting: PropTypes.bool.isRequired,
-  handleSort: PropTypes.func.isRequired,
+  sorting: PropTypes.func.isRequired,
 };
 
 export default memo(ComicChapters);

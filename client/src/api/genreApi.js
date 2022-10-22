@@ -5,7 +5,7 @@ const url = "/genres";
 const genreApi = {
   getAll: (params) => axiosClient.get(url, { params }),
 
-  getOneById: (id) => axiosClient.get(`${url}/${id}`),
+  getOneByID: (id) => axiosClient.get(`${url}/${id}`),
 
   add: (title) => axiosClient.post(url, title),
 

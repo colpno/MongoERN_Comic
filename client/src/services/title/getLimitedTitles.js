@@ -1,7 +1,8 @@
 import titleApi from "api/titleApi";
 import { useEffect, useState } from "react";
+import { convertTitlesPropertyToString } from "utils/convertArrayPropertyToString";
 
-const getTitlesByUserID = (ID, limit) => {
+const getLimitedTitles = (limit) => {
   const [titles, setTitles] = useState([]);
   const [pagination, setPagination] = useState({
     page: 1,
@@ -9,22 +10,14 @@ const getTitlesByUserID = (ID, limit) => {
     total: 0,
   });
 
-  const fetchAllTitles = async () => {
-    try {
-      const response = await titleApi.getAll();
-      setTitles(response);
-    } catch (error) {
-      throw new Error(error);
-    }
-  };
-
   const fetchLimitTitles = async () => {
     try {
-      const response = await titleApi.getAllByUserID(ID, {
+      const response = await titleApi.getAll({
         _page: pagination.page,
         _limit: pagination.limit,
       });
-      setTitles(response.data);
+      const converted = convertTitlesPropertyToString(response.data);
+      setTitles(converted);
       setPagination((prev) => {
         return { ...prev, total: response.pagination.total };
       });
@@ -34,12 +27,10 @@ const getTitlesByUserID = (ID, limit) => {
   };
 
   useEffect(() => {
-    limit ? fetchLimitTitles() : fetchAllTitles();
+    fetchLimitTitles();
   }, [pagination.page]);
 
-  return limit
-    ? { titles, setTitles, pagination, setPagination }
-    : { titles, setTitles };
+  return { titles, setTitles, pagination, setPagination };
 };
 
-export default getTitlesByUserID;
+export default getLimitedTitles;

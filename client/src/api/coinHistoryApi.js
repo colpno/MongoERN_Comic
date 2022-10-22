@@ -6,7 +6,7 @@ const coinHistoryApi = {
   getAll: (userId, params) =>
     axiosClient.get(`${url}?userId=${userId}`, { params }),
 
-  getOneById: (id) => axiosClient.get(`${url}/${id}`),
+  getOneByID: (id) => axiosClient.get(`${url}/${id}`),
 
   add: (coinHistory) => axiosClient.post(url, coinHistory),
 

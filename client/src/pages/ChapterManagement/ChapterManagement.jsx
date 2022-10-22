@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 
 import { FloatingContainer, Select } from "components";
 import { sortChapters } from "services/chapter";
-import { getTitles } from "services/title";
+import { getAllTitles } from "services/title";
 import ChapterManagementCards from "./components/ChapterManagementCards";
 import ChapterTable from "./components/ChapterTable";
 import styles from "./styles/ChapterManagement.module.scss";
@@ -18,7 +18,7 @@ function ChapterManagement() {
   );
   const { chapters, pagination, setPagination, sorting, setTitleID } =
     sortChapters(selectedOption.value);
-  const { titles } = getTitles();
+  const { titles } = getAllTitles();
   const hasData = chapters?.length > 0;
   const [popup, setPopup] = useState({
     trigger: false,
@@ -50,7 +50,7 @@ function ChapterManagement() {
             <ChapterManagementCards totalTitles={pagination.total} />
           </Row>
           <Row>
-            <h4 className={cx("label")}>All Titles</h4>
+            <h4 className={cx("label")}>All Chapters</h4>
           </Row>
           <FloatingContainer>
             <ChapterTable

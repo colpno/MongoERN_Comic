@@ -5,7 +5,7 @@ import { Container } from "react-bootstrap";
 
 import genreApi from "api/genreApi";
 import CardList from "components/CardList";
-import { getTitles } from "services/title";
+import { getAllTitles } from "services/title";
 import styles from "../../assets/styles/ComicSection.module.scss";
 import ComicActionSection from "./components/ComicActionSection";
 import ComicFollowSection from "./components/ComicFollowSection";
@@ -15,7 +15,7 @@ const cx = classNames.bind(styles);
 
 function ComicSection() {
   const [genres, setGenres] = useState([]);
-  const { titles } = getTitles();
+  const { titles } = getAllTitles();
   const hasData = genres.length > 0 && titles.length > 0;
   const top5 = hasData && titles.filter((title) => title.rank <= 5);
 

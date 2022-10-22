@@ -64,7 +64,7 @@ function Weekly() {
   const slider =
     titles &&
     titles.slice(0, 10).map((title) => {
-      return { id: title.id, src: title.coverImage };
+      return title.coverImage;
     });
 
   return (

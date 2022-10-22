@@ -5,7 +5,7 @@ import { Col, Container, Row } from "react-bootstrap";
 import ticketHistoryApi from "api/ticketHistoryApi";
 import { RentTicket } from "assets/images";
 import { NoData } from "features";
-import { formatToDateTimeString } from "utils/convertTime";
+import { convertToDateTimeString } from "utils/convertTime";
 import styles from "./assets/styles/TicketHistory.module.scss";
 
 const cx = classNames.bind(styles);
@@ -52,7 +52,7 @@ function TicketHistory() {
                 </Col>
                 <Col className={cx("ticket-history__row__content")}>
                   <h5>Nhận Vé thuê từ {source}</h5>
-                  <small>{formatToDateTimeString(createdAt)}</small>
+                  <small>{convertToDateTimeString(createdAt)}</small>
                   <p>[{detail}]</p>
                 </Col>
                 <Col className={cx("ticket-history__row__quantity")}>
@@ -71,7 +71,5 @@ function TicketHistory() {
     </>
   );
 }
-
-TicketHistory.propTypes = {};
 
 export default TicketHistory;

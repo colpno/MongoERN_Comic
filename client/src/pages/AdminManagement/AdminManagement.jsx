@@ -1,22 +1,29 @@
 import classNames from "classnames/bind";
+import { useState } from "react";
 import { Container, Row } from "react-bootstrap";
 
 import { FloatingContainer } from "components";
-import MyTitleContent from "pages/MyTitle/components/MyTitleContent";
-import { sortTitles } from "services/title";
+import { sortUsersByProperty } from "services/user";
 import AdminManagementCards from "./components/AdminManagementCards";
+import AdminTable from "./components/AdminTable";
 import styles from "./styles/AdminManagement.module.scss";
 
 const cx = classNames.bind(styles);
 
 function AdminManagement() {
-  const TITLES_PER_PAGE = 50;
-  const { titles, pagination, setPagination, sorting } = sortTitles(
-    "index",
-    true,
-    TITLES_PER_PAGE
-  );
-  const hasData = titles?.length > 0;
+  const {
+    users: members,
+    pagination,
+    setPagination,
+    sorting,
+  } = sortUsersByProperty("administrator", "index", true);
+  const [popup, setPopup] = useState({
+    trigger: false,
+    isConfirm: false,
+    title: "",
+    content: "",
+  });
+  const hasData = members?.length > 0;
 
   return (
     <Container>
@@ -26,12 +33,14 @@ function AdminManagement() {
             <AdminManagementCards totalTitles={pagination.total} />
           </Row>
           <Row>
-            <h4 className={cx("label")}>All Titles</h4>
+            <h4 className={cx("label")}>All Administrators</h4>
           </Row>
           <FloatingContainer>
-            <MyTitleContent
+            <AdminTable
               sorting={sorting}
-              titles={titles}
+              admins={members}
+              popup={popup}
+              setPopup={setPopup}
               pagination={pagination}
               setPagination={setPagination}
             />

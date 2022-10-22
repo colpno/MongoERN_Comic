@@ -84,7 +84,7 @@ export const publicRoutes = [
     layout: ReadingLayout,
   },
   {
-    path: "/content-list/:contentId",
+    path: "/content-list/:genreId",
     component: ContentList,
   },
   {

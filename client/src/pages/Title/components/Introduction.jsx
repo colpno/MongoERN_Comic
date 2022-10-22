@@ -77,7 +77,7 @@ Introduction.propTypes = {
     like: PropTypes.number.isRequired,
     view: PropTypes.number.isRequired,
     authors: PropTypes.string.isRequired,
-    genreId: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
+    genreId: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     summary: PropTypes.string.isRequired,
   }).isRequired,
   genres: PropTypes.string.isRequired,

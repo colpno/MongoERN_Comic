@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 
 import chapterApi from "api/chapterApi";
 import ChapterForm from "components/ChapterForm";
-import { formatToDateTimeString } from "utils/convertTime";
+import { convertToDateTimeString } from "utils/convertTime";
 import styles from "./UpdateChapter.module.scss";
 
 const cx = classNames.bind(styles);
@@ -17,7 +17,7 @@ function UpdateChapter() {
   useEffect(() => {
     const fetchChapter = async () => {
       try {
-        const response = await chapterApi.getOneById(id);
+        const response = await chapterApi.getOneByID(id);
         setChapter(response);
       } catch (error) {
         throw new Error(error);
@@ -38,7 +38,7 @@ function UpdateChapter() {
   const INITIAL_VALUE = chapter && {
     ...chapter,
     order: `${chapter.order}`,
-    schedule: formatToDateTimeString(chapter.schedule, "/"),
+    schedule: convertToDateTimeString(chapter.schedule, "/"),
 
     // Temporarily variables, assigned to real variables later in handleSubmit()
     coverImageFake: "",

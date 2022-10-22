@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import userApi from "api/userApi";
 
 const getUser = createAsyncThunk("user/getUser", async (id) => {
-  const response = await userApi.getOneById(id);
+  const response = await userApi.getOneByID(id);
   return response;
 });
 

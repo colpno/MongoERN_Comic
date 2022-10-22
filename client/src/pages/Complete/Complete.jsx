@@ -2,13 +2,13 @@ import classNames from "classnames/bind";
 import CardList from "components/CardList";
 import { NoData } from "features";
 import { Container } from "react-bootstrap";
-import { getTitles } from "services/title";
+import { getAllTitles } from "services/title";
 import styles from "./assets/styles/Complete.module.scss";
 
 const cx = classNames.bind(styles);
 
 function Complete() {
-  const { titles } = getTitles();
+  const { titles } = getAllTitles();
   const hasData = titles.length;
 
   return (

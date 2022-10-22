@@ -1,5 +1,6 @@
 import chapterApi from "api/chapterApi";
 import { useEffect, useState } from "react";
+import { convertChaptersPropertyToString } from "utils/convertArrayPropertyToString";
 
 const sortChapters = (titleID, col, isAsc = true, limit = 50) => {
   const [chapters, setChapters] = useState([]);
@@ -27,7 +28,8 @@ const sortChapters = (titleID, col, isAsc = true, limit = 50) => {
         _limit: pagination.limit,
         _page: pagination.page,
       });
-      setChapters(response.data);
+      const converted = convertChaptersPropertyToString(response.data);
+      setChapters(converted);
       setPagination({ ...pagination, total: response.pagination.total });
     } catch (error) {
       throw new Error(error);

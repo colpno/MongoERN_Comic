@@ -28,8 +28,8 @@ function Footer() {
             })}
           </ul>
         </nav>
-        <div className={cx("footer__logo", "logo")}>
-          <img src={Logo} alt="Logo" />
+        <div className={cx("footer__logo")}>
+          <Logo className={cx("logo")} />
         </div>
         <address className={cx("footer__address")}>
           <p>

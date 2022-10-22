@@ -1,21 +1,23 @@
 import chapterApi from "api/chapterApi";
 import { useEffect, useState } from "react";
+import { convertChapterPropertyToString } from "utils/convertArrayPropertyToString";
 
-const getChapterByID = (ID) => {
+const getChapterByID = (chapterID) => {
   const [chapter, setChapter] = useState({});
 
-  useEffect(() => {
-    const fetchChapters = async () => {
-      try {
-        const response = await chapterApi.getOneById(ID);
-        setChapter(response);
-      } catch (error) {
-        throw new Error(error);
-      }
-    };
+  const fetchChapter = async () => {
+    try {
+      const response = await chapterApi.getOneByID(chapterID);
+      const converted = convertChapterPropertyToString(response);
+      setChapter(converted);
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
 
-    fetchChapters();
-  }, []);
+  useEffect(() => {
+    fetchChapter();
+  }, [chapterID]);
 
   return { chapter, setChapter };
 };

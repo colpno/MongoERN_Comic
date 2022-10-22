@@ -5,7 +5,7 @@ import { Col, Container, Row } from "react-bootstrap";
 import pointHistoryApi from "api/pointHistoryApi";
 import { CircleP } from "assets/images";
 import { NoData } from "features";
-import { formatToDateTimeString } from "utils/convertTime";
+import { convertToDateTimeString } from "utils/convertTime";
 import styles from "./assets/styles/PointHistory.module.scss";
 
 const cx = classNames.bind(styles);
@@ -47,7 +47,7 @@ function PointHistory() {
                 </Col>
                 <Col className={cx("point-history__row__content")}>
                   <h5>Nhận Point từ {source}</h5>
-                  <small>{formatToDateTimeString(createdAt)}</small>
+                  <small>{convertToDateTimeString(createdAt)}</small>
                   <p>[{detail}]</p>
                 </Col>
                 <Col className={cx("point-history__row__quantity")}>
@@ -66,7 +66,5 @@ function PointHistory() {
     </>
   );
 }
-
-PointHistory.propTypes = {};
 
 export default PointHistory;
