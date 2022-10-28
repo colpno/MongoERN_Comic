@@ -27,11 +27,13 @@ function ChapterTable({
         ]}
         sorting={sorting}
       >
-        <ChapterTableRow
-          chapters={chapters}
-          popup={popup}
-          setPopup={setPopup}
-        />
+        {chapters.length > 0 && (
+          <ChapterTableRow
+            chapters={chapters}
+            popup={popup}
+            setPopup={setPopup}
+          />
+        )}
       </GridTable>
       <Pagination pagination={pagination} setPagination={setPagination} />
     </>

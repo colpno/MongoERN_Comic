@@ -1,3 +1,17 @@
 .label {
-  margin-top: 2rem;
+  width: fit-content;
+}
+
+.label-wrapper {
+  align-items: flex-end;
+
+  :global(.css-b62m3t-container) {
+    width: fit-content;
+  }
+
+  :global(.css-b62m3t-container .css-13bxhgm-control) {
+    border-width: 0 0 1px 0;
+    border-color: #999;
+    background-color: hsl(202, 40%, 91%);
+  }
 }

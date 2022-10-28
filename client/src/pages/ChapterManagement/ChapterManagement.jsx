@@ -19,7 +19,6 @@ function ChapterManagement() {
   const { chapters, pagination, setPagination, sorting, setTitleID } =
     sortChapters(selectedOption.value);
   const { titles } = getAllTitles();
-  const hasData = chapters?.length > 0;
   const [popup, setPopup] = useState({
     trigger: false,
     isConfirm: false,
@@ -38,32 +37,30 @@ function ChapterManagement() {
 
   return (
     <Container>
-      {titles.length > 0 && (
-        <FloatingContainer>
-          <p>Select title to display all of it&apos;s chapters:</p>
-          <Select options={options} defaultValue={options[0]} searchable />
-        </FloatingContainer>
-      )}
-      {hasData && (
-        <>
-          <Row>
-            <ChapterManagementCards totalTitles={pagination.total} />
-          </Row>
-          <Row>
-            <h4 className={cx("label")}>All Chapters</h4>
-          </Row>
-          <FloatingContainer>
-            <ChapterTable
-              chapters={chapters}
-              popup={popup}
-              setPopup={setPopup}
-              pagination={pagination}
-              setPagination={setPagination}
-              sorting={sorting}
-            />
-          </FloatingContainer>
-        </>
-      )}
+      <Row>
+        <ChapterManagementCards totalTitles={pagination.total} />
+      </Row>
+      <Row className={cx("label-wrapper")}>
+        <h4 className={cx("label")}>All Chapters of</h4>
+        {titles.length > 0 && (
+          <Select
+            options={options}
+            defaultValue={options[0]}
+            searchable
+            clearable
+          />
+        )}
+      </Row>
+      <FloatingContainer>
+        <ChapterTable
+          chapters={chapters}
+          popup={popup}
+          setPopup={setPopup}
+          pagination={pagination}
+          setPagination={setPagination}
+          sorting={sorting}
+        />
+      </FloatingContainer>
     </Container>
   );
 }

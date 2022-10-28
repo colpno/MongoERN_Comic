@@ -1,7 +1,7 @@
 @use "assets/styles/variables";
 @use "assets/styles/mixins";
 
-.username {
+.user-name {
   @include mixins.multiLineClamp(2);
   font-weight: 500;
 }

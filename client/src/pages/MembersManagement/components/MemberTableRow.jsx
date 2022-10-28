@@ -41,7 +41,7 @@ function MemberTableRow({ popup, setPopup, members }) {
               <span className={cx("order")}>{index}</span>
             </Col>
             <Col>
-              <span className={cx("username")}>{userName}</span>
+              <span className={cx("user-name")}>{userName}</span>
             </Col>
             <Col>
               <span className={cx("coin")}>{coin}</span>
@@ -109,7 +109,7 @@ MemberTableRow.propTypes = {
       point: PropTypes.number.isRequired,
       createdAt: PropTypes.string.isRequired,
       updatedAt: PropTypes.string.isRequired,
-      id: PropTypes.number.isRequired,
+      id: PropTypes.string.isRequired,
     })
   ).isRequired,
 };
