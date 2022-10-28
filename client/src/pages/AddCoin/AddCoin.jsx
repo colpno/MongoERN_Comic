@@ -3,28 +3,24 @@ import { Button, Radio } from "components";
 import { NoData } from "features";
 import { useState } from "react";
 import { Container } from "react-bootstrap";
+import { getAllPayMethods } from "services/payMethod";
 import styles from "./assets/styles/AddCoin.module.scss";
 
 const cx = classNames.bind(styles);
 
 function AddCoin() {
   const [choseMethod, setChoseMethod] = useState({ value: "0", label: "" });
-  const payMethods = [
-    { value: "1", label: "Thanh toán bằng Ví ZaloPay" },
-    { value: "2", label: "Thanh toán bằng Ví MoMo" },
-    {
-      value: "3",
-      label: "Thẻ ATM nội địa / Internet banking",
-      subLabel: "(qua cổng ZaloPay)",
-    },
-    { value: "4", label: "Thanh toán bằng SMS" },
-  ];
+  const { payMethods } = getAllPayMethods();
+
+  const options = payMethods.map((payMethod) => {
+    return { value: payMethod.id, label: payMethod.label };
+  });
 
   const onMethodChange = (e) => {
     const { value } = e.target;
     setChoseMethod({
       value,
-      label: payMethods.find((method) => {
+      label: options.find((method) => {
         return method.value === value;
       }).label,
     });
@@ -37,7 +33,7 @@ function AddCoin() {
           Chọn phương thức thanh toán
         </p>
         <div className={cx("add-coin__step__methods")}>
-          {payMethods.map((method) => {
+          {options.map((method) => {
             return (
               <div
                 className={cx("add-coin__step__methods__method")}

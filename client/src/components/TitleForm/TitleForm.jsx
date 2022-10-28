@@ -56,7 +56,7 @@ function TitleForm({
               </>
             )} */}
 
-            {options && (
+            {options.length > 0 && (
               <>
                 <FormLabel
                   name="genreId"

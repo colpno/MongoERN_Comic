@@ -1,60 +1,36 @@
 import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Container } from "react-bootstrap";
 
-import followApi from "api/followApi";
 import { noFavorite } from "assets/images";
 import GridTable from "components/GridTable";
 import TabsContainer from "components/TabsContainer";
 import { NoData, Pagination, Popup } from "features";
+import { getLimitedFollowsByUserID } from "services/follow";
 import styles from "./assets/styles/Follow.module.scss";
 import FollowTable from "./components/FollowTable";
 
 const cx = classNames.bind(styles);
 
 function Follow() {
-  const userId = 1;
-  const [titles, setTitles] = useState([]);
+  const user = useSelector((state) => state.user.user);
+  const { titles, pagination, setPagination } = getLimitedFollowsByUserID(
+    user.id,
+    50
+  );
   const hasData = titles.length > 0;
 
   const menu = [
     { href: "", label: "Truyện tranh", tab: "" },
     { href: "?tab=novels", label: "Truyện chữ", tab: "novels" },
   ];
-  const [pagination, setPagination] = useState({
-    page: 1,
-    limit: 30,
-    total: titles.length,
-  });
   const [popup, setPopup] = useState({
     trigger: false,
     isConfirm: false,
     title: "",
     content: "",
   });
-
-  const handlePageChange = (newPage) => {
-    setPagination({ ...pagination, page: newPage });
-  };
-
-  useEffect(() => {
-    const fetchFollows = async () => {
-      try {
-        const response = await followApi.getAll(userId, {
-          _limit: pagination.limit,
-          _page: pagination.page,
-        });
-        const titlesArray = response.data.map((follow) => follow.title);
-
-        setTitles(titlesArray);
-        setPagination({ ...pagination, total: response.pagination.total });
-      } catch (error) {
-        throw new Error(error);
-      }
-    };
-
-    fetchFollows();
-  }, [pagination.page]);
 
   useEffect(() => {
     // console.log(popup.isConfirm);
@@ -75,10 +51,7 @@ function Follow() {
             >
               <FollowTable titles={titles} popup={popup} setPopup={setPopup} />
             </GridTable>
-            <Pagination
-              pagination={pagination}
-              onPageChange={handlePageChange}
-            />
+            <Pagination pagination={pagination} setPagination={setPagination} />
           </>
         ) : (
           <NoData image={noFavorite}>

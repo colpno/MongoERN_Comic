@@ -20,9 +20,9 @@ function RegisterForm({ handleSubmit }) {
       {() => {
         return (
           <Form>
-            <FormLabel name="username" label="Tên đăng nhập" required />
+            <FormLabel name="userName" label="Tên đăng nhập" required />
             <FastField
-              name="username"
+              name="userName"
               component={InputField}
               placeholder="Viết tên đăng nhập..."
             />

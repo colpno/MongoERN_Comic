@@ -4,6 +4,7 @@ import { BiSort } from "react-icons/bi";
 
 import Button from "components/Button";
 import Select from "components/Select";
+import { memo } from "react";
 
 function InventoryInteract({ cx, handleSort, sortOptions, handleFilter }) {
   return (
@@ -18,11 +19,7 @@ function InventoryInteract({ cx, handleSort, sortOptions, handleFilter }) {
         <Button wrapper className={cx("icon")} onClick={handleSort}>
           <BiSort />
         </Button>
-        <Select
-          options={sortOptions}
-          field={{ onChange: handleFilter }}
-          height={34}
-        />
+        <Select options={sortOptions} onChange={handleFilter} height={34} />
       </div>
     </Col>
   );
@@ -35,4 +32,4 @@ InventoryInteract.propTypes = {
   handleFilter: PropTypes.func.isRequired,
 };
 
-export default InventoryInteract;
+export default memo(InventoryInteract);

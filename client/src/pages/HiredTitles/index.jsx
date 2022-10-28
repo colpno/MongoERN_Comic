@@ -1,3 +1,3 @@
-import HiredTitles from "./HiredTitles";
+import HiredChapters from "./HiredChapters";
 
-export default HiredTitles;
+export default HiredChapters;

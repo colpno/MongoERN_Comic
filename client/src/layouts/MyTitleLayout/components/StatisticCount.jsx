@@ -1,21 +1,39 @@
+/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import { BsQuestionCircle } from "react-icons/bs";
+import { useDispatch, useSelector } from "react-redux";
 import { roundNumByUnit } from "utils";
 
+import { Popup } from "features";
 import { setMyTitles } from "libs/redux/slices/myTitlesSlice";
 import { getAllTitlesByUserID } from "services/title";
-import { BookLine, EyeLine, ThumbUpLine } from "../assets/images";
+import separateNumber from "utils/separateNumber";
+import { BookLine, DollarLine, EyeLine, ThumbUpLine } from "../assets/images";
 import styles from "../assets/styles/StatisticCount.module.scss";
+import IncomePopup from "./IncomePopup";
 
 const cx = classNames.bind(styles);
 
+// 10K likes = 1M vnd
+// 1 like = 100 vnd
 function StatisticCount() {
   const dispatch = useDispatch();
-  const userID = 1;
-  const { titles } = getAllTitlesByUserID(userID);
+  const user = useSelector((state) => state.user.user);
+  const { titles } = getAllTitlesByUserID(user.id);
   const [data, setData] = useState({ likes: 0, views: 0, totalTitles: 0 });
+  const [popup, setPopup] = useState({
+    trigger: false,
+    title: "Thu nhập",
+    content: <IncomePopup />,
+  });
+
+  const handleIncomeExplainClick = () => {
+    setPopup((prev) => {
+      return { ...prev, trigger: true };
+    });
+  };
 
   useEffect(() => {
     titles.length > 0 && dispatch(setMyTitles(titles));
@@ -51,7 +69,7 @@ function StatisticCount() {
         <Col className={cx("statistic-count__col")}>
           <ThumbUpLine className={cx("statistic-count__view__icon")} />
           <p className={cx("statistic-count__like__label")}>Lượt thích</p>
-          <strong className={cx("statistic-count__like__number", "active")}>
+          <strong className={cx("statistic-count__like__number")}>
             {roundNumByUnit(data.views)}
           </strong>
         </Col>
@@ -61,7 +79,7 @@ function StatisticCount() {
             Lượt bình luận
           </p>
           <strong className={cx("statistic-count__comment__number")}>0</strong>
-        </Col>
+        </Col> */}
         <Col className={cx("statistic-count__col")}>
           <DollarLine className={cx("statistic-count__income__icon")} />
           <div className={cx("statistic-count__label-container")}>
@@ -70,11 +88,15 @@ function StatisticCount() {
             </p>
             <BsQuestionCircle
               className={cx("statistic-count__income__question-icon")}
+              onClick={handleIncomeExplainClick}
             />
           </div>
-          <strong className={cx("statistic-count__income__number")}>0</strong>
-        </Col> */}
+          <strong className={cx("statistic-count__income__number", "active")}>
+            {separateNumber(user.income)}
+          </strong>
+        </Col>
       </Row>
+      <Popup popup={popup} setPopup={setPopup} />
     </Container>
   );
 }

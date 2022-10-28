@@ -4,8 +4,10 @@ import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import {
   ArcElement,
+  BarElement,
   CategoryScale,
   Chart,
+  Filler,
   Legend,
   LinearScale,
   LineElement,
@@ -21,10 +23,14 @@ Chart.register(
   ArcElement,
   Tooltip,
   Legend,
+
   CategoryScale,
   LinearScale,
   PointElement,
-  LineElement
+  LineElement,
+  Filler,
+
+  BarElement
 );
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

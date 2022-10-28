@@ -1,10 +1,12 @@
+/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
-import { Container } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import { AiOutlinePlus } from "react-icons/ai";
+import { useSelector } from "react-redux";
 
 import Button from "components/Button";
 import { NoData } from "features";
-import { sortTitles } from "services/title";
+import { sortTitlesByUserID } from "services/title";
 import styles from "./assets/styles/MyTitle.module.scss";
 import MyTitleContent from "./components/MyTitleContent";
 import MyTitleHeader from "./components/MyTitleHeader";
@@ -21,13 +23,13 @@ function BtnCreate() {
 }
 
 function MyTitle() {
-  const userID = 1;
+  const user = useSelector((state) => state.user.user);
   const TITLES_PER_PAGE = 50;
-  const { titles, pagination, setPagination, sorting } = sortTitles(
+  const { titles, pagination, setPagination, sorting } = sortTitlesByUserID(
+    user.id,
     "index",
     true,
-    TITLES_PER_PAGE,
-    userID
+    TITLES_PER_PAGE
   );
   const hasData = titles?.length > 0;
 
@@ -39,12 +41,16 @@ function MyTitle() {
       </Container>
       {hasData ? (
         <Container>
-          <MyTitleContent
-            sorting={sorting}
-            titles={titles}
-            pagination={pagination}
-            setPagination={setPagination}
-          />
+          <Row>
+            <Col>
+              <MyTitleContent
+                sorting={sorting}
+                titles={titles}
+                pagination={pagination}
+                setPagination={setPagination}
+              />
+            </Col>
+          </Row>
         </Container>
       ) : (
         <NoData>

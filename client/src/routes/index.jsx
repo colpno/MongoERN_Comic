@@ -41,6 +41,8 @@ import {
   ChapterManagement,
   AdminManagement,
   MemberManagement,
+  IncomeStatistic,
+  VisitStatistic,
 } from "pages";
 
 export const publicRoutes = [
@@ -184,6 +186,16 @@ export const publicRoutes = [
   {
     path: "/admin/administrators",
     component: AdminManagement,
+    layout: AdminLayout,
+  },
+  {
+    path: "/admin/income",
+    component: IncomeStatistic,
+    layout: AdminLayout,
+  },
+  {
+    path: "/admin/visit",
+    component: VisitStatistic,
     layout: AdminLayout,
   },
 ];

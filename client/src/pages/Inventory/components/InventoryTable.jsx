@@ -7,29 +7,29 @@ import styles from "../assets/styles/InventoryTable.module.scss";
 
 const cx = classNames.bind(styles);
 
-function InventoryTable({ hiredTitles }) {
+function InventoryTable({ hiredChapters }) {
   return (
     <>
-      {hiredTitles.map((hiredTitle) => {
+      {hiredChapters.map((hiredTitle) => {
         const beginTime = formatTime(hiredTitle.createdAt);
         const expiredTime = hiredTitle.expiredDay
           ? formatTime(hiredTitle.expiredDay)
           : "";
-        const { title } = hiredTitle;
+        const { chapter } = hiredTitle;
 
         return (
           <Row
             className={cx("inventory__container__content")}
             key={hiredTitle.id}
           >
-            <Col md={6} className={cx("title")}>
+            <Col md={6} className={cx("chapter")}>
               <div className={cx("box-img")}>
-                <img src={title.coverImage} alt={title.titleName} />
+                <img src={chapter.coverImage} alt={chapter.titleName} />
               </div>
-              <span className={cx("title")}>{title.titleName}</span>
+              <span className={cx("chapter")}>{chapter.titleName}</span>
             </Col>
             <Col>
-              <span className={cx("title")}>
+              <span className={cx("chapter")}>
                 {hiredTitle.ticketId === 1 ? <BuyTicket /> : <RentTicket />}
                 <strong className={cx("separate")}>x</strong>
                 <strong className={cx("rent-quantity")}>1</strong>
@@ -53,12 +53,12 @@ function InventoryTable({ hiredTitles }) {
 }
 
 InventoryTable.propTypes = {
-  hiredTitles: PropTypes.arrayOf(
+  hiredChapters: PropTypes.arrayOf(
     PropTypes.shape({
       createdAt: PropTypes.string.isRequired,
       expiredDay: PropTypes.string.isRequired,
       id: PropTypes.string.isRequired,
-      title: PropTypes.shape({
+      chapter: PropTypes.shape({
         coverImage: PropTypes.string.isRequired,
         titleName: PropTypes.string.isRequired,
       }).isRequired,

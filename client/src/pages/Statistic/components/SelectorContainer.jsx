@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 
 import { Select } from "components";
+import { memo } from "react";
 
 function SelectorContainer({ cx, titleLabel, options, handleChange }) {
   return (
@@ -9,7 +10,7 @@ function SelectorContainer({ cx, titleLabel, options, handleChange }) {
       <Select
         className={cx("select")}
         options={options}
-        field={{ onChange: handleChange }}
+        onChange={handleChange}
         searchable
         height={30}
       />
@@ -29,4 +30,4 @@ SelectorContainer.propTypes = {
   ).isRequired,
 };
 
-export default SelectorContainer;
+export default memo(SelectorContainer);

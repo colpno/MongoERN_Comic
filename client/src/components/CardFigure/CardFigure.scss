@@ -2,21 +2,13 @@
 @use "assets/styles/mixins";
 
 .card-figure {
+  width: 100%;
+
   &.horizontal {
     display: flex;
 
     :global(.image-wrapper) {
       margin: 0 15px 0 8px;
-    }
-
-    .card-figure__content {
-      display: flex;
-      justify-content: space-between;
-      flex-direction: column;
-
-      &__title {
-        margin-top: 0;
-      }
     }
   }
 

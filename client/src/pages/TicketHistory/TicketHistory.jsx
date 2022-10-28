@@ -1,10 +1,9 @@
 import classNames from "classnames/bind";
-import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 
-import ticketHistoryApi from "api/ticketHistoryApi";
 import { RentTicket } from "assets/images";
-import { NoData } from "features";
+import { NoData, Pagination } from "features";
+import { sortTicketHistories } from "services/ticketHistory";
 import { convertToDateTimeString } from "utils/convertTime";
 import styles from "./assets/styles/TicketHistory.module.scss";
 
@@ -12,31 +11,13 @@ const cx = classNames.bind(styles);
 
 function TicketHistory() {
   const userId = 1;
-  const [ticketHistories, setTicketHistories] = useState([]);
-  const [pagination, setPagination] = useState({
-    limit: 30,
-    page: 1,
-    total: 0,
-  });
+  const { ticketHistories, pagination, setPagination } = sortTicketHistories(
+    userId,
+    "createdAt",
+    false,
+    30
+  );
   const hasData = ticketHistories.length > 0;
-
-  useEffect(() => {
-    const fetchTicketHistory = async () => {
-      const response = await ticketHistoryApi.sort(
-        userId,
-        "createdAt",
-        "desc",
-        {
-          _limit: pagination.limit,
-          _page: pagination.page,
-        }
-      );
-      setTicketHistories(response.data);
-      setPagination({ ...pagination, total: response.pagination.total });
-    };
-
-    fetchTicketHistory();
-  }, [pagination.page]);
 
   return (
     <>
@@ -61,6 +42,9 @@ function TicketHistory() {
               </Row>
             );
           })}
+          <Row>
+            <Pagination pagination={pagination} setPagination={setPagination} />
+          </Row>
         </Container>
       ) : (
         <NoData>

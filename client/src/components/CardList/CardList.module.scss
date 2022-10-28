@@ -29,4 +29,9 @@
   &__cards {
     gap: 40px 0;
   }
+
+  :global([class*="col"]) {
+    padding-left: 0.375rem;
+    padding-right: 0.375rem;
+  }
 }

@@ -4,8 +4,9 @@ import { Container } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
 
 import TabsContainer from "components/TabsContainer";
-import HiredTitles from "./pages/HiredTitles";
-import PurchasedTitles from "./pages/PurchasedTitles";
+import { getAllTitles } from "services/title";
+import HiredChapters from "./pages/HiredChapters";
+import PurchasedChapters from "./pages/PurchasedChapters";
 import styles from "./styles/TitleTransaction.module.scss";
 
 const cx = classNames.bind(styles);
@@ -13,6 +14,7 @@ const cx = classNames.bind(styles);
 function TitleTransaction() {
   const [searchParams] = useSearchParams();
   let queryTab = searchParams.get("tab") || "";
+  const { titles } = getAllTitles();
 
   const menu = [
     { label: "Đã mua", tab: "purchased-titles", href: "?tab=purchased-titles" },
@@ -25,11 +27,17 @@ function TitleTransaction() {
 
   return (
     <>
-      <Container className={cx("transaction")}>
-        <TabsContainer menu={menu} />
-        {queryTab.includes(menu[0].tab) && <PurchasedTitles cx={cx} />}
-        {queryTab.includes(menu[1].tab) && <HiredTitles cx={cx} />}
-      </Container>
+      {titles.length > 0 && (
+        <Container className={cx("transaction")}>
+          <TabsContainer menu={menu} />
+          {queryTab.includes(menu[0].tab) && (
+            <PurchasedChapters cx={cx} titles={titles} />
+          )}
+          {queryTab.includes(menu[1].tab) && (
+            <HiredChapters cx={cx} titles={titles} />
+          )}
+        </Container>
+      )}
       {}
     </>
   );

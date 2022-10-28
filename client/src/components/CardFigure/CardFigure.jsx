@@ -25,7 +25,11 @@ function CardFigure(props) {
       to={to}
       className={`card-figure${horizontal ? " horizontal" : ""}`}
     >
-      <Image src={data.coverImage} alt={data.titleName} />
+      <Image
+        src={data.coverImage}
+        alt={data.titleName}
+        className="card-figure__image"
+      />
       <figcaption className="card-figure__content">
         <div className="card-figure__content__wrapper">
           <h5 className="card-figure__content__title">{data.titleName}</h5>

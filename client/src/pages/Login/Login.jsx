@@ -1,5 +1,11 @@
+/* eslint-disable no-unused-vars */
+import userApi from "api/userApi";
 import classNames from "classnames/bind";
 import { Button } from "components";
+import { login } from "libs/redux/slices/userSlice";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { convertUserPropertyToString } from "utils/convertArrayPropertyToString";
 
 import LoginForm from "./components/LoginForm";
 import styles from "./styles/Login.module.scss";
@@ -7,9 +13,23 @@ import styles from "./styles/Login.module.scss";
 const cx = classNames.bind(styles);
 
 function Login() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const handleSubmit = (values, { setSubmitting }) => {
-    console.log(values);
+    const { userName, password } = values;
+    const fetchUser = async () => {
+      try {
+        const response = await userApi.search({ userName, password });
+        const converted = convertUserPropertyToString(response[0]);
+        dispatch(login(converted));
+      } catch (error) {
+        throw new Error(error);
+      }
+    };
+    fetchUser();
     setSubmitting(false);
+    navigate("/");
   };
 
   return (

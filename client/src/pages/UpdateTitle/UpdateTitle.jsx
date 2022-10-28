@@ -11,13 +11,14 @@ const cx = classNames.bind(styles);
 function UpdateTitle() {
   const { titleId } = useParams();
   const { title } = getTitleByID(titleId);
+  const hasData = Object.keys(title).length > 0;
 
   const handleSubmit = (values, { setSubmitting }) => {
     console.log(values);
     setSubmitting(false);
   };
 
-  const INITIAL_VALUE = title && {
+  const INITIAL_VALUE = hasData && {
     title: title.titleName,
     summary: title.summary,
     titleStatusId: `${title.titleStatusId}`,
@@ -50,7 +51,7 @@ function UpdateTitle() {
   return (
     <div className={cx("update-title")}>
       <h3 className={cx("head-title")}>Chỉnh sửa truyện</h3>
-      {title && (
+      {hasData && (
         <TitleForm
           handleSubmit={handleSubmit}
           initialValues={INITIAL_VALUE}

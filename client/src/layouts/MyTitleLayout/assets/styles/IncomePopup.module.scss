@@ -1,0 +1,17 @@
+.content {
+  user-select: none;
+}
+
+.attention {
+  font-weight: 600;
+  min-width: fit-content;
+  margin-right: 0.8rem;
+
+  &-wrapper {
+    margin-top: 0.9rem;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+}

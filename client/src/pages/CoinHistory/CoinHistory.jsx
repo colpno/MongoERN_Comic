@@ -1,10 +1,9 @@
 import classNames from "classnames/bind";
-import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 
-import coinHistoryApi from "api/coinHistoryApi";
 import { CircleC } from "assets/images";
-import { NoData } from "features";
+import { NoData, Pagination } from "features";
+import { sortCoinHistories } from "services/coinHistory";
 import { convertToDateTimeString } from "utils/convertTime";
 import styles from "./assets/styles/CoinHistory.module.scss";
 
@@ -12,33 +11,21 @@ const cx = classNames.bind(styles);
 
 function CoinHistory() {
   const userId = 1;
-  const [coinHistories, setCoinHistories] = useState([]);
-  const [pagination, setPagination] = useState({
-    limit: 30,
-    page: 1,
-    total: 0,
-  });
+  const { coinHistories, pagination, setPagination } = sortCoinHistories(
+    userId,
+    "createdAt",
+    false,
+    30
+  );
   const hasData = coinHistories.length > 0;
-
-  useEffect(() => {
-    const fetchCoinHistory = async () => {
-      const response = await coinHistoryApi.sort(userId, "createdAt", "desc", {
-        _limit: pagination.limit,
-        _page: pagination.page,
-      });
-      setCoinHistories(response.data);
-      setPagination({ ...pagination, total: response.pagination.total });
-    };
-
-    fetchCoinHistory();
-  }, [pagination.page]);
 
   return (
     <>
       {hasData ? (
         <Container className={cx("coin-history")}>
           {coinHistories.map((coinHistory) => {
-            const { id, source, detail, amount, createdAt } = coinHistory;
+            const { id, payMethod, amount, createdAt } = coinHistory;
+            const { label } = payMethod;
 
             return (
               <Row className={cx("coin-history__row")} key={id}>
@@ -46,9 +33,8 @@ function CoinHistory() {
                   <CircleC className={cx("coin-icon")} />
                 </Col>
                 <Col className={cx("coin-history__row__content")}>
-                  <h5>Nhận Coin từ {source}</h5>
+                  <h5>Nhận Coin từ {label}</h5>
                   <small>{convertToDateTimeString(createdAt)}</small>
-                  <p>[{detail}]</p>
                 </Col>
                 <Col className={cx("coin-history__row__quantity")}>
                   <strong>{amount > 0 ? `+${amount}` : `-${amount}`}</strong>
@@ -56,6 +42,9 @@ function CoinHistory() {
               </Row>
             );
           })}
+          <Row>
+            <Pagination pagination={pagination} setPagination={setPagination} />
+          </Row>
         </Container>
       ) : (
         <NoData>

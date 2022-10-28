@@ -88,7 +88,7 @@ MyTitleTable.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
       index: PropTypes.number.isRequired,
-      id: PropTypes.number.isRequired,
+      id: PropTypes.string.isRequired,
       titleName: PropTypes.oneOfType([
         PropTypes.string.isRequired,
         PropTypes.arrayOf(
@@ -100,7 +100,7 @@ MyTitleTable.propTypes = {
       ]).isRequired,
       coverImage: PropTypes.string.isRequired,
       totalChapter: PropTypes.number.isRequired,
-      titleStatusId: PropTypes.number.isRequired,
+      titleStatusId: PropTypes.string.isRequired,
     })
   ).isRequired,
 };

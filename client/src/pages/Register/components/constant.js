@@ -1,14 +1,14 @@
 import * as Yup from "yup";
 
 export const INITIAL_VALUE = {
-  username: "",
+  userName: "",
   phone: "",
   password: "",
   confirmPassword: "",
   termOfService: false,
 };
 export const VALIDATION_SCHEMA = Yup.object({
-  username: Yup.string()
+  userName: Yup.string()
     .matches(/^[a-zA-Z0-9]+$/g, "Tên đăng nhập chỉ gồm chữ cái và số")
     .max(15, "Độ dài tối đa là 15 ký tự")
     .required("Tên đăng nhập là cần thiết để hiển thị"),

@@ -35,7 +35,7 @@ function TitlePart({ title, popup, setPopup }) {
       <Col md="auto" className={cx("chapters__title__box")}>
         <Button
           outline
-          to={`/comic/update/${title.id}`}
+          to={`/my-title/update/${title.id}`}
           className={cx("chapters__title-accelerate__button")}
         >
           <HiOutlinePencil />
@@ -63,7 +63,7 @@ TitlePart.propTypes = {
   }).isRequired,
   setPopup: PropTypes.func.isRequired,
   title: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     coverImage: PropTypes.string.isRequired,
     titleName: PropTypes.string.isRequired,
   }).isRequired,

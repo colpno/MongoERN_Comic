@@ -114,6 +114,18 @@ export const convertUserPropertyToString = (user) => {
   };
 };
 
+export const convertCoinHistoriesPropertyToString = (coinHistories) => {
+  const result = coinHistories.map((history) => {
+    const { amount } = history;
+    return {
+      ...history,
+      amount: Number.parseInt(amount, 10),
+    };
+  });
+
+  return result;
+};
+
 export const convertPointHistoriesPropertyToString = (pointHistories) => {
   const result = pointHistories.map((history) => {
     const { amount } = history;
@@ -132,6 +144,33 @@ export const convertTicketHistoriesPropertyToString = (ticketHistories) => {
     return {
       ...history,
       amount: Number.parseInt(amount, 10),
+    };
+  });
+
+  return result;
+};
+
+export const convertIncomeStatPropertyToString = (incomeStatArray) => {
+  const result = incomeStatArray.map((incomeStat) => {
+    const { income, month, year } = incomeStat;
+    return {
+      ...incomeStat,
+      income: Number.parseInt(income, 10),
+      month: Number.parseInt(month, 10),
+      year: Number.parseInt(year, 10),
+    };
+  });
+
+  return result;
+};
+
+export const convertTitleStatPropertyToString = (statArray) => {
+  const result = statArray.map((incomeStat) => {
+    const { like, view } = incomeStat;
+    return {
+      ...incomeStat,
+      like: Number.parseInt(like, 10),
+      view: Number.parseInt(view, 10),
     };
   });
 

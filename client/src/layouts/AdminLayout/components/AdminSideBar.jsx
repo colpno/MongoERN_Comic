@@ -5,7 +5,7 @@ import { Logo } from "assets/images";
 import { Button } from "components";
 import { SideBar } from "features";
 import { BsLayoutSidebarInset } from "react-icons/bs";
-import getAdminSideBarMenu from "utils/getAdminSideBarMenu";
+import getAdminSideBarMenu from "utils/constants";
 import styles from "../styles/AdminSideBar.module.scss";
 
 const cx = classNames.bind(styles);

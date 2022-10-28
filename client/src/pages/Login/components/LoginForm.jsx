@@ -20,8 +20,8 @@ function LoginForm({ handleSubmit }) {
       {() => {
         return (
           <Form>
-            <FormLabel name="username" label="Tên đăng nhập" />
-            <FastField name="username" component={InputField} />
+            <FormLabel name="userName" label="Tên đăng nhập" />
+            <FastField name="userName" component={InputField} />
 
             <FormLabel name="password" label="Mật khẩu" />
             <FastField name="password" component={InputField} type="password" />

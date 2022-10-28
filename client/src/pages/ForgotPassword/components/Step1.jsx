@@ -6,13 +6,13 @@ import FormLabel from "libs/formik/FormLabel";
 
 function Step1({ children, handleSubmit }) {
   return (
-    <Formik initialValues={{ username: "", phone: "" }} onSubmit={handleSubmit}>
+    <Formik initialValues={{ userName: "", phone: "" }} onSubmit={handleSubmit}>
       {() => {
         return (
           <Form>
-            <FormLabel name="username" label="Tên đăng nhập" required />
+            <FormLabel name="userName" label="Tên đăng nhập" required />
             <FastField
-              name="username"
+              name="userName"
               component={InputField}
               placeholder="Nhập tên đăng nhập..."
             />

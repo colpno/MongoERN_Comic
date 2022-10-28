@@ -31,3 +31,5 @@ export { default as TitleManagement } from "./TitleManagement/TitleManagement";
 export { default as ChapterManagement } from "./ChapterManagement/ChapterManagement";
 export { default as MemberManagement } from "./MembersManagement/MemberManagement";
 export { default as AdminManagement } from "./AdminManagement/AdminManagement";
+export { default as IncomeStatistic } from "./IncomeStatistic/IncomeStatistic";
+export { default as VisitStatistic } from "./VisitStatistic/VisitStatistic";

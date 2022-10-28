@@ -4,6 +4,7 @@
 .grid-table {
   &__head {
     font-weight: 500;
+    // border-bottom: 1px solid variables.$border-gray-dark;
   }
 
   :global(.row) {
@@ -49,4 +50,8 @@
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+}
+
+.label {
+  text-align: left;
 }

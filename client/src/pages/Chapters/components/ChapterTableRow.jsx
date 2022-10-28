@@ -110,14 +110,14 @@ ChaptersTableRow.propTypes = {
   setPopup: PropTypes.func.isRequired,
   chapters: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number.isRequired,
+      id: PropTypes.string.isRequired,
       createdAt: PropTypes.string.isRequired,
       updatedAt: PropTypes.string.isRequired,
       schedule: PropTypes.string.isRequired,
       order: PropTypes.number.isRequired,
       coverImage: PropTypes.string.isRequired,
       titleName: PropTypes.string.isRequired,
-      statusId: PropTypes.number.isRequired,
+      statusId: PropTypes.string.isRequired,
     })
   ).isRequired,
 };

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { memo } from "react";
 
 import { FloatingContainer } from "components";
-import DoughnutChart from "components/DoughnutChart/DoughnutChart";
+import { DoughnutChart } from "features";
 import styles from "../styles/AdminCard.module.scss";
 
 const cx = classNames.bind(styles);

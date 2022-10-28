@@ -1,6 +1,10 @@
 @use "assets/styles/variables";
 @use "assets/styles/mixins";
 
+:global(.card-figure__image) {
+  aspect-ratio: 1 / 1;
+}
+
 .ranking-figure {
   margin: 0;
   display: flex;

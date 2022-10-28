@@ -36,7 +36,7 @@ function Weekly() {
         return "T2";
     }
   });
-  const { titles } = searchTitle("schedule", dayFilter, dayFilter);
+  const { titles } = searchTitle("schedule", dayFilter);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -62,10 +62,11 @@ function Weekly() {
   };
 
   const slider =
-    titles &&
-    titles.slice(0, 10).map((title) => {
-      return title.coverImage;
-    });
+    titles.length > 0
+      ? titles.slice(0, 10).map((title) => {
+          return title.coverImage;
+        })
+      : [];
 
   return (
     <div className={cx("weekly-page")}>

@@ -1,13 +1,13 @@
 import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 import { Container, Row } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
-import hiredTitleApi from "api/hiredTitleApi";
-import purchaseTitleApi from "api/purchasedTitleApi";
 import GridTable from "components/GridTable";
-import { UserArray } from "database";
 import { Popup } from "features";
 import TicketExplainPopup from "pages/Title/components/TicketExplainPopup";
+import { getLimitedHiredChaptersByUserID } from "services/hiredChapter";
+import { getLimitedPurchasedChaptersByUserID } from "services/purchasedChapter";
 import { sort } from "utils/arrayMethods";
 import { ReactComponent as TicketLogo } from "./assets/images/ticket.svg";
 import styles from "./assets/styles/Inventory.module.scss";
@@ -18,10 +18,10 @@ import InventoryTickets from "./components/InventoryTickets";
 const cx = classNames.bind(styles);
 
 function Inventory() {
-  const user = UserArray()[0];
-  const [hiredTitles, setHiredTitles] = useState([]);
-  const [purchasedTitles, setPurchasedTitles] = useState([]);
-  const [titles, setTitles] = useState([]);
+  const user = useSelector((state) => state.user.user);
+  const { hiredChapters } = getLimitedHiredChaptersByUserID(user.id);
+  const { purchasedChapters } = getLimitedPurchasedChaptersByUserID(user.id);
+  const [chapters, setChapters] = useState([]);
   const [sorter, setSorter] = useState({ key: "createdAt", isAsc: false });
 
   const sortOptions = [
@@ -57,23 +57,23 @@ function Inventory() {
     let data = [];
     switch (sorter.key) {
       case "createdAt":
-        data = sorting([...titles], !sorter.isAsc, sorter.key);
+        data = sorting([...chapters], !sorter.isAsc, sorter.key);
         break;
       case "expiredDay":
-        data = sorting([...hiredTitles], !sorter.isAsc, sorter.key);
-        data.push(...purchasedTitles);
+        data = sorting([...hiredChapters], !sorter.isAsc, sorter.key);
+        data.push(...purchasedChapters);
         break;
       default:
         break;
     }
     setSorter({ ...sorter, isAsc: !sorter.isAsc });
-    setTitles(data);
+    setChapters(data);
   };
 
   const handleFilter = (selected) => {
     const { value } = selected;
     if (sorter.key !== value) {
-      const data = [...hiredTitles, ...purchasedTitles];
+      const data = [...hiredChapters, ...purchasedChapters];
 
       switch (value) {
         case "createdAt":
@@ -92,49 +92,17 @@ function Inventory() {
           break;
       }
 
-      setTitles(data);
+      setChapters(data);
     }
   };
 
   useEffect(() => {
-    const fetchPurchasedTitles = async () => {
-      try {
-        const response = await purchaseTitleApi.getAll(user.userID, {
-          _limit: 20,
-          _page: 1,
-        });
-        setPurchasedTitles(response.data);
-      } catch (error) {
-        throw new Error(error);
-      }
-    };
-
-    fetchPurchasedTitles();
-  }, []);
-
-  useEffect(() => {
-    const fetchHiredTitles = async () => {
-      try {
-        const response = await hiredTitleApi.getAll(user.userID, {
-          _limit: 20,
-          _page: 1,
-        });
-        setHiredTitles(response.data);
-      } catch (error) {
-        throw new Error(error);
-      }
-    };
-
-    fetchHiredTitles();
-  }, []);
-
-  useEffect(() => {
-    if (hiredTitles.length > 0 && purchasedTitles.length > 0) {
-      const data = [...hiredTitles, ...purchasedTitles];
+    if (hiredChapters.length > 0 && purchasedChapters.length > 0) {
+      const data = [...hiredChapters, ...purchasedChapters];
       sorting(data, sorter.isAsc, sorter.key);
-      setTitles(data);
+      setChapters(data);
     }
-  }, [hiredTitles, purchasedTitles]);
+  }, [hiredChapters, purchasedChapters]);
 
   return (
     <>
@@ -166,7 +134,7 @@ function Inventory() {
             { label: "Ngày hết" },
           ]}
         >
-          <InventoryTable hiredTitles={titles} />
+          <InventoryTable hiredChapters={chapters} />
         </GridTable>
       </Container>
       <Popup popup={popup} setPopup={setPopup} />
