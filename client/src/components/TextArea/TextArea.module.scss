@@ -1,7 +1,14 @@
 @use "components/Scrollbar/Scrollbar.module.scss" as scl;
 
-.textarea {
+.wrapper {
   position: relative;
+}
+
+.textarea {
+  :global(.ql-container) {
+    padding-bottom: 1.2rem;
+    font-size: 1rem;
+  }
 
   &.is-invalid {
     border-color: red;
@@ -9,11 +16,10 @@
 }
 
 .text-length {
-  padding-bottom: 30px;
   @extend .scrollbar;
 
   position: absolute;
-  bottom: 10px;
+  bottom: 4px;
   right: 20px;
   color: #ccc;
 
