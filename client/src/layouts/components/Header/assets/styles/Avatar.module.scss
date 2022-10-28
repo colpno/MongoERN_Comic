@@ -50,6 +50,7 @@
   &__icon {
     margin-right: 15px;
     $size: 24px;
+    background-color: transparent;
     font-size: $size;
     width: calc($size * 1.5);
     height: calc($size * 1.5);
@@ -71,23 +72,32 @@
   overflow: hidden;
 
   &__group {
+    &:first-child {
+      .dropdown__group__link {
+        &:nth-child(2),
+        &:nth-child(3) {
+          padding: 0.8rem 0;
+
+          .coin-balance,
+          .point-balance {
+            font-weight: 700;
+          }
+        }
+      }
+    }
+
     &:not(:last-child) {
       border-bottom: 10px solid #f4f4f4;
     }
 
     &__link {
-      padding: 6px 0;
+      padding: 1.5rem 0;
       border-top: 1px solid #e2e2e2;
+      width: 100%;
 
-      &:nth-child(2),
-      &:nth-child(3) {
-        padding: 8px 0;
-
-        .coin-balance,
-        .point-balance {
-          font-weight: 700;
-        }
-      }
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
 
       a {
         color: variables.$txt-black;
@@ -149,6 +159,7 @@
 .text-box {
   flex: 1;
   -webkit-line-clamp: 1;
+  text-align: left;
 
   .coin-label,
   .point-label {

@@ -87,7 +87,7 @@ function getAvatarMenu(cx, user, isLoggedIn) {
     ],
     [
       {
-        path: "/",
+        path: "",
         label: <span>Đăng xuất</span>,
         icon: <AiOutlineLogout className={cx("logout-icon")} />,
       },
