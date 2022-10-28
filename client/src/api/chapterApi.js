@@ -3,10 +3,7 @@ import axiosClient from "libs/axios/axiosClient";
 const url = "/chapters";
 
 const chapterApi = {
-  getAll: (titleId, params) =>
-    axiosClient.get(`${url}?titleId=${titleId}`, {
-      params,
-    }),
+  getAll: (params) => axiosClient.get(url, { params }),
 
   getOneByID: (chapterID, titleID) => {
     const queryStr = `?${titleID ? `titleId=${titleID}&` : ""}_expand=title`;
@@ -27,9 +24,15 @@ const chapterApi = {
     );
   },
 
-  filter: (filterObj) => {
-    const key = Object.keys(filterObj)[0];
-    return axiosClient.get(`${url}?${key}_like=${filterObj[key]}`);
+  filter: (filterObj, params) => {
+    const keyArray = Object.keys(filterObj);
+    const queryStr = keyArray.reduce((string, key, index) => {
+      return index !== keyArray.length - 1
+        ? `${string}${key}_like=${filterObj[key]}&`
+        : `${string}${key}_like=${filterObj[key]}`;
+    }, "");
+
+    return axiosClient.get(`${url}?${queryStr}`, { params });
   },
 
   search: (searchObj) => {

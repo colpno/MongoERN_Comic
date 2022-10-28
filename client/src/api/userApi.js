@@ -35,8 +35,14 @@ const userApi = {
   },
 
   search: (searchObj) => {
-    const key = Object.keys(searchObj)[0];
-    return axiosClient.get(`${url}?${key}=${searchObj[key]}`);
+    const keyArray = Object.keys(searchObj);
+    const queryStr = keyArray.reduce((string, key, index) => {
+      return index !== keyArray.length - 1
+        ? `${string}${key}=${searchObj[key]}&`
+        : `${string}${key}=${searchObj[key]}`;
+    }, "");
+
+    return axiosClient.get(`${url}?${queryStr}`);
   },
 };
 

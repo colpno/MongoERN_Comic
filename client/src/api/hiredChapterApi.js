@@ -2,13 +2,13 @@ import axiosClient from "libs/axios/axiosClient";
 
 const url = "/hired-chapters";
 
-const hiredTitleApi = {
+const hiredChapterApi = {
   getAll: (userId, params) =>
-    axiosClient.get(`${url}?userId=${userId}&_expand=chapter`, { params }),
+    axiosClient.get(`${url}?userId=${userId}&_expand=title`, { params }),
 
   getOneByID: (id) => axiosClient.get(`${url}/${id}`),
 
-  add: (chapter) => axiosClient.post(url, chapter),
+  add: (title) => axiosClient.post(url, title),
 
   delete: (id) => axiosClient.get(`${url}/${id}`),
 
@@ -25,4 +25,4 @@ const hiredTitleApi = {
   },
 };
 
-export default hiredTitleApi;
+export default hiredChapterApi;
