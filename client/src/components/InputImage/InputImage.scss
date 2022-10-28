@@ -62,3 +62,13 @@
     pointer-events: none;
   }
 }
+
+.close-icon {
+  position: absolute;
+  top: -0.9rem;
+  right: -0.9rem;
+  color: #777;
+  width: 1.3em;
+  height: 1.3em;
+  cursor: pointer;
+}

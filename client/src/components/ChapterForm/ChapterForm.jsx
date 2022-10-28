@@ -5,10 +5,12 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { Alert } from "react-bootstrap";
 
+import { Image } from "components";
 import Button from "components/Button";
 import { InputField, TextAreaField } from "libs/formik";
 import FileField from "libs/formik/FileField";
 import FormLabel from "libs/formik/FormLabel";
+import { IoCloseCircle } from "react-icons/io5";
 import styles from "./assets/ChapterForm.module.scss";
 import InputMultiFile from "./components/InputMultiFile";
 
@@ -32,6 +34,10 @@ function ChapterForm({
     // assign to contentsFake will cause "HTTPInputElement" error
     // so instead of assign to contentsFake, assign to contents
     setFieldValue("contents", [...imagesPreview, ...images]);
+  };
+
+  const onCloseIconClick = (e) => {
+    console.log(e);
   };
 
   return (
@@ -59,17 +65,19 @@ function ChapterForm({
             {!!errors.coverImageFake && (
               <Alert variant="danger">{errors.coverImageFake}</Alert>
             )}
-            <div className="cover-image-field">
+            <div className={cx("cover-image-field")}>
               <FastField
                 name="coverImageFake"
                 component={FileField}
                 imgSize={{ width: 312, height: 232 }}
                 imageBlob={imageBlob?.coverImage}
+                closeIcon={!!imageBlob?.coverImage}
+                handleCloseIconClick={onCloseIconClick}
               />
             </div>
 
             <FormLabel name="contentsFake" label="Nội dung chương" required />
-            <div className="contents-field">
+            <div className={cx("contents-field")}>
               <FastField
                 name="contentsFake"
                 component={InputMultiFile}
@@ -81,15 +89,24 @@ function ChapterForm({
                 fileSize={3}
               />
             </div>
-            <div className="contents-holder">
+            <div className={cx("contents-holder")}>
               {imagesPreview.map((content, index) => {
                 return (
-                  <img
-                    src={content}
-                    alt=""
-                    key={index}
-                    className={cx("image-content")}
-                  />
+                  <div className={cx("content-wrapper")} key={index}>
+                    <Image
+                      src={content}
+                      alt=""
+                      key={index}
+                      className={cx("image-content")}
+                    />
+                    <IoCloseCircle
+                      className={cx("close-icon")}
+                      onClick={() => {
+                        const elem = initialValues.contents.indexOf(content);
+                        console.log(initialValues.contents[elem]);
+                      }}
+                    />
+                  </div>
                 );
               })}
             </div>

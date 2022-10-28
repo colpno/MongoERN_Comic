@@ -1,9 +1,23 @@
 import useReviewImage from "hooks/useReviewImage";
 import PropTypes from "prop-types";
 import { FiUpload } from "react-icons/fi";
-import "./InputImage.scss";
+import { IoCloseCircle } from "react-icons/io5";
+import classNames from "classnames/bind";
 
-function InputImage({ field, imageBlob, imageSize, fileSize, ...attributes }) {
+import styles from "./InputImage.scss";
+
+const cx = classNames.bind(styles);
+
+function InputImage({
+  children,
+  field,
+  imageBlob,
+  imageSize,
+  fileSize,
+  closeIcon,
+  handleCloseIconClick,
+  ...attributes
+}) {
   const { accept, multiple, disabled } = attributes;
   const { width, height } = imageSize;
   const { imagePreview, handleImageChange } = useReviewImage(
@@ -42,11 +56,18 @@ function InputImage({ field, imageBlob, imageSize, fileSize, ...attributes }) {
         src={imagePreview?.preview}
         alt=""
       />
+      {closeIcon && (
+        <IoCloseCircle
+          className={cx("close-icon")}
+          onClick={() => handleCloseIconClick(imageBlob)}
+        />
+      )}
     </div>
   );
 }
 
 InputImage.propTypes = {
+  children: PropTypes.node,
   field: PropTypes.shape({
     name: PropTypes.string.isRequired,
     value: PropTypes.oneOfType([
@@ -67,9 +88,13 @@ InputImage.propTypes = {
     multiple: PropTypes.bool,
     disabled: PropTypes.bool,
   }),
+  closeIcon: PropTypes.bool,
+  handleCloseIconClick: PropTypes.func,
 };
 
 InputImage.defaultProps = {
+  // eslint-disable-next-line react/jsx-no-useless-fragment
+  children: <></>,
   fileSize: 2,
   imageSize: {},
   imageBlob: false,
@@ -78,6 +103,9 @@ InputImage.defaultProps = {
     multiple: false,
     disabled: false,
   },
+  // eslint-disable-next-line react/jsx-no-useless-fragment
+  closeIcon: false,
+  handleCloseIconClick: () => {},
 };
 
 export default InputImage;

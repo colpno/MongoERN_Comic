@@ -4,7 +4,12 @@ import PropTypes from "prop-types";
 import { Alert } from "react-bootstrap";
 
 import Button from "components/Button";
-import { CheckBoxGroup, InputField, TextAreaField } from "libs/formik";
+import {
+  CheckBoxGroup,
+  InputField,
+  RadioGroup,
+  TextAreaField,
+} from "libs/formik";
 import FileField from "libs/formik/FileField";
 import FormLabel from "libs/formik/FormLabel";
 import { getAllGenres } from "services/genre";
@@ -23,8 +28,11 @@ function TitleForm({
   const options = genres.map((genre) => {
     return { value: `${genre.id}`, label: genre.genre };
   });
-  // eslint-disable-next-line no-unused-vars
   const { titleStatuses } = titleStatusServices();
+
+  const handleCloseIconClick = (value) => {
+    console.log(value);
+  };
 
   return (
     <Formik
@@ -44,7 +52,7 @@ function TitleForm({
               letterCount
             />
 
-            {/* {titleStatuses && (
+            {titleStatuses && initialValues.titleStatusId && (
               <>
                 <FormLabel name="titleStatusId" label="Trạng thái" />
                 <FastField
@@ -54,7 +62,7 @@ function TitleForm({
                   col={{ sm: 6, md: 4 }}
                 />
               </>
-            )} */}
+            )}
 
             {options.length > 0 && (
               <>
@@ -94,6 +102,8 @@ function TitleForm({
                 component={FileField}
                 imgSize={{ width: 275, height: 275 }}
                 imageBlob={imageBlob?.coverImage ? imageBlob.coverImage : null}
+                closeIcon={!!imageBlob?.coverImage}
+                handleCloseIconClick={handleCloseIconClick}
               />
               <FastField
                 name="largeCoverImageTemp"
@@ -102,6 +112,8 @@ function TitleForm({
                 imageBlob={
                   imageBlob?.largeCoverImage ? imageBlob.largeCoverImage : null
                 }
+                closeIcon={!!imageBlob?.coverImage}
+                handleCloseIconClick={handleCloseIconClick}
               />
             </div>
 
@@ -143,7 +155,7 @@ TitleForm.propTypes = {
   initialValues: PropTypes.shape({
     title: PropTypes.string.isRequired,
     summary: PropTypes.string.isRequired,
-    // titleStatusId: PropTypes.string.isRequired,
+    titleStatusId: PropTypes.string.isRequired,
     genreId: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     coverImageTemp: PropTypes.string.isRequired,
     largeCoverImageTemp: PropTypes.string.isRequired,

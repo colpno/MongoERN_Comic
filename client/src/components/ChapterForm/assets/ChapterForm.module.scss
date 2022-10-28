@@ -20,6 +20,8 @@
 
 .contents-holder {
   margin: 0 -10px;
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
 }
 
 .image-content {
@@ -28,8 +30,16 @@
   margin-top: 20px;
 }
 
-@media (min-width: 960px) {
-  .image-content {
-    width: calc(100% / 8);
-  }
+.content-wrapper {
+  position: relative;
+}
+
+.close-icon {
+  position: absolute;
+  top: 0.5rem;
+  right: -0.1rem;
+  color: #777;
+  width: 1.1em;
+  height: 1.1em;
+  cursor: pointer;
 }

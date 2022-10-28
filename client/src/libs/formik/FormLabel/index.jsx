@@ -7,7 +7,7 @@ const cx = classNames.bind(styles);
 function FormLabel({ name, label, subLabel, required }) {
   return (
     <label htmlFor={name} className={cx("field__label")}>
-      {label}
+      <span>{label}</span>
       {required && <span className={cx("field__label--required")}> *</span>}
       {Array.isArray(subLabel)
         ? subLabel.map((lb, index) => (

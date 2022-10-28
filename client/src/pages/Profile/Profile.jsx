@@ -1,7 +1,17 @@
 import ProfileForm from "components/ProfileForm";
-import { INITIAL_VALUE } from "./const";
+import { useSelector } from "react-redux";
+import { convertToDateString, formatTime } from "utils/convertTime";
 
 function Profile() {
+  const user = useSelector((state) => state.user.user);
+  const { day, month, year } = formatTime(user.dateOfBirth);
+
+  const INITIAL_VALUE = {
+    nickname: user.userName,
+    phone: "",
+    dateOfBirth: convertToDateString(day, month, year),
+  };
+
   const handleSubmit = (values, { setSubmitting }) => {
     console.log(values);
     setSubmitting(false);
