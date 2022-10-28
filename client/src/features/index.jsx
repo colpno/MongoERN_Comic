@@ -1,6 +1,8 @@
 export { default as BackToTop } from "./BackToTop/BackToTop";
 export { default as BannerSlider } from "./BannerSlider/BannerSlider";
 export { default as LineChart } from "./LineChart/LineChart";
+export { default as DoughnutChart } from "./DoughnutChart/DoughnutChart";
+export { default as BarChart } from "./BarChart/BarChart";
 export { default as NoData } from "./NoData/NoData";
 export { default as Pagination } from "./Pagination/Pagination";
 export { default as Popup } from "./Popup/Popup";
