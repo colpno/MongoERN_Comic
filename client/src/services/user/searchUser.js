@@ -2,13 +2,13 @@ import userApi from "api/userApi";
 import { useEffect, useState } from "react";
 import { convertUserPropertyToString } from "utils/convertArrayPropertyToString";
 
-const searchUser = (key, value) => {
+const searchUser = (keyValuePairs) => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await userApi.search({ [key]: value });
+        const response = await userApi.search(keyValuePairs);
         const converted = convertUserPropertyToString(response);
         setUsers(converted);
       } catch (error) {

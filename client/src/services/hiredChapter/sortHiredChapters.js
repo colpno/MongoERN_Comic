@@ -1,15 +1,19 @@
-import titleApi from "api/titleApi";
+import hiredTitleApi from "api/hiredTitleApi";
 import { useEffect, useState } from "react";
-import { convertTitlesPropertyToString } from "utils/convertArrayPropertyToString";
 
-const sortTitles = (col, isAsc, limit = 50) => {
-  const [titles, setTitles] = useState([]);
+const sortHiredChapters = (titleID, col, isAsc = true, limit = 50) => {
+  const [hiredChapters, setHiredChapters] = useState([]);
   const [sort, setSort] = useState({ isAsc, col });
+  const [ID, setID] = useState(titleID);
   const [pagination, setPagination] = useState({
     page: 1,
     limit,
     total: 0,
   });
+
+  const setTitleID = (id) => {
+    setID(id);
+  };
 
   const sorting = (column) => {
     setSort({ isAsc: !sort.isAsc, col: column });
@@ -19,12 +23,11 @@ const sortTitles = (col, isAsc, limit = 50) => {
 
   const normalSort = async () => {
     try {
-      const response = await titleApi.sort(sort.col, sortOrder(), {
+      const response = await hiredTitleApi.sort(ID, sort.col, sortOrder(), {
         _limit: pagination.limit,
         _page: pagination.page,
       });
-      const converted = convertTitlesPropertyToString(response.data);
-      setTitles(converted);
+      setHiredChapters(response.data);
       setPagination({ ...pagination, total: response.pagination.total });
     } catch (error) {
       throw new Error(error);
@@ -33,15 +36,16 @@ const sortTitles = (col, isAsc, limit = 50) => {
 
   useEffect(() => {
     normalSort();
-  }, [pagination.page, sort.isAsc, sort.col]);
+  }, [pagination.page, sort.isAsc, sort.col, ID]);
 
   return {
-    titles,
-    setTitles,
+    hiredChapters,
+    setHiredChapters,
     pagination,
     setPagination,
     sorting,
+    setTitleID,
   };
 };
 
-export default sortTitles;
+export default sortHiredChapters;

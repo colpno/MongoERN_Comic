@@ -2,7 +2,7 @@ import titleApi from "api/titleApi";
 import { useEffect, useState } from "react";
 import { convertTitlesPropertyToString } from "utils/convertArrayPropertyToString";
 
-const sortTitles = (col, isAsc, limit = 50) => {
+const sortTitlesByUserID = (userID, col, isAsc, limit = 50) => {
   const [titles, setTitles] = useState([]);
   const [sort, setSort] = useState({ isAsc, col });
   const [pagination, setPagination] = useState({
@@ -17,12 +17,17 @@ const sortTitles = (col, isAsc, limit = 50) => {
 
   const sortOrder = () => (sort.isAsc ? "asc" : "desc");
 
-  const normalSort = async () => {
+  const sortByUserID = async () => {
     try {
-      const response = await titleApi.sort(sort.col, sortOrder(), {
-        _limit: pagination.limit,
-        _page: pagination.page,
-      });
+      const response = await titleApi.sortByUserID(
+        userID,
+        sort.col,
+        sortOrder(),
+        {
+          _limit: pagination.limit,
+          _page: pagination.page,
+        }
+      );
       const converted = convertTitlesPropertyToString(response.data);
       setTitles(converted);
       setPagination({ ...pagination, total: response.pagination.total });
@@ -32,7 +37,7 @@ const sortTitles = (col, isAsc, limit = 50) => {
   };
 
   useEffect(() => {
-    normalSort();
+    userID && sortByUserID();
   }, [pagination.page, sort.isAsc, sort.col]);
 
   return {
@@ -44,4 +49,4 @@ const sortTitles = (col, isAsc, limit = 50) => {
   };
 };
 
-export default sortTitles;
+export default sortTitlesByUserID;

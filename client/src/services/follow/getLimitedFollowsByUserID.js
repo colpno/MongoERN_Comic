@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 const getLimitedFollowsByUserID = (userID, limit) => {
   const [follows, setFollows] = useState([]);
+  const [titles, setTitles] = useState([]);
   const [pagination, setPagination] = useState({
     page: 1,
     limit,
@@ -16,6 +17,7 @@ const getLimitedFollowsByUserID = (userID, limit) => {
         _limit: pagination.limit,
       });
       setFollows(response.data);
+      setTitles(response.data.map((follow) => follow.title));
       setPagination((prev) => {
         return { ...prev, total: response.pagination.total };
       });
@@ -28,7 +30,7 @@ const getLimitedFollowsByUserID = (userID, limit) => {
     fetchLimitFollows();
   }, [pagination.page]);
 
-  return { follows, setFollows, pagination, setPagination };
+  return { titles, setTitles, follows, setFollows, pagination, setPagination };
 };
 
 export default getLimitedFollowsByUserID;

@@ -7,8 +7,8 @@ const getAllTitlesByUserID = (ID) => {
 
   const fetchLimitTitles = async () => {
     try {
-      const response = await titleApi.getAllByUserID(ID);
-      const converted = convertTitlesPropertyToString(response.data);
+      const response = await titleApi.getAllByProperty("userId", ID);
+      const converted = convertTitlesPropertyToString(response);
       setTitles(converted);
     } catch (error) {
       throw new Error(error);

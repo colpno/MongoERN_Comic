@@ -1,9 +1,8 @@
-import followApi from "api/followApi";
+import purchasedChapterApi from "api/purchasedChapterApi";
 import { useEffect, useState } from "react";
 
-const sortFollows = (titleID, col, isAsc = true, limit = 50) => {
-  const [follows, setFollows] = useState([]);
-  const [titles, setTitles] = useState([]);
+const sortPurchasedChapters = (titleID, col, isAsc = true, limit = 50) => {
+  const [purchasedChapters, setPurchasedChapters] = useState([]);
   const [sort, setSort] = useState({ isAsc, col });
   const [ID, setID] = useState(titleID);
   const [pagination, setPagination] = useState({
@@ -24,12 +23,16 @@ const sortFollows = (titleID, col, isAsc = true, limit = 50) => {
 
   const normalSort = async () => {
     try {
-      const response = await followApi.sort(ID, sort.col, sortOrder(), {
-        _limit: pagination.limit,
-        _page: pagination.page,
-      });
-      setFollows(response.data);
-      setTitles(response.data.map((follow) => follow.title));
+      const response = await purchasedChapterApi.sort(
+        ID,
+        sort.col,
+        sortOrder(),
+        {
+          _limit: pagination.limit,
+          _page: pagination.page,
+        }
+      );
+      setPurchasedChapters(response.data);
       setPagination({ ...pagination, total: response.pagination.total });
     } catch (error) {
       throw new Error(error);
@@ -41,10 +44,8 @@ const sortFollows = (titleID, col, isAsc = true, limit = 50) => {
   }, [pagination.page, sort.isAsc, sort.col, ID]);
 
   return {
-    titles,
-    setTitles,
-    follows,
-    setFollows,
+    purchasedChapters,
+    setPurchasedChapters,
     pagination,
     setPagination,
     sorting,
@@ -52,4 +53,4 @@ const sortFollows = (titleID, col, isAsc = true, limit = 50) => {
   };
 };
 
-export default sortFollows;
+export default sortPurchasedChapters;
