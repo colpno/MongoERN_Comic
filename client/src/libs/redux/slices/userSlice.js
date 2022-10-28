@@ -1,38 +1,36 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import userApi from "api/userApi";
-
-const getUser = createAsyncThunk("user/getUser", async (id) => {
-  const response = await userApi.getOneByID(id);
-  return response;
-});
+import { createSlice } from "@reduxjs/toolkit";
+import { guessAvatar } from "assets/images";
 
 const initialState = {
-  user: {},
-  loading: false,
-  error: "",
+  user: {
+    id: null,
+    avatar: guessAvatar,
+    userName: "Đăng nhập",
+    role: "",
+    point: 0,
+    coin: 0,
+    income: 0,
+  },
+  isLoggedIn: false,
 };
 
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
-  extraReducers: {
-    [getUser.pending]: (state) => {
-      state.loading = true;
-    },
-    [getUser.fulfilled]: (state, action) => {
-      state.loading = false;
+  reducers: {
+    login: (state, action) => {
       state.user = action.payload;
+      state.isLoggedIn = true;
     },
-    [getUser.rejected]: (state, action) => {
-      state.loading = false;
-      state.error = action.error;
+    logout: (state) => {
+      state.user = initialState.user;
+      state.isLoggedIn = initialState.isLoggedIn;
     },
   },
 });
 
-const { reducer: userReducer } = userSlice;
+const { reducer: userReducer, actions } = userSlice;
 
-export { getUser };
+export const { login, logout } = actions;
 
 export default userReducer;
