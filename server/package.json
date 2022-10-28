@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npm run generateData && nodemon index.js",
+    "dev": "nodemon index.js",
     "start": "node index.js",
-    "generateData": "node ./data_generator/index.js"
+    "randomData": "node ./data_generator/index.js"
   },
   "author": "",
   "license": "ISC",
