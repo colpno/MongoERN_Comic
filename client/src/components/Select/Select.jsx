@@ -1,28 +1,12 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { useDispatch } from "react-redux";
 import ReactSelect from "react-select";
 
 import { setSelectedOption } from "libs/redux/slices/selectFieldSlice";
 
-function Select({
-  className,
-  field,
-  options,
-  defaultValue,
-  multi,
-  disabled,
-  searchable,
-  autoFocus,
-  height,
-}) {
-  const dispatch = useDispatch();
-
-  const [value, setValue] = useState({
-    value: options[0].value,
-    label: options[0].label,
-  });
-  const styles = {
+const customStyles = (height) => {
+  return {
     control: (base) => ({
       ...base,
       minHeight: `${height}px`,
@@ -52,10 +36,43 @@ function Select({
       minWidth: "100%",
     }),
   };
+};
+
+function Select({
+  className,
+  field,
+  options,
+  defaultValue,
+  onChange,
+  multi,
+  disabled,
+  searchable,
+  autoFocus,
+  clearable,
+  height,
+  limitSelected,
+}) {
+  const dispatch = useDispatch();
+  const [value, setValue] = useState([
+    {
+      value: options[0]?.value || "",
+      label: options[0]?.label || "",
+    },
+  ]);
+  const styles = customStyles(height);
 
   const handleChange = (selected) => {
-    setValue(selected);
-    dispatch(setSelectedOption(selected));
+    if (multi && selected.length <= limitSelected) {
+      setValue(selected);
+      dispatch(setSelectedOption(selected));
+      onChange(selected);
+      return;
+    }
+    if (!multi) {
+      setValue(selected);
+      dispatch(setSelectedOption(selected));
+      onChange(selected);
+    }
   };
 
   return (
@@ -71,6 +88,7 @@ function Select({
       isDisabled={disabled}
       isSearchable={searchable}
       autoFocus={autoFocus}
+      isClearable={clearable}
     />
   );
 }
@@ -85,10 +103,11 @@ Select.propTypes = {
     onBlur: PropTypes.func,
     onChange: PropTypes.func,
   }),
+  onChange: PropTypes.func,
   options: PropTypes.arrayOf(
     PropTypes.shape({
-      value: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
+      value: PropTypes.string,
+      label: PropTypes.string,
     }).isRequired
   ).isRequired,
   defaultValue: PropTypes.shape({
@@ -97,23 +116,28 @@ Select.propTypes = {
   }),
   multi: PropTypes.bool,
   disabled: PropTypes.bool,
+  limitSelected: PropTypes.number,
   searchable: PropTypes.bool,
   autoFocus: PropTypes.bool,
+  clearable: PropTypes.bool,
 };
 
 Select.defaultProps = {
   height: 45,
   field: {},
+  onChange: () => {},
   defaultValue: {},
   multi: false,
   disabled: false,
   searchable: false,
   autoFocus: false,
+  clearable: false,
+  limitSelected: Number.MAX_SAFE_INTEGER,
   className: "",
   cn: () => {},
 };
 
-export default Select;
+export default memo(Select);
 
 /* Custom select */
 
