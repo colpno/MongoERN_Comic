@@ -13,6 +13,12 @@
   .top5-wrapper {
     padding: 17px 0 35px;
     background-color: #f2f2f2;
+
+    &__cards__card {
+      padding-left: 6px;
+      padding-right: 6px;
+    }
+
     &__cards__card:nth-child(1),
     &__cards__card:nth-child(2) {
       border-bottom: 1px solid #d7d7d7;
@@ -34,7 +40,7 @@
     }
 
     .statistic,
-    .authors {
+    .author {
       display: none;
     }
   }

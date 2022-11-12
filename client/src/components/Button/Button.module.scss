@@ -20,7 +20,7 @@
   }
 }
 
-// Type
+// Color
 .primary {
   border: 1px solid variables.$primary-dark;
   background-color: variables.$primary;
@@ -34,7 +34,7 @@
 
 .gray {
   background-color: #d7d7d7;
-  color: variables.$gray-600;
+  color: variables.$gray-700;
 }
 
 .outline {
@@ -52,26 +52,84 @@
   color: variables.$gray-600;
 }
 
-.text {
-  padding: 0;
-  min-width: fit-content;
-  font-weight: 400;
-  display: inline-block;
-}
-
 .outline.success {
   background-color: transparent;
   border-color: variables.$clr-green;
   color: variables.$clr-green;
 }
 
-.wrapper {
-  background-color: transparent;
-  border: 0;
+// Darken
+.dark90 {
+  filter: brightness(90%);
 }
 
-.rounded {
-  border-radius: 20vmax !important;
+.dark80 {
+  filter: brightness(80%);
+}
+
+.dark70 {
+  filter: brightness(70%);
+}
+
+.dark60 {
+  filter: brightness(60%);
+}
+
+.dark50 {
+  filter: brightness(50%);
+}
+
+.dark40 {
+  filter: brightness(40%);
+}
+
+.dark30 {
+  filter: brightness(30%);
+}
+
+.dark20 {
+  filter: brightness(20%);
+}
+
+.dark10 {
+  filter: brightness(10%);
+}
+
+// Lighten
+.light90 {
+  filter: brightness(90%);
+}
+
+.light80 {
+  filter: brightness(80%);
+}
+
+.light70 {
+  filter: brightness(70%);
+}
+
+.light60 {
+  filter: brightness(60%);
+}
+
+.light50 {
+  filter: brightness(50%);
+}
+
+.light40 {
+  filter: brightness(40%);
+}
+
+.light30 {
+  filter: brightness(30%);
+}
+
+.light20 {
+  filter: brightness(20%);
+}
+
+.light10 {
+  filter: brightness(10%);
 }
 
 // Size
@@ -82,6 +140,12 @@
 }
 
 .small {
+  padding: 6px 20px;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.xsmall {
   padding: 4px 20px;
   border-radius: 8px;
   font-size: 1rem;
@@ -94,4 +158,21 @@
   border: 0;
   box-shadow: none;
   pointer-events: none;
+}
+
+// Box model
+.text {
+  padding: 0;
+  min-width: fit-content;
+  font-weight: 400;
+  display: inline-block;
+}
+
+.wrapper {
+  background-color: transparent;
+  border: 0;
+}
+
+.rounded {
+  border-radius: 20vmax !important;
 }

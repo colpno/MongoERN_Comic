@@ -4,12 +4,11 @@ import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { BsQuestionCircle } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
-import { roundNumByUnit } from "utils";
+import { roundNumByUnit, separateNumberDigit } from "utils";
 
 import { Popup } from "features";
 import { setMyTitles } from "libs/redux/slices/myTitlesSlice";
 import { getAllTitlesByUserID } from "services/title";
-import separateNumber from "utils/separateNumber";
 import { BookLine, DollarLine, EyeLine, ThumbUpLine } from "../assets/images";
 import styles from "../assets/styles/StatisticCount.module.scss";
 import IncomePopup from "./IncomePopup";
@@ -21,7 +20,7 @@ const cx = classNames.bind(styles);
 function StatisticCount() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
-  const { titles } = getAllTitlesByUserID(user.id);
+  const { titles } = getAllTitlesByUserID(user.guid);
   const [data, setData] = useState({ likes: 0, views: 0, totalTitles: 0 });
   const [popup, setPopup] = useState({
     trigger: false,
@@ -92,7 +91,7 @@ function StatisticCount() {
             />
           </div>
           <strong className={cx("statistic-count__income__number", "active")}>
-            {separateNumber(user.income)}
+            {separateNumberDigit(user.income)}
           </strong>
         </Col>
       </Row>

@@ -9,14 +9,6 @@ function AdminHeader() {
   return (
     <header className={cx("header")}>
       <Search />
-      <div className={cx("avatar")}>
-        {/* <img
-          src={user.avatar}
-          alt="User avatar"
-          className={cx("avatar__icon")}
-        /> */}
-        <span className={cx("avatar__name")}>Đăng nhập</span>
-      </div>
     </header>
   );
 }

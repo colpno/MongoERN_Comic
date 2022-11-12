@@ -10,8 +10,8 @@ import {
 const router = express.Router();
 
 router.post('/create', addTitleGenre);
-router.put('/:guid/update', updateTitleGenre);
-router.delete('/:guid/delete', deleteTitleGenre);
+router.put('/update/:guid', updateTitleGenre);
+router.delete('/delete/:guid', deleteTitleGenre);
 router.get('/:guid', getTitleGenre);
 router.get('/', getTitlesGenres);
 

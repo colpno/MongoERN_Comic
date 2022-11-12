@@ -9,14 +9,14 @@ function RecentPurchasedChapters({ cx, purchasedChapters }) {
     <GridTable border={false}>
       {purchasedChapters.map((transaction) => {
         const { id, user, chapter, createdAt } = transaction;
-        const { userName } = user;
-        const { titleName } = chapter;
+        const { username } = user;
+        const { name } = chapter;
         const { day, month, year, hour, minute } = formatTime(createdAt);
 
         return (
           <Row key={id}>
             <Col>
-              <span>{userName}</span>
+              <span>{username}</span>
             </Col>
             <Col className={cx("transact-datetime")}>
               <p>{convertToDateString(day, month, year)}</p>
@@ -25,7 +25,7 @@ function RecentPurchasedChapters({ cx, purchasedChapters }) {
               </p>
             </Col>
             <Col className={cx("amount")}>
-              <span>{titleName} </span>
+              <span>{name} </span>
             </Col>
           </Row>
         );
@@ -40,10 +40,10 @@ RecentPurchasedChapters.propTypes = {
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       chapter: PropTypes.shape({
-        titleName: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
       }).isRequired,
       user: PropTypes.shape({
-        userName: PropTypes.string.isRequired,
+        username: PropTypes.string.isRequired,
       }).isRequired,
       createdAt: PropTypes.string.isRequired,
     }).isRequired

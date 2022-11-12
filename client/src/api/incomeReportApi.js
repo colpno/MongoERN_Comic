@@ -11,9 +11,11 @@ const incomeReportApi = {
     return axiosClient.get(`${url}/${id}`);
   },
 
-  add: (user) => axiosClient.post(url, user),
+  add: (id) =>
+    axiosClient.post(`${url}/create/${id}`, { withCredentials: true }),
 
-  delete: (id) => axiosClient.get(`${url}/${id}`),
+  delete: (id) =>
+    axiosClient.delete(`${url}/delete/${id}`, { withCredentials: true }),
 
   filter: (filterObj, params) => {
     const keyArray = Object.keys(filterObj);

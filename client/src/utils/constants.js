@@ -17,6 +17,11 @@ export default function getAdminSideBarMenu() {
           label: "Chapters",
         },
         {
+          to: `${baseURL}/genres`,
+          icon: CircleC,
+          label: "Genres",
+        },
+        {
           to: `${baseURL}/members`,
           icon: CircleC,
           label: "Members",
@@ -25,6 +30,11 @@ export default function getAdminSideBarMenu() {
           to: `${baseURL}/administrators`,
           icon: CircleC,
           label: "Administrators",
+        },
+        {
+          to: `${baseURL}/payment-methods`,
+          icon: CircleC,
+          label: "Payment Methods",
         },
       ],
     },
@@ -40,16 +50,6 @@ export default function getAdminSideBarMenu() {
           to: `${baseURL}/visit`,
           icon: CircleC,
           label: "Visits",
-        },
-      ],
-    },
-    {
-      groupLabel: "User",
-      subMenu: [
-        {
-          to: `${baseURL}/profile`,
-          icon: CircleC,
-          label: "Profile",
         },
       ],
     },

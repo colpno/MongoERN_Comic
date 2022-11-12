@@ -13,8 +13,8 @@ const filterChapters = (filterObj, limit) => {
   const fetchLimitChapters = async () => {
     try {
       const response = await chapterApi.filter(filterObj, {
-        _page: pagination.page,
-        _limit: pagination.limit,
+        page: pagination.page,
+        limit: pagination.limit,
       });
       const converted = convertChaptersPropertyToString(response.data);
       setChapters(converted);

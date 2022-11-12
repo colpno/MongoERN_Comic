@@ -24,8 +24,8 @@ const sortTitlesByUserID = (userID, col, isAsc, limit = 50) => {
         sort.col,
         sortOrder(),
         {
-          _limit: pagination.limit,
-          _page: pagination.page,
+          limit: pagination.limit,
+          page: pagination.page,
         }
       );
       const converted = convertTitlesPropertyToString(response.data);

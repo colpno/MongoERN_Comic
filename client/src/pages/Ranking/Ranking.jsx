@@ -8,7 +8,7 @@ import Top5 from "./components/Top5";
 const cx = classNames.bind(styles);
 
 function Ranking() {
-  const { titles } = sortTitles();
+  const { titles } = sortTitles("like", false, 50);
   const topFiveTitles = titles.slice(0, 5);
   const restRankTitles = titles.slice(5);
   const hasData = titles.length > 0;
@@ -23,7 +23,11 @@ function Ranking() {
             </Container>
           </div>
           <Container className={cx("top-wrapper")}>
-            <RankingList titles={restRankTitles} />
+            <RankingList
+              col={{ md: 6, lg: 4 }}
+              startRank={6}
+              titles={restRankTitles}
+            />
           </Container>
         </div>
       )}

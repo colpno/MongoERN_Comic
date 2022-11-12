@@ -7,12 +7,17 @@ const genreApi = {
 
   getOneByID: (id) => axiosClient.get(`${url}/${id}`),
 
-  add: (title) => axiosClient.post(url, title),
+  add: (genre) =>
+    axiosClient.post(`${url}/create`, genre, { withCredentials: true }),
 
-  delete: (id) => axiosClient.get(`${url}/${id}`),
+  update: (id, genre) =>
+    axiosClient.put(`${url}/update/${id}`, genre, { withCredentials: true }),
 
-  sort: ({ key, order }) =>
-    axiosClient.get(`${url}?_sort=${key}&_order=${order}`),
+  delete: (id) =>
+    axiosClient.delete(`${url}/delete/${id}`, { withCredentials: true }),
+
+  sort: (key, order, params) =>
+    axiosClient.get(`${url}?sort=${key}&order=${order}`, { params }),
 
   filter: (filterObj) => {
     const key = Object.keys(filterObj)[0];

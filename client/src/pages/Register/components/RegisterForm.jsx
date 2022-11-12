@@ -2,35 +2,35 @@ import classNames from "classnames/bind";
 import { FastField, Form, Formik } from "formik";
 import PropTypes from "prop-types";
 
-import { Button, CheckBox } from "components";
+import { Button } from "components";
 import { InputField } from "libs/formik";
 import FormLabel from "libs/formik/FormLabel";
 import styles from "../styles/RegisterForm.module.scss";
-import { INITIAL_VALUE, VALIDATION_SCHEMA } from "./constant";
 
 const cx = classNames.bind(styles);
 
-function RegisterForm({ handleSubmit }) {
+function RegisterForm({ handleSubmit, initialValue, validationSchema }) {
   return (
     <Formik
-      initialValues={INITIAL_VALUE}
-      validationSchema={VALIDATION_SCHEMA}
+      initialValues={initialValue}
+      validationSchema={validationSchema}
       onSubmit={handleSubmit}
     >
       {() => {
         return (
           <Form>
-            <FormLabel name="userName" label="Tên đăng nhập" required />
+            <FormLabel name="username" label="Tên đăng nhập" required />
             <FastField
-              name="userName"
+              name="username"
               component={InputField}
               placeholder="Viết tên đăng nhập..."
+              autoFocus
             />
-            <FormLabel name="phone" label="Số điện thoại" required />
+            <FormLabel name="email" label="Email" required />
             <FastField
-              name="phone"
+              name="email"
               component={InputField}
-              placeholder="Viết số điện thoại..."
+              placeholder="Viết địa chỉ email..."
             />
             <FormLabel
               name="password"
@@ -58,15 +58,6 @@ function RegisterForm({ handleSubmit }) {
               type="password"
               placeholder="Viết lại mật khẩu..."
             />
-            <div className={cx("service-term")}>
-              <FastField name="termOfService" component={CheckBox}>
-                <span className={cx("term-label")}>
-                  Tôi đồng ý với điều khoản{" "}
-                  <span className="bold">Bảo mật</span> và{" "}
-                  <span className="bold">bảo mật</span>
-                </span>
-              </FastField>
-            </div>
             <Button primary rounded className={cx("submit")} type="submit">
               Đăng ký
             </Button>{" "}
@@ -79,6 +70,13 @@ function RegisterForm({ handleSubmit }) {
 
 RegisterForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
+  initialValue: PropTypes.shape({
+    username: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
+    password: PropTypes.string.isRequired,
+    confirmPassword: PropTypes.string.isRequired,
+  }).isRequired,
+  validationSchema: PropTypes.shape({}).isRequired,
 };
 
 export default RegisterForm;

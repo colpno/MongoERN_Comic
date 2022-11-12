@@ -4,14 +4,16 @@ const url = "/reading-histories";
 
 const readingHistoriesApi = {
   getAll: (userId, params) =>
-    axiosClient.get(`${url}?userId=${userId}&_expand=title`, { params }),
+    axiosClient.get(`${url}?userId=${userId}`, { params }),
 
-  add: (title) => axiosClient.post(url, title),
+  add: (history) =>
+    axiosClient.post(`${url}/create`, history, { withCredentials: true }),
 
-  delete: (id) => axiosClient.get(`${url}/${id}`),
+  delete: (id) =>
+    axiosClient.delete(`${url}/delete/${id}`, { withCredentials: true }),
 
   sort: (key, order, params) =>
-    axiosClient.get(`${url}?_sort=${key}&_order=${order}`, { params }),
+    axiosClient.get(`${url}?sort=${key}&order=${order}`, { params }),
 
   filter: (filterObj) => {
     const key = Object.keys(filterObj)[0];

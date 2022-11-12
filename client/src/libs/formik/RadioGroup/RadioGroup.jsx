@@ -1,6 +1,11 @@
 import { Radio } from "components";
 import PropTypes from "prop-types";
 import { Alert, Col, Row } from "react-bootstrap";
+import classNames from "classnames/bind";
+
+import styles from "./assets/styles/RadioGroup.module.scss";
+
+const cx = classNames.bind(styles);
 
 function RadioGroup(props) {
   const { field, form, options, disabled, col } = props;
@@ -10,13 +15,13 @@ function RadioGroup(props) {
   const showError = touched[name] && !!errors[name];
 
   return (
-    <Row className="field">
+    <Row className={cx("field")}>
       {showError && <Alert variant="danger">{errors[name]}</Alert>}
       {options.map((option) => {
         return (
           <Col
             key={option.value}
-            className="field__group"
+            className={cx("field__group")}
             sm={sm}
             md={md}
             lg={lg}

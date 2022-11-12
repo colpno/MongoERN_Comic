@@ -20,17 +20,15 @@ export default function deleteQuery(req, res, table) {
         if (data.affectedRows > 0) return res.status(200).json(data);
         return res.status(400).json('Something went wrong');
       });
-      return res.status(400).json('Something went wrong');
+    } else {
+      const sql = `DELETE FROM ${table} WHERE guid = ? AND userId = ?`;
+
+      db.query(sql, [guid, userInfo.guid], (err, data) => {
+        if (err) return res.json(err).status(500);
+        if (data.affectedRows > 0) return res.status(200).json(data);
+        return res.status(400).json('Something went wrong');
+      });
     }
-
-    const sql = `DELETE FROM ${table} WHERE guid = ? AND userId = ?`;
-    const values = [guid, userInfo.guid];
-
-    db.query(sql, [values], (err, data) => {
-      if (err) return res.status(500).json(err);
-      if (data.affectedRows > 0) return res.status(200).json(data);
-      return res.status(400).json('Something went wrong');
-    });
   });
   return;
 }

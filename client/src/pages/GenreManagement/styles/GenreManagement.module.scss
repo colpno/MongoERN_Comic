@@ -1,0 +1,22 @@
+@use "assets/styles/variables" as var;
+
+.label-wrapper {
+  & > *:first-child {
+    display: flex;
+    align-items: flex-end;
+  }
+
+  & > *:last-child {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+}
+
+.buttons {
+  margin-top: 2rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

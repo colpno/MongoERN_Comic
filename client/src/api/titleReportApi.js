@@ -11,10 +11,6 @@ const titleReportApi = {
     return axiosClient.get(`${url}?titleId=${id}`);
   },
 
-  add: (user) => axiosClient.post(url, user),
-
-  delete: (id) => axiosClient.get(`${url}/${id}`),
-
   filter: (filterObj, params) => {
     const keyArray = Object.keys(filterObj);
     const queryStr = keyArray.reduce((string, key, index) => {

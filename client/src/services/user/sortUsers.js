@@ -20,8 +20,8 @@ const sortUsers = (col, isAsc = true, limit = 50) => {
   const normalSort = async () => {
     try {
       const response = await userApi.sort(sort.col, sortOrder(), {
-        _limit: pagination.limit,
-        _page: pagination.page,
+        limit: pagination.limit,
+        page: pagination.page,
       });
       const converted = convertUsersPropertyToString(response.data);
       setUsers(converted);

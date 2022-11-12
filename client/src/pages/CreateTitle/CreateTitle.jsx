@@ -1,56 +1,81 @@
-import * as Yup from "yup";
 import classNames from "classnames/bind";
+import { useState } from "react";
+import * as Yup from "yup";
+
 import TitleForm from "components/TitleForm";
+import { Popup, ProgressCircle } from "features";
+import { addTitle } from "services/title";
 import styles from "./CreateTitle.module.scss";
 
 const cx = classNames.bind(styles);
 
 function CreateTitle() {
+  const [progress, setProgress] = useState(0);
+  const [popup, setPopup] = useState({
+    trigger: false,
+    title: "Thông báo",
+    content: "",
+  });
+
   const handleSubmit = (values, { setSubmitting }) => {
-    console.log(values);
+    addTitle(values, setProgress).then((response) => {
+      if (response.affectedRows > 0) {
+        setPopup({ ...popup, trigger: true, content: "Thêm thành công" });
+        setProgress(0);
+      }
+    });
+
     setSubmitting(false);
   };
 
   const INITIAL_VALUE = {
-    title: "",
-    summary: "",
-    titleStatusId: "",
+    name: "",
     genreId: [],
-    coverImageTemp: "",
-    largeCoverImageTemp: "",
-    email: "",
+    summary: "",
+    author: "",
+    coin: "",
+    cover: "",
+    releaseDay: "",
+    // largeCoverTemp: "",
   };
 
   const VALIDATION_SCHEMA = Yup.object({
-    title: Yup.string()
-      .max(255, "Giới hạn độ dài của tiêu đề là 255 ký tự.")
-      .required("Truyện cần phải có tiêu đề."),
-    summary: Yup.string()
-      .max(1000, "Giới hạn độ dài của mô tả là 1000 ký tự.")
-      .required("Truyện cần phải có mô tả."),
-    status: Yup.string().required("Vui lòng chọn trạng thái của truyện."),
+    name: Yup.string()
+      .max(255, "Giới hạn độ dài là 255 ký tự.")
+      .required("Tiêu đề truyện không được để trống."),
     genreId: Yup.array()
       .min(1, "Truyện cần phải có tối thiểu 1 thể loại.")
       .max(3, "Truyện có tối đa 3 thể loại.")
       .of(Yup.string()),
-    coverImageTemp: Yup.string().required(
-      "Truyện cần phải có ảnh bìa mặc định."
+    summary: Yup.string()
+      .max(1000, "Giới hạn độ dài là 1000 ký tự.")
+      .required("Mô tả không được để trống."),
+    author: Yup.string()
+      .max(255, "Giới hạn độ dài là 255 ký tự.")
+      .required("Tác giả không được để trống."),
+    coin: Yup.string()
+      .max(3, "Giới hạn độ dài là 3 ký tự.")
+      .required("Coin không được để trống."),
+    releaseDay: Yup.string().required(
+      "Ngày đăng hàng tuần phải không được để trống"
     ),
-    largeCoverImageTemp: Yup.string().required("Truyện cần phải có ảnh bìa."),
-    email: Yup.string()
-      .email("Sai định dạng email.")
-      .required("Nhập email để xác nhận."),
+    cover: Yup.string().required("Ảnh bìa không được để trống."),
+    // largeCoverTemp: Yup.string().required("Truyện cần phải có ảnh bìa."),
   });
 
   return (
-    <div className={cx("create-title")}>
-      <h3 className={cx("head-title")}>Thêm truyện mới</h3>
-      <TitleForm
-        handleSubmit={handleSubmit}
-        initialValues={INITIAL_VALUE}
-        validationSchema={VALIDATION_SCHEMA}
-      />
-    </div>
+    <>
+      <div className={cx("create-title")}>
+        <h3 className={cx("head-title")}>Thêm truyện mới</h3>
+        <TitleForm
+          handleSubmit={handleSubmit}
+          initialValues={INITIAL_VALUE}
+          validationSchema={VALIDATION_SCHEMA}
+        />
+      </div>
+      <ProgressCircle percentage={progress} />
+      <Popup popup={popup} setPopup={setPopup} />
+    </>
   );
 }
 

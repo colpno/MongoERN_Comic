@@ -19,7 +19,7 @@
 **/.env.production.local
 
 *.sh
-server/*.http
+*/*.http
 
 
 **/npm-debug.log*

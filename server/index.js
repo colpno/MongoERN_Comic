@@ -35,7 +35,7 @@ router.render = (req, res) => {
 
     return res.jsonp({
       data: res.locals.data,
-      pagination: { _limit: params._limit, _page: params._page, total: xTotalCount },
+      pagination: { limit: params.limit, page: params.page, total: xTotalCount },
     });
   }
 

@@ -1,1 +1,1 @@
-export { default as getAllTitleReportsByTitleID } from "./getAllTitleReportsByTitleID";
+export { default as getAllTitleReportsByProperty } from "./getAllTitleReportsByProperty";

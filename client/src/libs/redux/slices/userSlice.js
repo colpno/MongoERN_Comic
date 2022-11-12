@@ -4,14 +4,15 @@ import { guessAvatar } from "assets/images";
 const initialState = {
   user: {
     id: null,
+    guid: "",
     avatar: guessAvatar,
-    userName: "Đăng nhập",
+    username: "Đăng nhập",
     role: "",
     point: 0,
     coin: 0,
     income: 0,
   },
-  isLoggedIn: false,
+  isLoggingIn: false,
 };
 
 const userSlice = createSlice({
@@ -20,11 +21,11 @@ const userSlice = createSlice({
   reducers: {
     login: (state, action) => {
       state.user = action.payload;
-      state.isLoggedIn = true;
+      state.isLoggingIn = true;
     },
     logout: (state) => {
       state.user = initialState.user;
-      state.isLoggedIn = initialState.isLoggedIn;
+      state.isLoggingIn = false;
     },
   },
 });

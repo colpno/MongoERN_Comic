@@ -1,39 +1,43 @@
 import classNames from "classnames/bind";
 import { useState } from "react";
 import { Container } from "react-bootstrap";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
-import { Fullsize } from "assets/images";
-import { UserArray } from "database";
-import { Pagination, Popup, Recommend } from "features";
+import followApi from "api/followApi";
+import { NoData, Pagination, Popup, Recommend } from "features";
 import styles from "pages/Title/assets/styles/Title.module.scss";
 import { sortChapters } from "services/chapter";
 import { getAllGenres } from "services/genre";
 import { getTitleByID } from "services/title";
+import { searchTitleGenre } from "services/titleGenre";
 import { ComicChapters, Introduction, TitleAbout } from "./components";
 
 const cx = classNames.bind(styles);
 
 function Title() {
+  const user = useSelector((state) => state.user.user);
   const { titleId } = useParams();
   const { title } = getTitleByID(titleId);
   const { genres } = getAllGenres();
-  const user = UserArray()[0];
+  const { titleGenres } = searchTitleGenre("titleId", titleId);
   const [isDESCSorting, setIsDESCSorting] = useState(false);
-  const hasData = Object.keys(title).length > 0;
-
   const { chapters, pagination, setPagination, sorting } = sortChapters(
     titleId,
     "order",
     true
   );
+  const hasTitle = Object.keys(title).length > 0;
+  const haveChapters = chapters.length > 0;
+
   const [popup, setPopup] = useState({
     trigger: false,
     title: "",
     content: "",
   });
-  const backgroundImageCSS = {
-    backgroundImage: `url(${Fullsize})`,
+
+  const backgroundImageCSS = hasTitle && {
+    backgroundImage: `url(${title.cover})`,
     backgroundRepeat: "no-repeat",
     backgroundSize: "100% 360px",
     filter: "blur(4px)",
@@ -48,48 +52,65 @@ function Title() {
     setIsDESCSorting(!isDESCSorting);
   };
 
+  const handleFollow = async (titleID) => {
+    const response = await followApi.add({ titleId: titleID });
+    if (response.affectedRows > 0) {
+      alert(`Bạn đã theo dõi truyện ${title.name}`);
+    }
+  };
+
   const convertGenreIdToString = () => {
-    const genreString = title.genreId.reduce((str, id, index) => {
-      const genre = genres.find((res) => res.id === id);
-      return index === 0 ? `${str}${genre.genre}` : `${str}, ${genre.genre}`;
+    const genreString = titleGenres.reduce((str, titleGenre, index) => {
+      const genre = genres.find((res) => res.guid === titleGenre.genreId);
+      return index === 0 ? `${str}${genre.name}` : `${str}, ${genre.name}`;
     }, "");
     return genreString;
   };
 
   return (
     <main className={cx("title-page")}>
-      {hasData && (
-        <>
-          <div style={backgroundImageCSS} />
-          <div className={cx("title-page__wrapper")}>
-            <Introduction
-              title={title}
-              genres={convertGenreIdToString()}
-              setPopup={setPopup}
-            />
-            <Container className={cx("title-page__wrapper__content")}>
-              <TitleAbout title={title} setPopup={setPopup} />
-              <div className={cx("title-page__wrapper__content__chapters")}>
-                <ComicChapters
-                  title={title}
-                  chapters={chapters}
-                  user={user}
-                  sorting={sorting}
-                  isDESCSorting={isDESCSorting}
-                  handleSort={handleSort}
-                />
-                <Pagination
-                  pagination={pagination}
-                  setPagination={setPagination}
-                />
-              </div>
-            </Container>
-            {/* TODO: random title */}
-            <Recommend />
+      {hasTitle && <div style={backgroundImageCSS} />}
+      <div className={cx("title-page__wrapper")}>
+        {hasTitle && (
+          <Introduction
+            title={title}
+            genres={convertGenreIdToString()}
+            firstChapter={chapters.length > 0 ? chapters[0].guid : "#"}
+            setPopup={setPopup}
+            handleFollow={handleFollow}
+          />
+        )}
+        <Container className={cx("title-page__wrapper__content")}>
+          {hasTitle && (
+            <TitleAbout title={title} user={user} setPopup={setPopup} />
+          )}
+          <div className={cx("chapters")}>
+            {hasTitle && haveChapters ? (
+              <ComicChapters
+                title={title}
+                chapters={chapters}
+                user={user}
+                sorting={sorting}
+                isDESCSorting={isDESCSorting}
+                handleSort={handleSort}
+              />
+            ) : (
+              <NoData>
+                <h6>Không có chương nào để hiển thị!</h6>
+              </NoData>
+            )}
+            {haveChapters && (
+              <Pagination
+                pagination={pagination}
+                setPagination={setPagination}
+              />
+            )}
           </div>
-          <Popup popup={popup} setPopup={setPopup} />
-        </>
-      )}
+        </Container>
+        {/* TODO: random title */}
+        <Recommend />
+      </div>
+      <Popup popup={popup} setPopup={setPopup} />
     </main>
   );
 }

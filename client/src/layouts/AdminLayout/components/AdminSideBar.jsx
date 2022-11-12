@@ -1,10 +1,13 @@
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
+import { IoIosLogOut } from "react-icons/io";
 
 import { Logo } from "assets/images";
-import { Button } from "components";
+import { Button, Image } from "components";
 import { SideBar } from "features";
+import { useLogout } from "hooks";
 import { BsLayoutSidebarInset } from "react-icons/bs";
+import { useSelector } from "react-redux";
 import getAdminSideBarMenu from "utils/constants";
 import styles from "../styles/AdminSideBar.module.scss";
 
@@ -12,6 +15,8 @@ const cx = classNames.bind(styles);
 
 function AdminSideBar({ visible, setToggleSideBar, toggleSideBar }) {
   const menu = getAdminSideBarMenu();
+  const user = useSelector((state) => state.user.user);
+  const { logout } = useLogout("/");
 
   return (
     <aside className={cx("sidebar", visible ? "" : "visible")}>
@@ -23,6 +28,13 @@ function AdminSideBar({ visible, setToggleSideBar, toggleSideBar }) {
         onClick={() => setToggleSideBar(!toggleSideBar)}
       />
       <SideBar menu={menu} defaultTab={menu[0].subMenu[0].tab} />
+      <div className={cx("user-info")}>
+        <Image src={user.avatar} alt="User avatar" className={cx("avatar")} />
+        <span className={cx("username")}>{user.username}</span>
+        <Button onClick={logout}>
+          <IoIosLogOut />
+        </Button>
+      </div>
     </aside>
   );
 }

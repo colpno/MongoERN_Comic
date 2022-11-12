@@ -1,14 +1,12 @@
-/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import { FastField, Form, Formik } from "formik";
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { Alert } from "react-bootstrap";
 
-import { Image } from "components";
+import { Image, InputImage } from "components";
 import Button from "components/Button";
-import { InputField, TextAreaField } from "libs/formik";
-import FileField from "libs/formik/FileField";
+import { InputField, RadioGroup } from "libs/formik";
 import FormLabel from "libs/formik/FormLabel";
 import { IoCloseCircle } from "react-icons/io5";
 import styles from "./assets/ChapterForm.module.scss";
@@ -16,25 +14,15 @@ import InputMultiFile from "./components/InputMultiFile";
 
 const cx = classNames.bind(styles);
 
-function ChapterForm({
-  initialValues,
-  validationSchema,
-  handleSubmit,
-  imageBlob,
-}) {
-  const [imagesPreview, setImagesPreview] = useState([...imageBlob.contents]);
+function ChapterForm({ initialValues, validationSchema, handleSubmit }) {
+  const [blobs, setBlobs] = useState(
+    initialValues.images ? [...initialValues.images] : []
+  );
 
-  // Formik onchange not worked in multiple file input
-  const handleImagePreview = (e, setFieldValue) => {
-    const { files } = e.target;
-    const fileArray = Array.from(files);
-    const images = fileArray.map((file) => URL.createObjectURL(file));
-    setImagesPreview((prev) => prev.concat(images));
-
-    // assign to contentsFake will cause "HTTPInputElement" error
-    // so instead of assign to contentsFake, assign to contents
-    setFieldValue("contents", [...imagesPreview, ...images]);
-  };
+  const costOptions = [
+    { value: "false", label: "Miễn phí" },
+    { value: "true", label: "Trả phí" },
+  ];
 
   const onCloseIconClick = (e) => {
     console.log(e);
@@ -46,85 +34,102 @@ function ChapterForm({
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
     >
-      {({ setFieldValue, errors }) => {
+      {({ values, setFieldValue, errors }) => {
         return (
           <Form>
             <FormLabel name="order" label="Thứ tự chương" />
             <FastField name="order" component={InputField} disabled />
 
-            <FormLabel name="titleName" label="Tiêu đề chương" required />
+            <FormLabel name="name" label="Tiêu đề chương" required />
             <FastField
-              name="titleName"
+              name="name"
               component={InputField}
               placeholder="Nhập tiêu đề chương..."
               maxLength={255}
               letterCount
+              autoFocus
             />
 
-            <FormLabel name="coverImageFake" label="Ảnh bìa" required />
-            {!!errors.coverImageFake && (
-              <Alert variant="danger">{errors.coverImageFake}</Alert>
+            {costOptions.length > 0 && (
+              <>
+                <FormLabel name="cost" label="Trả phí" required />
+                <FastField
+                  name="cost"
+                  component={RadioGroup}
+                  options={costOptions}
+                  col={{ sm: 6 }}
+                />
+              </>
             )}
+
+            <FormLabel name="cover" label="Ảnh bìa" required />
+            {!!errors.cover && <Alert variant="danger">{errors.cover}</Alert>}
             <div className={cx("cover-image-field")}>
               <FastField
-                name="coverImageFake"
-                component={FileField}
+                name="cover"
+                component={InputImage}
                 imgSize={{ width: 312, height: 232 }}
-                imageBlob={imageBlob?.coverImage}
-                closeIcon={!!imageBlob?.coverImage}
-                handleCloseIconClick={onCloseIconClick}
+                removable
+                handleRemove={onCloseIconClick}
+                setFieldValue={setFieldValue}
               />
             </div>
 
-            <FormLabel name="contentsFake" label="Nội dung chương" required />
+            <FormLabel name="images" label="Nội dung chương" required />
+            {!!errors.images && <Alert variant="danger">{errors.images}</Alert>}
             <div className={cx("contents-field")}>
               <FastField
-                name="contentsFake"
+                name="images"
                 component={InputMultiFile}
-                handleImagePreview={(e) => {
-                  handleImagePreview(e, setFieldValue);
-                }}
+                blobs={blobs}
+                setBlobs={setBlobs}
+                setFieldValue={setFieldValue}
                 multiple
                 imgSize={{ width: 690 }}
                 fileSize={3}
               />
             </div>
             <div className={cx("contents-holder")}>
-              {imagesPreview.map((content, index) => {
+              {blobs.map((blob, index) => {
                 return (
                   <div className={cx("content-wrapper")} key={index}>
                     <Image
-                      src={content}
-                      alt=""
+                      src={blob}
+                      alt={`Image ${index + 1}`}
                       key={index}
                       className={cx("image-content")}
                     />
                     <IoCloseCircle
                       className={cx("close-icon")}
                       onClick={() => {
-                        const elem = initialValues.contents.indexOf(content);
-                        console.log(initialValues.contents[elem]);
+                        const blobTemp = [...blobs];
+                        blobTemp.splice(index, 1);
+                        setBlobs(blobTemp);
+
+                        const dataTemp = [...values.images];
+                        dataTemp.splice(index, 1);
+                        setFieldValue("images", dataTemp);
                       }}
                     />
                   </div>
                 );
               })}
             </div>
-
+            {/* 
             <FormLabel name="authorNote" label="Lời nhắn của tác giả" />
             <FastField
               name="authorNote"
               component={TextAreaField}
               placeholder="Viết lời nhắn của bạn..."
               maxLength={500}
-            />
+            /> */}
 
-            <FormLabel name="schedule" label="Đặt lịch đăng chương" />
+            {/* <FormLabel name="schedule" label="Đặt lịch đăng chương" />
             <FastField
               name="schedule"
               component={InputField}
               placeholder="dd/mm/yyyy hh:mm:ss"
-            />
+            /> */}
 
             <div className={cx("button-group")}>
               <Button outline gray>
@@ -149,25 +154,13 @@ function ChapterForm({
 ChapterForm.propTypes = {
   initialValues: PropTypes.shape({
     order: PropTypes.string.isRequired,
-    titleName: PropTypes.string.isRequired,
-    coverImageFake: PropTypes.string.isRequired,
-    contents: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-    contentsFake: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-    authorNote: PropTypes.string.isRequired,
-    schedule: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    cost: PropTypes.string.isRequired,
+    cover: PropTypes.string,
+    images: PropTypes.arrayOf(PropTypes.string.isRequired),
   }).isRequired,
   validationSchema: PropTypes.shape({}).isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  imageBlob: PropTypes.shape({
-    coverImage: PropTypes.string,
-    contents: PropTypes.arrayOf(PropTypes.string.isRequired),
-  }),
 };
 
-ChapterForm.defaultProps = {
-  imageBlob: {
-    contents: [],
-  },
-};
-
-export default ChapterForm;
+export default memo(ChapterForm);

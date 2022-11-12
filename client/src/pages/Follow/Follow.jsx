@@ -1,13 +1,17 @@
+/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useMemo, useState } from "react";
 import { Container } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
+import followApi from "api/followApi";
 import { noFavorite } from "assets/images";
 import GridTable from "components/GridTable";
 import TabsContainer from "components/TabsContainer";
 import { NoData, Pagination, Popup } from "features";
-import { getLimitedFollowsByUserID } from "services/follow";
+import { useDelete } from "hooks";
+import { deleteFollow, getLimitedFollowsByUserID } from "services/follow";
+import { getAllTitles } from "services/title";
 import styles from "./assets/styles/Follow.module.scss";
 import FollowTable from "./components/FollowTable";
 
@@ -15,26 +19,37 @@ const cx = classNames.bind(styles);
 
 function Follow() {
   const user = useSelector((state) => state.user.user);
-  const { titles, pagination, setPagination } = getLimitedFollowsByUserID(
-    user.id,
-    50
+  const { follows, pagination, setPagination, fetchLimitFollows } =
+    getLimitedFollowsByUserID(user.guid, 50);
+  const { titles } = getAllTitles();
+  const hasData = follows.length > 0;
+
+  const followedTitles = useMemo(
+    () =>
+      follows.map((follow) => {
+        const temp = {
+          ...titles.find((title) => title.guid === follow.titleId),
+          followId: follow.guid,
+        };
+        return temp;
+      }),
+    [follows]
   );
-  const hasData = titles.length > 0;
 
   const menu = [
     { href: "", label: "Truyện tranh", tab: "" },
-    { href: "?tab=novels", label: "Truyện chữ", tab: "novels" },
+    // { href: "?tab=novels", label: "Truyện chữ", tab: "novels" },
   ];
-  const [popup, setPopup] = useState({
-    trigger: false,
-    isConfirm: false,
-    title: "",
-    content: "",
-  });
 
-  useEffect(() => {
-    // console.log(popup.isConfirm);
-  }, [popup.isConfirm]);
+  const { deletedItem, setDeletedItem, popup, setPopup } = useDelete(
+    async () => {
+      deleteFollow(deletedItem).then((value) => {
+        if (value.affectedRows > 0) {
+          fetchLimitFollows();
+        }
+      });
+    }
+  );
 
   return (
     <>
@@ -49,7 +64,12 @@ function Follow() {
                 { label: "Xóa", center: true },
               ]}
             >
-              <FollowTable titles={titles} popup={popup} setPopup={setPopup} />
+              <FollowTable
+                titles={followedTitles}
+                popup={popup}
+                setPopup={setPopup}
+                setDeletedItem={setDeletedItem}
+              />
             </GridTable>
             <Pagination pagination={pagination} setPagination={setPagination} />
           </>

@@ -19,13 +19,13 @@ function ReadingHistoryTableRow({ readingHistories, cx, calculateCountdown }) {
             >
               <div className={cx("box-img")}>
                 <img
-                  src={title.coverImage}
-                  alt={title.titleName}
+                  src={title.cover}
+                  alt={title.name}
                   className={cx("cover-image")}
                 />
               </div>
               <div>
-                <p className={cx("title")}>{title.titleName}</p>
+                <p className={cx("title")}>{title.name}</p>
                 <p className={cx("chapter-number")}>
                   <BiBookmark className={cx("bookmark-icon")} />
                   Chương {history.chapter}
@@ -51,8 +51,8 @@ ReadingHistoryTableRow.propTypes = {
       chapter: PropTypes.string.isRequired,
       readTime: PropTypes.string.isRequired,
       title: PropTypes.shape({
-        coverImage: PropTypes.string.isRequired,
-        titleName: PropTypes.string.isRequired,
+        cover: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
       }).isRequired,
     }).isRequired
   ).isRequired,

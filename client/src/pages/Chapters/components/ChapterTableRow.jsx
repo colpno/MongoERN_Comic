@@ -3,25 +3,36 @@ import PropTypes from "prop-types";
 import { Col, Row } from "react-bootstrap";
 import { BsTrash } from "react-icons/bs";
 import { HiOutlinePencil } from "react-icons/hi";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import Button from "components/Button";
-import { approveStatusString } from "database";
+import { getAllApprovedStatuses } from "services/approvedStatus";
 import { formatTime } from "utils/convertTime";
 import styles from "../assets/styles/ChaptersTableRow.module.scss";
 
 const cx = classNames.bind(styles);
 
-function ChaptersTableRow({ popup, setPopup, chapters }) {
+function ChaptersTableRow({ setPopup, setDeleteItem, chapters }) {
   const { titleId } = useParams();
-  const pathName = useLocation().pathname;
-  const handlePopup = () => {
-    setPopup({
-      ...popup,
-      trigger: true,
-      title: "Xóa chương",
-      content: "Bạn có muốn xóa chương?",
+  const { approvedStatuses } = getAllApprovedStatuses();
+  const options = approvedStatuses.map((status) => {
+    return {
+      value: status.guid,
+      label: status.name,
+    };
+  });
+
+  const handleDeleteClick = (guid) => {
+    setPopup((prev) => {
+      return {
+        ...prev,
+        trigger: true,
+        title: "Xóa tài khoản",
+        content: "Bạn có muốn xóa tài khoản?",
+        yesno: true,
+      };
     });
+    setDeleteItem({ guid, titleId });
   };
 
   return (
@@ -29,29 +40,29 @@ function ChaptersTableRow({ popup, setPopup, chapters }) {
       {chapters.map((chapter) => {
         const createdTime = formatTime(chapter.createdAt);
         const updatedTime = formatTime(chapter.updatedAt);
-        const scheduleTime = formatTime(chapter.schedule);
+
         return (
           <Row
             className={cx("chapters__container__content")}
-            key={chapter.order}
+            key={chapter.guid}
           >
             <Col sm={1}>
               <span className={cx("order")}>{chapter.order}</span>
             </Col>
             <Col>
               <img
-                className={cx("coverImage")}
-                src={chapter.coverImage}
-                alt={chapter.titleName}
+                className={cx("cover")}
+                src={chapter.cover}
+                alt={chapter.name}
               />
             </Col>
-            <Col>
+            <Col sm={3}>
               <Button
                 text
-                to={`/comic/title/${titleId}/${chapter.order}`}
+                to={`/comic/title/${titleId}/${chapter.guid}`}
                 className={cx("title")}
               >
-                {chapter.titleName}
+                {chapter.name}
               </Button>
             </Col>
             <Col>
@@ -65,22 +76,20 @@ function ChaptersTableRow({ popup, setPopup, chapters }) {
               </span>
             </Col>
             <Col>
-              <span className={cx("schedule")}>
-                {`${scheduleTime.day}.${scheduleTime.month}.${scheduleTime.year}`}
-              </span>
-            </Col>
-            <Col>
               <span className={cx("approve-status")}>
-                {approveStatusString(chapter.statusId)}
+                {options.length > 0 &&
+                  options.find(
+                    (option) => option.value === chapter.approvedStatusId
+                  ).label}
               </span>
             </Col>
             <Col className={cx("actions")}>
               <Button
                 outline
                 gray
-                to={`${pathName}/update/${chapter.id}`}
-                className={cx("action")}
-                title="Chỉnh sửa chương"
+                to={`update/${chapter.guid}`}
+                className="action"
+                title="Chỉnh sửa truyện"
               >
                 <HiOutlinePencil />
               </Button>
@@ -89,7 +98,7 @@ function ChaptersTableRow({ popup, setPopup, chapters }) {
                 gray
                 className={cx("action")}
                 title="Xóa chương"
-                onClick={handlePopup}
+                onClick={() => handleDeleteClick(chapter.guid)}
               >
                 <BsTrash />
               </Button>
@@ -102,24 +111,15 @@ function ChaptersTableRow({ popup, setPopup, chapters }) {
 }
 
 ChaptersTableRow.propTypes = {
-  popup: PropTypes.shape({
-    trigger: PropTypes.bool.isRequired,
-    title: PropTypes.string.isRequired,
-    content: PropTypes.string.isRequired,
-  }).isRequired,
-  setPopup: PropTypes.func.isRequired,
   chapters: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
+      guid: PropTypes.string.isRequired,
       createdAt: PropTypes.string.isRequired,
-      updatedAt: PropTypes.string.isRequired,
-      schedule: PropTypes.string.isRequired,
-      order: PropTypes.number.isRequired,
-      coverImage: PropTypes.string.isRequired,
-      titleName: PropTypes.string.isRequired,
-      statusId: PropTypes.string.isRequired,
+      approvedStatusId: PropTypes.string.isRequired,
     })
   ).isRequired,
+  setPopup: PropTypes.func.isRequired,
+  setDeleteItem: PropTypes.func.isRequired,
 };
 
 export default ChaptersTableRow;

@@ -2,18 +2,18 @@ import classNames from "classnames/bind";
 import { Button, Radio } from "components";
 import { NoData } from "features";
 import { useState } from "react";
-import { Container } from "react-bootstrap";
-import { getAllPayMethods } from "services/payMethod";
+import { Container, Row } from "react-bootstrap";
+import { useSelector } from "react-redux";
 import styles from "./assets/styles/AddCoin.module.scss";
 
 const cx = classNames.bind(styles);
 
 function AddCoin() {
   const [choseMethod, setChoseMethod] = useState({ value: "0", label: "" });
-  const { payMethods } = getAllPayMethods();
+  const payMethods = useSelector((state) => state.paymentMethod.paymentMethods);
 
   const options = payMethods.map((payMethod) => {
-    return { value: payMethod.id, label: payMethod.label };
+    return { value: payMethod.guid, label: payMethod.name };
   });
 
   const onMethodChange = (e) => {
@@ -28,7 +28,7 @@ function AddCoin() {
 
   return (
     <Container className={cx("add-coin")}>
-      <div className={cx("add-coin__step")}>
+      <Row className={cx("add-coin__step")}>
         <p className={cx("add-coin__step__title")}>
           Chọn phương thức thanh toán
         </p>
@@ -56,8 +56,8 @@ function AddCoin() {
             );
           })}
         </div>
-      </div>
-      <div className={cx("add-coin__step")}>
+      </Row>
+      <Row className={cx("add-coin__step")}>
         <div className={cx("add-coin__step__title")}>{choseMethod.label}</div>
         {choseMethod.value === "0" && (
           <NoData>
@@ -65,7 +65,7 @@ function AddCoin() {
             <p>Vui lòng chọn hình thức thanh toán!</p>
           </NoData>
         )}
-      </div>
+      </Row>
       <div className={cx("add-coin__step")}>
         <div className={cx("note")}>
           <p className={cx("note__title")}>GHI CHÚ</p>

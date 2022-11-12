@@ -13,19 +13,36 @@ export default function putQuery(req, res, table) {
   jwt.verify(token, process.env.ACCESS_TOKEN_KEY, (error, userInfo) => {
     if (error) return res.status(403).json('Invalid token');
 
-    const sql = `
+    if (userInfo.role === 'admin') {
+      const sql = `
+        UPDATE \`${table}\`
+        SET ${bodyKeys.map((key) => `\`${key}\` = ?`)},\`updatedAt\` = ?
+        WHERE guid = ?
+      `;
+
+      const now = getCurrentDateTime();
+      const values = [...bodyKeys.map((dataKey) => body[dataKey]), now, guid];
+
+      db.query(sql, [...values], (err, data) => {
+        if (err) return res.json(err);
+        if (data.affectedRows > 0) return res.json(data);
+        return res.json('Something went wrong');
+      });
+    } else {
+      const sql = `
         UPDATE \`${table}\`
         SET ${bodyKeys.map((key) => `\`${key}\` = ?`)},\`updatedAt\` = ?
         WHERE guid = ? AND userId = ?
       `;
 
-    const now = getCurrentDateTime();
-    const values = [...bodyKeys.map((dataKey) => body[dataKey]), now, guid, userInfo.guid];
+      const now = getCurrentDateTime();
+      const values = [...bodyKeys.map((dataKey) => body[dataKey]), now, guid, userInfo.guid];
 
-    db.query(sql, [values], (err, data) => {
-      if (err) return res.status(500).json(err);
-      if (data.affectedRows > 0) return res.status(200).json(data);
-      return res.status(403).json('You can only update your item');
-    });
+      db.query(sql, [...values], (err, data) => {
+        if (err) return res.json(err);
+        if (data.affectedRows > 0) return res.json(data);
+        return res.json('You can only update your item');
+      });
+    }
   });
 }

@@ -108,6 +108,14 @@
   }
 }
 
+@media (min-width: 1600px) {
+  .container {
+    $width: 1320px;
+    width: $width;
+    max-width: $width;
+  }
+}
+
 // $container-max-widths: (
 //   sm: 540px,
 //   md: 720px,

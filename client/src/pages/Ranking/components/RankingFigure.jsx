@@ -2,9 +2,7 @@ import CardFigure from "components/CardFigure";
 import PropTypes from "prop-types";
 import "../assets/styles/RankingFigures.scss";
 
-function RankingFigure({ data }) {
-  const { rank } = data;
-
+function RankingFigure({ data, rank }) {
   return (
     <figure className="ranking-figure">
       <span className="icon-bookmark">{rank}</span>
@@ -16,8 +14,8 @@ function RankingFigure({ data }) {
 RankingFigure.propTypes = {
   data: PropTypes.shape({
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    rank: PropTypes.number.isRequired,
   }).isRequired,
+  rank: PropTypes.number.isRequired,
 };
 
 export default RankingFigure;

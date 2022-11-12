@@ -19,8 +19,8 @@ const cx = classNames.bind(styles);
 
 function Inventory() {
   const user = useSelector((state) => state.user.user);
-  const { hiredChapters } = getLimitedHiredChaptersByUserID(user.id);
-  const { purchasedChapters } = getLimitedPurchasedChaptersByUserID(user.id);
+  const { hiredChapters } = getLimitedHiredChaptersByUserID(user.guid);
+  const { purchasedChapters } = getLimitedPurchasedChaptersByUserID(user.guid);
   const [chapters, setChapters] = useState([]);
   const [sorter, setSorter] = useState({ key: "createdAt", isAsc: false });
 

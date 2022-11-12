@@ -10,6 +10,7 @@ export { minuteToSecond } from "./convertTime";
 export { minuteToHour } from "./convertTime";
 export { hourToSecond } from "./convertTime";
 export { hourToMinute } from "./convertTime";
-export { default as roundNumByUnit } from "./roundNumByUnit";
+export { roundNumByUnit } from "./numberMethods";
+export { separateNumberDigit } from "./numberMethods";
 export { createArrayFromTo } from "./arrayMethods";
 export { makeUnique } from "./arrayMethods";

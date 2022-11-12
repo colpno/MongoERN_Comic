@@ -25,8 +25,8 @@ const sortPointHistories = (titleID, col, isAsc = true, limit = 50) => {
   const normalSort = async () => {
     try {
       const response = await pointHistoryApi.sort(ID, sort.col, sortOrder(), {
-        _limit: pagination.limit,
-        _page: pagination.page,
+        limit: pagination.limit,
+        page: pagination.page,
       });
       const converted = convertPointHistoriesPropertyToString(response.data);
       setPointHistories(converted);

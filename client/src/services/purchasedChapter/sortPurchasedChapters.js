@@ -28,8 +28,8 @@ const sortPurchasedChapters = (titleID, col, isAsc = true, limit = 50) => {
         sort.col,
         sortOrder(),
         {
-          _limit: pagination.limit,
-          _page: pagination.page,
+          limit: pagination.limit,
+          page: pagination.page,
         }
       );
       setPurchasedChapters(response.data);

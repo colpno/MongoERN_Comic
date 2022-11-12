@@ -1,24 +1,25 @@
 import axiosClient from "libs/axios/axiosClient";
 
-const url = "/purchased-chapters";
+const url = "/chapter-transactions";
 
 const purchasedChapterApi = {
-  getAll: (params) =>
-    axiosClient.get(`${url}?_expand=chapter&_expand=user`, { params }),
+  getAll: (params) => axiosClient.get(url, { params }),
 
   getAllByUserID: (userId, params) =>
-    axiosClient.get(`${url}?userId=${userId}&_expand=chapter&_expand=user`, {
+    axiosClient.get(`${url}?userId=${userId}`, {
       params,
     }),
 
   getOneByID: (id) => axiosClient.get(`${url}/${id}`),
 
-  add: (chapter) => axiosClient.post(url, chapter),
+  add: (chapter) =>
+    axiosClient.post(`${url}/create`, chapter, { withCredentials: true }),
 
-  delete: (id) => axiosClient.get(`${url}/${id}`),
+  delete: (id) =>
+    axiosClient.delete(`${url}/delete/${id}`, { withCredentials: true }),
 
   sort: (key, order, params) =>
-    axiosClient.get(`${url}?_sort=${key}&_order=${order}`, { params }),
+    axiosClient.get(`${url}?sort=${key}&order=${order}`, { params }),
 
   filter: (filterObj) => {
     const key = Object.keys(filterObj)[0];

@@ -13,8 +13,8 @@ const getLimitedPointHistoriesByUserID = (userID, limit) => {
   const fetchLimitPointHistories = async () => {
     try {
       const response = await pointHistoryApi.getAll(userID, {
-        _page: pagination.page,
-        _limit: pagination.limit,
+        page: pagination.page,
+        limit: pagination.limit,
       });
       const converted = convertPointHistoriesPropertyToString(response);
       setPointHistories(converted);

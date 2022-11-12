@@ -12,8 +12,8 @@ const getLimitedPurchasedChaptersByUserID = (userID, limit) => {
   const fetchLimitPurchasedChapters = async () => {
     try {
       const response = await purchasedChapterApi.getAllByUserID(userID, {
-        _page: pagination.page,
-        _limit: pagination.limit,
+        page: pagination.page,
+        limit: pagination.limit,
       });
       setPurchasedChapters(response.data);
       setPagination((prev) => {

@@ -6,22 +6,49 @@ const chapterApi = {
   getAll: (params) => axiosClient.get(url, { params }),
 
   getOneByID: (chapterID, titleID) => {
-    const queryStr = `?${titleID ? `titleId=${titleID}&` : ""}_expand=title`;
+    const queryStr = `?${titleID ? `titleId=${titleID}&` : ""}`;
     return axiosClient.get(`${url}/${chapterID}${queryStr}`);
   },
 
-  add: (title) => axiosClient.post(url, title),
+  add: (chapter, setProgress) =>
+    axiosClient.post(`${url}/create`, chapter, {
+      withCredentials: true,
+      onUploadProgress: (e) => {
+        const { loaded, total } = e;
+        const percentage = (loaded / total) * 100;
+        setProgress(percentage);
+      },
+    }),
 
-  delete: (id) => axiosClient.get(`${url}/${id}`),
+  update: (id, data, setProgress) =>
+    axiosClient.put(`${url}/update/${id}`, data, {
+      withCredentials: true,
+      onUploadProgress: (e) => {
+        const { loaded, total } = e;
+        const percentage = (loaded / total) * 100;
+        setProgress(percentage);
+      },
+    }),
+
+  delete: (id, data, setProgress) => {
+    return axiosClient.delete(`${url}/delete/${id}`, {
+      withCredentials: true,
+      data: {
+        data,
+      },
+      onUploadProgress: (e) => {
+        const { loaded, total } = e;
+        const percentage = Math.floor((loaded / total) * 100);
+        setProgress(percentage);
+      },
+    });
+  },
 
   sort: (titleId, key, order, params) => {
     const titleIdQuery = titleId ? `titleId=${titleId}&` : "";
-    return axiosClient.get(
-      `${url}?${titleIdQuery}_sort=${key}&_order=${order}`,
-      {
-        params,
-      }
-    );
+    return axiosClient.get(`${url}?${titleIdQuery}sort=${key}&order=${order}`, {
+      params,
+    });
   },
 
   filter: (filterObj, params) => {

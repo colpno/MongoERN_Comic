@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import authApi from "api/authApi";
 import userApi from "api/userApi";
 import classNames from "classnames/bind";
 import { Button } from "components";
@@ -17,11 +18,11 @@ function Login() {
   const navigate = useNavigate();
 
   const handleSubmit = (values, { setSubmitting }) => {
-    const { userName, password } = values;
+    const { username, password } = values;
     const fetchUser = async () => {
       try {
-        const response = await userApi.search({ userName, password });
-        const converted = convertUserPropertyToString(response[0]);
+        const response = await authApi.login(username, password);
+        const converted = convertUserPropertyToString(response);
         dispatch(login(converted));
       } catch (error) {
         throw new Error(error);

@@ -1,50 +1,59 @@
 import classNames from "classnames/bind";
-import Button from "components/Button";
-import { approveStatusString } from "database";
 import PropTypes from "prop-types";
 import { Col, Row } from "react-bootstrap";
 import { HiOutlinePencil } from "react-icons/hi";
 import { TbList } from "react-icons/tb";
+
+import Button from "components/Button";
+import { getAllApprovedStatuses } from "services/approvedStatus";
 import { formatTime } from "utils/convertTime";
 import styles from "../assets/styles/MyTitleTable.module.scss";
 
 const cx = classNames.bind(styles);
 
 function MyTitleTable({ data }) {
+  const { approvedStatuses } = getAllApprovedStatuses();
+  const options = approvedStatuses.map((status) => {
+    return {
+      value: status.guid,
+      label: status.name,
+    };
+  });
+
   return (
     <>
       {data.map((title) => {
-        const {
-          index,
-          id,
-          coverImage,
-          titleName,
-          totalChapter,
-          titleStatusId,
-        } = title;
+        const { id, guid, cover, name, totalChapter, approvedStatusId } = title;
         const timeObj = formatTime(new Date(2022, 7, 16, 23, 16, 0, 0));
+        const approvedStatus =
+          options.length > 0 &&
+          options.find((option) => option.value === approvedStatusId);
 
         return (
-          <Row key={id} className={cx("my-title__container__content")}>
+          <Row key={guid} className={cx("my-title__container__content")}>
             <Col sm={1}>
-              <span>{index}</span>
+              <span>{id}</span>
             </Col>
             <Col>
               <div className={cx("box-img")}>
-                <img src={coverImage} alt={titleName} />
+                <img src={cover} alt={name} />
               </div>
             </Col>
-            <Col md={3}>
-              <Button text to={`/comic/title/${id}`} className={cx("title")}>
-                {titleName}
+            <Col sm={3}>
+              <Button text to={`/comic/title/${guid}`} className={cx("title")}>
+                {name}
               </Button>
             </Col>
             <Col>
               <span className={cx("total-chapter")}>{totalChapter}</span>
             </Col>
             <Col>
-              <span className={cx(`approve-status status-${titleStatusId}`)}>
-                {approveStatusString(titleStatusId)}
+              <span
+                className={cx(
+                  `approve-approvedStatusIdapprovedStatus-${approvedStatusId}`
+                )}
+              >
+                {approvedStatus.label}
               </span>
             </Col>
             <Col>
@@ -61,7 +70,7 @@ function MyTitleTable({ data }) {
               <Button
                 outline
                 gray
-                to={`update/${id}`}
+                to={`update/${guid}`}
                 className="action"
                 title="Chỉnh sửa truyện"
               >
@@ -70,7 +79,7 @@ function MyTitleTable({ data }) {
               <Button
                 outline
                 gray
-                to={`${id}`}
+                to={`${guid}`}
                 className="action"
                 title="Xem danh sách chương"
               >
@@ -87,9 +96,9 @@ function MyTitleTable({ data }) {
 MyTitleTable.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
-      index: PropTypes.number.isRequired,
-      id: PropTypes.string.isRequired,
-      titleName: PropTypes.oneOfType([
+      id: PropTypes.number.isRequired,
+      guid: PropTypes.string.isRequired,
+      name: PropTypes.oneOfType([
         PropTypes.string.isRequired,
         PropTypes.arrayOf(
           PropTypes.oneOfType([
@@ -98,9 +107,9 @@ MyTitleTable.propTypes = {
           ]).isRequired
         ).isRequired,
       ]).isRequired,
-      coverImage: PropTypes.string.isRequired,
+      cover: PropTypes.string.isRequired,
       totalChapter: PropTypes.number.isRequired,
-      titleStatusId: PropTypes.string.isRequired,
+      approvedStatusId: PropTypes.string.isRequired,
     })
   ).isRequired,
 };

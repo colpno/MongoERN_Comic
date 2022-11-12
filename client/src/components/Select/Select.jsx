@@ -55,8 +55,8 @@ function Select({
   const dispatch = useDispatch();
   const [value, setValue] = useState([
     {
-      value: options[0]?.value || "",
-      label: options[0]?.label || "",
+      value: options[0].value,
+      label: options[0].label,
     },
   ]);
   const styles = customStyles(height);

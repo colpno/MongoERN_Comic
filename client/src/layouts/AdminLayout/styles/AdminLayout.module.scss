@@ -14,7 +14,7 @@
   width: 100%;
   margin-left: var.$sidebar-width;
   background-color: var.$bgc-admin;
-  box-shadow: inset 0 0.5rem 1rem rgb(132 139 200 / 0.14);
+  box-shadow: inset 0.5rem 0.5rem 1rem rgb(132 139 200 / 0.14);
 }
 
 /* 
@@ -392,5 +392,11 @@
   }
   #sidebar--toggle:checked ~ .main-content .container {
     display: none;
+  }
+}
+
+:global(.grid-table) {
+  :global(.row) {
+    // min-width: 1vw;
   }
 }

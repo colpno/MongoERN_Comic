@@ -1,0 +1,9 @@
+.field__group {
+  margin-bottom: 20px;
+
+  &__label {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+}

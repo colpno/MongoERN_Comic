@@ -25,8 +25,8 @@ const sortCoinHistories = (titleID, col, isAsc = true, limit = 50) => {
   const normalSort = async () => {
     try {
       const response = await coinHistoryApi.sort(ID, sort.col, sortOrder(), {
-        _limit: pagination.limit,
-        _page: pagination.page,
+        limit: pagination.limit,
+        page: pagination.page,
       });
       const converted = convertCoinHistoriesPropertyToString(response.data);
       setCoinHistories(converted);

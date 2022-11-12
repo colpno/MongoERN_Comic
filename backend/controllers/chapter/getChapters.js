@@ -13,7 +13,8 @@ export default function getChapters(req, res) {
   const { filter, search } = separateOtherParams(others);
 
   // URL: ?column_like=...
-  if (Object.keys(filter).length > 0) return filterQuery(res, table, filter, page, limit);
+  if (Object.keys(filter).length > 0)
+    return filterQuery(res, table, filter, page, limit, sort, order);
 
   // URL: ?column=...
   if (Object.keys(search).length > 0)

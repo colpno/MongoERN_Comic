@@ -13,7 +13,7 @@ function Notice() {
   return (
     <div className={cx("notice-page")}>
       <div className={cx("box-img")}>
-        <img src={notice.coverImage} alt={notice.title} />
+        <img src={notice.cover} alt={notice.title} />
       </div>
       <div className={cx("notice-page__beginning")}>
         <div className={cx("notice-page__beginning__head")}>

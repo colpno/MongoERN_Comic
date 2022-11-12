@@ -1,7 +1,6 @@
 import Input from "components/Input/Input";
 import PropTypes from "prop-types";
 import { FormGroup } from "react-bootstrap";
-import Feedback from "react-bootstrap/esm/Feedback";
 
 function InputField(props) {
   const { field, form } = props;
@@ -10,11 +9,7 @@ function InputField(props) {
 
   return (
     <FormGroup className="field">
-      <Input
-        {...props}
-        isInvalid={form ? touched[name] && !!errors[name] : "false"}
-      />
-      <Feedback type="invalid">{errors[name]}</Feedback>
+      <Input {...props} error={errors[name]} touched={touched[name]} />
     </FormGroup>
   );
 }

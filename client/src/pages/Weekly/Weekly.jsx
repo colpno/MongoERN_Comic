@@ -36,7 +36,7 @@ function Weekly() {
         return "T2";
     }
   });
-  const { titles } = searchTitle("schedule", dayFilter);
+  const { titles, setReFetch } = searchTitle("status", dayFilter);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -59,12 +59,13 @@ function Weekly() {
   const handleDayClick = (day) => {
     setDayFilter(day);
     setLimit(COMIC_PER_PAGE);
+    setReFetch(true);
   };
 
   const slider =
     titles.length > 0
       ? titles.slice(0, 10).map((title) => {
-          return title.coverImage;
+          return title.cover;
         })
       : [];
 

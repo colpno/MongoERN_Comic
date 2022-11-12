@@ -4,16 +4,18 @@ const url = "/hired-chapters";
 
 const hiredChapterApi = {
   getAll: (userId, params) =>
-    axiosClient.get(`${url}?userId=${userId}&_expand=title`, { params }),
+    axiosClient.get(`${url}?userId=${userId}`, { params }),
 
   getOneByID: (id) => axiosClient.get(`${url}/${id}`),
 
-  add: (title) => axiosClient.post(url, title),
+  add: (hiredChapter) =>
+    axiosClient.post(`${url}/create`, hiredChapter, { withCredentials: true }),
 
-  delete: (id) => axiosClient.get(`${url}/${id}`),
+  delete: (id) =>
+    axiosClient.delete(`${url}/delete/${id}`, { withCredentials: true }),
 
   sort: (key, order, params) =>
-    axiosClient.get(`${url}?_sort=${key}&_order=${order}`, { params }),
+    axiosClient.get(`${url}?sort=${key}&order=${order}`, { params }),
 
   filter: (filterObj) => {
     const key = Object.keys(filterObj)[0];

@@ -1,12 +1,14 @@
 import PropTypes from "prop-types";
 import { memo } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import { Lazy, Navigation, Thumbs } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "../assets/styles/ReadingPagination.scss";
 
-function ReadingPagination({ chapterId, titleId, chapters }) {
+function ReadingPagination({ chapters }) {
+  const { titleId } = useParams();
+
   return (
     <div className="reading-page__pagination">
       <div className="reading-page__pagination__container">
@@ -37,15 +39,12 @@ function ReadingPagination({ chapterId, titleId, chapters }) {
         >
           {chapters.map((chapter) => {
             return (
-              <SwiperSlide
-                key={chapter.id}
-                className={chapterId === chapter.order ? " current" : ""}
-              >
-                <Link to={`/comic/title/${titleId}/${chapter.order}`}>
+              <SwiperSlide key={chapter.guid}>
+                <Link to={`/comic/title/${titleId}/${chapter.guid}`}>
                   <div className="box-img">
-                    <img src={chapter.coverImage} alt={chapter.titleName} />
+                    <img src={chapter.cover} alt={chapter.name} />
                   </div>
-                  <span className="content">{chapter.titleName}</span>
+                  <span className="content">{chapter.name}</span>
                 </Link>
               </SwiperSlide>
             );
@@ -65,14 +64,12 @@ function ReadingPagination({ chapterId, titleId, chapters }) {
 }
 
 ReadingPagination.propTypes = {
-  titleId: PropTypes.string.isRequired,
-  chapterId: PropTypes.number.isRequired,
   chapters: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
       order: PropTypes.number.isRequired,
-      coverImage: PropTypes.string.isRequired,
-      titleName: PropTypes.string.isRequired,
+      cover: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
     }).isRequired
   ).isRequired,
 };

@@ -12,8 +12,8 @@ const getLimitedReadingHistoriesByUserID = (userID, limit) => {
   const fetchLimitReadingHistories = async () => {
     try {
       const response = await readingHistoryApi.getAll(userID, {
-        _page: pagination.page,
-        _limit: pagination.limit,
+        page: pagination.page,
+        limit: pagination.limit,
       });
       setReadingHistories(response.data);
       setPagination((prev) => {

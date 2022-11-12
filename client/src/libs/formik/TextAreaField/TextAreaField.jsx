@@ -1,43 +1,49 @@
 import TextArea from "components/TextArea/TextArea";
 import PropTypes from "prop-types";
-import { useEffect, useRef } from "react";
 import { FormGroup } from "react-bootstrap";
-import Feedback from "react-bootstrap/esm/Feedback";
 
-function TextAreaField(props) {
-  const { field, form, placeholder, maxLength, readOnly, textAreaStyles } =
-    props;
+function TextAreaField({
+  field,
+  form,
+  textAreaStyles,
+
+  placeholder,
+  maxLength,
+  readOnly,
+  rows,
+}) {
   const { name } = field;
   const { touched, errors } = form;
-  const reactQuillRef = useRef();
+  // const reactQuillRef = useRef();
 
-  const checkCharacterCount = (event) => {
-    const { unprivilegedEditor } = reactQuillRef.current;
-    if (
-      unprivilegedEditor.getLength() > maxLength &&
-      event.key !== "Backspace"
-    ) {
-      event.preventDefault();
-    }
-  };
+  // const checkCharacterCount = (event) => {
+  //   const { unprivilegedEditor } = reactQuillRef.current;
+  //   if (
+  //     unprivilegedEditor.getLength() > maxLength &&
+  //     event.key !== "Backspace"
+  //   ) {
+  //     event.preventDefault();
+  //   }
+  // };
 
-  useEffect(() => {
-    reactQuillRef.current?.editor.root.setAttribute("spellcheck", "false");
-  }, []);
+  // useEffect(() => {
+  //   reactQuillRef.current?.editor.root.setAttribute("spellcheck", "false");
+  // }, []);
 
   return (
     <FormGroup className="field">
       <TextArea
-        passRef={reactQuillRef}
-        field={field}
+        // passRef={reactQuillRef}
         placeholder={placeholder}
         readOnly={readOnly}
-        onKeyDown={checkCharacterCount}
-        isInvalid={touched[name] && !!errors[name]}
+        // onKeyDown={checkCharacterCount}
+        rows={rows}
         maxLength={maxLength}
+        touched={touched[name]}
+        error={errors[name]}
+        {...field}
         {...textAreaStyles}
       />
-      <Feedback type="invalid">{errors[name]}</Feedback>
     </FormGroup>
   );
 }
@@ -82,6 +88,7 @@ TextAreaField.propTypes = {
   maxLength: PropTypes.number,
   readOnly: PropTypes.bool,
   textAreaStyles: PropTypes.shape({}),
+  rows: PropTypes.number,
 };
 
 TextAreaField.defaultProps = {
@@ -90,6 +97,7 @@ TextAreaField.defaultProps = {
   maxLength: 1000,
   readOnly: false,
   textAreaStyles: {},
+  rows: 5,
 };
 
 export default TextAreaField;

@@ -4,7 +4,7 @@ import { convertChaptersPropertyToString } from "utils/convertArrayPropertyToStr
 
 const sortChapters = (titleID, col, isAsc = true, limit = 50) => {
   const [chapters, setChapters] = useState([]);
-  const [sort, setSort] = useState({ isAsc, col });
+  const [sortInfo, setSortInfo] = useState({ isAsc, col });
   const [ID, setID] = useState(titleID);
   const [pagination, setPagination] = useState({
     page: 1,
@@ -17,16 +17,16 @@ const sortChapters = (titleID, col, isAsc = true, limit = 50) => {
   };
 
   const sorting = (column) => {
-    setSort({ isAsc: !sort.isAsc, col: column });
+    setSortInfo({ isAsc: !sortInfo.isAsc, col: column });
   };
 
-  const sortOrder = () => (sort.isAsc ? "asc" : "desc");
+  const sortOrder = () => (sortInfo.isAsc ? "asc" : "desc");
 
-  const normalSort = async () => {
+  const sort = async () => {
     try {
-      const response = await chapterApi.sort(ID, sort.col, sortOrder(), {
-        _limit: pagination.limit,
-        _page: pagination.page,
+      const response = await chapterApi.sort(ID, sortInfo.col, sortOrder(), {
+        limit: pagination.limit,
+        page: pagination.page,
       });
       const converted = convertChaptersPropertyToString(response.data);
       setChapters(converted);
@@ -37,8 +37,8 @@ const sortChapters = (titleID, col, isAsc = true, limit = 50) => {
   };
 
   useEffect(() => {
-    normalSort();
-  }, [pagination.page, sort.isAsc, sort.col, ID]);
+    sort();
+  }, [pagination.page, sortInfo.isAsc, sortInfo.col, ID]);
 
   return {
     chapters,
@@ -47,6 +47,7 @@ const sortChapters = (titleID, col, isAsc = true, limit = 50) => {
     setPagination,
     sorting,
     setTitleID,
+    refetch: sort,
   };
 };
 

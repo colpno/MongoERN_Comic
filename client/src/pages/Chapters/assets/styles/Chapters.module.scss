@@ -21,6 +21,7 @@
         display: flex;
         align-items: center;
         justify-content: flex-start;
+        padding-left: 0;
       }
 
       &:last-child {
@@ -28,6 +29,7 @@
         align-items: center;
         justify-content: flex-end;
         height: 42px;
+        padding-right: 0;
 
         svg {
           font-size: 24px;
@@ -38,6 +40,10 @@
 
   &__general__total {
     font-weight: 500;
+  }
+
+  .chapters__button {
+    padding: 9.5px min(25px, 1vw + 0.2rem);
   }
 
   &__general__total__number {

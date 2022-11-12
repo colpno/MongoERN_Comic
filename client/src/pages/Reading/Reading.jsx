@@ -1,9 +1,10 @@
+/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import { Recommend } from "features";
 import styles from "pages/Reading/assets/styles/Reading.module.scss";
-import { sortChapters } from "services/chapter";
 import GGPlay from "./assets/images/icons8-google-play-48.png";
 import {
   ReadingComics,
@@ -14,27 +15,19 @@ import {
 const cx = classNames.bind(styles);
 
 function Reading() {
-  const { chapterId } = useParams();
-  const { titleId } = useParams();
-  const { chapters } = sortChapters(titleId, "order");
-  const chapter = chapters.find((chapt) => {
-    return chapterId === chapt.id;
-  });
+  const chapterImages = useSelector((state) => state.chapter.chapter.images);
+  const chapters = useSelector((state) => state.chapter.chapters);
 
   return (
     <>
-      {chapters.length > 0 && (
-        <div className={cx("reading-page")}>
-          <ReadingComics cx={cx} images={chapter.contents} />
-          <ReadingControls cx={cx} GGPlay={GGPlay} />
-          <ReadingPagination
-            titleId={titleId}
-            chapterId={parseInt(chapterId, 10)}
-            chapters={chapters}
-          />
-          <Recommend />
-        </div>
-      )}
+      <div className={cx("reading-page")}>
+        {chapterImages.length > 0 && (
+          <ReadingComics cx={cx} images={chapterImages} />
+        )}
+        <ReadingControls cx={cx} GGPlay={GGPlay} />
+        {chapters.length > 0 && <ReadingPagination chapters={chapters} />}
+        <Recommend />
+      </div>
       {}
     </>
   );

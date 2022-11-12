@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import { memo } from "react";
 import PropTypes from "prop-types";
@@ -27,9 +28,10 @@ function CardList(props) {
       <Row className={cx("cards-wrapper__cards")}>
         {data.map((card) => {
           return (
-            <Col {...col} key={card.id}>
+            <Col {...col} key={card.guid}>
               <CardFigure
-                to={`/comic/title/${card.id}`}
+                key={card.guid}
+                to={`/comic/title/${card.guid}`}
                 data={card}
                 summary={summary}
                 author={author}

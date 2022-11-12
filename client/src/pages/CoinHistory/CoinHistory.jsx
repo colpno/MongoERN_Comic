@@ -3,6 +3,7 @@ import { Col, Container, Row } from "react-bootstrap";
 
 import { CircleC } from "assets/images";
 import { NoData, Pagination } from "features";
+import { useSelector } from "react-redux";
 import { sortCoinHistories } from "services/coinHistory";
 import { convertToDateTimeString } from "utils/convertTime";
 import styles from "./assets/styles/CoinHistory.module.scss";
@@ -10,9 +11,9 @@ import styles from "./assets/styles/CoinHistory.module.scss";
 const cx = classNames.bind(styles);
 
 function CoinHistory() {
-  const userId = 1;
+  const user = useSelector((state) => state.user.user);
   const { coinHistories, pagination, setPagination } = sortCoinHistories(
-    userId,
+    user.guid,
     "createdAt",
     false,
     30
@@ -24,8 +25,8 @@ function CoinHistory() {
       {hasData ? (
         <Container className={cx("coin-history")}>
           {coinHistories.map((coinHistory) => {
-            const { id, payMethod, amount, createdAt } = coinHistory;
-            const { label } = payMethod;
+            const { id, amount, createdAt } = coinHistory;
+            // const { label } = payMethod;
 
             return (
               <Row className={cx("coin-history__row")} key={id}>
@@ -33,11 +34,11 @@ function CoinHistory() {
                   <CircleC className={cx("coin-icon")} />
                 </Col>
                 <Col className={cx("coin-history__row__content")}>
-                  <h5>Nhận Coin từ {label}</h5>
+                  {/* <h5>Nhận Coin từ {label}</h5> */}
                   <small>{convertToDateTimeString(createdAt)}</small>
                 </Col>
                 <Col className={cx("coin-history__row__quantity")}>
-                  <strong>{amount > 0 ? `+${amount}` : `-${amount}`}</strong>
+                  <strong>{amount >= 0 ? `+${amount}` : `-${amount}`}</strong>
                 </Col>
               </Row>
             );
@@ -48,7 +49,7 @@ function CoinHistory() {
         </Container>
       ) : (
         <NoData>
-          <p>Hiện tại không có lích sử Coint</p>
+          <h5>Hiện tại không có lịch sử Coint</h5>
         </NoData>
       )}
       <div className={cx("")} />

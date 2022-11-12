@@ -5,12 +5,12 @@ import styles from "../assets/styles/NoticeFigure.module.scss";
 const cx = classNames.bind(styles);
 
 function NoticeFigure({ data }) {
-  const { title, coverImage, content } = data;
+  const { title, cover, content } = data;
 
   return (
     <figure className={cx("notice-figure")}>
       <div className={cx("box-img")}>
-        <img src={coverImage} alt={title} />
+        <img src={cover} alt={title} />
       </div>
       <figcaption className={cx("notice-figure__content")}>
         <h5 className={cx("title")}>{title}</h5>
@@ -23,7 +23,7 @@ function NoticeFigure({ data }) {
 NoticeFigure.propTypes = {
   data: PropTypes.shape({
     title: PropTypes.string.isRequired,
-    coverImage: PropTypes.string.isRequired,
+    cover: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired,
   }).isRequired,
 };

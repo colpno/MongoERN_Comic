@@ -3,6 +3,7 @@ import { FastField, Form, Formik } from "formik";
 import PropTypes from "prop-types";
 import { Alert } from "react-bootstrap";
 
+import { InputImage } from "components";
 import Button from "components/Button";
 import {
   CheckBoxGroup,
@@ -10,10 +11,9 @@ import {
   RadioGroup,
   TextAreaField,
 } from "libs/formik";
-import FileField from "libs/formik/FileField";
 import FormLabel from "libs/formik/FormLabel";
+import { getAllApprovedStatuses } from "services/approvedStatus";
 import { getAllGenres } from "services/genre";
-import titleStatusServices from "services/titleStatusServices";
 import styles from "./assets/styles/TitleForm.module.scss";
 
 const cx = classNames.bind(styles);
@@ -25,12 +25,53 @@ function TitleForm({
   imageBlob,
 }) {
   const { genres } = getAllGenres();
-  const options = genres.map((genre) => {
-    return { value: `${genre.id}`, label: genre.genre };
+  const genreOptions = genres.map((genre) => {
+    return { value: `${genre.guid}`, label: genre.name };
   });
-  const { titleStatuses } = titleStatusServices();
+  const { approvedStatuses } = getAllApprovedStatuses();
+  const statusOptions = approvedStatuses.map((status) => {
+    return { value: `${status.guid}`, label: status.name };
+  });
+  const releaseDayOptions = [
+    {
+      value: "T2",
+      label: "Thứ hai",
+    },
+    {
+      value: "T3",
+      label: "Thứ ba",
+    },
+    {
+      value: "T4",
+      label: "Thứ tư",
+    },
+    {
+      value: "T5",
+      label: "Thứ năm",
+    },
+    {
+      value: "T6",
+      label: "Thứ sáu",
+    },
+    {
+      value: "T7",
+      label: "Thứ bảy",
+    },
+    {
+      value: "CN",
+      label: "Chủ nhật",
+    },
+    {
+      value: "paused",
+      label: "Tạm dừng",
+    },
+    {
+      value: "finished",
+      label: "Hoàn thành",
+    },
+  ];
 
-  const handleCloseIconClick = (value) => {
+  const handleRemove = (value) => {
     console.log(value);
   };
 
@@ -40,31 +81,32 @@ function TitleForm({
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
     >
-      {({ errors }) => {
+      {({ errors, setFieldValue }) => {
         return (
           <Form>
-            <FormLabel name="title" label="Tiêu đề truyện" required />
+            <FormLabel name="name" label="Tiêu đề truyện" required />
             <FastField
-              name="title"
+              name="name"
               component={InputField}
               placeholder="Nhập tiêu đề truyện..."
               maxLength={255}
               letterCount
+              autoFocus
             />
 
-            {titleStatuses && initialValues.titleStatusId && (
+            {statusOptions.length > 0 && "titleStatusId" in initialValues && (
               <>
                 <FormLabel name="titleStatusId" label="Trạng thái" />
                 <FastField
                   name="titleStatusId"
                   component={RadioGroup}
-                  options={titleStatuses}
+                  options={statusOptions}
                   col={{ sm: 6, md: 4 }}
                 />
               </>
             )}
 
-            {options.length > 0 && (
+            {genreOptions.length > 0 && (
               <>
                 <FormLabel
                   name="genreId"
@@ -75,7 +117,7 @@ function TitleForm({
                 <FastField
                   name="genreId"
                   component={CheckBoxGroup}
-                  options={options}
+                  options={genreOptions}
                   col={{ sm: 6, md: 4 }}
                 />
               </>
@@ -86,50 +128,65 @@ function TitleForm({
               name="summary"
               component={TextAreaField}
               placeholder="Viết giới thiệu truyện..."
+              rows={7}
+            />
+
+            <FormLabel name="author" label="Tác giả" required />
+            <FastField
+              name="author"
+              component={InputField}
+              placeholder="Nhập tên tác giả..."
+              maxLength={255}
+              letterCount
+            />
+
+            <FormLabel
+              name="coin"
+              label="Coin"
+              subLabel="Coin của tất cả chương thuộc truyện"
+              required
+            />
+            <FastField
+              name="coin"
+              component={InputField}
+              placeholder="Nhập coin..."
+              maxLength={3}
+              letterCount
+            />
+
+            <FormLabel name="releaseDay" label="Ngày đăng hàng tuần" />
+            <FastField
+              name="releaseDay"
+              component={RadioGroup}
+              options={releaseDayOptions}
+              col={{ sm: 4, md: 4 }}
             />
 
             {/* TODO: close icon to destroy image */}
-            <FormLabel name="coverImageTemp" label="Ảnh bìa" required />
-            {!!errors.coverImage && (
-              <Alert variant="danger">{errors.coverImage}</Alert>
-            )}
-            {!!errors.largeCoverImage && (
-              <Alert variant="danger">{errors.largeCoverImage}</Alert>
-            )}
+            <FormLabel name="cover" label="Ảnh bìa" required />
+            {!!errors.cover && <Alert variant="danger">{errors.cover}</Alert>}
+            {/* {!!errors.largeCover&& (
+              <Alert variant="danger">{errors.largeCover}</Alert>
+            )} */}
             <div className={cx("cover-image")}>
               <FastField
-                name="coverImageTemp"
-                component={FileField}
+                name="cover"
+                component={InputImage}
                 imgSize={{ width: 275, height: 275 }}
-                imageBlob={imageBlob?.coverImage ? imageBlob.coverImage : null}
-                closeIcon={!!imageBlob?.coverImage}
-                handleCloseIconClick={handleCloseIconClick}
+                imageBlob={imageBlob?.cover ? imageBlob.cover : null}
+                removable
+                handleRemove={handleRemove}
+                setFieldValue={setFieldValue}
               />
-              <FastField
-                name="largeCoverImageTemp"
+              {/* <FastField
+                name="largeCover"
                 component={FileField}
                 imgSize={{ width: 516, height: 306 }}
-                imageBlob={
-                  imageBlob?.largeCoverImage ? imageBlob.largeCoverImage : null
-                }
-                closeIcon={!!imageBlob?.coverImage}
-                handleCloseIconClick={handleCloseIconClick}
-              />
+                imageBlob={imageBlob?.largeCover ? imageBlob.largeCover : null}
+                closeIcon={!!imageBlob?.cover}
+                handleRemove={handleRemove}
+              /> */}
             </div>
-
-            {"email" in initialValues && (
-              <>
-                <FormLabel name="email" label="Xác nhận email" required />
-                <div className={cx("email-field")}>
-                  <FastField
-                    name="email"
-                    component={InputField}
-                    placeholder="Nhập email..."
-                  />
-                  <Button outline>Gửi email</Button>
-                </div>
-              </>
-            )}
 
             <div className={cx("button-group")}>
               <Button outline gray>
@@ -153,19 +210,20 @@ function TitleForm({
 
 TitleForm.propTypes = {
   initialValues: PropTypes.shape({
-    title: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
     summary: PropTypes.string.isRequired,
-    titleStatusId: PropTypes.string.isRequired,
+    titleStatusId: PropTypes.string,
     genreId: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-    coverImageTemp: PropTypes.string.isRequired,
-    largeCoverImageTemp: PropTypes.string.isRequired,
-    email: PropTypes.string,
+    cover: PropTypes.string.isRequired,
+    // largeCover: PropTypes.string.isRequired,
+    coin: PropTypes.string.isRequired,
+    author: PropTypes.string.isRequired,
   }).isRequired,
   validationSchema: PropTypes.shape({}).isRequired,
   handleSubmit: PropTypes.func.isRequired,
   imageBlob: PropTypes.shape({
-    coverImage: PropTypes.string,
-    largeCoverImage: PropTypes.string,
+    cover: PropTypes.string,
+    largeCover: PropTypes.string,
   }),
 };
 

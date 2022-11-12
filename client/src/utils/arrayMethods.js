@@ -11,7 +11,7 @@ export function makeUnique(array) {
 }
 
 export function sort(array, key, order) {
-  switch (order) {
+  switch (order.toLowerCase()) {
     case "asc":
       return array.sort((a, b) => {
         if (typeof a[key] === typeof 1) {

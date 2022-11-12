@@ -9,7 +9,7 @@ import HiredChaptersTable from "./components/HiredChaptersTable";
 function HiredChapters({ cx, titles }) {
   const user = useSelector((state) => state.user.user);
   const { hiredChapters, pagination, setPagination } =
-    getLimitedHiredChaptersByUserID(user.id, 30);
+    getLimitedHiredChaptersByUserID(user.guid, 30);
   const chapters = hiredChapters.map((hiredChapter) => hiredChapter.chapter);
   const finalData = [];
   chapters.forEach((chapter) => {
@@ -45,8 +45,8 @@ HiredChapters.propTypes = {
   titles: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      coverImage: PropTypes.string.isRequired,
-      titleName: PropTypes.string.isRequired,
+      cover: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
     }).isRequired
   ).isRequired,
 };

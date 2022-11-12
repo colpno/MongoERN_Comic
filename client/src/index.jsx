@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
 import { BrowserRouter } from "react-router-dom";
 import {
   ArcElement,
@@ -16,7 +17,7 @@ import {
 } from "chart.js";
 
 import GlobalStyles from "assets/styles/GlobalStyles";
-import store from "libs/redux/store";
+import store, { persistor } from "libs/redux/store";
 import App from "./App";
 
 Chart.register(
@@ -39,7 +40,9 @@ root.render(
     <BrowserRouter>
       <GlobalStyles>
         <Provider store={store}>
-          <App />
+          <PersistGate loading={null} persistor={persistor}>
+            <App />
+          </PersistGate>
         </Provider>
       </GlobalStyles>
     </BrowserRouter>

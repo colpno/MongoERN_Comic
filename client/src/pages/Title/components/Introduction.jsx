@@ -10,7 +10,13 @@ import { roundNumByUnit } from "utils";
 
 const cx = classNames.bind(styles);
 
-function Introduction({ title, genres, setPopup }) {
+function Introduction({ title, firstChapter, genres, setPopup, handleFollow }) {
+  title.summary += `
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet
+            voluptates sequi non esse vel neque hic, minus voluptatum quaerat
+            repellat, ex quibusdam deleniti modi accusamus explicabo fugit
+            aspernatur commodi illum.
+`;
   const handlePopupContent = () => {
     setPopup({
       trigger: true,
@@ -26,10 +32,10 @@ function Introduction({ title, genres, setPopup }) {
   return (
     <Container className={cx("introduction")}>
       <div className={cx("box-img")}>
-        <img src={title.coverImage} alt={title.titleName} />
+        <img src={title.cover} alt={title.name} />
       </div>
       <div className={cx("introduction__info")}>
-        <h4 className={cx("title")}>{title.titleName}</h4>
+        <h4 className={cx("title")}>{title.name}</h4>
         <div className={cx("introduction__info__statistic")}>
           <span className="like">
             <AiFillHeart />
@@ -41,28 +47,39 @@ function Introduction({ title, genres, setPopup }) {
           </span>
         </div>
         <div className={cx("introduction__info__detail")}>
-          <small className={cx("author")}>{title.authors}</small>
+          <small className={cx("author")}>{title.author}</small>
           <small className={cx("genres")}>{genres}</small>
           <small className={cx("summary")}>
-            {`${title.summary.slice(
+            {title.summary.slice(
               0,
               title.summary.slice(0, 135).lastIndexOf(" ")
-            )} ... `}
-            <Button text className={cx("more")} onClick={handlePopupContent}>
-              Xem thêm
-            </Button>
+            )}
+            {title.summary.length >= 135 && (
+              <>
+                <span> ... </span>
+                <Button
+                  text
+                  className={cx("more")}
+                  onClick={handlePopupContent}
+                >
+                  Xem thêm
+                </Button>
+              </>
+            )}
           </small>
         </div>
         <div className={cx("introduction__info__interact")}>
           {/* TODO: add to favorite list */}
-          <Button outline large>
+          <Button outline large onClick={() => handleFollow(title.guid)}>
             <AiFillStar />
             Theo dõi
           </Button>
-          <Button to="1" primary large>
-            <AiFillCopy />
-            Đọc chương đầu
-          </Button>
+          {firstChapter && (
+            <Button to={firstChapter} primary large>
+              <AiFillCopy />
+              Đọc chương đầu
+            </Button>
+          )}
         </div>
       </div>
     </Container>
@@ -72,15 +89,17 @@ function Introduction({ title, genres, setPopup }) {
 Introduction.propTypes = {
   setPopup: PropTypes.func.isRequired,
   title: PropTypes.shape({
-    coverImage: PropTypes.string.isRequired,
-    titleName: PropTypes.string.isRequired,
+    cover: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
     like: PropTypes.number.isRequired,
     view: PropTypes.number.isRequired,
-    authors: PropTypes.string.isRequired,
-    genreId: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+    author: PropTypes.string.isRequired,
     summary: PropTypes.string.isRequired,
+    guid: PropTypes.string.isRequired,
   }).isRequired,
   genres: PropTypes.string.isRequired,
+  handleFollow: PropTypes.func.isRequired,
+  firstChapter: PropTypes.string.isRequired,
 };
 
 export default memo(Introduction);

@@ -9,7 +9,7 @@ import { getLimitedPurchasedChaptersByUserID } from "services/purchasedChapter";
 function PurchasedChapters({ cx, titles }) {
   const user = useSelector((state) => state.user.user);
   const { purchasedChapters, pagination, setPagination } =
-    getLimitedPurchasedChaptersByUserID(user.id, 30);
+    getLimitedPurchasedChaptersByUserID(user.guid, 30);
   const chapters = purchasedChapters.map(
     (purchasedChapter) => purchasedChapter.chapter
   );
@@ -41,11 +41,11 @@ function PurchasedChapters({ cx, titles }) {
                 <Row className={cx("transaction__container")} key={chapter.id}>
                   <Col md={8} className={cx("transaction__container__content")}>
                     <div className={cx("box-img")}>
-                      <img src={title.coverImage} alt={title.titleName} />
+                      <img src={title.cover} alt={title.name} />
                     </div>
                     <div>
-                      <p className={cx("title")}>{title.titleName}</p>
-                      <p className={cx("chapter")}>{chapter.titleName}</p>
+                      <p className={cx("title")}>{title.name}</p>
+                      <p className={cx("chapter")}>{chapter.name}</p>
                     </div>
                   </Col>
                 </Row>
@@ -69,9 +69,9 @@ PurchasedChapters.propTypes = {
   cx: PropTypes.func.isRequired,
   titles: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      coverImage: PropTypes.string.isRequired,
-      titleName: PropTypes.string.isRequired,
+      guid: PropTypes.string.isRequired,
+      cover: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
     }).isRequired
   ).isRequired,
 };

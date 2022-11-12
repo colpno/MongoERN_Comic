@@ -6,7 +6,7 @@ import { BsChevronRight } from "react-icons/bs";
 import { Button, FloatingContainer, Select } from "components";
 import { getLimitedCoinHistories } from "services/coinHistory";
 import { getAllIncomeReports } from "services/incomeReport";
-import { getAllPayMethods } from "services/payMethod";
+import { getAllPayMethods } from "services/paymentMethod";
 import { getLimitedPurchasedChapters } from "services/purchasedChapter";
 import { createArrayFromTo } from "utils";
 import { getChartColors, getMonthArray } from "utils/constants";

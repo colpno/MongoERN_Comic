@@ -1,30 +1,25 @@
 import genreApi from "api/genreApi";
 import { useEffect, useState } from "react";
 
-const sortGenres = (titleID, col, isAsc = true, limit = 50) => {
+const sortGenres = (col, isAsc = true, limit = 50) => {
   const [genres, setGenres] = useState([]);
-  const [sort, setSort] = useState({ isAsc, col });
-  const [ID, setID] = useState(titleID);
+  const [sortInfo, setSort] = useState({ isAsc, col });
   const [pagination, setPagination] = useState({
     page: 1,
     limit,
   });
 
-  const setTitleID = (id) => {
-    setID(id);
-  };
-
   const sorting = (column) => {
-    setSort({ isAsc: !sort.isAsc, col: column });
+    setSort({ isAsc: !sortInfo.isAsc, col: column });
   };
 
-  const sortOrder = () => (sort.isAsc ? "asc" : "desc");
+  const sortOrder = () => (sortInfo.isAsc ? "asc" : "desc");
 
-  const normalSort = async () => {
+  const sort = async () => {
     try {
-      const response = await genreApi.sort(ID, sort.col, sortOrder(), {
-        _limit: pagination.limit,
-        _page: pagination.page,
+      const response = await genreApi.sort(sortInfo.col, sortOrder(), {
+        limit: pagination.limit,
+        page: pagination.page,
       });
       setGenres(response.data);
       setPagination({ ...pagination, total: response.pagination.total });
@@ -34,8 +29,8 @@ const sortGenres = (titleID, col, isAsc = true, limit = 50) => {
   };
 
   useEffect(() => {
-    normalSort();
-  }, [pagination.page, sort.isAsc, sort.col, ID]);
+    sort();
+  }, [pagination.page, sortInfo.isAsc, sortInfo.col]);
 
   return {
     genres,
@@ -43,7 +38,7 @@ const sortGenres = (titleID, col, isAsc = true, limit = 50) => {
     pagination,
     setPagination,
     sorting,
-    setTitleID,
+    sort,
   };
 };
 

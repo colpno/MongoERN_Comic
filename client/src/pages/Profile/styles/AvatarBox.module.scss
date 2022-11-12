@@ -1,0 +1,10 @@
+@use "assets/styles/variables" as var;
+
+.avatars-container {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var.$gray-300;
+
+  :global([class*="col"]) {
+    margin-bottom: 0.4rem;
+  }
+}

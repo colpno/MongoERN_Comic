@@ -6,8 +6,8 @@ import { useEffect, useMemo, useState } from "react";
 
 import { LineChart, NoData } from "features";
 import { getAllChapters, getAllChaptersByTitleID } from "services/chapter";
-import { getAllChapterReportsByTitleID } from "services/chapterReport";
-import { getAllTitleReportsByTitleID } from "services/titleReport";
+import { getAllChapterReportsByProperty } from "services/chapterReport";
+import { getAllTitleReportsByProperty } from "services/titleReport";
 import { getChartColors, getMonthArray } from "utils/constants";
 import { formatTime } from "utils/convertTime";
 import SelectorContainer from "./components/SelectorContainer";
@@ -36,7 +36,7 @@ function Statistic() {
     () =>
       titles.length > 0
         ? titles.reduce((options, title) => {
-            return [...options, { value: title.id, label: title.titleName }];
+            return [...options, { value: title.id, label: title.name }];
           }, [])
         : [],
     [chapters]
@@ -45,10 +45,7 @@ function Statistic() {
     () =>
       chapters.length > 0
         ? chapters.reduce((options, chapter) => {
-            return [
-              ...options,
-              { value: chapter.id, label: chapter.titleName },
-            ];
+            return [...options, { value: chapter.id, label: chapter.name }];
           }, [])
         : [],
     [ID.titleID, chapters]
@@ -57,12 +54,12 @@ function Statistic() {
     titleReports,
     chartLikeData: titleReportLikes,
     chartViewData: titleReportViews,
-  } = getAllTitleReportsByTitleID(ID.titleID);
+  } = getAllTitleReportsByProperty({ titleId: ID.titleID });
   const {
     chapterReports,
     chartLikeData: chapterReportLikes,
     chartViewData: chapterReportViews,
-  } = getAllChapterReportsByTitleID(ID.chapterID);
+  } = getAllChapterReportsByProperty({ chapterId: ID.chapterID });
 
   const [titleChart, setTitleChart] = useState({ likeData: [], viewData: [] });
   useEffect(() => {

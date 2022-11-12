@@ -13,7 +13,7 @@ const cx = classNames.bind(styles);
 function ReadingHistory() {
   const user = useSelector((state) => state.user.user);
   const { readingHistories, pagination, setPagination } =
-    getLimitedReadingHistoriesByUserID(user.id, 25);
+    getLimitedReadingHistoriesByUserID(user.guid, 25);
   const hasData = readingHistories.length > 0;
 
   const calculateCountdown = (date) => {

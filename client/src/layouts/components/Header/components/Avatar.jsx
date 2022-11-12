@@ -1,13 +1,11 @@
 import classNames from "classnames/bind";
 import { useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import { Image } from "components";
 import Button from "components/Button";
-import { useClickOutSide } from "hooks";
-import { logout } from "libs/redux/slices/userSlice";
+import { useClickOutSide, useLogout } from "hooks";
 import styles from "../assets/styles/Avatar.module.scss";
 import getAvatarMenu from "../utils/getAvatarMenu";
 import AvatarDropdownList from "./AvatarDropdownList";
@@ -15,18 +13,12 @@ import AvatarDropdownList from "./AvatarDropdownList";
 const cx = classNames.bind(styles);
 
 function Avatar() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const { logout } = useLogout("/");
   const [showMenu, setShowMenu] = useState(false);
   const avatarRef = useClickOutSide(showMenu, () => setShowMenu(false));
   const user = useSelector((state) => state.user.user);
-  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-  const menu = getAvatarMenu(cx, user, isLoggedIn);
-
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate("/");
-  };
+  const isLoggingIn = useSelector((state) => state.user.isLoggingIn);
+  const menu = getAvatarMenu(cx, user, isLoggingIn);
 
   return (
     <div className={cx("dropdown-avatar")} ref={avatarRef}>
@@ -40,16 +32,16 @@ function Avatar() {
           alt="User avatar"
           className={cx("avatar__icon")}
         />
-        <span className={cx("avatar__name")}>{user.userName}</span>
+        <span className={cx("avatar__name")}>{user.username}</span>
         <BiChevronDown className={cx("avatar__chevron-icon")} />
       </Button>
 
       {showMenu && (
         <AvatarDropdownList
           cx={cx}
-          isLoggedIn={isLoggedIn}
+          isLoggingIn={isLoggingIn}
           menu={menu}
-          logoutClick={handleLogout}
+          logoutClick={logout}
         />
       )}
     </div>

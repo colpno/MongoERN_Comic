@@ -25,8 +25,8 @@ const sortTicketHistories = (titleID, col, isAsc = true, limit = 50) => {
   const normalSort = async () => {
     try {
       const response = await ticketHistoryApi.sort(ID, sort.col, sortOrder(), {
-        _limit: pagination.limit,
-        _page: pagination.page,
+        limit: pagination.limit,
+        page: pagination.page,
       });
       const converted = convertTicketHistoriesPropertyToString(response.data);
       setTicketHistories(converted);

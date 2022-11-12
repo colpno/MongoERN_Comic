@@ -125,19 +125,6 @@ export const TitleArray = () => {
   ];
 };
 
-export const approveStatusString = (status) => {
-  switch (status) {
-    case 0:
-      return "Đã duyệt";
-    case 1:
-      return "Chờ duyệt";
-    case 2:
-      return "Từ chối";
-    default:
-      return "Bản nháp";
-  }
-};
-
 export const ChapterArray = () => {
   return [
     {

@@ -10,6 +10,14 @@
     justify-content: space-between;
     margin-bottom: 20px;
     padding: 0;
+
+    & > *:first-child {
+      padding-left: 0;
+    }
+
+    & > *:last-child {
+      padding: 0;
+    }
   }
 
   &__header__total {
@@ -22,6 +30,8 @@
 
   &__header__create {
     height: 42px;
+    padding: 9.5px min(25px, 1vw - 0.1rem);
+
     display: flex;
     align-items: center;
 

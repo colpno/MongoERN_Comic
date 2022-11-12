@@ -17,17 +17,17 @@ const handleSearchTitleNameAuthor = (searchedArray, searchValue, limit) => {
   let index = 0;
 
   return searchedArray.reduce((titleArray, title) => {
-    const { titleName, authors } = title;
+    const { name, author } = title;
 
     if (
       index !== limit &&
-      checkContains(titleName, searchValue) &&
-      checkContains(authors, searchValue)
+      checkContains(name, searchValue) &&
+      checkContains(author, searchValue)
     ) {
       titleArray.push({
         ...title,
-        titleName: handleHighlightText(titleName, searchValue),
-        authors: handleHighlightText(authors, searchValue),
+        name: handleHighlightText(name, searchValue),
+        author: handleHighlightText(author, searchValue),
       });
       index += 1;
     }
@@ -40,12 +40,12 @@ const handleSearchTitleName = (searchedArray, searchValue, limit) => {
   let index = 0;
 
   return searchedArray.reduce((titleArray, title) => {
-    const { titleName } = title;
+    const { name } = title;
 
-    if (index !== limit && checkContains(titleName, searchValue)) {
+    if (index !== limit && checkContains(name, searchValue)) {
       titleArray.push({
         ...title,
-        titleName: handleHighlightText(titleName, searchValue),
+        name: handleHighlightText(name, searchValue),
       });
       index += 1;
     }
@@ -58,12 +58,12 @@ const handleSearchTitleAuthor = (searchedArray, searchValue, limit) => {
   let index = 0;
 
   return searchedArray.reduce((titleArray, title) => {
-    const { authors } = title;
+    const { author } = title;
 
-    if (index !== limit && checkContains(authors, searchValue)) {
+    if (index !== limit && checkContains(author, searchValue)) {
       titleArray.push({
         ...title,
-        authors: handleHighlightText(authors, searchValue),
+        author: handleHighlightText(author, searchValue),
       });
       index += 1;
     }

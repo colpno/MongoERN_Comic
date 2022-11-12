@@ -10,13 +10,13 @@ function RecentCoinTransactions({ cx, transactions }) {
     <GridTable border={false}>
       {transactions.map((transaction) => {
         const { id, user, amount, createdAt } = transaction;
-        const { userName } = user;
+        const { username } = user;
         const { day, month, year, hour, minute } = formatTime(createdAt);
 
         return (
           <Row key={id}>
             <Col>
-              <span>{userName}</span>
+              <span>{username}</span>
             </Col>
             <Col className={cx("transact-datetime")}>
               <p>{convertToDateString(day, month, year)}</p>

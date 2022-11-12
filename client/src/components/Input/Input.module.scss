@@ -1,7 +1,12 @@
 @use "assets/styles/variables" as var;
 
+.wrapper {
+  position: relative;
+}
+
 .input {
   height: var.$field-height;
+  height: 42px;
   width: 100%;
   border: 1px solid var.$gray-400;
   padding: var.$field-padding;
@@ -14,15 +19,15 @@
   }
 }
 
-.input.is-invalid + .letter-counter {
-  right: 35px;
-}
-
 .letter-counter {
   position: absolute;
-  top: calc(var.$field-height / 2);
+  top: calc(var.$field-height / 2 - 1px);
   right: 20px;
   transform: translateY(-50%);
   color: #ccc;
   pointer-events: none;
+}
+
+.input:global(.is-invalid) + .letter-counter {
+  right: 35px;
 }

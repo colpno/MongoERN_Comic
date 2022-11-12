@@ -13,10 +13,12 @@ export default function getUsers(req, res) {
   const { filter, search } = separateOtherParams(others);
 
   // URL: ?column_like=...
-  if (Object.keys(filter).length > 0) return filterQuery(res, table, filter, page, limit);
+  if (Object.keys(filter).length > 0)
+    return filterQuery(res, table, filter, page, limit, sort, order);
 
   // URL: ?column=...
-  if (Object.keys(search).length > 0) return searchQuery(res, table, search, page, limit);
+  if (Object.keys(search).length > 0)
+    return searchQuery(res, table, search, page, limit, sort, order);
 
   // URL: ?sort=column&order=...
   if (sort && order) return sortQuery(res, table, sort, order, page, limit);

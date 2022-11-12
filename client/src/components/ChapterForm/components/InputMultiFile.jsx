@@ -1,21 +1,57 @@
 import PropTypes from "prop-types";
+import { useEffect } from "react";
 import { FiUpload } from "react-icons/fi";
+
 import "../assets/InputMultiFile.scss";
 
 function InputMultiFile({
   field,
   imageSize,
   fileSize,
-  handleImagePreview,
+  blobs,
+  setBlobs,
+  setFieldValue,
   ...attributes
 }) {
   const { accept, multiple, disabled } = attributes;
   const { width, height } = imageSize;
 
+  const handleImagePreview = (e) => {
+    const { files } = e.target;
+    const fileArray = Array.from(files);
+    const data = [...field.value];
+    const newBlobs = [];
+
+    for (let i = 0; i < fileArray.length; i++) {
+      const file = fileArray[i];
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        data.push(reader.result);
+      };
+
+      const blob = URL.createObjectURL(file);
+      newBlobs.push(blob);
+    }
+
+    setFieldValue(field.name, data);
+    setBlobs((prev) => [...prev, ...newBlobs]);
+  };
+
+  useEffect(() => {
+    return () => {
+      Object.keys(blobs)?.forEach((blob) => {
+        URL.revokeObjectURL(blob);
+      });
+    };
+  }, [blobs]);
+
   return (
     <div className="multi-input-file-wrapper">
       <input
-        {...field}
+        name={field.name}
+        onBlur={field.onBlur}
         onChange={handleImagePreview}
         type="file"
         accept={accept}
@@ -45,14 +81,10 @@ function InputMultiFile({
 InputMultiFile.propTypes = {
   field: PropTypes.shape({
     name: PropTypes.string.isRequired,
-    value: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.arrayOf(PropTypes.string),
-    ]).isRequired,
+    value: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     onBlur: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
   }).isRequired,
-  handleImagePreview: PropTypes.func.isRequired,
   fileSize: PropTypes.number,
   imageSize: PropTypes.shape({
     width: PropTypes.number,
@@ -63,6 +95,9 @@ InputMultiFile.propTypes = {
     multiple: PropTypes.bool,
     disabled: PropTypes.bool,
   }),
+  blobs: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  setBlobs: PropTypes.func.isRequired,
+  setFieldValue: PropTypes.func.isRequired,
 };
 
 InputMultiFile.defaultProps = {

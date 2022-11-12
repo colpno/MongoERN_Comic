@@ -1,4 +1,4 @@
-import hiredTitleApi from "api/hiredTitleApi";
+import hiredChapterApi from "api/hiredChapterApi";
 import { useEffect, useState } from "react";
 
 const sortHiredChapters = (titleID, col, isAsc = true, limit = 50) => {
@@ -23,9 +23,9 @@ const sortHiredChapters = (titleID, col, isAsc = true, limit = 50) => {
 
   const normalSort = async () => {
     try {
-      const response = await hiredTitleApi.sort(ID, sort.col, sortOrder(), {
-        _limit: pagination.limit,
-        _page: pagination.page,
+      const response = await hiredChapterApi.sort(ID, sort.col, sortOrder(), {
+        limit: pagination.limit,
+        page: pagination.page,
       });
       setHiredChapters(response.data);
       setPagination({ ...pagination, total: response.pagination.total });

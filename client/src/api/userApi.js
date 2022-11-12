@@ -11,20 +11,19 @@ const userApi = {
     return axiosClient.get(`${url}/${id}`);
   },
 
-  add: (user) => axiosClient.post(url, user),
-
-  delete: (id) => axiosClient.get(`${url}/${id}`),
+  delete: (id) =>
+    axiosClient.delete(`${url}/delete/${id}`, { withCredentials: true }),
 
   sort: (propertyObj, key, order, params) => {
     const propertyKey = Object.keys(propertyObj)[0];
     if (propertyKey) {
       const queryStr = `${propertyKey}=${propertyObj[propertyKey]}&`;
-      return axiosClient.get(`${url}?${queryStr}_sort=${key}&_order=${order}`, {
+      return axiosClient.get(`${url}?${queryStr}sort=${key}&order=${order}`, {
         params,
       });
     }
 
-    return axiosClient.get(`${url}?_sort=${key}&_order=${order}`, {
+    return axiosClient.get(`${url}?sort=${key}&order=${order}`, {
       params,
     });
   },

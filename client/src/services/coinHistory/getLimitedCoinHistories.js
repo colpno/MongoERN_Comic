@@ -13,8 +13,8 @@ const getLimitedCoinHistories = (limit) => {
   const fetchLimitCoinHistories = async () => {
     try {
       const response = await coinHistoryApi.getAll({
-        _page: pagination.page,
-        _limit: pagination.limit,
+        page: pagination.page,
+        limit: pagination.limit,
       });
       const converted = convertCoinHistoriesPropertyToString(response.data);
       setCoinHistories(converted);

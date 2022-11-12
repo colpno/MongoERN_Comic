@@ -24,8 +24,8 @@ const sortReadingHistories = (titleID, col, isAsc = true, limit = 50) => {
   const normalSort = async () => {
     try {
       const response = await readingHistoryApi.sort(ID, sort.col, sortOrder(), {
-        _limit: pagination.limit,
-        _page: pagination.page,
+        limit: pagination.limit,
+        page: pagination.page,
       });
       setReadingHistories(response.data);
       setPagination({ ...pagination, total: response.pagination.total });

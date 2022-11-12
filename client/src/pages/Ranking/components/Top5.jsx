@@ -26,6 +26,7 @@ function Top5({ titles }) {
             >
               <RankingFigure
                 data={data}
+                rank={index + 1}
                 classN={{
                   bookmark: cx("icon-bookmark"),
                   boxImg: cx("box-img"),
@@ -45,6 +46,7 @@ function Top5({ titles }) {
             >
               <RankingFigure
                 data={data}
+                rank={index + 3}
                 classN={{
                   bookmark: cx("icon-bookmark"),
                 }}
@@ -61,7 +63,7 @@ function Top5({ titles }) {
               key={index}
               className={cx("top5-wrapper__cards__card", "top-4-5")}
             >
-              <RankingFigure data={data} />
+              <RankingFigure data={data} rank={index + 4} />
             </Col>
           );
         })}

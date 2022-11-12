@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
 import { memo } from "react";
@@ -9,8 +10,8 @@ import { ChargeIcon, CircleC, CircleP } from "assets/images";
 import Button from "components/Button";
 import { NoData } from "features";
 import styles from "pages/Title/assets/styles/ComicChapters.module.scss";
-import separateNumber from "utils/separateNumber";
 import { convertToDateString, formatTime } from "utils/convertTime";
+import { separateNumberDigit } from "utils";
 
 const cx = classNames.bind(styles);
 
@@ -38,27 +39,23 @@ function ComicChapters({ title, chapters, user, isDESCSorting, sorting }) {
           </div>
           <div className={cx("chapters__content")}>
             {chapters.map((chapter) => {
-              const freeVisible = user.paid || chapter.free;
-              const chargeVisible = !user.paid && chapter.charge;
-              const coinVisible = !user.paid && chapter.coin;
-              const pointVisible = !user.paid && chapter.point;
-              const { day, month, year } = formatTime(chapter.releaseDay);
+              const { day, month, year } = formatTime(chapter.createdAt);
 
               return (
                 <Button
                   wrapper
-                  to={`${useLocation().pathname}/${chapter.order}`}
+                  to={`${useLocation().pathname}/${chapter.guid}`}
                   className={cx("chapters__content__chapter")}
-                  key={chapter.id}
+                  key={chapter.guid}
                 >
                   <div className={cx("chapters__content__chapter__box-img")}>
-                    <img src={chapter.coverImage} alt={chapter.titleName} />
+                    <img src={chapter.cover} alt={chapter.name} />
                   </div>
                   <div className={cx("chapters__content__chapter__info")}>
-                    <h4 className={cx("title")}>{chapter.titleName}</h4>
+                    <h4 className={cx("title")}>{chapter.name}</h4>
                     <div className={`like ${cx("like")}`}>
                       <AiFillHeart />
-                      <span>{separateNumber(chapter.like)}</span>
+                      <span>{separateNumberDigit(chapter.like)}</span>
                     </div>
                     <small className={cx("release-date")}>
                       {convertToDateString(day, month, year)}
@@ -67,18 +64,16 @@ function ComicChapters({ title, chapters, user, isDESCSorting, sorting }) {
                   {/* TODO: if chapter cost coin or point then show pop up when click on a chapter */}
                   {/* TODO: when bought, free btn is showed up instead up others */}
                   <div className={cx("chapters__content__chapter__price")}>
-                    {!freeVisible && (
-                      <Button
-                        outline
-                        success
-                        className={cx(
-                          "chapters__content__chapter__price__free"
-                        )}
-                      >
-                        Mien phi
-                      </Button>
-                    )}
-                    {chargeVisible && (
+                    {/* {!freeVisible && ( */}
+                    <Button
+                      outline
+                      success
+                      className={cx("chapters__content__chapter__price__free")}
+                    >
+                      Miễn phí
+                    </Button>
+                    {/* )} */}
+                    {/* {chargeVisible && (
                       <Button
                         outline
                         success
@@ -94,11 +89,11 @@ function ComicChapters({ title, chapters, user, isDESCSorting, sorting }) {
                         </div>
                         Mien phi
                       </Button>
-                    )}
-                    {chapter.charge && (chapter.point || chapter.coin) && (
+                    )} */}
+                    {/* {chapter.charge && (chapter.point || chapter.coin) && (
                       <div className={cx("divider")} />
-                    )}
-                    {pointVisible && (
+                    )} */}
+                    {/* {pointVisible && (
                       <div
                         className={cx(
                           "chapters__content__chapter__price__point"
@@ -107,8 +102,8 @@ function ComicChapters({ title, chapters, user, isDESCSorting, sorting }) {
                         <span>{title.point}</span>
                         <CircleP />
                       </div>
-                    )}
-                    {chapter.point && chapter.coin && (
+                    )} */}
+                    {/* {chapter.point && chapter.coin && (
                       <div className={cx("divider")} />
                     )}
                     {coinVisible && (
@@ -120,7 +115,7 @@ function ComicChapters({ title, chapters, user, isDESCSorting, sorting }) {
                         <span>{title.coin}</span>
                         <CircleC />
                       </div>
-                    )}
+                    )} */}
                   </div>
                 </Button>
               );
@@ -141,26 +136,19 @@ function ComicChapters({ title, chapters, user, isDESCSorting, sorting }) {
 ComicChapters.propTypes = {
   title: PropTypes.shape({
     totalChapter: PropTypes.number.isRequired,
-    chargeTime: PropTypes.number.isRequired,
-    point: PropTypes.number.isRequired,
-    coin: PropTypes.number.isRequired,
   }).isRequired,
   chapters: PropTypes.arrayOf(
     PropTypes.shape({
-      free: PropTypes.bool.isRequired,
-      charge: PropTypes.bool.isRequired,
-      coin: PropTypes.bool.isRequired,
-      point: PropTypes.bool.isRequired,
+      cost: PropTypes.bool.isRequired,
       order: PropTypes.number.isRequired,
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-      coverImage: PropTypes.string.isRequired,
-      titleName: PropTypes.string.isRequired,
+      cover: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
       like: PropTypes.number.isRequired,
-      releaseDay: PropTypes.string.isRequired,
     }).isRequired
   ).isRequired,
   user: PropTypes.shape({
-    paid: PropTypes.bool.isRequired,
+    // paid: PropTypes.bool.isRequired,
   }).isRequired,
   isDESCSorting: PropTypes.bool.isRequired,
   sorting: PropTypes.func.isRequired,

@@ -3,17 +3,19 @@ import axiosClient from "libs/axios/axiosClient";
 const url = "/follows";
 
 const followApi = {
-  getAll: (params) => axiosClient.get(`${url}?_expand=title`, { params }),
+  getAll: (params) => axiosClient.get(url, { params }),
 
   getAllByUserID: (userId, params) =>
-    axiosClient.get(`${url}?userId=${userId}&_expand=title`, { params }),
+    axiosClient.get(`${url}?userId=${userId}`, { params }),
 
-  add: (title) => axiosClient.post(url, title),
+  add: (follow) =>
+    axiosClient.post(`${url}/create`, follow, { withCredentials: true }),
 
-  delete: (id) => axiosClient.get(`${url}/${id}`),
+  delete: (titleId) =>
+    axiosClient.delete(`${url}/delete/${titleId}`, { withCredentials: true }),
 
   sort: (key, order, params) =>
-    axiosClient.get(`${url}?_sort=${key}&_order=${order}`, { params }),
+    axiosClient.get(`${url}?sort=${key}&order=${order}`, { params }),
 
   filter: (filterObj) => {
     const key = Object.keys(filterObj)[0];

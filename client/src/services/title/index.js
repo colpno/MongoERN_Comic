@@ -5,3 +5,6 @@ export { default as getTitleByID } from "./getTitleByID";
 export { default as sortTitles } from "./sortTitles";
 export { default as sortTitlesByUserID } from "./sortTitlesByUserID";
 export { default as searchTitle } from "./searchTitle";
+export { default as addTitle } from "./addTitle";
+export { default as updateTitle } from "./updateTitle";
+export { default as deleteTitle } from "./deleteTitle";

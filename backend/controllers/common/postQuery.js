@@ -13,20 +13,38 @@ export default function postQuery(req, res, table) {
   jwt.verify(token, process.env.ACCESS_TOKEN_KEY, (error, userInfo) => {
     if (error) return res.status(403).json('Invalid token');
 
-    const sql = `
-      INSERT INTO \`${table}\`
-      (${bodyKeys.map((key) => `\`${key}\``)},\`guid\`,\`userId\`,\`createdAt\`,\`updatedAt\`)
-      VALUES (?)
-    `;
+    if (userInfo.role === 'admin') {
+      const sql = `
+        INSERT INTO \`${table}\`
+        (${bodyKeys.map((key) => `\`${key}\``)},\`guid\`,\`createdAt\`,\`updatedAt\`)
+        VALUES (?)
+      `;
 
-    const now = getCurrentDateTime();
-    const guid = uuidv4();
-    const values = [...bodyKeys.map((dataKey) => body[dataKey]), guid, userInfo.guid, now, now];
+      const now = getCurrentDateTime();
+      const guid = uuidv4();
+      const values = [...bodyKeys.map((dataKey) => body[dataKey]), guid, now, now];
 
-    db.query(sql, [values], (err, data) => {
-      if (err) return res.status(500).json(err);
-      if (data.affectedRows > 0) return res.status(200).json(data);
-      return res.status(400).json('Something went wrong');
-    });
+      db.query(sql, [values], (err, data) => {
+        if (err) return res.json(err);
+        if (data.affectedRows > 0) return res.json(data);
+        return res.json('Something went wrong');
+      });
+    } else {
+      const sql = `
+        INSERT INTO \`${table}\`
+        (${bodyKeys.map((key) => `\`${key}\``)},\`guid\`,\`userId\`,\`createdAt\`,\`updatedAt\`)
+        VALUES (?)
+      `;
+
+      const now = getCurrentDateTime();
+      const guid = uuidv4();
+      const values = [...bodyKeys.map((dataKey) => body[dataKey]), guid, userInfo.guid, now, now];
+
+      db.query(sql, [values], (err, data) => {
+        if (err) return res.json(err);
+        if (data.affectedRows > 0) return res.json(data);
+        return res.json('Something went wrong');
+      });
+    }
   });
 }

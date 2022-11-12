@@ -7,28 +7,39 @@ import MemberTableRow from "./MemberTableRow";
 function MemberTable({
   members,
   popup,
-  setPopup,
   pagination,
   setPagination,
   sorting,
+  setPopup,
+  setDeleteItem,
+  setUpdate,
+  setShowForm,
 }) {
   return (
     <>
       <GridTable
         head={[
-          { label: "#", name: "index", sm: 1 },
-          { label: "Tên", name: "userName" },
+          { label: "#", name: "id", sm: 1 },
+          { label: "Tên", name: "username" },
           { label: "Coin", name: "coin" },
-          { label: "Point", name: "point" },
-          { label: "Vé mua", name: "buyTicket" },
-          { label: "Vé thuê", name: "rentTicket" },
+          { label: "Thu nhập (VNĐ)", name: "income" },
+          // { label: "Point", name: "point" },
+          // { label: "Vé mua", name: "buyTicket" },
+          // { label: "Vé thuê", name: "rentTicket" },
           { label: "Ngày tạo", name: "createdAt" },
           { label: "Ngày sửa", name: "updatedAt" },
-          { label: "" },
+          { label: "", sm: 1 },
         ]}
         sorting={sorting}
       >
-        <MemberTableRow members={members} popup={popup} setPopup={setPopup} />
+        <MemberTableRow
+          members={members}
+          popup={popup}
+          setPopup={setPopup}
+          setDeleteItem={setDeleteItem}
+          setUpdate={setUpdate}
+          setShowForm={setShowForm}
+        />
       </GridTable>
       <Pagination pagination={pagination} setPagination={setPagination} />
     </>
@@ -42,6 +53,9 @@ MemberTable.propTypes = {
   pagination: PropTypes.shape({}).isRequired,
   setPagination: PropTypes.func.isRequired,
   sorting: PropTypes.func.isRequired,
+  setDeleteItem: PropTypes.func.isRequired,
+  setUpdate: PropTypes.func.isRequired,
+  setShowForm: PropTypes.func.isRequired,
 };
 
 export default MemberTable;

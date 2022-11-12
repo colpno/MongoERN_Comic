@@ -21,11 +21,8 @@ function ReadingNav({ cx, chapter, totalChapter, titleId }) {
       >
         <IoChevronBackCircleOutline />
       </Button>
-      <span
-        className={cx("reading-header__nav__title")}
-        title={chapter.titleName}
-      >
-        {chapter.titleName}
+      <span className={cx("reading-header__nav__title")} title={chapter.name}>
+        {chapter.name}
       </span>
       <Button
         text
@@ -47,10 +44,7 @@ ReadingNav.propTypes = {
   cx: PropTypes.func.isRequired,
   chapter: PropTypes.shape({
     order: PropTypes.number.isRequired,
-    titleName: PropTypes.string.isRequired,
-    title: PropTypes.shape({
-      titleName: PropTypes.string.isRequired,
-    }).isRequired,
+    name: PropTypes.string.isRequired,
   }).isRequired,
   totalChapter: PropTypes.number.isRequired,
   titleId: PropTypes.string.isRequired,

@@ -2,6 +2,9 @@
 @use "assets/styles/mixins";
 
 .top5-wrapper__cards__card {
+  padding-left: 6px;
+  padding-right: 6px;
+
   &:nth-child(1),
   &:nth-child(2) {
     margin-bottom: 12px;
@@ -48,5 +51,17 @@
 
   &:nth-child(3) :global(.icon-bookmark) {
     background-color: variables.$blue;
+  }
+}
+
+@media (max-width: 992px) {
+  .top5-wrapper__cards__card:nth-child(3) {
+    margin-bottom: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .top5-wrapper__cards__card:nth-child(4) {
+    margin-bottom: 12px;
   }
 }

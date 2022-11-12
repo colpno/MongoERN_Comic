@@ -8,7 +8,7 @@ const getTitleByID = (ID) => {
   const fetchTitle = async () => {
     try {
       const response = await titleApi.getOneByID(ID);
-      const converted = convertTitlePropertyToString(response);
+      const converted = convertTitlePropertyToString(response[0]);
       setTitle(converted);
     } catch (error) {
       throw new Error(error);

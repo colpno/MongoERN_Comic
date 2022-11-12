@@ -4,24 +4,24 @@ import { convertUsersPropertyToString } from "utils/convertArrayPropertyToString
 
 const sortUsersByProperty = (property, col, isAsc = true, limit = 50) => {
   const [users, setUsers] = useState([]);
-  const [sort, setSort] = useState({ isAsc, col });
+  const [sortInfo, setSortInfo] = useState({ isAsc, col });
   const [pagination, setPagination] = useState({
     page: 1,
     limit,
     total: 0,
   });
 
-  const sortOrder = () => (sort.isAsc ? "asc" : "desc");
+  const sortOrder = () => (sortInfo.isAsc ? "asc" : "desc");
 
   const sorting = (column) => {
-    setSort({ isAsc: !sort.isAsc, col: column });
+    setSortInfo({ isAsc: !sortInfo.isAsc, col: column });
   };
 
-  const normalSort = async () => {
+  const fetchUser = async () => {
     try {
-      const response = await userApi.sort(property, sort.col, sortOrder(), {
-        _limit: pagination.limit,
-        _page: pagination.page,
+      const response = await userApi.sort(property, sortInfo.col, sortOrder(), {
+        limit: pagination.limit,
+        page: pagination.page,
       });
       const converted = convertUsersPropertyToString(response.data);
       setUsers(converted);
@@ -32,8 +32,8 @@ const sortUsersByProperty = (property, col, isAsc = true, limit = 50) => {
   };
 
   useEffect(() => {
-    normalSort();
-  }, [pagination.page, sort.isAsc, sort.col]);
+    fetchUser();
+  }, [pagination.page, sortInfo.isAsc, sortInfo.col]);
 
   return {
     users,
@@ -41,6 +41,7 @@ const sortUsersByProperty = (property, col, isAsc = true, limit = 50) => {
     pagination,
     setPagination,
     sorting,
+    fetchUser,
   };
 };
 

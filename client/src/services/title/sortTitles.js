@@ -20,8 +20,8 @@ const sortTitles = (col, isAsc, limit = 50) => {
   const normalSort = async () => {
     try {
       const response = await titleApi.sort(sort.col, sortOrder(), {
-        _limit: pagination.limit,
-        _page: pagination.page,
+        limit: pagination.limit,
+        page: pagination.page,
       });
       const converted = convertTitlesPropertyToString(response.data);
       setTitles(converted);

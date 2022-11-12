@@ -4,4 +4,4 @@ export { default as deleteCoinTransaction } from './deleteCoinTransaction.js';
 export { default as getCoinTransactions } from './getCoinTransactions.js';
 export { default as getCoinTransaction } from './getCoinTransaction.js';
 
-export const table = 'title';
+export const table = 'coin_transaction';

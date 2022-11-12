@@ -7,12 +7,13 @@ import YesNoPopupButtons from "./components/YesNoPopupButtons";
 
 const cx = classNames.bind(styles);
 
-function Popup({ popup, setPopup, yesno, size }) {
+function Popup({ popup, setPopup, yesno, width, height }) {
   const { title, content, trigger } = popup;
   let Component = (
     <Button
+      primary
       className={cx("popup__btn-close")}
-      onClick={() => setPopup({ ...popup, trigger: false })}
+      onClick={() => setPopup((prev) => ({ ...prev, trigger: false }))}
     >
       Đóng
     </Button>
@@ -26,14 +27,14 @@ function Popup({ popup, setPopup, yesno, size }) {
     trigger && (
       <Dialog
         onClickOutside={() =>
-          setPopup({
-            ...popup,
+          setPopup((prev) => ({
+            ...prev,
             trigger: false,
             isConfirm: false,
-          })
+          }))
         }
       >
-        <div className={cx("popup")} style={{ width: `${size}px` }}>
+        <div className={cx("popup")} style={{ width: `${width}px`, height }}>
           <div className={cx("popup__head")}>
             <span>{title}</span>
           </div>
@@ -48,17 +49,19 @@ function Popup({ popup, setPopup, yesno, size }) {
 Popup.propTypes = {
   popup: PropTypes.shape({
     title: PropTypes.string.isRequired,
-    content: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
+    content: PropTypes.oneOfType([PropTypes.node, PropTypes.string]).isRequired,
     trigger: PropTypes.bool.isRequired,
   }).isRequired,
   setPopup: PropTypes.func.isRequired,
   yesno: PropTypes.bool,
-  size: PropTypes.number,
+  width: PropTypes.number,
+  height: PropTypes.number,
 };
 
 Popup.defaultProps = {
   yesno: false,
-  size: 400,
+  width: 400,
+  height: 500,
 };
 
 export default Popup;

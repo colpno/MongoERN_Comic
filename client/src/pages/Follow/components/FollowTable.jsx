@@ -1,4 +1,5 @@
 import classNames from "classnames/bind";
+import { Button } from "components";
 import PropTypes from "prop-types";
 import { Col, Row } from "react-bootstrap";
 import { IoTrashSharp } from "react-icons/io5";
@@ -7,45 +8,51 @@ import styles from "../assets/styles/FollowTable.module.scss";
 
 const cx = classNames.bind(styles);
 
-function FollowTable({ popup, setPopup, titles }) {
-  const handlePopup = () => {
+function FollowTable({ setDeletedItem, popup, setPopup, titles }) {
+  const handleClick = (followId) => {
     setPopup({
       ...popup,
       trigger: true,
       title: "Xóa mục yêu thích",
       content: "Bạn có muốn xóa yêu thích?",
     });
+    setDeletedItem(followId);
   };
 
   return (
     <>
       {titles.map((title) => {
         const timeObj = formatTime(title.updatedAt);
+
         return (
-          <Row className={cx("follow__container__content")} key={title.id}>
+          <Row className={cx("follow__container__content")} key={title.guid}>
             <Col
               md={8}
               className={cx("follow__container__content__title-info")}
             >
               <div className={cx("box-img")}>
                 <img
-                  src={title.coverImage}
-                  alt={title.titleName}
+                  src={title.cover}
+                  alt={title.name}
                   className={cx("cover-image")}
                 />
               </div>
               <div>
-                <p className={cx("title")}>{title.titleName}</p>
-                <p className={cx("authors")}>{title.authors}</p>
+                <p className={cx("title")}>{title.name}</p>
+                <p className={cx("author")}>{title.author}</p>
               </div>
             </Col>
             <Col className="center">
               <span>{`${timeObj.day}.${timeObj.month}.${timeObj.year}`}</span>
             </Col>
             <Col className="center">
-              <button type="button" className={cx("trash-can-button")}>
-                <IoTrashSharp onClick={handlePopup} />
-              </button>
+              <Button
+                wrapper
+                className={cx("trash-can-button")}
+                onClick={() => handleClick(title.followId)}
+              >
+                <IoTrashSharp />
+              </Button>
             </Col>
           </Row>
         );
@@ -64,11 +71,12 @@ FollowTable.propTypes = {
   titles: PropTypes.arrayOf(
     PropTypes.shape({
       updatedAt: PropTypes.string.isRequired,
-      coverImage: PropTypes.string.isRequired,
-      titleName: PropTypes.string.isRequired,
-      authors: PropTypes.string.isRequired,
+      cover: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      author: PropTypes.string.isRequired,
     })
   ).isRequired,
+  setDeletedItem: PropTypes.func.isRequired,
 };
 
 export default FollowTable;

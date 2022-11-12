@@ -10,7 +10,8 @@ function BookshelfHeader() {
   const menu = [
     { href: "/bookshelf/follow", label: "Theo dõi" },
     { href: "/bookshelf/history", label: "Lịch sử xem" },
-    { href: "/bookshelf/transaction?tab=purchased-titles", label: "Thuê/Mua" },
+    { href: "/bookshelf/transaction?tab=purchased-titles", label: "Mua" },
+    // { href: "/bookshelf/transaction?tab=purchased-titles", label: "Thuê/Mua" },
   ];
   const pathName = useLocation().pathname;
 

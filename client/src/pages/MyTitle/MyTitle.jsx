@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import { Col, Container, Row } from "react-bootstrap";
 import { AiOutlinePlus } from "react-icons/ai";
@@ -26,39 +25,39 @@ function MyTitle() {
   const user = useSelector((state) => state.user.user);
   const TITLES_PER_PAGE = 50;
   const { titles, pagination, setPagination, sorting } = sortTitlesByUserID(
-    user.id,
-    "index",
+    user.guid,
+    "id",
     true,
     TITLES_PER_PAGE
   );
   const hasData = titles?.length > 0;
 
   return (
-    <div className={cx("my-title")}>
-      <Container className={cx("my-title__header")}>
-        <MyTitleHeader cx={cx} totalTitle={pagination.total} />
-        {hasData && <BtnCreate />}
-      </Container>
+    <Container className={cx("my-title")}>
+      <Row className={cx("my-title__header")}>
+        <Col>
+          <MyTitleHeader cx={cx} totalTitle={pagination.total} />
+        </Col>
+        <Col xs={5} sm={3} lg={20}>
+          {hasData && <BtnCreate />}
+        </Col>
+      </Row>
       {hasData ? (
-        <Container>
-          <Row>
-            <Col>
-              <MyTitleContent
-                sorting={sorting}
-                titles={titles}
-                pagination={pagination}
-                setPagination={setPagination}
-              />
-            </Col>
-          </Row>
-        </Container>
+        <Row>
+          <MyTitleContent
+            sorting={sorting}
+            titles={titles}
+            pagination={pagination}
+            setPagination={setPagination}
+          />
+        </Row>
       ) : (
         <NoData>
           <h5>Hiện tại chưa có truyện nào!</h5>
           <BtnCreate />
         </NoData>
       )}
-    </div>
+    </Container>
   );
 }
 

@@ -5,12 +5,15 @@
 }
 
 .textarea {
-  :global(.ql-container) {
-    padding-bottom: 1.2rem;
-    font-size: 1rem;
-  }
+  padding: 5px 10px 1.8rem;
+  font-size: 1rem;
+  width: 100%;
+  border: 1px solid #ced4da;
+  color: #777;
+  outline: none;
+  border-radius: 4px;
 
-  &.is-invalid {
+  &:global(.is-invalid) {
     border-color: red;
   }
 }
@@ -22,8 +25,8 @@
   bottom: 4px;
   right: 20px;
   color: #ccc;
+}
 
-  .textarea.is-invalid + .text-length {
-    bottom: 36px;
-  }
+.textarea:global(.is-invalid) + .text-length {
+  bottom: 30px;
 }

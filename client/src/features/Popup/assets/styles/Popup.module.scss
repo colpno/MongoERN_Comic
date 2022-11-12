@@ -1,10 +1,12 @@
 @use "assets/styles/variables";
+@use "components/Scrollbar/Scrollbar.module.scss";
 
 .popup {
   background-color: #fff;
   box-shadow: 0 0 10px rgb(0 0 0 / 0.2);
   border-radius: 10px;
   width: 400px;
+  max-height: 70vh;
 
   position: fixed;
   content: "";
@@ -12,6 +14,8 @@
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 21;
+
+  @extend .scrollbar;
 
   &__head {
     padding: 10px 0;
@@ -24,6 +28,7 @@
   &__content {
     padding: 20px;
     line-height: 1.4;
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -45,17 +50,7 @@
     }
   }
 
-  &__btn-close,
-  &__confirm__btn-accept {
-    background-color: variables.$primary;
-    color: variables.$txt-white;
-  }
-
   &__confirm__btn-close {
-    background-color: transparent;
-    border: 1px solid #bbb !important;
-    box-shadow: inset 0 0 5px rgb(0 0 0 / 0.1);
-    color: variables.$txt-black;
     margin-left: 10px !important;
   }
 }

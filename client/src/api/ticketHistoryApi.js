@@ -8,12 +8,14 @@ const ticketHistoryApi = {
 
   getOneByID: (id) => axiosClient.get(`${url}/${id}`),
 
-  add: (coinHistory) => axiosClient.post(url, coinHistory),
+  add: (history) =>
+    axiosClient.post(`${url}/create`, history, { withCredentials: true }),
 
-  delete: (id) => axiosClient.get(`${url}/${id}`),
+  delete: (id) =>
+    axiosClient.delete(`${url}/delete/${id}`, { withCredentials: true }),
 
   sort: (userId, key, order, params) =>
-    axiosClient.get(`${url}?userId=${userId}&_sort=${key}&_order=${order}`, {
+    axiosClient.get(`${url}?userId=${userId}&sort=${key}&order=${order}`, {
       params,
     }),
 

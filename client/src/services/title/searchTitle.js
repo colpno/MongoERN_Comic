@@ -4,22 +4,24 @@ import { convertTitlesPropertyToString } from "utils/convertArrayPropertyToStrin
 
 const searchTitle = (key, value) => {
   const [titles, setTitles] = useState([]);
+  const [reFetch, setReFetch] = useState(false);
 
   useEffect(() => {
     const fetchTitles = async () => {
       try {
-        const response = await titleApi.search({ [key]: value });
+        const response = await titleApi.search(key, value);
         const converted = convertTitlesPropertyToString(response);
         setTitles(converted);
+        setReFetch(false);
       } catch (error) {
         throw new Error(error);
       }
     };
 
-    fetchTitles();
-  }, []);
+    reFetch && fetchTitles();
+  }, [reFetch]);
 
-  return { titles, setTitles };
+  return { titles, setTitles, setReFetch };
 };
 
 export default searchTitle;

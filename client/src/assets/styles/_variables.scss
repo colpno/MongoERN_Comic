@@ -262,7 +262,7 @@ $cyan-900: shade-color($cyan, 80%);
 // );
 
 $primary: hsl(0, 100%, 48%);
-$primary-dark: hsl(0, 100%, 40%);
+$primary-dark: rgb(204, 0, 0);
 $primary-admin: #fa5973;
 $secondary: $gray-600;
 $success: $green;

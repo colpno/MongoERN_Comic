@@ -1,15 +1,12 @@
 export const convertChaptersPropertyToString = (chapters) => {
   const result = chapters.map((chapter) => {
-    const { order, like, view, free, charge, coin, point } = chapter;
+    const { order, like, view, cost } = chapter;
     return {
       ...chapter,
       order: Number.parseInt(order, 10),
       like: Number.parseInt(like, 10),
       view: Number.parseInt(view, 10),
-      free: free === "true",
-      charge: charge === "true",
-      coin: coin === "true",
-      point: point === "true",
+      cost: cost === "0",
     };
   });
 
@@ -17,43 +14,25 @@ export const convertChaptersPropertyToString = (chapters) => {
 };
 
 export const convertChapterPropertyToString = (chapter) => {
-  const { order, like, view, free, charge, coin, point } = chapter;
+  const { order, like, view, cost } = chapter;
   return {
     ...chapter,
     order: Number.parseInt(order, 10),
     like: Number.parseInt(like, 10),
     view: Number.parseInt(view, 10),
-    free: free === "true",
-    charge: charge === "true",
-    coin: coin === "true",
-    point: point === "true",
+    cost: cost === "false",
   };
 };
 
 export const convertTitlesPropertyToString = (titles) => {
   const result = titles.map((title) => {
-    const {
-      index,
-      totalChapter,
-      point,
-      coin,
-      like,
-      view,
-      rank,
-      publish,
-      chargeTime,
-    } = title;
+    const { id, like, view, totalChapter } = title;
     return {
       ...title,
-      index: Number.parseInt(index, 10),
+      id: Number.parseInt(id, 10),
       totalChapter: Number.parseInt(totalChapter, 10),
-      point: Number.parseInt(point, 10),
-      coin: Number.parseInt(coin, 10),
       like: Number.parseInt(like, 10),
       view: Number.parseInt(view, 10),
-      rank: Number.parseInt(rank, 10),
-      publish: Number.parseInt(publish, 10),
-      chargeTime: Number.parseInt(chargeTime, 10),
     };
   });
 
@@ -61,41 +40,24 @@ export const convertTitlesPropertyToString = (titles) => {
 };
 
 export const convertTitlePropertyToString = (title) => {
-  const {
-    index,
-    totalChapter,
-    point,
-    coin,
-    like,
-    view,
-    rank,
-    publish,
-    chargeTime,
-  } = title;
+  const { id, like, view, totalChapter } = title;
   return {
     ...title,
-    index: Number.parseInt(index, 10),
+    id: Number.parseInt(id, 10),
     totalChapter: Number.parseInt(totalChapter, 10),
-    point: Number.parseInt(point, 10),
-    coin: Number.parseInt(coin, 10),
     like: Number.parseInt(like, 10),
     view: Number.parseInt(view, 10),
-    rank: Number.parseInt(rank, 10),
-    publish: Number.parseInt(publish, 10),
-    chargeTime: Number.parseInt(chargeTime, 10),
   };
 };
 
 export const convertUsersPropertyToString = (users) => {
   const result = users.map((user) => {
-    const { index, buyTicket, rentTicket, coin, point } = user;
+    const { id, coin, income } = user;
     return {
       ...user,
-      index: Number.parseInt(index, 10),
-      buyTicket: Number.parseInt(buyTicket, 10),
-      rentTicket: Number.parseInt(rentTicket, 10),
+      id: Number.parseInt(id, 10),
       coin: Number.parseInt(coin, 10),
-      point: Number.parseInt(point, 10),
+      income: Number.parseInt(income, 10),
     };
   });
 
@@ -103,14 +65,12 @@ export const convertUsersPropertyToString = (users) => {
 };
 
 export const convertUserPropertyToString = (user) => {
-  const { index, buyTicket, rentTicket, coin, point } = user;
+  const { id, coin, income } = user;
   return {
     ...user,
-    index: Number.parseInt(index, 10),
-    buyTicket: Number.parseInt(buyTicket, 10),
-    rentTicket: Number.parseInt(rentTicket, 10),
+    id: Number.parseInt(id, 10),
+    income: Number.parseInt(income, 10),
     coin: Number.parseInt(coin, 10),
-    point: Number.parseInt(point, 10),
   };
 };
 

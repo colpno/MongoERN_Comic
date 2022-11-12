@@ -13,8 +13,8 @@ const getLimitedTitles = (limit) => {
   const fetchLimitTitles = async () => {
     try {
       const response = await titleApi.getAll({
-        _page: pagination.page,
-        _limit: pagination.limit,
+        page: pagination.page,
+        limit: pagination.limit,
       });
       const converted = convertTitlesPropertyToString(response.data);
       setTitles(converted);

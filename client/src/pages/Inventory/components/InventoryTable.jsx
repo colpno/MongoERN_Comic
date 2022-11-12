@@ -24,9 +24,9 @@ function InventoryTable({ hiredChapters }) {
           >
             <Col md={6} className={cx("chapter")}>
               <div className={cx("box-img")}>
-                <img src={chapter.coverImage} alt={chapter.titleName} />
+                <img src={chapter.cover} alt={chapter.name} />
               </div>
-              <span className={cx("chapter")}>{chapter.titleName}</span>
+              <span className={cx("chapter")}>{chapter.name}</span>
             </Col>
             <Col>
               <span className={cx("chapter")}>
@@ -59,8 +59,8 @@ InventoryTable.propTypes = {
       expiredDay: PropTypes.string.isRequired,
       id: PropTypes.string.isRequired,
       chapter: PropTypes.shape({
-        coverImage: PropTypes.string.isRequired,
-        titleName: PropTypes.string.isRequired,
+        cover: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
       }).isRequired,
     })
   ).isRequired,

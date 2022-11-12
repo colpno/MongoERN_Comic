@@ -1,4 +1,4 @@
-import hiredTitleApi from "api/hiredTitleApi";
+import hiredChapterApi from "api/hiredChapterApi";
 import { useEffect, useState } from "react";
 
 const getAllHiredChaptersByUserID = (userID, limit) => {
@@ -11,9 +11,9 @@ const getAllHiredChaptersByUserID = (userID, limit) => {
 
   const fetchLimitHiredChapters = async () => {
     try {
-      const response = await hiredTitleApi.getAll(userID, {
-        _page: pagination.page,
-        _limit: pagination.limit,
+      const response = await hiredChapterApi.getAll(userID, {
+        page: pagination.page,
+        limit: pagination.limit,
       });
       setHiredChapters(response.data);
       setPagination((prev) => {

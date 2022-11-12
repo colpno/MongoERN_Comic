@@ -4,7 +4,6 @@
   display: flex;
   align-items: center;
   position: relative;
-  margin-bottom: 20px;
 }
 
 .radio {
@@ -38,8 +37,8 @@
   &::before {
     position: absolute;
     content: "";
-    top: 50%;
-    left: 50%;
+    top: 49%;
+    left: 52%;
     transform: translate(-50%, -50%);
     width: 70%;
     height: 70%;

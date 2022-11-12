@@ -13,37 +13,39 @@ function GridTable({ head, children, border, sorting }) {
   const classes = cx("grid-table", { border });
 
   return (
-    <Row className={classes}>
-      {head.length > 0 && (
-        <Row className={cx("grid-table__head")}>
-          {head.map((item, index) => {
-            const { label, name, center, sm, md, lg, xl, xxl } = item;
+    <Row className={`${classes} grid-table`}>
+      <Col>
+        {head.length > 0 && (
+          <Row className={cx("grid-table__head")}>
+            {head.map((item, index) => {
+              const { label, name, center, sm, md, lg, xl, xxl } = item;
 
-            return (
-              <Col
-                sm={sm}
-                md={md}
-                lg={lg}
-                xl={xl}
-                xxl={xxl}
-                key={index}
-                className={center && "center"}
-                onClick={() => name && sorting(name)}
-              >
-                {name ? (
-                  <Button text className={cx("wrapper--sort")}>
-                    <span className={cx("label")}>{label}</span>
-                    <FaSort className={cx("sort-icon")} />
-                  </Button>
-                ) : (
-                  <span>{label}</span>
-                )}
-              </Col>
-            );
-          })}
-        </Row>
-      )}
-      {children}
+              return (
+                <Col
+                  sm={sm}
+                  md={md}
+                  lg={lg}
+                  xl={xl}
+                  xxl={xxl}
+                  key={index}
+                  className={center && "center"}
+                  onClick={() => name && sorting(name)}
+                >
+                  {name ? (
+                    <Button text className={cx("wrapper--sort")}>
+                      <span className={cx("label")}>{label}</span>
+                      <FaSort className={cx("sort-icon")} />
+                    </Button>
+                  ) : (
+                    <span>{label}</span>
+                  )}
+                </Col>
+              );
+            })}
+          </Row>
+        )}
+        {children}
+      </Col>
     </Row>
   );
 }

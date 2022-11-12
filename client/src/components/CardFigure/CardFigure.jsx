@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import Button from "components/Button";
 import { Image } from "components/Image";
 import PropTypes from "prop-types";
@@ -25,14 +26,10 @@ function CardFigure(props) {
       to={to}
       className={`card-figure${horizontal ? " horizontal" : ""}`}
     >
-      <Image
-        src={data.coverImage}
-        alt={data.titleName}
-        className="card-figure__image"
-      />
+      <Image src={data.cover} alt={data.name} className="card-figure__image" />
       <figcaption className="card-figure__content">
         <div className="card-figure__content__wrapper">
-          <h5 className="card-figure__content__title">{data.titleName}</h5>
+          <h5 className="card-figure__content__title">{data.name}</h5>
           {summary && (
             <p className="card-figure__content__summary">{data.summary}</p>
           )}
@@ -41,7 +38,7 @@ function CardFigure(props) {
         <div className="card-figure__content__wrapper">
           {author && (
             <small className="card-figure__content__author">
-              {data.authors}
+              {data.author}
             </small>
           )}
           {(likeCount || viewCount) && (
@@ -68,10 +65,10 @@ function CardFigure(props) {
 
 CardFigure.propTypes = {
   data: PropTypes.shape({
-    titleName: PropTypes.string.isRequired,
-    coverImage: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    cover: PropTypes.string.isRequired,
     summary: PropTypes.string.isRequired,
-    authors: PropTypes.oneOfType([
+    author: PropTypes.oneOfType([
       PropTypes.string.isRequired,
       PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     ]),

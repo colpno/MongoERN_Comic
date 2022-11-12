@@ -37,9 +37,9 @@ function Pagination({ pagination, setPagination }) {
   };
 
   return (
-    <div className={cx("pagination")}>
+    <>
       {totalPage > 1 && (
-        <>
+        <div className={cx("pagination")}>
           <Button
             text
             className={cx("prev")}
@@ -96,9 +96,10 @@ function Pagination({ pagination, setPagination }) {
           >
             Next
           </Button>
-        </>
+        </div>
       )}
-    </div>
+      {}
+    </>
   );
 }
 

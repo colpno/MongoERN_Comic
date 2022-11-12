@@ -1,4 +1,4 @@
-import hiredTitleApi from "api/hiredTitleApi";
+import hiredChapterApi from "api/hiredChapterApi";
 import { useEffect, useState } from "react";
 
 const searchHiredTitle = (key, value) => {
@@ -7,7 +7,7 @@ const searchHiredTitle = (key, value) => {
   useEffect(() => {
     const fetchHiredChapters = async () => {
       try {
-        const response = await hiredTitleApi.search({ [key]: value });
+        const response = await hiredChapterApi.search({ [key]: value });
         setHiredChapters(response);
       } catch (error) {
         throw new Error(error);

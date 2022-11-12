@@ -13,8 +13,8 @@ const getLimitedTicketHistoriesByUserID = (userID, limit) => {
   const fetchLimitTicketHistories = async () => {
     try {
       const response = await ticketHistoryApi.getAll(userID, {
-        _page: pagination.page,
-        _limit: pagination.limit,
+        page: pagination.page,
+        limit: pagination.limit,
       });
       const converted = convertTicketHistoriesPropertyToString(response);
       setTicketHistories(converted);

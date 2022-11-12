@@ -1,9 +1,9 @@
-import useReviewImage from "hooks/useReviewImage";
+import usePreviewImage from "hooks/usePreviewImage";
 import PropTypes from "prop-types";
 import { FiUpload } from "react-icons/fi";
 import { IoCloseCircle } from "react-icons/io5";
-import classNames from "classnames/bind";
 
+import classNames from "classnames/bind";
 import styles from "./InputImage.scss";
 
 const cx = classNames.bind(styles);
@@ -11,26 +11,37 @@ const cx = classNames.bind(styles);
 function InputImage({
   children,
   field,
-  imageBlob,
   imageSize,
   fileSize,
-  closeIcon,
-  handleCloseIconClick,
+  removable,
+  handleRemove,
+  setFieldValue,
+  form,
+  width,
+  height,
   ...attributes
 }) {
   const { accept, multiple, disabled } = attributes;
-  const { width, height } = imageSize;
-  const { imagePreview, handleImageChange } = useReviewImage(
+  const { onBlur, name, value } = field;
+  const { imagePreview, setImagePreview, handleImageChange } = usePreviewImage(
     {
-      preview: imageBlob || null,
+      preview: value || null,
     },
-    field
+    fileSize,
+    setFieldValue,
+    name
   );
 
+  const handleRemoveImage = () => {
+    setImagePreview("");
+    setFieldValue(field.name, "");
+  };
+
   return (
-    <div className="input-file-wrapper">
+    <div className="input-file-wrapper" style={{ width, height }}>
       <input
-        {...field}
+        name={name}
+        onBlur={onBlur}
         onChange={handleImageChange}
         type="file"
         accept={accept}
@@ -46,20 +57,22 @@ function InputImage({
         </p>
         <p className="input-file-wrapper__custom__label--primary">Chọn ảnh</p>
         <p className="input-file-wrapper__custom__requirement">
-          JPG/PNG {width}
-          {width && height ? "x" : "px"}
-          {height} ({fileSize}MB)
+          JPG/PNG {imageSize.width}
+          {imageSize.width && imageSize.height ? "x" : "px"}
+          {imageSize.height} ({fileSize}MB)
         </p>
       </span>
-      <img
-        className="input-file-wrapper__custom-image-holder"
-        src={imagePreview?.preview}
-        alt=""
-      />
-      {closeIcon && (
+      {imagePreview?.preview && (
+        <img
+          className="input-file-wrapper__custom-image-holder"
+          src={imagePreview.preview}
+          alt=""
+        />
+      )}
+      {removable && imagePreview?.preview && (
         <IoCloseCircle
           className={cx("close-icon")}
-          onClick={() => handleCloseIconClick(imageBlob)}
+          onClick={handleRemoveImage}
         />
       )}
     </div>
@@ -70,26 +83,25 @@ InputImage.propTypes = {
   children: PropTypes.node,
   field: PropTypes.shape({
     name: PropTypes.string.isRequired,
-    value: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.arrayOf(PropTypes.string),
-    ]).isRequired,
+    value: PropTypes.string.isRequired,
     onBlur: PropTypes.func.isRequired,
-    onChange: PropTypes.func.isRequired,
   }).isRequired,
   fileSize: PropTypes.number,
   imageSize: PropTypes.shape({
     width: PropTypes.number,
     height: PropTypes.number,
   }),
-  imageBlob: PropTypes.string,
+  width: PropTypes.number,
+  height: PropTypes.number,
   attributes: PropTypes.shape({
     accept: PropTypes.string,
     multiple: PropTypes.bool,
     disabled: PropTypes.bool,
   }),
-  closeIcon: PropTypes.bool,
-  handleCloseIconClick: PropTypes.func,
+  removable: PropTypes.bool,
+  setFieldValue: PropTypes.func,
+  handleRemove: PropTypes.func,
+  form: PropTypes.shape({}).isRequired,
 };
 
 InputImage.defaultProps = {
@@ -97,15 +109,16 @@ InputImage.defaultProps = {
   children: <></>,
   fileSize: 2,
   imageSize: {},
-  imageBlob: false,
   attributes: {
     accept: ".jpg, .png",
     multiple: false,
     disabled: false,
   },
-  // eslint-disable-next-line react/jsx-no-useless-fragment
-  closeIcon: false,
-  handleCloseIconClick: () => {},
+  width: 250,
+  height: 250,
+  removable: false,
+  setFieldValue: () => {},
+  handleRemove: () => {},
 };
 
 export default InputImage;

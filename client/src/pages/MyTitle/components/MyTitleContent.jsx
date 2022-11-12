@@ -12,7 +12,7 @@ function MyTitleContent({ titles, pagination, setPagination, sorting }) {
         head={[
           {
             label: "#",
-            name: "index",
+            name: "id",
             sm: 1,
           },
           {
@@ -20,8 +20,8 @@ function MyTitleContent({ titles, pagination, setPagination, sorting }) {
           },
           {
             label: "Tiêu đề",
-            name: "titleName",
-            md: 3,
+            name: "name",
+            sm: 3,
           },
           {
             label: "Số chương",
@@ -29,14 +29,14 @@ function MyTitleContent({ titles, pagination, setPagination, sorting }) {
           },
           {
             label: "Trạng thái",
-            name: "titleStatusId",
+            name: "approveStatusId",
           },
           {
             label: "Ngày đăng",
             name: "createdAt",
           },
           {
-            label: "Ngày cập nhật",
+            label: "Ngày sửa",
             name: "updatedAt",
           },
           {
