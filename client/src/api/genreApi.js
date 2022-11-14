@@ -7,14 +7,35 @@ const genreApi = {
 
   getOneByID: (id) => axiosClient.get(`${url}/${id}`),
 
-  add: (genre) =>
-    axiosClient.post(`${url}/create`, genre, { withCredentials: true }),
+  add: (genre, setProgress) =>
+    axiosClient.post(`${url}/create`, genre, {
+      withCredentials: true,
+      onUploadProgress: (e) => {
+        const { loaded, total } = e;
+        const percentage = (loaded / total) * 100;
+        setProgress(percentage);
+      },
+    }),
 
-  update: (id, genre) =>
-    axiosClient.put(`${url}/update/${id}`, genre, { withCredentials: true }),
+  update: (id, genre, setProgress) =>
+    axiosClient.put(`${url}/update/${id}`, genre, {
+      withCredentials: true,
+      onUploadProgress: (e) => {
+        const { loaded, total } = e;
+        const percentage = (loaded / total) * 100;
+        setProgress(percentage);
+      },
+    }),
 
-  delete: (id) =>
-    axiosClient.delete(`${url}/delete/${id}`, { withCredentials: true }),
+  delete: (id, setProgress) =>
+    axiosClient.delete(`${url}/delete/${id}`, {
+      withCredentials: true,
+      onUploadProgress: (e) => {
+        const { loaded, total } = e;
+        const percentage = (loaded / total) * 100;
+        setProgress(percentage);
+      },
+    }),
 
   sort: (key, order, params) =>
     axiosClient.get(`${url}?sort=${key}&order=${order}`, { params }),
