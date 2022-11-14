@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { guessAvatar } from "assets/images";
+import { robotHead1 } from "assets/images";
 
 const initialState = {
   user: {
     id: null,
     guid: "",
-    avatar: guessAvatar,
+    avatar: robotHead1,
     username: "Đăng nhập",
     role: "",
     point: 0,
