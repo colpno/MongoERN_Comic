@@ -9,52 +9,59 @@ export default function deleteChapter(req, res) {
   const { titleId } = body.data;
 
   const token = cookies.accessToken;
+  if (!token) return res.status(401).json({ error: 'Cần đăng nhập để sử dụng chức năng này' });
 
-  try {
-    jwt.verify(token, process.env.ACCESS_TOKEN_KEY, async (error, userInfo) => {
-      if (error) return res.json('Invalid token');
+  jwt.verify(token, process.env.ACCESS_TOKEN_KEY, async (error, userInfo) => {
+    if (error) return res.status(403).json({ error: 'Token không hợp lệ' });
 
-      console.log('------------------------------------------------------');
-      await cloudinary.api
-        .delete_resources_by_prefix(`comic/titles/${titleId}/chapters/${guid}`)
-        .then(async () => {
-          await cloudinary.api
-            .delete_folder(`comic/titles/${titleId}/chapters/${guid}/`)
-            .catch((error) => {
-              console.log(error);
-            });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+    const sql = `SELECT t.userId FROM \`${table}\` as c JOIN title as t ON (t.guid = c.titleId) WHERE c.guid = ?`;
 
-      if (userInfo.role === 'admin') {
-        const sql = `DELETE FROM ${table} WHERE guid = ?`;
+    db.query(sql, [guid], async (err, data) => {
+      if (err) return res.status(500).json(err);
 
-        db.query(sql, [guid], (err, data) => {
-          if (err) return res.json(err);
-          if (data.affectedRows > 0) {
-            console.log("Chapters's info has been deleted from database");
-            console.log('------------------------------------------------------');
-            return res.json(data);
-          }
-          return res.json('Something went wrong');
-        });
+      if (data.length && data[0].userId !== userInfo.guid) {
+        return res.status(403).json({ error: 'Token không hợp lệ' });
       } else {
-        const sql = `DELETE FROM ${table} WHERE guid = ?`;
+        console.log('------------------------------------------------------');
+        await cloudinary.api
+          .delete_resources_by_prefix(`comic/titles/${titleId}/chapters/${guid}`)
+          .then(async () => {
+            await cloudinary.api
+              .delete_folder(`comic/titles/${titleId}/chapters/${guid}/`)
+              .catch((error) => {
+                console.log(error);
+              });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
 
-        db.query(sql, [guid], (err, data) => {
-          if (err) return res.json(err);
-          if (data.affectedRows > 0) {
-            console.log("Chapters's info has been deleted from database");
-            console.log('------------------------------------------------------');
-            return res.json(data);
-          }
-          return res.json('Something went wrong');
-        });
+        if (userInfo.role === 'admin') {
+          const sql = `DELETE FROM ${table} WHERE guid = ?`;
+
+          db.query(sql, [guid], (err, data) => {
+            if (err) return res.status(500).json(err);
+            if (data.affectedRows > 0) {
+              console.log("Chapters's info has been deleted from database");
+              console.log('------------------------------------------------------');
+              return res.status(200).json(data);
+            }
+            return res.status(400).json({ error: data });
+          });
+        } else {
+          const sql = `DELETE FROM ${table} WHERE guid = ?`;
+
+          db.query(sql, [guid], (err, data) => {
+            if (err) return res.status(500).json(err);
+            if (data.affectedRows > 0) {
+              console.log("Chapters's info has been deleted from database");
+              console.log('------------------------------------------------------');
+              return res.status(200).json(data);
+            }
+            return res.status(400).json({ error: data });
+          });
+        }
       }
     });
-  } catch (error) {
-    return res.json(error);
-  }
+  });
 }

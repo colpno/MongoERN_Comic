@@ -15,15 +15,15 @@ export default function addTitle(req, res) {
 
   db.query(sql, [values.name], (error, data) => {
     if (error) return res.status(500).json(error);
-    if (data.length) return res.json("Title's name has already existed").status(409);
+    if (data.length) return res.status(409).json({ error: 'Tên truyện đã tồn tại' });
 
     const bodyKeys = Object.keys(values);
     const token = req.cookies.accessToken;
 
-    if (!token) return res.status(401).json('Not logged in');
+    if (!token) return res.status(401).json({ error: 'Cần đăng nhập để sử dụng chức năng này' });
 
     jwt.verify(token, process.env.ACCESS_TOKEN_KEY, async (error, userInfo) => {
-      if (error) return res.status(403).json('Invalid token');
+      if (error) return res.status(403).json({ error: 'Token không hợp lệ' });
 
       console.log('------------------------------------------------------');
       const titleGuid = uuidv4();
@@ -35,7 +35,7 @@ export default function addTitle(req, res) {
           folder: `comic/titles/${titleGuid}/cover`,
         },
         (error) => {
-          if (error) return res.json(error);
+          if (error) return res.status(500).json(error);
           console.log('Cover has been uploaded to cloud');
         }
       );
@@ -61,7 +61,7 @@ export default function addTitle(req, res) {
       ];
 
       db.query(sql, [titleValues], (err, data) => {
-        if (err) return res.json(err);
+        if (err) return res.status(500).json(err);
         if (data.affectedRows > 0) {
           console.log("Title's info has been insert into database");
 
@@ -73,13 +73,13 @@ export default function addTitle(req, res) {
           `;
           const titleGenreValues = genreId.map((id) => [titleGuid, id, uuidv4(), now, now]);
           db.query(sqla, [titleGenreValues], (err, data) => {
-            if (err) return res.json(err);
+            if (err) return res.status(500).json(err);
             if (data.affectedRows > 0) {
               console.log("Title's genres has been insert into database");
               console.log('------------------------------------------------------');
-              return res.json(data);
+              return res.status(200).json(data);
             }
-            return res.json('Something went wrong');
+            return res.status(400).json({ error: data });
           });
         }
       });

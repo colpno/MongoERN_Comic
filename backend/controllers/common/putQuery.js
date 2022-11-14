@@ -8,41 +8,51 @@ export default function putQuery(req, res, table) {
   const bodyKeys = Object.keys(body);
   const token = req.cookies.accessToken;
 
-  if (!token) return res.status(401).json('Not logged in');
+  if (!token) return res.status(401).json({ error: 'Cần đăng nhập để sử dụng chức năng này' });
 
   jwt.verify(token, process.env.ACCESS_TOKEN_KEY, (error, userInfo) => {
-    if (error) return res.status(403).json('Invalid token');
+    if (error) return res.status(403).json({ error: 'Token không hợp lệ' });
 
-    if (userInfo.role === 'admin') {
-      const sql = `
+    console.log('------------------------------------------------------');
+    const sql = `
         UPDATE \`${table}\`
         SET ${bodyKeys.map((key) => `\`${key}\` = ?`)},\`updatedAt\` = ?
         WHERE guid = ?
       `;
 
-      const now = getCurrentDateTime();
-      const values = [...bodyKeys.map((dataKey) => body[dataKey]), now, guid];
+    const now = getCurrentDateTime();
+    const values = [...bodyKeys.map((dataKey) => body[dataKey]), now, guid];
 
-      db.query(sql, [...values], (err, data) => {
-        if (err) return res.json(err);
-        if (data.affectedRows > 0) return res.json(data);
-        return res.json('Something went wrong');
-      });
-    } else {
-      const sql = `
-        UPDATE \`${table}\`
-        SET ${bodyKeys.map((key) => `\`${key}\` = ?`)},\`updatedAt\` = ?
-        WHERE guid = ? AND userId = ?
-      `;
+    db.query(sql, [...values], (err, data) => {
+      if (err) return res.status(500).json(err);
+      if (data.affectedRows > 0) {
+        console.log('Updated');
+        console.log('------------------------------------------------------');
+        return res.status(200).json(data);
+      }
+      return res.status(400).json({ error: data });
+    });
 
-      const now = getCurrentDateTime();
-      const values = [...bodyKeys.map((dataKey) => body[dataKey]), now, guid, userInfo.guid];
+    // if (userInfo.role === 'admin') {
+    // } else {
+    //   const sql = `
+    //     UPDATE \`${table}\`
+    //     SET ${bodyKeys.map((key) => `\`${key}\` = ?`)},\`updatedAt\` = ?
+    //     WHERE guid = ? AND userId = ?
+    //   `;
 
-      db.query(sql, [...values], (err, data) => {
-        if (err) return res.json(err);
-        if (data.affectedRows > 0) return res.json(data);
-        return res.json('You can only update your item');
-      });
-    }
+    //   const now = getCurrentDateTime();
+    //   const values = [...bodyKeys.map((dataKey) => body[dataKey]), now, guid, userInfo.guid];
+
+    //   db.query(sql, [...values], (err, data) => {
+    //     if (err) return res.status().json(err);
+    //     if (data.affectedRows > 0) {
+    //       console.log('Updated');
+    //       console.log('------------------------------------------------------');
+    //       return res.status().json(data);
+    //     }
+    //     return res.status().json({error: 'You can only update your item'});
+    //   });
+    // }
   });
 }

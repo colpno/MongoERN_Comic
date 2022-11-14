@@ -15,6 +15,6 @@ export default function getAllQuery(
 
   db.query(sql, (error, data) => {
     if (error) return res.status(500).json(error);
-    return res.json(data);
+    return res.status(200).json(data);
   });
 }

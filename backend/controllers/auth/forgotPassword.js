@@ -13,7 +13,7 @@ export default function forgotPassword(req, res) {
 
   db.query(sql, [username], (error, data) => {
     if (error) return res.status(500).json(error);
-    if (data.length === 0) return res.json(`${username} không tồn tại`);
+    if (data.length === 0) return res.status(404).json(`Tên đăng nhập không tồn tại`);
 
     const { guid, email } = data[0];
     const payload = {

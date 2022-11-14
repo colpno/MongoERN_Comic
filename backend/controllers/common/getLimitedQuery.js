@@ -27,7 +27,9 @@ export default function getLimitedQuery(
     db.query(sql, (error, rows) => {
       if (error) return res.status(500).json(error);
 
-      return res.json({ data, pagination: { total: rows[0].total, page: +page, limit: +limit } });
+      return res
+        .status(200)
+        .json({ data, pagination: { total: rows[0].total, page: +page, limit: +limit } });
     });
   });
 }

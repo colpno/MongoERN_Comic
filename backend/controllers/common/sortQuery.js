@@ -29,8 +29,8 @@ export default function sortQuery(res, table, sort, order, page, limit, select =
   if (!!sql) {
     db.query(sql, (error, data) => {
       if (error) return res.status(500).json(error);
-      if (!!pagination) return res.json({ data, pagination });
-      return res.json(data);
+      if (!!pagination) return res.status(200).json({ data, pagination });
+      return res.status(200).json(data);
     });
   }
 }

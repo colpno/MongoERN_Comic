@@ -14,7 +14,7 @@ export default function register(req, res) {
 
   db.query(sql, [username], (error, data) => {
     if (error) return res.status(500).json(error);
-    if (data.length) return res.status(409).json('Username has already existed');
+    if (data.length) return res.status(409).json({ error: 'Tên đăng nhập đã tồn tại' });
 
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(password, salt);

@@ -5,5 +5,5 @@ export default function logout(req, res) {
       sameSite: 'none',
     })
     .status(200)
-    .json('Successfully logged out');
+    .json({ message: 'Đăng xuất thành công' });
 }

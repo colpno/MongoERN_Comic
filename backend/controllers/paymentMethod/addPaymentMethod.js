@@ -8,7 +8,7 @@ export default function addPaymentMethod(req, res) {
 
   db.query(sql, [name], (error, data) => {
     if (error) return res.status(500).json(error);
-    if (data.length) return res.status(409).json('Payment method has already existed');
+    if (data.length) return res.status(409).json({ error: 'Phương thức thanh toán đã tồn tại' });
     return postQuery(req, res, table);
   });
 }
