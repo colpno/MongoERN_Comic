@@ -7,14 +7,35 @@ const paymentMethodApi = {
 
   getOneByID: (id) => axiosClient.get(`${url}/${id}`),
 
-  add: (method) =>
-    axiosClient.post(`${url}/create`, method, { withCredentials: true }),
+  add: (method, setProgress) =>
+    axiosClient.post(`${url}/create`, method, {
+      withCredentials: true,
+      onUploadProgress: (e) => {
+        const { loaded, total } = e;
+        const percentage = (loaded / total) * 100;
+        setProgress(percentage);
+      },
+    }),
 
-  update: (id, method) =>
-    axiosClient.put(`${url}/update/${id}`, method, { withCredentials: true }),
+  update: (id, method, setProgress) =>
+    axiosClient.put(`${url}/update/${id}`, method, {
+      withCredentials: true,
+      onUploadProgress: (e) => {
+        const { loaded, total } = e;
+        const percentage = (loaded / total) * 100;
+        setProgress(percentage);
+      },
+    }),
 
-  delete: (id) =>
-    axiosClient.delete(`${url}/delete/${id}`, { withCredentials: true }),
+  delete: (id, setProgress) =>
+    axiosClient.delete(`${url}/delete/${id}`, {
+      withCredentials: true,
+      onUploadProgress: (e) => {
+        const { loaded, total } = e;
+        const percentage = (loaded / total) * 100;
+        setProgress(percentage);
+      },
+    }),
 
   sort: (key, order, params) =>
     axiosClient.get(`${url}?sort=${key}&order=${order}`, {
