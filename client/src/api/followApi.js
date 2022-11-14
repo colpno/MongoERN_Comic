@@ -6,7 +6,10 @@ const followApi = {
   getAll: (params) => axiosClient.get(url, { params }),
 
   getAllByUserID: (userId, params) =>
-    axiosClient.get(`${url}?userId=${userId}`, { params }),
+    axiosClient.get(`${url}?userId=${userId}`, {
+      params,
+      withCredentials: true,
+    }),
 
   add: (follow) =>
     axiosClient.post(`${url}/create`, follow, { withCredentials: true }),

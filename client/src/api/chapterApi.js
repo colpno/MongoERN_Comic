@@ -7,7 +7,9 @@ const chapterApi = {
 
   getOneByID: (chapterID, titleID) => {
     const queryStr = `?${titleID ? `titleId=${titleID}&` : ""}`;
-    return axiosClient.get(`${url}/${chapterID}${queryStr}`);
+    return axiosClient.get(`${url}/${chapterID}${queryStr}`, {
+      withCredentials: true,
+    });
   },
 
   add: (chapter, setProgress) =>

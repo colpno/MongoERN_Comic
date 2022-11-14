@@ -8,6 +8,7 @@ const coinHistoryApi = {
   getAllByUserID: (userId, params) =>
     axiosClient.get(`${url}?userId=${userId}`, {
       params,
+      withCredentials: true,
     }),
 
   getOneByID: (id) => axiosClient.get(`${url}/${id}`),
