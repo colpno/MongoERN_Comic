@@ -11,7 +11,18 @@ const titleApi = {
       params,
     }),
 
-  getOneByID: (id) => axiosClient.get(`${url}/${id}`),
+  getOneByID: (id, property) => {
+    const keyArray = Object.keys(property);
+    const queryStr = keyArray.reduce((string, key, index) => {
+      return index !== keyArray.length - 1
+        ? `${string}${key}=${property[key]}&`
+        : `${string}${key}=${property[key]}`;
+    }, "");
+
+    return axiosClient.get(`${url}/${id}?${queryStr}`, {
+      withCredentials: true,
+    });
+  },
 
   add: (title, setProgress) =>
     axiosClient.post(`${url}/create`, title, {
