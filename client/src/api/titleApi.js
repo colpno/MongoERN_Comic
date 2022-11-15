@@ -6,10 +6,18 @@ const url = "/titles";
 const titleApi = {
   getAll: (params) => axiosClient.get(`${url}`, { params }),
 
-  getAllByProperty: (property, value, params) =>
-    axiosClient.get(`${url}?${property}_like=${value}`, {
+  getAllByProperty: (property, params) => {
+    const keyArray = Object.keys(property);
+    const queryStr = keyArray.reduce((string, key, index) => {
+      return index !== keyArray.length - 1
+        ? `${string}${key}=${property[key]}&`
+        : `${string}${key}=${property[key]}`;
+    }, "");
+
+    return axiosClient.get(`${url}?${queryStr}`, {
       params,
-    }),
+    });
+  },
 
   getOneByID: (id, property) => {
     const keyArray = Object.keys(property);
@@ -67,9 +75,15 @@ const titleApi = {
       params,
     }),
 
-  filter: (filterObj) => {
-    const key = Object.keys(filterObj)[0];
-    return axiosClient.get(`${url}?${key}_like=${filterObj[key]}`);
+  filter: (property, params) => {
+    const keyArray = Object.keys(property);
+    const queryStr = keyArray.reduce((string, key, index) => {
+      return index !== keyArray.length - 1
+        ? `${string}${key}_like=${property[key]}&`
+        : `${string}${key}_like=${property[key]}`;
+    }, "");
+
+    return axiosClient.get(`${url}?${queryStr}`, { params });
   },
 
   search: (key, value) => {

@@ -40,9 +40,15 @@ const genreApi = {
   sort: (key, order, params) =>
     axiosClient.get(`${url}?sort=${key}&order=${order}`, { params }),
 
-  filter: (filterObj) => {
-    const key = Object.keys(filterObj)[0];
-    return axiosClient.get(`${url}?${key}_like=${filterObj[key]}`);
+  filter: (property, params) => {
+    const keyArray = Object.keys(property);
+    const queryStr = keyArray.reduce((string, key, index) => {
+      return index !== keyArray.length - 1
+        ? `${string}${key}_like=${property[key]}&`
+        : `${string}${key}_like=${property[key]}`;
+    }, "");
+
+    return axiosClient.get(`${url}?${queryStr}`, { params });
   },
 
   search: (searchObj) => {
