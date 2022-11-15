@@ -31,6 +31,8 @@ function Avatar() {
           src={user.avatar}
           alt="User avatar"
           className={cx("avatar__icon")}
+          width={40}
+          height={40}
         />
         <span className={cx("avatar__name")}>{user.username}</span>
         <BiChevronDown className={cx("avatar__chevron-icon")} />

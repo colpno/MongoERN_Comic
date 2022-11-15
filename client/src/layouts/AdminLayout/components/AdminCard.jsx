@@ -22,7 +22,7 @@ function AdminCard({ rawData, chartProps }) {
           <p className={cx("amount")}>{amount}</p>
           <p className={cx("sub-label")}>{subLabel}</p>
         </div>
-        <DoughnutChart width="100px" height="100px" {...chartProps} />
+        <DoughnutChart width="120px" height="120px" {...chartProps} />
       </div>
     </FloatingContainer>
   );

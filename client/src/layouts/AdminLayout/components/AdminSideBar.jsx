@@ -29,10 +29,16 @@ function AdminSideBar({ visible, setToggleSideBar, toggleSideBar }) {
       />
       <SideBar menu={menu} defaultTab={menu[0].subMenu[0].tab} />
       <div className={cx("user-info")}>
-        <Image src={user.avatar} alt="User avatar" className={cx("avatar")} />
+        <Image
+          src={user.avatar}
+          alt="User avatar"
+          className={cx("avatar")}
+          width={50}
+          height={50}
+        />
         <span className={cx("username")}>{user.username}</span>
         <Button onClick={logout}>
-          <IoIosLogOut />
+          <IoIosLogOut className={cx("logout-icon")} />
         </Button>
       </div>
     </aside>

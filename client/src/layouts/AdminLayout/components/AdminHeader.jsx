@@ -1,6 +1,6 @@
 import classNames from "classnames/bind";
 
-import Search from "layouts/components/Header/components/Search";
+import { Search } from "features";
 import styles from "../styles/AdminHeader.module.scss";
 
 const cx = classNames.bind(styles);
