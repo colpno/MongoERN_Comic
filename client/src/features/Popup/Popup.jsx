@@ -7,7 +7,7 @@ import YesNoPopupButtons from "./components/YesNoPopupButtons";
 
 const cx = classNames.bind(styles);
 
-function Popup({ popup, setPopup, yesno, width, height }) {
+function Popup({ popup, setPopup, yesno, width }) {
   const { title, content, trigger } = popup;
   let Component = (
     <Button
@@ -34,7 +34,7 @@ function Popup({ popup, setPopup, yesno, width, height }) {
           }))
         }
       >
-        <div className={cx("popup")} style={{ width: `${width}px`, height }}>
+        <div className={cx("popup")} style={{ width: `${width}px` }}>
           <div className={cx("popup__head")}>
             <span>{title}</span>
           </div>
@@ -55,13 +55,11 @@ Popup.propTypes = {
   setPopup: PropTypes.func.isRequired,
   yesno: PropTypes.bool,
   width: PropTypes.number,
-  height: PropTypes.number,
 };
 
 Popup.defaultProps = {
   yesno: false,
   width: 400,
-  height: 500,
 };
 
 export default Popup;
