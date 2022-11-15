@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 
 function useDelete(deleteFunc) {
   const [deletedItem, setDeletedItem] = useState({});
-  const [progress, setProgress] = useState(0);
   const [popup, setPopup] = useState({
     trigger: false,
     isConfirm: false,
@@ -23,8 +22,6 @@ function useDelete(deleteFunc) {
     setDeletedItem,
     popup,
     setPopup,
-    progress,
-    setProgress,
   };
 }
 
