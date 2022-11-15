@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import ReactSelect from "react-select";
 
@@ -53,27 +53,27 @@ function Select({
   limitSelected,
 }) {
   const dispatch = useDispatch();
-  const [value, setValue] = useState([
-    {
-      value: options[0].value,
-      label: options[0].label,
-    },
-  ]);
+  const [value, setValue] = useState({
+    value: options[0].value,
+    label: options[0].label,
+  });
   const styles = customStyles(height);
 
   const handleChange = (selected) => {
     if (multi && selected.length <= limitSelected) {
       setValue(selected);
-      dispatch(setSelectedOption(selected));
       onChange(selected);
       return;
     }
     if (!multi) {
       setValue(selected);
-      dispatch(setSelectedOption(selected));
       onChange(selected);
     }
   };
+
+  useEffect(() => {
+    dispatch(setSelectedOption(value));
+  }, [value.value]);
 
   return (
     <ReactSelect
