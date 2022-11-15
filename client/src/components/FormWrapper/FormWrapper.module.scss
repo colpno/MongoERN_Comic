@@ -1,0 +1,13 @@
+@use "assets/styles/variables" as var;
+
+.wrapper {
+  width: 800px;
+  margin: calc(var.$header-height + 20px) auto 80px;
+  padding: 20px 55px;
+  border: 1px solid var.$border-gray;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 30px;
+}

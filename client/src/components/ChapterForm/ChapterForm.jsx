@@ -33,6 +33,7 @@ function ChapterForm({ initialValues, validationSchema, handleSubmit }) {
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
+      enableReinitialize
     >
       {({ values, setFieldValue, errors }) => {
         return (
@@ -98,6 +99,7 @@ function ChapterForm({ initialValues, validationSchema, handleSubmit }) {
                       alt={`Image ${index + 1}`}
                       key={index}
                       className={cx("image-content")}
+                      height={100}
                     />
                     <IoCloseCircle
                       className={cx("close-icon")}
