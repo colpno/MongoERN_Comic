@@ -1,30 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  data: [],
-  result: [],
-  input: "",
+  text: "",
 };
 
 const searchResultSlice = createSlice({
   name: "search",
   initialState,
   reducers: {
-    setSearchData: (state, action) => {
-      state.data = action.payload;
-    },
-    setSearchResult: (state, action) => {
-      state.result = action.payload;
-    },
-
-    setSearchInput: (state, action) => {
-      state.input = action.payload;
+    setSearchText: (state, action) => {
+      state.text = action.payload;
     },
   },
 });
 
 const { reducer: searchReducer, actions } = searchResultSlice;
 
-export const { setSearchData, setSearchResult, setSearchInput } = actions;
+export const { setSearchText } = actions;
 
 export default searchReducer;
