@@ -1,50 +1,69 @@
-import jsonServer from 'json-server';
-import queryString from 'query-string';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import { config } from 'dotenv';
+import express from 'express';
+import {
+  authRoute,
+  chapterImageRoute,
+  chapterRoute,
+  chapterTransactionRoute,
+  coinTransactionRoute,
+  followRoute,
+  genreRoute,
+  paymentMethodRoute,
+  readingHistoryRoute,
+  approvedStatusRoute,
+  titleGenreRoute,
+  titleReportRoute,
+  titleRoute,
+  userRoute,
+  chargeRoute,
+} from './routes/index.js';
 
-const server = jsonServer.create();
-const router = jsonServer.router('db.json');
-const middlewares = jsonServer.defaults();
+config();
+const app = express();
+const { PORT, BASE_URL, CLIENT_URL } = process.env;
 
-// Set default middlewares (logger, static, cors and no-cache)
-server.use(middlewares);
-
-// Handle POST, PUT and PATCH you need to use a body-parser
-server.use(jsonServer.bodyParser);
-server.use((req, res, next) => {
-  if (req.method === 'POST') {
-    req.body.createdAt = new Date().toISOString();
-    req.body.updatedAt = new Date().toISOString();
-  }
-  if (req.method === 'PATCH') {
-    req.body.updatedAt = new Date().toISOString();
-  }
-
-  // Continue to JSON Server router
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Origin', [
+    process.env.CLIENT_URL,
+    'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html',
+  ]);
+  res.header('Access-Control-Allow-Credentials', true);
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Content-Type: application/json',
+    'Content-Type: multipart/form-data'
+  );
+  res.header('Access-Control-Allow-Methods', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS');
   next();
 });
+app.use(express.json({ limit: '50mb' }));
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: [CLIENT_URL, 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html'],
+  })
+);
 
-// Custom response
-router.render = (req, res) => {
-  const xTotalCount = res.getHeaders()['x-total-count'];
-  const method = req.method;
+app.use(`${BASE_URL}/chapters`, chapterRoute);
+app.use(`${BASE_URL}/chapter-transactions`, chapterTransactionRoute);
+app.use(`${BASE_URL}/chapter-images`, chapterImageRoute);
+app.use(`${BASE_URL}/coin-transactions`, coinTransactionRoute);
+app.use(`${BASE_URL}/follows`, followRoute);
+app.use(`${BASE_URL}/genres`, genreRoute);
+app.use(`${BASE_URL}/payment-methods`, paymentMethodRoute);
+app.use(`${BASE_URL}/reading-histories`, readingHistoryRoute);
+app.use(`${BASE_URL}/approved-statuses`, approvedStatusRoute);
+app.use(`${BASE_URL}/titles`, titleRoute);
+app.use(`${BASE_URL}/title-genres`, titleGenreRoute);
+app.use(`${BASE_URL}/title-reports`, titleReportRoute);
+app.use(`${BASE_URL}/users`, userRoute);
+app.use(`${BASE_URL}/auth`, authRoute);
+app.use(`${BASE_URL}/charge`, chargeRoute);
 
-  // if method is GET and header has x-total-count,
-  // add pagination property to response
-  if (method === 'GET' && xTotalCount) {
-    const params = queryString.parse(req._parsedOriginalUrl.query);
-
-    return res.jsonp({
-      data: res.locals.data,
-      pagination: { limit: params.limit, page: params.page, total: xTotalCount },
-    });
-  }
-
-  // Otherwise, default response
-  res.jsonp(res.locals.data);
-};
-
-// Use default router
-server.use('/api', router);
-server.listen(3001, () => {
-  console.log('JSON Server is running');
+app.listen(PORT, () => {
+  // console.log(`Server is running on localhost:${PORT}`);
+  console.log(`Server is running on ${process.env.SERVER_URL}`);
 });
