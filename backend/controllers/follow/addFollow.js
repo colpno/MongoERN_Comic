@@ -1,4 +1,4 @@
-import { db } from '../../database/connect.js';
+import { db } from '../../config/database.js';
 import { postQuery } from '../common/index.js';
 import { table } from './index.js';
 import jwt from 'jsonwebtoken';

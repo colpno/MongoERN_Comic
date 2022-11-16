@@ -12,3 +12,4 @@ export { default as titleRoute } from './titleRoute.js';
 export { default as userRoute } from './userRoute.js';
 export { default as titleGenreRoute } from './titleGenreRoute.js';
 export { default as titleReportRoute } from './titleReportRoute.js';
+export { default as chargeRoute } from './chargeRoute.js';

@@ -1,4 +1,4 @@
-import { db } from '../../database/connect.js';
+import { db } from '../../config/database.js';
 
 export default function sortQuery(res, table, sort, order, page, limit, select = '*') {
   let sql = `

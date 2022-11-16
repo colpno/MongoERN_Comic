@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
-import { db } from '../../database/connect.js';
+import { db } from '../../config/database.js';
 import { getCurrentDateTime, postQuery } from '../common/index.js';
 import { table } from './index.js';
 

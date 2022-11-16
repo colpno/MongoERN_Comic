@@ -1,4 +1,4 @@
-import { db } from '../../database/connect.js';
+import { db } from '../../config/database.js';
 
 export default function searchQuery(
   res,
@@ -16,7 +16,7 @@ export default function searchQuery(
   const values = searchKeys.map((key) => searches[key]);
 
   const whereStatement = `
-    WHERE ${searchKeys.reduce((string, key, index) => {
+    ${searchKeys.reduce((string, key, index) => {
       return `${string}\`${key}\` = ?${index !== length ? ' AND ' : ''}`;
     }, '')}
   `;
@@ -24,7 +24,7 @@ export default function searchQuery(
   let sql = `
     SELECT ${select}
     FROM \`${table}\`
-    ${whereStatement}
+    WHERE ${whereStatement}
     ORDER BY \`${defaultSortCol}\` ${order}
   `;
 
@@ -37,7 +37,7 @@ export default function searchQuery(
     const subQuery = `
       SELECT COUNT(*) as total
       FROM ${table} 
-      ${whereStatement}
+      WHERE ${whereStatement}
     `;
 
     db.query(subQuery, [values], (error, data) => {

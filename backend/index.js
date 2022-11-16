@@ -17,16 +17,19 @@ import {
   titleReportRoute,
   titleRoute,
   userRoute,
+  chargeRoute,
 } from './routes/index.js';
 
 config();
 const app = express();
-const PORT = process.env.PORT;
-const BASE_URL = process.env.BASE_URL;
+const { PORT, BASE_URL, CLIENT_URL } = process.env;
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Origin', process.env.CLIENT_URL);
+  res.header('Access-Control-Allow-Origin', [
+    process.env.CLIENT_URL,
+    'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html',
+  ]);
   res.header('Access-Control-Allow-Credentials', true);
   res.header(
     'Access-Control-Allow-Headers',
@@ -40,7 +43,7 @@ app.use(express.json({ limit: '50mb' }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: [CLIENT_URL, 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html'],
   })
 );
 
@@ -58,7 +61,9 @@ app.use(`${BASE_URL}/title-genres`, titleGenreRoute);
 app.use(`${BASE_URL}/title-reports`, titleReportRoute);
 app.use(`${BASE_URL}/users`, userRoute);
 app.use(`${BASE_URL}/auth`, authRoute);
+app.use(`${BASE_URL}/charge`, chargeRoute);
 
 app.listen(PORT, () => {
-  console.log(`Server is running on localhost:${PORT}`);
+  // console.log(`Server is running on localhost:${PORT}`);
+  console.log(`Server is running on ${process.env.SERVER_URL}`);
 });

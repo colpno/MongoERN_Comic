@@ -1,4 +1,4 @@
-import { db } from '../../database/connect.js';
+import { db } from '../../config/database.js';
 
 export default function filterQuery(
   res,
@@ -24,6 +24,7 @@ export default function filterQuery(
     ORDER BY \`${defaultSortCol}\` ${order}
   `;
 
+  let pagination;
   if (limit && page) {
     sql += `
       LIMIT ${(page - 1) * limit},${limit * page}
@@ -32,10 +33,10 @@ export default function filterQuery(
     const subQuery = `
       SELECT COUNT(*) as total
       FROM ${table} 
-      ${whereStatement}
+      WHERE ${whereStatement}
     `;
 
-    db.query(subQuery, [values], (error, data) => {
+    db.query(subQuery, [...values], (error, data) => {
       if (error) return res.status(500).json(error);
 
       pagination = {
@@ -46,10 +47,9 @@ export default function filterQuery(
     });
   }
 
-  if (!!sql) {
-    db.query(sql, [values], (error, data) => {
-      if (error) return res.status(500).json(error);
-      return res.status(200).json(data);
-    });
-  }
+  db.query(sql, [...values], (error, data) => {
+    if (error) return res.status(500).json(error);
+    if (pagination) return res.status(200).json({ data, pagination });
+    return res.status(200).json(data);
+  });
 }

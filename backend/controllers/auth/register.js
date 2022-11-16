@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
-import { db } from '../../database/connect.js';
+import { db } from '../../config/database.js';
 import { getCurrentDateTime } from '../common/index.js';
 
 export default function register(req, res) {

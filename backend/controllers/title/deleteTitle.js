@@ -1,6 +1,6 @@
 import { table } from './index.js';
 import jwt from 'jsonwebtoken';
-import { db } from '../../database/connect.js';
+import { db } from '../../config/database.js';
 import { cloudinary } from '../../libs/cloudinary/index.js';
 import { deleteChapter } from '../chapter/index.js';
 

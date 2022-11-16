@@ -1,4 +1,4 @@
-import { db } from '../../database/connect.js';
+import { db } from '../../config/database.js';
 import { getCurrentDateTime } from './index.js';
 import jwt from 'jsonwebtoken';
 

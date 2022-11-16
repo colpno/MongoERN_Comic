@@ -1,5 +1,5 @@
 import { table } from './index.js';
-import { db } from '../../database/connect.js';
+import { db } from '../../config/database.js';
 import jwt from 'jsonwebtoken';
 import { cloudinary } from '../../libs/cloudinary/index.js';
 import { config } from 'dotenv';
