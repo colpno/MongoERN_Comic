@@ -3,9 +3,11 @@ import { useClickOutSide, useDebounce, useSearch } from "hooks";
 import { useEffect, useState } from "react";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { IoSearchOutline } from "react-icons/io5";
+import { MdOutlineOpenInNew } from "react-icons/md";
 
 import styles from "layouts/components/Header/assets/styles/Search.module.scss";
 import { getAllTitles } from "services/title";
+import { Button } from "components";
 import SearchDropdownList from "./SearchDropdownList";
 
 const cx = classNames.bind(styles);
@@ -57,6 +59,9 @@ function Search() {
           />
         )}
         <IoSearchOutline className={cx("search__icon")} />
+        <Button wrapper to="/search" className={cx("search-extend")}>
+          <MdOutlineOpenInNew className={cx("icon")} />
+        </Button>
       </div>
       {showResult && debounced && (
         <SearchDropdownList cx={cx} searchResult={searchResult} />
