@@ -18,6 +18,12 @@ export const convertToSQL = (queries) => {
       continue;
     }
 
+    if (query.includes('_like')) {
+      whereArray.push(`\`${query.slice(0, query.indexOf('_like'))}\` LIKE ?`);
+      values.push(`%${otherQueries[query]}%`);
+      continue;
+    }
+
     values.push(otherQueries[query]);
 
     if (query.includes('_gte')) {
@@ -42,11 +48,6 @@ export const convertToSQL = (queries) => {
 
     if (query.includes('_ne')) {
       whereArray.push(`\`${query.slice(0, query.indexOf('_ne'))}\` <> ?`);
-      continue;
-    }
-
-    if (query.includes('_like')) {
-      whereArray.push(`\`${query.slice(0, query.indexOf('_like'))}\` LIKE '%?%'`);
       continue;
     }
 
