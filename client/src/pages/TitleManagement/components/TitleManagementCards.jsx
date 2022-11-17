@@ -2,16 +2,89 @@ import { Col } from "react-bootstrap";
 import PropTypes from "prop-types";
 
 import AdminCard from "layouts/AdminLayout/components/AdminCard";
-import {
-  getContinuingCardData,
-  getFinishedCardData,
-  getPausedCardData,
-} from "../const";
+import { topSales } from "assets/images";
+import { getChartColors } from "utils/constants";
 
-function TitleManagementCards({ totalTitles }) {
-  const continuingCardData = getContinuingCardData(totalTitles, 123);
-  const pausedCardData = getPausedCardData(totalTitles, 23);
-  const finishedCardData = getFinishedCardData(totalTitles, 50);
+const cardData = (textData, chartData) => {
+  const { icon, label, amount, subLabel } = textData;
+  const { labels, datasets } = chartData;
+
+  return {
+    rawData: {
+      icon,
+      label,
+      amount,
+      subLabel,
+    },
+    chartProps: {
+      data: {
+        labels,
+        datasets,
+      },
+      options: {
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+      },
+    },
+  };
+};
+
+function TitleManagementCards({ totalTitles, continuing, paused, finished }) {
+  const chartColors = getChartColors().backgroundColors;
+  const continuingCardData = cardData(
+    {
+      icon: topSales,
+      label: "Tiếp tục đăng",
+      subLabel: "Toàn thời gian",
+      amount: continuing,
+    },
+    {
+      labels: ["Tiếp tục", "Tất cả"],
+      datasets: [
+        {
+          data: [continuing, totalTitles - continuing],
+          backgroundColor: [chartColors[5], "lightblue"],
+        },
+      ],
+    }
+  );
+  const pausedCardData = cardData(
+    {
+      icon: topSales,
+      label: "Tạm dừng",
+      subLabel: "Toàn thời gian",
+      amount: paused,
+    },
+    {
+      labels: ["Tạm dừng", "Tất cả"],
+      datasets: [
+        {
+          data: [paused, totalTitles - paused],
+          backgroundColor: [chartColors[7], "lightblue"],
+        },
+      ],
+    }
+  );
+  const finishedCardData = cardData(
+    {
+      icon: topSales,
+      label: "Hoàn thành",
+      subLabel: "Toàn thời gian",
+      amount: finished,
+    },
+    {
+      labels: ["Hoàn thành", "Tất cả"],
+      datasets: [
+        {
+          data: [finished, totalTitles - finished],
+          backgroundColor: ["#000", "lightblue"],
+        },
+      ],
+    }
+  );
 
   return (
     <>
@@ -39,6 +112,9 @@ function TitleManagementCards({ totalTitles }) {
 
 TitleManagementCards.propTypes = {
   totalTitles: PropTypes.number.isRequired,
+  continuing: PropTypes.number.isRequired,
+  paused: PropTypes.number.isRequired,
+  finished: PropTypes.number.isRequired,
 };
 
 export default TitleManagementCards;
