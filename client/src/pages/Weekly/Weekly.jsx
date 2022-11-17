@@ -36,7 +36,7 @@ function Weekly() {
         return "T2";
     }
   });
-  const { titles, setReFetch } = searchTitle("status", dayFilter);
+  const { titles, setReFetch } = searchTitle("releaseDay", dayFilter);
 
   useEffect(() => {
     const handleScroll = () => {

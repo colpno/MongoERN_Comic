@@ -8,7 +8,7 @@ import styles from "./assets/styles/Complete.module.scss";
 const cx = classNames.bind(styles);
 
 function Complete() {
-  const { titles } = getAllTitlesByProperty("status", "finished");
+  const { titles } = getAllTitlesByProperty("releaseDay", "finished");
   const hasData = titles.length;
 
   return (
