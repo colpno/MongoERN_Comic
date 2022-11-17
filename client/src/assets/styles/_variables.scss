@@ -1,3 +1,29 @@
+// Return opaque color
+// opaque(#fff, rgba(0, 0, 0, .5)) => #808080
+@function opaque($background, $foreground) {
+  @return mix(rgba($foreground, 1), $background, opacity($foreground) * 100);
+}
+
+// scss-docs-start color-functions
+// Tint a color: mix a color with white
+@function tint-color($color, $weight) {
+  @return mix(white, $color, $weight);
+}
+
+// Shade a color: mix a color with black
+@function shade-color($color, $weight) {
+  @return mix(black, $color, $weight);
+}
+
+// Shade the color if the weight is positive, else tint it
+@function shift-color($color, $weight) {
+  @return if(
+    $weight > 0,
+    shade-color($color, $weight),
+    tint-color($color, -$weight)
+  );
+}
+// scss-docs-end color-functions
 // @import "~bootstrap/scss/functions";
 
 // Override bootstrap variables
@@ -285,6 +311,7 @@ $dark: $gray-900;
 
 $layout-transition-time: 0.2s;
 $sidebar-width: 300px;
+$min-sidebar-width: 105px;
 $bgc-admin: #f1f6f9;
 $clr-green: hsl(151, 81%, 46%);
 $clr-gray: #636363;
