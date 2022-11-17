@@ -8,7 +8,9 @@ $checkboxSize: 20px;
   align-items: center;
   position: relative;
   margin-bottom: 20px;
+}
 
+.text {
   @include mixins.singleLineClamp();
 }
 

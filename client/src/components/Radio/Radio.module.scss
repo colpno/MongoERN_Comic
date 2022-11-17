@@ -1,9 +1,14 @@
-@use "assets/styles/variables";
+@use "assets/styles/variables" as var;
+@use "assets/styles/mixins";
 
 .label {
   display: flex;
   align-items: center;
   position: relative;
+}
+
+.text {
+  @include mixins.singleLineClamp();
 }
 
 .radio {
@@ -26,13 +31,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid variables.$gray-500;
+  border: 1px solid var.$gray-500;
   border-radius: 100%;
   pointer-events: none;
 }
 
 .radio:checked + .custom-radio {
-  border: 1px solid variables.$primary;
+  border: 1px solid var.$primary;
 
   &::before {
     position: absolute;

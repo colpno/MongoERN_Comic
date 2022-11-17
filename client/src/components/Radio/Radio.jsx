@@ -16,7 +16,7 @@ function Radio({ field, disabled, value, children }) {
         className={cx("radio")}
       />
       <span className={cx("custom-radio")} />
-      {children}
+      <span className={cx("text")}>{children}</span>
     </label>
   );
 }

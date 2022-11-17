@@ -19,7 +19,7 @@ function CheckBox({ field, isChecked, value, disabled, children }) {
       <span className={cx("custom-checkbox")}>
         <ImCheckmark className={cx("check-mark")} />
       </span>
-      {children}
+      <span className={cx("text")}>{children}</span>
     </label>
   );
 }
