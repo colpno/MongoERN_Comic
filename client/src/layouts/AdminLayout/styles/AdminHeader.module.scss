@@ -5,9 +5,15 @@
   background-color: #fff;
   height: var.$header-height;
   border-bottom: 1px solid var.$gray-200;
-  margin-left: var.$sidebar-width;
+  margin-left: var.$min-sidebar-width;
 
   display: flex;
   align-items: center;
   justify-content: center;
+
+  transition: all 0.5s ease;
+
+  &.sidebar--toggle {
+    margin-left: var.$sidebar-width;
+  }
 }

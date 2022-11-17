@@ -1,12 +1,21 @@
 @use "assets/styles/variables" as var;
+@use "assets/styles/mixins";
 
-.sidebar {
-  width: 300px;
+.dump {
+  width: var.$min-sidebar-width;
+  background-color: var.$white;
+
+  transition: all 0.5s ease;
+
+  &.active {
+    width: var.$sidebar-width;
+  }
+}
+
+:global(.sidebar) {
   height: 100vh;
   max-height: 100vh;
   background-color: var.$white;
-  padding-left: 1.1rem;
-  padding-bottom: 3rem;
 
   display: flex;
   justify-content: space-between;
@@ -16,31 +25,68 @@
   top: 0;
   left: 0;
 
-  &--toggle {
-    position: absolute;
-    font-size: 2rem;
-    left: 0;
+  transition: all 0.5s ease;
+
+  &:global(.active) {
+    width: var.$sidebar-width;
+  }
+
+  &:not(:global(.active)) {
+    width: var.$min-sidebar-width;
+
+    .username,
+    .avatar,
+    .logo-button {
+      display: none;
+    }
+
+    .logo-container {
+      justify-content: center;
+    }
   }
 }
 
 .logo {
   fill: #000;
   width: 150px;
-  height: var.$header-height;
 
-  &-wrapper {
+  &-container {
     width: 100%;
+    min-height: var.$header-height;
     border-bottom: 1px solid var.$gray-200;
+    border-right: 1px solid var.$gray-200;
+    padding-right: 1rem;
+    padding-left: 1rem;
+
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
+}
+
+.sidebar--toggle {
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.menu {
+  position: relative;
 }
 
 .user-info {
   margin-top: 1rem;
-  border-top: 1px solid var.$gray-200;
+  padding: 1rem 0;
+  border-top: 1px solid var.$gray-300;
+  border-right: 1px solid var.$gray-200;
+  background-color: #f0f7fc;
+  padding-right: 1rem;
+  padding-left: 1rem;
 
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
 }
 
 .username {
@@ -48,10 +94,27 @@
   font-size: 1.3em;
   font-weight: 500;
   flex: 1;
+  padding: 0.4rem;
+  margin-right: 0.8rem;
+
+  @include mixins.singleLineClamp();
 }
 
-.logout-icon {
-  color: var.$primary-dark;
-  width: 1.6rem;
-  height: 1.6rem;
+.avatar {
+  border: 1px solid var.$gray-400;
+  border-radius: 100%;
+  padding: 0.6rem;
+}
+
+.logout {
+  box-shadow: 0 8px 24px 12px rgb(0 0 0 / 0.02),
+    0 2px 12px 2px rgb(0 0 0 / 0.04);
+  padding: 0.4rem;
+
+  .icon {
+    color: var.$primary;
+    $size: 1.8rem;
+    width: $size;
+    height: $size;
+  }
 }
