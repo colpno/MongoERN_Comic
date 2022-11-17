@@ -14,10 +14,11 @@ function CardFigure(props) {
 
     horizontal,
 
-    summary,
-    author,
-    likeCount,
-    viewCount,
+    showTotalChapter,
+    showSummary,
+    showAuthor,
+    showLike,
+    showView,
   } = props;
 
   return (
@@ -30,26 +31,31 @@ function CardFigure(props) {
       <figcaption className="card-figure__content">
         <div className="card-figure__content__wrapper">
           <h5 className="card-figure__content__title">{data.name}</h5>
-          {summary && (
-            <p className="card-figure__content__summary">{data.summary}</p>
+          {showSummary && (
+            <p className="card-figure__content__summary">{data.showSummary}</p>
           )}
         </div>
 
         <div className="card-figure__content__wrapper">
-          {author && (
-            <small className="card-figure__content__author">
-              {data.author}
+          {showTotalChapter && (
+            <small className="card-figure__content__total-chapter">
+              {data.showTotalChapter} chương
             </small>
           )}
-          {(likeCount || viewCount) && (
+          {showAuthor && (
+            <small className="card-figure__content__author">
+              {data.showAuthor}
+            </small>
+          )}
+          {(showLike || showView) && (
             <div className="card-figure__content__counting">
-              {likeCount && (
+              {showLike && (
                 <span className="card-figure__content__counting__like like">
                   <AiFillHeart className="card-figure__content__counting__like__icon" />
                   <span>{roundNumByUnit(data.like)}</span>
                 </span>
               )}
-              {viewCount && (
+              {showView && (
                 <span className="card-figure__content__counting__view view">
                   <AiFillEye className="card-figure__content__counting__eye__icon" />
                   <span>{roundNumByUnit(data.view)}</span>
@@ -67,8 +73,9 @@ CardFigure.propTypes = {
   data: PropTypes.shape({
     name: PropTypes.string.isRequired,
     cover: PropTypes.string.isRequired,
-    summary: PropTypes.string.isRequired,
-    author: PropTypes.oneOfType([
+    showSummary: PropTypes.string.isRequired,
+    showTotalChapter: PropTypes.number.isRequired,
+    showAuthor: PropTypes.oneOfType([
       PropTypes.string.isRequired,
       PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     ]),
@@ -77,19 +84,21 @@ CardFigure.propTypes = {
   }).isRequired,
   to: PropTypes.string.isRequired,
 
-  summary: PropTypes.bool,
-  author: PropTypes.bool,
-  likeCount: PropTypes.bool,
-  viewCount: PropTypes.bool,
+  showTotalChapter: PropTypes.bool,
+  showSummary: PropTypes.bool,
+  showAuthor: PropTypes.bool,
+  showLike: PropTypes.bool,
+  showView: PropTypes.bool,
 
   horizontal: PropTypes.bool,
 };
 
 CardFigure.defaultProps = {
-  summary: false,
-  author: true,
-  likeCount: true,
-  viewCount: true,
+  showTotalChapter: false,
+  showSummary: false,
+  showAuthor: true,
+  showLike: true,
+  showView: true,
 
   horizontal: false,
 };

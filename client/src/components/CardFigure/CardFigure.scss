@@ -12,16 +12,20 @@
     }
   }
 
-  :global(.image-wrapper) {
+  .card-figure__image {
     align-self: center;
-    $size: 100px;
-    width: $size;
-    height: $size;
+    aspect-ratio: 1 / 1;
     box-shadow: 0 0 0 1px rgb(0 0 0 / 0.1);
-    @include mixins.imageScale();
+    @include mixins.imageScale(1.1);
   }
 
   &__content {
+    margin-top: 8px;
+
+    &__total-chapter {
+      color: #777;
+    }
+
     &__author {
       display: -webkit-box;
       -webkit-box-orient: vertical;
@@ -47,7 +51,6 @@
     &__title,
     &__author {
       line-height: 1.4;
-      margin-top: 8px;
     }
 
     &__counting {

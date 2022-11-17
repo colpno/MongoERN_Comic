@@ -37,8 +37,7 @@
     padding-right: 0.375rem;
     // width: calc(180px + 0.375rem * 2);
   }
-
-  :global([class*="row"]) {
+  &:not(.wrap) :global([class*="row"]) {
     flex-wrap: nowrap;
     overflow-x: auto;
   }

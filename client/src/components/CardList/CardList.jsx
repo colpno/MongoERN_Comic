@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import { memo } from "react";
 import PropTypes from "prop-types";
@@ -10,11 +9,19 @@ import Styles from "./CardList.module.scss";
 
 const cx = classNames.bind(Styles);
 
-function CardList(props) {
-  const { col, data, headTitle, summary, author, likeCount, viewCount } = props;
-
+function CardList({
+  col,
+  data,
+  headTitle,
+  showTotalChapter,
+  showSummary,
+  showAuthor,
+  showLike,
+  showView,
+  wrap,
+}) {
   return (
-    <div className={cx(`cards-wrapper`)}>
+    <div className={cx(`cards-wrapper`, wrap ? "wrap" : "")}>
       {headTitle ? (
         <header className={cx("cards-wrapper__head")}>
           <h3 className={cx("cards-wrapper__head__title")}>{headTitle}</h3>
@@ -33,10 +40,11 @@ function CardList(props) {
                 key={card.guid}
                 to={`/comic/title/${card.guid}`}
                 data={card}
-                summary={summary}
-                author={author}
-                likeCount={likeCount}
-                viewCount={viewCount}
+                showTotalChapter={showTotalChapter}
+                showSummary={showSummary}
+                showAuthor={showAuthor}
+                showLike={showLike}
+                showView={showView}
               />
             </Col>
           );
@@ -56,18 +64,23 @@ CardList.propTypes = {
   }),
   data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   headTitle: PropTypes.string,
-  summary: PropTypes.bool,
-  author: PropTypes.bool,
-  likeCount: PropTypes.bool,
-  viewCount: PropTypes.bool,
+  showTotalChapter: PropTypes.bool,
+  showSummary: PropTypes.bool,
+  showAuthor: PropTypes.bool,
+  showLike: PropTypes.bool,
+  showView: PropTypes.bool,
+  wrap: PropTypes.bool,
 };
+
 CardList.defaultProps = {
   col: {},
   headTitle: "",
-  summary: false,
-  author: true,
-  likeCount: true,
-  viewCount: true,
+  showTotalChapter: false,
+  showSummary: false,
+  showAuthor: true,
+  showLike: true,
+  showView: true,
+  wrap: false,
 };
 
 export default memo(CardList);
