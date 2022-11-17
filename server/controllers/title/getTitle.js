@@ -1,53 +1,44 @@
-import { table } from './index.js';
 import { db } from '../../config/database.js';
-import jwt from 'jsonwebtoken';
+import { table } from './index.js';
 
-export default function getTitle(req, res) {
+export default function getTitlePrivate(req, res) {
   const { guid } = req.params;
 
-  const token = req.cookies.accessToken;
+  const checkExistSQL = `SELECT guid FROM \`${table}\` WHERE guid = ?`;
 
-  if (!token) return res.status(401).json({ error: 'Cần đăng nhập để sử dụng chức năng này' });
+  db.query(checkExistSQL, [guid], (err, data) => {
+    if (err) return res.status(500).json(err);
+    if (data.length) {
+      const searchData = {
+        guid,
+      };
 
-  jwt.verify(token, process.env.ACCESS_TOKEN_KEY, (error, userInfo) => {
-    if (error) return res.status(403).json({ error: 'Token không hợp lệ' });
+      const searchKeys = Object.keys(searchData);
+      const length = searchKeys.length - 1;
 
-    const sql = `SELECT userId FROM \`${table}\` WHERE guid = ?`;
+      const values = [...searchKeys.map((key) => searchData[key])];
 
-    db.query(sql, [guid], (err, data) => {
-      if (err) return res.status(500).json(err);
-
-      if (data.length && data[0].userId !== userInfo.guid) {
-        return res.status(403).json({ error: 'Token không hợp lệ' });
-      } else {
-        const searchData = {
-          guid,
-          userId: userInfo.guid,
-        };
-
-        const searchKeys = Object.keys(searchData);
-        const length = searchKeys.length - 1;
-
-        const values = [...searchKeys.map((key) => searchData[key])];
-
-        const whereStatement = `
-      WHERE ${searchKeys.reduce((string, key, index) => {
-        return `${string}\`${key}\` = ?${index !== length ? ' AND ' : ''}`;
-      }, '')}
+      const whereStatement = `
+      WHERE ${searchKeys.reduce(
+        (string, key, index) => `${string}\`${key}\` = ?${index !== length ? ' AND ' : ''}`,
+        ''
+      )}
     `;
 
-        const sql = `
+      const sql = `
       SELECT *
       FROM \`${table}\`
       ${whereStatement}
     `;
 
-        db.query(sql, [...values], (error, data) => {
-          if (error) return res.status(500).json(error);
-          if (data.length) return res.status(200).json(data);
-          return res.status(400).json({ error: data });
-        });
-      }
-    });
+      db.query(sql, [...values], (fail, result) => {
+        if (fail) return res.status(500).json(fail);
+        if (result.length) return res.status(200).json(result);
+        return res.status(400).json({ error: result });
+      });
+    }
+    if (data.lengt === 0) {
+      return res.status(404).json({ error: 'Truyện không tồn tại' });
+    }
   });
 }
