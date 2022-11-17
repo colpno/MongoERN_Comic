@@ -25,6 +25,8 @@ function RegisterForm({ handleSubmit, initialValue, validationSchema }) {
               component={InputField}
               placeholder="Viết tên đăng nhập..."
               autoFocus
+              maxLength={20}
+              letterCount
             />
             <FormLabel name="email" label="Email" required />
             <FastField
@@ -32,20 +34,25 @@ function RegisterForm({ handleSubmit, initialValue, validationSchema }) {
               component={InputField}
               placeholder="Viết địa chỉ email..."
             />
-            <FormLabel
-              name="password"
-              label="Mật khẩu"
-              subLabel={[
-                "Gồm chữ thường, chữ hoa, số, ký tự đặc biệt",
-                "Tối thiểu 8 ký tự, tối đa 15 ký tự",
-              ]}
-              required
-            />
+            <FormLabel name="password" label="Mật khẩu" required />
+            <ul className={cx("un-ordered-list")}>
+              <li className={cx("lower-case")}>Tối thiểu 1 ký tự chữ thường</li>
+              <li className={cx("upper-case")}>Tối thiểu 1 ký tự chữ hoa</li>
+              <li className={cx("number-character")}>Tối thiểu 1 ký tự số</li>
+              <li className={cx("special-character")}>
+                Tối thiểu 1 ký tự đặc biết
+              </li>
+              <li className={cx("minmax-character")}>
+                Tối thiểu 8 ký tự, tối đa 20 ký tự
+              </li>
+            </ul>
             <FastField
               name="password"
               component={InputField}
               type="password"
               placeholder="Viết mật khẩu..."
+              maxLength={20}
+              letterCount
             />
             <FormLabel
               name="confirmPassword"
@@ -57,6 +64,8 @@ function RegisterForm({ handleSubmit, initialValue, validationSchema }) {
               component={InputField}
               type="password"
               placeholder="Viết lại mật khẩu..."
+              maxLength={20}
+              letterCount
             />
             <Button primary rounded className={cx("submit")} type="submit">
               Đăng ký
