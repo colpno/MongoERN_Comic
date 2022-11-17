@@ -16,6 +16,11 @@
     "comma-dangle": "off",
     "no-tabs": "off",
     "max-len": "off",
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "object-curly-newline": "off",
+    "consistent-return": "off",
+    "no-continue": "off",
+    "no-extra-boolean-cast": "off",
+    "indent": "off"
   }
 }

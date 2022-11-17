@@ -16,9 +16,10 @@ export default function searchQuery(
   const values = searchKeys.map((key) => searches[key]);
 
   const whereStatement = `
-    ${searchKeys.reduce((string, key, index) => {
-      return `${string}\`${key}\` = ?${index !== length ? ' AND ' : ''}`;
-    }, '')}
+    ${searchKeys.reduce(
+      (string, key, index) => `${string}\`${key}\` = ?${index !== length ? ' AND ' : ''}`,
+      ''
+    )}
   `;
 
   let sql = `

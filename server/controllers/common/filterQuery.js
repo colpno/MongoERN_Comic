@@ -13,9 +13,10 @@ export default function filterQuery(
   const filterKeys = Object.keys(filters);
   const length = filterKeys.length - 1;
   const values = filterKeys.map((key) => `%${filters[key].toLowerCase()}%`);
-  const whereStatement = filterKeys.reduce((string, key, index) => {
-    return `${string}LOWER(\`${key}\`) LIKE ?${index !== length ? ' AND ' : ''}`;
-  }, '');
+  const whereStatement = filterKeys.reduce(
+    (string, key, index) => `${string}LOWER(\`${key}\`) LIKE ?${index !== length ? ' AND ' : ''}`,
+    ''
+  );
 
   let sql = `
     SELECT ${select}

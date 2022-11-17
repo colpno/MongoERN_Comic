@@ -1,7 +1,7 @@
-import { db } from '../../config/database.js';
-import { getCurrentDateTime } from './index.js';
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
+import { db } from '../../config/database.js';
+import { getCurrentDateTime } from './index.js';
 
 export default function postQuery(req, res, table) {
   const { body } = req;
