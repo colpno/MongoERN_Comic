@@ -36,7 +36,7 @@ function Chapters() {
     title: "Thông báo",
     content: "",
   });
-  const { title } = getTitleByID(titleId);
+  const { title } = getTitleByID(titleId, {}, true);
   const {
     chapters,
     setChapters,
