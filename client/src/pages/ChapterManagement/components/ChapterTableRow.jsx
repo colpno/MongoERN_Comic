@@ -63,7 +63,7 @@ function ChaptersTableRow({
             key={chapter.guid}
           >
             <Col sm={1}>
-              <span className={cx("order")}>{chapter.order}</span>
+              <span className={cx("id")}>{chapter.id}</span>
             </Col>
             <Col>
               <img

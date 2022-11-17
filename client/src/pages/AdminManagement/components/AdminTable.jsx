@@ -25,7 +25,7 @@ function AdminTable({
           // { label: "Vé thuê", name: "rentTicket" },
           { label: "Ngày tạo", name: "createdAt" },
           { label: "Ngày sửa", name: "updatedAt" },
-          { label: "", sm: 2 },
+          { label: "", sm: 1 },
         ]}
         sorting={sorting}
       >

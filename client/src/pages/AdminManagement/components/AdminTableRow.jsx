@@ -40,6 +40,7 @@ function AdminTableRow({ setPopup, admins, setDeletedItem }) {
         } = admin;
         const createdTime = formatTime(createdAt);
         const updatedTime = formatTime(updatedAt);
+
         return (
           <Row className={cx("chapters__container__content")} key={id}>
             <Col sm={1}>
@@ -75,7 +76,7 @@ function AdminTableRow({ setPopup, admins, setDeletedItem }) {
                 {`${updatedTime.day}.${updatedTime.month}.${updatedTime.year}`}
               </span>
             </Col>
-            <Col sm={2} className={cx("actions")}>
+            <Col sm={1} className={cx("actions")}>
               <Button
                 outline
                 gray

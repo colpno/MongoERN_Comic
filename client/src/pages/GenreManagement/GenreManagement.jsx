@@ -1,13 +1,20 @@
 import classNames from "classnames/bind";
+import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { AiOutlinePlus } from "react-icons/ai";
+import { useSelector } from "react-redux";
 
 import { Button, FloatingContainer } from "components";
 import FloatingForm from "components/FloatingForm/FloatingForm";
-import { Popup } from "features";
-import { useAdd, useDelete, useUpdate } from "hooks";
-import { addGenre, deleteGenre, sortGenres, updateGenre } from "services/genre";
-import GenreManagementCards from "./components/GenreManagementCards";
+import { Popup, ProgressCircle } from "features";
+import { useAdd, useDelete, useToast, useUpdate } from "hooks";
+import {
+  addGenre,
+  deleteGenre,
+  filterGenre,
+  sortGenres,
+  updateGenre,
+} from "services/genre";
 import GenreTable from "./components/GenreTable";
 import UpdateForm from "./components/UpdateForm";
 import styles from "./styles/GenreManagement.module.scss";
@@ -15,11 +22,15 @@ import styles from "./styles/GenreManagement.module.scss";
 const cx = classNames.bind(styles);
 
 function GenreManagement() {
-  const { genres, pagination, setPagination, sorting, sort } = sortGenres(
-    "id",
-    true,
-    30
+  const searchText = useSelector((state) => state.global.searchText);
+  const { genres, setGenres, pagination, setPagination, sorting, sort } =
+    sortGenres("id", true, 30);
+  const { genres: filteredGenres, fetch: fetchFilteredGenres } = filterGenre(
+    null,
+    pagination.limit
   );
+  const [progress, setProgress] = useState(0);
+  const { Toast, options: toastOptions, toastEmitter } = useToast();
   const hasData = genres?.length > 0;
 
   const {
@@ -29,13 +40,19 @@ function GenreManagement() {
     setShowForm: setShowAddForm,
     showForm: showAddForm,
   } = useAdd(async (values) => {
-    addGenre({
-      name: values.name,
-    }).then((response) => {
-      if (response.affectedRows > 0) {
-        sort();
-      }
-    });
+    addGenre({ name: values.name }, setProgress)
+      .then((response) => {
+        if (response.affectedRows > 0) {
+          toastEmitter("Thể loại đã được thêm thành công", "success");
+          setProgress(0);
+          setShowAddForm(false);
+          sort();
+        }
+      })
+      .catch((error) => {
+        toastEmitter(error.data.error || error.data.message, "error");
+        setProgress(0);
+      });
   });
 
   const {
@@ -44,11 +61,18 @@ function GenreManagement() {
     setDeletedItem,
     setPopup: setDeletePopup,
   } = useDelete(async () => {
-    deleteGenre(deletedItem).then((value) => {
-      if (value.affectedRows > 0) {
-        sort();
-      }
-    });
+    deleteGenre(deletedItem, setProgress)
+      .then((value) => {
+        if (value.affectedRows > 0) {
+          toastEmitter("Thể loại đã được xóa thành công", "success");
+          setProgress(0);
+          sort();
+        }
+      })
+      .catch((error) => {
+        toastEmitter(error.data.error || error.data.message, "error");
+        setProgress(0);
+      });
   });
 
   const {
@@ -61,21 +85,42 @@ function GenreManagement() {
     handleSubmit: handleUpdateFormSubmit,
   } = useUpdate(async (values) => {
     const data = { name: values.name };
-    updateGenre(values.guid, data).then((response) => {
-      if (response.affectedRows > 0) {
-        sort();
-      }
-    });
+    updateGenre(values.guid, data, setProgress)
+      .then((response) => {
+        if (response.affectedRows > 0) {
+          toastEmitter("Thể loại đã được thay đổi thành công", "success");
+          setProgress(0);
+          setShowUpdateForm(false);
+          sort();
+        }
+      })
+      .catch((error) => {
+        toastEmitter(error.data.error || error.data.message, "error");
+        setProgress(0);
+      });
   });
+
+  useEffect(() => {
+    if (searchText.length > 0) {
+      const data = {
+        name: searchText,
+      };
+      fetchFilteredGenres(data);
+    }
+    if (searchText.length === 0) {
+      sort();
+    }
+  }, [searchText]);
+
+  useEffect(() => {
+    filteredGenres.length > 0 ? setGenres(filteredGenres) : sort();
+  }, [filteredGenres]);
 
   return (
     <>
       <Container>
         {hasData && (
           <>
-            <Row>
-              <GenreManagementCards totalTitles={pagination.total} />
-            </Row>
             <Row className={cx("label-wrapper")}>
               <Col>
                 <h4 className={cx("label")}>All Genres</h4>
@@ -129,6 +174,8 @@ function GenreManagement() {
       <Popup yesno popup={deletePopup} setPopup={setDeletePopup} />
       <Popup yesno popup={addFormPopup} setPopup={setAddFormPopup} />
       <Popup yesno popup={updatePopup} setPopup={setUpdatePopup} />
+      <Toast {...toastOptions} />
+      <ProgressCircle percentage={progress} />
     </>
   );
 }

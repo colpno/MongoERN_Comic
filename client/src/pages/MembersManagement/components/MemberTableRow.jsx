@@ -54,6 +54,7 @@ function MemberTableRow({
         } = member;
         const createdTime = formatTime(createdAt);
         const updatedTime = formatTime(updatedAt);
+
         return (
           <Row className={cx("chapters__container__content")} key={id}>
             <Col sm={1}>

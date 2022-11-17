@@ -1,26 +1,41 @@
-/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
+import { useEffect, useState } from "react";
 import { Container, Row } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 import { FloatingContainer, FloatingForm } from "components";
-import { Popup } from "features";
-import { useDelete, useUpdate } from "hooks";
-import { deleteUser, sortUsersByProperty } from "services/user";
+import { Popup, ProgressCircle } from "features";
+import { useDelete, useToast, useUpdate } from "hooks";
+import {
+  deleteUser,
+  filterUser,
+  searchUser,
+  sortUsersByProperty,
+} from "services/user";
 import MemberManagementCards from "./components/MemberManagementCards";
 import MemberTable from "./components/MemberTable";
-import styles from "./styles/MemberManagement.module.scss";
 import UpdateForm from "./components/UpdateForm";
+import styles from "./styles/MemberManagement.module.scss";
 
 const cx = classNames.bind(styles);
 
 function MemberManagement() {
+  const searchText = useSelector((state) => state.global.searchText);
+  const { users: allMembers } = searchUser({ role: "member" });
   const {
     users: members,
+    setUsers: setMembers,
     pagination,
     setPagination,
     sorting,
     fetchUser,
   } = sortUsersByProperty({ role: "member" }, "id", true);
+  const { users: filteredMembers, fetch: fetchFilteredUsers } = filterUser(
+    null,
+    pagination.limit
+  );
+  const [progress, setProgress] = useState(0);
+  const { Toast, options: toastOptions, toastEmitter } = useToast();
   const hasData = members?.length > 0;
 
   const {
@@ -29,11 +44,18 @@ function MemberManagement() {
     setDeletedItem,
     setPopup: setDeletePopup,
   } = useDelete(async () => {
-    deleteUser(deletedItem).then((response) => {
-      if (response.affectedRows > 0) {
-        fetchUser();
-      }
-    });
+    deleteUser(deletedItem, setProgress)
+      .then((value) => {
+        if (value.affectedRows > 0) {
+          toastEmitter("Tài khoản đã được xóa thành công", "success");
+          setProgress(0);
+          fetchUser();
+        }
+      })
+      .catch((error) => {
+        toastEmitter(error.data.error || error.data.message, "error");
+        setProgress(0);
+      });
   });
 
   const {
@@ -48,14 +70,62 @@ function MemberManagement() {
     console.log(updateInfo.updated);
   });
 
+  const stat =
+    allMembers.length > 0 &&
+    allMembers.reduce(
+      (obj, member) => {
+        return {
+          coin: obj.coin + member.coin,
+          income: obj.income + member.income,
+          highestCoin:
+            obj.highestCoin < member.highestCoin
+              ? member.highestCoin
+              : obj.highestCoin,
+          highestIncome:
+            obj.highestIncome < member.highestIncome
+              ? member.highestIncome
+              : obj.highestIncome,
+        };
+      },
+      {
+        coin: 0,
+        income: 0,
+        highestCoin: allMembers[0].coin,
+        highestIncome: allMembers[0].income,
+      }
+    );
+
+  useEffect(() => {
+    if (searchText.length > 0) {
+      const data = {
+        username: searchText,
+      };
+      fetchFilteredUsers(data);
+    }
+    if (searchText.length === 0) {
+      fetchUser();
+    }
+  }, [searchText]);
+
+  useEffect(() => {
+    filteredMembers.length > 0 ? setMembers(filteredMembers) : fetchUser();
+  }, [filteredMembers]);
+
   return (
     <>
       <Container>
+        <Row>
+          {allMembers.length > 0 && (
+            <MemberManagementCards
+              totalCoin={stat.coin}
+              totalIncome={stat.income}
+              highestCoin={stat.highestCoin}
+              highestIncome={stat.highestIncome}
+            />
+          )}
+        </Row>
         {hasData && (
           <>
-            <Row>
-              <MemberManagementCards totalTitles={pagination.total} />
-            </Row>
             <Row>
               <h4 className={cx("label")}>All Members</h4>
             </Row>
@@ -88,6 +158,8 @@ function MemberManagement() {
         </FloatingForm>
       )}
       <Popup popup={deletePopup} setPopup={setDeletePopup} yesno />
+      <Toast {...toastOptions} />
+      <ProgressCircle percentage={progress} />
     </>
   );
 }
