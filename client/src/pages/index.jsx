@@ -36,3 +36,4 @@ export { default as GenreManagement } from "./GenreManagement/GenreManagement";
 export { default as PaymentMethodManagement } from "./PaymentMethodManagement/PaymentMethodManagement";
 export { default as IncomeStatistic } from "./IncomeStatistic/IncomeStatistic";
 export { default as VisitStatistic } from "./VisitStatistic/VisitStatistic";
+export { default as Search } from "./Search/Search";
