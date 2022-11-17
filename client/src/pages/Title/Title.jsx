@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 
 import followApi from "api/followApi";
 import { NoData, Pagination, Popup, Recommend } from "features";
+import { useToast } from "hooks";
 import styles from "pages/Title/assets/styles/Title.module.scss";
 import { sortChapters } from "services/chapter";
 import { getAllGenres } from "services/genre";
@@ -20,6 +21,7 @@ function Title() {
   const { titleId } = useParams();
   const { title } = getTitleByID(titleId);
   const { genres } = getAllGenres();
+  const { Toast, options, toastEmitter } = useToast();
   const { titleGenres } = searchTitleGenre("titleId", titleId);
   const [isDESCSorting, setIsDESCSorting] = useState(false);
   const { chapters, pagination, setPagination, sorting } = sortChapters(
@@ -55,7 +57,7 @@ function Title() {
   const handleFollow = async (titleID) => {
     const response = await followApi.add({ titleId: titleID });
     if (response.affectedRows > 0) {
-      alert(`Bạn đã theo dõi truyện ${title.name}`);
+      toastEmitter(`Bạn đã theo dõi truyện ${title.name}`, "success");
     }
   };
 
@@ -68,50 +70,53 @@ function Title() {
   };
 
   return (
-    <main className={cx("title-page")}>
-      {hasTitle && <div style={backgroundImageCSS} />}
-      <div className={cx("title-page__wrapper")}>
-        {hasTitle && (
-          <Introduction
-            title={title}
-            genres={convertGenreIdToString()}
-            firstChapter={chapters.length > 0 ? chapters[0].guid : "#"}
-            setPopup={setPopup}
-            handleFollow={handleFollow}
-          />
-        )}
-        <Container className={cx("title-page__wrapper__content")}>
+    <>
+      <main className={cx("title-page")}>
+        {hasTitle && <div style={backgroundImageCSS} />}
+        <div className={cx("title-page__wrapper")}>
           {hasTitle && (
-            <TitleAbout title={title} user={user} setPopup={setPopup} />
+            <Introduction
+              title={title}
+              genres={convertGenreIdToString()}
+              firstChapter={chapters.length > 0 ? chapters[0].guid : "#"}
+              setPopup={setPopup}
+              handleFollow={handleFollow}
+            />
           )}
-          <div className={cx("chapters")}>
-            {hasTitle && haveChapters ? (
-              <ComicChapters
-                title={title}
-                chapters={chapters}
-                user={user}
-                sorting={sorting}
-                isDESCSorting={isDESCSorting}
-                handleSort={handleSort}
-              />
-            ) : (
-              <NoData>
-                <h6>Không có chương nào để hiển thị!</h6>
-              </NoData>
+          <Container className={cx("title-page__wrapper__content")}>
+            {hasTitle && (
+              <TitleAbout title={title} user={user} setPopup={setPopup} />
             )}
-            {haveChapters && (
-              <Pagination
-                pagination={pagination}
-                setPagination={setPagination}
-              />
-            )}
-          </div>
-        </Container>
-        {/* TODO: random title */}
-        <Recommend />
-      </div>
+            <div className={cx("chapters")}>
+              {hasTitle && haveChapters ? (
+                <ComicChapters
+                  title={title}
+                  chapters={chapters}
+                  user={user}
+                  sorting={sorting}
+                  isDESCSorting={isDESCSorting}
+                  handleSort={handleSort}
+                />
+              ) : (
+                <NoData>
+                  <h6>Không có chương nào để hiển thị!</h6>
+                </NoData>
+              )}
+              {haveChapters && (
+                <Pagination
+                  pagination={pagination}
+                  setPagination={setPagination}
+                />
+              )}
+            </div>
+          </Container>
+          {/* TODO: random title */}
+          <Recommend />
+        </div>
+      </main>
       <Popup popup={popup} setPopup={setPopup} />
-    </main>
+      <Toast {...options} />
+    </>
   );
 }
 
