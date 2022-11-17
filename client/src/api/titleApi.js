@@ -19,7 +19,7 @@ const titleApi = {
     });
   },
 
-  getOneByID: (id, property) => {
+  getOneByID: (id, property, isPrivate) => {
     const keyArray = Object.keys(property);
     const queryStr = keyArray.reduce((string, key, index) => {
       return index !== keyArray.length - 1
@@ -27,9 +27,12 @@ const titleApi = {
         : `${string}${key}=${property[key]}`;
     }, "");
 
-    return axiosClient.get(`${url}/${id}?${queryStr}`, {
-      withCredentials: true,
-    });
+    const options = isPrivate ? { withCredentials: true } : {};
+
+    return axiosClient.get(
+      `${url}/${isPrivate ? "private/" : ""}${id}?${queryStr}`,
+      options
+    );
   },
 
   add: (title, setProgress) =>
