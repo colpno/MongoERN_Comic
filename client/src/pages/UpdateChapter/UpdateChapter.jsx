@@ -1,19 +1,17 @@
-/* eslint-disable no-unused-vars */
-import classNames from "classnames/bind";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import * as Yup from "yup";
 
 import ChapterForm from "components/ChapterForm";
+import FormWrapper from "components/FormWrapper/FormWrapper";
 import { Popup, ProgressCircle } from "features";
+import { useToast } from "hooks";
 import { getChapterByID, updateChapter } from "services/chapter";
 import { getAllChapterImagesByChapterID } from "services/chapterImage";
-import styles from "./UpdateChapter.module.scss";
-
-const cx = classNames.bind(styles);
 
 function UpdateChapter() {
   const { titleId, chapterId } = useParams();
+  const { Toast, options: toastOptions, toastEmitter } = useToast();
   const [popup, setPopup] = useState({
     trigger: false,
     title: "Thông báo",
@@ -72,11 +70,14 @@ function UpdateChapter() {
     };
     updateChapter(chapterId, data, setProgress)
       .then((response) => {
-        console.log(response);
-        setProgress(0);
+        if (response.affectedRows > 0) {
+          toastEmitter("Truyện đã được thay đổi thành công", "success");
+          setProgress(0);
+        }
       })
       .catch((error) => {
-        console.log("file: UpdateChapter.jsx ~ line 91 ~ error", error);
+        toastEmitter(error.data.error || error.data.message, "error");
+        setProgress(0);
       });
 
     setSubmitting(false);
@@ -84,8 +85,7 @@ function UpdateChapter() {
 
   return (
     <>
-      <div className={cx("wrapper")}>
-        <h3 className={cx("head")}>Chỉnh sửa truyện</h3>
+      <FormWrapper title="Chỉnh sửa chương">
         {Object.keys(chapter).length && chapterImages.length > 0 && (
           <ChapterForm
             handleSubmit={handleSubmit}
@@ -93,9 +93,10 @@ function UpdateChapter() {
             validationSchema={VALIDATION_SCHEMA}
           />
         )}
-      </div>
+      </FormWrapper>
       <ProgressCircle percentage={progress} />
       <Popup popup={popup} setPopup={setPopup} />
+      <Toast {...toastOptions} />
     </>
   );
 }

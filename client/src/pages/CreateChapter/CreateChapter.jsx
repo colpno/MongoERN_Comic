@@ -1,24 +1,41 @@
-import classNames from "classnames/bind";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import * as Yup from "yup";
 
 import ChapterForm from "components/ChapterForm";
+import FormWrapper from "components/FormWrapper/FormWrapper";
 import { Popup, ProgressCircle } from "features";
+import { useToast } from "hooks";
 import { addChapter, sortChapters } from "services/chapter";
-import styles from "./CreateChapter.module.scss";
-
-const cx = classNames.bind(styles);
 
 function CreateChapter() {
   const [progress, setProgress] = useState(0);
   const { titleId } = useParams();
+  const { Toast, options: toastOptions, toastEmitter } = useToast();
   const [popup, setPopup] = useState({
     trigger: false,
     title: "Thông báo",
     content: "",
   });
   const { chapters, refetch } = sortChapters(titleId, "order", false, 1);
+
+  const INITIAL_VALUE = {
+    order: `${Number.parseInt(chapters[0]?.order || 0, 10) + 1}`,
+    name: "",
+    cost: "false",
+    cover: "",
+    images: [],
+  };
+
+  const VALIDATION_SCHEMA = Yup.object({
+    order: Yup.number(),
+    name: Yup.string()
+      .max(255, "Giới hạn độ dài là 255 ký tự.")
+      .required("Tiêu đề không được để trống."),
+    cost: Yup.string().required("Chương tối thiểu là miễn phí"),
+    cover: Yup.string().required("Ảnh bìa không được để trống."),
+    images: Yup.array().of(Yup.string()).min(1, "Nội dung không được để trống"),
+  });
 
   const handleSubmit = (
     { cover, images, ...values },
@@ -30,59 +47,35 @@ function CreateChapter() {
       cover,
       images,
     };
-    addChapter(data, setProgress).then((response) => {
-      if (response.affectedRows > 0) {
-        setPopup({ ...popup, trigger: true, content: "Thêm thành công" });
+    addChapter(data, setProgress)
+      .then((response) => {
+        if (response.affectedRows > 0) {
+          toastEmitter("Truyện đã được thêm thành công", "success");
+          setProgress(0);
+          resetForm();
+          refetch();
+        }
+      })
+      .catch((error) => {
+        toastEmitter(error.data.error || error.data.message, "error");
         setProgress(0);
-        refetch();
-        resetForm();
-      }
-    });
+      });
 
     setSubmitting(false);
   };
 
-  const INITIAL_VALUE =
-    chapters.length > 0
-      ? {
-          order: `${Number.parseInt(chapters[0]?.order, 10) + 1}`,
-          name: "",
-          cost: "false",
-          cover: "",
-          images: [],
-        }
-      : {
-          order: `1`,
-          name: "",
-          cost: "false",
-          cover: "",
-          images: [],
-        };
-
-  const VALIDATION_SCHEMA = Yup.object({
-    order: Yup.number(),
-    name: Yup.string()
-      .max(255, "Giới hạn độ dài là 255 ký tự.")
-      .required("Chương phải có tiêu đề."),
-    cost: Yup.string().required("Chương tối thiểu là miễn phí"),
-    cover: Yup.string().required("Chương phải có ảnh bìa mặc định."),
-    images: Yup.array().of(Yup.string()).min(1, "Cần tối thiểu 1 nội dung"),
-  });
-
   return (
     <>
-      <div className={cx("wrapper")}>
-        <h3 className={cx("head")}>Thêm chương mới</h3>
-        {INITIAL_VALUE.order - 1 === (chapters[0]?.order || 0) && (
-          <ChapterForm
-            initialValues={INITIAL_VALUE}
-            validationSchema={VALIDATION_SCHEMA}
-            handleSubmit={handleSubmit}
-          />
-        )}
-      </div>
+      <FormWrapper title="Thêm chương mới">
+        <ChapterForm
+          initialValues={INITIAL_VALUE}
+          validationSchema={VALIDATION_SCHEMA}
+          handleSubmit={handleSubmit}
+        />
+      </FormWrapper>
       <ProgressCircle percentage={progress} />
       <Popup popup={popup} setPopup={setPopup} />
+      <Toast {...toastOptions} />
     </>
   );
 }

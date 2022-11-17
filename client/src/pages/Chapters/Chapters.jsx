@@ -1,13 +1,14 @@
 import classNames from "classnames/bind";
+import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { AiOutlinePlus } from "react-icons/ai";
-import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import Button from "components/Button";
-import { NoData, Popup, ProgressCircle } from "features";
-import { useDelete } from "hooks";
-import { deleteChapter, sortChapters } from "services/chapter";
+import { NoData, Popup, ProgressCircle, Search } from "features";
+import { useDelete, useToast } from "hooks";
+import { deleteChapter, filterChapters, sortChapters } from "services/chapter";
 import { deleteTitle, getTitleByID } from "services/title";
 import styles from "./assets/styles/Chapters.module.scss";
 import ChapterTable from "./components/ChapterTable";
@@ -26,7 +27,10 @@ function BtnCreate() {
 
 function Chapters() {
   const navigate = useNavigate();
+  const searchText = useSelector((state) => state.global.searchText);
   const { titleId } = useParams();
+  const [progress, setProgress] = useState(0);
+  const { Toast, options: toastOptions, toastEmitter } = useToast();
   const [popup, setPopup] = useState({
     trigger: false,
     title: "Thông báo",
@@ -35,11 +39,14 @@ function Chapters() {
   const { title } = getTitleByID(titleId);
   const {
     chapters,
+    setChapters,
     pagination,
     setPagination,
     sorting,
     refetch: fetchChapters,
   } = sortChapters(titleId, "order", true);
+  const { chapters: filteredChapters, fetch: fetchFilterChapters } =
+    filterChapters(null, pagination.limit);
   const hasData = chapters.length > 0;
 
   const {
@@ -47,40 +54,34 @@ function Chapters() {
     popup: titlePopup,
     setDeletedItem: setTitleDeletedItem,
     setPopup: setTitlePopup,
-    progress: deleteTitleProgress,
-    setProgress: setDeleteTitleProgress,
   } = useDelete(async () => {
     deleteTitle(
       titleDeletedItem.titleId,
       {
         publicId: titleDeletedItem.publicId,
       },
-      setDeleteTitleProgress
-    ).then((response) => {
-      if (response.errno === 1451) {
-        setTitlePopup((prev) => ({
-          ...prev,
-          trigger: false,
-          yesno: true,
-        }));
-        setPopup((prev) => ({
-          ...prev,
-          trigger: true,
-          content: "Không thể xóa do vẫn tồn tại các chương",
-        }));
-        setDeleteTitleProgress(0);
-      }
-      if (response.affectedRows > 0) {
-        setTitlePopup((prev) => ({
-          ...prev,
-          trigger: true,
-          content: "Xóa thành công",
-          yesno: false,
-        }));
-        setDeleteTitleProgress(0);
-        navigate(-1);
-      }
-    });
+      setProgress
+    )
+      .then((response) => {
+        if (response.errno === 1451) {
+          setTitlePopup((prev) => ({
+            ...prev,
+            trigger: false,
+            yesno: true,
+          }));
+          toastEmitter("Không thể xóa do vẫn tồn tại các chương", "error");
+          setProgress(0);
+        }
+        if (response.affectedRows > 0) {
+          toastEmitter("Truyện đã được xóa thành công", "success");
+          setProgress(0);
+          navigate(-1);
+        }
+      })
+      .catch((error) => {
+        toastEmitter(error.data.error || error.data.message, "error");
+        setProgress(0);
+      });
   });
 
   const {
@@ -88,25 +89,37 @@ function Chapters() {
     popup: chapterPopup,
     setDeletedItem: setChapterDeletedItem,
     setPopup: setChapterPopup,
-    progress: deleteChapterProgress,
-    setProgress: setDeleteChapterProgress,
   } = useDelete(async () => {
     const { guid, titleId: titleID } = chapterDeletedItem;
     const data = { titleId: titleID };
-    deleteChapter(guid, data, setDeleteChapterProgress).then((response) => {
-      if (response.affectedRows > 0) {
-        setChapterPopup((prev) => ({
-          ...prev,
-          trigger: true,
-          content: "Xóa thành công",
-          yesno: false,
-        }));
-        fetchChapters();
-        setDeleteChapterProgress(0);
-      }
-      console.log(response);
-    });
+    deleteChapter(guid, data, setProgress)
+      .then((response) => {
+        if (response.affectedRows > 0) {
+          toastEmitter("Truyện đã được xóa thành công", "success");
+          fetchChapters();
+          setProgress(0);
+        }
+      })
+      .catch((error) => {
+        toastEmitter(error.data.error || error.data.message, "error");
+        setProgress(0);
+      });
   });
+
+  useEffect(() => {
+    if (searchText.length > 0) {
+      const property = {
+        name: searchText,
+        titleId,
+      };
+      fetchFilterChapters(property);
+    }
+    if (searchText.length === 0) fetchChapters();
+  }, [searchText]);
+
+  useEffect(() => {
+    setChapters(filteredChapters);
+  }, [filteredChapters]);
 
   return (
     <>
@@ -130,6 +143,9 @@ function Chapters() {
               </span>
             </span>
           </Col>
+          <Col>
+            <Search />
+          </Col>
           <Col xs={6} sm={4} lg={20} className={cx("chapters__general__box")}>
             {hasData && <BtnCreate />}
           </Col>
@@ -150,8 +166,7 @@ function Chapters() {
           </NoData>
         )}
       </Container>
-      <ProgressCircle percentage={deleteChapterProgress} />
-      <ProgressCircle percentage={deleteTitleProgress} />
+      <ProgressCircle percentage={progress} />
       <Popup
         yesno={chapterPopup.yesno}
         popup={chapterPopup}
@@ -163,6 +178,7 @@ function Chapters() {
         setPopup={setTitlePopup}
       />
       <Popup popup={popup} setPopup={setPopup} />
+      <Toast {...toastOptions} />
     </>
   );
 }

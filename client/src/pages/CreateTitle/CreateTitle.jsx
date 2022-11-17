@@ -4,6 +4,7 @@ import * as Yup from "yup";
 
 import TitleForm from "components/TitleForm";
 import { Popup, ProgressCircle } from "features";
+import { useToast } from "hooks";
 import { addTitle } from "services/title";
 import styles from "./CreateTitle.module.scss";
 
@@ -11,6 +12,7 @@ const cx = classNames.bind(styles);
 
 function CreateTitle() {
   const [progress, setProgress] = useState(0);
+  const { Toast, options: toastOptions, toastEmitter } = useToast();
   const [popup, setPopup] = useState({
     trigger: false,
     title: "Thông báo",
@@ -18,12 +20,17 @@ function CreateTitle() {
   });
 
   const handleSubmit = (values, { setSubmitting }) => {
-    addTitle(values, setProgress).then((response) => {
-      if (response.affectedRows > 0) {
-        setPopup({ ...popup, trigger: true, content: "Thêm thành công" });
+    addTitle(values, setProgress)
+      .then((response) => {
+        if (response.affectedRows > 0) {
+          toastEmitter("Truyện đã được thêm thành công", "success");
+          setProgress(0);
+        }
+      })
+      .catch((error) => {
+        toastEmitter(error.data.error || error.data.message, "error");
         setProgress(0);
-      }
-    });
+      });
 
     setSubmitting(false);
   };
@@ -75,6 +82,7 @@ function CreateTitle() {
       </div>
       <ProgressCircle percentage={progress} />
       <Popup popup={popup} setPopup={setPopup} />
+      <Toast {...toastOptions} />
     </>
   );
 }

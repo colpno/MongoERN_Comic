@@ -5,6 +5,7 @@ import * as Yup from "yup";
 
 import TitleForm from "components/TitleForm";
 import { Popup, ProgressCircle } from "features";
+import { useToast } from "hooks";
 import { getTitleByID, updateTitle } from "services/title";
 import { getAllTitleGenreByProperty } from "services/titleGenre";
 import styles from "./UpdateTitle.module.scss";
@@ -14,6 +15,7 @@ const cx = classNames.bind(styles);
 function UpdateTitle() {
   const { titleId } = useParams();
   const [progress, setProgress] = useState(0);
+  const { Toast, options: toastOptions, toastEmitter } = useToast();
   const [popup, setPopup] = useState({
     trigger: false,
     title: "Thông báo",
@@ -92,18 +94,14 @@ function UpdateTitle() {
         setProgress
       )
         .then((response) => {
-          console.log("file: UpdateTitle.jsx ~ line 96 ~ response", response);
           if (response.affectedRows > 0) {
-            setPopup((prev) => ({
-              ...prev,
-              trigger: true,
-              content: "Thay đổi thành công",
-            }));
+            toastEmitter("Truyện đã được thay đổi thành công", "success");
             setProgress(0);
           }
         })
         .catch((error) => {
-          console.log("file: UpdateTitle.jsx ~ line 100 ~ error", error);
+          toastEmitter(error.data.error || error.data.message, "error");
+          setProgress(0);
         });
 
     setSubmitting(false);
@@ -127,6 +125,7 @@ function UpdateTitle() {
       </div>
       <ProgressCircle percentage={progress} />
       <Popup popup={popup} setPopup={setPopup} />
+      <Toast {...toastOptions} />
     </>
   );
 }
