@@ -1,16 +1,6 @@
 @use "assets/styles/variables" as var;
 
 .form {
-  width: 800px;
-  margin: calc(var.$header-height + 20px) auto 80px;
-  padding: 20px 55px;
-  border: 1px solid var.$border-gray;
-
-  &__head-title {
-    text-align: center;
-    margin-bottom: 30px;
-  }
-
   &__group {
     margin-bottom: 20px;
   }
@@ -32,5 +22,5 @@
   margin-bottom: 1.2rem;
   border: 1px solid var.$gray-300;
   border-radius: 100vw;
-  padding: 10px;
+  padding: 1.4rem;
 }
