@@ -1,6 +1,7 @@
 import classNames from "classnames/bind";
 import { FastField, Form, Formik } from "formik";
 import PropTypes from "prop-types";
+import moment from "moment";
 import * as Yup from "yup";
 
 import { Image } from "components";
@@ -11,86 +12,88 @@ import styles from "../styles/ProfileForm.module.scss";
 
 const cx = classNames.bind(styles);
 
-function ProfileForm({ INITIAL_VALUE, handleSubmit, handleOpenChooseAvatar }) {
+function ProfileForm({
+  avatar,
+  INITIAL_VALUE,
+  handleSubmit,
+  handleOpenChooseAvatar,
+}) {
   const VALIDATION_SCHEMA = Yup.object({
-    nickname: Yup.string()
+    avatar: Yup.string().required("Hình đại diện không được để trống"),
+    username: Yup.string()
       .matches(/^[a-zA-Z0-9]+$/g, "Tên người dùng phải là chữ cái hoặc số")
-      .max(15, "Độ dài tối đa là 15 ký tự")
-      .required("Nickname là cần thiết để hiển thị"),
+      .max(20, "Độ dài tối đa là 20 ký tự")
+      .required("Tên hiển thị không được để trống"),
     email: Yup.string()
-      .min(10, "Số điện thoại gồm có 10 chữ số")
-      .max(10, "Số điện thoại gồm có 10 chữ số")
-      .matches(/\d+/g, "Số điện thoại chỉ bao gồm số")
-      .matches(/^0/, "Số điện thoại bắt đầu bằng số 0")
-      .required("Số điện thoại là cần thiết khi quên mật khẩu"),
-    dataOfBirth: Yup.string(),
+      .email("Định dạng mail không hợp lệ")
+      .required("Email không được để trống"),
+    dateOfBirth: Yup.date()
+      .transform((value, originalValue) =>
+        value ? moment(originalValue, "DD/MM/YYYY").toDate() : value
+      )
+      .typeError("Ngày sinh không chính xác")
+      .min("01/01/1900", "Ngày sinh không được nhỏ hơn 01/01/1900")
+      .max(moment().toDate(), "Ngày sinh không được vượt quá hôm nay"),
   });
 
   return (
-    <div className={cx("form")}>
-      <h3 className={cx("form__head-title")}>Thông tin cá nhân</h3>
-      <Formik
-        initialValues={INITIAL_VALUE}
-        validationSchema={VALIDATION_SCHEMA}
-        onSubmit={handleSubmit}
-      >
-        {() => {
-          return (
-            <Form>
-              <div className={cx("avatar-container")}>
-                <Image
-                  src="https://robohash.org/quisuntquia.png?size=200x200&set=set1"
-                  alt="avatar"
-                  width={120}
-                  height={120}
-                  className={cx("avatar")}
-                />
-                <Button gray dark80 small onClick={handleOpenChooseAvatar}>
-                  Đổi ảnh đại diện
-                </Button>
-              </div>
-
-              <FormLabel
-                name="nickname"
-                label="Tên hiển thị (Nickname)"
-                required
+    <Formik
+      enableReinitialize
+      initialValues={INITIAL_VALUE}
+      validationSchema={VALIDATION_SCHEMA}
+      onSubmit={handleSubmit}
+    >
+      {() => {
+        return (
+          <Form>
+            <div className={cx("avatar-container")}>
+              <Image
+                src={avatar}
+                alt="avatar"
+                width={150}
+                height={150}
+                className={cx("avatar")}
               />
-              <FastField
-                name="nickname"
-                component={InputField}
-                placeholder="Viết tên người dùng..."
-                letterCount
-                maxLength={20}
-              />
-              <FormLabel name="email" label="Địa chỉ email" required />
-              <FastField
-                name="email"
-                component={InputField}
-                placeholder="Viết số điện thoại..."
-                letterCount
-                maxLength={10}
-              />
-              <FormLabel name="dateOfBirth" label="Ngày sinh" />
-              <FastField
-                name="dateOfBirth"
-                component={InputField}
-                placeholder="dd/mm/yyyy"
-              />
-              <Button primary type="submit" className={cx("form__submit")}>
-                Thay đổi
+              <Button gray dark80 small onClick={handleOpenChooseAvatar}>
+                Đổi ảnh đại diện
               </Button>
-              {/* <pre>{JSON.stringify(formikProps.values, null, 4)}</pre> */}
-            </Form>
-          );
-        }}
-      </Formik>
-    </div>
+            </div>
+
+            <FormLabel name="username" label="Tên đăng nhập" />
+            <FastField
+              name="username"
+              component={InputField}
+              placeholder="Viết tên người dùng..."
+              disabled
+            />
+            <FormLabel name="email" label="Địa chỉ email" required />
+            <FastField
+              name="email"
+              component={InputField}
+              placeholder="Viết địa chỉ email..."
+            />
+            <FormLabel name="dateOfBirth" label="Ngày sinh" />
+            <FastField
+              name="dateOfBirth"
+              component={InputField}
+              placeholder="dd/mm/yyyy"
+            />
+            <Button primary type="submit" className={cx("form__submit")}>
+              Thay đổi
+            </Button>
+            {/* <pre>{JSON.stringify(formikProps.values, null, 4)}</pre> */}
+          </Form>
+        );
+      }}
+    </Formik>
   );
 }
 
 ProfileForm.propTypes = {
+  avatar: PropTypes.string.isRequired,
   INITIAL_VALUE: PropTypes.shape({
-    nickname: PropTypes.string.isRequired,
+    avatar: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired,
     dateOfBirth: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired,
   }).isRequired,
