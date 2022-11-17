@@ -29,12 +29,12 @@
   clip-path: inset(0 -100vmax);
 }
 
-@mixin imageScale() {
+@mixin imageScale($scale) {
   overflow: hidden;
   img {
     transition: all 0.4s ease-out;
     &:hover {
-      transform: scale(1.1);
+      transform: scale($scale);
     }
   }
 }
