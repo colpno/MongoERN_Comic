@@ -14,3 +14,4 @@ export { roundNumByUnit } from "./numberMethods";
 export { separateNumberDigit } from "./numberMethods";
 export { createArrayFromTo } from "./arrayMethods";
 export { makeUnique } from "./arrayMethods";
+export { isEmpty } from "./isEmpty";
