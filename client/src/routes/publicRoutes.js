@@ -11,6 +11,7 @@ import {
   Reading,
   Register,
   ResetPassword,
+  Search,
   Title,
   Weekly,
 } from "pages";
@@ -34,6 +35,10 @@ export const publicRoutes = [
   {
     path: "/reset-password/:token",
     component: ResetPassword,
+  },
+  {
+    path: "/search",
+    component: Search,
   },
   {
     path: "/comic/weekly",
