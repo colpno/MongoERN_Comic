@@ -6,13 +6,13 @@ import { IoSearchOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 
 import styles from "layouts/components/Header/assets/styles/Search.module.scss";
-import { setSearchText } from "libs/redux/slices/searchSlice";
+import { setSearchText } from "libs/redux/slices/globalSlice";
 
 const cx = classNames.bind(styles);
 
 function Search() {
   const dispatch = useDispatch();
-  const searchText = useSelector((state) => state.search.text);
+  const searchText = useSelector((state) => state.global.searchText);
   const [searchValue, setSearchValue] = useState("");
   const debounced = useDebounce(searchValue, 500);
 
