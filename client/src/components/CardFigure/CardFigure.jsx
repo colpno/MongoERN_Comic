@@ -32,19 +32,19 @@ function CardFigure(props) {
         <div className="card-figure__content__wrapper">
           <h5 className="card-figure__content__title">{data.name}</h5>
           {showSummary && (
-            <p className="card-figure__content__summary">{data.showSummary}</p>
+            <p className="card-figure__content__summary">{data.summary}</p>
           )}
         </div>
 
         <div className="card-figure__content__wrapper">
           {showTotalChapter && (
             <small className="card-figure__content__total-chapter">
-              {data.showTotalChapter} chương
+              {data.totalChapter} chương
             </small>
           )}
           {showAuthor && (
             <small className="card-figure__content__author">
-              {data.showAuthor}
+              {data.author}
             </small>
           )}
           {(showLike || showView) && (
@@ -73,9 +73,9 @@ CardFigure.propTypes = {
   data: PropTypes.shape({
     name: PropTypes.string.isRequired,
     cover: PropTypes.string.isRequired,
-    showSummary: PropTypes.string.isRequired,
-    showTotalChapter: PropTypes.number.isRequired,
-    showAuthor: PropTypes.oneOfType([
+    summary: PropTypes.string.isRequired,
+    totalChapter: PropTypes.number.isRequired,
+    author: PropTypes.oneOfType([
       PropTypes.string.isRequired,
       PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     ]),

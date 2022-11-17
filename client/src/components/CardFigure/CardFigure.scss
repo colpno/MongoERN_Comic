@@ -1,4 +1,4 @@
-@use "assets/styles/variables";
+@use "assets/styles/variables" as var;
 @use "assets/styles/mixins";
 
 .card-figure {
@@ -9,11 +9,13 @@
 
     :global(.image-wrapper) {
       margin: 0 15px 0 8px;
+      border: 1px solid var.$gray-300;
     }
   }
 
   .card-figure__image {
     align-self: center;
+    width: 182px;
     aspect-ratio: 1 / 1;
     box-shadow: 0 0 0 1px rgb(0 0 0 / 0.1);
     @include mixins.imageScale(1.1);
