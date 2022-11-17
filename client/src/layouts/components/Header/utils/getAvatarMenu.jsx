@@ -4,6 +4,7 @@ import { AiOutlineLogout } from "react-icons/ai";
 import {
   BsBellFill,
   BsFillFileEarmarkFontFill,
+  BsFillGearFill,
   BsFillPatchQuestionFill,
 } from "react-icons/bs";
 import { FaTicketAlt } from "react-icons/fa";
@@ -11,7 +12,6 @@ import { ImBooks, ImQuill } from "react-icons/im";
 import { IoGiftSharp, IoLockClosed } from "react-icons/io5";
 
 import { CircleC, CircleP } from "assets/images";
-import { MdAdminPanelSettings } from "react-icons/md";
 
 function getAvatarMenu(cx, user, isLoggingIn) {
   const menu = [
@@ -99,7 +99,7 @@ function getAvatarMenu(cx, user, isLoggingIn) {
     const managementMenu = {
       path: "/admin/titles",
       label: <p className={cx("management")}>Management</p>,
-      icon: <MdAdminPanelSettings />,
+      icon: <BsFillGearFill />,
     };
     user.role === "admin" && menu[0].splice(1, 0, managementMenu);
   }
