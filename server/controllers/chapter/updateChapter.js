@@ -1,10 +1,10 @@
-import { table } from './index.js';
-import { db } from '../../config/database.js';
+import { config } from 'dotenv';
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
+import { db } from '../../config/database.js';
 import { cloudinary } from '../../libs/cloudinary/index.js';
-import { config } from 'dotenv';
 import getCurrentDateTime from '../common/getCurrentDateTime.js';
+import { table } from './index.js';
 
 config();
 
@@ -31,7 +31,7 @@ const first = async (res, image, titleId, chapterId, index) => {
       console.log('Image has been uploaded to cloud');
     }
   );
-  return await [
+  return [
     chapterId,
     response.secure_url,
     `${index + 1}`,
@@ -72,12 +72,12 @@ export default function updateChapter(req, res) {
               .then(async () => {
                 await cloudinary.api
                   .delete_folder(`comic/titles/${titleId}/chapters/${chapterGuid}/cover/`)
-                  .catch((error) => {
-                    if (error) console.log(error);
+                  .catch((error2) => {
+                    if (error2) console.log(error2);
                   });
               })
-              .catch((error) => {
-                if (error) console.log(error);
+              .catch((error1) => {
+                if (error1) console.log(error1);
               });
 
             // Upload cover to cloudinary
@@ -87,8 +87,8 @@ export default function updateChapter(req, res) {
                 upload_preset: process.env.CLOUDINARY_CHAPTER_UPLOAD_PRESET,
                 folder: `comic/titles/${titleId}/chapters/${chapterGuid}/cover`,
               },
-              (error) => {
-                if (error) console.log(error);
+              (error1) => {
+                if (error1) console.log(error1);
                 console.log('Cover has been uploaded to cloud');
               }
             );
@@ -99,15 +99,16 @@ export default function updateChapter(req, res) {
           if (images?.length > 0) {
             // Upload all images of chapter into cloudinary
             const getRes = async () => {
-              const chapterImagesValues = await images.map(
-                async (image, index) => await first(res, image, titleId, chapterGuid, index)
-              );
-              return chapterImagesValues;
+              const temp = await images.map(async (image, index) => {
+                const temp1 = await first(res, image, titleId, chapterGuid, index);
+                return temp1;
+              });
+              return temp;
             };
             const promises = await getRes()
               .then((response) => response)
-              .catch((error) => {
-                if (error) console.log(error);
+              .catch((error1) => {
+                if (error1) console.log(error1);
               });
             chapterImagesValues =
               promises.length > 0 &&
@@ -119,16 +120,16 @@ export default function updateChapter(req, res) {
                   );
 
                   oldImagePublicId.forEach(async (publicId) => {
-                    await cloudinary.uploader.destroy(publicId).catch((error) => {
-                      if (error) console.log(error);
+                    await cloudinary.uploader.destroy(publicId).catch((error1) => {
+                      if (error1) console.log(error1);
                       console.log('Deleted all unnecessary images');
                     });
                   });
 
                   return response;
                 })
-                .catch((error) => {
-                  if (error) console.log(error);
+                .catch((error1) => {
+                  if (error1) console.log(error1);
                 }));
           }
 
@@ -150,35 +151,34 @@ export default function updateChapter(req, res) {
             chapterValues.push(uploadCoverResponse.secure_url, uploadCoverResponse.public_id);
           chapterValues.push(now, chapterGuid);
 
-          db.query(updateSql, [...chapterValues], (error, data) => {
-            if (error) return res.status(500).json(error);
-            if (data.affectedRows > 0) {
+          db.query(updateSql, [...chapterValues], (error1, data1) => {
+            if (error1) return res.status(500).json(error1);
+            if (data1.affectedRows > 0) {
               console.log("Updated chapter's info in database");
 
               if (images?.length > 0) {
-                console.log('first');
                 const deleteSql = `DELETE FROM ${table}_image WHERE chapterId = ?`;
 
-                db.query(deleteSql, [chapterGuid], (error, data) => {
-                  if (error) return res.status(500).json(error);
-                  if (data.affectedRows > 0) {
+                db.query(deleteSql, [chapterGuid], (error2, data2) => {
+                  if (error2) return res.status(500).json(error2);
+                  if (data2.affectedRows > 0) {
                     console.log('Deleted all images');
 
                     const sqla = `
-                INSERT INTO \`${table}_image\`
-                (\`chapterId\`,\`image\`,\`order\`,\`createdAt\`,\`updatedAt\`, \`guid\`,\`publicId\`)
-                VALUES ?;
-              `;
+                      INSERT INTO \`${table}_image\`
+                      (\`chapterId\`,\`image\`,\`order\`,\`createdAt\`,\`updatedAt\`, \`guid\`,\`publicId\`)
+                      VALUES ?;
+                    `;
 
                     // Execute query
-                    db.query(sqla, [chapterImagesValues], (err, data) => {
-                      if (err) return res.status(500).json(err);
-                      if (data.affectedRows > 0) {
+                    db.query(sqla, [chapterImagesValues], (error3, data3) => {
+                      if (error3) return res.status(500).json(error3);
+                      if (data3.affectedRows > 0) {
                         console.log("Chapter's images has been insert into database");
                         console.log('------------------------------------------------------');
-                        return res.status(200).json(data);
+                        return res.status(200).json(data3);
                       }
-                      return res.status(400).json({ error: data });
+                      return res.status(400).json({ error: data3 });
                     });
                   }
                 });

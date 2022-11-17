@@ -21,6 +21,11 @@
     "consistent-return": "off",
     "no-continue": "off",
     "no-extra-boolean-cast": "off",
-    "indent": "off"
+    "indent": "off",
+    "import/no-cycle": "off",
+    "no-unused-expressions": "off",
+    "no-confusing-arrow": "off",
+    "implicit-arrow-linebreak": "off",
+    "function-paren-newline": "off"
   }
 }

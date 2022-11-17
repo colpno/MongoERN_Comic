@@ -1,6 +1,6 @@
+import jwt from 'jsonwebtoken';
 import { db } from '../../config/database.js';
 import { getCurrentDateTime } from './index.js';
-import jwt from 'jsonwebtoken';
 
 export default function putQuery(req, res, table) {
   const { body, params } = req;
@@ -10,7 +10,7 @@ export default function putQuery(req, res, table) {
 
   if (!token) return res.status(401).json({ error: 'Cần đăng nhập để sử dụng chức năng này' });
 
-  jwt.verify(token, process.env.ACCESS_TOKEN_KEY, (error, userInfo) => {
+  jwt.verify(token, process.env.ACCESS_TOKEN_KEY, (error) => {
     if (error) return res.status(403).json({ error: 'Token không hợp lệ' });
 
     console.log('------------------------------------------------------');
