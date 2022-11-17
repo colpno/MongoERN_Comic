@@ -14,7 +14,7 @@ function ComicActionSection({ titles, headTitle }) {
       <Container className={cx("action")}>
         <CardList
           col={{
-            sm: 4,
+            lg: 4,
           }}
           data={titles}
           headTitle={headTitle}

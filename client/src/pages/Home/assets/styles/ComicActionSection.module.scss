@@ -1,9 +1,7 @@
 .action {
-  :global(.image-wrapper) {
-    width: 100%;
-    // height: 236px;
-  }
   :global(.card-figure__image) {
-    aspect-ratio: 2 / 1.25;
+    width: 100%;
+    aspect-ratio: 1.7 / 1;
+    border-radius: 2rem 2rem 0 0;
   }
 }
