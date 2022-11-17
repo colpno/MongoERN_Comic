@@ -1,4 +1,7 @@
-import { CircleC } from "assets/images";
+import { BiCategoryAlt, BiSpreadsheet } from "react-icons/bi";
+import { BsFilePost } from "react-icons/bs";
+import { FaChartBar, FaUsers } from "react-icons/fa";
+import { MdAdminPanelSettings, MdPayment } from "react-icons/md";
 
 export default function getAdminSideBarMenu() {
   const baseURL = "/admin";
@@ -8,32 +11,32 @@ export default function getAdminSideBarMenu() {
       subMenu: [
         {
           to: `${baseURL}/titles`,
-          icon: CircleC,
+          icon: BsFilePost,
           label: "Titles",
         },
         {
           to: `${baseURL}/chapters`,
-          icon: CircleC,
+          icon: BiSpreadsheet,
           label: "Chapters",
         },
         {
           to: `${baseURL}/genres`,
-          icon: CircleC,
+          icon: BiCategoryAlt,
           label: "Genres",
         },
         {
           to: `${baseURL}/members`,
-          icon: CircleC,
+          icon: FaUsers,
           label: "Members",
         },
         {
           to: `${baseURL}/administrators`,
-          icon: CircleC,
+          icon: MdAdminPanelSettings,
           label: "Administrators",
         },
         {
           to: `${baseURL}/payment-methods`,
-          icon: CircleC,
+          icon: MdPayment,
           label: "Payment Methods",
         },
       ],
@@ -43,14 +46,14 @@ export default function getAdminSideBarMenu() {
       subMenu: [
         {
           to: `${baseURL}/income`,
-          icon: CircleC,
+          icon: FaChartBar,
           label: "Income",
         },
-        {
-          to: `${baseURL}/visit`,
-          icon: CircleC,
-          label: "Visits",
-        },
+        // {
+        //   to: `${baseURL}/visit`,
+        //   icon: CircleC,
+        //   label: "Visits",
+        // },
       ],
     },
   ];
