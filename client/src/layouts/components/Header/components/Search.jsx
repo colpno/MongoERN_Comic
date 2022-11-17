@@ -44,7 +44,10 @@ function Search() {
 
   return (
     <div className={cx("search")} ref={searchRef}>
-      <div className={cx("search__wrapper__field")}>
+      <div className={cx("wrapper")}>
+        <Button wrapper to="/search" className={cx("search-extend")}>
+          <MdOutlineOpenInNew className={cx("icon")} />
+        </Button>
         <input
           type="text"
           placeholder="Tìm tên truyện, tên tác giả"
@@ -59,9 +62,6 @@ function Search() {
           />
         )}
         <IoSearchOutline className={cx("search__icon")} />
-        <Button wrapper to="/search" className={cx("search-extend")}>
-          <MdOutlineOpenInNew className={cx("icon")} />
-        </Button>
       </div>
       {showResult && debounced && (
         <SearchDropdownList cx={cx} searchResult={searchResult} />

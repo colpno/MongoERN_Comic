@@ -28,10 +28,11 @@
   align-items: center;
   flex-direction: row;
   flex: 1;
+
   li {
     a {
       color: inherit;
-      padding: calc(variables.$header-height / 2 - 10px) 22px;
+      padding: calc(variables.$header-height / 2 - 12px) 22px;
       font-weight: 700;
       position: relative;
     }
