@@ -1,7 +1,7 @@
 import genreApi from "api/genreApi";
 
-const updateGenre = async (id, genre) => {
-  const response = await genreApi.update(id, genre);
+const updateGenre = async (id, genre, setProgress) => {
+  const response = await genreApi.update(id, genre, setProgress);
   return response;
 };
 

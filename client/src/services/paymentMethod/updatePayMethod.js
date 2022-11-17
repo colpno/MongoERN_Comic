@@ -1,7 +1,7 @@
 import paymentMethodApi from "api/paymentMethodApi";
 
-const updatePayMethod = async (id, method) => {
-  const response = await paymentMethodApi.update(id, method);
+const updatePayMethod = async (id, method, setProgress) => {
+  const response = await paymentMethodApi.update(id, method, setProgress);
   return response;
 };
 

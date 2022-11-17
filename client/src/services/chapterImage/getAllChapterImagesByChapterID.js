@@ -6,8 +6,7 @@ const getAllChapterImagesByChapterID = (chapterId) => {
 
   const fetchAllChapters = async (chapterID) => {
     try {
-      const id = chapterId || chapterID;
-      const response = await chapterImageApi.sort(id, "order", "asc");
+      const response = await chapterImageApi.sort(chapterID, "order", "asc");
       setChapterImages(response);
       return response;
     } catch (error) {
@@ -16,7 +15,7 @@ const getAllChapterImagesByChapterID = (chapterId) => {
   };
 
   useEffect(() => {
-    chapterId && setChapterImages(fetchAllChapters());
+    chapterId && setChapterImages(fetchAllChapters(chapterId));
   }, [chapterId]);
 
   return { chapterImages, setChapterImages, refetch: fetchAllChapters };

@@ -4,7 +4,7 @@ import { convertTitlesPropertyToString } from "utils/convertArrayPropertyToStrin
 
 const sortTitles = (col, isAsc, limit = 50) => {
   const [titles, setTitles] = useState([]);
-  const [sort, setSort] = useState({ isAsc, col });
+  const [sortInfo, setSortInfo] = useState({ isAsc, col });
   const [pagination, setPagination] = useState({
     page: 1,
     limit,
@@ -12,14 +12,14 @@ const sortTitles = (col, isAsc, limit = 50) => {
   });
 
   const sorting = (column) => {
-    setSort({ isAsc: !sort.isAsc, col: column });
+    setSortInfo({ isAsc: !sortInfo.isAsc, col: column });
   };
 
-  const sortOrder = () => (sort.isAsc ? "asc" : "desc");
+  const sortOrder = () => (sortInfo.isAsc ? "asc" : "desc");
 
-  const normalSort = async () => {
+  const sort = async () => {
     try {
-      const response = await titleApi.sort(sort.col, sortOrder(), {
+      const response = await titleApi.sort(sortInfo.col, sortOrder(), {
         limit: pagination.limit,
         page: pagination.page,
       });
@@ -32,8 +32,8 @@ const sortTitles = (col, isAsc, limit = 50) => {
   };
 
   useEffect(() => {
-    normalSort();
-  }, [pagination.page, sort.isAsc, sort.col]);
+    sort();
+  }, [pagination.page, sortInfo.isAsc, sortInfo.col]);
 
   return {
     titles,
@@ -41,6 +41,7 @@ const sortTitles = (col, isAsc, limit = 50) => {
     pagination,
     setPagination,
     sorting,
+    refetch: sort,
   };
 };
 

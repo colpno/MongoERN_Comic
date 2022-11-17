@@ -2,7 +2,7 @@ import chapterApi from "api/chapterApi";
 import { useEffect, useState } from "react";
 import { convertChaptersPropertyToString } from "utils/convertArrayPropertyToString";
 
-const filterChapters = (filterObj, limit) => {
+const filterChapters = (property, limit) => {
   const [chapters, setChapters] = useState([]);
   const [pagination, setPagination] = useState({
     page: 1,
@@ -10,27 +10,28 @@ const filterChapters = (filterObj, limit) => {
     total: 0,
   });
 
-  const fetchLimitChapters = async () => {
+  const fetch = async (prop) => {
     try {
-      const response = await chapterApi.filter(filterObj, {
+      const response = await chapterApi.filter(prop, {
         page: pagination.page,
         limit: pagination.limit,
       });
       const converted = convertChaptersPropertyToString(response.data);
       setChapters(converted);
-      setPagination((prev) => {
-        return { ...prev, total: response.pagination.total };
-      });
+      setPagination((prev) => ({
+        ...prev,
+        total: response.pagination.total,
+      }));
     } catch (error) {
       throw new Error(error);
     }
   };
 
   useEffect(() => {
-    fetchLimitChapters();
+    property && fetch(property);
   }, [pagination.page]);
 
-  return { chapters, setChapters, pagination, setPagination };
+  return { chapters, setChapters, pagination, setPagination, fetch };
 };
 
 export default filterChapters;

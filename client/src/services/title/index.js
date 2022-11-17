@@ -1,5 +1,6 @@
 export { default as getAllTitles } from "./getAllTitles";
 export { default as getLimitedTitles } from "./getLimitedTitles";
+export { default as getLimitedTitlesByProperty } from "./getLimitedTitlesByProperty";
 export { default as getAllTitlesByUserID } from "./getAllTitlesByUserID";
 export { default as getTitleByID } from "./getTitleByID";
 export { default as sortTitles } from "./sortTitles";
@@ -8,3 +9,4 @@ export { default as searchTitle } from "./searchTitle";
 export { default as addTitle } from "./addTitle";
 export { default as updateTitle } from "./updateTitle";
 export { default as deleteTitle } from "./deleteTitle";
+export { default as filterTitles } from "./filterTitles";

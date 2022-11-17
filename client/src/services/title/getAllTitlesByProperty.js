@@ -7,10 +7,11 @@ const getAllTitlesByProperty = (key, value) => {
 
   const fetchLimitTitles = async () => {
     try {
-      const response = await titleApi.getAllByProperty(key, value);
+      const response = await titleApi.getAllByProperty({ [key]: value });
       const converted = convertTitlesPropertyToString(response);
       setTitles(converted);
     } catch (error) {
+      console.log(error);
       throw new Error(error);
     }
   };

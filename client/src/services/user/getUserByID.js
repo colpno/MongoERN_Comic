@@ -2,24 +2,24 @@ import userApi from "api/userApi";
 import { useEffect, useState } from "react";
 import { convertUserPropertyToString } from "utils/convertArrayPropertyToString";
 
-const getUserByID = (ID) => {
+const getUserByID = (id) => {
   const [user, setUser] = useState({});
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await userApi.getOneByID(ID);
-        const converted = convertUserPropertyToString(response);
-        setUser(converted);
-      } catch (error) {
-        throw new Error(error);
-      }
-    };
+  const fetchUsers = async (ID) => {
+    try {
+      const response = await userApi.getOneByID(ID);
+      const converted = convertUserPropertyToString(response[0]);
+      setUser(converted);
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
 
-    fetchUsers();
+  useEffect(() => {
+    id && fetchUsers(id);
   }, []);
 
-  return { user, setUser };
+  return { user, setUser, refetch: fetchUsers };
 };
 
 export default getUserByID;

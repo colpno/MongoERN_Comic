@@ -7,7 +7,7 @@ const getAllTitlesByGenreID = (ID) => {
 
   const fetchTitles = async () => {
     try {
-      const response = await titleApi.getAllByProperty("genreId", ID);
+      const response = await titleApi.getAllByProperty({ genreId: ID });
       const converted = convertTitlesPropertyToString(response);
       setTitles(converted);
     } catch (error) {
