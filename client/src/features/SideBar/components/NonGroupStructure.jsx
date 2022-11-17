@@ -23,7 +23,7 @@ NonGroupStructure.propTypes = {
     to: PropTypes.string.isRequired,
     href: PropTypes.string,
     label: PropTypes.string.isRequired,
-    icon: PropTypes.shape({}).isRequired,
+    icon: PropTypes.oneOfType([PropTypes.func, PropTypes.shape({})]),
     tab: PropTypes.string.isRequired,
   }).isRequired,
 };
