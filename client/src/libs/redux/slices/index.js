@@ -1,6 +1,6 @@
 export { default as userReducer } from "./userSlice";
 export { default as statisticCountReducer } from "./statisticCountSlice";
-export { default as searchReducer } from "./searchSlice";
+export { default as globalReducer } from "./globalSlice";
 export { default as titleReducer } from "./titleSlice";
 export { default as chapterReducer } from "./chapterSlice";
 export { default as paymentMethodReducer } from "./paymentMethodSlice";

@@ -5,17 +5,17 @@ import {
   chapterReducer,
   myTitlesReducer,
   paymentMethodReducer,
-  searchReducer,
   selectFieldReducer,
   statisticCountReducer,
   titleReducer,
   userReducer,
 } from "./slices";
+import globalReducer from "./slices/globalSlice";
 
 const rootReducer = combineReducers({
   user: persistReducer(authPersistConfig, userReducer),
   statisticCount: statisticCountReducer,
-  search: searchReducer,
+  global: globalReducer,
   title: titleReducer,
   chapter: chapterReducer,
   paymentMethod: paymentMethodReducer,
