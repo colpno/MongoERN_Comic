@@ -1,0 +1,36 @@
+@use "assets/styles/variables" as var;
+
+.wrapper {
+  padding: 3rem 0;
+}
+
+.filter-container {
+  padding-bottom: 2rem;
+  margin-bottom: 4rem;
+  border-bottom: 1px solid var.$gray-400;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+}
+
+.label {
+  font-weight: 500;
+  font-size: 1.2em;
+}
+
+.button-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.author-row {
+  margin-bottom: 1rem;
+}
+
+.order-row {
+  border-top: 1px solid var.$gray-300;
+  padding-top: 20px;
+}
