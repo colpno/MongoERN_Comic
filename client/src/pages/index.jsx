@@ -37,3 +37,4 @@ export { default as PaymentMethodManagement } from "./PaymentMethodManagement/Pa
 export { default as IncomeStatistic } from "./IncomeStatistic/IncomeStatistic";
 export { default as VisitStatistic } from "./VisitStatistic/VisitStatistic";
 export { default as Search } from "./Search/Search";
+export { default as NotFound } from "./NotFound/NotFound";
