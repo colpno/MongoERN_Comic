@@ -33,23 +33,28 @@ function Footer() {
         </div>
         <address className={cx("footer__address")}>
           <p>
-            Floor 139, Block A, A Tower, 99999 Dien Bien Phu Street,
+            {/* Floor 139, Block A, A Tower, 99999 Dien Bien Phu Street,
             <br />
-            Dakao Ward, District 1, Ho Chi Minh City.
+            Dakao Ward, District 1, Ho Chi Minh City. */}
+            Tầng 123, Khu A, Tòa nhà B, Số 9999 đường C,
+            <br />
+            Phường D, Quận E, Thành phố F.
           </p>
         </address>
         <div className={cx("divider")} />
         <div className={cx("footer__contact")}>
-          <span>Support: help@mail.domain</span>
-          <span>Business: business@mail.domain</span>
+          <span>Hỗ trợ: help@mail.domain</span>
+          <span>Hợp tác: business@mail.domain</span>
         </div>
         <div className={cx("footer__social-media")}>
           <Link to="/">
             <ImFacebook2 />
           </Link>
         </div>
+        <p className={cx("footer__copyright")}>
+          Copyright. All rights reserved.
+        </p>
       </div>
-      <p className={cx("footer__copyright")}>Copyright. All rights reserved.</p>
       <BackToTop />
     </footer>
   );
