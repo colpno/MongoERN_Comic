@@ -1,9 +1,9 @@
-import { transporter } from './config.js';
 import { config } from 'dotenv';
+import { transporter } from './config.js';
 
 config();
 
-export default function sendMail(res, successfullyMessage, to, subject, html) {
+export default function sendMail(to, subject, html) {
   const mailDetails = {
     from: process.env.MAIL_FROM,
     to,
@@ -11,13 +11,13 @@ export default function sendMail(res, successfullyMessage, to, subject, html) {
     html,
   };
 
-  transporter.sendMail(mailDetails, function (err, data) {
+  transporter.sendMail(mailDetails, (err) => {
     if (err) {
       console.log(`Error Occurs: ${err}`);
-      return res.status(500).json({ error: err });
-    } else {
-      console.log('Email sent successfully');
-      return res.status(200).json({ message: successfullyMessage });
+      return { error: err };
     }
   });
+
+  console.log('Email sent successfully');
+  return { message: `Link thay đổi mật khẩu đã được gửi đến ${to}` };
 }

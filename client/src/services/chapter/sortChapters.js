@@ -37,7 +37,9 @@ const sortChapters = (titleID, col, isAsc = true, limit = 50) => {
   };
 
   useEffect(() => {
-    sort();
+    if (ID) {
+      sort();
+    }
   }, [pagination.page, sortInfo.isAsc, sortInfo.col, ID]);
 
   return {
