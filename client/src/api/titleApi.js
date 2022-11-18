@@ -89,8 +89,8 @@ const titleApi = {
     return axiosClient.get(`${url}?${queryStr}`, { params });
   },
 
-  search: (key, value) => {
-    return axiosClient.get(`${url}?${key}=${value}`);
+  search: (key, value, params) => {
+    return axiosClient.get(`${url}?${key}=${value}`, { params });
   },
 };
 
