@@ -37,7 +37,7 @@ export default function forgotPassword(req, res) {
     `;
 
     const response = sendMail(email, subject, html);
-    console.log('------------------------------------------------------');
+    console.log('******************************************************');
 
     return res
       .cookie('forgotPasswordToken', token, {

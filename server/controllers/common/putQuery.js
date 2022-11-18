@@ -27,7 +27,7 @@ export default function putQuery(req, res, table) {
       if (err) return res.status(500).json(err);
       if (data.affectedRows > 0) {
         console.log('Updated');
-        console.log('------------------------------------------------------');
+        console.log('******************************************************');
         return res.status(200).json(data);
       }
       return res.status(400).json({ error: data });
@@ -48,7 +48,7 @@ export default function putQuery(req, res, table) {
     //     if (err) return res.status().json(err);
     //     if (data.affectedRows > 0) {
     //       console.log('Updated');
-    //       console.log('------------------------------------------------------');
+    //       console.log('******************************************************');
     //       return res.status().json(data);
     //     }
     //     return res.status().json({error: 'You can only update your item'});

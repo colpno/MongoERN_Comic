@@ -108,7 +108,7 @@ export default function updateTitle(req, res) {
               if (error3) return res.status(500).json(error3);
               if (result.affectedRows > 0) {
                 console.log('Title has been updated');
-                console.log('------------------------------------------------------');
+                console.log('******************************************************');
                 return res.status(200).json(result);
               }
               return res.status(400).json({ error: result });
@@ -122,7 +122,7 @@ export default function updateTitle(req, res) {
               if (error3) return res.status(500).json(error3);
               if (result.affectedRows > 0) {
                 console.log('Title has been updated');
-                console.log('------------------------------------------------------');
+                console.log('******************************************************');
                 return res.status(200).json(result);
               }
               return res.status(400).json({ error: result });
