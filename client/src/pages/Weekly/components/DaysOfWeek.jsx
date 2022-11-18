@@ -1,10 +1,14 @@
 import PropTypes from "prop-types";
 import { memo } from "react";
 import { Container } from "react-bootstrap";
+import classNames from "classnames/bind";
 
 import Button from "components/Button";
+import styles from "../assets/styles/DaysOfWeek.module.scss";
 
-function DaysOfWeek({ cx, handleDayClick, date }) {
+const cx = classNames.bind(styles);
+
+function DaysOfWeek({ handleDayClick, date }) {
   const daysOfWeek = [
     { shortLabel: "T2", label: "Thứ Hai", number: 1 },
     { shortLabel: "T3", label: "Thứ Ba", number: 2 },
@@ -28,7 +32,8 @@ function DaysOfWeek({ cx, handleDayClick, date }) {
             onClick={() => handleDayClick(day.shortLabel)}
             key={day.number}
           >
-            {day.label}
+            <span className={cx("short-version")}>{day.shortLabel}</span>
+            <span className={cx("full-version")}>{day.label}</span>
           </Button>
         );
       })}
@@ -37,7 +42,6 @@ function DaysOfWeek({ cx, handleDayClick, date }) {
 }
 
 DaysOfWeek.propTypes = {
-  cx: PropTypes.func.isRequired,
   handleDayClick: PropTypes.func,
   date: PropTypes.shape({
     day: PropTypes.string.isRequired,
