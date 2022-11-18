@@ -10,7 +10,7 @@ const getAllChapterImagesByChapterID = (chapterId) => {
       setChapterImages(response);
       return response;
     } catch (error) {
-      throw new Error(error);
+      throw new Error(error.data.error);
     }
   };
 
