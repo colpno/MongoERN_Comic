@@ -6,7 +6,7 @@ export const convertChaptersPropertyToString = (chapters) => {
       order: Number.parseInt(order, 10),
       like: Number.parseInt(like, 10),
       view: Number.parseInt(view, 10),
-      cost: cost === "0",
+      cost: cost === "true",
     };
   });
 
@@ -20,7 +20,7 @@ export const convertChapterPropertyToString = (chapter) => {
     order: Number.parseInt(order, 10),
     like: Number.parseInt(like, 10),
     view: Number.parseInt(view, 10),
-    cost: cost === "false",
+    cost: cost === "true",
   };
 };
 
