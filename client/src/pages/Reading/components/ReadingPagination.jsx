@@ -1,6 +1,7 @@
+import { Button } from "components";
 import PropTypes from "prop-types";
 import { memo } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import { Lazy, Navigation, Thumbs } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -40,12 +41,12 @@ function ReadingPagination({ chapters }) {
           {chapters.map((chapter) => {
             return (
               <SwiperSlide key={chapter.guid}>
-                <Link to={`/comic/title/${titleId}/${chapter.guid}`}>
+                <Button wrapper to={`/comic/title/${titleId}/${chapter.guid}`}>
                   <div className="box-img">
                     <img src={chapter.cover} alt={chapter.name} />
                   </div>
                   <span className="content">{chapter.name}</span>
-                </Link>
+                </Button>
               </SwiperSlide>
             );
           })}
