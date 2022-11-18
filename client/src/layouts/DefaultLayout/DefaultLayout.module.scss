@@ -5,10 +5,6 @@
 .navigator {
   margin-top: var.$header-height;
   display: none;
-
-  + :global(.skip-header) {
-    margin-top: 0;
-  }
 }
 
 .navigator {

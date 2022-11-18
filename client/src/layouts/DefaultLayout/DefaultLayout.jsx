@@ -23,36 +23,42 @@ function DefaultLayout({ children }) {
   return (
     <>
       <Header />
-      <Swiper
-        breakpoints={{
-          100: {
-            slidesPerView: 2.2,
-          },
-          540: {
-            slidesPerView: 3.2,
-          },
-          768: {
-            slidesPerView: 4,
-          },
-        }}
-        modules={[Thumbs]}
-        grabCursor
-        className={cx("navigator")}
-      >
-        {headerNavigation.map((item, index) => {
-          return (
-            <SwiperSlide
-              key={index}
-              className={cx(item.href === url ? "active" : "")}
-            >
-              <Button wrapper to={item.href} className={cx("navigator__label")}>
-                {item.label}
-              </Button>
-            </SwiperSlide>
-          );
-        })}
-      </Swiper>
-      <div className="content skip-header">{children}</div>
+      <div className="content skip-header">
+        <Swiper
+          breakpoints={{
+            100: {
+              slidesPerView: 2.2,
+            },
+            540: {
+              slidesPerView: 3.2,
+            },
+            768: {
+              slidesPerView: 4,
+            },
+          }}
+          modules={[Thumbs]}
+          grabCursor
+          className={cx("navigator")}
+        >
+          {headerNavigation.map((item, index) => {
+            return (
+              <SwiperSlide
+                key={index}
+                className={cx(item.href === url ? "active" : "")}
+              >
+                <Button
+                  wrapper
+                  to={item.href}
+                  className={cx("navigator__label")}
+                >
+                  {item.label}
+                </Button>
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
+        {children}
+      </div>
       <Footer />
     </>
   );
