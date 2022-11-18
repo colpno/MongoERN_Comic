@@ -39,7 +39,7 @@ function LoginForm({ handleSubmit }) {
             <FormLabel name="password" label="Mật khẩu" />
             <FastField name="password" component={InputField} type="password" />
 
-            <Button primary rounded className={cx("submit")} type="submit">
+            <Button primary round className={cx("submit")} type="submit">
               Đăng nhập
             </Button>
           </Form>

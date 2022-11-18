@@ -44,6 +44,7 @@ function ResetPasswordForm({
 
             <Button
               primary
+              round
               type="submit"
               onClick={handleSubmit}
               className={cx("submit-button")}

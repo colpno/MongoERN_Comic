@@ -67,7 +67,7 @@ function RegisterForm({ handleSubmit, initialValue, validationSchema }) {
               maxLength={20}
               letterCount
             />
-            <Button primary rounded className={cx("submit")} type="submit">
+            <Button primary round className={cx("submit")} type="submit">
               Đăng ký
             </Button>{" "}
           </Form>

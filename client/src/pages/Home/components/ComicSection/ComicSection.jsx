@@ -72,7 +72,7 @@ function ComicSection() {
               <section key={genr.guid}>
                 <Container className={cx("section")}>
                   <CardList
-                    col={{ sm: 2 }}
+                    col={{ xs: 2 }}
                     data={data.slice(0, 6)}
                     headTitle={genr.name}
                   />

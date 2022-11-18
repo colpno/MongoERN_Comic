@@ -14,7 +14,7 @@ function ComicFollowSection({ titles, headTitle }) {
       <Container className={cx("follow")}>
         <CardList
           col={{
-            sm: 2,
+            xs: 2,
           }}
           data={titles}
           headTitle={headTitle}

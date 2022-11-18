@@ -5,10 +5,12 @@
   margin-bottom: 12px;
 
   &__head {
+    margin-bottom: 17px;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 17px;
+
     position: relative;
 
     &::before {
@@ -41,5 +43,9 @@
   &:not(.wrap) :global([class*="row"]) {
     flex-wrap: nowrap;
     overflow-x: auto;
+  }
+
+  :global(.card-figure) {
+    padding-bottom: 1.4rem;
   }
 }

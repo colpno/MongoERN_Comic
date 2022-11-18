@@ -15,8 +15,9 @@ function Complete() {
     <Container className={cx("complete-page")}>
       {hasData ? (
         <CardList
+          wrap
           data={titles}
-          col={{ md: 20 }}
+          col={{ xs: 6, sm: 4, md: 20 }}
           classN={{ boxImg: cx("box-img") }}
         />
       ) : (
