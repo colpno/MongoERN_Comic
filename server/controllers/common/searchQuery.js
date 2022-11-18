@@ -56,6 +56,7 @@ export default function searchQuery(
     if (error) return res.status(500).json(error);
     if (pagination) return res.status(200).json({ data, pagination });
     if (data.length) return res.status(200).json(data);
+    if (data.length === 0) return res.status(404).json({ error: 'Không tồn tại nội dung nào' });
     return res.status(400).json({ error: data });
   });
 }
