@@ -18,6 +18,11 @@
       position: relative;
 
       .swiper-slide-active {
+        a {
+          pointer-events: none;
+          cursor: default;
+        }
+
         .content {
           color: variables.$primary-dark;
         }
@@ -48,6 +53,7 @@
       font-weight: 600;
       color: $color;
       height: 44px;
+      text-align: center;
       @include mixins.multiLineClamp(2);
     }
   }
