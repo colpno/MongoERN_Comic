@@ -46,7 +46,7 @@ export default function updateChapter(req, res) {
   const { params, body, cookies } = req;
   const { guid: chapterGuid } = params;
   const { titleId, newValues } = body;
-  const { cover, images, ...others } = newValues;
+  const { cover, images, like, view, ...others } = newValues;
   const token = cookies.accessToken;
   const otherKeys = Object.keys(others);
 
@@ -136,23 +136,26 @@ export default function updateChapter(req, res) {
           const setStatements = [];
           otherKeys.length > 0 && setStatements.push(otherKeys.map((key) => `\`${key}\` = ?`));
           uploadCoverResponse?.public_id && setStatements.push('`cover` = ?,`publicId` = ?');
-          setStatements.push('`updatedAt` = ?');
+          !like && !view && setStatements.push('`updatedAt` = ?');
 
           const updateSql = `
-      UPDATE \`${table}\`
-      SET ${setStatements.toString()}
-      WHERE guid = ?
-    `;
+            UPDATE \`${table}\`
+            SET ${setStatements.toString()}
+            WHERE guid = ?
+          `;
 
           // Values of above SQL
           const now = getCurrentDateTime();
-          const chapterValues = [...otherKeys.map((dataKey) => body.newValues[dataKey])];
+          const chapterValues = [...otherKeys.map((dataKey) => others[dataKey])];
           uploadCoverResponse?.public_id &&
             chapterValues.push(uploadCoverResponse.secure_url, uploadCoverResponse.public_id);
-          chapterValues.push(now, chapterGuid);
+          like || view ? chapterValues.push(chapterGuid) : chapterValues.push(now, chapterGuid);
 
           db.query(updateSql, [...chapterValues], (error1, data1) => {
-            if (error1) return res.status(500).json(error1);
+            if (error1) {
+              console.log('file: updateChapter.js ~ line 155 ~ error1', error1);
+              return res.status(500).json(error1);
+            }
             if (data1.affectedRows > 0) {
               console.log("Updated chapter's info in database");
 
@@ -175,7 +178,7 @@ export default function updateChapter(req, res) {
                       if (error3) return res.status(500).json(error3);
                       if (data3.affectedRows > 0) {
                         console.log("Chapter's images has been insert into database");
-                        console.log('------------------------------------------------------');
+                        console.log('******************************************************');
                         return res.status(200).json(data3);
                       }
                       return res.status(400).json({ error: data3 });
@@ -183,9 +186,10 @@ export default function updateChapter(req, res) {
                   }
                 });
               } else {
-                return res.status(200).json(data);
+                return res.status(200).json(data1);
               }
             }
+            return res.status(400).json({ error: error1, data: data1 });
           });
         } else {
           return res.status(403).json({ error: 'Token không hợp lệ' });

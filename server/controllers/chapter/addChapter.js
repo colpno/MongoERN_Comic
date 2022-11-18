@@ -1,9 +1,9 @@
-import { db } from '../../config/database.js';
-import { table } from './index.js';
 import jwt from 'jsonwebtoken';
-import { getCurrentDateTime } from '../common/index.js';
 import { v4 as uuidv4 } from 'uuid';
 import { config } from 'dotenv';
+import { db } from '../../config/database.js';
+import { table } from './index.js';
+import { getCurrentDateTime } from '../common/index.js';
 import { cloudinary } from '../../libs/cloudinary/index.js';
 
 config();
@@ -20,7 +20,7 @@ const first = async (res, image, titleId, chapterId, index) => {
       console.log('Image has been uploaded to cloud');
     }
   );
-  return await [
+  return [
     chapterId,
     response.secure_url,
     `${index + 1}`,
@@ -39,14 +39,14 @@ export default async function addChapter(req, res) {
 
   if (!token) return res.status(401).json({ error: 'Cần đăng nhập để sử dụng chức năng này' });
 
-  jwt.verify(token, process.env.ACCESS_TOKEN_KEY, async (error, userInfo) => {
-    if (error) return res.status(403).json({ error: 'Token không hợp lệ' });
+  jwt.verify(token, process.env.ACCESS_TOKEN_KEY, async (jwtError) => {
+    if (jwtError) return res.status(403).json({ error: 'Token không hợp lệ' });
 
     console.log('------------------------------------------------------');
     const chapterGuid = uuidv4();
 
     // Upload cover to cloudinary
-    const response = await cloudinary.uploader.upload(
+    const uploadResponse = await cloudinary.uploader.upload(
       cover,
       {
         upload_preset: process.env.CLOUDINARY_CHAPTER_UPLOAD_PRESET,
@@ -71,27 +71,35 @@ export default async function addChapter(req, res) {
     const now = getCurrentDateTime();
     const chapterValues = [
       ...bodyKeys.map((dataKey) => values[dataKey]),
-      response.secure_url,
+      uploadResponse.secure_url,
       chapterGuid,
       now,
       now,
-      response.public_id,
+      uploadResponse.public_id,
     ];
 
     // Execute query
     db.query(sql, [chapterValues], async (err, data) => {
-      if (err) return res.status(500).json(err);
+      if (err) {
+        console.log('file: addChapter.js ~ line 83 ~ err', err);
+        return res.status(500).json(err);
+      }
       if (data.affectedRows > 0) {
         console.log("Chapter's info has been insert into database");
 
         // Upload all images of chapter into cloudinary
         const getRes = async () => {
-          const chapterImagesValues = await images.map(
-            async (image, index) => await first(res, image, values.titleId, chapterGuid, index)
-          );
-          return chapterImagesValues;
+          const temp = await images.map(async (image, index) => {
+            const temp1 = first(res, image, values.titleId, chapterGuid, index);
+            return temp1;
+          });
+          return temp;
         };
-        const promises = await getRes().then((response) => response);
+        const promises = await getRes()
+          .then((response) => response)
+          .catch((error1) => {
+            if (error1) console.log(error1);
+          });
 
         // SQL insert to chapter table
         const sqla = `
@@ -104,14 +112,17 @@ export default async function addChapter(req, res) {
         const chapterImagesValues = await Promise.all(promises).then((response) => response);
 
         // Execute query
-        db.query(sqla, [chapterImagesValues], (err, data) => {
-          if (err) return res.status(500).json(err);
-          if (data.affectedRows > 0) {
-            console.log("Chapter's images has been insert into database");
-            console.log('------------------------------------------------------');
-            return res.status(200).json(data);
+        db.query(sqla, [chapterImagesValues], (error, data2) => {
+          if (error) {
+            console.log('file: addChapter.js ~ line 116 ~ error', error);
+            return res.status(500).json(error);
           }
-          return res.status(400).json({ error: data });
+          if (data2.affectedRows > 0) {
+            console.log("Chapter's images has been insert into database");
+            console.log('******************************************************');
+            return res.status(200).json(data2);
+          }
+          return res.status(400).json({ error: data2 });
         });
       }
     });
