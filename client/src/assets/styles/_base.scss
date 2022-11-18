@@ -6,10 +6,6 @@ img {
   height: 100%;
 }
 
-[alt="logo"] {
-  transform: translateY(-4px);
-}
-
 .skip-header {
   margin-top: variables.$header-height;
   min-height: calc(
