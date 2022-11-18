@@ -39,14 +39,19 @@ function Chapters() {
   const { title } = getTitleByID(titleId, {}, true);
   const {
     chapters,
-    setChapters,
+    setTitleID,
     pagination,
     setPagination,
     sorting,
     refetch: fetchChapters,
-  } = sortChapters(titleId, "order", true);
-  const { chapters: filteredChapters, fetch: fetchFilterChapters } =
-    filterChapters(null, pagination.limit);
+  } = sortChapters(null, "order", true);
+  const {
+    chapters: filteredChapters,
+    setChapters: setFilteredChapters,
+    pagination: filteredChapterPagination,
+    setPagination: setFilteredChapterPagination,
+    fetch: fetchFilterChapters,
+  } = filterChapters(null, pagination.limit);
   const hasData = chapters.length > 0;
 
   const {
@@ -69,7 +74,7 @@ function Chapters() {
             trigger: false,
             yesno: true,
           }));
-          toastEmitter("Không thể xóa do vẫn tồn tại các chương", "error");
+          toastEmitter("Không thể xóa do các chương vẫn tồn tại", "error");
           setProgress(0);
         }
         if (response.affectedRows > 0) {
@@ -114,12 +119,12 @@ function Chapters() {
       };
       fetchFilterChapters(property);
     }
-    if (searchText.length === 0) fetchChapters();
+    if (searchText.length === 0 && title?.guid) setFilteredChapters([]);
   }, [searchText]);
 
   useEffect(() => {
-    setChapters(filteredChapters);
-  }, [filteredChapters]);
+    Object.keys(title).length > 0 && setTitleID(title.guid);
+  }, [title]);
 
   return (
     <>
@@ -143,23 +148,50 @@ function Chapters() {
               </span>
             </span>
           </Col>
-          <Col>
-            <Search />
-          </Col>
-          <Col xs={6} sm={4} lg={20} className={cx("chapters__general__box")}>
-            {hasData && <BtnCreate />}
-          </Col>
+          {hasData && (
+            <>
+              <Col>
+                <Search />
+              </Col>
+              <Col
+                xs={6}
+                sm={4}
+                lg={20}
+                className={cx("chapters__general__box")}
+              >
+                <BtnCreate />
+              </Col>{" "}
+            </>
+          )}
         </Row>
-        {hasData ? (
+        {filteredChapters.length > 0 && (
           <ChapterTable
-            chapters={chapters}
-            pagination={pagination}
+            chapters={filteredChapters}
+            pagination={filteredChapterPagination}
             setPopup={setChapterPopup}
             setDeleteItem={setChapterDeletedItem}
-            setPagination={setPagination}
+            setPagination={setFilteredChapterPagination}
             sorting={sorting}
           />
-        ) : (
+        )}
+        {searchText.length > 0 && filteredChapters.length === 0 && (
+          <NoData>
+            <h5>Không tìm thấy chương phù hợp!</h5>
+          </NoData>
+        )}
+        {hasData &&
+          searchText.length === 0 &&
+          filteredChapters.length === 0 && (
+            <ChapterTable
+              chapters={chapters}
+              pagination={pagination}
+              setPopup={setChapterPopup}
+              setDeleteItem={setChapterDeletedItem}
+              setPagination={setPagination}
+              sorting={sorting}
+            />
+          )}
+        {!hasData && searchText.length === 0 && filteredChapters.length === 0 && (
           <NoData>
             <h5>Hiện tại truyện chưa có chương nào!</h5>
             <BtnCreate />
