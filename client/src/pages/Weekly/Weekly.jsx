@@ -36,17 +36,23 @@ function Weekly() {
         return "T2";
     }
   });
-  const { titles, setReFetch } = searchTitle("releaseDay", dayFilter);
+  const { titles, pagination, setReFetch } = searchTitle(
+    "releaseDay",
+    dayFilter,
+    limit
+  );
 
   useEffect(() => {
     const handleScroll = () => {
       const cardsContainerHeight =
         document.querySelector(".cards-content")?.offsetHeight;
 
-      window.scrollY >= cardsContainerHeight + 150 &&
-        setLimit((prev) => {
-          setLimit(prev + COMIC_PER_PAGE);
-        });
+      if (
+        window.scrollY >= cardsContainerHeight + 150 &&
+        limit < pagination.total
+      ) {
+        setLimit((prev) => prev + COMIC_PER_PAGE);
+      }
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -88,9 +94,13 @@ function Weekly() {
           today,
         }}
       />
-      {titles ? (
+      {titles.length > 0 ? (
         <Container className="cards-content">
-          <CardList data={titles.slice(0, limit)} col={{ md: 20 }} />
+          <CardList
+            wrap
+            data={titles.slice(0, limit)}
+            col={{ xs: 6, sm: 4, md: 20 }}
+          />
         </Container>
       ) : (
         <NoData>
