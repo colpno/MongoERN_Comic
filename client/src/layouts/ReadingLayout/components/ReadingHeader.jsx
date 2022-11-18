@@ -14,7 +14,7 @@ const cx = classNames.bind(styles);
 
 function ReadingHeader() {
   const { titleId } = useParams();
-  const { title } = getTitleByID(titleId);
+  const { title } = getTitleByID(titleId, {}, false);
   const [darkTheme, setDarkTheme] = useState(false);
   const [isLike, setIsLike] = useState(false);
   const chapter = useSelector((state) => state.chapter.chapter.info);

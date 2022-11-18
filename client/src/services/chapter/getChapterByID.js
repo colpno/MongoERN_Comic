@@ -2,12 +2,16 @@ import chapterApi from "api/chapterApi";
 import { useEffect, useState } from "react";
 import { convertChapterPropertyToString } from "utils/convertArrayPropertyToString";
 
-const getChapterByID = (chapterID, titleID) => {
+const getChapterByID = (chapterID, titleID, isPrivate = true) => {
   const [chapter, setChapter] = useState({});
 
   const fetchChapter = async () => {
     try {
-      const response = await chapterApi.getOneByID(chapterID, titleID);
+      const response = await chapterApi.getOneByID(
+        chapterID,
+        titleID,
+        isPrivate
+      );
       const converted = convertChapterPropertyToString(response[0]);
       setChapter(converted);
     } catch (error) {

@@ -5,11 +5,11 @@ const url = "/chapters";
 const chapterApi = {
   getAll: (params) => axiosClient.get(url, { params }),
 
-  getOneByID: (chapterID, titleID) => {
+  getOneByID: (chapterID, titleID, isPrivate) => {
     const queryStr = `?${titleID ? `titleId=${titleID}&` : ""}`;
-    return axiosClient.get(`${url}/${chapterID}${queryStr}`, {
-      withCredentials: true,
-    });
+
+    const options = isPrivate ? { withCredentials: true } : {};
+    return axiosClient.get(`${url}/${chapterID}${queryStr}`, options);
   },
 
   add: (chapter, setProgress) =>

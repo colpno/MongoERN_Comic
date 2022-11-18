@@ -12,16 +12,23 @@ import ReadingHeader from "./components/ReadingHeader";
 function ReadingLayout({ children }) {
   const dispatch = useDispatch();
   const { chapterId, titleId } = useParams();
-  const { chapter } = getChapterByID(chapterId, titleId);
+  const { chapter } = getChapterByID(chapterId, titleId, false);
   const { chapters } = sortChapters(titleId, "order", true);
   const { chapterImages } = getAllChapterImagesByChapterID(chapterId);
 
   useEffect(() => {
-    dispatch(setChapter({ info: chapter, images: chapterImages }));
+    chapter?.guid &&
+      // chapterImages.length > 0 &&
+      dispatch(
+        setChapter({
+          info: chapter,
+          images: chapterImages[0]?.guid ? chapterImages : [],
+        })
+      );
   }, [chapter, chapterImages]);
 
   useEffect(() => {
-    dispatch(setChapters(chapters));
+    chapters.length > 0 && dispatch(setChapters(chapters));
   }, [chapters]);
 
   return (
