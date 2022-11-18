@@ -44,3 +44,12 @@ svg {
 .chapters {
   padding-bottom: 3rem;
 }
+
+@media (max-width: 768px) {
+  .title-page {
+    padding-top: 0;
+  }
+  .background-image {
+    display: none;
+  }
+}

@@ -21,7 +21,7 @@ function Recommend() {
   };
 
   return (
-    <Container className={cx("recommend")}>
+    <Container fluid="md" className={cx("recommend")}>
       <div className={cx("head")}>
         <h4 className={cx("title")}>Đề xuất</h4>
         <Button text className={cx("more")} onClick={showMoreCards}>
@@ -29,8 +29,10 @@ function Recommend() {
           <AiFillCaretDown className={cx(isExpand ? "rotate" : "")} />
         </Button>
       </div>
-      <CardList col={{ md: 2 }} data={foldList} />
-      {isExpand && <CardList col={{ md: 2 }} data={unFoldList} />}
+      <CardList wrap col={{ xs: 6, sm: 3, xl: 2 }} data={foldList} />
+      {isExpand && (
+        <CardList wrap col={{ xs: 6, sm: 3, xl: 2 }} data={unFoldList} />
+      )}
     </Container>
   );
 }

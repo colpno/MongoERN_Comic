@@ -54,11 +54,20 @@ function Title() {
     setIsDESCSorting(!isDESCSorting);
   };
 
-  const handleFollow = async (titleID) => {
-    const response = await followApi.add({ titleId: titleID });
-    if (response.affectedRows > 0) {
-      toastEmitter(`Bạn đã theo dõi truyện ${title.name}`, "success");
-    }
+  const handleFollow = (titleID) => {
+    followApi
+      .add({ titleId: titleID })
+      .then((response) => {
+        if (response.affectedRows > 0) {
+          toastEmitter(
+            `Bạn đã theo dõi truyện <strong>${title.name}</strong>`,
+            "success"
+          );
+        }
+      })
+      .catch((error) => {
+        toastEmitter(error.data.error, "error");
+      });
   };
 
   const convertGenreIdToString = () => {
@@ -72,7 +81,9 @@ function Title() {
   return (
     <>
       <main className={cx("title-page")}>
-        {hasTitle && <div style={backgroundImageCSS} />}
+        {hasTitle && (
+          <div style={backgroundImageCSS} className={cx("background-image")} />
+        )}
         <div className={cx("title-page__wrapper")}>
           {hasTitle && (
             <Introduction
@@ -83,7 +94,7 @@ function Title() {
               handleFollow={handleFollow}
             />
           )}
-          <Container className={cx("title-page__wrapper__content")}>
+          <Container fluid="md" className={cx("title-page__wrapper__content")}>
             {hasTitle && (
               <TitleAbout title={title} user={user} setPopup={setPopup} />
             )}
