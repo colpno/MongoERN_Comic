@@ -19,6 +19,7 @@ axiosClient.interceptors.response.use(
 
     if (status === 403) {
       window.location.href = "/";
+      alert(response.data.error);
     }
     return Promise.reject(response);
   }

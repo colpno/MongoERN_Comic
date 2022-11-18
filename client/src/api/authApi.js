@@ -17,11 +17,17 @@ const authApi = {
   },
 
   forgot: (info) => {
-    return axiosClient.post(`${url}/forgot-password`, info);
+    return axiosClient.post(`${url}/forgot-password`, info, {
+      withCredentials: true,
+    });
   },
 
-  reset: (info) => {
-    return axiosClient.put(`${url}/reset-password/${info.token}`, info);
+  reset: (token, password) => {
+    return axiosClient.put(
+      `${url}/reset-password/${token}`,
+      { password },
+      { withCredentials: true }
+    );
   },
 };
 
