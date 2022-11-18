@@ -5,6 +5,7 @@ import * as Yup from "yup";
 
 import FormWrapper from "components/FormWrapper/FormWrapper";
 import { Popup } from "features";
+import { useToast } from "hooks";
 import { forgotPassword } from "services/auth";
 import ForgotPasswordForm from "./components/ForgotPasswordForm";
 import styles from "./ForgotPassword.module.scss";
@@ -12,6 +13,7 @@ import styles from "./ForgotPassword.module.scss";
 const cx = classNames.bind(styles);
 
 function ForgotPassword() {
+  const { Toast, options, toastEmitter } = useToast();
   const [popup, setPopup] = useState({
     trigger: false,
     title: "Thông báo",
@@ -32,10 +34,26 @@ function ForgotPassword() {
   const handleSubmit = (values) => {
     const { username } = values;
 
-    username &&
-      forgotPassword({ username }).then((response) => {
-        setPopup({ ...popup, trigger: true, content: response });
-      });
+    if (username) {
+      forgotPassword({ username })
+        .then((response) => {
+          const content = (
+            <p style={{ textAlign: "center" }}>{response.message}</p>
+          );
+
+          setPopup({
+            ...popup,
+            trigger: true,
+            content,
+          });
+        })
+        .catch((error) => {
+          toastEmitter(
+            error.data || error.data.error || error.data.message,
+            "error"
+          );
+        });
+    }
   };
 
   return (
@@ -51,6 +69,7 @@ function ForgotPassword() {
         </FormWrapper>
       </Container>
       <Popup popup={popup} setPopup={setPopup} />
+      <Toast {...options} />
     </>
   );
 }

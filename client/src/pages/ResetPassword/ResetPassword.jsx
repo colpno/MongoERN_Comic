@@ -1,10 +1,11 @@
 import classNames from "classnames/bind";
 import { useState } from "react";
-import * as Yup from "yup";
 import { useParams } from "react-router-dom";
+import * as Yup from "yup";
 
 import FormWrapper from "components/FormWrapper/FormWrapper";
 import { Popup } from "features";
+import { useToast } from "hooks";
 import { Container } from "react-bootstrap";
 import { resetPassword } from "services/auth";
 import styles from "./ResetPassword.module.scss";
@@ -14,6 +15,7 @@ const cx = classNames.bind(styles);
 
 function ResetPassword() {
   const { token } = useParams();
+  const { Toast, options, toastEmitter } = useToast();
   const [popup, setPopup] = useState({
     trigger: false,
     title: "Thông báo",
@@ -38,12 +40,21 @@ function ResetPassword() {
 
   const handleSubmit = (values) => {
     const { password } = values;
-    password &&
-      resetPassword({ token, password }).then((response) => {
-        if (response.affectedRows > 0) {
-          setPopup({ ...popup, trigger: true });
-        }
-      });
+
+    if (password) {
+      resetPassword(token, password)
+        .then((response) => {
+          if (response.affectedRows > 0) {
+            setPopup({ ...popup, trigger: true });
+          }
+        })
+        .catch((error) => {
+          toastEmitter(
+            error.data || error.data.error || error.date.message,
+            "error"
+          );
+        });
+    }
   };
 
   return (
@@ -59,6 +70,7 @@ function ResetPassword() {
         </FormWrapper>
       </Container>
       <Popup popup={popup} setPopup={setPopup} />
+      <Toast {...options} />
     </>
   );
 }
