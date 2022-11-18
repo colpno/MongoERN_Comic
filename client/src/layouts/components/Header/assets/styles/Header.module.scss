@@ -18,12 +18,19 @@
 
 .logo {
   width: 100%;
+  min-width: 100px;
   max-width: 150px;
   height: variables.$header-height;
   padding-right: 25px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .nav-menu {
+  margin-right: 2rem;
+
   display: flex;
   align-items: center;
   flex-direction: row;
@@ -53,4 +60,20 @@
 .desktop-screen {
   position: relative;
   height: variables.$header-height;
+}
+
+@media (max-width: 600px) {
+  .logo {
+    display: none;
+  }
+}
+@media (max-width: 1200px) {
+  .desktop-screen {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .nav-menu {
+    display: none;
+  }
 }

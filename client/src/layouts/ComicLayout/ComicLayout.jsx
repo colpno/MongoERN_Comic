@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import SubNavigator from "layouts/components/SubNavigator";
 import PropTypes from "prop-types";
@@ -18,7 +19,7 @@ function ComicLayout({ children }) {
     <>
       <Header />
       <div className={cx("content", "skip-header", "comic")}>
-        <SubNavigator menu={menu} />
+        {/* <SubNavigator menu={menu} /> */}
         {children}
       </div>
       <Footer />

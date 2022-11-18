@@ -1,5 +1,6 @@
 import classNames from "classnames/bind";
 import { useLocation } from "react-router-dom";
+import { Container } from "react-bootstrap";
 
 import { Logo } from "assets/images";
 import { Button } from "components";
@@ -11,15 +12,17 @@ const cx = classNames.bind(styles);
 
 function Header() {
   const headerNavigation = [
-    { href: "/comic/weekly", label: "Comics" },
-    { href: "/novel", label: "Novels" },
-    { href: "/anime", label: "Anime" },
+    { href: "/comic/weekly", label: "Hàng tuần" },
+    { href: "/comic/ranking", label: "Xếp hạng" },
+    { href: "/comic/complete", label: "Truyện hoàn thành" },
+    // { href: "/novel", label: "Novel" },
+    // { href: "/anime", label: "Anime" },
   ];
   const url = useLocation().pathname;
 
   return (
     <header className={cx("header")}>
-      <div className={cx("container")}>
+      <Container fluid="md">
         <div className={cx("desktop-screen")}>
           <div className={cx("logo")}>
             <Button wrapper to="/">
@@ -33,9 +36,7 @@ function Header() {
                   <Button
                     wrapper
                     to={nav.href}
-                    className={cx(
-                      url.includes(nav.href.split("/")[1]) ? "active" : ""
-                    )}
+                    className={cx(url.includes(nav.href) ? "active" : "")}
                   >
                     {nav.label}
                   </Button>
@@ -46,7 +47,7 @@ function Header() {
           <Search />
           <Avatar />
         </div>
-      </div>
+      </Container>
     </header>
   );
 }

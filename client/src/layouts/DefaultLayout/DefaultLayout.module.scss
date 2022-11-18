@@ -1,0 +1,38 @@
+@use "assets/styles/variables" as var;
+@import "swiper/css";
+@import "swiper/css/thumbs";
+
+.navigator {
+  margin-top: var.$header-height;
+  display: none;
+
+  + :global(.skip-header) {
+    margin-top: 0;
+  }
+}
+
+.navigator {
+  font-weight: 600;
+
+  &__label {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(var.$header-height - 10px);
+  }
+
+  .active {
+    border-bottom: 3px solid var.$primary;
+
+    .navigator__label {
+      color: var.$primary;
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  .navigator {
+    display: block;
+  }
+}
