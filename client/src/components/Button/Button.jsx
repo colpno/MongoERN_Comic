@@ -47,7 +47,7 @@ function Button(props) {
     text,
     small,
     large,
-    rounded,
+    round,
   } = props;
   const classes = cx(
     wrapper || "btn",
@@ -82,7 +82,7 @@ function Button(props) {
 
       wrapper,
       text,
-      rounded,
+      round,
       small,
       large,
     },
@@ -150,7 +150,7 @@ Button.propTypes = {
   text: PropTypes.bool,
   small: PropTypes.bool,
   large: PropTypes.bool,
-  rounded: PropTypes.bool,
+  round: PropTypes.bool,
 };
 
 Button.defaultProps = {
@@ -192,7 +192,7 @@ Button.defaultProps = {
   text: false,
   small: false,
   large: false,
-  rounded: false,
+  round: false,
 };
 
 export default Button;
