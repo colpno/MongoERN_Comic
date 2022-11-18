@@ -45,7 +45,7 @@ function LoginLayout({ children }) {
             <Col lg={8}>
               <Row className={cx("conveniences")}>
                 {conveniences.map((convenience, index) => (
-                  <Col md={6} key={index} className={cx("convenience-wrapper")}>
+                  <Col xs={6} key={index} className={cx("convenience-wrapper")}>
                     <div className={cx("convenience")}>
                       <div className={cx("icon")}>
                         <img src={convenience.icon} alt="Icon" />
