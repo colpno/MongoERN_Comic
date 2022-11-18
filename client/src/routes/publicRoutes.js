@@ -6,6 +6,7 @@ import {
   ForgotPassword,
   Home,
   Login,
+  NotFound,
   Notice,
   NoticeList,
   Ranking,
@@ -18,6 +19,7 @@ import {
 } from "pages";
 
 export const publicRoutes = [
+  { path: "/not-found", component: NotFound },
   { path: "/", component: Home },
   {
     path: "/login",
