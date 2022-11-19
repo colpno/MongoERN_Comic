@@ -8,11 +8,11 @@
 
   :global(.row) {
     flex-wrap: nowrap;
+    max-width: 1180px;
   }
 
   &__col {
     padding-left: 20px;
-    min-width: 298px;
     flex-wrap: nowrap;
 
     &:not(:last-child) {
