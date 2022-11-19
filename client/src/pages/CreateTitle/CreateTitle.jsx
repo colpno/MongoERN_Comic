@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as Yup from "yup";
+import { useNavigate } from "react-router-dom";
 
 import FormWrapper from "components/FormWrapper/FormWrapper";
 import TitleForm from "components/TitleForm";
@@ -8,6 +9,7 @@ import { useToast } from "hooks";
 import { addTitle } from "services/title";
 
 function CreateTitle() {
+  const navigate = useNavigate();
   const [progress, setProgress] = useState(0);
   const { Toast, options: toastOptions, toastEmitter } = useToast();
   const [popup, setPopup] = useState({
@@ -59,6 +61,10 @@ function CreateTitle() {
       content: "Bạn có chắc muốn quay lại?",
     }));
   };
+
+  useEffect(() => {
+    popup.isConfirm && navigate(-1);
+  }, [popup.isConfirm]);
 
   const handleSubmit = (values, { setSubmitting }) => {
     addTitle(values, setProgress)
