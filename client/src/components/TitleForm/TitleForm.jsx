@@ -21,6 +21,7 @@ const cx = classNames.bind(styles);
 function TitleForm({
   initialValues,
   validationSchema,
+  handleCancel,
   handleSubmit,
   imageBlob,
 }) {
@@ -93,7 +94,6 @@ function TitleForm({
               letterCount
               autoFocus
             />
-
             {statusOptions.length > 0 && "titleStatusId" in initialValues && (
               <>
                 <FormLabel name="titleStatusId" label="Trạng thái" />
@@ -101,11 +101,10 @@ function TitleForm({
                   name="titleStatusId"
                   component={RadioGroup}
                   options={statusOptions}
-                  col={{ sm: 6, md: 4 }}
+                  col={{ xs: 6, md: 4 }}
                 />
               </>
             )}
-
             {genreOptions.length > 0 && (
               <>
                 <FormLabel
@@ -118,11 +117,10 @@ function TitleForm({
                   name="genreId"
                   component={CheckBoxGroup}
                   options={genreOptions}
-                  col={{ sm: 6, md: 4 }}
+                  col={{ xs: 6, md: 4 }}
                 />
               </>
             )}
-
             <FormLabel name="summary" label="Mô tả" required />
             <FastField
               name="summary"
@@ -130,7 +128,6 @@ function TitleForm({
               placeholder="Viết giới thiệu truyện..."
               rows={7}
             />
-
             <FormLabel name="author" label="Tác giả" required />
             <FastField
               name="author"
@@ -139,7 +136,6 @@ function TitleForm({
               maxLength={255}
               letterCount
             />
-
             <FormLabel
               name="coin"
               label="Coin"
@@ -153,15 +149,13 @@ function TitleForm({
               maxLength={3}
               letterCount
             />
-
             <FormLabel name="releaseDay" label="Ngày đăng hàng tuần" />
             <FastField
               name="releaseDay"
               component={RadioGroup}
               options={releaseDayOptions}
-              col={{ sm: 4, md: 4 }}
+              col={{ xs: 6, md: 4 }}
             />
-
             {/* TODO: close icon to destroy image */}
             <FormLabel name="cover" label="Ảnh bìa" required />
             {!!errors.cover && <Alert variant="danger">{errors.cover}</Alert>}
@@ -187,9 +181,8 @@ function TitleForm({
                 handleRemove={handleRemove}
               /> */}
             </div>
-
             <div className={cx("button-group")}>
-              <Button outline gray>
+              <Button outline gray onClick={handleCancel}>
                 Hủy bỏ
               </Button>
               <div className={cx("button-group__submit-group")}>
@@ -220,6 +213,7 @@ TitleForm.propTypes = {
     author: PropTypes.string.isRequired,
   }).isRequired,
   validationSchema: PropTypes.shape({}).isRequired,
+  handleCancel: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   imageBlob: PropTypes.shape({
     cover: PropTypes.string,
