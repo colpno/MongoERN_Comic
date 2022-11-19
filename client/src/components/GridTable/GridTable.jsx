@@ -18,10 +18,11 @@ function GridTable({ head, children, border, sorting }) {
         {head.length > 0 && (
           <Row className={cx("grid-table__head")}>
             {head.map((item, index) => {
-              const { label, name, center, sm, md, lg, xl, xxl } = item;
+              const { label, name, center, xs, sm, md, lg, xl, xxl } = item;
 
               return (
                 <Col
+                  xs={xs}
                   sm={sm}
                   md={md}
                   lg={lg}
@@ -55,6 +56,7 @@ GridTable.propTypes = {
     PropTypes.shape({
       label: PropTypes.string.isRequired,
       name: PropTypes.string,
+      xs: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       sm: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       md: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       lg: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),

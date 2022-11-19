@@ -31,7 +31,7 @@ function MyTitleTable({ data }) {
 
         return (
           <Row key={guid} className={cx("my-title__container__content")}>
-            <Col sm={1}>
+            <Col xs={1}>
               <span>{id}</span>
             </Col>
             <Col>
@@ -39,7 +39,7 @@ function MyTitleTable({ data }) {
                 <img src={cover} alt={name} />
               </div>
             </Col>
-            <Col sm={3}>
+            <Col xs={3}>
               <Button text to={`/comic/title/${guid}`} className={cx("title")}>
                 {name}
               </Button>

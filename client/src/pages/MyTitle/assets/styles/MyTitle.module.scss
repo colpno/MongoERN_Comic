@@ -15,6 +15,10 @@
       padding-left: 0;
     }
 
+    & > *:nth-child(2) {
+      padding-left: 0;
+    }
+
     & > *:last-child {
       padding: 0;
     }
@@ -43,5 +47,22 @@
       font-size: 24px;
       margin-right: 5px;
     }
+  }
+
+  :global(.grid-table .row) {
+    min-width: 1144px;
+  }
+}
+
+:global(.right),
+.right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+@media (max-width: 768px) {
+  .my-title__header :global([class*="col"]):first-child {
+    margin-bottom: 0.5rem;
   }
 }

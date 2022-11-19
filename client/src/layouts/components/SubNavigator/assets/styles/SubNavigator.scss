@@ -1,13 +1,39 @@
-@use "assets/styles/variables";
+@use "assets/styles/variables" as var;
 
 .sub-navbar {
-  border-bottom: 1px solid variables.$border-gray;
+  border-bottom: 1px solid var.$border-gray;
+
+  .navigator {
+    margin-top: var.$header-height;
+    background-color: var.$white;
+    display: none;
+  }
 
   .navigator {
     font-weight: 600;
 
+    &__label {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: calc(var.$header-height - 10px);
+    }
+
+    .active {
+      border-bottom: 3px solid var.$primary;
+
+      .navigator__label {
+        color: var.$primary;
+      }
+    }
+  }
+
+  .navigator--default {
+    font-weight: 600;
+
     &:not(.active):hover .navigator__label {
-      color: variables.$primary;
+      color: var.$primary;
     }
 
     &__label {
@@ -15,15 +41,21 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      height: calc(variables.$header-height - 10px);
+      height: calc(var.$header-height - 10px);
     }
 
     &:where(.active) {
-      border-bottom: 3px solid variables.$primary;
+      border-bottom: 3px solid var.$primary;
 
       .navigator__label {
-        color: variables.$primary;
+        color: var.$primary;
       }
     }
+  }
+}
+
+@media (max-width: 1200px) {
+  .sub-navbar .navigator {
+    display: block;
   }
 }

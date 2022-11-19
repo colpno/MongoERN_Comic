@@ -13,7 +13,7 @@ function MyTitleContent({ titles, pagination, setPagination, sorting }) {
           {
             label: "#",
             name: "id",
-            sm: 1,
+            xs: 1,
           },
           {
             label: "Ảnh bìa",
@@ -21,7 +21,7 @@ function MyTitleContent({ titles, pagination, setPagination, sorting }) {
           {
             label: "Tiêu đề",
             name: "name",
-            sm: 3,
+            xs: 3,
           },
           {
             label: "Số chương",

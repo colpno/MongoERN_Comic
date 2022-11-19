@@ -11,7 +11,7 @@ function RadioGroup(props) {
   const { field, form, options, disabled, col } = props;
   const { name } = field;
   const { touched, errors } = form;
-  const { sm, md, lg, xl, xxl } = col;
+  const { xs, sm, md, lg, xl, xxl } = col;
   const showError = touched[name] && !!errors[name];
 
   return (
@@ -22,6 +22,7 @@ function RadioGroup(props) {
           <Col
             key={option.value}
             className={cx("field__group")}
+            xs={xs}
             sm={sm}
             md={md}
             lg={lg}
@@ -57,6 +58,7 @@ RadioGroup.propTypes = {
   ).isRequired,
   disabled: PropTypes.bool,
   col: PropTypes.shape({
+    xs: PropTypes.number,
     sm: PropTypes.number,
     md: PropTypes.number,
     lg: PropTypes.number,

@@ -49,13 +49,13 @@ function MyTitle() {
   return (
     <Container className={cx("my-title")}>
       <Row className={cx("my-title__header")}>
-        <Col>
+        <Col xs={12} md="auto">
           <MyTitleHeader cx={cx} totalTitle={pagination.total} />
         </Col>
-        <Col>
+        <Col xs={6} md={4} lg={4} className="right">
           <Search />
         </Col>
-        <Col xs={5} sm={3} lg={20}>
+        <Col xs={6} md={3} lg={20} className="right">
           {hasData && <BtnCreate />}
         </Col>
       </Row>

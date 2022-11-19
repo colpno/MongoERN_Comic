@@ -4,9 +4,16 @@
   border: 1px solid variables.$border-gray;
   padding: 20px 0;
   margin-top: calc(variables.$header-height + 30px);
+  overflow-x: auto;
+
+  :global(.row) {
+    flex-wrap: nowrap;
+  }
 
   &__col {
     padding-left: 20px;
+    min-width: 298px;
+    flex-wrap: nowrap;
 
     &:not(:last-child) {
       border-right: 2px solid #e9e9e9;
@@ -48,5 +55,11 @@
     font-size: 20px;
     color: #aaa;
     cursor: pointer;
+  }
+}
+
+@media (max-width: 768px) {
+  .statistic-count__col {
+    min-width: 250px;
   }
 }
