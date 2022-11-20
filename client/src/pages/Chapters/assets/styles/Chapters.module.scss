@@ -2,7 +2,7 @@
 @use "assets/styles/mixins";
 
 .chapters {
-  margin-top: calc(variables.$header-height + 60px);
+  margin-top: calc(variables.$header-height + 0px);
   margin-bottom: 30px;
 
   &__header {
@@ -21,6 +21,10 @@
         display: flex;
         align-items: center;
         justify-content: flex-start;
+        padding-left: 0;
+      }
+
+      &:nth-child(2) {
         padding-left: 0;
       }
 
@@ -48,5 +52,21 @@
 
   &__general__total__number {
     font-weight: 700;
+  }
+
+  :global(.grid-table .row) {
+    min-width: 1144px;
+  }
+}
+
+@media (max-width: 996px) {
+  // .chapters {
+  //   margin-top: 2rem;
+  // }
+}
+
+@media (max-width: 768px) {
+  .chapters__general :global([class*="col"]):first-child {
+    margin-bottom: 0.5rem;
   }
 }

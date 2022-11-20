@@ -45,3 +45,25 @@
   width: 70%;
   @include mixins.multiLineClamp(2);
 }
+
+@media (max-width: 996px) {
+  .button-container {
+    flex-direction: column;
+
+    > * {
+      width: 165px;
+    }
+
+    .chapters__title-accelerate__button {
+      margin-left: 0;
+      margin-top: 0.8rem;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .button-container {
+    justify-content: flex-end;
+    flex-direction: row;
+  }
+}

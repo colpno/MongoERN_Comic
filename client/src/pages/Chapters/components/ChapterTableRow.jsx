@@ -46,7 +46,7 @@ function ChaptersTableRow({ setPopup, setDeleteItem, chapters }) {
             className={cx("chapters__container__content")}
             key={chapter.guid}
           >
-            <Col sm={1}>
+            <Col xs={1}>
               <span className={cx("order")}>{chapter.order}</span>
             </Col>
             <Col>
@@ -56,7 +56,7 @@ function ChaptersTableRow({ setPopup, setDeleteItem, chapters }) {
                 alt={chapter.name}
               />
             </Col>
-            <Col sm={3}>
+            <Col xs={3}>
               <Button
                 text
                 to={`/comic/title/${titleId}/${chapter.guid}`}

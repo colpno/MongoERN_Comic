@@ -36,7 +36,11 @@ function TitlePart({ title, setPopup, setDeletedItem }) {
           <span className={cx("title")}>{title.name}</span>
         </Button>
       </Col>
-      <Col md="auto" className={cx("chapters__title__box")}>
+      <Col
+        sm={12}
+        md="auto"
+        className={cx("chapters__title__box", "button-container")}
+      >
         <Button
           outline
           to={`/my-title/update/${title.guid}`}

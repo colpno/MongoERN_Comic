@@ -140,7 +140,7 @@ function Chapters() {
           />
         )}
         <Row className={cx("chapters__general")}>
-          <Col className={cx("chapters__general__box")}>
+          <Col xs={12} className={cx("chapters__general__box")}>
             <span className={cx("chapters__general__total")}>
               Tổng số chương:{" "}
               <span className={cx("chapters__general__total__number")}>
@@ -150,14 +150,19 @@ function Chapters() {
           </Col>
           {hasData && (
             <>
-              <Col>
+              <Col
+                xs={6}
+                md={4}
+                lg={4}
+                className={`${cx("chapters__general__box")} right`}
+              >
                 <Search />
               </Col>
               <Col
                 xs={6}
-                sm={4}
+                md={3}
                 lg={20}
-                className={cx("chapters__general__box")}
+                className={`${cx("chapters__general__box")} right`}
               >
                 <BtnCreate />
               </Col>{" "}

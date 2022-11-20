@@ -16,9 +16,9 @@ function ChapterTable({
     <>
       <GridTable
         head={[
-          { label: "#", name: "order", sm: 1 },
+          { label: "#", name: "order", xs: 1 },
           { label: "Ảnh bìa" },
-          { label: "Tên chương", name: "name", sm: 3 },
+          { label: "Tên chương", name: "name", xs: 3 },
           { label: "Ngày tạo", name: "createdAt" },
           { label: "Ngày sửa", name: "updatedAt" },
           { label: "Trạng thái", name: "approvedStatusId" },
