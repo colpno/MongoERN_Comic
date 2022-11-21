@@ -22,11 +22,11 @@ import {
 
 config();
 const app = express();
-const { PORT, BASE_URL, CLIENT_URL } = process.env;
+const { PORT, BASE_URL, CLIENT_URL, ADMIN_URL } = process.env;
 // [ process.env.CLIENT_URL, 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html', ]
 app.use((req, res, next) => {
   // res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Origin', process.env.CLIENT_URL);
+  res.header('Access-Control-Allow-Origin', [CLIENT_URL, ADMIN_URL]);
   res.header('Access-Control-Allow-Credentials', true);
   res.header(
     'Access-Control-Allow-Headers',
@@ -41,7 +41,7 @@ app.use(cookieParser());
 app.use(
   cors({
     // origin: [CLIENT_URL, 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html'],
-    origin: CLIENT_URL,
+    origin: [CLIENT_URL, ADMIN_URL],
   })
 );
 
