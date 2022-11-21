@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 import { AiOutlineInfoCircle, AiOutlineQuestionCircle } from "react-icons/ai";
 
 import { BuyTicket, ChargeIcon, RentTicket } from "assets/images";
-import { UserArray } from "database";
 import styles from "pages/Title/assets/styles/TitleAbout.module.scss";
 import ChargeBar from "./ChargeBar";
 import ChargeExplainPopup from "./ChargeExplainPopup";
