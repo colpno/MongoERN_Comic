@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
 import { Col, Row } from "react-bootstrap";
@@ -43,20 +44,20 @@ function AdminTableRow({ setPopup, admins, setDeletedItem }) {
 
         return (
           <Row className={cx("chapters__container__content")} key={id}>
-            <Col sm={1}>
+            <Col xs={1}>
               <span className={cx("id")}>{id}</span>
             </Col>
             <Col>
               <span className={cx("username")}>{username}</span>
             </Col>
-            <Col>
+            {/* <Col>
               <span className={cx("coin")}>{coin}</span>
             </Col>
             <Col>
               <span className={cx("income")}>
                 {separateNumberDigit(income)}
               </span>
-            </Col>
+            </Col> */}
             {/* <Col>
               <span className={cx("point")}>{point}</span>
             </Col>
@@ -76,7 +77,7 @@ function AdminTableRow({ setPopup, admins, setDeletedItem }) {
                 {`${updatedTime.day}.${updatedTime.month}.${updatedTime.year}`}
               </span>
             </Col>
-            <Col sm={1} className={cx("actions")}>
+            <Col xs={1} className={cx("actions")}>
               <Button
                 outline
                 gray

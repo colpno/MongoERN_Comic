@@ -58,7 +58,7 @@ function ChapterForm({ initialValues, validationSchema, handleSubmit }) {
                   name="cost"
                   component={RadioGroup}
                   options={costOptions}
-                  col={{ sm: 6 }}
+                  col={{ xs: 6 }}
                 />
               </>
             )}
@@ -99,7 +99,6 @@ function ChapterForm({ initialValues, validationSchema, handleSubmit }) {
                       alt={`Image ${index + 1}`}
                       key={index}
                       className={cx("image-content")}
-                      height={100}
                     />
                     <IoCloseCircle
                       className={cx("close-icon")}

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 import { Container, Row } from "react-bootstrap";
@@ -203,7 +202,7 @@ function ChapterManagement() {
             />
           )}
         </Row>
-        <FloatingContainer>
+        <FloatingContainer className={cx("data-rows")}>
           {searchText.length > 0 && (
             <ChapterTable
               chapters={filteredChapters}

@@ -27,7 +27,7 @@ function FollowTable({ setDeletedItem, popup, setPopup, titles }) {
         return (
           <Row className={cx("follow__container__content")} key={title.guid}>
             <Col
-              md={8}
+              xs={8}
               className={cx("follow__container__content__title-info")}
             >
               <div className={cx("box-img")}>

@@ -1,0 +1,13 @@
+.table-wrapper {
+  :global(.grid-table .row) {
+    min-width: 1086.4px;
+  }
+}
+
+@media (max-width: 768px) {
+  .follow {
+    :global(.grid-table .row) {
+      min-width: 890px;
+    }
+  }
+}

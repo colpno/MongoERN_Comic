@@ -63,14 +63,14 @@ function MemberTableRow({
             <Col>
               <span className={cx("user-name")}>{username}</span>
             </Col>
-            <Col>
+            {/* <Col>
               <span className={cx("coin")}>{coin}</span>
             </Col>
             <Col>
               <span className={cx("income")}>
                 {separateNumberDigit(income)}
               </span>
-            </Col>
+            </Col> */}
             {/* <Col>
               <span className={cx("point")}>{point}</span>
             </Col>

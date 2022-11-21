@@ -10,3 +10,9 @@
     justify-content: flex-end;
   }
 }
+
+.data-rows {
+  :global(.grid-table .row) {
+    min-width: 1086.4px;
+  }
+}

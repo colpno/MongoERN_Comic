@@ -62,7 +62,7 @@ function ChaptersTableRow({
             className={cx("chapters__container__content")}
             key={chapter.guid}
           >
-            <Col sm={1}>
+            <Col xs={1}>
               <span className={cx("id")}>{chapter.id}</span>
             </Col>
             <Col>
@@ -72,7 +72,7 @@ function ChaptersTableRow({
                 alt={chapter.name}
               />
             </Col>
-            <Col sm={3}>
+            <Col xs={3}>
               <Button
                 text
                 to={`/comic/title/${titleId}/${chapter.guid}`}

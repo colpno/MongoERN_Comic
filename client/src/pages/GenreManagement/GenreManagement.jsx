@@ -134,7 +134,7 @@ function GenreManagement() {
             </Row>
             <Row>
               <Col>
-                <FloatingContainer>
+                <FloatingContainer className={cx("data-rows")}>
                   <GenreTable
                     pagination={pagination}
                     genres={genres}

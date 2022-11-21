@@ -1,4 +1,5 @@
 @use "assets/styles/variables";
+@use "components/Scrollbar/Scrollbar.module.scss";
 
 .wrapper {
   border-bottom: 1px solid #ccc;
@@ -12,6 +13,8 @@
     &__title {
       display: flex;
       align-items: center;
+      flex: 1;
+      margin-right: 5rem;
     }
 
     &__title__image {
@@ -25,13 +28,19 @@
     &__title__label {
       font-size: 1.3em;
       font-weight: 500;
+      width: max-content;
     }
 
     &__navbar__link {
       font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      min-width: max-content;
+      max-width: max-content;
 
       &:not(:first-child) {
-        margin-left: 60px;
+        margin-left: 3rem;
       }
 
       &.active,
@@ -39,5 +48,17 @@
         color: variables.$primary-dark;
       }
     }
+  }
+
+  :global(.swiper) {
+    // margin-left: 0;
+    margin-right: 0;
+    max-width: 300px;
+  }
+
+  :global(.swiper-wrapper) {
+    overflow-x: auto;
+    @extend .scrollbar;
+    padding-bottom: 10px;
   }
 }

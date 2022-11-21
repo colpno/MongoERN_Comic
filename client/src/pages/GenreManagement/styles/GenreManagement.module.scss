@@ -20,3 +20,18 @@
   align-items: center;
   justify-content: center;
 }
+
+.data-rows {
+  :global(.grid-table .row) {
+    min-width: 1086.4px;
+  }
+}
+
+@media (max-width: 992px) {
+  .data-rows {
+    :global(.grid-table .row) {
+      max-width: 800px !important;
+      min-width: 800px !important;
+    }
+  }
+}

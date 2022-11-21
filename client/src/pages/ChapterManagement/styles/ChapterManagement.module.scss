@@ -15,3 +15,9 @@
     background-color: hsl(202, 40%, 91%);
   }
 }
+
+.data-rows {
+  :global(.grid-table .row) {
+    min-width: 1086.4px;
+  }
+}

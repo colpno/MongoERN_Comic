@@ -92,20 +92,20 @@ function ChapterManagementCards({
 
   return (
     <>
-      <Col sm={12} md={12} lg={6} xl={4}>
+      <Col xs={12} md={12} lg={6} xl={4}>
         <AdminCard
           rawData={waitingCardData.rawData}
           chartProps={waitingCardData.chartProps}
         />
       </Col>
-      <Col sm={12} md={12} lg={6} xl={4}>
+      <Col xs={12} md={12} lg={6} xl={4}>
         <AdminCard
           rawData={acceptedCardData.rawData}
           chartProps={acceptedCardData.chartProps}
         />
       </Col>
       <Col
-        sm={12}
+        xs={12}
         md={12}
         lg={{ span: 8, offset: 2 }}
         xl={{ span: 4, offset: 0 }}

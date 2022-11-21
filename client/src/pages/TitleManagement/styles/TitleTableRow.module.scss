@@ -2,7 +2,7 @@
 @use "assets/styles/mixins";
 
 .title {
-  @include mixins.multiLineClamp(3);
+  @include mixins.multiLineClamp(2);
   font-weight: 500;
 }
 

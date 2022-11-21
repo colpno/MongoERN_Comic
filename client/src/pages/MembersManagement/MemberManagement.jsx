@@ -129,7 +129,7 @@ function MemberManagement() {
             <Row>
               <h4 className={cx("label")}>All Members</h4>
             </Row>
-            <FloatingContainer>
+            <FloatingContainer className={cx("data-rows")}>
               <MemberTable
                 sorting={sorting}
                 members={members}

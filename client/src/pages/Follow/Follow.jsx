@@ -1,10 +1,9 @@
 /* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Container } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
-import followApi from "api/followApi";
 import { noFavorite } from "assets/images";
 import GridTable from "components/GridTable";
 import TabsContainer from "components/TabsContainer";
@@ -54,12 +53,12 @@ function Follow() {
   return (
     <>
       <Container className={cx("follow")}>
-        <TabsContainer menu={menu} />
+        {/* <TabsContainer menu={menu} /> */}
         {hasData ? (
           <>
             <GridTable
               head={[
-                { label: "Tiêu đề", md: 8 },
+                { label: "Tiêu đề", xs: 8 },
                 { label: "Cập nhật lần cuối", center: true },
                 { label: "Xóa", center: true },
               ]}

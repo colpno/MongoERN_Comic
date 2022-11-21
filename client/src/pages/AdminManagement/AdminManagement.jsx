@@ -114,7 +114,7 @@ function AdminManagement() {
                 </Button>
               </Col>
             </Row>
-            <FloatingContainer>
+            <FloatingContainer className={cx("data-rows")}>
               <AdminTable
                 admins={admins}
                 pagination={pagination}

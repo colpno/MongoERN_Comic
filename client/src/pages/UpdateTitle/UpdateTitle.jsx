@@ -1,16 +1,13 @@
-import classNames from "classnames/bind";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import * as Yup from "yup";
 
+import FormWrapper from "components/FormWrapper/FormWrapper";
 import TitleForm from "components/TitleForm";
 import { Popup, ProgressCircle } from "features";
 import { useToast } from "hooks";
 import { getTitleByID, updateTitle } from "services/title";
 import { getAllTitleGenreByProperty } from "services/titleGenre";
-import styles from "./UpdateTitle.module.scss";
-
-const cx = classNames.bind(styles);
 
 function UpdateTitle() {
   const { titleId } = useParams();
@@ -109,8 +106,7 @@ function UpdateTitle() {
 
   return (
     <>
-      <div className={cx("update-title")}>
-        <h3 className={cx("head-title")}>Chỉnh sửa truyện</h3>
+      <FormWrapper title="Chỉnh sửa truyện">
         {hasData && (
           <TitleForm
             handleSubmit={handleSubmit}
@@ -122,7 +118,7 @@ function UpdateTitle() {
             validationSchema={VALIDATION_SCHEMA}
           />
         )}
-      </div>
+      </FormWrapper>
       <ProgressCircle percentage={progress} />
       <Popup popup={popup} setPopup={setPopup} />
       <Toast {...toastOptions} />

@@ -28,7 +28,7 @@ function TitleManagement() {
   const { Toast, options: toastOptions, toastEmitter } = useToast();
   const [progress, setProgress] = useState(0);
   const { titles, setTitles, pagination, setPagination, sorting, refetch } =
-    sortTitles("id", true, TITLES_PER_PAGE);
+    sortTitles("approvedStatusId", true, TITLES_PER_PAGE);
   const { titles: allTitles } = getAllTitles();
   const { titles: limitedTitles, fetch: fetchLimitedTitles } =
     getLimitedTitlesByProperty(null, 30);

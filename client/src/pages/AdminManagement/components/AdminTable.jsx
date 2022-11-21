@@ -18,8 +18,8 @@ function AdminTable({
         head={[
           { label: "#", name: "id", sm: 1 },
           { label: "Tên", name: "username" },
-          { label: "Coin", name: "coin" },
-          { label: "Thu nhập (VNĐ)", name: "income" },
+          // { label: "Coin", name: "coin" },
+          // { label: "Thu nhập (VNĐ)", name: "income" },
           // { label: "Point", name: "point" },
           // { label: "Vé mua", name: "buyTicket" },
           // { label: "Vé thuê", name: "rentTicket" },

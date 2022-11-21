@@ -30,7 +30,7 @@ function TitleTable({
           {
             label: "Tiêu đề",
             name: "name",
-            sm: 3,
+            sm: 2,
           },
           {
             label: "Số chương",

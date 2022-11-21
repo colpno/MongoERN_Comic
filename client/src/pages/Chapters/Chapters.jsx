@@ -140,7 +140,7 @@ function Chapters() {
           />
         )}
         <Row className={cx("chapters__general")}>
-          <Col xs={12} className={cx("chapters__general__box")}>
+          <Col xs={12} md="auto" className={cx("chapters__general__box")}>
             <span className={cx("chapters__general__total")}>
               Tổng số chương:{" "}
               <span className={cx("chapters__general__total__number")}>
@@ -161,7 +161,7 @@ function Chapters() {
               <Col
                 xs={6}
                 md={3}
-                lg={20}
+                lg={3}
                 className={`${cx("chapters__general__box")} right`}
               >
                 <BtnCreate />

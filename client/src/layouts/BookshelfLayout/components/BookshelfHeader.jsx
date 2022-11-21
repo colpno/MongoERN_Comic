@@ -1,6 +1,11 @@
+/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
-import { Container } from "react-bootstrap";
-import { Link, useLocation } from "react-router-dom";
+import { Container, Row } from "react-bootstrap";
+import { useLocation } from "react-router-dom";
+import { Navigation, Scrollbar, Thumbs } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
+
+import { Button } from "components";
 import { ReactComponent as InventoryBooksLogo } from "../assets/images/inventory-books-logo.svg";
 import styles from "../assets/styles/BookshelfHeader.module.scss";
 
@@ -22,7 +27,7 @@ function BookshelfHeader() {
           <InventoryBooksLogo className={cx("header__title__image")} />
           <span className={cx("header__title__label")}>Tủ sách của bạn</span>
         </div>
-        <div className={cx("header__navbar")}>
+        {/* <div className={cx("header__navbar")}>
           {menu.map((link) => {
             return (
               <Link
@@ -37,7 +42,40 @@ function BookshelfHeader() {
               </Link>
             );
           })}
-        </div>
+        </div> */}
+        <Swiper
+          modules={[Thumbs]}
+          breakpoints={{
+            100: {
+              slidesPerView: 1.6,
+            },
+            540: {
+              slidesPerView: 2.2,
+            },
+            768: {
+              slidesPerView: 3.8,
+            },
+          }}
+          grabCursor
+        >
+          <Row className={cx("header__navbar")}>
+            {menu.map((item, index) => {
+              return (
+                <SwiperSlide
+                  key={index}
+                  className={cx(
+                    "header__navbar__link",
+                    item.href.includes(pathName) ? "active" : ""
+                  )}
+                >
+                  <Button wrapper to={item.href} className={cx("label")}>
+                    {item.label}
+                  </Button>
+                </SwiperSlide>
+              );
+            })}
+          </Row>
+        </Swiper>
       </Container>
     </div>
   );
