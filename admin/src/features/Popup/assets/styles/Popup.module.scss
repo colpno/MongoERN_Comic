@@ -1,0 +1,66 @@
+@use "assets/styles/variables" as var;
+@use "components/Scrollbar/Scrollbar.module.scss";
+
+.popup {
+  background-color: #fff;
+  box-shadow: 0 0 10px rgb(0 0 0 / 0.2);
+  border-radius: 10px;
+  width: 400px;
+  max-height: 70vh;
+
+  position: fixed;
+  content: "";
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 21;
+
+  display: flex;
+  flex-direction: column;
+
+  &__head {
+    padding: 10px 0;
+    border-bottom: 3px solid var.$primary;
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  &__content {
+    padding: 20px;
+    line-height: 1.4;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @extend .scrollbar;
+
+    > * {
+      height: 100%;
+    }
+  }
+
+  &__btn-container {
+    padding: 0.9rem 0 1rem;
+    margin-top: 1rem;
+    border-top: 1px solid var.$gray-300;
+    box-shadow: 0 -3px rgb(0 0 0 /0.04), 0 -16px 5px rgb(0 0 0 / 0.02);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    button {
+      padding: 10px 60px;
+      border: none;
+      border-radius: 8px;
+      outline: none;
+      font-weight: 700;
+    }
+  }
+
+  &__confirm__btn-close {
+    margin-left: 10px !important;
+  }
+}

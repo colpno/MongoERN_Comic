@@ -1,0 +1,23 @@
+@use "assets/styles/variables" as var;
+@use "components/Scrollbar/Scrollbar.module.scss" as scl;
+
+.field {
+  position: relative;
+
+  &__select {
+    height: var.$field-height;
+  }
+
+  &__textarea {
+    width: 100%;
+    border: 1px solid var.$gray-400;
+    padding: 15px;
+    color: #777;
+    outline: none;
+    border-radius: 4px;
+  }
+
+  // Input field
+
+  // Select field
+}

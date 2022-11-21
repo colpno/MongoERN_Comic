@@ -1,0 +1,42 @@
+:global(.input-file-wrapper) {
+  + :global(.input-file-wrapper) {
+    margin-left: 20px;
+  }
+}
+
+.button-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 40px;
+}
+
+.button-group__submit-group {
+  display: flex;
+  align-items: center;
+}
+
+.cover-image {
+  display: flex;
+
+  :global(.input-file-wrapper:nth-child(1)) {
+    width: 250px;
+  }
+
+  :global(.input-file-wrapper:nth-child(2)) {
+    width: 400px;
+  }
+}
+
+.email-field {
+  display: flex;
+
+  button {
+    max-height: 45px;
+  }
+
+  :global(.field) {
+    flex: 1;
+    margin-right: 20px;
+  }
+}

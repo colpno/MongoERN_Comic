@@ -1,0 +1,51 @@
+@use "assets/styles/variables";
+@use "assets/styles/mixins";
+
+.cards-wrapper {
+  margin-bottom: 12px;
+
+  &__head {
+    margin-bottom: 17px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    position: relative;
+
+    &::before {
+      position: absolute;
+      content: "";
+      top: 0;
+      bottom: 0;
+      left: 0;
+      background-color: variables.$primary;
+      width: 4px;
+      border-radius: 100vmax;
+    }
+
+    &__title {
+      padding-left: 20px;
+      @include mixins.singleLineClamp();
+    }
+  }
+
+  &__cards {
+    gap: 40px 0;
+  }
+
+  :global([class*="col"]) {
+    padding-left: 0.375rem;
+    padding-right: 0.375rem;
+    // width: calc(180px + 0.375rem * 2);
+    min-width: min-content;
+  }
+  &:not(.wrap) :global([class*="row"]) {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+
+  :global(.card-figure) {
+    padding-bottom: 1.4rem;
+  }
+}

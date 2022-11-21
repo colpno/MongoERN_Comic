@@ -1,0 +1,57 @@
+@use "assets/styles/variables";
+@use "assets/styles/mixins";
+
+$checkboxSize: 20px;
+
+.label {
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.text {
+  @include mixins.singleLineClamp();
+}
+
+.checkbox {
+  margin-right: 10px;
+  opacity: 0;
+}
+
+.checkbox,
+.custom-checkbox,
+.check-mark {
+  width: $checkboxSize;
+  height: $checkboxSize;
+}
+
+.custom-checkbox {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: variables.$white;
+  border: 1px solid variables.$gray-500;
+
+  .check-mark {
+    color: variables.$white;
+    width: calc($checkboxSize - 40%);
+    height: calc($checkboxSize - 40%);
+    opacity: 0;
+  }
+}
+
+.checkbox:checked {
+  + .custom-checkbox {
+    background-color: variables.$primary;
+    border: none;
+
+    > .check-mark {
+      opacity: 1;
+    }
+  }
+}

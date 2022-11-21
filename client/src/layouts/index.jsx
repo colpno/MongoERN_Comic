@@ -5,4 +5,3 @@ export { default as HistoryLayout } from "./HistoryLayout";
 export { default as MyTitleLayout } from "./MyTitleLayout";
 export { default as ReadingLayout } from "./ReadingLayout";
 export { default as LoginLayout } from "./LoginLayout";
-export { default as AdminLayout } from "./AdminLayout";
