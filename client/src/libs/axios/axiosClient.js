@@ -18,7 +18,7 @@ axiosClient.interceptors.response.use(
     const { status } = response;
 
     if (status === 403) {
-      window.location.href = "/";
+      window.location.href = "/login";
       alert(response.data.error);
     }
     return Promise.reject(response);
