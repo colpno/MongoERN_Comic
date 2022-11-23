@@ -1,31 +1,31 @@
 import classNames from "classnames/bind";
-import { Button } from "components";
 import { useToast } from "hooks";
-import { login as dispatchLogin } from "libs/redux/slices/userSlice";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { login } from "services/auth";
-import { convertUserPropertyToString } from "utils/convertArrayPropertyToString";
 
+import { Button } from "components";
+import { Popup } from "features";
+import { login } from "services/auth";
 import LoginForm from "./components/LoginForm";
 import styles from "./styles/Login.module.scss";
 
 const cx = classNames.bind(styles);
 
 function Login() {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [popup, setPopup] = useState({
+    trigger: false,
+    title: "Thông báo",
+    content: "",
+    isClosed: false,
+  });
   const { Toast, options: toastOptions, toastEmitter } = useToast();
 
   const handleSubmit = (values, { setSubmitting }) => {
     const { username, password } = values;
     login(username, password)
       .then((response) => {
-        if (response) {
-          const converted = convertUserPropertyToString(response);
-          dispatch(dispatchLogin(converted));
-          navigate("/");
-        }
+        setPopup((prev) => ({ ...prev, trigger: true, content: response }));
       })
       .catch((error) => {
         const { data } = error;
@@ -34,6 +34,10 @@ function Login() {
 
     setSubmitting(false);
   };
+
+  useEffect(() => {
+    popup.isClosed && navigate("verify");
+  }, [popup.isClosed]);
 
   return (
     <>
@@ -55,6 +59,7 @@ function Login() {
           </p>
         </div>
       </div>
+      <Popup popup={popup} setPopup={setPopup} />
       <Toast {...toastOptions} />
     </>
   );

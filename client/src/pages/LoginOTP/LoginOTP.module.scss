@@ -1,0 +1,141 @@
+@use "assets/styles/variables" as var;
+
+.btn-verify {
+  width: 100%;
+  border-radius: 10px;
+  margin: 15px 0;
+
+  .icon {
+    margin-left: 0.6rem;
+  }
+}
+
+.container-content {
+  width: 400px;
+  margin: 4rem auto 3rem;
+}
+
+.otp-container {
+  box-shadow: 0 0 20px 1px #e2e2e2;
+  width: 100%;
+  height: 100%;
+  border-radius: 30px;
+  padding: 30px 35px;
+  background-color: #fff;
+
+  display: flex;
+  flex-direction: column;
+
+  .title {
+    margin-bottom: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    p {
+      font-weight: 500;
+      width: 130px;
+      margin-bottom: 0;
+      text-align: center;
+
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+
+  .otp-input {
+    display: flex;
+
+    > *:not(:last-child) {
+      margin-right: 8px;
+    }
+
+    .input {
+      width: 25%;
+      height: 51px;
+      border-radius: 15px;
+      border: none;
+      outline: none;
+      text-align: center;
+      background-color: rgba(225, 225, 225, 0.8);
+      font-weight: 500;
+    }
+  }
+
+  .resend-code {
+    margin-bottom: 10px;
+
+    display: flex;
+    align-items: center;
+  }
+
+  .btn-resend {
+    color: var.$primary;
+    margin-left: 0.4rem;
+    cursor: pointer;
+    font-weight: 500;
+  }
+
+  .countdown {
+    margin-left: 0.5rem;
+    width: 1.2rem;
+    height: 1.2rem;
+    padding: 4px;
+    font-size: 0.77em;
+    border: 1px solid var.$gray-500;
+    border-radius: 100%;
+    cursor: default;
+    pointer-events: none;
+    user-select: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    margin-bottom: 6px;
+
+    p {
+      color: rgba(61, 61, 61, 0.8);
+    }
+  }
+
+  .keyboard {
+    margin: 0 -4px;
+    .num,
+    .remove {
+      color: #000;
+      font-weight: 500;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      border-radius: 20px;
+      padding: 10px 0;
+      width: calc(33.3333% - 8px);
+      margin: 0 4px 8px;
+      text-align: center;
+      background-color: rgba(241, 241, 241, 0.8);
+      cursor: pointer;
+      transition: all 0.2s linear;
+      &:hover,
+      &.active {
+        background-color: rgba(218, 218, 218, 0.8);
+      }
+    }
+
+    .num-n {
+      cursor: default;
+      background-color: transparent;
+
+      &:hover {
+        background-color: transparent;
+      }
+    }
+  }
+}
