@@ -8,6 +8,8 @@ const authApi = {
 
   register: (user) => axiosClient.post(`${url}/register`, user),
 
+  verifyRegister: (token) => axiosClient.post(`${url}/register/verify`, token),
+
   login: (username, password) => {
     return axiosClient.post(
       `${url}/login`,
@@ -15,6 +17,16 @@ const authApi = {
       { withCredentials: true }
     );
   },
+
+  verifyOTP: (data) =>
+    axiosClient.post(`${url}/login/verify`, data, { withCredentials: true }),
+
+  reSendOTP: () =>
+    axiosClient.post(
+      `${url}/login/verify/re-send`,
+      {},
+      { withCredentials: true }
+    ),
 
   forgot: (info) => {
     return axiosClient.post(`${url}/forgot-password`, info, {

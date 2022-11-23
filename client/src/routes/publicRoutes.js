@@ -1,11 +1,12 @@
 // eslint-disable-next-line no-unused-vars
-import { ComicLayout, LoginLayout, ReadingLayout } from "layouts";
+import { BlankLayout, ComicLayout, LoginLayout, ReadingLayout } from "layouts";
 import {
   Complete,
   ContentList,
   ForgotPassword,
   Home,
   Login,
+  LoginOTP,
   NotFound,
   Notice,
   NoticeList,
@@ -15,6 +16,7 @@ import {
   ResetPassword,
   Search,
   Title,
+  VerifyAccount,
   Weekly,
 } from "pages";
 
@@ -27,9 +29,18 @@ export const publicRoutes = [
     layout: LoginLayout,
   },
   {
+    path: "/login/verify",
+    component: LoginOTP,
+  },
+  {
     path: "/register",
     component: Register,
     layout: LoginLayout,
+  },
+  {
+    path: "/register/verify",
+    component: VerifyAccount,
+    layout: BlankLayout,
   },
   {
     path: "/forgot-password",
