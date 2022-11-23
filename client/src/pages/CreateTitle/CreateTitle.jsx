@@ -24,7 +24,7 @@ function CreateTitle() {
     genreId: [],
     summary: "",
     author: "",
-    coin: "",
+    // coin: "",
     cover: "",
     releaseDay: "",
     // largeCoverTemp: "",
@@ -44,9 +44,9 @@ function CreateTitle() {
     author: Yup.string()
       .max(255, "Giới hạn độ dài là 255 ký tự.")
       .required("Tác giả không được để trống."),
-    coin: Yup.string()
-      .max(3, "Giới hạn độ dài là 3 ký tự.")
-      .required("Coin không được để trống."),
+    // coin: Yup.string()
+    //   .max(3, "Giới hạn độ dài là 3 ký tự.")
+    //   .required("Coin không được để trống."),
     releaseDay: Yup.string().required(
       "Ngày đăng hàng tuần phải không được để trống"
     ),

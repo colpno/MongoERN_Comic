@@ -79,7 +79,7 @@ function StatisticCount() {
           </p>
           <strong className={cx("statistic-count__comment__number")}>0</strong>
         </Col> */}
-        <Col className={cx("statistic-count__col")}>
+        {/* <Col className={cx("statistic-count__col")}>
           <DollarLine className={cx("statistic-count__income__icon")} />
           <div className={cx("statistic-count__label-container")}>
             <p className={cx("statistic-count__income__label")}>
@@ -93,7 +93,7 @@ function StatisticCount() {
           <strong className={cx("statistic-count__income__number", "active")}>
             {separateNumberDigit(user.income)}
           </strong>
-        </Col>
+        </Col> */}
       </Row>
       <Popup popup={popup} setPopup={setPopup} />
     </Container>

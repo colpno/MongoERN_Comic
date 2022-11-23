@@ -21,7 +21,7 @@ function ChapterForm({ initialValues, validationSchema, handleSubmit }) {
 
   const costOptions = [
     { value: "false", label: "Miễn phí" },
-    { value: "true", label: "Trả phí" },
+    // { value: "true", label: "Trả phí" },
   ];
 
   const onCloseIconClick = (e) => {

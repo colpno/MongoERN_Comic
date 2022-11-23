@@ -34,7 +34,7 @@ function UpdateTitle() {
           })
         : [""],
     author: title.author,
-    coin: title.coin,
+    // coin: title.coin,
     cover: title.cover,
     largeCover: title.cover,
   };
@@ -61,9 +61,9 @@ function UpdateTitle() {
     ),
     cover: Yup.string().required("Truyện cần phải có ảnh bìa mặc định."),
     largeCover: Yup.string().required("Truyện cần phải có ảnh bìa."),
-    coin: Yup.string()
-      .max(3, "Giới hạn độ dài là 3 ký tự.")
-      .required("Truyện cần phải có số coin mặc định cho tất cả chương."),
+    // coin: Yup.string()
+    //   .max(3, "Giới hạn độ dài là 3 ký tự.")
+    //   .required("Truyện cần phải có số coin mặc định cho tất cả chương."),
     // email: Yup.string()
     //   .email("Sai định dạng email.")
     //   .required("Nhập email để xác nhận."),

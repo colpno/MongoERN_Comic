@@ -21,16 +21,16 @@ function getAvatarMenu(cx, user, isLoggingIn) {
         label: <span className={cx("user-name")}>{user.username}</span>,
         icon: <img src={user.avatar} alt="User avatar" />,
       },
-      {
-        path: "/profile/coin/add",
-        label: (
-          <>
-            <p className={cx("coin-label")}>Coin</p>
-            <p className={cx("coin-balance")}>{user.coin}</p>
-          </>
-        ),
-        icon: <CircleC className={cx(isLoggingIn ? "" : "gray")} />,
-      },
+      // {
+      //   path: "/profile/coin/add",
+      //   label: (
+      //     <>
+      //       <p className={cx("coin-label")}>Coin</p>
+      //       <p className={cx("coin-balance")}>{user.coin}</p>
+      //     </>
+      //   ),
+      //   icon: <CircleC className={cx(isLoggingIn ? "" : "gray")} />,
+      // },
       // {
       //   path: "/profile/coin/add",
       //   label: (
