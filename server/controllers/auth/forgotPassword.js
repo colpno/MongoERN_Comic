@@ -3,7 +3,7 @@ import { db } from '../../config/database.js';
 import sendMail from '../../libs/nodemailer/sendMail.js';
 
 export default function forgotPassword(req, res) {
-  const { username } = req.body;
+  const { username, email } = req.body;
 
   const sql = `
 		SELECT guid, email
@@ -12,11 +12,16 @@ export default function forgotPassword(req, res) {
 	`;
 
   db.query(sql, [username], (error, data) => {
-    if (error) return res.status(500).json(error);
-    if (data.length === 0) return res.status(404).json('Tên đăng nhập không tồn tại');
+    if (error) return res.status(500).json({ error: 'Lỗi do server' });
+    if (data.length === 0) return res.status(404).json({ error: 'Tên đăng nhập không tồn tại' });
+
+    const { guid, email: userEmail } = data[0];
+
+    if (userEmail !== email) {
+      return res.status(404).json({ error: 'Email không trùng khớp, vui lòng nhập lại' });
+    }
 
     console.log('------------------------------------------------------');
-    const { guid, email } = data[0];
     const payload = {
       guid,
     };
@@ -37,13 +42,25 @@ export default function forgotPassword(req, res) {
     `;
 
     const response = sendMail(email, subject, html);
-    console.log('******************************************************');
+    if (response.status) {
+      const message = `Link thay đổi mật khẩu đã được gửi đến ${email}`;
 
-    return res
-      .cookie('forgotPasswordToken', token, {
-        httpOnly: true,
-      })
-      .status(200)
-      .json(response);
+      return res
+        .cookie('forgotPasswordToken', token, {
+          httpOnly: true,
+        })
+        .status(200)
+        .json(message);
+    }
+    if (!response.status) {
+      return res
+        .cookie('forgotPasswordToken', token, {
+          httpOnly: true,
+        })
+        .status(400)
+        .json(response.error);
+    }
+
+    console.log('******************************************************');
   });
 }
