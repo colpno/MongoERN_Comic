@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { BsBoxArrowInRight } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 
 import { Button } from "components";
 import { Popup } from "features";
@@ -18,16 +19,18 @@ import styles from "./LoginOTP.module.scss";
 const cx = classNames.bind(styles);
 
 function LoginOTP() {
-  const COUNT_DOWN_TIME = 5;
+  const RE_SEND_TIME = 5;
   const navigate = useNavigate();
   const [currentDigit, setCurrentDigit] = useState(null);
   const [reSend, setReSend] = useState({
     disable: true,
-    countdown: COUNT_DOWN_TIME,
+    countdown: RE_SEND_TIME,
   });
+  const [expiredCountdown, setExpiredCountdown] = useState("59:99");
   const dispatch = useDispatch();
   const { Toast, options, toastEmitter } = useToast();
-  const countdownRef = useRef();
+  const reSendCountdownRef = useRef();
+  const expiredCountdownRef = useRef();
   const firstDigitInputRef = useRef(0);
   const [OTPInput, setOTPInput] = useState({
     digit1: "",
@@ -41,13 +44,17 @@ function LoginOTP() {
     content: "",
     isClosed: false,
   });
-  const [loginInfo, setLoginInfo] = useState({ email: "", userGuid: "" });
+  const [loginInfo, setLoginInfo] = useState({
+    email: "",
+    userGuid: "",
+    expiredAt: "",
+  });
 
   useEffect(() => {
     const cookie = cookies.get("loginInfo");
     if (cookie) {
-      const { email, userGuid } = JSON.parse(cookie);
-      setLoginInfo({ email, userGuid });
+      const { email, userGuid, expiredAt } = JSON.parse(cookie);
+      setLoginInfo({ email, userGuid, expiredAt });
     } else {
       setPopup((prev) => ({
         ...prev,
@@ -62,21 +69,45 @@ function LoginOTP() {
   }, [popup.isClosed]);
 
   useEffect(() => {
+    if (loginInfo.expiredAt) {
+      expiredCountdownRef.current = setInterval(() => {
+        const expiredTimeInSecond = moment(loginInfo.expiredAt).diff(moment());
+        const formatedTime = moment(expiredTimeInSecond)
+          .format("mm:ss")
+          .toString();
+        setExpiredCountdown(formatedTime);
+      }, 1000);
+    }
+  }, [loginInfo.expiredAt]);
+
+  useEffect(() => {
+    if (moment.duration(expiredCountdown).asSeconds() <= 0) {
+      clearInterval(expiredCountdownRef.current);
+      setPopup((prev) => ({
+        ...prev,
+        trigger: true,
+        content:
+          "Bạn sẽ được chuyển hướng quay lại màn hình đăng nhập vì mã OTP đã hết hạn",
+      }));
+    }
+  }, [expiredCountdown]);
+
+  useEffect(() => {
     if (reSend.disable) {
       setTimeout(() => {
         setReSend((prev) => ({ ...prev, disable: false }));
       }, reSend.countdown * 1000);
 
-      countdownRef.current = setInterval(() => {
+      reSendCountdownRef.current = setInterval(() => {
         setReSend((prev) => ({ ...prev, countdown: prev.countdown - 1 }));
       }, 1000);
     }
 
-    return () => clearInterval(countdownRef.current);
+    return () => clearInterval(reSendCountdownRef.current);
   }, [reSend.disable]);
 
   if (reSend.countdown <= 0) {
-    clearInterval(countdownRef.current);
+    clearInterval(reSendCountdownRef.current);
   }
 
   const handleNumpadClick = (e) => {
@@ -227,7 +258,7 @@ function LoginOTP() {
       })
       .catch((error) => console.log(error));
 
-    setReSend(() => ({ countdown: COUNT_DOWN_TIME, disable: true }));
+    setReSend(() => ({ countdown: RE_SEND_TIME, disable: true }));
   };
 
   return (
@@ -248,10 +279,12 @@ function LoginOTP() {
                   "********"
                 )}
             </span>
-            {/* <p>
-              The OTPInput will expire in
-              <span className={cx("expire", "text-dark")}>30s</span>
-            </p> */}
+            <p>
+              Mã OTP sẽ hết hạn trong {}
+              <span className={cx("expire", "text-dark")}>
+                {expiredCountdown}
+              </span>
+            </p>
           </div>
           <div className={cx("otp-input")} id="otp-input">
             <input
