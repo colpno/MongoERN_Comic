@@ -19,6 +19,7 @@ export { default as wallet } from "./wallet.svg";
 export { default as backpack } from "./backpack.svg";
 export { default as coins } from "./coins.svg";
 export { default as topSales } from "./top-sales.svg";
+export { default as notFoundSVG } from "./not-found/page-not-found.svg";
 
 export { default as toastErrorIcon } from "./toast/fail.svg";
 export { default as toastSuccessIcon } from "./toast/success.svg";
