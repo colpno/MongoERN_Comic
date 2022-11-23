@@ -69,7 +69,7 @@ export default function login(req, res) {
             const cookieData = JSON.stringify({ email, userGuid });
             return res
               .cookie('loginInfo', cookieData, {
-                maxAge: 60 * 1000,
+                maxAge: 15 * 60 * 1000,
               })
               .json(`OTP đã được gửi đến ${email}`);
           }
