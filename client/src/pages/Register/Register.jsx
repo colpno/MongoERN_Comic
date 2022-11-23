@@ -20,13 +20,13 @@ function Register() {
   const handleSubmit = (values, { setSubmitting }) => {
     const { username, email, password } = values;
     register({ username, password, email, role: "member" }).then((response) => {
-      if (response.affectedRows > 0) {
-        setPopup({
-          trigger: true,
-          title: "Đăng ký",
-          content: "Đăng ký thành công!",
-        });
-      }
+      // if (response.affectedRows > 0) {
+      setPopup({
+        trigger: true,
+        title: "Thông báo",
+        content: response.message,
+      });
+      // }
     });
 
     setSubmitting(false);
