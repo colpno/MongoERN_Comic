@@ -14,10 +14,10 @@ export default function sendMail(to, subject, html) {
   transporter.sendMail(mailDetails, (err) => {
     if (err) {
       console.log(`Error Occurs: ${err}`);
-      return { error: err };
+      return { status: false, error: err };
     }
   });
 
   console.log('Email sent successfully');
-  return { message: `Link thay đổi mật khẩu đã được gửi đến ${to}` };
+  return { status: true };
 }
