@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { BookshelfLayout, HistoryLayout, MyTitleLayout } from "layouts";
 import {
   AddCoin,
@@ -21,22 +22,22 @@ import {
 
 export const privateRoutes = [
   { path: "/profile/update", component: Profile },
-  { path: "/profile/coin/add", component: AddCoin, layout: HistoryLayout },
-  {
-    path: "/profile/history/coin",
-    component: CoinHistory,
-    layout: HistoryLayout,
-  },
-  {
-    path: "/profile/history/point",
-    component: PointHistory,
-    layout: HistoryLayout,
-  },
-  {
-    path: "/profile/history/ticket",
-    component: TicketHistory,
-    layout: HistoryLayout,
-  },
+  // { path: "/profile/coin/add", component: AddCoin, layout: HistoryLayout },
+  // {
+  //   path: "/profile/history/coin",
+  //   component: CoinHistory,
+  //   layout: HistoryLayout,
+  // },
+  // {
+  //   path: "/profile/history/point",
+  //   component: PointHistory,
+  //   layout: HistoryLayout,
+  // },
+  // {
+  //   path: "/profile/history/ticket",
+  //   component: TicketHistory,
+  //   layout: HistoryLayout,
+  // },
   { path: "/inventory", component: Inventory },
   { path: "/bookshelf/follow", component: Follow, layout: BookshelfLayout },
   // { path: "/bookshelf/free-charge", component: Home, layout: BookshelfLayout },
@@ -80,9 +81,9 @@ export const privateRoutes = [
     component: Statistic,
     layout: MyTitleLayout,
   },
-  {
-    path: "/my-title/notice",
-    component: MyNotice,
-    layout: MyTitleLayout,
-  },
+  // {
+  //   path: "/my-title/notice",
+  //   component: MyNotice,
+  //   layout: MyTitleLayout,
+  // },
 ];
