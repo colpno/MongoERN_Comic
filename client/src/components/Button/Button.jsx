@@ -48,6 +48,8 @@ function Button(props) {
     small,
     large,
     round,
+
+    ...others
   } = props;
   const classes = cx(
     wrapper || "btn",
@@ -88,7 +90,7 @@ function Button(props) {
     },
     className
   );
-  const attributes = { onClick, type };
+  const attributes = { onClick, type, ...others };
   attributes.target = target || null;
   attributes.type = type || "button";
 
