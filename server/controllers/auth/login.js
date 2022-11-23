@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs';
+import moment from 'moment';
 import { db } from '../../config/database.js';
 import sendMail from '../../libs/nodemailer/sendMail.js';
 
@@ -66,7 +67,8 @@ export default function login(req, res) {
           const response = sendMail(email, subject, html);
 
           if (response.status) {
-            const cookieData = JSON.stringify({ email, userGuid });
+            const expiredAt = moment().add(15, 'm').toISOString();
+            const cookieData = JSON.stringify({ email, userGuid, expiredAt });
             return res
               .cookie('loginInfo', cookieData, {
                 maxAge: 15 * 60 * 1000,

@@ -1,5 +1,5 @@
-/* eslint-disable no-unreachable */
 import bcrypt from 'bcryptjs';
+import moment from 'moment';
 import { db } from '../../config/database.js';
 import sendMail from '../../libs/nodemailer/sendMail.js';
 
@@ -58,14 +58,15 @@ export default function sendOTP(req, res) {
         const response = sendMail(email, subject, html);
 
         if (response.status) {
-          const cookieData = JSON.stringify({ email, userGuid });
+          const expiredAt = moment().add(15, 'm').toISOString();
+          const cookieData = JSON.stringify({ email, userGuid, expiredAt });
           return res
             .clearCookie('loginInfo', {
               secure: true,
               sameSite: 'none',
             })
             .cookie('loginInfo', cookieData, {
-              maxAge: 60 * 1000,
+              maxAge: 15 * 60 * 1000,
             })
             .json(`OTP đã được gửi đến ${email}`);
         }

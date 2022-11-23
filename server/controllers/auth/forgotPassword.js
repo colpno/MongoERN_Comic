@@ -48,18 +48,13 @@ export default function forgotPassword(req, res) {
       return res
         .cookie('forgotPasswordToken', token, {
           httpOnly: true,
+          maxAge: 15 * 60 * 1000,
         })
         .status(200)
         .json(message);
     }
     if (!response.status) {
-      return res
-        .cookie('forgotPasswordToken', token, {
-          httpOnly: true,
-          maxAge: 15 * 60 * 1000,
-        })
-        .status(400)
-        .json(response.error);
+      return res.status(400).json(response.error);
     }
 
     console.log('******************************************************');
