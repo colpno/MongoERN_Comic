@@ -28,6 +28,13 @@ function ForgotPasswordForm({
               autoFocus
             />
 
+            <FormLabel name="email" label="Email" required />
+            <FastField
+              name="email"
+              component={InputField}
+              placeholder="Nhập email..."
+            />
+
             <Button
               primary
               round

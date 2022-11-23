@@ -22,6 +22,7 @@ function ForgotPassword() {
 
   const INITIAL_VALUES = {
     username: "",
+    email: "",
   };
 
   const VALIDATION_SCHEMA = Yup.object({
@@ -29,13 +30,16 @@ function ForgotPassword() {
       .matches(/^\w+$/g, "Tên người dùng phải là chữ cái hoặc số")
       .trim()
       .required("Tên đăng nhập không được để trống"),
+    email: Yup.string()
+      .email("Định dạng email không hợp lệ")
+      .required("Email không được để trống"),
   });
 
   const handleSubmit = (values) => {
-    const { username } = values;
+    const { username, email } = values;
 
-    if (username) {
-      forgotPassword({ username })
+    if (username && email) {
+      forgotPassword({ username, email })
         .then((response) => {
           const content = (
             <p style={{ textAlign: "center" }}>{response.message}</p>
