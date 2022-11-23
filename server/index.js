@@ -25,8 +25,9 @@ const app = express();
 const { PORT, BASE_URL, CLIENT_URL, ADMIN_URL } = process.env;
 // [ process.env.CLIENT_URL, 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html', ]
 app.use((req, res, next) => {
-  // res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Origin', [CLIENT_URL, ADMIN_URL]);
+
+  res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Credentials', true);
   res.header(
     'Access-Control-Allow-Headers',
@@ -34,6 +35,7 @@ app.use((req, res, next) => {
     'Content-Type: multipart/form-data'
   );
   res.header('Access-Control-Allow-Methods', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS');
+
   next();
 });
 app.use(express.json({ limit: '50mb' }));
