@@ -1,4 +1,4 @@
-// eslint-disable-next-line no-unused-vars
+/* eslint-disable no-unused-vars */
 import { BlankLayout, ComicLayout, LoginLayout, ReadingLayout } from "layouts";
 import {
   Complete,
@@ -78,10 +78,10 @@ export const publicRoutes = [
     component: Reading,
     layout: ReadingLayout,
   },
-  {
-    path: "/content-list/:genreId",
-    component: ContentList,
-  },
+  // {
+  //   path: "/content-list/:genreId",
+  //   component: ContentList,
+  // },
   {
     path: "/notice-list",
     component: NoticeList,
