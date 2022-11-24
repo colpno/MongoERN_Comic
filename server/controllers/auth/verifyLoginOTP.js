@@ -1,4 +1,3 @@
-/* eslint-disable no-unreachable */
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { db } from '../../config/database.js';
@@ -43,12 +42,9 @@ export default function verifyLoginOTP(req, res) {
               if (data3.affectedRows === 0) return res.status(500).json({ error: error3 });
             });
 
-            const { guid, role, ...others } = data2[0];
+            const { role, ...others } = data2[0];
 
-            const token = jwt.sign(
-              { guid: data2[0].guid, role: data2[0].role },
-              process.env.ACCESS_TOKEN_KEY
-            );
+            const token = jwt.sign({ guid: data2[0].guid, role }, process.env.ACCESS_TOKEN_KEY);
             return res
               .cookie('accessToken', token, {
                 httpOnly: true,
