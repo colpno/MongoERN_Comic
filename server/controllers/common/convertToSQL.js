@@ -19,39 +19,44 @@ export const convertToSQL = (queries) => {
     }
 
     if (query.includes('_like')) {
-      whereArray.push(`\`${query.slice(0, query.indexOf('_like'))}\` LIKE ?`);
+      whereArray.push(`a.\`${query.slice(0, query.indexOf('_like'))}\` LIKE ?`);
       values.push(`%${otherQueries[query]}%`);
       continue;
     }
 
     values.push(otherQueries[query]);
 
+    if (query.includes('genreId')) {
+      whereArray.push(`b.\`${query}\` = ?`);
+      continue;
+    }
+
     if (query.includes('_gte')) {
-      whereArray.push(`\`${query.slice(0, query.indexOf('_gte'))}\` >= ?`);
+      whereArray.push(`a.\`${query.slice(0, query.indexOf('_gte'))}\` >= ?`);
       continue;
     }
 
     if (query.includes('_lte')) {
-      whereArray.push(`\`${query.slice(0, query.indexOf('_lte'))}\` <= ?`);
+      whereArray.push(`a.\`${query.slice(0, query.indexOf('_lte'))}\` <= ?`);
       continue;
     }
 
     if (query.includes('_gt')) {
-      whereArray.push(`\`${query.slice(0, query.indexOf('_gt'))}\` > ?`);
+      whereArray.push(`a.\`${query.slice(0, query.indexOf('_gt'))}\` > ?`);
       continue;
     }
 
     if (query.includes('_lt')) {
-      whereArray.push(`\`${query.slice(0, query.indexOf('_lt'))}\` < ?`);
+      whereArray.push(`a.\`${query.slice(0, query.indexOf('_lt'))}\` < ?`);
       continue;
     }
 
     if (query.includes('_ne')) {
-      whereArray.push(`\`${query.slice(0, query.indexOf('_ne'))}\` <> ?`);
+      whereArray.push(`a.\`${query.slice(0, query.indexOf('_ne'))}\` <> ?`);
       continue;
     }
 
-    whereArray.push(`\`${query}\` = ?`);
+    whereArray.push(`a.\`${query}\` = ?`);
   }
 
   const whereStatement = whereArray.reduce(
@@ -63,7 +68,7 @@ export const convertToSQL = (queries) => {
     sort &&
     order &&
     `ORDER BY
-    \`${sort}\`+0 ${order.toUpperCase()}, \`${sort}\` ${order.toUpperCase()}`;
+    a.\`${sort}\`+0 ${order.toUpperCase()}, a.\`${sort}\` ${order.toUpperCase()}`;
 
   const limitStatement = page && limit && `LIMIT ${(page - 1) * limit},${limit * page}`;
 

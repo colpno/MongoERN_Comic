@@ -7,11 +7,11 @@ export default function getTitles(req, res) {
   const { page, limit, embed } = req.query;
   const { values, whereStatement, limitStatement, orderStatement } = convertToSQL(req.query);
 
-  const joinStatement = embed ? ` as a INNER JOIN \`${embed}\` as b ON a.guid = b.titleId` : '';
+  const joinStatement = embed ? `INNER JOIN \`${embed}\` as b ON a.guid = b.titleId` : '';
 
   const sql = `
     SELECT ${!!joinStatement ? 'a.' : ''}*
-    FROM \`${table}\` ${joinStatement || ''}
+    FROM \`${table}\` as a ${joinStatement || ''}
     ${whereStatement || ''}
     ${orderStatement || ''}
     ${limitStatement || ''}
@@ -21,7 +21,7 @@ export default function getTitles(req, res) {
   if (limitStatement) {
     const paginationSQL = `
       SELECT COUNT(${!!joinStatement ? 'a.' : ''}guid) as total
-      FROM \`${table}\` ${joinStatement || ''}
+      FROM \`${table}\` as a ${joinStatement || ''}
       ${whereStatement || ''}
     `;
 
