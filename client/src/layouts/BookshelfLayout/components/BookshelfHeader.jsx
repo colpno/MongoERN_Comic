@@ -15,7 +15,7 @@ function BookshelfHeader() {
   const menu = [
     { href: "/bookshelf/follow", label: "Theo dõi" },
     { href: "/bookshelf/history", label: "Lịch sử xem" },
-    { href: "/bookshelf/transaction?tab=purchased-titles", label: "Mua" },
+    // { href: "/bookshelf/transaction?tab=purchased-titles", label: "Mua" },
     // { href: "/bookshelf/transaction?tab=purchased-titles", label: "Thuê/Mua" },
   ];
   const pathName = useLocation().pathname;
@@ -61,14 +61,15 @@ function BookshelfHeader() {
           <Row className={cx("header__navbar")}>
             {menu.map((item, index) => {
               return (
-                <SwiperSlide
-                  key={index}
-                  className={cx(
-                    "header__navbar__link",
-                    item.href.includes(pathName) ? "active" : ""
-                  )}
-                >
-                  <Button wrapper to={item.href} className={cx("label")}>
+                <SwiperSlide key={index} className={cx("header__navbar__link")}>
+                  <Button
+                    wrapper
+                    to={item.href}
+                    className={cx(
+                      "label",
+                      pathName.includes(item.href) ? "active" : ""
+                    )}
+                  >
                     {item.label}
                   </Button>
                 </SwiperSlide>

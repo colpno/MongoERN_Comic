@@ -43,8 +43,8 @@
         margin-left: 3rem;
       }
 
-      &.active,
-      &:not(.active):hover {
+      > *.active,
+      > *:not(.active):hover {
         color: variables.$primary-dark;
       }
     }
