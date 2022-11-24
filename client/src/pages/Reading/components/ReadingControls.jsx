@@ -1,33 +1,51 @@
+/* eslint-disable no-unused-vars */
 import PropTypes from "prop-types";
 
 import Button from "components/Button";
 import { AiFillApple, AiFillHeart, AiFillStar } from "react-icons/ai";
 import { FaShareAlt } from "react-icons/fa";
+import GGPlay from "../assets/images/icons8-google-play-48.png";
 
-function ReadingControls({ cx, GGPlay }) {
+function ReadingControls({
+  cx,
+  handleLikeClick,
+  handleFollowClick,
+  isLiked,
+  isFollowed,
+}) {
   return (
     <div className={cx("reading-page__controls")}>
       <div className={cx("reading-page__controls__group")}>
         <Button
-          className={cx("reading-page__controls__controls__group__control")}
+          className={cx(
+            "reading-page__controls__controls__group__control",
+            "like",
+            isLiked ? "active" : ""
+          )}
+          onClick={handleLikeClick}
         >
-          <AiFillHeart />
-          <span>Yêu thích</span>
+          <AiFillHeart className={cx("icon")} />
+          <span className={cx("text")}>Yêu thích</span>
         </Button>
         <Button
-          className={cx("reading-page__controls__controls__group__control")}
+          className={cx(
+            "reading-page__controls__controls__group__control",
+            "follow",
+            isFollowed ? "active" : ""
+          )}
+          onClick={handleFollowClick}
         >
-          <AiFillStar />
-          <span>Theo dõi</span>
+          <AiFillStar className={cx("icon")} />
+          <span className={cx("text")}>Theo dõi</span>
         </Button>
-        <Button
+        {/* <Button
           className={cx("reading-page__controls__controls__group__control")}
         >
           <FaShareAlt />
           <span>Chia sẻ</span>
-        </Button>
+        </Button> */}
       </div>
-      <p className={cx("reading-page__text")}>
+      {/* <p className={cx("reading-page__text")}>
         Tất cả nội dung có thể được đọc thông qua ứng dụng ComicVN trên CH Play
         hoặc App store
       </p>
@@ -40,14 +58,17 @@ function ReadingControls({ cx, GGPlay }) {
           <AiFillApple />
           <span>App Store</span>
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 }
 
 ReadingControls.propTypes = {
   cx: PropTypes.func.isRequired,
-  GGPlay: PropTypes.string.isRequired,
+  handleLikeClick: PropTypes.func.isRequired,
+  handleFollowClick: PropTypes.func.isRequired,
+  isLiked: PropTypes.bool.isRequired,
+  isFollowed: PropTypes.bool.isRequired,
 };
 
 export default ReadingControls;

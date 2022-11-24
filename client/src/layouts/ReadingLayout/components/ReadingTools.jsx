@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import PropTypes from "prop-types";
 import { memo } from "react";
 
@@ -14,19 +15,19 @@ function ReadingTools({
 }) {
   return (
     <div className={cx("reading-header__tools")}>
-      <FaLightbulb
+      {/* <FaLightbulb
         className={cx(
           "reading-header__tools__theme",
           darkTheme ? "active" : ""
         )}
         onClick={handleChangeTheme}
-      />
+      /> */}
       <ImHeart
         className={cx("reading-header__tools__like", isLike ? "active" : "")}
         onClick={handleLike}
       />
-      <FaShareAlt className={cx("reading-header__tools__share")} />
-      <MdFitScreen className={cx("reading-header__tools__fullscreen")} />
+      {/* <FaShareAlt className={cx("reading-header__tools__share")} />
+      <MdFitScreen className={cx("reading-header__tools__fullscreen")} /> */}
     </div>
   );
 }

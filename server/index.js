@@ -18,6 +18,7 @@ import {
   titleRoute,
   userRoute,
   chargeRoute,
+  userLikeRoute,
 } from './routes/index.js';
 
 config();
@@ -60,6 +61,7 @@ app.use(`${BASE_URL}/titles`, titleRoute);
 app.use(`${BASE_URL}/title-genres`, titleGenreRoute);
 app.use(`${BASE_URL}/title-reports`, titleReportRoute);
 app.use(`${BASE_URL}/users`, userRoute);
+app.use(`${BASE_URL}/user-like`, userLikeRoute);
 app.use(`${BASE_URL}/auth`, authRoute);
 app.use(`${BASE_URL}/charge`, chargeRoute);
 

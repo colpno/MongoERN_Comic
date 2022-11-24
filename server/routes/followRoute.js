@@ -4,8 +4,8 @@ import { addFollow, deleteFollow, getFollow, getFollows } from '../controllers/f
 const router = express.Router();
 
 router.post('/create', addFollow);
-router.delete('/delete/:guid', deleteFollow);
-router.get('/:guid', getFollow);
+router.delete('/delete/:titleId', deleteFollow);
+router.get('/one', getFollow);
 router.get('/', getFollows);
 
 export default router;

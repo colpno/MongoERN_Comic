@@ -1,12 +1,20 @@
+/* eslint-disable no-unused-vars */
 import PropTypes from "prop-types";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import Footer from "layouts/components/Footer";
-import { setChapter, setChapters } from "libs/redux/slices/chapterSlice";
+import {
+  setChapterImages,
+  setChapterInfo,
+  setChapters,
+  setUserLike,
+} from "libs/redux/slices/readingChapterSlice";
 import { getChapterByID, sortChapters } from "services/chapter";
 import { getAllChapterImagesByChapterID } from "services/chapterImage";
+import { getUserLike } from "services/userLike";
+import { isEmpty } from "utils";
 import ReadingHeader from "./components/ReadingHeader";
 
 function ReadingLayout({ children }) {
@@ -15,21 +23,31 @@ function ReadingLayout({ children }) {
   const { chapter } = getChapterByID(chapterId, titleId, false);
   const { chapters } = sortChapters(titleId, "order", true);
   const { chapterImages } = getAllChapterImagesByChapterID(chapterId);
+  const user = useSelector((state) => state.user.user);
+  const { userLike } = getUserLike(user.guid, chapterId);
 
   useEffect(() => {
-    chapter?.guid &&
-      // chapterImages.length > 0 &&
-      dispatch(
-        setChapter({
-          info: chapter,
-          images: chapterImages[0]?.guid ? chapterImages : [],
-        })
-      );
-  }, [chapter, chapterImages]);
+    chapter?.guid && dispatch(setChapterInfo(chapter));
+  }, [chapter]);
+
+  useEffect(() => {
+    chapterImages.length > 0 && dispatch(setChapterImages(chapterImages));
+  }, [chapterImages]);
+
+  useEffect(() => {
+    userLike?.guid && dispatch(setUserLike(userLike));
+  }, [userLike]);
 
   useEffect(() => {
     chapters.length > 0 && dispatch(setChapters(chapters));
   }, [chapters]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      // updateChapter(chapterId, { view: 1 }, null, false);
+      console.log("view");
+    }, 60 * 1000);
+  }, []);
 
   return (
     <>
