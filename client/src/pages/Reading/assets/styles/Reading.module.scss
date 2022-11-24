@@ -1,4 +1,4 @@
-@use "assets/styles/variables";
+@use "assets/styles/variables" as var;
 @use "assets/styles/mixins";
 
 .reading-page {
@@ -13,9 +13,7 @@
 
   &__content {
     width: 690px;
-    min-height: calc(
-      100vh - variables.$header-height - variables.$footer-height
-    );
+    min-height: calc(100vh - var.$header-height - var.$footer-height);
     box-shadow: 0 96px 48px rgb(0 0 0 / 0.04), 12px 12px 24px rgb(0 0 0 / 0.06);
   }
 
@@ -49,6 +47,28 @@
     background-color: #f0f0f0;
     padding: 20px;
     color: $color;
+
+    &.active {
+      &.follow {
+        .icon {
+          color: var.$yellow;
+        }
+
+        .text {
+          color: var.$yellow;
+        }
+      }
+
+      &.like {
+        .icon {
+          color: var.$primary;
+        }
+
+        .text {
+          color: var.$primary;
+        }
+      }
+    }
   }
 
   &__text {
