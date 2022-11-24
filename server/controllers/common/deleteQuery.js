@@ -1,5 +1,5 @@
-import { db } from '../../config/database.js';
 import jwt from 'jsonwebtoken';
+import { db } from '../../config/database.js';
 
 export default function deleteQuery(req, res, table) {
   const { params } = req;
@@ -30,5 +30,4 @@ export default function deleteQuery(req, res, table) {
       });
     }
   });
-  return;
 }
