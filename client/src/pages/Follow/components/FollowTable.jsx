@@ -8,7 +8,7 @@ import styles from "../assets/styles/FollowTable.module.scss";
 
 const cx = classNames.bind(styles);
 
-function FollowTable({ setDeletedItem, popup, setPopup, titles }) {
+function FollowTable({ setDeletedItem, popup, setPopup, follows }) {
   const handleClick = (followId) => {
     setPopup({
       ...popup,
@@ -21,25 +21,23 @@ function FollowTable({ setDeletedItem, popup, setPopup, titles }) {
 
   return (
     <>
-      {titles.map((title) => {
-        const timeObj = formatTime(title.updatedAt);
+      {follows.map((follow) => {
+        const { title, updatedAt, guid } = follow;
+        const { cover, name, author } = title;
+        const timeObj = formatTime(updatedAt);
 
         return (
-          <Row className={cx("follow__container__content")} key={title.guid}>
+          <Row className={cx("follow__container__content")} key={guid}>
             <Col
               xs={8}
               className={cx("follow__container__content__title-info")}
             >
               <div className={cx("box-img")}>
-                <img
-                  src={title.cover}
-                  alt={title.name}
-                  className={cx("cover-image")}
-                />
+                <img src={cover} alt={name} className={cx("cover-image")} />
               </div>
               <div>
-                <p className={cx("title")}>{title.name}</p>
-                <p className={cx("author")}>{title.author}</p>
+                <p className={cx("title")}>{name}</p>
+                <p className={cx("author")}>{author}</p>
               </div>
             </Col>
             <Col className="center">
@@ -49,7 +47,7 @@ function FollowTable({ setDeletedItem, popup, setPopup, titles }) {
               <Button
                 wrapper
                 className={cx("trash-can-button")}
-                onClick={() => handleClick(title.followId)}
+                onClick={() => handleClick(guid)}
               >
                 <IoTrashSharp />
               </Button>
@@ -68,13 +66,16 @@ FollowTable.propTypes = {
     content: PropTypes.string.isRequired,
   }).isRequired,
   setPopup: PropTypes.func.isRequired,
-  titles: PropTypes.arrayOf(
+  follows: PropTypes.arrayOf(
     PropTypes.shape({
+      guid: PropTypes.string.isRequired,
       updatedAt: PropTypes.string.isRequired,
-      cover: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      author: PropTypes.string.isRequired,
-    })
+      title: PropTypes.shape({
+        cover: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        author: PropTypes.string.isRequired,
+      }),
+    }).isRequired
   ).isRequired,
   setDeletedItem: PropTypes.func.isRequired,
 };

@@ -2,7 +2,7 @@ import { GridTable } from "components";
 import PropTypes from "prop-types";
 import ReadingHistoryTableRow from "./ReadingHistoryTableRow";
 
-function ReadingHistoryTable({ readingHistories, cx, calculateCountdown }) {
+function ReadingHistoryTable({ readingHistories, cx }) {
   return (
     <GridTable
       head={[
@@ -16,11 +16,7 @@ function ReadingHistoryTable({ readingHistories, cx, calculateCountdown }) {
         },
       ]}
     >
-      <ReadingHistoryTableRow
-        readingHistories={readingHistories}
-        cx={cx}
-        calculateCountdown={calculateCountdown}
-      />
+      <ReadingHistoryTableRow readingHistories={readingHistories} cx={cx} />
     </GridTable>
   );
 }
@@ -29,7 +25,6 @@ ReadingHistoryTable.propTypes = {
   readingHistories: PropTypes.arrayOf(PropTypes.shape({}).isRequired)
     .isRequired,
   cx: PropTypes.func.isRequired,
-  calculateCountdown: PropTypes.func.isRequired,
 };
 
 export default ReadingHistoryTable;

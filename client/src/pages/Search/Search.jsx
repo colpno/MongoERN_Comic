@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import { FastField, Form, Formik } from "formik";
-import { Col, Container, Row } from "react-bootstrap";
 import { useState } from "react";
+import { Col, Container, Row } from "react-bootstrap";
 
-import { Button, CardList, Input } from "components";
+import { Button, CardList } from "components";
 import { NoData, Pagination } from "features";
-import { CheckBoxGroup, RadioGroup } from "libs/formik";
+import { CheckBoxGroup, InputField, RadioGroup } from "libs/formik";
 import { getAllGenres } from "services/genre";
 import { filterTitles } from "services/title";
 import { isEmpty } from "utils";
@@ -119,7 +119,7 @@ function Search() {
                     <Col md={10}>
                       <FastField
                         name="author"
-                        component={Input}
+                        component={InputField}
                         placeholder="Nhập tên tác giả..."
                       />
                     </Col>
