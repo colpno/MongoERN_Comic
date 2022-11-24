@@ -2,7 +2,6 @@ import { db } from '../../config/database.js';
 
 export default function getFollow(req, res) {
   const { userId, titleId } = req.query;
-  console.log('file: getFollow.js ~ line 5 ~ userId, titleId', userId, titleId);
 
   const checkExistSQL = `
 		SELECT *
