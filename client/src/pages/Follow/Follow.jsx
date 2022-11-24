@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Container } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
@@ -20,20 +20,7 @@ function Follow() {
   const user = useSelector((state) => state.user.user);
   const { follows, pagination, setPagination, fetchLimitFollows } =
     getLimitedFollowsByUserID(user.guid, 50);
-  const { titles } = getAllTitles();
   const hasData = follows.length > 0;
-
-  const followedTitles = useMemo(
-    () =>
-      follows.map((follow) => {
-        const temp = {
-          ...titles.find((title) => title.guid === follow.titleId),
-          followId: follow.guid,
-        };
-        return temp;
-      }),
-    [follows]
-  );
 
   const menu = [
     { href: "", label: "Truyện tranh", tab: "" },
@@ -42,10 +29,8 @@ function Follow() {
 
   const { deletedItem, setDeletedItem, popup, setPopup } = useDelete(
     async () => {
-      deleteFollow(deletedItem).then((value) => {
-        if (value.affectedRows > 0) {
-          fetchLimitFollows();
-        }
+      deleteFollow(deletedItem).then(() => {
+        fetchLimitFollows();
       });
     }
   );
@@ -64,7 +49,7 @@ function Follow() {
               ]}
             >
               <FollowTable
-                titles={followedTitles}
+                follows={follows}
                 popup={popup}
                 setPopup={setPopup}
                 setDeletedItem={setDeletedItem}

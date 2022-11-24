@@ -1,30 +1,108 @@
-import {
-  filterQuery,
-  getAllQuery,
-  getLimitedQuery,
-  searchQuery,
-  separateOtherParams,
-  sortQuery,
-} from '../common/index.js';
+import { db } from '../../config/database.js';
+import { separateOtherParams } from '../common/index.js';
 import { table } from './index.js';
 
 export default function getFollows(req, res) {
   const { sort, order, page, limit, ...others } = req.query;
   const { filter, search } = separateOtherParams(others);
 
-  // URL: ?column_like=...
-  if (Object.keys(filter).length > 0)
-    return filterQuery(res, table, filter, page, limit, sort, order);
+  const values = [];
+  let whereStatement = '';
 
-  // URL: ?column=...
-  if (Object.keys(search).length > 0)
-    return searchQuery(res, table, search, page, limit, sort, order);
+  const filterKeys = Object.keys(filter);
+  const filterLength = filterKeys.length - 1;
+  values.push(...filterKeys.map((key) => `%${filter[key].toLowerCase()}%`));
+  whereStatement += filterKeys.reduce(
+    (string, key, index) =>
+      `${string}LOWER(a.\`${key}\`) LIKE ?${index !== filterLength ? ' AND ' : ''}`,
+    ''
+  );
 
-  // URL: ?sort=column&order=...
-  if (sort && order) return sortQuery(res, table, sort, order, page, limit);
+  const searchKeys = Object.keys(search);
+  const searchLength = searchKeys.length - 1;
+  values.push(...searchKeys.map((key) => search[key]));
+  whereStatement += searchKeys.reduce(
+    (string, key, index) => `${string}a.\`${key}\` = ?${index !== searchLength ? ' AND ' : ''}`,
+    ''
+  );
 
-  // URL: ?limit=...&page=...
-  if (limit && page) return getLimitedQuery(res, table, limit, page);
+  const orderStatement = `
+    ORDER BY a.\`${sort || 'id'}\`+0 ${order?.toUpperCase() || 'ASC'},
+    a.\`${sort || 'id'}\` ${order?.toUpperCase() || 'ASC'}`;
 
-  return getAllQuery(res, table);
+  let titleSQL = `
+    SELECT b.*
+    FROM ${table} as a JOIN title as b ON a.titleId = b.guid
+    ${whereStatement.trim() !== '' ? `WHERE ${whereStatement}` : ''}
+    ${orderStatement}
+  `;
+
+  let sql = `
+    SELECT *
+    FROM ${table} as a
+    ${whereStatement.trim() !== '' ? `WHERE ${whereStatement}` : ''}
+    ${orderStatement}
+  `;
+
+  let pagination;
+  if (limit && page) {
+    const limitSQL = `
+      LIMIT ${(page - 1) * limit},${limit * page}
+    `;
+    sql += limitSQL;
+    titleSQL += limitSQL;
+
+    const subQuery = `
+      SELECT COUNT(guid) as total
+      FROM ${table} as a
+      WHERE ${whereStatement}
+    `;
+
+    db.query(subQuery, [values], (error, data) => {
+      if (error) return res.status(500).json(error);
+
+      pagination = {
+        total: data[0].total,
+        page,
+        limit,
+      };
+    });
+  }
+
+  db.query(titleSQL, [...values], (error, titles) => {
+    if (error) return res.status(500).json({ error: 'Lỗi do server', detail: error });
+    if (titles.length === 0) return res.status(404).json({ error: 'Không tìm thấy' });
+
+    db.query(sql, [...values], (error3, histories) => {
+      if (error3) return res.status(500).json({ error: 'Lỗi do server', detail: error3 });
+      if (histories.length === 0) return res.status(404).json({ error: 'Không tìm thấy' });
+      if (histories.length) {
+        const result = [];
+
+        for (let i = 0; i < histories.length; i++) {
+          const history = histories[i];
+
+          const fulfilled = {
+            ...history,
+            title: titles.find((title) => title.guid === history.titleId),
+          };
+
+          result.push(fulfilled);
+        }
+
+        // const result = histories.reduce((array, history) => {
+        //   const fulfilled = {
+        //     ...history,
+        //     title: titles.find((title) => title.guid === history.titleId),
+        //   };
+
+        //   return [...array, fulfilled];
+        // }, []);
+
+        if (pagination) return res.status(200).json({ data: result, pagination });
+        if (!pagination) return res.status(200).json(result);
+      }
+      return res.status(400).json({ error });
+    });
+  });
 }
