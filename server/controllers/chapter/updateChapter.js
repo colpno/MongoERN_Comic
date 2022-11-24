@@ -46,32 +46,12 @@ export default function updateChapter(req, res) {
   const { params, body, cookies } = req;
   const { guid: chapterGuid } = params;
   const { titleId, newValues } = body;
-  const { cover, images, like, view, ...others } = newValues;
+  const { cover, images, ...others } = newValues;
   const token = cookies.accessToken;
   const otherKeys = Object.keys(others);
 
-  if (!token && view) {
-    // return res.status(401).json({ error: 'Cần đăng nhập để sử dụng chức năng này' });
-    const updateSql = `
-              UPDATE \`${table}\`
-              SET \`view\` = \`view\` + 1
-              WHERE guid = ?
-            `;
-
-    // Values of above SQL
-    const chapterValues = [view, chapterGuid];
-
-    db.query(updateSql, [...chapterValues], (error1, data1) => {
-      if (error1) {
-        console.log('file: updateChapter.js ~ line 155 ~ error1', error1);
-        return res.status(500).json(error1);
-      }
-      if (data1.affectedRows > 0) {
-        console.log("Updated chapter's info in database");
-        return res.status(200).json(data1);
-      }
-      return res.status(400).json({ error: error1, data: data1 });
-    });
+  if (!token) {
+    return res.status(401).json({ error: 'Cần đăng nhập để sử dụng chức năng này' });
   }
 
   if (token) {
@@ -159,7 +139,7 @@ export default function updateChapter(req, res) {
             const setStatements = [];
             otherKeys.length > 0 && setStatements.push(otherKeys.map((key) => `\`${key}\` = ?`));
             uploadCoverResponse?.public_id && setStatements.push('`cover` = ?,`publicId` = ?');
-            !like && !view && setStatements.push('`updatedAt` = ?');
+            setStatements.push('`updatedAt` = ?');
 
             const updateSql = `
               UPDATE \`${table}\`
@@ -172,7 +152,7 @@ export default function updateChapter(req, res) {
             const chapterValues = [...otherKeys.map((dataKey) => others[dataKey])];
             uploadCoverResponse?.public_id &&
               chapterValues.push(uploadCoverResponse.secure_url, uploadCoverResponse.public_id);
-            like || view ? chapterValues.push(chapterGuid) : chapterValues.push(now, chapterGuid);
+            chapterValues.push(now, chapterGuid);
 
             db.query(updateSql, [...chapterValues], (error1, data1) => {
               if (error1) {
