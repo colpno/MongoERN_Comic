@@ -16,6 +16,7 @@ import {
   updateChapterView,
 } from "services/chapter";
 import { getAllChapterImagesByChapterID } from "services/chapterImage";
+import { addReadingHistory } from "services/readingHistory";
 import { getUserLike } from "services/userLike";
 import ReadingHeader from "./components/ReadingHeader";
 
@@ -47,7 +48,8 @@ function ReadingLayout({ children }) {
   useEffect(() => {
     setTimeout(() => {
       updateChapterView(chapterId);
-    }, 60 * 1000);
+      addReadingHistory(titleId, chapterId, user.guid);
+    }, 5 * 1000);
   }, []);
 
   return (
