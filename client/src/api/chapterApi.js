@@ -22,21 +22,19 @@ const chapterApi = {
       },
     }),
 
-  update: (id, data, setProgress, isPrivate) => {
-    const options = isPrivate
-      ? {
-          withCredentials: true,
-        }
-      : {};
-
+  update: (id, data, setProgress) => {
     return axiosClient.put(`${url}/update/${id}`, data, {
-      ...options,
+      withCredentials: true,
       onUploadProgress: (e) => {
         const { loaded, total } = e;
         const percentage = (loaded / total) * 100;
         setProgress(percentage);
       },
     });
+  },
+
+  updateView: (id) => {
+    return axiosClient.put(`${url}/update/${id}/view`);
   },
 
   delete: (id, data, setProgress) => {

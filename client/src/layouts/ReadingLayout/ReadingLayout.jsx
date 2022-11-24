@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import PropTypes from "prop-types";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,10 +10,13 @@ import {
   setChapters,
   setUserLike,
 } from "libs/redux/slices/readingChapterSlice";
-import { getChapterByID, sortChapters } from "services/chapter";
+import {
+  getChapterByID,
+  sortChapters,
+  updateChapterView,
+} from "services/chapter";
 import { getAllChapterImagesByChapterID } from "services/chapterImage";
 import { getUserLike } from "services/userLike";
-import { isEmpty } from "utils";
 import ReadingHeader from "./components/ReadingHeader";
 
 function ReadingLayout({ children }) {
@@ -44,8 +46,7 @@ function ReadingLayout({ children }) {
 
   useEffect(() => {
     setTimeout(() => {
-      // updateChapter(chapterId, { view: 1 }, null, false);
-      console.log("view");
+      updateChapterView(chapterId);
     }, 60 * 1000);
   }, []);
 
