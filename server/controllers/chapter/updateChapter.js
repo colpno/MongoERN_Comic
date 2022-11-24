@@ -50,153 +50,177 @@ export default function updateChapter(req, res) {
   const token = cookies.accessToken;
   const otherKeys = Object.keys(others);
 
-  if (!token) return res.status(401).json({ error: 'Cần đăng nhập để sử dụng chức năng này' });
+  if (!token && view) {
+    // return res.status(401).json({ error: 'Cần đăng nhập để sử dụng chức năng này' });
+    const updateSql = `
+              UPDATE \`${table}\`
+              SET \`view\` = \`view\` + 1
+              WHERE guid = ?
+            `;
 
-  jwt.verify(token, process.env.ACCESS_TOKEN_KEY, async (error, userInfo) => {
-    if (error) return res.status(403).json({ error: 'Token không hợp lệ' });
+    // Values of above SQL
+    const chapterValues = [view, chapterGuid];
 
-    const sql = `SELECT t.userId FROM \`${table}\` as c JOIN title as t ON (t.guid = c.titleId) WHERE c.guid = ?`;
+    db.query(updateSql, [...chapterValues], (error1, data1) => {
+      if (error1) {
+        console.log('file: updateChapter.js ~ line 155 ~ error1', error1);
+        return res.status(500).json(error1);
+      }
+      if (data1.affectedRows > 0) {
+        console.log("Updated chapter's info in database");
+        return res.status(200).json(data1);
+      }
+      return res.status(400).json({ error: error1, data: data1 });
+    });
+  }
 
-    db.query(sql, [chapterGuid], async (err, data) => {
-      if (err) return res.status(500).json(err);
+  if (token) {
+    jwt.verify(token, process.env.ACCESS_TOKEN_KEY, async (error, userInfo) => {
+      if (error) return res.status(403).json({ error: 'Token không hợp lệ' });
 
-      if (data.length) {
-        if (userInfo.role === 'admin' || data[0].userId === userInfo.guid) {
-          console.log('------------------------------------------------------');
+      const sql = `SELECT t.userId FROM \`${table}\` as c JOIN title as t ON (t.guid = c.titleId) WHERE c.guid = ?`;
 
-          let uploadCoverResponse = null;
+      db.query(sql, [chapterGuid], async (err, data) => {
+        if (err) return res.status(500).json(err);
 
-          if (cover) {
-            await cloudinary.api
-              .delete_resources_by_prefix(`comic/titles/${titleId}/chapters/${chapterGuid}/cover`)
-              .then(async () => {
-                await cloudinary.api
-                  .delete_folder(`comic/titles/${titleId}/chapters/${chapterGuid}/cover/`)
-                  .catch((error2) => {
-                    if (error2) console.log(error2);
-                  });
-              })
-              .catch((error1) => {
-                if (error1) console.log(error1);
-              });
+        if (data.length) {
+          if (userInfo.role === 'admin' || data[0].userId === userInfo.guid) {
+            console.log('------------------------------------------------------');
 
-            // Upload cover to cloudinary
-            uploadCoverResponse = await cloudinary.uploader.upload(
-              cover,
-              {
-                upload_preset: process.env.CLOUDINARY_CHAPTER_UPLOAD_PRESET,
-                folder: `comic/titles/${titleId}/chapters/${chapterGuid}/cover`,
-              },
-              (error1) => {
-                if (error1) console.log(error1);
-                console.log('Cover has been uploaded to cloud');
-              }
-            );
-          }
+            let uploadCoverResponse = null;
 
-          let chapterImagesValues = null;
-
-          if (images?.length > 0) {
-            // Upload all images of chapter into cloudinary
-            const getRes = async () => {
-              const temp = await images.map(async (image, index) => {
-                const temp1 = await first(res, image, titleId, chapterGuid, index);
-                return temp1;
-              });
-              return temp;
-            };
-            const promises = await getRes()
-              .then((response) => response)
-              .catch((error1) => {
-                if (error1) console.log(error1);
-              });
-            chapterImagesValues =
-              promises.length > 0 &&
-              (await Promise.all(promises)
-                .then(async (response) => {
-                  const oldImages = images.filter((image) => image.includes('comic'));
-                  const oldImagePublicId = oldImages.map((image) =>
-                    image.slice(image.indexOf('comic'), image.lastIndexOf('.'))
-                  );
-
-                  oldImagePublicId.forEach(async (publicId) => {
-                    await cloudinary.uploader.destroy(publicId).catch((error1) => {
-                      if (error1) console.log(error1);
-                      console.log('Deleted all unnecessary images');
+            if (cover) {
+              await cloudinary.api
+                .delete_resources_by_prefix(`comic/titles/${titleId}/chapters/${chapterGuid}/cover`)
+                .then(async () => {
+                  await cloudinary.api
+                    .delete_folder(`comic/titles/${titleId}/chapters/${chapterGuid}/cover/`)
+                    .catch((error2) => {
+                      if (error2) console.log(error2);
                     });
-                  });
-
-                  return response;
                 })
                 .catch((error1) => {
                   if (error1) console.log(error1);
-                }));
-          }
+                });
 
-          const setStatements = [];
-          otherKeys.length > 0 && setStatements.push(otherKeys.map((key) => `\`${key}\` = ?`));
-          uploadCoverResponse?.public_id && setStatements.push('`cover` = ?,`publicId` = ?');
-          !like && !view && setStatements.push('`updatedAt` = ?');
-
-          const updateSql = `
-            UPDATE \`${table}\`
-            SET ${setStatements.toString()}
-            WHERE guid = ?
-          `;
-
-          // Values of above SQL
-          const now = getCurrentDateTime();
-          const chapterValues = [...otherKeys.map((dataKey) => others[dataKey])];
-          uploadCoverResponse?.public_id &&
-            chapterValues.push(uploadCoverResponse.secure_url, uploadCoverResponse.public_id);
-          like || view ? chapterValues.push(chapterGuid) : chapterValues.push(now, chapterGuid);
-
-          db.query(updateSql, [...chapterValues], (error1, data1) => {
-            if (error1) {
-              console.log('file: updateChapter.js ~ line 155 ~ error1', error1);
-              return res.status(500).json(error1);
+              // Upload cover to cloudinary
+              uploadCoverResponse = await cloudinary.uploader.upload(
+                cover,
+                {
+                  upload_preset: process.env.CLOUDINARY_CHAPTER_UPLOAD_PRESET,
+                  folder: `comic/titles/${titleId}/chapters/${chapterGuid}/cover`,
+                },
+                (error1) => {
+                  if (error1) console.log(error1);
+                  console.log('Cover has been uploaded to cloud');
+                }
+              );
             }
-            if (data1.affectedRows > 0) {
-              console.log("Updated chapter's info in database");
 
-              if (images?.length > 0) {
-                const deleteSql = `DELETE FROM ${table}_image WHERE chapterId = ?`;
+            let chapterImagesValues = null;
 
-                db.query(deleteSql, [chapterGuid], (error2, data2) => {
-                  if (error2) return res.status(500).json(error2);
-                  if (data2.affectedRows > 0) {
-                    console.log('Deleted all images');
+            if (images?.length > 0) {
+              // Upload all images of chapter into cloudinary
+              const getRes = async () => {
+                const temp = await images.map(async (image, index) => {
+                  const temp1 = await first(res, image, titleId, chapterGuid, index);
+                  return temp1;
+                });
+                return temp;
+              };
+              const promises = await getRes()
+                .then((response) => response)
+                .catch((error1) => {
+                  if (error1) console.log(error1);
+                });
+              chapterImagesValues =
+                promises.length > 0 &&
+                (await Promise.all(promises)
+                  .then(async (response) => {
+                    const oldImages = images.filter((image) => image.includes('comic'));
+                    const oldImagePublicId = oldImages.map((image) =>
+                      image.slice(image.indexOf('comic'), image.lastIndexOf('.'))
+                    );
 
-                    const sqla = `
+                    oldImagePublicId.forEach(async (publicId) => {
+                      await cloudinary.uploader.destroy(publicId).catch((error1) => {
+                        if (error1) console.log(error1);
+                        console.log('Deleted all unnecessary images');
+                      });
+                    });
+
+                    return response;
+                  })
+                  .catch((error1) => {
+                    if (error1) console.log(error1);
+                  }));
+            }
+
+            const setStatements = [];
+            otherKeys.length > 0 && setStatements.push(otherKeys.map((key) => `\`${key}\` = ?`));
+            uploadCoverResponse?.public_id && setStatements.push('`cover` = ?,`publicId` = ?');
+            !like && !view && setStatements.push('`updatedAt` = ?');
+
+            const updateSql = `
+              UPDATE \`${table}\`
+              SET ${setStatements.toString()}
+              WHERE guid = ?
+            `;
+
+            // Values of above SQL
+            const now = getCurrentDateTime();
+            const chapterValues = [...otherKeys.map((dataKey) => others[dataKey])];
+            uploadCoverResponse?.public_id &&
+              chapterValues.push(uploadCoverResponse.secure_url, uploadCoverResponse.public_id);
+            like || view ? chapterValues.push(chapterGuid) : chapterValues.push(now, chapterGuid);
+
+            db.query(updateSql, [...chapterValues], (error1, data1) => {
+              if (error1) {
+                console.log('file: updateChapter.js ~ line 155 ~ error1', error1);
+                return res.status(500).json(error1);
+              }
+              if (data1.affectedRows > 0) {
+                console.log("Updated chapter's info in database");
+
+                if (images?.length > 0) {
+                  const deleteSql = `DELETE FROM ${table}_image WHERE chapterId = ?`;
+
+                  db.query(deleteSql, [chapterGuid], (error2, data2) => {
+                    if (error2) return res.status(500).json(error2);
+                    if (data2.affectedRows > 0) {
+                      console.log('Deleted all images');
+
+                      const sqla = `
                       INSERT INTO \`${table}_image\`
                       (\`chapterId\`,\`image\`,\`order\`,\`createdAt\`,\`updatedAt\`, \`guid\`,\`publicId\`)
                       VALUES ?;
                     `;
 
-                    // Execute query
-                    db.query(sqla, [chapterImagesValues], (error3, data3) => {
-                      if (error3) return res.status(500).json(error3);
-                      if (data3.affectedRows > 0) {
-                        console.log("Chapter's images has been insert into database");
-                        console.log('******************************************************');
-                        return res.status(200).json(data3);
-                      }
-                      return res.status(400).json({ error: data3 });
-                    });
-                  }
-                });
-              } else {
-                return res.status(200).json(data1);
+                      // Execute query
+                      db.query(sqla, [chapterImagesValues], (error3, data3) => {
+                        if (error3) return res.status(500).json(error3);
+                        if (data3.affectedRows > 0) {
+                          console.log("Chapter's images has been insert into database");
+                          console.log('******************************************************');
+                          return res.status(200).json(data3);
+                        }
+                        return res.status(400).json({ error: data3 });
+                      });
+                    }
+                  });
+                } else {
+                  return res.status(200).json(data1);
+                }
               }
-            }
-            return res.status(400).json({ error: error1, data: data1 });
-          });
+              return res.status(400).json({ error: error1, data: data1 });
+            });
+          } else {
+            return res.status(403).json({ error: 'Token không hợp lệ' });
+          }
         } else {
-          return res.status(403).json({ error: 'Token không hợp lệ' });
+          return res.status(400).json({ error: data });
         }
-      } else {
-        return res.status(400).json({ error: data });
-      }
+      });
     });
-  });
+  }
 }
