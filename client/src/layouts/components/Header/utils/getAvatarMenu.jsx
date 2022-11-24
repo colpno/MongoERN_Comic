@@ -64,28 +64,28 @@ function getAvatarMenu(cx, user, isLoggingIn) {
         icon: <ImQuill className={cx(isLoggingIn ? "" : "gray")} />,
       },
     ],
-    [
-      {
-        path: "/notice-list",
-        label: <span>Thông báo</span>,
-        icon: <BsBellFill />,
-      },
-      // {
-      //   path: "login",
-      //   label: <span>FAQ</span>,
-      //   icon: <BsFillPatchQuestionFill />,
-      // },
-      // {
-      //   path: "/static/terms",
-      //   label: <span>Điều khoản sử dụng</span>,
-      //   icon: <BsFillFileEarmarkFontFill />,
-      // },
-      // {
-      //   path: "/static/privacy-policy",
-      //   label: <span>Điều khoản bảo mật</span>,
-      //   icon: <IoLockClosed />,
-      // },
-    ],
+    // [
+    // {
+    //   path: "/notice-list",
+    //   label: <span>Thông báo</span>,
+    //   icon: <BsBellFill />,
+    // },
+    // {
+    //   path: "login",
+    //   label: <span>FAQ</span>,
+    //   icon: <BsFillPatchQuestionFill />,
+    // },
+    // {
+    //   path: "/static/terms",
+    //   label: <span>Điều khoản sử dụng</span>,
+    //   icon: <BsFillFileEarmarkFontFill />,
+    // },
+    // {
+    //   path: "/static/privacy-policy",
+    //   label: <span>Điều khoản bảo mật</span>,
+    //   icon: <IoLockClosed />,
+    // },
+    // ],
     [
       {
         path: "",
