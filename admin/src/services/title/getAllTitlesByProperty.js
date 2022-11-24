@@ -11,8 +11,8 @@ const getAllTitlesByProperty = (key, value) => {
       const converted = convertTitlesPropertyToString(response);
       setTitles(converted);
     } catch (error) {
-      console.log(error);
-      throw new Error(error);
+      // console.log(error);
+      // throw new Error(error);
     }
   };
 
