@@ -59,12 +59,11 @@ function ProfileForm({
               </Button>
             </div>
 
-            <FormLabel name="username" label="Tên đăng nhập" />
+            <FormLabel name="username" label="Tên đăng nhập" required />
             <FastField
               name="username"
               component={InputField}
               placeholder="Viết tên người dùng..."
-              disabled
             />
             <FormLabel name="email" label="Địa chỉ email" required />
             <FastField
