@@ -42,6 +42,10 @@
         min-width: 198px;
         height: 147px;
         border-right: 1px solid #ddd;
+
+        > * {
+          object-fit: cover;
+        }
       }
 
       &__info {
