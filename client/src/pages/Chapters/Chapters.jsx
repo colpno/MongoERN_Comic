@@ -72,7 +72,7 @@ function Chapters() {
           setTitlePopup((prev) => ({
             ...prev,
             trigger: false,
-            yesno: true,
+            // yesno: true,
           }));
           toastEmitter("Không thể xóa do các chương vẫn tồn tại", "error");
           setProgress(0);
@@ -204,16 +204,8 @@ function Chapters() {
         )}
       </Container>
       <ProgressCircle percentage={progress} />
-      <Popup
-        yesno={chapterPopup.yesno}
-        popup={chapterPopup}
-        setPopup={setChapterPopup}
-      />
-      <Popup
-        yesno={titlePopup.yesno}
-        popup={titlePopup}
-        setPopup={setTitlePopup}
-      />
+      <Popup yesno popup={chapterPopup} setPopup={setChapterPopup} />
+      <Popup yesno popup={titlePopup} setPopup={setTitlePopup} />
       <Popup popup={popup} setPopup={setPopup} />
       <Toast {...toastOptions} />
     </>
