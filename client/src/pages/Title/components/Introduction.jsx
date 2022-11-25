@@ -11,12 +11,6 @@ import { roundNumByUnit } from "utils";
 const cx = classNames.bind(styles);
 
 function Introduction({ title, firstChapter, genres, setPopup, handleFollow }) {
-  title.summary += `
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet
-            voluptates sequi non esse vel neque hic, minus voluptatum quaerat
-            repellat, ex quibusdam deleniti modi accusamus explicabo fugit
-            aspernatur commodi illum.
-`;
   const handlePopupContent = () => {
     setPopup({
       trigger: true,
