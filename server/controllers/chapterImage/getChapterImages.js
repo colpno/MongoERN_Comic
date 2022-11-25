@@ -14,16 +14,16 @@ export default function getChapterImages(req, res) {
 
   // URL: ?column_like=...
   if (Object.keys(filter).length > 0) {
-    return filterQuery(res, table, filter, page, limit, sort, order);
+    return filterQuery(res, table, filter, page, limit, 'id', order);
   }
 
   // URL: ?column=...
   if (Object.keys(search).length > 0) {
-    return searchQuery(res, table, search, page, limit, sort, order);
+    return searchQuery(res, table, search, page, limit, 'id', order);
   }
 
   // URL: ?sort=column&order=...
-  if (sort && order) return sortQuery(res, table, sort, order, page, limit);
+  if (sort && order) return sortQuery(res, table, 'id', order, page, limit);
 
   // URL: ?limit=...&page=...
   if (limit && page) return getLimitedQuery(res, table, limit, page);
