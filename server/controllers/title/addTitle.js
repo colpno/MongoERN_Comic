@@ -26,11 +26,12 @@ export default function addTitle(req, res) {
 
     if (!token) return res.status(401).json({ error: 'Cần đăng nhập để sử dụng chức năng này' });
 
+    const titleGuid = uuidv4();
+
     jwt.verify(token, process.env.ACCESS_TOKEN_KEY, async (error2, userInfo) => {
       if (error2) return res.status(403).json({ error: 'Token không hợp lệ' });
 
       console.log('------------------------------------------------------');
-      const titleGuid = uuidv4();
 
       const response = await cloudinary.uploader.upload(
         cover,
