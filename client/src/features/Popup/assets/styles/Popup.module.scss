@@ -29,12 +29,8 @@
   &__content {
     padding: 20px;
     line-height: 1.4;
-    height: 40vh;
-    max-height: 50vh;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    text-align: center;
 
     @extend .scrollbar;
 
