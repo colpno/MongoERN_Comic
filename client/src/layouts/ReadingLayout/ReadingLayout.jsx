@@ -49,7 +49,7 @@ function ReadingLayout({ children }) {
     setTimeout(() => {
       updateChapterView(chapterId);
       addReadingHistory(titleId, chapterId, user.guid);
-    }, 5 * 1000);
+    }, 60 * 1000);
   }, []);
 
   return (
