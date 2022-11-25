@@ -10,12 +10,18 @@ import {
   VisitStatistic,
   Login,
   NotFound,
+  LoginOTP,
 } from "pages";
 
 export const adminRoutes = [
   {
-    path: "/login",
+    path: "/",
     component: Login,
+    layout: LoginLayout,
+  },
+  {
+    path: "/verify",
+    component: LoginOTP,
     layout: LoginLayout,
   },
   {

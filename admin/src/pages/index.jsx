@@ -1,4 +1,5 @@
 export { default as Login } from "./Login";
+export { default as LoginOTP } from "./LoginOTP/LoginOTP";
 export { default as TitleManagement } from "./TitleManagement/TitleManagement";
 export { default as ChapterManagement } from "./ChapterManagement/ChapterManagement";
 export { default as MemberManagement } from "./MembersManagement/MemberManagement";

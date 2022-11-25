@@ -1,5 +1,3 @@
-export { querySelector } from "./selector";
-export { querySelectors } from "./selector";
 export { msToSeconds } from "./convertTime";
 export { msToMinutes } from "./convertTime";
 export { msToHours } from "./convertTime";
