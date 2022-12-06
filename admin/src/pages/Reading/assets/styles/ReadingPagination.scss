@@ -1,0 +1,106 @@
+@use "assets/styles/variables";
+@use "assets/styles/mixins";
+@import "swiper/css/lazy";
+
+.reading-page {
+  $color: #a6a5a5;
+
+  &__pagination {
+    width: 100%;
+    border-top: 1px solid $color;
+    border-bottom: 1px solid $color;
+    padding: 20px 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &__container {
+      position: relative;
+
+      .swiper-slide-active {
+        a {
+          pointer-events: none;
+          cursor: default;
+        }
+
+        .content {
+          color: variables.$primary-dark;
+        }
+
+        // .box-img {
+        // box-shadow: 0 0 4px 1px rgb(255 0 0 / 0.5);
+        // }
+      }
+    }
+
+    a {
+      pointer-events: all;
+    }
+
+    .box-img {
+      height: 96px;
+      border-radius: 4px;
+      margin-bottom: 5px;
+      overflow: hidden;
+
+      img {
+        border-radius: 4px;
+      }
+    }
+
+    .content {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: $color;
+      height: 44px;
+      text-align: center;
+      @include mixins.multiLineClamp(2);
+    }
+  }
+
+  &__pagination__move {
+    &-left,
+    &-right {
+      color: $color;
+      position: absolute;
+      top: 50%;
+      z-index: 2;
+
+      &::after {
+        font-size: 30px;
+      }
+    }
+
+    &-left {
+      left: -50px !important;
+    }
+
+    &-right {
+      right: -50px !important;
+    }
+  }
+}
+
+@media (min-width: 480px) and (max-width: 768px) {
+  .reading-page__pagination__container {
+    width: 400px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 960px) {
+  .reading-page__pagination__container {
+    width: 600px;
+  }
+}
+
+@media (min-width: 960px) and (max-width: 1180px) {
+  .reading-page__pagination__container {
+    width: 800px;
+  }
+}
+
+@media (min-width: 1180px) {
+  .reading-page__pagination__container {
+    width: 1000px;
+  }
+}

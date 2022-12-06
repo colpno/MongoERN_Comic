@@ -72,7 +72,6 @@ function Chapters() {
           setTitlePopup((prev) => ({
             ...prev,
             trigger: false,
-            // yesno: true,
           }));
           toastEmitter("Không thể xóa do các chương vẫn tồn tại", "error");
           setProgress(0);

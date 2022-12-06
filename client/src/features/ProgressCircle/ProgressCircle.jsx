@@ -2,7 +2,6 @@ import { Loading } from "features";
 import PropTypes from "prop-types";
 import { ProgressBar } from "react-bootstrap";
 
-// eslint-disable-next-line no-unused-vars
 function ProgressCircle({ percentage }) {
   return (
     <>

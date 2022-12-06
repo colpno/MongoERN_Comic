@@ -139,55 +139,55 @@ Select.defaultProps = {
 
 export default memo(Select);
 
-/* Custom select */
+/* REMOVE: Custom select
 
-// function Select({ field, options, className, onChange }) {
-// const [value, setValue] = useState({
-//   value: options[0].value,
-//   label: options[0].label,
-// });
-// const [showOptions, setShowOptions] = useState(false);
-// const selectRef = useClickOutSide(showOptions, () => setShowOptions(false));
+ function Select({ field, options, className, onChange }) {
+ const [value, setValue] = useState({
+   value: options[0].value,
+   label: options[0].label,
+ });
+ const [showOptions, setShowOptions] = useState(false);
+ const selectRef = useClickOutSide(showOptions, () => setShowOptions(false));
 
-// const handleSelect = (option) => {
-//   setValue({ value: option.value, label: option.label });
+ const handleSelect = (option) => {
+   setValue({ value: option.value, label: option.label });
 
-//   const fakeEvent = {
-//     target: {
-//       value: option.value,
-//     },
-//   };
+   const fakeEvent = {
+     target: {
+       value: option.value,
+     },
+   };
 
-//   onChange(fakeEvent);
-//   setShowOptions(false);
-// };
+   onChange(fakeEvent);
+   setShowOptions(false);
+ };
 
-// return (
-// <div className={cx("wrapper")} ref={selectRef}>
-//   <Button
-//     wrapper
-//     className={`${cx("select")} ${className}`}
-//     onClick={() => setShowOptions(!showOptions)}
-//   >
-//     {value.label}
-//     <BiChevronDown
-//       className={cx("chevron-down", showOptions ? "active" : "")}
-//     />
-//   </Button>
-//   {showOptions && (
-//     <div className={cx("options")}>
-//       {options.map((option) => (
-//         <Button
-//           wrapper
-//           key={option.value}
-//           className={cx("option")}
-//           onClick={() => handleSelect(option)}
-//         >
-//           {option.label}
-//         </Button>
-//       ))}
-//     </div>
-//   )}
-// </div>
-// );
-// }
+ return (
+ <div className={cx("wrapper")} ref={selectRef}>
+   <Button
+     wrapper
+     className={`${cx("select")} ${className}`}
+     onClick={() => setShowOptions(!showOptions)}
+   >
+     {value.label}
+     <BiChevronDown
+       className={cx("chevron-down", showOptions ? "active" : "")}
+     />
+   </Button>
+   {showOptions && (
+     <div className={cx("options")}>
+       {options.map((option) => (
+         <Button
+           wrapper
+           key={option.value}
+           className={cx("option")}
+           onClick={() => handleSelect(option)}
+         >
+           {option.label}
+         </Button>
+       ))}
+     </div>
+   )}
+ </div>
+ );
+ } */

@@ -47,7 +47,7 @@ function FollowTable({ setDeletedItem, popup, setPopup, follows }) {
               <Button
                 wrapper
                 className={cx("trash-can-button")}
-                onClick={() => handleClick(guid)}
+                onClick={() => handleClick(title.guid)}
               >
                 <IoTrashSharp />
               </Button>
@@ -71,6 +71,7 @@ FollowTable.propTypes = {
       guid: PropTypes.string.isRequired,
       updatedAt: PropTypes.string.isRequired,
       title: PropTypes.shape({
+        guid: PropTypes.string.isRequired,
         cover: PropTypes.string.isRequired,
         name: PropTypes.string.isRequired,
         author: PropTypes.string.isRequired,

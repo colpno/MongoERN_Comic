@@ -40,7 +40,6 @@ FileField.defaultProps = {
   multiple: false,
   disabled: false,
   imageBlob: "",
-  // eslint-disable-next-line react/jsx-no-useless-fragment
   closeIcon: false,
   handleCloseIconClick: () => {},
 };

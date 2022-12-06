@@ -19,12 +19,11 @@ export default function addReadingHistory(req, res) {
     db.query(checkExistSQL, [userInfo.guid, titleId], (error1, data1) => {
       if (error1) return res.status(500).json({ error: 'Lỗi do server', detail: error1 });
 
-      if (data1[0].chapterId === chapterId && data1[0].titleId === titleId) {
-        return res.status(200);
-      }
-
       // Read same title but difference chapter
       if (data1.length > 0) {
+        if (data1[0].chapterId === chapterId && data1[0].titleId === titleId) {
+          return res.status(200);
+        }
         const sql = `
           UPDATE \`${table}\` SET \`chapterId\` = ?, \`updatedAt\` = ?
           WHERE \`titleId\` = ? AND userId = ?;

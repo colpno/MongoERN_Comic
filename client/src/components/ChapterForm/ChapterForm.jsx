@@ -6,7 +6,7 @@ import { Alert } from "react-bootstrap";
 
 import { Image, InputImage } from "components";
 import Button from "components/Button";
-import { InputField, RadioGroup } from "libs/formik";
+import { InputField, RadioGroup, TextAreaField } from "libs/formik";
 import FormLabel from "libs/formik/FormLabel";
 import { IoCloseCircle } from "react-icons/io5";
 import styles from "./assets/ChapterForm.module.scss";
@@ -21,7 +21,7 @@ function ChapterForm({ initialValues, validationSchema, handleSubmit }) {
 
   const costOptions = [
     { value: "false", label: "Miễn phí" },
-    // { value: "true", label: "Trả phí" },
+    { value: "true", label: "Trả phí" },
   ];
 
   const onCloseIconClick = (e) => {
@@ -116,21 +116,21 @@ function ChapterForm({ initialValues, validationSchema, handleSubmit }) {
                 );
               })}
             </div>
-            {/* 
+
             <FormLabel name="authorNote" label="Lời nhắn của tác giả" />
             <FastField
               name="authorNote"
               component={TextAreaField}
               placeholder="Viết lời nhắn của bạn..."
               maxLength={500}
-            /> */}
+            />
 
-            {/* <FormLabel name="schedule" label="Đặt lịch đăng chương" />
+            <FormLabel name="schedule" label="Đặt lịch đăng chương" />
             <FastField
               name="schedule"
               component={InputField}
               placeholder="dd/mm/yyyy hh:mm:ss"
-            /> */}
+            />
 
             <div className={cx("button-group")}>
               <Button outline gray>

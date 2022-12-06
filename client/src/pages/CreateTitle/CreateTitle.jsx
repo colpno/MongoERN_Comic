@@ -24,10 +24,10 @@ function CreateTitle() {
     genreId: [],
     summary: "",
     author: "",
-    // coin: "",
+    coin: "",
     cover: "",
     releaseDay: "",
-    // largeCoverTemp: "",
+    // TODO largeCoverTemp: "",
   };
 
   const VALIDATION_SCHEMA = Yup.object({
@@ -44,14 +44,14 @@ function CreateTitle() {
     author: Yup.string()
       .max(255, "Giới hạn độ dài là 255 ký tự.")
       .required("Tác giả không được để trống."),
-    // coin: Yup.string()
-    //   .max(3, "Giới hạn độ dài là 3 ký tự.")
-    //   .required("Coin không được để trống."),
+    coin: Yup.string()
+      .max(3, "Giới hạn độ dài là 3 ký tự.")
+      .required("Coin không được để trống."),
     releaseDay: Yup.string().required(
       "Ngày đăng hàng tuần phải không được để trống"
     ),
     cover: Yup.string().required("Ảnh bìa không được để trống."),
-    // largeCoverTemp: Yup.string().required("Truyện cần phải có ảnh bìa."),
+    // TODO largeCoverTemp: Yup.string().required("Truyện cần phải có ảnh bìa."),
   });
 
   const handleCancel = () => {
@@ -92,14 +92,6 @@ function CreateTitle() {
           validationSchema={VALIDATION_SCHEMA}
         />
       </FormWrapper>
-      {/* <div className={cx("create-title")}>
-        <h3 className={cx("head-title")}>Thêm truyện mới</h3>
-        <TitleForm
-          handleSubmit={handleSubmit}
-          initialValues={INITIAL_VALUE}
-          validationSchema={VALIDATION_SCHEMA}
-        />
-      </div> */}
       <ProgressCircle percentage={progress} />
       <Popup yesno popup={popup} setPopup={setPopup} />
       <Toast {...toastOptions} />

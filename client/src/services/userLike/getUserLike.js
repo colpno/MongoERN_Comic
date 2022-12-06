@@ -9,7 +9,7 @@ export default function getUserLike(userId, chapterId) {
       const response = await userLikeApi.getOne(userId, chapterId);
       setUserLike(response[0]);
     } catch (error) {
-      // console.log(error);
+      console.log("file: getUserLike.js:12 ~ error", error);
     }
   };
 

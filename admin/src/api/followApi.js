@@ -11,6 +11,11 @@ const followApi = {
       withCredentials: true,
     }),
 
+  getOne: (userId, titleId) =>
+    axiosClient.get(`${url}/one?userId=${userId}&titleId=${titleId}`, {
+      withCredentials: true,
+    }),
+
   add: (follow) =>
     axiosClient.post(`${url}/create`, follow, { withCredentials: true }),
 

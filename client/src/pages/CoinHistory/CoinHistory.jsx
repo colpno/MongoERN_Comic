@@ -26,7 +26,7 @@ function CoinHistory() {
         <Container className={cx("coin-history")}>
           {coinHistories.map((coinHistory) => {
             const { id, amount, createdAt } = coinHistory;
-            // const { label } = payMethod;
+            // TODO: const { label } = payMethod;
 
             return (
               <Row className={cx("coin-history__row")} key={id}>
@@ -34,7 +34,7 @@ function CoinHistory() {
                   <CircleC className={cx("coin-icon")} />
                 </Col>
                 <Col className={cx("coin-history__row__content")}>
-                  {/* <h5>Nhận Coin từ {label}</h5> */}
+                  {/* TODO: <h5>Nhận Coin từ {label}</h5> */}
                   <small>{convertToDateTimeString(createdAt)}</small>
                 </Col>
                 <Col className={cx("coin-history__row__quantity")}>

@@ -12,8 +12,6 @@ function NotFound() {
       <img src={notFoundSVG} alt="vector" />
       <h1 className={cx("title")}>Trang không tồn tại</h1>
       <p className={cx("message")}>
-        {/* Lorem ipsum dolor sit, amet consectetur adipisicing elit. Id sit
-        inventore eveniet cumque alias. */}
         Xin vui lòng quay lại hoặc về lại trang chủ.
       </p>
       <Button primary to="/" className={cx("btn")}>

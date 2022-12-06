@@ -1,7 +1,7 @@
+import jwt from 'jsonwebtoken';
 import { db } from '../../config/database.js';
 import { postQuery } from '../common/index.js';
 import { table } from './index.js';
-import jwt from 'jsonwebtoken';
 
 export default function addFollow(req, res) {
   const { titleId } = req.body;
@@ -14,10 +14,11 @@ export default function addFollow(req, res) {
 
     const sql = `SELECT * FROM ${table} WHERE userId = ? AND titleId = ?`;
 
-    db.query(sql, [`${userInfo.guid}`, `${titleId}`], (error, data) => {
-      if (error) return res.status(500).json(error);
-      if (data.length)
+    db.query(sql, [`${userInfo.guid}`, `${titleId}`], (error2, data) => {
+      if (error2) return res.status(500).json(error2);
+      if (data.length) {
         return res.status(409).json({ error: 'Truyện đã có sẵn trong danh mục theo dõi' });
+      }
       return postQuery(req, res, table, true);
     });
   });

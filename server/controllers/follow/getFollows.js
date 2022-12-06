@@ -71,11 +71,11 @@ export default function getFollows(req, res) {
 
   db.query(titleSQL, [...values], (error, titles) => {
     if (error) return res.status(500).json({ error: 'Lỗi do server', detail: error });
-    if (titles.length === 0) return res.status(404).json({ error: 'Không tìm thấy' });
+    // if (titles.length === 0) return res.status(404).json({ error: 'Không tìm thấy' });
 
     db.query(sql, [...values], (error3, histories) => {
       if (error3) return res.status(500).json({ error: 'Lỗi do server', detail: error3 });
-      if (histories.length === 0) return res.status(404).json({ error: 'Không tìm thấy' });
+      // if (histories.length === 0) return res.status(200).json([]);
       if (histories.length) {
         const result = [];
 
@@ -102,7 +102,8 @@ export default function getFollows(req, res) {
         if (pagination) return res.status(200).json({ data: result, pagination });
         if (!pagination) return res.status(200).json(result);
       }
-      return res.status(400).json({ error });
+      if (pagination) return res.status(200).json({ data: histories, pagination });
+      if (!pagination) return res.status(200).json(histories);
     });
   });
 }

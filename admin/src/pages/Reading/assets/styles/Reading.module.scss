@@ -1,0 +1,114 @@
+@use "assets/styles/variables" as var;
+@use "assets/styles/mixins";
+
+.reading-page {
+  $color: #a6a5a5;
+
+  padding-bottom: 3rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  &__content {
+    width: 690px;
+    min-height: calc(100vh - var.$header-height - var.$footer-height);
+    box-shadow: 0 96px 48px rgb(0 0 0 / 0.04), 12px 12px 24px rgb(0 0 0 / 0.06);
+  }
+
+  &__controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: 200px 0 40px;
+  }
+
+  &__controls__group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      $size: 40px;
+      width: $size;
+      height: $size;
+      margin-bottom: 5px;
+    }
+  }
+
+  &__controls__controls__group__control {
+    flex-direction: column;
+    border: 1px solid $color;
+    width: 120px;
+    height: 120px;
+    border-radius: 100%;
+    background-color: #f0f0f0;
+    padding: 20px;
+    color: $color;
+
+    &.active {
+      &.follow {
+        .icon {
+          color: var.$yellow;
+        }
+
+        .text {
+          color: var.$yellow;
+        }
+      }
+
+      &.like {
+        .icon {
+          color: var.$primary;
+        }
+
+        .text {
+          color: var.$primary;
+        }
+      }
+    }
+  }
+
+  &__text {
+    color: $color;
+    width: 500px;
+    margin: 20px 0 15px;
+    text-align: center;
+  }
+
+  &__download-app {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &__button {
+      padding: 5px 30px;
+      background-color: #d7d7d7;
+      border-radius: 100vmax;
+    }
+    svg,
+    img {
+      $size: 40px;
+      width: $size;
+      height: $size;
+      font-size: $size;
+      margin-right: 10px;
+    }
+    svg {
+      color: #fff;
+    }
+    span {
+      font-size: 1.2rem;
+    }
+  }
+
+  .recommend {
+    margin: 40px 0 20px;
+  }
+}
+
+.btn > svg {
+  margin-right: 10px;
+}

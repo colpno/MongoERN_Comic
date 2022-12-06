@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = { totalChapters: 0, likes: 0, views: 0 };

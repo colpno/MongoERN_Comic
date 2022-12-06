@@ -12,11 +12,9 @@ const cx = classNames.bind(styles);
 
 function Header() {
   const headerNavigation = [
-    { href: "/comic/weekly", label: "Hàng tuần" },
-    { href: "/comic/ranking", label: "Xếp hạng" },
-    { href: "/comic/complete", label: "Truyện hoàn thành" },
-    // { href: "/novel", label: "Novel" },
-    // { href: "/anime", label: "Anime" },
+    { href: "/comic/weekly", label: "Comic" },
+    { href: "/novel", label: "Novel" },
+    { href: "/anime", label: "Anime" },
   ];
   const url = useLocation().pathname;
 

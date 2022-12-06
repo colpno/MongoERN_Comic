@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import bcrypt from 'bcryptjs';
 import moment from 'moment';
 import { db } from '../../config/database.js';
@@ -67,13 +68,13 @@ export default function login(req, res) {
           const response = sendMail(email, subject, html);
 
           if (response.status) {
-            const expiredAt = moment().add(15, 'm').toISOString();
-            const cookieData = JSON.stringify({ email, userGuid, expiredAt });
-            return res
-              .cookie('loginInfo', cookieData, {
-                maxAge: 15 * 60 * 1000,
-              })
-              .json(`OTP đã được gửi đến ${email}`);
+          const expiredAt = moment().add(15, 'm').toISOString();
+          const cookieData = JSON.stringify({ email, userGuid, expiredAt });
+          return res
+            .cookie('loginInfo', cookieData, {
+              maxAge: 15 * 60 * 1000,
+            })
+            .json(`OTP đã được gửi đến ${email}`);
           }
 
           return res.status(500).json({ error: response.error });

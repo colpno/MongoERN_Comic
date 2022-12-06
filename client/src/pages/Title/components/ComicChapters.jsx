@@ -1,10 +1,8 @@
-/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
 import { memo } from "react";
 import { AiFillHeart } from "react-icons/ai";
 import { BsSortNumericDown, BsSortNumericUp } from "react-icons/bs";
-import { useLocation } from "react-router-dom";
 
 import { ChargeIcon, CircleC, CircleP } from "assets/images";
 import Button from "components/Button";
@@ -15,6 +13,7 @@ import { separateNumberDigit } from "utils";
 
 const cx = classNames.bind(styles);
 
+// eslint-disable-next-line no-unused-vars
 function ComicChapters({ title, chapters, user, isDESCSorting, sorting }) {
   return (
     <>
@@ -27,7 +26,6 @@ function ComicChapters({ title, chapters, user, isDESCSorting, sorting }) {
                 {title.totalChapter}
               </strong>
             </span>
-            {/* TODO: sorting chapters */}
             <Button
               text
               className={cx("chapters__head__sorting")}
@@ -44,7 +42,7 @@ function ComicChapters({ title, chapters, user, isDESCSorting, sorting }) {
               return (
                 <Button
                   wrapper
-                  to={`${useLocation().pathname}/${chapter.guid}`}
+                  to={chapter.guid}
                   className={cx("chapters__content__chapter")}
                   key={chapter.guid}
                 >
@@ -61,19 +59,19 @@ function ComicChapters({ title, chapters, user, isDESCSorting, sorting }) {
                       {convertToDateString(day, month, year)}
                     </small>
                   </div>
-                  {/* TODO: if chapter cost coin or point then show pop up when click on a chapter */}
-                  {/* TODO: when bought, free btn is showed up instead up others */}
                   <div className={cx("chapters__content__chapter__price")}>
-                    {/* {!freeVisible && ( */}
-                    <Button
-                      outline
-                      success
-                      className={cx("chapters__content__chapter__price__free")}
-                    >
-                      Miễn phí
-                    </Button>
-                    {/* )} */}
-                    {/* {chargeVisible && (
+                    {!chapter.cost && (
+                      <Button
+                        outline
+                        success
+                        className={cx(
+                          "chapters__content__chapter__price__free"
+                        )}
+                      >
+                        Miễn phí
+                      </Button>
+                    )}
+                    {title.chargeTime && (
                       <Button
                         outline
                         success
@@ -89,11 +87,11 @@ function ComicChapters({ title, chapters, user, isDESCSorting, sorting }) {
                         </div>
                         Mien phi
                       </Button>
-                    )} */}
-                    {/* {chapter.charge && (chapter.point || chapter.coin) && (
+                    )}
+                    {title.chargeTime && (title.point || title.coin) && (
                       <div className={cx("divider")} />
-                    )} */}
-                    {/* {pointVisible && (
+                    )}
+                    {chapter.cost && (
                       <div
                         className={cx(
                           "chapters__content__chapter__price__point"
@@ -102,11 +100,11 @@ function ComicChapters({ title, chapters, user, isDESCSorting, sorting }) {
                         <span>{title.point}</span>
                         <CircleP />
                       </div>
-                    )} */}
-                    {/* {chapter.point && chapter.coin && (
+                    )}
+                    {title.point && title.coin && (
                       <div className={cx("divider")} />
                     )}
-                    {coinVisible && (
+                    {chapter.cost && (
                       <div
                         className={cx(
                           "chapters__content__chapter__price__coin"
@@ -115,7 +113,7 @@ function ComicChapters({ title, chapters, user, isDESCSorting, sorting }) {
                         <span>{title.coin}</span>
                         <CircleC />
                       </div>
-                    )} */}
+                    )}
                   </div>
                 </Button>
               );
@@ -136,6 +134,9 @@ function ComicChapters({ title, chapters, user, isDESCSorting, sorting }) {
 ComicChapters.propTypes = {
   title: PropTypes.shape({
     totalChapter: PropTypes.number.isRequired,
+    coin: PropTypes.number.isRequired,
+    point: PropTypes.number.isRequired,
+    chargeTime: PropTypes.number.isRequired,
   }).isRequired,
   chapters: PropTypes.arrayOf(
     PropTypes.shape({
@@ -148,7 +149,7 @@ ComicChapters.propTypes = {
     }).isRequired
   ).isRequired,
   user: PropTypes.shape({
-    // paid: PropTypes.bool.isRequired,
+    // TODO paid: PropTypes.bool.isRequired,
   }).isRequired,
   isDESCSorting: PropTypes.bool.isRequired,
   sorting: PropTypes.func.isRequired,

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { BlankLayout, ComicLayout, LoginLayout, ReadingLayout } from "layouts";
 import {
   Complete,
@@ -57,17 +56,17 @@ export const publicRoutes = [
   {
     path: "/comic/weekly",
     component: Weekly,
-    // layout: ComicLayout,
+    layout: ComicLayout,
   },
   {
     path: "/comic/ranking",
     component: Ranking,
-    // layout: ComicLayout,
+    layout: ComicLayout,
   },
   {
     path: "/comic/complete",
     component: Complete,
-    // layout: ComicLayout,
+    layout: ComicLayout,
   },
   {
     path: "/comic/title/:titleId",
@@ -78,10 +77,10 @@ export const publicRoutes = [
     component: Reading,
     layout: ReadingLayout,
   },
-  // {
-  //   path: "/content-list/:genreId",
-  //   component: ContentList,
-  // },
+  {
+    path: "/content-list/:genreId",
+    component: ContentList,
+  },
   {
     path: "/notice-list",
     component: NoticeList,
@@ -90,6 +89,6 @@ export const publicRoutes = [
     path: "/notice/:noticeId",
     component: Notice,
   },
-  // { path: "/static/term", component: Home },
-  // { path: "/static/privacy-policy", component: Home },
+  { path: "/static/term", component: Home },
+  { path: "/static/privacy-policy", component: Home },
 ];

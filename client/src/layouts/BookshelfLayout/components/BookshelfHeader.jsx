@@ -15,8 +15,8 @@ function BookshelfHeader() {
   const menu = [
     { href: "/bookshelf/follow", label: "Theo dõi" },
     { href: "/bookshelf/history", label: "Lịch sử xem" },
-    // { href: "/bookshelf/transaction?tab=purchased-titles", label: "Mua" },
-    // { href: "/bookshelf/transaction?tab=purchased-titles", label: "Thuê/Mua" },
+    { href: "/bookshelf/transaction?tab=purchased-titles", label: "Mua" },
+    { href: "/bookshelf/transaction?tab=purchased-titles", label: "Thuê/Mua" },
   ];
   const pathName = useLocation().pathname;
 
@@ -27,7 +27,7 @@ function BookshelfHeader() {
           <InventoryBooksLogo className={cx("header__title__image")} />
           <span className={cx("header__title__label")}>Tủ sách của bạn</span>
         </div>
-        {/* <div className={cx("header__navbar")}>
+        {/* REMOVE: <div className={cx("header__navbar")}>
           {menu.map((link) => {
             return (
               <Link

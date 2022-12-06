@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { Col, Container, Row } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
-import { Thumbs } from "swiper";
+import { Navigation, Thumbs } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import { Button } from "components";
@@ -30,18 +30,9 @@ function SubNavigator({ menu, responsive }) {
           </Row>
         ) : (
           <Swiper
-            breakpoints={{
-              100: {
-                slidesPerView: 2.6,
-              },
-              540: {
-                slidesPerView: 3.6,
-              },
-              768: {
-                slidesPerView: 4,
-              },
-            }}
-            modules={[Thumbs]}
+            modules={[Navigation, Thumbs]}
+            navigation
+            slidesPerView={2}
             grabCursor
             className="navigator"
           >

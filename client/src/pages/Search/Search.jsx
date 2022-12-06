@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import { FastField, Form, Formik } from "formik";
 import { useState } from "react";

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import { memo } from "react";
 import PropTypes from "prop-types";
@@ -46,7 +45,7 @@ function TitleAbout({ user, title, setPopup }) {
           </>
         )}
       </div>
-      {/* <div className={cx("title-page__about__ticket-info", "side-info")}>
+      <div className={cx("title-page__about__ticket-info", "side-info")}>
         <span className={cx("title")}>
           Vé đang có:
           <AiOutlineQuestionCircle
@@ -73,8 +72,8 @@ function TitleAbout({ user, title, setPopup }) {
             <BuyTicket />
           </span>
         </div>
-      </div> */}
-      {/* <div className={cx("title-page__about__charge", "side-info")}>
+      </div>
+      <div className={cx("title-page__about__charge", "side-info")}>
         <div className={cx("charge-info")}>
           <div className={cx("charge__icon")}>
             <ChargeIcon />
@@ -97,13 +96,13 @@ function TitleAbout({ user, title, setPopup }) {
           </span>
         </div>
         <ChargeBar user={user} title={title} />
-      </div> */}
-      {/* <div className={cx("title-page__about__notifications", "side-info")}>
+      </div>
+      <div className={cx("title-page__about__notifications", "side-info")}>
         <div className={cx("title-page__about__notifications__notification")}>
           <AiOutlineInfoCircle className={cx("icon-info")} />
           <span>7 chuong moi nhat chi ap dung Coin hoac Ve mua</span>
         </div>
-      </div> */}
+      </div>
     </div>
   );
 }
@@ -113,8 +112,12 @@ TitleAbout.propTypes = {
   title: PropTypes.shape({
     approvedStatusId: PropTypes.string.isRequired,
     releaseDay: PropTypes.string.isRequired,
+    chargeTime: PropTypes.number.isRequired,
   }).isRequired,
-  user: PropTypes.shape({}).isRequired,
+  user: PropTypes.shape({
+    rentTicket: PropTypes.number.isRequired,
+    buyTicket: PropTypes.number.isRequired,
+  }).isRequired,
 };
 
 export default memo(TitleAbout);

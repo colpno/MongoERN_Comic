@@ -28,6 +28,7 @@
   box-shadow: 1px 1px variables.$primary-dark;
 
   &:hover {
+    background-color: variables.$primary;
     color: variables.$white;
   }
 }
@@ -153,8 +154,8 @@
 
 // Attributes
 .disabled {
-  background-color: #efefef4d;
-  color: #1010104d;
+  background-color: #efefef4d !important;
+  color: #1010104d !important;
   border: 0;
   box-shadow: none;
   pointer-events: none;

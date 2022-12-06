@@ -1,5 +1,5 @@
 export const convertToSQL = (queries) => {
-  const { sort, order, limit, page, embed, ...otherQueries } = queries;
+  const { genreId, sort, order, limit, page, embed, ...otherQueries } = queries;
   const queryKeys = Object.keys(otherQueries);
 
   const whereArray = [];
@@ -25,11 +25,6 @@ export const convertToSQL = (queries) => {
     }
 
     values.push(otherQueries[query]);
-
-    if (query.includes('genreId')) {
-      whereArray.push(`b.\`${query}\` = ?`);
-      continue;
-    }
 
     if (query.includes('_gte')) {
       whereArray.push(`a.\`${query.slice(0, query.indexOf('_gte'))}\` >= ?`);

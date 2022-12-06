@@ -20,7 +20,7 @@ function AdminSideBar() {
   const toggle = useSelector((state) => state.global.toggleSideBar);
   const menu = getAdminSideBarMenu();
   const user = useSelector((state) => state.user.user);
-  const { logout } = useLogout("/");
+  const { logout } = useLogout("/login");
 
   const setToggleSideBar = (isToggle) => {
     dispatch(toggleSideBar(isToggle));
@@ -31,7 +31,7 @@ function AdminSideBar() {
       <div className={cx("dump", toggle ? "active" : "")} />
       <aside className={`sidebar ${toggle ? "active" : ""}`}>
         <div className={cx("logo-container")}>
-          <Button wrapper to="/" className={cx("logo-button")}>
+          <Button wrapper to="/titles" className={cx("logo-button")}>
             <Logo className={cx("logo")} />
           </Button>
           <FaBars

@@ -9,3 +9,4 @@ export { default as PaymentMethodManagement } from "./PaymentMethodManagement/Pa
 export { default as IncomeStatistic } from "./IncomeStatistic/IncomeStatistic";
 export { default as VisitStatistic } from "./VisitStatistic/VisitStatistic";
 export { default as NotFound } from "./NotFound/NotFound";
+export { default as Title } from "./Title/Title";

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { CircleC, CircleP } from "assets/images";
 import classNames from "classnames/bind";
 import { setPaymentMethods } from "libs/redux/slices/paymentMethodSlice";
@@ -39,14 +38,14 @@ function CurrencyCount() {
             <span className={cx("wrapper__balance")}>{user.coin}</span>
           </div>
         </Col>
-        {/* <Col>
+        <Col>
           <p className={cx("wrapper__label")}>Tổng số Point</p>
           <div className={cx("wrapper__content")}>
             <CircleP className={cx("wrapper__icon")} />
             <span className={cx("wrapper__separate")}>x</span>
             <span className={cx("wrapper__balance")}>{user.point}</span>
           </div>
-        </Col> */}
+        </Col>
       </Row>
     </Container>
   );

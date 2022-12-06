@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import axiosClient from "libs/axios/axiosClient";
 
 const url = "/titles";

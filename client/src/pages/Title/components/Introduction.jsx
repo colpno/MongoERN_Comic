@@ -64,7 +64,6 @@ function Introduction({ title, firstChapter, genres, setPopup, handleFollow }) {
             </small>
           </div>
           <div className={cx("button-container")}>
-            {/* TODO: add to favorite list */}
             <Button outline large onClick={() => handleFollow(title.guid)}>
               <AiFillStar />
               Theo dõi

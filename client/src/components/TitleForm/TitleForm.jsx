@@ -141,7 +141,7 @@ function TitleForm({
               letterCount
             />
 
-            {/* <FormLabel
+            <FormLabel
               name="coin"
               label="Coin"
               subLabel="Coin của tất cả chương thuộc truyện"
@@ -153,7 +153,7 @@ function TitleForm({
               placeholder="Nhập coin..."
               maxLength={3}
               letterCount
-            /> */}
+            />
 
             <FormLabel name="releaseDay" label="Ngày đăng hàng tuần" />
             <FastField
@@ -163,10 +163,9 @@ function TitleForm({
               col={{ xs: 6, md: 4 }}
             />
 
-            {/* TODO: close icon to destroy image */}
             <FormLabel name="cover" label="Ảnh bìa" required />
             {!!errors.cover && <Alert variant="danger">{errors.cover}</Alert>}
-            {/* {!!errors.largeCover&& (
+            {/* TODO: {!!errors.largeCover&& (
               <Alert variant="danger">{errors.largeCover}</Alert>
             )} */}
             <div className={cx("cover-image")}>
@@ -179,7 +178,7 @@ function TitleForm({
                 handleRemove={handleRemove}
                 setFieldValue={setFieldValue}
               />
-              {/* <FastField
+              {/* TODO: <FastField
                 name="largeCover"
                 component={FileField}
                 imgSize={{ width: 516, height: 306 }}
@@ -216,7 +215,7 @@ TitleForm.propTypes = {
     titleStatusId: PropTypes.string,
     genreId: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     cover: PropTypes.string.isRequired,
-    // largeCover: PropTypes.string.isRequired,
+    // TODO: largeCover: PropTypes.string.isRequired,
     coin: PropTypes.string.isRequired,
     author: PropTypes.string.isRequired,
   }).isRequired,

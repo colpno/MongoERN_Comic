@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import PropTypes from "prop-types";
 import { AiOutlineLogout } from "react-icons/ai";
 import {
@@ -21,38 +20,38 @@ function getAvatarMenu(cx, user, isLoggingIn) {
         label: <span className={cx("user-name")}>{user.username}</span>,
         icon: <img src={user.avatar} alt="User avatar" />,
       },
-      // {
-      //   path: "/profile/coin/add",
-      //   label: (
-      //     <>
-      //       <p className={cx("coin-label")}>Coin</p>
-      //       <p className={cx("coin-balance")}>{user.coin}</p>
-      //     </>
-      //   ),
-      //   icon: <CircleC className={cx(isLoggingIn ? "" : "gray")} />,
-      // },
-      // {
-      //   path: "/profile/coin/add",
-      //   label: (
-      //     <>
-      //       <p className={cx("point-label")}>Point</p>
-      //       <p className={cx("point-balance")}>{user.point}</p>
-      //     </>
-      //   ),
-      //   icon: <CircleP className={cx(isLoggingIn ? "" : "gray")} />,
-      // },
+      {
+        path: "/profile/coin/add",
+        label: (
+          <>
+            <p className={cx("coin-label")}>Coin</p>
+            <p className={cx("coin-balance")}>{user.coin}</p>
+          </>
+        ),
+        icon: <CircleC className={cx(isLoggingIn ? "" : "gray")} />,
+      },
+      {
+        path: "/profile/coin/add",
+        label: (
+          <>
+            <p className={cx("point-label")}>Point</p>
+            <p className={cx("point-balance")}>{user.point}</p>
+          </>
+        ),
+        icon: <CircleP className={cx(isLoggingIn ? "" : "gray")} />,
+      },
     ],
     [
-      // {
-      //   path: "/redeem",
-      //   label: <span>Thẻ quà tặng</span>,
-      //   icon: <IoGiftSharp className={cx(isLoggingIn ? "" : "gray")} />,
-      // },
-      // {
-      //   path: "/inventory",
-      //   label: <span>Hộp vé</span>,
-      //   icon: <FaTicketAlt className={cx(isLoggingIn ? "" : "gray")} />,
-      // },
+      {
+        path: "/redeem",
+        label: <span>Thẻ quà tặng</span>,
+        icon: <IoGiftSharp className={cx(isLoggingIn ? "" : "gray")} />,
+      },
+      {
+        path: "/inventory",
+        label: <span>Hộp vé</span>,
+        icon: <FaTicketAlt className={cx(isLoggingIn ? "" : "gray")} />,
+      },
       {
         path: "/bookshelf/follow",
         label: <span>Tủ sách</span>,
@@ -64,28 +63,28 @@ function getAvatarMenu(cx, user, isLoggingIn) {
         icon: <ImQuill className={cx(isLoggingIn ? "" : "gray")} />,
       },
     ],
-    // [
-    // {
-    //   path: "/notice-list",
-    //   label: <span>Thông báo</span>,
-    //   icon: <BsBellFill />,
-    // },
-    // {
-    //   path: "login",
-    //   label: <span>FAQ</span>,
-    //   icon: <BsFillPatchQuestionFill />,
-    // },
-    // {
-    //   path: "/static/terms",
-    //   label: <span>Điều khoản sử dụng</span>,
-    //   icon: <BsFillFileEarmarkFontFill />,
-    // },
-    // {
-    //   path: "/static/privacy-policy",
-    //   label: <span>Điều khoản bảo mật</span>,
-    //   icon: <IoLockClosed />,
-    // },
-    // ],
+    [
+      {
+        path: "/notice-list",
+        label: <span>Thông báo</span>,
+        icon: <BsBellFill />,
+      },
+      {
+        path: "login",
+        label: <span>FAQ</span>,
+        icon: <BsFillPatchQuestionFill />,
+      },
+      {
+        path: "/static/terms",
+        label: <span>Điều khoản sử dụng</span>,
+        icon: <BsFillFileEarmarkFontFill />,
+      },
+      {
+        path: "/static/privacy-policy",
+        label: <span>Điều khoản bảo mật</span>,
+        icon: <IoLockClosed />,
+      },
+    ],
     [
       {
         path: "",

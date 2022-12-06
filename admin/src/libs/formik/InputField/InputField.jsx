@@ -3,13 +3,18 @@ import PropTypes from "prop-types";
 import { FormGroup } from "react-bootstrap";
 
 function InputField(props) {
-  const { field, form } = props;
+  const { field, form, ...others } = props;
   const { name } = field;
   const { errors, touched } = form;
 
   return (
     <FormGroup className="field">
-      <Input {...props} error={errors[name]} touched={touched[name]} />
+      <Input
+        {...field}
+        {...others}
+        error={errors[name]}
+        touched={touched[name]}
+      />
     </FormGroup>
   );
 }

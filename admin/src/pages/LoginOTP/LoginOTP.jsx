@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/no-autofocus */
 import classNames from "classnames/bind";
 import cookies from "js-cookie";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { BsBoxArrowInRight } from "react-icons/bs";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 import moment from "moment";
 
 import { Button } from "components";
@@ -18,6 +18,13 @@ import NumPad from "./components/NumPad";
 import styles from "./LoginOTP.module.scss";
 
 const cx = classNames.bind(styles);
+
+const checkLoggedInCanAccessURL = (url) => {
+  const array = ["login", "verify"];
+
+  const haveAccessed = array.some((pathName) => url.includes(pathName));
+  return haveAccessed;
+};
 
 function LoginOTP() {
   const RE_SEND_TIME = 5;
@@ -50,6 +57,10 @@ function LoginOTP() {
     userGuid: "",
     expiredAt: "",
   });
+  const userState = useSelector((state) => state.user);
+  const { isLoggingIn } = userState;
+  const url = useLocation().pathname;
+  const haveAccessed = useMemo(() => checkLoggedInCanAccessURL(url), [url]);
 
   useEffect(() => {
     const cookie = cookies.get("loginInfo");
@@ -66,7 +77,7 @@ function LoginOTP() {
   }, []);
 
   useEffect(() => {
-    popup.isClosed && navigate(-1);
+    popup.isClosed && navigate("/login");
   }, [popup.isClosed]);
 
   useEffect(() => {
@@ -271,98 +282,105 @@ function LoginOTP() {
 
   return (
     <>
-      <div className={cx("container-content")}>
-        <div className={cx("otp-container")}>
-          <div className={cx("title")}>
-            <p>Xác thực OTP</p>
-          </div>
-          <div className={cx("text")}>
-            <p>Hãy điền mã OTP được gửi đến</p>
-            <span className={cx("phone")}>
-              {loginInfo.email &&
-                replaceAt(
-                  loginInfo.email,
-                  3,
-                  loginInfo.email.indexOf("@") - 3,
-                  "********"
+      {(!haveAccessed && !isLoggingIn) ||
+        (!isLoggingIn && (
+          <div className={cx("container-content")}>
+            <div className={cx("otp-container")}>
+              <div className={cx("title")}>
+                <p>Xác thực OTP</p>
+              </div>
+              <div className={cx("text")}>
+                <p>Hãy điền mã OTP được gửi đến</p>
+                <span className={cx("phone")}>
+                  {loginInfo.email &&
+                    replaceAt(
+                      loginInfo.email,
+                      3,
+                      loginInfo.email.indexOf("@") - 3,
+                      "********"
+                    )}
+                </span>
+                <p>
+                  Mã OTP sẽ hết hạn trong {}
+                  <span className={cx("expire", "text-dark")}>
+                    {expiredCountdown}
+                  </span>
+                </p>
+              </div>
+              <div className={cx("otp-input")} id="otp-input">
+                <input
+                  type="text"
+                  maxLength={1}
+                  className={cx("input", "otp-input-1", "active")}
+                  onChange={(e) => handleChangeOTP(0, e)}
+                  onKeyDown={handlePressBackSpace}
+                  onFocus={(e) => setCurrentDigit(e.target)}
+                  ref={firstDigitInputRef}
+                  value={OTPInput.digit1}
+                  data-digit={1}
+                  autoFocus
+                />
+                <input
+                  type="text"
+                  maxLength={1}
+                  className={cx("input", "otp-input-2")}
+                  onChange={(e) => handleChangeOTP(1, e)}
+                  onKeyDown={handlePressBackSpace}
+                  onFocus={(e) => setCurrentDigit(e.target)}
+                  value={OTPInput.digit2}
+                  data-digit={2}
+                />
+                <input
+                  type="text"
+                  maxLength={1}
+                  className={cx("input", "otp-input-3")}
+                  onChange={(e) => handleChangeOTP(2, e)}
+                  onKeyDown={handlePressBackSpace}
+                  onFocus={(e) => setCurrentDigit(e.target)}
+                  value={OTPInput.digit3}
+                  data-digit={3}
+                />
+                <input
+                  type="text"
+                  maxLength={1}
+                  className={cx("input", "otp-input-4")}
+                  onChange={(e) => handleChangeOTP(3, e)}
+                  onKeyDown={handlePressBackSpace}
+                  onFocus={(e) => setCurrentDigit(e.target)}
+                  value={OTPInput.digit4}
+                  data-digit={4}
+                />
+              </div>
+              <span className={cx("text-danger")} />
+              <Button
+                primary
+                className={cx("btn-verify")}
+                onClick={handleVerify}
+              >
+                Xác thực <BsBoxArrowInRight className={cx("icon")} />
+              </Button>
+              <div className={cx("resend-code", "text-muted")}>
+                Chưa nhận được?
+                <Button
+                  wrapper
+                  disabled={reSend.disable}
+                  className={cx("btn-resend")}
+                  onClick={handleReSend}
+                >
+                  Gửi lại
+                </Button>
+                {reSend.countdown !== 0 && (
+                  <div className={cx("countdown")}>{reSend.countdown}</div>
                 )}
-            </span>
-            <p>
-              Mã OTP sẽ hết hạn trong {}
-              <span className={cx("expire", "text-dark")}>
-                {expiredCountdown}
-              </span>
-            </p>
+              </div>
+              <NumPad
+                cx={cx}
+                handleNumpadClick={handleNumpadClick}
+                handleNumpadClearClick={handleNumpadClearClick}
+              />
+            </div>
           </div>
-          <div className={cx("otp-input")} id="otp-input">
-            <input
-              type="text"
-              maxLength={1}
-              className={cx("input", "otp-input-1", "active")}
-              onChange={(e) => handleChangeOTP(0, e)}
-              onKeyDown={handlePressBackSpace}
-              onFocus={(e) => setCurrentDigit(e.target)}
-              ref={firstDigitInputRef}
-              value={OTPInput.digit1}
-              data-digit={1}
-              autoFocus
-            />
-            <input
-              type="text"
-              maxLength={1}
-              className={cx("input", "otp-input-2")}
-              onChange={(e) => handleChangeOTP(1, e)}
-              onKeyDown={handlePressBackSpace}
-              onFocus={(e) => setCurrentDigit(e.target)}
-              value={OTPInput.digit2}
-              data-digit={2}
-            />
-            <input
-              type="text"
-              maxLength={1}
-              className={cx("input", "otp-input-3")}
-              onChange={(e) => handleChangeOTP(2, e)}
-              onKeyDown={handlePressBackSpace}
-              onFocus={(e) => setCurrentDigit(e.target)}
-              value={OTPInput.digit3}
-              data-digit={3}
-            />
-            <input
-              type="text"
-              maxLength={1}
-              className={cx("input", "otp-input-4")}
-              onChange={(e) => handleChangeOTP(3, e)}
-              onKeyDown={handlePressBackSpace}
-              onFocus={(e) => setCurrentDigit(e.target)}
-              value={OTPInput.digit4}
-              data-digit={4}
-            />
-          </div>
-          <span className={cx("text-danger")} />
-          <Button primary className={cx("btn-verify")} onClick={handleVerify}>
-            Xác thực <BsBoxArrowInRight className={cx("icon")} />
-          </Button>
-          <div className={cx("resend-code", "text-muted")}>
-            Chưa nhận được?
-            <Button
-              wrapper
-              disabled={reSend.disable}
-              className={cx("btn-resend")}
-              onClick={handleReSend}
-            >
-              Gửi lại
-            </Button>
-            {reSend.countdown !== 0 && (
-              <div className={cx("countdown")}>{reSend.countdown}</div>
-            )}
-          </div>
-          <NumPad
-            cx={cx}
-            handleNumpadClick={handleNumpadClick}
-            handleNumpadClearClick={handleNumpadClearClick}
-          />
-        </div>
-      </div>
+        ))}
       <Popup popup={popup} setPopup={setPopup} />
       <Toast {...options} />
     </>

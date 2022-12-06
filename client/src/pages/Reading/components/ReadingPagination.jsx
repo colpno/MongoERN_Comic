@@ -1,6 +1,6 @@
 import { Button } from "components";
 import PropTypes from "prop-types";
-import { memo } from "react";
+import { memo, useRef } from "react";
 import { useParams } from "react-router-dom";
 
 import { Lazy, Navigation, Thumbs } from "swiper";
@@ -9,6 +9,8 @@ import "../assets/styles/ReadingPagination.scss";
 
 function ReadingPagination({ chapters }) {
   const { titleId } = useParams();
+  const navigationPrevRef = useRef(null);
+  const navigationNextRef = useRef(null);
 
   return (
     <div className="reading-page__pagination">
@@ -16,8 +18,8 @@ function ReadingPagination({ chapters }) {
         <Swiper
           modules={[Navigation, Thumbs, Lazy]}
           navigation={{
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
+            nextEl: navigationNextRef,
+            prevEl: navigationPrevRef,
           }}
           grabCursor
           centeredSlides
@@ -41,7 +43,11 @@ function ReadingPagination({ chapters }) {
           {chapters.map((chapter) => {
             return (
               <SwiperSlide key={chapter.guid}>
-                <Button wrapper to={`/comic/title/${titleId}/${chapter.guid}`}>
+                <Button
+                  wrapper
+                  to={`/comic/title/${titleId}/${chapter.guid}`}
+                  className="slide-wrapper"
+                >
                   <div className="box-img">
                     <img src={chapter.cover} alt={chapter.name} />
                   </div>
@@ -54,10 +60,12 @@ function ReadingPagination({ chapters }) {
         <div
           type="button"
           className="reading-page__pagination__move-left swiper-button-prev"
+          ref={navigationPrevRef}
         />
         <div
           type="button"
           className="reading-page__pagination__move-right swiper-button-next"
+          ref={navigationNextRef}
         />
       </div>
     </div>
