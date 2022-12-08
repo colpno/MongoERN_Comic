@@ -12,3 +12,4 @@ export { default as SideBar } from "./SideBar/SideBar";
 export { default as ProgressCircle } from "./ProgressCircle/ProgressCircle";
 export { default as Loading } from "./Loading/Loading";
 export { default as Search } from "./Search/Search";
+export { default as Slider } from "./Slider/Slider";

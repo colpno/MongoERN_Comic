@@ -1,0 +1,37 @@
+@use "assets/styles/variables";
+@import "swiper/css";
+@import "swiper/css/lazy";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
+@import "swiper/css/thumbs";
+@import "swiper/css/autoplay";
+
+.slide-container {
+  position: relative;
+}
+
+.previous,
+.next {
+  padding: 0 20px;
+
+  position: absolute;
+  top: 50%;
+
+  &::after {
+    font-size: 30px !important;
+  }
+
+  &.disable {
+    opacity: 0.35;
+    cursor: default;
+    pointer-events: none;
+  }
+}
+
+.previous {
+  left: -50px !important;
+}
+
+.next {
+  right: -50px !important;
+}
