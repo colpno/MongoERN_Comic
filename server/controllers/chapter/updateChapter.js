@@ -192,7 +192,7 @@ export default function updateChapter(req, res) {
                   return res.status(200).json(data1);
                 }
               }
-              return res.status(400).json({ error: error1, data: data1 });
+              // return res.status(400).json({ error: error1, data: data1 });
             });
           } else {
             return res.status(403).json({ error: 'Token không hợp lệ' });

@@ -52,7 +52,6 @@ function ReadingHeader() {
         });
     }
     if (controls.isLiked) {
-      // toastEmitter("Bạn đã thích truyện này rồi", "error");
       deleteUserLike(user.guid, chapter.guid)
         .then(() => {
           setControls((prev) => ({ ...prev, isLiked: false }));

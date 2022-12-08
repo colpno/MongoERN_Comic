@@ -1,7 +1,8 @@
 import classNames from "classnames/bind";
+import PropTypes from "prop-types";
+
 import Button from "components/Button";
 import { Dialog } from "features";
-import PropTypes from "prop-types";
 import styles from "./assets/styles/Popup.module.scss";
 import YesNoPopupButtons from "./components/YesNoPopupButtons";
 
@@ -9,12 +10,13 @@ const cx = classNames.bind(styles);
 
 function Popup({ popup, setPopup, yesno, width }) {
   const { title, content, trigger } = popup;
+
+  const handleClose = () => {
+    setPopup((prev) => ({ ...prev, trigger: false, isClosed: true }));
+  };
+
   let Component = (
-    <Button
-      primary
-      className={cx("popup__btn-close")}
-      onClick={() => setPopup((prev) => ({ ...prev, trigger: false }))}
-    >
+    <Button primary className={cx("popup__btn-close")} onClick={handleClose}>
       Đóng
     </Button>
   );
@@ -23,17 +25,18 @@ function Popup({ popup, setPopup, yesno, width }) {
     Component = <YesNoPopupButtons cx={cx} popup={popup} setPopup={setPopup} />;
   }
 
+  const handleClickOutside = () => {
+    setPopup((prev) => ({
+      ...prev,
+      trigger: false,
+      isConfirm: false,
+      isClosed: true,
+    }));
+  };
+
   return (
     trigger && (
-      <Dialog
-        onClickOutside={() =>
-          setPopup((prev) => ({
-            ...prev,
-            trigger: false,
-            isConfirm: false,
-          }))
-        }
-      >
+      <Dialog onClickOutside={handleClickOutside}>
         <div className={cx("popup")} style={{ width: `${width}px` }}>
           <div className={cx("popup__head")}>
             <span>{title}</span>

@@ -1,0 +1,97 @@
+@use "assets/styles/variables";
+@use "assets/styles/mixins";
+
+.reading-header {
+  $logoWidth: 140px;
+
+  height: variables.$header-height;
+  color: variables.$txt-white;
+  background-color: #2d2d2d;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+
+  &__logo {
+    height: fit-content;
+    width: $logoWidth;
+    margin-right: 30px;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &__title {
+    font-size: 1.2em;
+    font-weight: 700;
+    flex: 1;
+
+    a {
+      color: variables.$txt-white;
+    }
+  }
+
+  &__nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @include mixins.centerByPosition(absolute);
+    width: 400px;
+  }
+  &__nav__left,
+  &__nav__right {
+    color: variables.$txt-white;
+    display: flex;
+    align-items: center;
+
+    svg {
+      font-size: 40px;
+    }
+
+    &:hover {
+      color: variables.$primary;
+    }
+
+    &.disabled {
+      pointer-events: none;
+      opacity: 0.4;
+    }
+  }
+
+  &__nav__title {
+    @include mixins.singleLineClamp;
+    font-size: 1.2em;
+    font-weight: 700;
+    margin: 0 15px;
+  }
+
+  &__tools {
+    display: flex;
+    align-items: center;
+    color: #a0a0a0;
+
+    svg:not(:last-child) {
+      margin-right: 40px;
+    }
+
+    svg {
+      font-size: 28px;
+      cursor: pointer;
+
+      &:not(.active):hover {
+        color: #fff;
+      }
+    }
+
+    &__theme.active {
+      color: variables.$yellow;
+    }
+
+    &__like.active {
+      color: variables.$red;
+    }
+  }
+}

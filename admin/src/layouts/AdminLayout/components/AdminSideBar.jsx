@@ -31,7 +31,7 @@ function AdminSideBar() {
       <div className={cx("dump", toggle ? "active" : "")} />
       <aside className={`sidebar ${toggle ? "active" : ""}`}>
         <div className={cx("logo-container")}>
-          <Button wrapper to="/" className={cx("logo-button")}>
+          <Button wrapper to="/titles" className={cx("logo-button")}>
             <Logo className={cx("logo")} />
           </Button>
           <FaBars

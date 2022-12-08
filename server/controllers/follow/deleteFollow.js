@@ -14,7 +14,7 @@ export default function deleteFollow(req, res) {
     const checkExistSQL = `
       SELECT f.userId
       FROM \`${table}\` as f
-        JOIN \`title\` as t ON (t.guid = f.titleId)
+      JOIN \`title\` as t ON (t.guid = f.titleId)
       WHERE f.titleId = ?
     `;
 
@@ -27,7 +27,9 @@ export default function deleteFollow(req, res) {
 
       const sql = `DELETE FROM ${table} WHERE titleId = ? AND userId = ?`;
 
-      db.query(sql, [titleId, userInfo.guid], (error3, data3) => {
+      const values = [titleId, userInfo.guid];
+
+      db.query(sql, values, (error3, data3) => {
         if (error3) return res.status(500).json({ error: 'Lỗi do server', detail: error3 });
         if (data3.affectedRows > 0) {
           return res.status(200).json({ message: 'Hủy theo dõi thành cồng' });

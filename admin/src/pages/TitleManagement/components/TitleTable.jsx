@@ -50,6 +50,7 @@ function TitleTable({
           },
           {
             label: "",
+            sm: 2,
           },
         ]}
         sorting={sorting}

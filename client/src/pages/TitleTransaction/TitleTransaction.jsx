@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import { useEffect } from "react";
 import { Container } from "react-bootstrap";
@@ -19,7 +18,7 @@ function TitleTransaction() {
 
   const menu = [
     { label: "Đã mua", tab: "purchased-titles", href: "?tab=purchased-titles" },
-    // { label: "Đã thuê", tab: "hired-titles", href: "?tab=hired-titles" },
+    { label: "Đã thuê", tab: "hired-titles", href: "?tab=hired-titles" },
   ];
 
   useEffect(() => {
@@ -31,12 +30,12 @@ function TitleTransaction() {
       {titles.length > 0 && (
         <Container className={cx("transaction")}>
           <TabsContainer menu={menu} />
-          {/* {queryTab.includes(menu[0].tab) && ( */}
-          <PurchasedChapters cx={cx} titles={titles} />
-          {/* )} */}
-          {/* {queryTab.includes(menu[1].tab) && ( */}
-          {/* <HiredChapters cx={cx} titles={titles} /> */}
-          {/* )} */}
+          {queryTab.includes(menu[0].tab) && (
+            <PurchasedChapters cx={cx} titles={titles} />
+          )}
+          {queryTab.includes(menu[1].tab) && (
+            <HiredChapters cx={cx} titles={titles} />
+          )}
         </Container>
       )}
       {}

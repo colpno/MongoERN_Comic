@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import { memo } from "react";
 import PropTypes from "prop-types";
@@ -26,9 +25,9 @@ function CardList({
       {headTitle ? (
         <header className={cx("cards-wrapper__head")}>
           <h3 className={cx("cards-wrapper__head__title")}>{headTitle}</h3>
-          {/* <Button text to="/content-list/1">
+          <Button text to="/content-list/1">
             Xem thêm
-          </Button> */}
+          </Button>
         </header>
       ) : (
         ""

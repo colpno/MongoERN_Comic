@@ -79,7 +79,6 @@ function ChaptersTableRow({ setPopup, setDeleteItem, chapters }) {
               <span
                 className={cx(`approved-status-${chapter.approvedStatusId}`)}
               >
-                {/* Get label of approved status id */}
                 {options.length > 0 &&
                   options.find(
                     (option) => option.value === chapter.approvedStatusId

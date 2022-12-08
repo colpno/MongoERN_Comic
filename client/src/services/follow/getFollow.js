@@ -9,8 +9,7 @@ const getFollow = (userID, titleID) => {
       const response = await followApi.getOne(userID, titleID);
       setFollow(response[0]);
     } catch (error) {
-      // console.log("file: getFollow.js ~ line 12 ~ error", error);
-      // throw new Error(error);
+      console.log("file: getFollow.js ~ line 12 ~ error", error);
     }
   };
 

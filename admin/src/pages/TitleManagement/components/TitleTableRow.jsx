@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Col, Row } from "react-bootstrap";
 import { HiOutlinePencil } from "react-icons/hi";
 import { BsTrash } from "react-icons/bs";
+import { TbList } from "react-icons/tb";
 
 import Button from "components/Button";
 import { getAllApprovedStatuses } from "services/approvedStatus";
@@ -87,7 +88,7 @@ function TitleTableRow({
                 className={cx("updated-time")}
               >{`${timeObj.day}.${timeObj.month}.${timeObj.year}`}</span>
             </Col>
-            <Col className="actions">
+            <Col className="actions" sm={2}>
               <Button
                 outline
                 gray
@@ -105,6 +106,15 @@ function TitleTableRow({
                 onClick={() => handleDeleteClick(guid)}
               >
                 <BsTrash />
+              </Button>
+              <Button
+                outline
+                gray
+                to={`/title/${guid}`}
+                className="action"
+                title="Xem truyện"
+              >
+                <TbList />
               </Button>
             </Col>
           </Row>

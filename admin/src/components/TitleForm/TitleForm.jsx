@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import { FastField, Form, Formik } from "formik";
 import PropTypes from "prop-types";
@@ -94,7 +95,8 @@ function TitleForm({
               letterCount
               autoFocus
             />
-            {statusOptions.length > 0 && "titleStatusId" in initialValues && (
+
+            {/* {statusOptions.length > 0 && "titleStatusId" in initialValues && (
               <>
                 <FormLabel name="titleStatusId" label="Trạng thái" />
                 <FastField
@@ -104,7 +106,8 @@ function TitleForm({
                   col={{ xs: 6, md: 4 }}
                 />
               </>
-            )}
+            )} */}
+
             {genreOptions.length > 0 && (
               <>
                 <FormLabel
@@ -121,6 +124,7 @@ function TitleForm({
                 />
               </>
             )}
+
             <FormLabel name="summary" label="Mô tả" required />
             <FastField
               name="summary"
@@ -128,6 +132,7 @@ function TitleForm({
               placeholder="Viết giới thiệu truyện..."
               rows={7}
             />
+
             <FormLabel name="author" label="Tác giả" required />
             <FastField
               name="author"
@@ -136,7 +141,8 @@ function TitleForm({
               maxLength={255}
               letterCount
             />
-            <FormLabel
+
+            {/* <FormLabel
               name="coin"
               label="Coin"
               subLabel="Coin của tất cả chương thuộc truyện"
@@ -148,7 +154,8 @@ function TitleForm({
               placeholder="Nhập coin..."
               maxLength={3}
               letterCount
-            />
+            /> */}
+
             <FormLabel name="releaseDay" label="Ngày đăng hàng tuần" />
             <FastField
               name="releaseDay"
@@ -156,6 +163,7 @@ function TitleForm({
               options={releaseDayOptions}
               col={{ xs: 6, md: 4 }}
             />
+
             {/* TODO: close icon to destroy image */}
             <FormLabel name="cover" label="Ảnh bìa" required />
             {!!errors.cover && <Alert variant="danger">{errors.cover}</Alert>}
@@ -181,6 +189,7 @@ function TitleForm({
                 handleRemove={handleRemove}
               /> */}
             </div>
+
             <div className={cx("button-group")}>
               <Button outline gray onClick={handleCancel}>
                 Hủy bỏ

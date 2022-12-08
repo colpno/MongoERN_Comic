@@ -39,11 +39,12 @@ export default async function addChapter(req, res) {
 
   if (!token) return res.status(401).json({ error: 'Cần đăng nhập để sử dụng chức năng này' });
 
+  const chapterGuid = uuidv4();
+
   jwt.verify(token, process.env.ACCESS_TOKEN_KEY, async (jwtError) => {
     if (jwtError) return res.status(403).json({ error: 'Token không hợp lệ' });
 
     console.log('------------------------------------------------------');
-    const chapterGuid = uuidv4();
 
     // Upload cover to cloudinary
     const uploadResponse = await cloudinary.uploader.upload(

@@ -1,11 +1,10 @@
-/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
+import { useEffect, useMemo, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import { useEffect, useMemo, useState } from "react";
 
 import { LineChart, NoData } from "features";
-import { getAllChapters, getAllChaptersByTitleID } from "services/chapter";
+import { getAllChaptersByTitleID } from "services/chapter";
 import { getAllChapterReportsByProperty } from "services/chapterReport";
 import { getAllTitleReportsByProperty } from "services/titleReport";
 import { getChartColors, getMonthArray } from "utils/constants";

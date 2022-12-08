@@ -185,8 +185,47 @@ function LoginOTP() {
     }
   };
 
+  const handleVerify = () => {
+    const OTPKeys = Object.keys(OTPInput);
+
+    const OTPString = OTPKeys.reduce(
+      (str, key) => `${str}${OTPInput[key]}`,
+      ""
+    );
+
+    if (OTPString.length !== OTPKeys.length) {
+      toastEmitter("Mã OTP không hợp lệ", "error");
+      return;
+    }
+
+    if (loginInfo.email && OTPString) {
+      const data = {
+        email: loginInfo.email,
+        userGuid: loginInfo.userGuid,
+        otp: OTPString,
+      };
+
+      loginOTP(data)
+        .then((response) => {
+          if (response) {
+            const converted = convertUserPropertyToString(response);
+            dispatch(dispatchLogin(converted));
+            toastEmitter("Đăng nhập thành công", "success");
+            setTimeout(() => {
+              navigate("/");
+            }, 1000);
+          }
+        })
+        .catch((error) => toastEmitter(error.data.error, "error"));
+    }
+  };
+
   const handlePressBackSpace = (e) => {
     const { keyCode, target } = e;
+    if (keyCode === 13) {
+      handleVerify();
+      return;
+    }
     if (keyCode === 8 && target.value.length === 0) {
       const prevSibling = target.previousElementSibling;
 
@@ -214,38 +253,6 @@ function LoginOTP() {
         ...prev,
         [`digit${digit}`]: keyCode - UNICODE_OF_0,
       }));
-    }
-  };
-
-  const handleVerify = () => {
-    const OTPKeys = Object.keys(OTPInput);
-
-    const OTPString = OTPKeys.reduce(
-      (str, key) => `${str}${OTPInput[key]}`,
-      ""
-    );
-
-    if (OTPString.length !== OTPKeys.length) {
-      toastEmitter("Mã OTP không hợp lệ", "error");
-      return;
-    }
-
-    if (loginInfo.email && OTPString) {
-      const data = {
-        email: loginInfo.email,
-        userGuid: loginInfo.userGuid,
-        otp: OTPString,
-      };
-
-      loginOTP(data)
-        .then((response) => {
-          if (response) {
-            const converted = convertUserPropertyToString(response);
-            dispatch(dispatchLogin(converted));
-            toastEmitter("Đăng nhập thành công", "success");
-          }
-        })
-        .catch((error) => console.log(error));
     }
   };
 

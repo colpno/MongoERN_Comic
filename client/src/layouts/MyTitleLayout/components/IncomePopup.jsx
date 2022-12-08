@@ -9,13 +9,13 @@ function IncomePopup() {
     <div className={cx("popup")}>
       <div className={cx("content")}>
         <p>
-          Thu nhập của bạn sẽ được tính dựa trên số coin của chương người đọc đã
-          mua.
-          {/* Thu nhập của bạn sẽ được tính dựa trên số lượt thích của những chương
-          truyện có trả phí bằng coin. */}
+          {/* REMOVE: Thu nhập của bạn sẽ được tính dựa trên số coin của chương người đọc đã
+          mua. */}
+          Thu nhập của bạn sẽ được tính dựa trên số lượt thích của những chương
+          truyện có trả phí bằng coin.
         </p>
       </div>
-      {/* <div className={cx("attention-wrapper")}>
+      <div className={cx("attention-wrapper")}>
         <p className={cx("attention")}>Lưu ý:</p>
         <ul className={cx("attention-list")}>
           <li>
@@ -28,7 +28,7 @@ function IncomePopup() {
             được bao gồm.
           </li>
         </ul>
-      </div> */}
+      </div>
     </div>
   );
 }

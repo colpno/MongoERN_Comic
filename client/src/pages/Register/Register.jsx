@@ -20,13 +20,11 @@ function Register() {
   const handleSubmit = (values, { setSubmitting }) => {
     const { username, email, password } = values;
     register({ username, password, email, role: "member" }).then((response) => {
-      // if (response.affectedRows > 0) {
       setPopup({
         trigger: true,
         title: "Thông báo",
         content: response.message,
       });
-      // }
     });
 
     setSubmitting(false);
@@ -58,12 +56,6 @@ function Register() {
     email: Yup.string()
       .email("Định dạng mail không hợp lệ")
       .required("Email không được để trống"),
-    // phone: Yup.string()
-    //   .min(10, "Số điện thoại gồm có 10 chữ số")
-    //   .max(10, "Số điện thoại gồm có 10 chữ số")
-    //   .matches(/\d+/g, "Số điện thoại chỉ bao gồm số")
-    //   .matches(/^0/, "Số điện thoại bắt đầu bằng số 0")
-    //   .required("Số điện thoại là cần thiết khi quên mật khẩu"),
   });
 
   return (

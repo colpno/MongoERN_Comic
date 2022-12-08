@@ -8,14 +8,18 @@ import styles from "./Input.module.scss";
 const cx = classNames.bind(styles);
 
 function Input({
-  field,
-  type,
-  className,
   error,
   touched,
+
   width,
   height,
 
+  name,
+  value,
+  onBlur,
+  onChange,
+  className,
+  type,
   placeholder,
   maxLength,
   disabled,
@@ -23,8 +27,6 @@ function Input({
   letterCount,
   autoFocus,
 }) {
-  const { value } = field;
-
   return (
     <div className={cx("wrapper")}>
       <FormControl
@@ -41,7 +43,10 @@ function Input({
         readOnly={readOnly}
         isInvalid={touched && !!error}
         autoFocus={autoFocus}
-        {...field}
+        value={value}
+        name={name}
+        onChange={onChange}
+        onBlur={onBlur}
       />
       {letterCount && maxLength !== 0 && (
         <span
@@ -54,20 +59,18 @@ function Input({
 }
 
 Input.propTypes = {
-  field: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
-    onBlur: PropTypes.func,
-    onChange: PropTypes.func.isRequired,
-  }).isRequired,
-  type: PropTypes.string,
   error: PropTypes.string,
   touched: PropTypes.bool,
-  isInvalid: PropTypes.bool,
   width: PropTypes.string,
   height: PropTypes.string,
-  className: PropTypes.string,
 
+  name: PropTypes.string,
+  value: PropTypes.string.isRequired,
+  onBlur: PropTypes.func,
+  onChange: PropTypes.func.isRequired,
+
+  type: PropTypes.string,
+  className: PropTypes.string,
   placeholder: PropTypes.string,
   maxLength: PropTypes.number,
   disabled: PropTypes.bool,
@@ -77,15 +80,18 @@ Input.propTypes = {
 };
 
 Input.defaultProps = {
-  type: "text",
-  placeholder: "",
   error: "",
   touched: false,
-  isInvalid: false,
+
   width: "100%",
   height: "42px",
-  className: "",
 
+  name: "",
+  onBlur: () => {},
+
+  type: "text",
+  placeholder: "",
+  className: "",
   maxLength: 255,
   disabled: false,
   readOnly: false,

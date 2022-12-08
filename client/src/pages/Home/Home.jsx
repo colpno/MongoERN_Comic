@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import { Container } from "react-bootstrap";
 
@@ -11,7 +10,6 @@ import { ComicSection, Notification } from "./components";
 const cx = classNames.bind(styles);
 
 function Home() {
-  // const bannerImages = [Fullsize, Fullsize, Fullsize, Fullsize, Fullsize];
   const { titles } = sortTitles("like", false, 5);
   const bannerImages = useMemo(
     () => titles.map((title) => title.cover),
@@ -22,13 +20,13 @@ function Home() {
     <main className={cx("home")}>
       <BannerSlider images={bannerImages} />
       <section className={cx("section-comic")}>
-        {/* <Container>
+        <Container>
           <h1 className={cx("title", "line-clamp")}>Comic</h1>
-        </Container> */}
+        </Container>
         <ComicSection />
       </section>
-      {/* <Notification /> */}
-      {/* <section className={cx("section-novel")}>
+      <Notification />
+      <section className={cx("section-novel")}>
         <Container>
           <h1 className={cx("title")}>Novels</h1>
         </Container>
@@ -43,7 +41,7 @@ function Home() {
         <div className={cx("anime-action")} />
         <div className={cx("anime-horror")} />
         <div className={cx("anime-ranking")} />
-      </section> */}
+      </section>
     </main>
   );
 }

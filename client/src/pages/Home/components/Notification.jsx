@@ -3,7 +3,6 @@ import classNames from "classnames/bind";
 import { AiOutlineClockCircle } from "react-icons/ai";
 
 import Button from "components/Button";
-// import { NoticeArray } from "database";
 import { formatTime } from "utils/convertTime";
 import styles from "../assets/styles/Notification.module.scss";
 
@@ -14,7 +13,7 @@ export default function Notification() {
 
   return (
     <section className={cx("notification")}>
-      {/* <div className={cx("container")}>
+      <div className={cx("container")}>
         <header className={cx("head")}>
           <h3 className={cx("title")}>Thong bao</h3>
           <Button text to="/notice-list">
@@ -22,7 +21,7 @@ export default function Notification() {
           </Button>
         </header>
         <ul>
-          {notices.map((notice) => {
+          {/* {notices.map((notice) => {
             const timeObj = formatTime(notice.createdAt);
             return (
               <li key={notice.id}>
@@ -37,9 +36,9 @@ export default function Notification() {
                 </Button>
               </li>
             );
-          })}
+          })} */}
         </ul>
-      </div> */}
+      </div>
     </section>
   );
 }

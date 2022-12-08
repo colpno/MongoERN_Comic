@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 
 function usePreviewImage(initialState, fileSize, setFieldValue, fieldName) {

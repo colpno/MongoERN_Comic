@@ -1,6 +1,4 @@
-/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
-import { useEffect, useMemo, useState } from "react";
 import { Container } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
@@ -8,9 +6,8 @@ import { noFavorite } from "assets/images";
 import GridTable from "components/GridTable";
 import TabsContainer from "components/TabsContainer";
 import { NoData, Pagination, Popup } from "features";
-import { useDelete } from "hooks";
+import { useDelete, useToast } from "hooks";
 import { deleteFollow, getLimitedFollowsByUserID } from "services/follow";
-import { getAllTitles } from "services/title";
 import styles from "./assets/styles/Follow.module.scss";
 import FollowTable from "./components/FollowTable";
 
@@ -20,16 +17,18 @@ function Follow() {
   const user = useSelector((state) => state.user.user);
   const { follows, pagination, setPagination, fetchLimitFollows } =
     getLimitedFollowsByUserID(user.guid, 50);
+  const { Toast, options, toastEmitter } = useToast();
   const hasData = follows.length > 0;
 
   const menu = [
     { href: "", label: "Truyện tranh", tab: "" },
-    // { href: "?tab=novels", label: "Truyện chữ", tab: "novels" },
+    { href: "?tab=novels", label: "Truyện chữ", tab: "novels" },
   ];
 
   const { deletedItem, setDeletedItem, popup, setPopup } = useDelete(
     async () => {
       deleteFollow(deletedItem).then(() => {
+        toastEmitter("Hủy theo dõi thành công", "success");
         fetchLimitFollows();
       });
     }
@@ -38,7 +37,7 @@ function Follow() {
   return (
     <>
       <Container className={cx("follow")}>
-        {/* <TabsContainer menu={menu} /> */}
+        <TabsContainer menu={menu} />
         {hasData ? (
           <>
             <GridTable
@@ -67,6 +66,7 @@ function Follow() {
         )}
       </Container>
       <Popup yesno popup={popup} setPopup={setPopup} />
+      <Toast {...options} />
     </>
   );
 }

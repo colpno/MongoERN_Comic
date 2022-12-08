@@ -11,12 +11,6 @@ import { roundNumByUnit } from "utils";
 const cx = classNames.bind(styles);
 
 function Introduction({ title, firstChapter, genres, setPopup, handleFollow }) {
-  title.summary += `
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet
-            voluptates sequi non esse vel neque hic, minus voluptatum quaerat
-            repellat, ex quibusdam deleniti modi accusamus explicabo fugit
-            aspernatur commodi illum.
-`;
   const handlePopupContent = () => {
     setPopup({
       trigger: true,
@@ -70,7 +64,6 @@ function Introduction({ title, firstChapter, genres, setPopup, handleFollow }) {
             </small>
           </div>
           <div className={cx("button-container")}>
-            {/* TODO: add to favorite list */}
             <Button outline large onClick={() => handleFollow(title.guid)}>
               <AiFillStar />
               Theo dõi

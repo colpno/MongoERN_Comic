@@ -105,8 +105,7 @@ InputImage.propTypes = {
 };
 
 InputImage.defaultProps = {
-  // eslint-disable-next-line react/jsx-no-useless-fragment
-  children: <></>,
+  children: <div />,
   fileSize: 2,
   imageSize: {},
   attributes: {

@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 
 function NonGroupStructure({ cx, group }) {
   const urlPath = useLocation().pathname;
+  const Icon = group.icon;
 
   return (
     <Button
@@ -11,7 +12,7 @@ function NonGroupStructure({ cx, group }) {
       to={group.to}
       className={cx("tab-wrapper", urlPath.includes(group.tab) && "active")}
     >
-      {/* <Icon className={cx("tab-icon")} /> */}
+      <Icon className={cx("tab-icon")} />
       <span>{group.label}</span>
     </Button>
   );

@@ -59,10 +59,7 @@ function Title() {
       .add({ titleId: titleID })
       .then((response) => {
         if (response.affectedRows > 0) {
-          toastEmitter(
-            `Bạn đã theo dõi truyện <strong>${title.name}</strong>`,
-            "success"
-          );
+          toastEmitter(`Bạn đã theo dõi truyện ${title.name}`, "success");
         }
       })
       .catch((error) => {

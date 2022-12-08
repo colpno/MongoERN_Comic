@@ -65,7 +65,7 @@ function Weekly() {
   const handleDayClick = (day) => {
     setDayFilter(day);
     setLimit(COMIC_PER_PAGE);
-    setReFetch(true);
+    setReFetch("releaseDay", day);
   };
 
   const slider =

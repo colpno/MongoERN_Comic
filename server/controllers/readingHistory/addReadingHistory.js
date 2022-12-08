@@ -21,6 +21,9 @@ export default function addReadingHistory(req, res) {
 
       // Read same title but difference chapter
       if (data1.length > 0) {
+        if (data1[0].chapterId === chapterId && data1[0].titleId === titleId) {
+          return res.status(200);
+        }
         const sql = `
           UPDATE \`${table}\` SET \`chapterId\` = ?, \`updatedAt\` = ?
           WHERE \`titleId\` = ? AND userId = ?;
@@ -29,7 +32,7 @@ export default function addReadingHistory(req, res) {
         const now = getCurrentDateTime();
         const values = [chapterId, now, titleId, userInfo.guid];
 
-        db.query(sql, [values], (error2, data2) => {
+        db.query(sql, values, (error2, data2) => {
           if (error2) return res.status(500).json({ error: 'Lỗi do server', detail: error2 });
           return res.status(200).json(data2);
         });

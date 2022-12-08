@@ -8,4 +8,5 @@ export { default as searchChapter } from "./searchChapter";
 export { default as filterChapters } from "./filterChapters";
 export { default as addChapter } from "./addChapter";
 export { default as updateChapter } from "./updateChapter";
+export { default as updateChapterView } from "./updateChapterView";
 export { default as deleteChapter } from "./deleteChapter";

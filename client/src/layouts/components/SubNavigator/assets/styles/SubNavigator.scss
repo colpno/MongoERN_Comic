@@ -6,7 +6,6 @@
   .navigator {
     margin-top: var.$header-height;
     background-color: var.$white;
-    display: none;
   }
 
   .navigator {
@@ -51,11 +50,5 @@
         color: var.$primary;
       }
     }
-  }
-}
-
-@media (max-width: 1200px) {
-  .sub-navbar .navigator {
-    display: block;
   }
 }

@@ -1,4 +1,5 @@
-import { AdminLayout, LoginLayout } from "layouts";
+/* eslint-disable no-unused-vars */
+import { AdminLayout, LoginLayout, ReadingLayout } from "layouts";
 import {
   AdminManagement,
   ChapterManagement,
@@ -10,7 +11,10 @@ import {
   VisitStatistic,
   Login,
   NotFound,
+  LoginOTP,
+  Title,
 } from "pages";
+import Reading from "pages/Reading";
 
 export const adminRoutes = [
   {
@@ -19,9 +23,24 @@ export const adminRoutes = [
     layout: LoginLayout,
   },
   {
+    path: "/verify",
+    component: LoginOTP,
+    layout: LoginLayout,
+  },
+  {
     path: "/titles",
     component: TitleManagement,
     layout: AdminLayout,
+  },
+  {
+    path: "/title/:titleId",
+    component: Title,
+    layout: AdminLayout,
+  },
+  {
+    path: "/title/:titleId/:chapterId",
+    component: Reading,
+    layout: ReadingLayout,
   },
   {
     path: "/chapters",
@@ -48,19 +67,19 @@ export const adminRoutes = [
     component: PaymentMethodManagement,
     layout: AdminLayout,
   },
-  {
-    path: "/income",
-    component: IncomeStatistic,
-    layout: AdminLayout,
-  },
-  {
-    path: "/visit",
-    component: VisitStatistic,
-    layout: AdminLayout,
-  },
+  // {
+  //   path: "/income",
+  //   component: IncomeStatistic,
+  //   layout: AdminLayout,
+  // },
+  // {
+  //   path: "/visit",
+  //   component: VisitStatistic,
+  //   layout: AdminLayout,
+  // },
   {
     path: "/not-found",
     component: NotFound,
-    layout: AdminLayout,
+    layout: LoginLayout,
   },
 ];

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
@@ -9,14 +8,20 @@ import { roundNumByUnit, separateNumberDigit } from "utils";
 import { Popup } from "features";
 import { setMyTitles } from "libs/redux/slices/myTitlesSlice";
 import { getAllTitlesByUserID } from "services/title";
-import { BookLine, DollarLine, EyeLine, ThumbUpLine } from "../assets/images";
+import {
+  BookLine,
+  ChatLine,
+  DollarLine,
+  EyeLine,
+  ThumbUpLine,
+} from "../assets/images";
 import styles from "../assets/styles/StatisticCount.module.scss";
 import IncomePopup from "./IncomePopup";
 
 const cx = classNames.bind(styles);
 
-// 10K likes = 1M vnd
-// 1 like = 100 vnd
+// INFO: 10K likes = 1M vnd
+// INFO: 1 like = 100 vnd
 function StatisticCount() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
@@ -72,14 +77,14 @@ function StatisticCount() {
             {roundNumByUnit(data.views)}
           </strong>
         </Col>
-        {/* <Col className={cx("statistic-count__col")}>
+        <Col className={cx("statistic-count__col")}>
           <ChatLine className={cx("statistic-count__comment__icon")} />
           <p className={cx("statistic-count__comment__label")}>
             Lượt bình luận
           </p>
           <strong className={cx("statistic-count__comment__number")}>0</strong>
-        </Col> */}
-        {/* <Col className={cx("statistic-count__col")}>
+        </Col>
+        <Col className={cx("statistic-count__col")}>
           <DollarLine className={cx("statistic-count__income__icon")} />
           <div className={cx("statistic-count__label-container")}>
             <p className={cx("statistic-count__income__label")}>
@@ -93,7 +98,7 @@ function StatisticCount() {
           <strong className={cx("statistic-count__income__number", "active")}>
             {separateNumberDigit(user.income)}
           </strong>
-        </Col> */}
+        </Col>
       </Row>
       <Popup popup={popup} setPopup={setPopup} />
     </Container>

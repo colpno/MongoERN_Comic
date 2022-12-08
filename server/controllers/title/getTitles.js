@@ -4,15 +4,31 @@ import { table } from './index.js';
 import { db } from '../../config/database.js';
 
 export default function getTitles(req, res) {
-  const { page, limit, embed } = req.query;
+  const { page, limit, embed, genreId } = req.query;
   const { values, whereStatement, limitStatement, orderStatement } = convertToSQL(req.query);
 
   const joinStatement = embed ? `INNER JOIN \`${embed}\` as b ON a.guid = b.titleId` : '';
+  let genreSQL = '';
+  if (joinStatement && genreId) {
+    if (whereStatement) {
+      genreSQL = ` AND \`genreId\` IN (${genreId.map((id) => `'${id}'`).join(',')})`;
+    } else {
+      genreSQL = ` WHERE \`genreId\` IN (${genreId.map((id) => `'${id}'`).join(',')})`;
+    }
+  }
 
   const sql = `
     SELECT ${!!joinStatement ? 'a.' : ''}*
     FROM \`${table}\` as a ${joinStatement || ''}
-    ${whereStatement || ''}
+    ${whereStatement || ''}${genreSQL}
+    ${
+      genreSQL !== ''
+        ? `
+    GROUP BY b.titleId
+    HAVING COUNT(b.titleId) >= ${genreId.length}
+    `
+        : ''
+    }
     ${orderStatement || ''}
     ${limitStatement || ''}
   `;

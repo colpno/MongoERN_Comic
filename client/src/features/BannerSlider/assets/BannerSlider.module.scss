@@ -1,5 +1,47 @@
+@use "assets/styles/variables" as var;
+@import "swiper/css";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
+@import "swiper/css/thumbs";
+@import "swiper/css/autoplay";
+
 .slider {
   position: relative;
+
+  :global(.swiper-button-prev),
+  :global(.swiper-button-next) {
+    $size: 60px;
+    background-color: rgba(169, 169, 169, 0.335);
+    border-radius: 10px;
+    padding: 20px;
+    width: $size;
+    height: $size;
+    color: #fff;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+
+    &.swiper-button-prev {
+      left: 20%;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+    &.swiper-button-next {
+      right: 20%;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+  :global(.swiper-pagination-bullet) {
+    width: 10px;
+    height: 10px;
+  }
+  :global(.swiper-pagination-bullet-active) {
+    background: var.$primary;
+  }
 }
 .slide {
   height: 360px;

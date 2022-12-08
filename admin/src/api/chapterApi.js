@@ -7,8 +7,8 @@ const chapterApi = {
 
   getOneByID: (chapterID, titleID, isPrivate) => {
     const queryStr = `?${titleID ? `titleId=${titleID}&` : ""}`;
-
     const options = isPrivate ? { withCredentials: true } : {};
+
     return axiosClient.get(`${url}/${chapterID}${queryStr}`, options);
   },
 
@@ -22,15 +22,20 @@ const chapterApi = {
       },
     }),
 
-  update: (id, data, setProgress) =>
-    axiosClient.put(`${url}/update/${id}`, data, {
+  update: (id, data, setProgress) => {
+    return axiosClient.put(`${url}/update/${id}`, data, {
       withCredentials: true,
       onUploadProgress: (e) => {
         const { loaded, total } = e;
         const percentage = (loaded / total) * 100;
         setProgress(percentage);
       },
-    }),
+    });
+  },
+
+  updateView: (id) => {
+    return axiosClient.put(`${url}/update/${id}/view`);
+  },
 
   delete: (id, data, setProgress) => {
     return axiosClient.delete(`${url}/delete/${id}`, {

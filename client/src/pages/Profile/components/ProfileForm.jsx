@@ -65,22 +65,26 @@ function ProfileForm({
               component={InputField}
               placeholder="Viết tên người dùng..."
             />
+
             <FormLabel name="email" label="Địa chỉ email" required />
             <FastField
               name="email"
               component={InputField}
               placeholder="Viết địa chỉ email..."
             />
+
             <FormLabel name="dateOfBirth" label="Ngày sinh" />
             <FastField
               name="dateOfBirth"
               component={InputField}
               placeholder="dd/mm/yyyy"
             />
+
             <Button primary type="submit" className={cx("form__submit")}>
               Thay đổi
             </Button>
-            {/* <pre>{JSON.stringify(formikProps.values, null, 4)}</pre> */}
+
+            {/* REMOVE: <pre>{JSON.stringify(formikProps.values, null, 4)}</pre> */}
           </Form>
         );
       }}

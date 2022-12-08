@@ -52,7 +52,6 @@ function Reading() {
         });
     }
     if (controls.isLiked) {
-      // toastEmitter("Bạn đã thích truyện này rồi", "error");
       deleteUserLike(user.guid, chapter.guid)
         .then(() => {
           setControls((prev) => ({ ...prev, isLiked: false }));
@@ -84,7 +83,6 @@ function Reading() {
         });
     }
     if (controls.isFollowed) {
-      // toastEmitter("Bạn đã theo dõi truyện này rồi", "error");
       deleteFollow(titleId)
         .then(() => {
           setControls((prev) => ({ ...prev, isFollowed: false }));

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import PropTypes from "prop-types";
 
 import Button from "components/Button";
@@ -38,14 +37,14 @@ function ReadingControls({
           <AiFillStar className={cx("icon")} />
           <span className={cx("text")}>Theo dõi</span>
         </Button>
-        {/* <Button
+        <Button
           className={cx("reading-page__controls__controls__group__control")}
         >
           <FaShareAlt />
           <span>Chia sẻ</span>
-        </Button> */}
+        </Button>
       </div>
-      {/* <p className={cx("reading-page__text")}>
+      <p className={cx("reading-page__text")}>
         Tất cả nội dung có thể được đọc thông qua ứng dụng ComicVN trên CH Play
         hoặc App store
       </p>
@@ -58,7 +57,7 @@ function ReadingControls({
           <AiFillApple />
           <span>App Store</span>
         </Button>
-      </div> */}
+      </div>
     </div>
   );
 }

@@ -1,7 +1,3 @@
-//  d = Number(d);
-//   var h = Math.floor(d / 3600);
-//   var m = Math.floor(d % 3600 / 60);
-//   var s = Math.floor(d % 3600 % 60);
 export function secondToMinute(second) {
   const number = parseFloat(second);
   return number / 60;
@@ -34,17 +30,14 @@ export function hourToMinute(hour) {
 
 export function msToHours(millisecond) {
   return Math.floor((millisecond / (1000 * 60 * 60)) % 24);
-  // return Math.floor(millisecond / 3600);
 }
 
 export function msToMinutes(millisecond) {
   return Math.floor((millisecond / (1000 * 60)) % 60);
-  // return Math.floor((millisecond % 3600) / 60);
 }
 
 export function msToSeconds(millisecond) {
   return Math.floor((millisecond / 1000) % 60);
-  // return Math.floor((millisecond % 3600) % 60);
 }
 
 export function msToTime(millisecond) {
