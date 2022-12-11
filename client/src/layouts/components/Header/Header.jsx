@@ -1,9 +1,11 @@
 import classNames from "classnames/bind";
-import { useLocation } from "react-router-dom";
 import { Container } from "react-bootstrap";
+import { useLocation } from "react-router-dom";
+import { SwiperSlide } from "swiper/react";
 
 import { Logo } from "assets/images";
 import { Button } from "components";
+import { Slider } from "features";
 import styles from "layouts/components/Header/assets/styles/Header.module.scss";
 import Avatar from "./components/Avatar";
 import Search from "./components/Search";
@@ -27,21 +29,29 @@ function Header() {
               <Logo className={cx("logo")} />
             </Button>
           </div>
-          <ul className={cx("nav-menu")}>
-            {headerNavigation.map((nav) => {
+          <Slider
+            outsideNavigation
+            grabCursor
+            slidesPerView={4}
+            className={cx("nav-menu")}
+          >
+            {headerNavigation.map((nav, index) => {
               return (
-                <li key={nav.label}>
+                <SwiperSlide key={index}>
                   <Button
                     wrapper
                     to={nav.href}
-                    className={cx(url.includes(nav.href) ? "active" : "")}
+                    className={cx(
+                      "nav-link",
+                      url.includes(nav.href) ? "active" : ""
+                    )}
                   >
                     {nav.label}
                   </Button>
-                </li>
+                </SwiperSlide>
               );
             })}
-          </ul>
+          </Slider>
           <Search />
           <Avatar />
         </div>

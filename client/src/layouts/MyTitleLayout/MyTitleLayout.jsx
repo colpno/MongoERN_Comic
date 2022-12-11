@@ -7,11 +7,11 @@ import StatisticCount from "./components/StatisticCount";
 
 function MyTitleLayout({ children }) {
   const menu = [
-    { href: "/", label: "Trang chủ" },
     { href: "/my-title", label: "Truyện của tôi" },
     { href: "/my-title/statistic", label: "Thống kê" },
     { href: "/my-title/notice", label: "Thông báo" },
   ];
+
   return (
     <>
       <Header />

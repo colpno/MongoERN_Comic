@@ -1,6 +1,5 @@
 @use "assets/styles/variables";
 @use "assets/styles/mixins";
-@import "swiper/css/lazy";
 
 .reading-page {
   $color: #a6a5a5;
@@ -10,46 +9,35 @@
     border-top: 1px solid $color;
     border-bottom: 1px solid $color;
     padding: 20px 0 20px;
+
     display: flex;
     align-items: center;
     justify-content: center;
 
+    :global(.swiper-button-next),
+    :global(.swiper-button-prev) {
+      font-size: 30px;
+    }
+
     &__container {
       position: relative;
 
-      .swiper-slide-active {
-        a {
-          pointer-events: none;
-          cursor: default;
-        }
-
-        .content {
-          color: variables.$primary-dark;
-        }
-
-        // .box-img {
-        // box-shadow: 0 0 4px 1px rgb(255 0 0 / 0.5);
-        // }
-      }
-
       .slide-wrapper {
         width: 100%;
+
+        &.active {
+          pointer-events: none;
+          cursor: default;
+
+          .content {
+            color: variables.$primary-dark;
+          }
+        }
       }
     }
 
     a {
       pointer-events: all;
-    }
-
-    .box-img {
-      height: 96px;
-      border-radius: 4px;
-      margin-bottom: 5px;
-      overflow: hidden;
-
-      img {
-        border-radius: 4px;
-      }
     }
 
     .content {
@@ -82,6 +70,18 @@
     &-right {
       right: -50px !important;
     }
+  }
+}
+
+.box-img {
+  border-radius: 4px;
+  margin-bottom: 5px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px 2px rgb(0 0 0 / 0.06);
+
+  img {
+    border-radius: 4px;
+    aspect-ratio: 1.25 / 1;
   }
 }
 

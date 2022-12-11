@@ -1,6 +1,7 @@
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
 
+import { Scrollbar } from "components";
 import Button from "components/Button";
 import { Dialog } from "features";
 import styles from "./assets/styles/Popup.module.scss";
@@ -8,7 +9,7 @@ import YesNoPopupButtons from "./components/YesNoPopupButtons";
 
 const cx = classNames.bind(styles);
 
-function Popup({ popup, setPopup, yesno, width }) {
+function Popup({ popup, setPopup, yesno, width, center }) {
   const { title, content, trigger } = popup;
 
   const handleClose = () => {
@@ -41,7 +42,9 @@ function Popup({ popup, setPopup, yesno, width }) {
           <div className={cx("popup__head")}>
             <span>{title}</span>
           </div>
-          <div className={cx("popup__content")}>{content}</div>
+          <Scrollbar yAxis className={cx("popup__content", [center])}>
+            {content}
+          </Scrollbar>
           <div className={cx("popup__btn-container")}>{Component}</div>
         </div>
       </Dialog>
@@ -58,11 +61,13 @@ Popup.propTypes = {
   setPopup: PropTypes.func.isRequired,
   yesno: PropTypes.bool,
   width: PropTypes.number,
+  center: PropTypes.bool,
 };
 
 Popup.defaultProps = {
   yesno: false,
   width: 400,
+  center: false,
 };
 
 export default Popup;

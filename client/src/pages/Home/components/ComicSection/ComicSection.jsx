@@ -6,7 +6,7 @@ import genreApi from "api/genreApi";
 import titleGenreApi from "api/titleGenreApi";
 import CardList from "components/CardList";
 import { getAllTitles } from "services/title";
-import { sort } from "utils/arrayMethods";
+import { sortArray } from "utils/arrayMethods";
 import styles from "../../assets/styles/ComicSection.module.scss";
 import ComicFollowSection from "./components/ComicFollowSection";
 import ComicActionSection from "./components/ComicActionSection";
@@ -21,7 +21,7 @@ function ComicSection() {
     approvedStatusId: "6cbc2179-d24c-4097-abe9-320e4ae6c4ca",
   });
   const hasData = genres?.length > 0 && titles?.length > 0;
-  const ranking = hasData && sort(titles, "like", "desc");
+  const ranking = hasData && sortArray(titles, "like", "desc");
 
   useEffect(() => {
     const fetchGenres = async () => {

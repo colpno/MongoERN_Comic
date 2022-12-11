@@ -1,13 +1,31 @@
 import purchasedChapterApi from "api/purchasedChapterApi";
 import { useEffect, useState } from "react";
 
-const getAllPurchasedChapters = () => {
+const getAllPurchasedChapters = (properties = {}) => {
   const [purchasedChapters, setPurchasedChapters] = useState([]);
+  const [pagination, setPagination] = useState(
+    properties.limit
+      ? {
+          page: 1,
+          limit: properties.limit,
+        }
+      : {}
+  );
 
   const fetchLimitPurchasedChapters = async () => {
     try {
-      const response = await purchasedChapterApi.getAll();
-      setPurchasedChapters(response.data);
+      const props = { ...properties, ...pagination };
+      const response = await purchasedChapterApi.getAll(props);
+
+      if (properties.limit) {
+        setPurchasedChapters(response.data);
+        setPagination((prev) => ({
+          ...prev,
+          total: response.pagination.total,
+        }));
+      } else {
+        setPurchasedChapters(response);
+      }
     } catch (error) {
       throw new Error(error);
     }
@@ -17,7 +35,7 @@ const getAllPurchasedChapters = () => {
     fetchLimitPurchasedChapters();
   }, []);
 
-  return { purchasedChapters, setPurchasedChapters };
+  return { purchasedChapters, setPurchasedChapters, pagination, setPagination };
 };
 
 export default getAllPurchasedChapters;

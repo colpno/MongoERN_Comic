@@ -1,14 +1,14 @@
-@use "assets/styles/variables";
+@use "assets/styles/variables" as var;
 
 .header {
-  background: variables.$primary;
-  color: variables.$txt-white;
-  height: variables.$header-height;
+  background: var.$primary;
+  color: var.$txt-white;
+  height: var.$header-height;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 5;
+  z-index: 20;
 }
 
 .desktop-screen {
@@ -19,9 +19,8 @@
 .logo {
   width: 100%;
   min-width: 100px;
-  max-width: 150px;
-  height: variables.$header-height;
-  padding-right: 25px;
+  max-width: 120px;
+  height: var.$header-height;
 
   display: flex;
   align-items: center;
@@ -29,22 +28,33 @@
 }
 
 .nav-menu {
-  margin-right: 2rem;
+  width: 400px;
+  margin: 0 auto 0 60px;
 
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  flex: 1;
+  :global(.swiper-button-prev),
+  :global(.swiper-button-next) {
+    font-size: 20px;
+  }
+  :global(.swiper-button-prev) {
+    left: -30px !important;
+  }
+  :global(.swiper-button-next) {
+    right: -30px !important;
+  }
 
-  li {
-    a {
-      color: inherit;
-      padding: calc(variables.$header-height / 2 - 12px) 22px;
-      font-weight: 700;
-      position: relative;
-    }
-    &:hover a::before,
-    a.active::before {
+  .nav-link {
+    height: var.$header-height;
+    color: inherit;
+    font-weight: 700;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+
+    &:not(.active):hover::before,
+    &.active::before {
       position: absolute;
       content: "";
       top: 0;
@@ -59,7 +69,7 @@
 
 .desktop-screen {
   position: relative;
-  height: variables.$header-height;
+  height: var.$header-height;
 }
 
 @media (max-width: 600px) {

@@ -1,4 +1,5 @@
 @use "assets/styles/variables";
+@use "components/Scrollbar/Scrollbar.module.scss";
 
 .dropdown-avatar {
   margin-left: 12px;
@@ -69,7 +70,6 @@
   position: absolute;
   top: variables.$header-height;
   right: 0;
-  overflow: hidden;
 
   &__group {
     &:first-child {

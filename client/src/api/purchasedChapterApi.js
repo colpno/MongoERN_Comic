@@ -1,9 +1,9 @@
 import axiosClient from "libs/axios/axiosClient";
 
-const url = "/chapter-transactions";
+const url = "/purchased-chapters";
 
 const purchasedChapterApi = {
-  getAll: (params) => axiosClient.get(url, { params }),
+  getAll: (params) => axiosClient.get(url, { params, withCredentials: true }),
 
   getAllByUserID: (userId, params) =>
     axiosClient.get(`${url}?userId=${userId}`, {

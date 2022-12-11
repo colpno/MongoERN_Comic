@@ -2,12 +2,12 @@ import titleApi from "api/titleApi";
 import { useEffect, useState } from "react";
 import { convertTitlesPropertyToString } from "utils/convertArrayPropertyToString";
 
-const getAllTitles = (options) => {
+const getAllTitles = (properties) => {
   const [titles, setTitles] = useState([]);
 
-  const fetchAllTitles = async (opts) => {
+  const fetchAllTitles = async (props) => {
     try {
-      const response = await titleApi.getAll(opts);
+      const response = await titleApi.getAll(props);
       const converted = convertTitlesPropertyToString(response);
       setTitles(converted);
     } catch (error) {
@@ -16,7 +16,7 @@ const getAllTitles = (options) => {
   };
 
   useEffect(() => {
-    options && fetchAllTitles(options);
+    properties && fetchAllTitles(properties);
   }, []);
 
   return { titles, setTitles };

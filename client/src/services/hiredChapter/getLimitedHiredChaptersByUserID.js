@@ -1,24 +1,32 @@
 import hiredChapterApi from "api/hiredChapterApi";
 import { useEffect, useState } from "react";
 
-const getAllHiredChaptersByUserID = (userID, limit) => {
+const getHiredChapters = (properties) => {
   const [hiredChapters, setHiredChapters] = useState([]);
-  const [pagination, setPagination] = useState({
-    page: 1,
-    limit,
-    total: 0,
-  });
+  const [pagination, setPagination] = useState(
+    properties.limit
+      ? {
+          page: 1,
+          limit: properties.limit,
+          total: 0,
+        }
+      : {}
+  );
 
   const fetchLimitHiredChapters = async () => {
     try {
-      const response = await hiredChapterApi.getAll(userID, {
-        page: pagination.page,
-        limit: pagination.limit,
-      });
-      setHiredChapters(response.data);
-      setPagination((prev) => {
-        return { ...prev, total: response.pagination.total };
-      });
+      const props = { ...properties, ...pagination };
+      const response = await hiredChapterApi.getAll(props);
+
+      if (properties.limit) {
+        setHiredChapters(response.data);
+        setPagination((prev) => ({
+          ...prev,
+          total: response.pagination.total,
+        }));
+      } else {
+        setHiredChapters(response);
+      }
     } catch (error) {
       throw new Error(error);
     }
@@ -31,4 +39,4 @@ const getAllHiredChaptersByUserID = (userID, limit) => {
   return { hiredChapters, setHiredChapters, pagination, setPagination };
 };
 
-export default getAllHiredChaptersByUserID;
+export default getHiredChapters;

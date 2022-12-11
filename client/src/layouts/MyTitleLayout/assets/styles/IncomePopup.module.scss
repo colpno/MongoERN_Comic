@@ -1,11 +1,14 @@
 .content {
   user-select: none;
+  text-indent: 1rem;
 }
 
 .attention {
-  font-weight: 600;
-  min-width: fit-content;
-  margin-right: 0.8rem;
+  &-label {
+    font-weight: 600;
+    min-width: fit-content;
+    margin-right: 0.8rem;
+  }
 
   &-wrapper {
     margin-top: 0.9rem;
@@ -13,5 +16,11 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
+  }
+}
+
+.attention {
+  &:not(:last-child) {
+    margin-bottom: 0.5rem;
   }
 }
