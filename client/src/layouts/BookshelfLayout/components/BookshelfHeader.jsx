@@ -1,11 +1,10 @@
-/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import { Container, Row } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
-import { Navigation, Scrollbar, Thumbs } from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { SwiperSlide } from "swiper/react";
 
 import { Button } from "components";
+import { Slider } from "features";
 import { ReactComponent as InventoryBooksLogo } from "../assets/images/inventory-books-logo.svg";
 import styles from "../assets/styles/BookshelfHeader.module.scss";
 
@@ -15,7 +14,6 @@ function BookshelfHeader() {
   const menu = [
     { href: "/bookshelf/follow", label: "Theo dõi" },
     { href: "/bookshelf/history", label: "Lịch sử xem" },
-    { href: "/bookshelf/transaction?tab=purchased-titles", label: "Mua" },
     { href: "/bookshelf/transaction?tab=purchased-titles", label: "Thuê/Mua" },
   ];
   const pathName = useLocation().pathname;
@@ -27,38 +25,23 @@ function BookshelfHeader() {
           <InventoryBooksLogo className={cx("header__title__image")} />
           <span className={cx("header__title__label")}>Tủ sách của bạn</span>
         </div>
-        {/* REMOVE: <div className={cx("header__navbar")}>
-          {menu.map((link) => {
-            return (
-              <Link
-                to={link.href}
-                className={cx(
-                  "header__navbar__link",
-                  link.href.includes(pathName) ? "active" : ""
-                )}
-                key={link.href}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
-        </div> */}
-        <Swiper
-          modules={[Thumbs]}
-          breakpoints={{
-            100: {
-              slidesPerView: 1.6,
-            },
-            540: {
-              slidesPerView: 2.2,
-            },
-            768: {
-              slidesPerView: 3.8,
-            },
-          }}
-          grabCursor
-        >
-          <Row className={cx("header__navbar")}>
+        <Row className={cx("header__navbar")}>
+          <Slider
+            grabCursor
+            outsideNavigation
+            slidesPerView={3}
+            breakpoints={{
+              100: {
+                slidesPerView: 1,
+              },
+              540: {
+                slidesPerView: 2,
+              },
+              768: {
+                slidesPerView: 3,
+              },
+            }}
+          >
             {menu.map((item, index) => {
               return (
                 <SwiperSlide key={index} className={cx("header__navbar__link")}>
@@ -75,8 +58,8 @@ function BookshelfHeader() {
                 </SwiperSlide>
               );
             })}
-          </Row>
-        </Swiper>
+          </Slider>
+        </Row>
       </Container>
     </div>
   );

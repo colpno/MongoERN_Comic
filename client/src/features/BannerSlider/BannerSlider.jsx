@@ -1,25 +1,22 @@
 import classNames from "classnames/bind";
+import { Slider } from "features";
 import PropTypes from "prop-types";
 import { memo } from "react";
-import { Autoplay, Lazy, Navigation, Pagination, Thumbs } from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { SwiperSlide } from "swiper/react";
 
 import styles from "./assets/BannerSlider.module.scss";
-import "./assets/swiper.scss";
 
 const cx = classNames.bind(styles);
 
 function BannerSlider({ images, clickable, delay }) {
   return (
-    <Swiper
-      modules={[Navigation, Thumbs, Pagination, Autoplay, Lazy]}
-      loop
+    <Slider
       navigation
-      preloadImages={false}
-      lazy
-      pagination={{ clickable }}
-      autoplay={{ delay }}
       grabCursor
+      pagination
+      clickablePagination={clickable}
+      delay={delay}
+      loop
       slidesPerView={1}
       className={cx("slider")}
     >
@@ -32,7 +29,7 @@ function BannerSlider({ images, clickable, delay }) {
           </SwiperSlide>
         );
       })}
-    </Swiper>
+    </Slider>
   );
 }
 

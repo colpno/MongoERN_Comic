@@ -106,9 +106,46 @@ function LoginOTP() {
     return () => clearInterval(reSendCountdownRef.current);
   }, [reSend.disable]);
 
-  if (reSend.countdown <= 0) {
-    clearInterval(reSendCountdownRef.current);
-  }
+  useEffect(() => {
+    if (reSend.countdown <= 0) {
+      clearInterval(reSendCountdownRef.current);
+    }
+  }, [reSend.countdown]);
+
+  const handleVerify = () => {
+    const OTPKeys = Object.keys(OTPInput);
+
+    const OTPString = OTPKeys.reduce(
+      (str, key) => `${str}${OTPInput[key]}`,
+      ""
+    );
+
+    if (OTPString.length !== OTPKeys.length) {
+      toastEmitter("Mã OTP không hợp lệ", "error");
+      return;
+    }
+
+    if (loginInfo.email && OTPString.length === 4) {
+      const data = {
+        email: loginInfo.email,
+        userGuid: loginInfo.userGuid,
+        otp: OTPString,
+      };
+
+      loginOTP(data)
+        .then((response) => {
+          if (response) {
+            const converted = convertUserPropertyToString(response);
+            dispatch(dispatchLogin(converted));
+            toastEmitter("Đăng nhập thành công", "success");
+            setTimeout(() => {
+              navigate("/");
+            }, 1000);
+          }
+        })
+        .catch((error) => toastEmitter(error.data.error, "error"));
+    }
+  };
 
   const handleNumpadClick = (e) => {
     const { target } = e;
@@ -185,47 +222,14 @@ function LoginOTP() {
     }
   };
 
-  const handleVerify = () => {
-    const OTPKeys = Object.keys(OTPInput);
-
-    const OTPString = OTPKeys.reduce(
-      (str, key) => `${str}${OTPInput[key]}`,
-      ""
-    );
-
-    if (OTPString.length !== OTPKeys.length) {
-      toastEmitter("Mã OTP không hợp lệ", "error");
-      return;
-    }
-
-    if (loginInfo.email && OTPString) {
-      const data = {
-        email: loginInfo.email,
-        userGuid: loginInfo.userGuid,
-        otp: OTPString,
-      };
-
-      loginOTP(data)
-        .then((response) => {
-          if (response) {
-            const converted = convertUserPropertyToString(response);
-            dispatch(dispatchLogin(converted));
-            toastEmitter("Đăng nhập thành công", "success");
-            setTimeout(() => {
-              navigate("/");
-            }, 1000);
-          }
-        })
-        .catch((error) => toastEmitter(error.data.error, "error"));
-    }
-  };
-
   const handlePressBackSpace = (e) => {
     const { keyCode, target } = e;
-    if (keyCode === 13) {
-      handleVerify();
-      return;
-    }
+
+    // if (keyCode === 13) {
+    //   handleVerify();
+    //   return;
+    // }
+
     if (keyCode === 8 && target.value.length === 0) {
       const prevSibling = target.previousElementSibling;
 
@@ -267,6 +271,16 @@ function LoginOTP() {
 
     setReSend(() => ({ countdown: RE_SEND_TIME, disable: true }));
   };
+
+  useEffect(() => {
+    const OTPKeys = Object.keys(OTPInput);
+
+    const isOTPEmpty = OTPKeys.every((digit) => OTPInput[digit] !== "");
+
+    if (isOTPEmpty) {
+      handleVerify();
+    }
+  }, [OTPInput]);
 
   return (
     <>

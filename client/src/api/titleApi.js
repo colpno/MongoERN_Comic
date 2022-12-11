@@ -5,19 +5,10 @@ const url = "/titles";
 const titleApi = {
   getAll: (params) => axiosClient.get(`${url}`, { params }),
 
-  getAllByProperty: (property, params) => {
-    const keyArray = Object.keys(property);
-    const queryStr = keyArray.reduce((string, key, index) => {
-      return index !== keyArray.length - 1
-        ? `${string}${key}=${property[key]}&`
-        : `${string}${key}=${property[key]}`;
-    }, "");
-
-    return axiosClient.get(`${url}?${queryStr}`, {
+  getAllByProperty: (params) =>
+    axiosClient.get(url, {
       params,
-    });
-  },
-
+    }),
   getOneByID: (id, property, isPrivate) => {
     const keyArray = Object.keys(property);
     const queryStr = keyArray.reduce((string, key, index) => {

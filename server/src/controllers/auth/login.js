@@ -65,9 +65,9 @@ export default function login(req, res) {
               </div>
               <div>Hết hạn sau <strong>15</strong> phút</div>
             `;
-          const response = sendMail(email, subject, html);
+          // const response = sendMail(email, subject, html);
 
-          if (response.status) {
+          // if (response.status) {
           const expiredAt = moment().add(15, 'm').toISOString();
           const cookieData = JSON.stringify({ email, userGuid, expiredAt });
           return res
@@ -75,9 +75,9 @@ export default function login(req, res) {
               maxAge: 15 * 60 * 1000,
             })
             .json(`OTP đã được gửi đến ${email}`);
-          }
+          // }
 
-          return res.status(500).json({ error: response.error });
+          // return res.status(500).json({ error: response.error });
         }
         return res.status(400).json({ error, data: data3 });
       });

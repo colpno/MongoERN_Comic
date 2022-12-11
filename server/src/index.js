@@ -6,7 +6,7 @@ import {
   authRoute,
   chapterImageRoute,
   chapterRoute,
-  chapterTransactionRoute,
+  purchasedChapterRoute,
   coinTransactionRoute,
   followRoute,
   genreRoute,
@@ -19,6 +19,7 @@ import {
   userRoute,
   chargeRoute,
   userLikeRoute,
+  hiredChapterRoute,
 } from './routes/index.js';
 
 config();
@@ -49,7 +50,8 @@ app.use(
 );
 
 app.use(`${BASE_URL}/chapters`, chapterRoute);
-app.use(`${BASE_URL}/chapter-transactions`, chapterTransactionRoute);
+app.use(`${BASE_URL}/purchased-chapters`, purchasedChapterRoute);
+app.use(`${BASE_URL}/hired-chapters`, hiredChapterRoute);
 app.use(`${BASE_URL}/chapter-images`, chapterImageRoute);
 app.use(`${BASE_URL}/coin-transactions`, coinTransactionRoute);
 app.use(`${BASE_URL}/follows`, followRoute);

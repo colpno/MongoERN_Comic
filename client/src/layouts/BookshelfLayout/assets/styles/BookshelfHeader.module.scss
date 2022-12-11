@@ -1,5 +1,4 @@
 @use "assets/styles/variables";
-@use "components/Scrollbar/Scrollbar.module.scss";
 
 .wrapper {
   border-bottom: 1px solid #ccc;
@@ -48,17 +47,5 @@
         color: variables.$primary-dark;
       }
     }
-  }
-
-  :global(.swiper) {
-    // margin-left: 0;
-    margin-right: 0;
-    max-width: 300px;
-  }
-
-  :global(.swiper-wrapper) {
-    overflow-x: auto;
-    @extend .scrollbar;
-    padding-bottom: 10px;
   }
 }

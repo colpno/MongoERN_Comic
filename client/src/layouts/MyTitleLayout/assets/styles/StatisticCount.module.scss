@@ -1,14 +1,18 @@
 @use "assets/styles/variables";
+@use "components/Scrollbar/Scrollbar.module.scss";
 
 .statistic-count {
   border: 1px solid variables.$border-gray;
   padding: 20px 0;
   margin-top: calc(variables.$header-height + 30px);
+
   overflow-x: auto;
+  @extend .scrollbar;
 
   :global(.row) {
     flex-wrap: nowrap;
     max-width: 1180px;
+    width: 1180px;
   }
 
   &__col {
@@ -58,8 +62,10 @@
   }
 }
 
+/* REMOVE
 @media (max-width: 768px) {
   .statistic-count__col {
     min-width: 250px;
   }
 }
+*/

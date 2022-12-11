@@ -5,13 +5,28 @@ import styles from "./Scrollbar.module.scss";
 
 const cx = classNames.bind(styles);
 
-function Scrollbar(props) {
-  const { children } = props;
-  return <div className={cx("scrollbar")}>{children}</div>;
+function Scrollbar({ children, className, xAxis, yAxis }) {
+  const classes = cx(
+    "scrollbar",
+    xAxis && "x-axis",
+    yAxis && "y-axis",
+    className
+  );
+
+  return <div className={classes}>{children}</div>;
 }
 
 Scrollbar.propTypes = {
   children: PropTypes.node.isRequired,
+  className: PropTypes.string,
+  xAxis: PropTypes.bool,
+  yAxis: PropTypes.bool,
+};
+
+Scrollbar.defaultProps = {
+  className: "",
+  xAxis: false,
+  yAxis: false,
 };
 
 export default Scrollbar;

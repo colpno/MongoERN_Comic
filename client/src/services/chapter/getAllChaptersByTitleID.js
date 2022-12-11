@@ -5,21 +5,21 @@ import { convertChaptersPropertyToString } from "utils/convertArrayPropertyToStr
 const getAllChaptersByTitleID = (titleId) => {
   const [chapters, setChapters] = useState([]);
 
-  const fetchAllChapters = async () => {
+  const fetchAllChapters = async (ID) => {
     try {
-      const response = await chapterApi.filter({ titleId });
+      const response = await chapterApi.getAll({ titleId: ID });
       const converted = convertChaptersPropertyToString(response);
       setChapters(converted);
     } catch (error) {
-      throw new Error(error);
+      // throw new Error(error);
     }
   };
 
   useEffect(() => {
-    fetchAllChapters();
+    titleId && fetchAllChapters(titleId);
   }, [titleId]);
 
-  return { chapters, setChapters };
+  return { chapters, setChapters, fetchAllChapters };
 };
 
 export default getAllChaptersByTitleID;

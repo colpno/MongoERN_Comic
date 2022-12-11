@@ -67,14 +67,14 @@ function StatisticCount() {
           <EyeLine className={cx("statistic-count__view__icon")} />
           <p className={cx("statistic-count__view__label")}>Lượt xem</p>
           <strong className={cx("statistic-count__view__number")}>
-            {roundNumByUnit(data.likes)}
+            {roundNumByUnit(data.views)}
           </strong>
         </Col>
         <Col className={cx("statistic-count__col")}>
           <ThumbUpLine className={cx("statistic-count__view__icon")} />
           <p className={cx("statistic-count__like__label")}>Lượt thích</p>
           <strong className={cx("statistic-count__like__number")}>
-            {roundNumByUnit(data.views)}
+            {roundNumByUnit(data.likes)}
           </strong>
         </Col>
         <Col className={cx("statistic-count__col")}>

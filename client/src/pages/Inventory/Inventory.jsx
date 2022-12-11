@@ -7,8 +7,8 @@ import GridTable from "components/GridTable";
 import { Popup } from "features";
 import TicketExplainPopup from "pages/Title/components/TicketExplainPopup";
 import { getLimitedHiredChaptersByUserID } from "services/hiredChapter";
-import { getLimitedPurchasedChaptersByUserID } from "services/purchasedChapter";
-import { sort } from "utils/arrayMethods";
+import { getAllPurchasedChapters } from "services/purchasedChapter";
+import { sortArray } from "utils/arrayMethods";
 import { ReactComponent as TicketLogo } from "./assets/images/ticket.svg";
 import styles from "./assets/styles/Inventory.module.scss";
 import InventoryInteract from "./components/InventoryInteract";
@@ -19,8 +19,14 @@ const cx = classNames.bind(styles);
 
 function Inventory() {
   const user = useSelector((state) => state.user.user);
-  const { hiredChapters } = getLimitedHiredChaptersByUserID(user.guid);
-  const { purchasedChapters } = getLimitedPurchasedChaptersByUserID(user.guid);
+  const { hiredChapters } = getLimitedHiredChaptersByUserID({
+    userId: user.guid,
+    limit: 30,
+  });
+  const { purchasedChapters } = getAllPurchasedChapters({
+    userId: user.guid,
+    limit: 30,
+  });
   const [chapters, setChapters] = useState([]);
   const [sorter, setSorter] = useState({ key: "createdAt", isAsc: false });
 
@@ -45,9 +51,9 @@ function Inventory() {
   const sorting = (array, asc, key) => {
     switch (asc) {
       case true:
-        return sort(array, key, "asc");
+        return sortArray(array, key, "asc");
       case false:
-        return sort(array, key, "desc");
+        return sortArray(array, key, "desc");
       default:
         return array;
     }

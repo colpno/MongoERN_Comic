@@ -1,26 +1,24 @@
-import { Button } from "components";
+import classNames from "classnames/bind";
 import PropTypes from "prop-types";
-import { memo, useRef } from "react";
+import { memo } from "react";
 import { useParams } from "react-router-dom";
+import { Container } from "react-bootstrap";
+import { SwiperSlide } from "swiper/react";
 
-import { Lazy, Navigation, Thumbs } from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "../assets/styles/ReadingPagination.scss";
+import { Button } from "components";
+import { Slider } from "features";
+import styles from "../assets/styles/ReadingPagination.module.scss";
+
+const cx = classNames.bind(styles);
 
 function ReadingPagination({ chapters }) {
-  const { titleId } = useParams();
-  const navigationPrevRef = useRef(null);
-  const navigationNextRef = useRef(null);
+  const { titleId, chapterId } = useParams();
 
   return (
-    <div className="reading-page__pagination">
-      <div className="reading-page__pagination__container">
-        <Swiper
-          modules={[Navigation, Thumbs, Lazy]}
-          navigation={{
-            nextEl: navigationNextRef,
-            prevEl: navigationPrevRef,
-          }}
+    <div className={cx("reading-page__pagination")}>
+      <Container className={cx("reading-page__pagination__container")}>
+        <Slider
+          outsideNavigation
           grabCursor
           centeredSlides
           preloadImages={false}
@@ -38,7 +36,6 @@ function ReadingPagination({ chapters }) {
               slidesPerView: 7,
             },
           }}
-          className="reading-page__pagination__container__chapters"
         >
           {chapters.map((chapter) => {
             return (
@@ -46,28 +43,21 @@ function ReadingPagination({ chapters }) {
                 <Button
                   wrapper
                   to={`/comic/title/${titleId}/${chapter.guid}`}
-                  className="slide-wrapper"
+                  className={cx(
+                    "slide-wrapper",
+                    chapterId === chapter.guid ? "active" : ""
+                  )}
                 >
-                  <div className="box-img">
+                  <div className={cx("box-img")}>
                     <img src={chapter.cover} alt={chapter.name} />
                   </div>
-                  <span className="content">{chapter.name}</span>
+                  <span className={cx("content")}>{chapter.name}</span>
                 </Button>
               </SwiperSlide>
             );
           })}
-        </Swiper>
-        <div
-          type="button"
-          className="reading-page__pagination__move-left swiper-button-prev"
-          ref={navigationPrevRef}
-        />
-        <div
-          type="button"
-          className="reading-page__pagination__move-right swiper-button-next"
-          ref={navigationNextRef}
-        />
-      </div>
+        </Slider>
+      </Container>
     </div>
   );
 }

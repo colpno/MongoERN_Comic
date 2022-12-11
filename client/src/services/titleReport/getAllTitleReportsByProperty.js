@@ -1,12 +1,12 @@
 import titleReportApi from "api/titleReportApi";
 import { useEffect, useState } from "react";
 
-const getAllTitleReportsByProperty = (prop) => {
+const getAllTitleReportsByProperty = (properties) => {
   const [reports, setReports] = useState([]);
 
-  const fetch = async () => {
+  const fetch = async (props) => {
     try {
-      const response = await titleReportApi.filter(prop);
+      const response = await titleReportApi.filter(props);
       setReports(response);
     } catch (error) {
       throw new Error(error);
@@ -14,10 +14,10 @@ const getAllTitleReportsByProperty = (prop) => {
   };
 
   useEffect(() => {
-    fetch();
+    properties && fetch(properties);
   }, []);
 
-  return { reports, setReports };
+  return { reports, setReports, fetchAllTitlesByProperty: fetch };
 };
 
 export default getAllTitleReportsByProperty;

@@ -1,6 +1,10 @@
 @use "assets/styles/variables";
 @use "assets/styles/mixins";
 
+.top5-wrapper {
+  padding: 0 6px;
+}
+
 .top5-wrapper__cards__card {
   padding-left: 6px;
   padding-right: 6px;

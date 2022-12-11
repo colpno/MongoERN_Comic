@@ -3,8 +3,7 @@ import axiosClient from "libs/axios/axiosClient";
 const url = "/hired-chapters";
 
 const hiredChapterApi = {
-  getAll: (userId, params) =>
-    axiosClient.get(`${url}?userId=${userId}`, { params }),
+  getAll: (params) => axiosClient.get(url, { params, withCredentials: true }),
 
   getOneByID: (id) => axiosClient.get(`${url}/${id}`),
 
@@ -15,7 +14,10 @@ const hiredChapterApi = {
     axiosClient.delete(`${url}/delete/${id}`, { withCredentials: true }),
 
   sort: (key, order, params) =>
-    axiosClient.get(`${url}?sort=${key}&order=${order}`, { params }),
+    axiosClient.get(`${url}?sort=${key}&order=${order}`, {
+      params,
+      withCredentials: true,
+    }),
 
   filter: (filterObj) => {
     const key = Object.keys(filterObj)[0];
