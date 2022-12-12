@@ -1,23 +1,12 @@
 import titleGenreApi from "api/titleGenreApi";
-import { useEffect, useState } from "react";
 
-const getAllTitleGenres = () => {
-  const [titleGenres, setTitleGenres] = useState([]);
-
-  const fetchAllTitleGenres = async () => {
-    try {
-      const response = await titleGenreApi.getAll();
-      setTitleGenres(response);
-    } catch (error) {
-      throw new Error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchAllTitleGenres();
-  }, []);
-
-  return { titleGenres, setTitleGenres };
+const getAllTitleGenres = async (params = {}) => {
+  try {
+    const response = await titleGenreApi.getAll(params);
+    return response;
+  } catch (error) {
+    return error.data.error || error.data.message;
+  }
 };
 
 export default getAllTitleGenres;

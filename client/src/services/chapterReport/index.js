@@ -1,1 +1,1 @@
-export { default as getAllChapterReportsByProperty } from "./getAllChapterReportsByProperty";
+export { default as getAllChapterReports } from "./getAllChapterReports";

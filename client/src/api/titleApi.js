@@ -5,28 +5,17 @@ const url = "/titles";
 const titleApi = {
   getAll: (params) => axiosClient.get(`${url}`, { params }),
 
-  getAllByProperty: (params) =>
-    axiosClient.get(url, {
-      params,
-    }),
-  getOneByID: (id, property, isPrivate) => {
-    const keyArray = Object.keys(property);
-    const queryStr = keyArray.reduce((string, key, index) => {
-      return index !== keyArray.length - 1
-        ? `${string}${key}=${property[key]}&`
-        : `${string}${key}=${property[key]}`;
-    }, "");
-
+  getOne: (id, isPrivate) => {
     const options = isPrivate ? { withCredentials: true } : {};
 
     return axiosClient.get(
-      `${url}/${isPrivate ? "private/" : ""}${id}?${queryStr}`,
+      `${url}/${isPrivate ? "private/" : ""}${id}`,
       options
     );
   },
 
-  add: (title, setProgress) =>
-    axiosClient.post(`${url}/create`, title, {
+  add: (data, setProgress) =>
+    axiosClient.post(`${url}/create`, data, {
       withCredentials: true,
       onUploadProgress: (e) => {
         const { loaded, total } = e;
@@ -57,31 +46,6 @@ const titleApi = {
         setProgress(percentage);
       },
     }),
-
-  sort: (key, order, params) =>
-    axiosClient.get(`${url}?sort=${key}&order=${order}`, {
-      params,
-    }),
-
-  sortByUserID: (ID, key, order, params) =>
-    axiosClient.get(`${url}?userId=${ID}&sort=${key}&order=${order}`, {
-      params,
-    }),
-
-  filter: (property, params) => {
-    const keyArray = Object.keys(property);
-    const queryStr = keyArray.reduce((string, key, index) => {
-      return index !== keyArray.length - 1
-        ? `${string}${key}_like=${property[key]}&`
-        : `${string}${key}_like=${property[key]}`;
-    }, "");
-
-    return axiosClient.get(`${url}?${queryStr}`, { params });
-  },
-
-  search: (key, value, params) => {
-    return axiosClient.get(`${url}?${key}=${value}`, { params });
-  },
 };
 
 export default titleApi;

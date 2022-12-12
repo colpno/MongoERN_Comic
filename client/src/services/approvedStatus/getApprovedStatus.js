@@ -1,12 +1,12 @@
 import approvedStatusApi from "api/approvedStatusApi";
 
-const getAllApprovedStatuses = async (params = {}) => {
+const getApprovedStatus = async (approvedStatusID) => {
   try {
-    const response = await approvedStatusApi.getAll(params);
+    const response = await approvedStatusApi.getOne(approvedStatusID);
     return response;
   } catch (error) {
     return error.data.error || error.data.message;
   }
 };
 
-export default getAllApprovedStatuses;
+export default getApprovedStatus;

@@ -1,12 +1,12 @@
 import genreApi from "api/genreApi";
 
-const getAllGenres = async (params = {}) => {
+const getGenre = async (genreID) => {
   try {
-    const response = await genreApi.getAll(params);
+    const response = await genreApi.getOne(genreID);
     return response;
   } catch (error) {
     return error.data.error || error.data.message;
   }
 };
 
-export default getAllGenres;
+export default getGenre;

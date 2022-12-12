@@ -1,26 +1,12 @@
 import paymentMethodApi from "api/paymentMethodApi";
-import { useEffect, useState } from "react";
 
-const getAllPayMethods = () => {
-  const [payMethods, setPayMethods] = useState([]);
-
-  const fetchLimitPayMethods = async () => {
-    try {
-      const response = await paymentMethodApi.getAll();
-      setPayMethods(response);
-    } catch (error) {
-      throw new Error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchLimitPayMethods();
-  }, []);
-
-  return {
-    payMethods,
-    setPayMethods,
-  };
+const getAllPayMethods = async (params = {}) => {
+  try {
+    const response = await paymentMethodApi.getAll(params);
+    return response;
+  } catch (error) {
+    return error.data.error || error.data.message;
+  }
 };
 
 export default getAllPayMethods;

@@ -6,7 +6,7 @@ const authApi = {
     return axiosClient.get(`${url}/logout`, { withCredentials: "include" });
   },
 
-  register: (user) => axiosClient.post(`${url}/register`, user),
+  register: (data) => axiosClient.post(`${url}/register`, data),
 
   verifyRegister: (token) => axiosClient.post(`${url}/register/verify`, token),
 

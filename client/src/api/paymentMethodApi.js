@@ -5,10 +5,8 @@ const url = "/payment-methods";
 const paymentMethodApi = {
   getAll: (params) => axiosClient.get(url, { params }),
 
-  getOneByID: (id) => axiosClient.get(`${url}/${id}`),
-
-  add: (method, setProgress) =>
-    axiosClient.post(`${url}/create`, method, {
+  add: (data, setProgress) =>
+    axiosClient.post(`${url}/create`, data, {
       withCredentials: true,
       onUploadProgress: (e) => {
         const { loaded, total } = e;
@@ -17,8 +15,8 @@ const paymentMethodApi = {
       },
     }),
 
-  update: (id, method, setProgress) =>
-    axiosClient.put(`${url}/update/${id}`, method, {
+  update: (id, data, setProgress) =>
+    axiosClient.put(`${url}/update/${id}`, data, {
       withCredentials: true,
       onUploadProgress: (e) => {
         const { loaded, total } = e;
@@ -36,20 +34,6 @@ const paymentMethodApi = {
         setProgress(percentage);
       },
     }),
-
-  sort: (key, order, params) =>
-    axiosClient.get(`${url}?sort=${key}&order=${order}`, {
-      params,
-    }),
-
-  filter: (filterObj) => {
-    const key = Object.keys(filterObj)[0];
-    return axiosClient.get(`${url}?${key}_like=${filterObj[key]}`);
-  },
-
-  search: (key, value) => {
-    return axiosClient.get(`${url}?${key}=${value}`);
-  },
 };
 
 export default paymentMethodApi;

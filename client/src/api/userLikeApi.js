@@ -3,8 +3,7 @@ import axiosClient from "libs/axios/axiosClient";
 const url = "/user-like";
 
 const userLikeApi = {
-  getOne: (userId, chapterId) =>
-    axiosClient.get(`${url}?userId=${userId}&chapterId=${chapterId}`),
+  getAll: (params) => axiosClient.get(url, { params }),
 
   add: (userId, chapterId) =>
     axiosClient.post(`${url}/create`, { userId, chapterId }),

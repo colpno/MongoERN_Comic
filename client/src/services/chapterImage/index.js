@@ -1,1 +1,1 @@
-export { default as getAllChapterImagesByChapterID } from "./getAllChapterImagesByChapterID";
+export { default as getAllChapterImages } from "./getAllChapterImages";
