@@ -1,9 +1,9 @@
-import usePreviewImage from "hooks/usePreviewImage";
 import PropTypes from "prop-types";
 import { FiUpload } from "react-icons/fi";
 import { IoCloseCircle } from "react-icons/io5";
 
 import classNames from "classnames/bind";
+import { usePreviewImage } from "hooks";
 import styles from "./InputImage.scss";
 
 const cx = classNames.bind(styles);
