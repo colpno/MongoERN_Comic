@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import { FaBars } from "react-icons/fa";
 import { IoIosLogOut } from "react-icons/io";
