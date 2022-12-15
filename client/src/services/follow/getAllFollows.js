@@ -5,7 +5,7 @@ const getAllFollows = async (params = {}) => {
     const response = await followApi.getAll(params);
     return response;
   } catch (error) {
-    return error.data.error || error.data.message;
+    return error?.data?.error || error?.data?.message;
   }
 };
 

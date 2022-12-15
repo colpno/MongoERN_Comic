@@ -1,13 +1,11 @@
 import userApi from "api/userApi";
-import { convertUserPropertyToString } from "utils/convertArrayPropertyToString";
 
 const getUser = async (id) => {
   try {
     const response = await userApi.getOne(id);
-    const converted = convertUserPropertyToString(response[0]);
-    return converted;
+    return response[0];
   } catch (error) {
-    return error.data.error || error.data.message;
+    return error?.data?.error || error?.data?.message;
   }
 };
 

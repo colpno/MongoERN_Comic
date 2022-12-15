@@ -1,13 +1,11 @@
 import chapterApi from "api/chapterApi";
-import { convertChaptersPropertyToString } from "utils/convertArrayPropertyToString";
 
-const getAllChapters = async (params = {}) => {
+const getAllChapters = async (params = {}, isPrivate = true) => {
   try {
-    const response = await chapterApi.getAll(params);
-    const converted = convertChaptersPropertyToString(response);
-    return converted;
+    const response = await chapterApi.getAll(params, isPrivate);
+    return response;
   } catch (error) {
-    return error.data.error || error.data.message;
+    return error?.data?.error || error?.data?.message;
   }
 };
 

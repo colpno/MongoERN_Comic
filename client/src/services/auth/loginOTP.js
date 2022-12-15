@@ -1,8 +1,12 @@
 import authApi from "api/authApi";
 
 const loginOTP = async (data) => {
-  const response = await authApi.verifyOTP(data);
-  return response;
+  try {
+    const response = await authApi.verifyOTP(data);
+    return response[0];
+  } catch (error) {
+    return error?.data?.error || error?.data?.message;
+  }
 };
 
 export default loginOTP;

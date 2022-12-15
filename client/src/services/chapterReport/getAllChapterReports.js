@@ -5,7 +5,7 @@ const getAllChapterReports = async (params = {}) => {
     const response = await chapterReportApi.getAll(params);
     return response;
   } catch (error) {
-    return error.data.error || error.data.message;
+    return error?.data?.error || error?.data?.message;
   }
 };
 

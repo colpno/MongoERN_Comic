@@ -1,13 +1,11 @@
 import pointHistoryApi from "api/pointHistoryApi";
-import { convertPointHistoriesPropertyToString } from "utils/convertArrayPropertyToString";
 
 const getAllPointHistories = async (params = {}) => {
   try {
     const response = await pointHistoryApi.getAll(params);
-    const converted = convertPointHistoriesPropertyToString(response);
-    return converted;
+    return response;
   } catch (error) {
-    return error.data.error || error.data.message;
+    return error?.data?.error || error?.data?.message;
   }
 };
 

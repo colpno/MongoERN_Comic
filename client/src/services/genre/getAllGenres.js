@@ -5,7 +5,7 @@ const getAllGenres = async (params = {}) => {
     const response = await genreApi.getAll(params);
     return response;
   } catch (error) {
-    return error.data.error || error.data.message;
+    return error?.data?.error || error?.data?.message;
   }
 };
 

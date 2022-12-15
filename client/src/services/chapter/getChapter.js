@@ -1,13 +1,11 @@
 import chapterApi from "api/chapterApi";
-import { convertChapterPropertyToString } from "utils/convertArrayPropertyToString";
 
 const getChapter = async (chapterID, isPrivate = true) => {
   try {
     const response = await chapterApi.getOne(chapterID, isPrivate);
-    const converted = convertChapterPropertyToString(response[0]);
-    return converted;
+    return response[0];
   } catch (error) {
-    return error.data.error || error.data.message;
+    return error?.data?.error || error?.data?.message;
   }
 };
 

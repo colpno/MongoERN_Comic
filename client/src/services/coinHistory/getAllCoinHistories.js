@@ -1,13 +1,11 @@
 import coinHistoryApi from "api/coinHistoryApi";
-import { convertCoinHistoriesPropertyToString } from "utils/convertArrayPropertyToString";
 
 const getAllCoinHistories = async (params = {}) => {
   try {
     const response = await coinHistoryApi.getAll(params);
-    const converted = convertCoinHistoriesPropertyToString(response.data);
-    return converted;
+    return response;
   } catch (error) {
-    return error.data.error || error.data.message;
+    return error?.data?.error || error?.data?.message;
   }
 };
 

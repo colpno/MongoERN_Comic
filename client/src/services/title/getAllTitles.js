@@ -1,13 +1,11 @@
 import titleApi from "api/titleApi";
-import { convertTitlesPropertyToString } from "utils/convertArrayPropertyToString";
 
-const getAllTitles = async (params = {}) => {
+const getAllTitles = async (params = {}, isPrivate = true) => {
   try {
-    const response = await titleApi.getAll(params);
-    const converted = convertTitlesPropertyToString(response);
-    return converted;
+    const response = await titleApi.getAll(params, isPrivate);
+    return response;
   } catch (error) {
-    return error.data.error || error.data.message;
+    return error?.data?.error || error?.data?.message;
   }
 };
 
