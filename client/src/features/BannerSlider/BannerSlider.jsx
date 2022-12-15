@@ -1,4 +1,6 @@
+import { noData } from "assets/images";
 import classNames from "classnames/bind";
+import { Button } from "components";
 import { Slider } from "features";
 import PropTypes from "prop-types";
 import { memo } from "react";
@@ -9,9 +11,11 @@ import styles from "./assets/BannerSlider.module.scss";
 const cx = classNames.bind(styles);
 
 function BannerSlider({ images, clickable, delay }) {
+  const hasImages = images.length > 0;
+
   return (
     <Slider
-      navigation
+      navigation={hasImages}
       grabCursor
       pagination
       clickablePagination={clickable}
@@ -20,21 +24,32 @@ function BannerSlider({ images, clickable, delay }) {
       slidesPerView={1}
       className={cx("slider")}
     >
-      {images.map((img, index) => {
-        return (
-          <SwiperSlide key={index}>
-            <div className={cx("slide")}>
-              <img src={img} alt="title" />
-            </div>
-          </SwiperSlide>
-        );
-      })}
+      {hasImages ? (
+        images.map((img, index) => {
+          const { image, link } = img;
+
+          return (
+            <SwiperSlide key={index}>
+              <Button wrapper to={link} className={cx("slide")}>
+                <img src={image} alt="title" />
+              </Button>
+            </SwiperSlide>
+          );
+        })
+      ) : (
+        <img src={noData} alt="No slides" className={cx("slide")} />
+      )}
     </Slider>
   );
 }
 
 BannerSlider.propTypes = {
-  images: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  images: PropTypes.arrayOf(
+    PropTypes.shape({
+      image: PropTypes.string.isRequired,
+      link: PropTypes.string.isRequired,
+    }).isRequired
+  ).isRequired,
   clickable: PropTypes.bool,
   delay: PropTypes.number,
 };
