@@ -1,4 +1,5 @@
 import { db } from '../../config/database.js';
+import { switchCaseConvert } from '../../helpers/convertDataFormat/switchCaseConvert.js';
 import { table } from './index.js';
 
 export default function getTitlePrivate(req, res) {
@@ -33,7 +34,7 @@ export default function getTitlePrivate(req, res) {
 
       db.query(sql, [...values], (fail, result) => {
         if (fail) return res.status(500).json(fail);
-        if (result.length) return res.status(200).json(result);
+        if (result.length) return res.status(200).json(switchCaseConvert(result, table));
         return res.status(400).json({ error: result });
       });
     }

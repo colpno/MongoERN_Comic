@@ -1,4 +1,5 @@
 import { db } from '../../config/database.js';
+import { switchCaseConvert } from '../../helpers/convertDataFormat/switchCaseConvert.js';
 
 export default function getLimitedQuery(
   res,
@@ -19,17 +20,20 @@ export default function getLimitedQuery(
   db.query(sql, (error, data) => {
     if (error) return res.status(500).json(error);
 
-    const sql = `
+    const getTotalRowSQL = `
       SELECT COUNT(*) AS 'total'
       FROM \`${table}\`
     `;
 
-    db.query(sql, (error, rows) => {
-      if (error) return res.status(500).json(error);
+    db.query(getTotalRowSQL, (totalRowError, rows) => {
+      if (totalRowError) return res.status(500).json({ error: totalRowError });
 
       return res
         .status(200)
-        .json({ data, pagination: { total: rows[0].total, page: +page, limit: +limit } });
+        .json({
+          data: switchCaseConvert(data, table),
+          pagination: { total: rows[0].total, page: +page, limit: +limit },
+        });
     });
   });
 }

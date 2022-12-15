@@ -1,7 +1,7 @@
-/* eslint-disable no-unreachable */
 import { convertToSQL } from '../common/index.js';
 import { table } from './index.js';
 import { db } from '../../config/database.js';
+import { switchCaseConvert } from '../../helpers/convertDataFormat/switchCaseConvert.js';
 
 export default function getTitles(req, res) {
   const { page, limit, embed, genreId } = req.query;
@@ -11,9 +11,13 @@ export default function getTitles(req, res) {
   let genreSQL = '';
   if (joinStatement && genreId) {
     if (whereStatement) {
-      genreSQL = ` AND \`genreId\` IN (${genreId.map((id) => `'${id}'`).join(',')})`;
+      genreSQL = ` AND \`genreId\` IN (${
+        Array.isArray(genreId) ? genreId.map((id) => `'${id}'`).join(',') : `'${genreId}'`
+      })`;
     } else {
-      genreSQL = ` WHERE \`genreId\` IN (${genreId.map((id) => `'${id}'`).join(',')})`;
+      genreSQL = ` WHERE \`genreId\` IN (${
+        Array.isArray(genreId) ? genreId.map((id) => `'${id}'`).join(',') : `'${genreId}'`
+      })`;
     }
   }
 
@@ -25,7 +29,7 @@ export default function getTitles(req, res) {
       genreSQL !== ''
         ? `
     GROUP BY b.titleId
-    HAVING COUNT(b.titleId) >= ${genreId.length}
+    HAVING COUNT(b.titleId) >= ${Array.isArray(genreId) ? genreId.length : 1}
     `
         : ''
     }
@@ -54,8 +58,10 @@ export default function getTitles(req, res) {
 
   db.query(sql, values, (error, data) => {
     if (error) return res.status(500).json(error);
-    if (pagination) return res.status(200).json({ data, pagination });
-    return res.status(200).json(data);
+    if (pagination) {
+      return res.status(200).json({ data: switchCaseConvert(data, table), pagination });
+    }
+    return res.status(200).json(switchCaseConvert(data, table));
   });
 }
 

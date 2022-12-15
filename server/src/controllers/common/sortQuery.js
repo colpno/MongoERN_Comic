@@ -1,4 +1,5 @@
 import { db } from '../../config/database.js';
+import { switchCaseConvert } from '../../helpers/convertDataFormat/switchCaseConvert.js';
 
 export default function sortQuery(res, table, sort, order, page, limit, select = '*') {
   let sql = `
@@ -29,8 +30,14 @@ export default function sortQuery(res, table, sort, order, page, limit, select =
   if (!!sql) {
     db.query(sql, (error, data) => {
       if (error) return res.status(500).json(error);
-      if (!!pagination) return res.status(200).json({ data, pagination });
-      return res.status(200).json(data);
+      if (pagination) {
+        return res.status(200).json({ data: switchCaseConvert(data, table), pagination });
+      }
+      if (data.length) {
+        return res.status(200).json(switchCaseConvert(data, table));
+      }
+      if (data.length === 0) return res.status(200).json([]);
+      return res.status(400).json({ error });
     });
   }
 }

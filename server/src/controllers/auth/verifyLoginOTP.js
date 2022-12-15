@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { db } from '../../config/database.js';
+import { switchCaseConvert } from '../../helpers/convertDataFormat/index.js';
 
 export default function verifyLoginOTP(req, res) {
   const { userGuid, email, otp: userOTP } = req.body;
@@ -50,7 +51,7 @@ export default function verifyLoginOTP(req, res) {
                 httpOnly: true,
               })
               .status(200)
-              .json(others);
+              .json(switchCaseConvert([others], 'user'));
           }
         });
       }

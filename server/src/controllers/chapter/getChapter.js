@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { table } from './index.js';
 import { db } from '../../config/database.js';
+import { switchCaseConvert } from '../../helpers/convertDataFormat/switchCaseConvert.js';
 
 export default function getChapter(req, res) {
   const { guid } = req.params;
@@ -32,7 +33,7 @@ export default function getChapter(req, res) {
 
     db.query(sql, [...values], (error2, data2) => {
       if (error2) return res.status(500).json(error2);
-      if (data2.length) return res.status(200).json(data2);
+      if (data2.length) return res.status(200).json(switchCaseConvert(data2, table));
       return res.status(400).json({ error: data2 });
     });
   }
@@ -69,7 +70,7 @@ export default function getChapter(req, res) {
 
         db.query(sql, [...values], (error2, data2) => {
           if (error2) return res.status(500).json(error2);
-          if (data2.length) return res.status(200).json(data2);
+          if (data2.length) return res.status(200).json(switchCaseConvert(data, table));
           return res.status(400).json({ error: data2 });
         });
       });

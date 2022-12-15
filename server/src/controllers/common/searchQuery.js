@@ -1,4 +1,5 @@
 import { db } from '../../config/database.js';
+import { switchCaseConvert } from '../../helpers/convertDataFormat/switchCaseConvert.js';
 
 export default function searchQuery(
   res,
@@ -54,9 +55,13 @@ export default function searchQuery(
 
   db.query(sql, [values], (error, data) => {
     if (error) return res.status(500).json(error);
-    if (pagination) return res.status(200).json({ data, pagination });
-    if (data.length) return res.status(200).json(data);
-    if (data.length === 0) return res.status(200).json(data);
-    return res.status(400).json({ error: data });
+    if (pagination) {
+      return res.status(200).json({ data: switchCaseConvert(data, table), pagination });
+    }
+    if (data.length) {
+      return res.status(200).json(switchCaseConvert(data, table));
+    }
+    if (data.length === 0) return res.status(200).json([]);
+    return res.status(400).json({ error });
   });
 }
