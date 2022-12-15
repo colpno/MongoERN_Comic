@@ -23,7 +23,6 @@ export default function getChapterTransactions(req, res) {
     if (Object.keys(filter).length > 0) {
       return filterQuery(res, table, filter, page, limit, sort, order);
     }
-    console.log('file: getChapterTransactions.js:16 ~ token', token);
 
     // URL: ?column=...
     if (Object.keys(search).length > 0) {

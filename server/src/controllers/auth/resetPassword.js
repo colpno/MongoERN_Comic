@@ -1,4 +1,3 @@
-/* eslint-disable no-unreachable */
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { db } from '../../config/database.js';

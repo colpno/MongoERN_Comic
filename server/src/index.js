@@ -68,6 +68,5 @@ app.use(`${BASE_URL}/auth`, authRoute);
 app.use(`${BASE_URL}/charge`, chargeRoute);
 
 app.listen(PORT, () => {
-  // console.log(`Server is running on localhost:${PORT}`);
   console.log(`Server is running on ${process.env.SERVER_URL}`);
 });
