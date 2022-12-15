@@ -6,6 +6,7 @@ export { default as Select } from "./Select/Select";
 export { default as Radio } from "./Radio/Radio";
 export { default as CheckBox } from "./CheckBox/CheckBox";
 export { default as CardFigure } from "./CardFigure/CardFigure";
+export { default as CardListWithTitle } from "./CardList/CardListWithTitle";
 export { default as CardList } from "./CardList/CardList";
 export { default as ChapterForm } from "./ChapterForm/ChapterForm";
 export { default as GridTable } from "./GridTable/GridTable";
