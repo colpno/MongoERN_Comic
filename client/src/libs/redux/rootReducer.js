@@ -3,7 +3,6 @@ import { authPersistConfig } from "libs/redux-persist/authPersistConfig";
 import { persistReducer } from "redux-persist";
 import {
   readingChapterReducer,
-  myTitlesReducer,
   paymentMethodReducer,
   selectFieldReducer,
   statisticCountReducer,
@@ -19,7 +18,6 @@ const rootReducer = combineReducers({
   title: titleReducer,
   chapter: readingChapterReducer,
   paymentMethod: paymentMethodReducer,
-  myTitles: myTitlesReducer,
   selectField: selectFieldReducer,
 });
 
