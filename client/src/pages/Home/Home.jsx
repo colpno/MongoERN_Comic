@@ -1,25 +1,29 @@
-/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
+import { useMemo } from "react";
 import { Container } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 import { BannerSlider } from "features";
 import styles from "pages/Home/assets/styles/Home.module.scss";
-import { useMemo } from "react";
-import { sortTitles } from "services/title";
 import { ComicSection, Notification } from "./components";
 
 const cx = classNames.bind(styles);
 
 function Home() {
-  const { titles } = sortTitles("like", false, 5);
-  const bannerImages = useMemo(
-    () => titles.map((title) => title.cover),
-    [titles]
+  const top5Titles = useSelector((state) => state.title.top5);
+
+  const banners = useMemo(
+    () =>
+      top5Titles.map((title) => ({
+        image: title.cover,
+        link: `/comic/title/${title.guid}`,
+      })),
+    [top5Titles]
   );
 
   return (
     <main className={cx("home")}>
-      <BannerSlider images={bannerImages} />
+      <BannerSlider images={banners} />
       <section className={cx("section-comic")}>
         <Container>
           <h1 className={cx("title", "line-clamp")}>Comic</h1>
