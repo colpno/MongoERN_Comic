@@ -11,7 +11,6 @@ import { Popup } from "features";
 import { useToast } from "hooks";
 import { login as dispatchLogin } from "libs/redux/slices/userSlice";
 import { loginOTP, reSendOTP } from "services/auth";
-import { convertUserPropertyToString } from "utils/convertArrayPropertyToString";
 import { replaceAt } from "utils/stringMethods";
 import NumPad from "./components/NumPad";
 import styles from "./LoginOTP.module.scss";
@@ -135,15 +134,14 @@ function LoginOTP() {
       loginOTP(data)
         .then((response) => {
           if (response) {
-            const converted = convertUserPropertyToString(response);
-            dispatch(dispatchLogin(converted));
+            dispatch(dispatchLogin(response));
             toastEmitter("Đăng nhập thành công", "success");
             setTimeout(() => {
               navigate("/");
             }, 1000);
           }
         })
-        .catch((error) => toastEmitter(error.data.error, "error"));
+        .catch((error) => toastEmitter(error, "error"));
     }
   };
 
@@ -262,11 +260,7 @@ function LoginOTP() {
 
   const handleReSend = () => {
     reSendOTP()
-      .then((response) => {
-        if (response) {
-          toastEmitter(response, "success");
-        }
-      })
+      .then((response) => toastEmitter(response, "success"))
       .catch((error) => console.log(error));
 
     setReSend(() => ({ countdown: RE_SEND_TIME, disable: true }));
