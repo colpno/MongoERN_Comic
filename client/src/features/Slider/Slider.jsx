@@ -61,7 +61,7 @@ function Slider({
   const navigationPrevRef = outsideNavigation ? useRef(null) : null;
   const navigationNextRef = outsideNavigation ? useRef(null) : null;
   const sliderRef = outsideNavigation ? useRef(null) : null;
-
+  const [numberOfSlides, setNumberOfSlides] = useState(0);
   const [hideNavigation, setHideNavigation] = useState(false);
   const [swiperLength, setSwiperLength] = useState({
     reachBegin: true,
@@ -161,37 +161,38 @@ function Slider({
     }
   };
 
-  // If number of slides <= slides per view, will not show navigation buttons
-  useEffect(() => {
-    if (sliderRef?.current) {
-      const child = sliderRef.current.children[0].children;
+  const handleBreakpointChange = (swiper) => {
+    const isChecked =
+      numberOfSlides > breakpoints[swiper.currentBreakpoint].slidesPerView &&
+      swiper.isBeginning &&
+      swiper.isEnd;
 
-      child.length <= slidesPerView
-        ? setHideNavigation(true)
-        : setHideNavigation(false);
-    }
-  }, [sliderRef]);
+    isChecked ? setHideNavigation(false) : setHideNavigation(true);
+  };
 
   const swiperProps = {
     ref: sliderRef,
     onSlideChange: handleSlideChange,
-    className: `${cx("slider")}`,
-    modules,
-    navigation: nav,
-    pagination: page,
-    loop,
-    preloadImages,
-    lazy,
-    autoplay,
-    grabCursor,
-    centeredSlides,
-    spaceBetween,
-    breakpoints,
-    scrollbar,
-    parallax,
-    effect,
-    direction,
+    className: `${cx("slider")} ${className}`,
   };
+  if (modules.length > 0) swiperProps.modules = modules;
+  if (navigation) swiperProps.navigation = nav;
+  if (pagination) swiperProps.pagination = page;
+  if (loop) swiperProps.loop = loop;
+  if (preloadImages) swiperProps.preloadImages = preloadImages;
+  if (lazy) swiperProps.lazy = lazy;
+  if (Object.keys(autoplay).length > 0) swiperProps.autoplay = autoplay;
+  if (grabCursor) swiperProps.grabCursor = grabCursor;
+  if (centeredSlides) swiperProps.centeredSlides = centeredSlides;
+  if (spaceBetween !== 0) swiperProps.spaceBetween = spaceBetween;
+  if (Object.keys(breakpoints).length > 0) {
+    swiperProps.breakpoints = breakpoints;
+    swiperProps.onBreakpoint = handleBreakpointChange;
+  }
+  if (scrollbar) swiperProps.scrollbar = scrollbar;
+  if (parallax) swiperProps.parallax = parallax;
+  if (effect !== false) swiperProps.effect = effect;
+  if (direction !== "horizontal") swiperProps.direction = direction;
 
   const nonGroupSliderProps = {
     ...swiperProps,
@@ -203,8 +204,31 @@ function Slider({
     slidesPerGroup: groupSlide,
   };
 
+  // If number of slides <= slides per view, will not show navigation buttons
+  useEffect(() => {
+    if (sliderRef?.current) {
+      const child = sliderRef.current.children[0].children.length;
+
+      setNumberOfSlides(child);
+
+      child <= slidesPerView
+        ? setHideNavigation(true)
+        : setHideNavigation(false);
+    }
+  }, [sliderRef]);
+
   return (
-    <div className={`${cx("slide-container")}  ${className}`}>
+    <>
+      {outsideNavigation && !hideNavigation && (
+        <div
+          className={`${cx(
+            "previous",
+            swiperLength.reachBegin && "disable"
+          )} swiper-button-prev`}
+          ref={navigationPrevRef}
+          onClick={handlePrev}
+        />
+      )}
       {slidesPerView !== 0 && (
         <Swiper {...nonGroupSliderProps}>{children}</Swiper>
       )}
@@ -212,26 +236,16 @@ function Slider({
         <Swiper {...groupSliderProps}>{children}</Swiper>
       )}
       {outsideNavigation && !hideNavigation && (
-        <>
-          <div
-            className={`${cx(
-              "previous",
-              swiperLength.reachBegin && "disable"
-            )} swiper-button-prev`}
-            ref={navigationPrevRef}
-            onClick={handlePrev}
-          />
-          <div
-            className={`${cx(
-              "next",
-              swiperLength.reachEnd && "disable"
-            )} swiper-button-next`}
-            ref={navigationNextRef}
-            onClick={handleNext}
-          />
-        </>
+        <div
+          className={`${cx(
+            "next",
+            swiperLength.reachEnd && "disable"
+          )} swiper-button-next`}
+          ref={navigationNextRef}
+          onClick={handleNext}
+        />
       )}
-    </div>
+    </>
   );
 }
 
