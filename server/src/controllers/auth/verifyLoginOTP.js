@@ -47,6 +47,10 @@ export default function verifyLoginOTP(req, res) {
 
             const token = jwt.sign({ guid: data2[0].guid, role }, process.env.ACCESS_TOKEN_KEY);
             return res
+              .clearCookie('loginInfo', {
+                secure: true,
+                sameSite: 'none',
+              })
               .cookie('accessToken', token, {
                 httpOnly: true,
               })
