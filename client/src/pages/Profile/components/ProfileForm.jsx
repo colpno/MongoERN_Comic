@@ -6,7 +6,7 @@ import { Image } from "components";
 import Button from "components/Button";
 import { InputField } from "libs/formik";
 import FormLabel from "libs/formik/FormLabel";
-import { profileFormValidation } from "validations/profileFormValidation";
+import { profileFormValidation } from "validations/profileForm.validation";
 import styles from "../styles/ProfileForm.module.scss";
 
 const cx = classNames.bind(styles);

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "components";
 import { Popup } from "features";
 import { register } from "services/auth";
-import { registerFormValidation } from "validations/registerFormValidation";
+import { registerFormValidation } from "validations/registerForm.validation";
 import RegisterForm from "./components/RegisterForm";
 import styles from "./styles/Register.module.scss";
 

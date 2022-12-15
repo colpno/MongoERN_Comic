@@ -7,7 +7,7 @@ import { Popup, ProgressCircle } from "features";
 import { useToast } from "hooks";
 import { getChapter, updateChapter } from "services/chapter";
 import { getAllChapterImages } from "services/chapterImage";
-import { updateChapterFormValidation } from "validations/updateChapterFormValidation";
+import { updateChapterFormValidation } from "validations/updateChapterForm.validation";
 
 function UpdateChapter() {
   const { titleId, chapterId } = useParams();

@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import { Button } from "components";
 import { InputField } from "libs/formik";
 import FormLabel from "libs/formik/FormLabel";
-import { loginFormValidation } from "validations/loginFormValidation";
+import { loginFormValidation } from "validations/loginForm.validation";
 import styles from "../styles/LoginForm.module.scss";
 
 const cx = classNames.bind(styles);

@@ -7,7 +7,7 @@ import { Popup, ProgressCircle } from "features";
 import { useToast } from "hooks";
 import { getTitle, updateTitle } from "services/title";
 import { getAllTitleGenres } from "services/titleGenre";
-import { updateTitleFormValidation } from "validations/updateTitleFormValidation";
+import { updateTitleFormValidation } from "validations/updateTitleForm.validation";
 
 function UpdateTitle() {
   const { titleId } = useParams();

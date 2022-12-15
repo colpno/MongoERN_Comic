@@ -6,7 +6,7 @@ import TitleForm from "components/TitleForm";
 import { Popup, ProgressCircle } from "features";
 import { useToast } from "hooks";
 import { addTitle } from "services/title";
-import { createTitleFormValidation } from "validations/createTitleFormValidation";
+import { createTitleFormValidation } from "validations/createTitleForm.validation";
 
 function CreateTitle() {
   const navigate = useNavigate();
