@@ -6,3 +6,7 @@ export { default as useAdd } from "./useAdd";
 export { default as useDelete } from "./useDelete";
 export { default as useUpdate } from "./useUpdate";
 export { default as useToast } from "./useToast";
+export { default as usePreviewImage } from "./usePreviewImage";
+export { default as useMultipleForms } from "./useMultipleForms";
+export { default as usePagination } from "./usePagination";
+export { default as useInfinitePagination } from "./useInfinitePagination";
