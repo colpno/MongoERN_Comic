@@ -47,12 +47,14 @@ function Button(props) {
     text,
     small,
     large,
+    fullWidth,
     round,
 
     ...others
   } = props;
   const classes = cx(
     wrapper || "btn",
+    fullWidth && "full-width",
     {
       disabled,
 
@@ -152,6 +154,7 @@ Button.propTypes = {
   text: PropTypes.bool,
   small: PropTypes.bool,
   large: PropTypes.bool,
+  fullWidth: PropTypes.bool,
   round: PropTypes.bool,
 };
 
@@ -194,6 +197,7 @@ Button.defaultProps = {
   text: false,
   small: false,
   large: false,
+  fullWidth: false,
   round: false,
 };
 
