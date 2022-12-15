@@ -1,4 +1,4 @@
-@use "assets/styles/variables";
+@use "assets/styles/variables" as var;
 @use "assets/styles/mixins";
 
 .weekly-page__content {
@@ -12,7 +12,7 @@
   flex: 0 0 calc(100% / 7);
   font-weight: 700;
   padding: 20px 0;
-  border: 1px solid variables.$gray-500;
+  border: 1px solid var.$gray-500;
   border-right: 0;
   border-radius: 0;
   position: relative;
@@ -22,13 +22,14 @@
   }
 
   &:last-child {
-    border-right: 1px solid variables.$gray-500;
+    border-right: 1px solid var.$gray-500;
   }
 
   &.active,
   &:not(.active):hover {
-    background-color: variables.$primary;
-    color: variables.$txt-white;
+    background-color: var.$primary;
+    color: var.$txt-white;
+    transition: 0.3s ease-in-out;
   }
 
   &.today {
