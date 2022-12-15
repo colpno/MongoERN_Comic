@@ -1,13 +1,13 @@
-import { Logo } from "assets/images";
 import classNames from "classnames/bind";
-import { Button } from "components";
-import { useToast } from "hooks";
-import { setUserLike } from "libs/redux/slices/readingChapterSlice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
-import { getTitleByID } from "services/title";
+import { Logo } from "assets/images";
+import { Button } from "components";
+import { useToast } from "hooks";
+import { setUserLike } from "libs/redux/slices/readingChapterSlice";
+import { getTitle } from "services/title";
 import { addUserLike, deleteUserLike } from "services/userLike";
 import { isEmpty } from "utils";
 import styles from "../assets/styles/ReadingHeader.module.scss";
@@ -19,7 +19,7 @@ const cx = classNames.bind(styles);
 function ReadingHeader() {
   const dispatch = useDispatch();
   const { titleId } = useParams();
-  const { title } = getTitleByID(titleId, {}, false);
+  const [title, setTitle] = useState({});
   const [darkTheme, setDarkTheme] = useState(false);
   const [isLike, setIsLike] = useState(false);
   const chapter = useSelector((state) => state.chapter.chapter.info);
@@ -29,6 +29,12 @@ function ReadingHeader() {
   const [controls, setControls] = useState({
     isLiked: false,
   });
+
+  const fetchData = () => {
+    getTitle(titleId, false)
+      .then((response) => setTitle(response))
+      .catch((error) => console.log(error));
+  };
 
   const handleChangeTheme = () => {
     setDarkTheme(!darkTheme);
@@ -62,6 +68,10 @@ function ReadingHeader() {
         });
     }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   useEffect(() => {
     if (userLike.userId === user.guid) {

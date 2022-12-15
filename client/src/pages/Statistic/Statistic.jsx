@@ -1,13 +1,12 @@
-/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import { useEffect, useMemo, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
 import { NoData } from "features";
-import { getAllChaptersByTitleID } from "services/chapter";
-import { getAllChapterReportsByProperty } from "services/chapterReport";
-import { getAllTitleReportsByProperty } from "services/titleReport";
+import { getAllChapters } from "services/chapter";
+import { getAllChapterReports } from "services/chapterReport";
+import { getAllTitleReports } from "services/titleReport";
 import { getChartColors, getMonthArray } from "utils/constants";
 import { formatTime } from "utils/convertTime";
 import ChapterStatistic from "./components/ChapterStatistic";
@@ -19,62 +18,53 @@ const cx = classNames.bind(styles);
 function Statistic() {
   // INFO: Data variables
 
-  const titles = useSelector((state) => state.myTitles.titles);
+  const titles = useSelector((state) => state.titles.myTitles);
   const [titleReports, setTitleReports] = useState([]);
+  const [chapters, setChapters] = useState([]);
   const [chapterReports, setChapterReports] = useState([]);
-  const { chapters, fetchAllChapters } = getAllChaptersByTitleID();
   const [ID, setID] = useState({
     titleID: "",
     chapterID: "",
   });
 
-  const {
-    chartLikeData: titleReportLikes,
-    chartViewData: titleReportViews,
-    fetchAllTitlesByProperty,
-  } = getAllTitleReportsByProperty();
-  const {
-    chartLikeData: chapterReportLikes,
-    chartViewData: chapterReportViews,
-    fetchAllChapterReportsByProperty,
-  } = getAllChapterReportsByProperty();
+  const fetchTitleReports = (params) => {
+    getAllTitleReports(params)
+      .then((response) => setTitleReports(response))
+      .catch((error) => console.log(error));
+  };
+
+  const fetchChapterReports = (params) => {
+    getAllChapterReports(params)
+      .then((response) => setChapterReports(response))
+      .catch((error) => console.log(error));
+  };
+
+  const fetchChapters = (params) => {
+    getAllChapters(params)
+      .then((response) => setChapters(response))
+      .catch((error) => console.log(error));
+  };
 
   useEffect(() => {
-    const fetchChapters = async () => {
-      await fetchAllChapters(titles[0].guid);
-    };
-
-    titles.length > 0 && fetchChapters();
+    titles.length > 0 && fetchChapters({ titleId: titles[0].guid });
   }, [titles]);
 
   useEffect(() => {
-    const fetchChapters = async () => {
-      await fetchAllChapters(ID.titleID);
-    };
-
-    ID.titleID && fetchChapters();
+    ID.titleID && fetchChapters(ID.titleID);
   }, [ID.titleID]);
 
   useEffect(() => {
-    const fetchChapterReports = async () => {
-      const chapterReportArray = await fetchAllChapterReportsByProperty({
+    ID.chapterID &&
+      fetchChapterReports({
         chapterId: ID.chapterID,
       });
-      setTitleReports(chapterReportArray);
-    };
-
-    ID.chapterID && fetchChapterReports();
   }, [ID.chapterID]);
 
   useEffect(() => {
-    const fetchTitleReports = async () => {
-      const titleReportArray = await fetchAllTitlesByProperty({
+    ID.titleID &&
+      fetchTitleReports({
         titleId: ID.titleID,
       });
-      setTitleReports(titleReportArray);
-    };
-
-    ID.titleID && fetchTitleReports();
   }, [ID.titleID]);
 
   useEffect(() => {
@@ -87,24 +77,21 @@ function Statistic() {
   }, [titles, chapters]);
 
   // INFO: Chart variables
-
   const months = getMonthArray();
   const { backgroundColors, borderColors } = getChartColors();
-
-  const [chartData, setChartData] = useState({
-    title: {
-      like: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      view: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    },
-    chapter: {
-      like: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      view: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    },
-  });
-
   const { month: currentMonth, year: currentYear } = useMemo(() => {
     return formatTime(new Date());
   }, []);
+  const [chartData, setChartData] = useState({
+    title: {
+      likes: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      views: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    },
+    chapter: {
+      likes: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      views: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    },
+  });
 
   const chartLabels = useMemo(
     () => [
@@ -134,45 +121,61 @@ function Statistic() {
         }, [])
       : [];
 
-  // INFO: Calculate title's views and likes
+  // INFO: Calculate views and likes
+
+  const getReportByTitle = (reports = [], titleId = "") => {
+    return reports.filter((report) => report.titleId === titleId);
+  };
+
+  const getReportByChapter = (reports = [], chapterId = "") => {
+    return reports.filter((report) => report.chapterId === chapterId);
+  };
+
+  const getViews = (reports = [], year = currentYear) => {
+    const views = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+    const reportsByYear = reports.filter((report) => report.year === year);
+    reportsByYear.forEach((report) => {
+      const { month } = report;
+      views[month] = report.view;
+    });
+
+    return views;
+  };
+
+  const getLikes = (reports = [], year = currentYear) => {
+    const likes = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+    const reportsByYear = reports.filter((report) => report.year === year);
+    reportsByYear.forEach((report) => {
+      const { month } = report;
+      likes[month] = report.like;
+    });
+
+    return likes;
+  };
 
   useEffect(() => {
-    if (titleReportLikes && titleReportLikes[currentYear]?.length > 0) {
-      const likes = [
-        ...titleReportLikes[currentYear].slice(currentMonth),
-        ...titleReportLikes[currentYear].slice(0, currentMonth),
-      ];
-      const views = [
-        ...titleReportViews[currentYear].slice(currentMonth),
-        ...titleReportViews[currentYear].slice(0, currentMonth),
-      ];
+    const reports = getReportByTitle(titleReports, ID.titleID);
+    const likes = getLikes(reports);
+    const views = getViews(reports);
 
-      setChartData((prev) => ({
-        ...prev,
-        title: { like: likes, view: views },
-      }));
-    }
-  }, [titleReports]);
-
-  // INFO: Calculate chapter's views and likes
+    setChartData((prev) => ({
+      ...prev,
+      title: { likes, views },
+    }));
+  }, [titleReports, ID.titleID]);
 
   useEffect(() => {
-    if (chapterReportLikes && chapterReportLikes[currentYear]?.length > 0) {
-      const likes = [
-        ...chapterReportLikes[currentYear].slice(currentMonth),
-        ...chapterReportLikes[currentYear].slice(0, currentMonth),
-      ];
-      const views = [
-        ...chapterReportViews[currentYear].slice(currentMonth),
-        ...chapterReportViews[currentYear].slice(0, currentMonth),
-      ];
+    const reports = getReportByChapter(chapterReports, ID.chapterID);
+    const likes = getLikes(reports);
+    const views = getViews(reports);
 
-      setChartData((prev) => ({
-        ...prev,
-        chapter: { like: likes, viewData: views },
-      }));
-    }
-  }, [chapterReports, chapterSelectOptions]);
+    setChartData((prev) => ({
+      ...prev,
+      chapter: { likes, views },
+    }));
+  }, [chapterReports, ID.chapterID]);
 
   const changeTitle = (option) => {
     setID({ ...ID, titleID: option.value });

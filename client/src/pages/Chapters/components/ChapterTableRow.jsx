@@ -1,5 +1,6 @@
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { BsTrash } from "react-icons/bs";
 import { HiOutlinePencil } from "react-icons/hi";
@@ -14,13 +15,19 @@ const cx = classNames.bind(styles);
 
 function ChaptersTableRow({ setPopup, setDeleteItem, chapters }) {
   const { titleId } = useParams();
-  const { approvedStatuses } = getAllApprovedStatuses();
+  const [approvedStatuses, setApprovedStatuses] = useState([]);
   const options = approvedStatuses.map((status) => {
     return {
       value: status.guid,
       label: status.name,
     };
   });
+
+  const fetchData = () => {
+    getAllApprovedStatuses()
+      .then((response) => setApprovedStatuses(response))
+      .catch((error) => console.log(error));
+  };
 
   const handleDeleteClick = (guid) => {
     setPopup((prev) => {
@@ -34,6 +41,10 @@ function ChaptersTableRow({ setPopup, setDeleteItem, chapters }) {
     });
     setDeleteItem({ guid, titleId });
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <>
