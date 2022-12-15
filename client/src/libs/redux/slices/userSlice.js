@@ -11,6 +11,8 @@ const initialState = {
     point: 0,
     coin: 0,
     income: 0,
+    ticketForRenting: 0,
+    ticketForBuying: 0,
   },
   isLoggingIn: false,
 };
