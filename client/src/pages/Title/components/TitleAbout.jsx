@@ -5,7 +5,7 @@ import { AiOutlineInfoCircle, AiOutlineQuestionCircle } from "react-icons/ai";
 
 import { BuyTicket, ChargeIcon, RentTicket } from "assets/images";
 import styles from "pages/Title/assets/styles/TitleAbout.module.scss";
-import ChargeBar from "./ChargeBar";
+// TODO: import ChargeBar from "./ChargeBar";
 import ChargeExplainPopup from "./ChargeExplainPopup";
 import TicketExplainPopup from "./TicketExplainPopup";
 
@@ -61,13 +61,13 @@ function TitleAbout({ user, title, setPopup }) {
         <div className={cx("user-tickets")}>
           <span className={cx("ticket")}>
             Vé thuê chương:
-            <span className={cx("rent-quantity")}>{user.rentTicket}</span>
+            <span className={cx("rent-quantity")}>{user.ticketForRenting}</span>
             <strong className={cx("ticket-separate")}>x</strong>
             <RentTicket />
           </span>
           <span className={cx("ticket")}>
             Vẽ mua chương:
-            <span className={cx("buy-quantity")}>{user.buyTicket}</span>
+            <span className={cx("buy-quantity")}>{user.ticketForBuying}</span>
             <strong className={cx("ticket-separate")}>x</strong>
             <BuyTicket />
           </span>
@@ -78,12 +78,15 @@ function TitleAbout({ user, title, setPopup }) {
           <div className={cx("charge__icon")}>
             <ChargeIcon />
             <span className={cx("charge__icon__label")}>
-              {title.chargeTime}
+              {/* TODO: {title.chargeTime} */}6
             </span>
           </div>
           <span>
             {`Đọc miễn phí 1 chương như có "Vé thuê" khi sạc đủ`}
-            <span className={cx("charge-time")}>{title.chargeTime}h</span>
+            <span className={cx("charge-time")}>
+              {/* TODO: {title.chargeTime} */}
+              6h
+            </span>
             <AiOutlineQuestionCircle
               className={cx("icon-question")}
               onClick={() =>
@@ -95,7 +98,7 @@ function TitleAbout({ user, title, setPopup }) {
             />
           </span>
         </div>
-        <ChargeBar user={user} title={title} />
+        {/* TODO: <ChargeBar user={user} title={title} /> */}
       </div>
       <div className={cx("title-page__about__notifications", "side-info")}>
         <div className={cx("title-page__about__notifications__notification")}>
@@ -112,11 +115,11 @@ TitleAbout.propTypes = {
   title: PropTypes.shape({
     approvedStatusId: PropTypes.string.isRequired,
     releaseDay: PropTypes.string.isRequired,
-    chargeTime: PropTypes.number.isRequired,
+    // TODO: chargeTime: PropTypes.number.isRequired,
   }).isRequired,
   user: PropTypes.shape({
-    rentTicket: PropTypes.number.isRequired,
-    buyTicket: PropTypes.number.isRequired,
+    ticketForRenting: PropTypes.number.isRequired,
+    ticketForBuying: PropTypes.number.isRequired,
   }).isRequired,
 };
 
