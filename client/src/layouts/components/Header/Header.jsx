@@ -1,7 +1,9 @@
 import classNames from "classnames/bind";
 import { Container } from "react-bootstrap";
+import { FaBars } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import { SwiperSlide } from "swiper/react";
+import PropTypes from "prop-types";
 
 import { Logo } from "assets/images";
 import { Button } from "components";
@@ -12,7 +14,7 @@ import Search from "./components/Search";
 
 const cx = classNames.bind(styles);
 
-function Header() {
+function Header({ toggleMobileNavbar }) {
   const headerNavigation = [
     { href: "/comic/weekly", label: "Comic" },
     { href: "/novel", label: "Novel" },
@@ -29,10 +31,21 @@ function Header() {
               <Logo className={cx("logo")} />
             </Button>
           </div>
+          <Button>
+            <FaBars
+              className={cx("sidebar--toggle")}
+              onClick={toggleMobileNavbar}
+            />
+          </Button>
           <Slider
             outsideNavigation
             grabCursor
-            slidesPerView={4}
+            slidesPerView={8}
+            breakpoints={{
+              0: { slidesPerView: 1 },
+              996: { slidesPerView: 5 },
+              1200: { slidesPerView: 8 },
+            }}
             className={cx("nav-menu")}
           >
             {headerNavigation.map((nav, index) => {
@@ -59,5 +72,13 @@ function Header() {
     </header>
   );
 }
+
+Header.propTypes = {
+  toggleMobileNavbar: PropTypes.func,
+};
+
+Header.defaultProps = {
+  toggleMobileNavbar: () => {},
+};
 
 export default Header;
