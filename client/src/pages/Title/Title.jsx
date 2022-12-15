@@ -1,43 +1,40 @@
 import classNames from "classnames/bind";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
-import followApi from "api/followApi";
 import { NoData, Pagination, Popup, Recommend } from "features";
-import { useToast } from "hooks";
+import { usePagination, useToast } from "hooks";
 import styles from "pages/Title/assets/styles/Title.module.scss";
-import { sortChapters } from "services/chapter";
+import { getAllChapters } from "services/chapter";
+import { addFollow } from "services/follow";
 import { getAllGenres } from "services/genre";
-import { getTitleByID } from "services/title";
-import { searchTitleGenre } from "services/titleGenre";
+import { getTitle } from "services/title";
+import { getAllTitleGenres } from "services/titleGenre";
 import { ComicChapters, Introduction, TitleAbout } from "./components";
 
 const cx = classNames.bind(styles);
 
 function Title() {
-  const user = useSelector((state) => state.user.user);
+  const CHAPTERS_PER_PAGE = 50;
   const { titleId } = useParams();
-  const { title } = getTitleByID(titleId);
-  const { genres } = getAllGenres();
+  const user = useSelector((state) => state.user.user);
+  const [title, setTitle] = useState({});
+  const [chapters, setChapters] = useState([]);
+  const [genres, setGenres] = useState([]);
+  const [titleGenres, setTitleGenres] = useState([]);
+  const { pagination, setPagination, setPaginationTotal } =
+    usePagination(CHAPTERS_PER_PAGE);
   const { Toast, options, toastEmitter } = useToast();
-  const { titleGenres } = searchTitleGenre("titleId", titleId);
   const [isDESCSorting, setIsDESCSorting] = useState(false);
-  const { chapters, pagination, setPagination, sorting } = sortChapters(
-    titleId,
-    "order",
-    true
-  );
   const hasTitle = Object.keys(title).length > 0;
   const haveChapters = chapters.length > 0;
-
   const [popup, setPopup] = useState({
     trigger: false,
     title: "",
     content: "",
   });
-
   const backgroundImageCSS = hasTitle && {
     backgroundImage: `url(${title.cover})`,
     backgroundRepeat: "no-repeat",
@@ -49,14 +46,49 @@ function Title() {
     left: "0",
     right: "0",
   };
+  const chapterApiParams = {
+    titleId,
+    sort: "order",
+    order: isDESCSorting ? "desc" : "asc",
+    page: pagination.page,
+    limit: pagination.limit,
+  };
 
-  const handleSort = () => {
+  const fetchData = () => {
+    const titlePromise = getTitle(titleId, false);
+    const genrePromise = getAllGenres();
+    const titleGenrePromise = getAllTitleGenres({ titleId });
+    const chaptersPromise = getAllChapters(chapterApiParams, false);
+
+    Promise.all([
+      titlePromise,
+      genrePromise,
+      titleGenrePromise,
+      chaptersPromise,
+    ])
+      .then(
+        ([
+          titleResponse,
+          genreResponse,
+          titleGenreResponse,
+          chapterResponse,
+        ]) => {
+          setTitle(titleResponse);
+          setGenres(genreResponse);
+          setTitleGenres(titleGenreResponse);
+          setChapters(chapterResponse.data);
+          setPaginationTotal(chapterResponse.pagination.total);
+        }
+      )
+      .catch((error) => console.log(error));
+  };
+
+  const handleSorting = () => {
     setIsDESCSorting(!isDESCSorting);
   };
 
   const handleFollow = (titleID) => {
-    followApi
-      .add({ titleId: titleID })
+    addFollow({ titleId: titleID })
       .then((response) => {
         if (response.affectedRows > 0) {
           toastEmitter(`Bạn đã theo dõi truyện ${title.name}`, "success");
@@ -74,6 +106,19 @@ function Title() {
     }, "");
     return genreString;
   };
+
+  const fetchChapters = async () => {
+    const response = await getAllChapters(chapterApiParams, false);
+    setChapters(response.data);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    fetchChapters();
+  }, [isDESCSorting, pagination.page]);
 
   return (
     <>
@@ -101,9 +146,8 @@ function Title() {
                   title={title}
                   chapters={chapters}
                   user={user}
-                  sorting={sorting}
                   isDESCSorting={isDESCSorting}
-                  handleSort={handleSort}
+                  handleSorting={handleSorting}
                 />
               ) : (
                 <NoData>

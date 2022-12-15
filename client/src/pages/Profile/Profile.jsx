@@ -7,7 +7,7 @@ import { Popup, ProgressCircle } from "features";
 import { useToast } from "hooks";
 import { login } from "libs/redux/slices/userSlice";
 import ProfileForm from "pages/Profile/components/ProfileForm";
-import { getUserByID, updateUser } from "services/user";
+import { getUser, updateUser } from "services/user";
 import AvatarBox from "./components/AvatarBox";
 
 function Profile() {
@@ -16,7 +16,6 @@ function Profile() {
   const [avatar, setAvatar] = useState(user.avatar);
   const [progress, setProgress] = useState(0);
   const { Toast, options, toastEmitter } = useToast();
-  const { refetch } = getUserByID();
   const [popup, setPopup] = useState({
     trigger: false,
     isConfirm: false,
@@ -33,13 +32,30 @@ function Profile() {
       : "",
   };
 
-  const handleSubmit = (values, { setSubmitting }) => {
-    values.avatar = avatar;
+  const handleUpdateUser = (data) => {
+    updateUser(user.guid, data, setProgress)
+      .then((response) => {
+        if (response.affectedRows > 0) {
+          getUser(user.guid).then(() => {
+            dispatch(login({ ...user, ...data }));
+          });
+          toastEmitter("Đổi thông tin cá nhân thành công", "success");
+          setProgress(0);
+        }
+      })
+      .catch((error) => {
+        toastEmitter(error.data.error || error.data.message, "error");
+        setProgress(0);
+      });
+  };
+
+  const getChangedValues = (values) => {
     const newData = {
       ...values,
       dateOfBirth: moment(values.dateOfBirth, "YYYY-MM-DD hh:mm:ss").toString(),
     };
     const valueKeys = Object.keys(newData);
+
     const changedValues = valueKeys.reduce((obj, key) => {
       if (JSON.stringify(values[key]) !== JSON.stringify(INITIAL_VALUE[key])) {
         return { ...obj, [key]: values[key] };
@@ -47,21 +63,14 @@ function Profile() {
       return obj;
     }, {});
 
-    Object.keys(changedValues).length > 0 &&
-      updateUser(user.guid, changedValues, setProgress)
-        .then((response) => {
-          if (response.affectedRows > 0) {
-            refetch(user.guid).then(() => {
-              dispatch(login({ ...user, ...changedValues }));
-            });
-            toastEmitter("Đổi thông tin cá nhân thành công", "success");
-            setProgress(0);
-          }
-        })
-        .catch((error) => {
-          toastEmitter(error.data.error || error.data.message, "error");
-          setProgress(0);
-        });
+    return changedValues;
+  };
+
+  const handleSubmit = (values, { setSubmitting }) => {
+    values.avatar = avatar;
+    const changedValues = getChangedValues(values);
+
+    Object.keys(changedValues).length > 0 && handleUpdateUser(changedValues);
 
     setSubmitting(false);
   };

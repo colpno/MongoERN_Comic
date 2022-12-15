@@ -1,12 +1,13 @@
 import classNames from "classnames/bind";
+import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { AiOutlinePlus } from "react-icons/ai";
-import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 import Button from "components/Button";
 import { NoData, Search } from "features";
-import { getLimitedTitlesByProperty, sortTitlesByUserID } from "services/title";
+import { usePagination } from "hooks";
+import { getAllTitles } from "services/title";
 import styles from "./assets/styles/MyTitle.module.scss";
 import MyTitleContent from "./components/MyTitleContent";
 import MyTitleHeader from "./components/MyTitleHeader";
@@ -23,28 +24,53 @@ function BtnCreate() {
 }
 
 function MyTitle() {
+  const TITLES_PER_PAGE = 50;
   const user = useSelector((state) => state.user.user);
   const searchText = useSelector((state) => state.global.searchText);
-  const TITLES_PER_PAGE = 50;
-  const { titles, setTitles, pagination, setPagination, sorting, fetch } =
-    sortTitlesByUserID(user.guid, "id", true, TITLES_PER_PAGE);
-  const { titles: limitedTitles, fetch: fetchLimitedTitles } =
-    getLimitedTitlesByProperty(null, 30);
-  const hasData = titles?.length > 0;
+  const [titles, setTitles] = useState([]);
+  const { pagination, setPagination, setPaginationTotal } =
+    usePagination(TITLES_PER_PAGE);
+  const defaultTitleApiParams = {
+    userId: user.guid,
+    sort: "id",
+    order: "asc",
+    page: pagination.page,
+    limit: pagination.limit,
+  };
+  const [titleApiParams, setTitleApiParams] = useState(defaultTitleApiParams);
+  const [isDescSort, setIsDescSort] = useState(true);
+  const hasData = titles.length > 0;
+
+  const fetchData = (params) => {
+    getAllTitles(params)
+      .then((response) => {
+        setTitles(response.data);
+        setPaginationTotal(response.pagination.total);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const handleSorting = (column) => {
+    setTitleApiParams((prev) => ({
+      ...prev,
+      sort: column,
+      order: !isDescSort,
+    }));
+    setIsDescSort((prev) => !prev);
+  };
+
+  useEffect(() => {
+    fetchData(titleApiParams);
+  }, [titleApiParams]);
 
   useEffect(() => {
     if (searchText) {
-      const prop = { name: searchText, userId: user.guid };
-      fetchLimitedTitles(prop);
+      setTitleApiParams((prev) => ({ ...prev, name: searchText }));
     }
     if (searchText.length === 0) {
-      fetch();
+      setTitleApiParams(defaultTitleApiParams);
     }
   }, [searchText]);
-
-  useEffect(() => {
-    limitedTitles.length > 0 && setTitles(limitedTitles);
-  }, [limitedTitles]);
 
   return (
     <Container className={cx("my-title")}>
@@ -62,7 +88,7 @@ function MyTitle() {
       {hasData ? (
         <Row>
           <MyTitleContent
-            sorting={sorting}
+            sorting={handleSorting}
             titles={titles}
             pagination={pagination}
             setPagination={setPagination}

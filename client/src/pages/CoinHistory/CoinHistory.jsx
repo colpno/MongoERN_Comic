@@ -1,30 +1,49 @@
 import classNames from "classnames/bind";
+import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 import { CircleC } from "assets/images";
 import { NoData, Pagination } from "features";
-import { useSelector } from "react-redux";
-import { sortCoinHistories } from "services/coinHistory";
+import { usePagination } from "hooks";
+import { getAllCoinHistories } from "services/coinHistory";
 import { convertToDateTimeString } from "utils/convertTime";
 import styles from "./assets/styles/CoinHistory.module.scss";
 
 const cx = classNames.bind(styles);
 
 function CoinHistory() {
+  const HISTORIES_PER_PAGE = 30;
   const user = useSelector((state) => state.user.user);
-  const { coinHistories, pagination, setPagination } = sortCoinHistories(
-    user.guid,
-    "createdAt",
-    false,
-    30
-  );
-  const hasData = coinHistories.length > 0;
+  const [histories, setHistories] = useState([]);
+  const { pagination, setPagination, setPaginationTotal } =
+    usePagination(HISTORIES_PER_PAGE);
+
+  const fetchData = () => {
+    const params = {
+      userId: user.guid,
+      sort: "createdAt",
+      order: "desc",
+      page: pagination.page,
+      limit: pagination.limit,
+    };
+    getAllCoinHistories(params)
+      .then((response) => {
+        setHistories(response.data);
+        setPaginationTotal(response.pagination.total);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <>
-      {hasData ? (
+      {histories.length > 0 ? (
         <Container className={cx("coin-history")}>
-          {coinHistories.map((coinHistory) => {
+          {histories.map((coinHistory) => {
             const { id, amount, createdAt } = coinHistory;
             // TODO: const { label } = payMethod;
 
@@ -52,7 +71,7 @@ function CoinHistory() {
           <h5>Hiện tại không có lịch sử Coint</h5>
         </NoData>
       )}
-      <div className={cx("")} />
+      {}
     </>
   );
 }

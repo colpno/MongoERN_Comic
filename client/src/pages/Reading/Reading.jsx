@@ -3,12 +3,11 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
-import followApi from "api/followApi";
 import { Recommend } from "features";
 import { useToast } from "hooks";
 import { setUserLike } from "libs/redux/slices/readingChapterSlice";
 import styles from "pages/Reading/assets/styles/Reading.module.scss";
-import { deleteFollow, getFollow } from "services/follow";
+import { addFollow, deleteFollow, getAllFollows } from "services/follow";
 import { addUserLike, deleteUserLike } from "services/userLike";
 import { isEmpty } from "utils";
 import {
@@ -27,12 +26,44 @@ function Reading() {
   const user = useSelector((state) => state.user.user);
   const chapters = useSelector((state) => state.chapter.chapters);
   const userLike = useSelector((state) => state.chapter.userLike);
-  const { follow } = getFollow(user.guid, titleId);
+  const [follows, setFollows] = useState([]);
   const { Toast, options, toastEmitter } = useToast();
   const [controls, setControls] = useState({
     isLiked: false,
     isFollowed: false,
   });
+
+  const fetchData = () => {
+    getAllFollows({
+      userId: user.guid,
+      titleId,
+    })
+      .then((response) => setFollows(response))
+      .catch((error) => console.log(error));
+  };
+
+  const handleUserLike = () => {
+    addUserLike(user.guid, chapter.guid)
+      .then((response) => {
+        toastEmitter(response.message, "success");
+        setControls((prev) => ({ ...prev, isLiked: true }));
+        dispatch(setUserLike(response.data));
+      })
+      .catch((error) => {
+        toastEmitter(error.data.error, "error");
+      });
+  };
+
+  const handleRemoveUserLike = () => {
+    deleteUserLike(user.guid, chapter.guid)
+      .then(() => {
+        setControls((prev) => ({ ...prev, isLiked: false }));
+        dispatch(setUserLike({}));
+      })
+      .catch((error) => {
+        toastEmitter(error.data.error, "error");
+      });
+  };
 
   const handleLikeClick = () => {
     if (isEmpty(user.guid)) {
@@ -41,26 +72,35 @@ function Reading() {
     }
 
     if (!userLike.guid && !controls.isLiked) {
-      addUserLike(user.guid, chapter.guid)
-        .then((response) => {
-          toastEmitter(response.message, "success");
-          setControls((prev) => ({ ...prev, isLiked: true }));
-          dispatch(setUserLike(response.data));
-        })
-        .catch((error) => {
-          toastEmitter(error.data.error, "error");
-        });
+      handleUserLike();
     }
     if (controls.isLiked) {
-      deleteUserLike(user.guid, chapter.guid)
-        .then(() => {
-          setControls((prev) => ({ ...prev, isLiked: false }));
-          dispatch(setUserLike({}));
-        })
-        .catch((error) => {
-          toastEmitter(error.data.error, "error");
-        });
+      handleRemoveUserLike();
     }
+  };
+
+  const handleFollow = () => {
+    addFollow({ titleId })
+      .then((response) => {
+        if (response.affectedRows > 0) {
+          toastEmitter("Bạn đã theo dõi truyện", "success");
+          setControls((prev) => ({ ...prev, isFollowed: true }));
+        }
+      })
+      .catch((error) => {
+        toastEmitter(error.data.error, "error");
+      });
+  };
+
+  const handleUnFollow = () => {
+    deleteFollow(titleId)
+      .then(() => {
+        setControls((prev) => ({ ...prev, isFollowed: false }));
+      })
+      .catch((error) => {
+        console.log("file: Reading.jsx ~ line 57 ~ error", error);
+        toastEmitter(error.data.error, "error");
+      });
   };
 
   const handleFollowClick = () => {
@@ -70,29 +110,16 @@ function Reading() {
     }
 
     if (!controls.isFollowed) {
-      followApi
-        .add({ titleId })
-        .then((response) => {
-          if (response.affectedRows > 0) {
-            toastEmitter("Bạn đã theo dõi truyện", "success");
-            setControls((prev) => ({ ...prev, isFollowed: true }));
-          }
-        })
-        .catch((error) => {
-          toastEmitter(error.data.error, "error");
-        });
+      handleFollow();
     }
     if (controls.isFollowed) {
-      deleteFollow(titleId)
-        .then(() => {
-          setControls((prev) => ({ ...prev, isFollowed: false }));
-        })
-        .catch((error) => {
-          console.log("file: Reading.jsx ~ line 57 ~ error", error);
-          toastEmitter(error.data.error, "error");
-        });
+      handleUnFollow();
     }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   useEffect(() => {
     if (userLike?.userId === user.guid) {
@@ -104,10 +131,10 @@ function Reading() {
   }, [userLike]);
 
   useEffect(() => {
-    if (follow?.userId === user.guid) {
+    if (follows?.userId === user.guid) {
       setControls((prev) => ({ ...prev, isFollowed: true }));
     }
-  }, [follow]);
+  }, [follows]);
 
   return (
     <>

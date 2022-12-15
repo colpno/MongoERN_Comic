@@ -1,47 +1,49 @@
 import classNames from "classnames/bind";
-import { Col, Container, Row } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Container, Row } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
-import { CircleP } from "assets/images";
 import { NoData, Pagination } from "features";
-import { sortPointHistories } from "services/pointHistory";
-import { convertToDateTimeString } from "utils/convertTime";
+import { usePagination } from "hooks";
+import { getAllPointHistories } from "services/pointHistory";
 import styles from "./assets/styles/PointHistory.module.scss";
+import PointHistoryList from "./components/PointHistoryList";
 
 const cx = classNames.bind(styles);
 
 function PointHistory() {
-  const userId = 1;
-  const { pointHistories, pagination, setPagination } = sortPointHistories(
-    userId,
-    "createdAt",
-    false,
-    30
-  );
-  const hasData = pointHistories.length > 0;
+  const HISTORIES_PER_PAGE = 30;
+  const { guid: userId } = useSelector((state) => state.user.user);
+  const [histories, setHistories] = useState([]);
+  const { pagination, setPagination, setPaginationTotal } =
+    usePagination(HISTORIES_PER_PAGE);
+  const hasData = histories.length > 0;
+
+  const fetchData = () => {
+    const params = {
+      userId,
+      sort: "createdAt",
+      order: "desc",
+      page: pagination.page,
+      limit: pagination.limit,
+    };
+    getAllPointHistories(params)
+      .then((response) => {
+        setHistories(response.data);
+        setPaginationTotal(response.pagination.total);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [pagination.page]);
 
   return (
     <>
       {hasData ? (
         <Container className={cx("point-history")}>
-          {pointHistories.map((pointHistory) => {
-            const { id, payMethod, amount, createdAt } = pointHistory;
-            const { label } = payMethod;
-
-            return (
-              <Row className={cx("point-history__row")} key={id}>
-                <Col sm={1}>
-                  <CircleP className={cx("point-icon")} />
-                </Col>
-                <Col className={cx("point-history__row__content")}>
-                  <h5>Nhận Point từ {label}</h5>
-                  <small>{convertToDateTimeString(createdAt)}</small>
-                </Col>
-                <Col className={cx("point-history__row__quantity")}>
-                  <strong>{amount > 0 ? `+${amount}` : `-${amount}`}</strong>
-                </Col>
-              </Row>
-            );
-          })}
+          <PointHistoryList histories={histories} />
           <Row>
             <Pagination pagination={pagination} setPagination={setPagination} />
           </Row>

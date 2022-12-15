@@ -1,10 +1,11 @@
 import classNames from "classnames/bind";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import CardList from "components/CardList";
 import { BannerSlider, NoData } from "features";
+import { useInfinitePagination } from "hooks";
 import { Container } from "react-bootstrap";
-import { searchTitle } from "services/title";
+import { getAllTitles } from "services/title";
 import Calendar from "./assets/images/icons8-new-year-calendar-24.png";
 import styles from "./assets/styles/Weekly.module.scss";
 import DaysOfWeek from "./components/DaysOfWeek";
@@ -12,9 +13,12 @@ import DaysOfWeek from "./components/DaysOfWeek";
 const cx = classNames.bind(styles);
 
 function Weekly() {
-  const COMIC_PER_PAGE = 15;
+  const TITLES_PER_PAGE = 15;
   const today = new Date().getDay();
-  const [limit, setLimit] = useState(COMIC_PER_PAGE);
+  const [titles, setTitles] = useState([]);
+  const { pagination, setPaginationTotal, setLastElement } =
+    useInfinitePagination(TITLES_PER_PAGE);
+  const [limit, setLimit] = useState(TITLES_PER_PAGE);
 
   const [dayFilter, setDayFilter] = useState(() => {
     switch (today) {
@@ -36,44 +40,59 @@ function Weekly() {
         return "T2";
     }
   });
-  const { titles, pagination, setReFetch } = searchTitle(
-    "releaseDay",
-    dayFilter,
-    limit
+
+  const slider = useMemo(
+    () =>
+      titles?.slice(0, 10).map((title) => {
+        return { image: title.cover, link: `/comic/title/${title.guid}` };
+      }),
+    [titles]
   );
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const cardsContainerHeight =
-        document.querySelector(".cards-content")?.offsetHeight;
+  const fetchTitles = (selectedDay) => {
+    getAllTitles(
+      {
+        releaseDay: selectedDay,
+        page: pagination.page,
+        limit: pagination.limit,
+      },
+      false
+    )
+      .then((response) => {
+        setTitles(response.data);
+        setPaginationTotal(response.pagination.total);
+      })
+      .catch((error) => console.log(error));
+  };
 
-      if (
-        window.scrollY >= cardsContainerHeight + 150 &&
-        limit < pagination.total
-      ) {
-        setLimit((prev) => prev + COMIC_PER_PAGE);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [dayFilter]);
+  const scrollFetchTitles = (selectedDay) => {
+    getAllTitles(
+      {
+        releaseDay: selectedDay,
+        page: pagination.page,
+        limit: pagination.limit,
+      },
+      false
+    )
+      .then((response) => {
+        setTitles((prev) => [...prev, ...response.data]);
+      })
+      .catch((error) => console.log(error));
+  };
 
   const handleDayClick = (day) => {
     setDayFilter(day);
-    setLimit(COMIC_PER_PAGE);
-    setReFetch("releaseDay", day);
+    setLimit(TITLES_PER_PAGE);
+    fetchTitles(day);
   };
 
-  const slider =
-    titles.length > 0
-      ? titles.slice(0, 10).map((title) => {
-          return title.cover;
-        })
-      : [];
+  useEffect(() => {
+    fetchTitles(dayFilter);
+  }, []);
+
+  useEffect(() => {
+    scrollFetchTitles(dayFilter);
+  }, [pagination.page]);
 
   return (
     <div className={cx("weekly-page")}>
@@ -101,6 +120,7 @@ function Weekly() {
             data={titles.slice(0, limit)}
             col={{ xs: 6, sm: 4, md: 20 }}
           />
+          <div ref={setLastElement} />
         </Container>
       ) : (
         <NoData>

@@ -1,15 +1,27 @@
 import classNames from "classnames/bind";
+import { useEffect, useState } from "react";
+import { Container } from "react-bootstrap";
+
 import CardList from "components/CardList";
 import { NoData } from "features";
-import { Container } from "react-bootstrap";
 import { getAllTitles } from "services/title";
 import styles from "./assets/styles/Complete.module.scss";
 
 const cx = classNames.bind(styles);
 
 function Complete() {
-  const { titles } = getAllTitles({ releaseDay: "finished" });
+  const [titles, setTitles] = useState([]);
   const hasData = titles.length;
+
+  const fetchData = () => {
+    getAllTitles({ releaseDay: "finished" })
+      .then((response) => setTitles(response))
+      .catch((error) => console.log(error));
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <Container className={cx("complete-page")}>

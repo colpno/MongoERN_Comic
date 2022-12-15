@@ -1,5 +1,6 @@
-import Button from "components/Button";
 import PropTypes from "prop-types";
+
+import Button from "components/Button";
 
 function SearchDropdownGroup({ cx, searchResult, label }) {
   return (
@@ -10,7 +11,7 @@ function SearchDropdownGroup({ cx, searchResult, label }) {
           const { id, cover, name, author } = title;
           return (
             <li key={id} className={cx("dropdown__item")}>
-              <Button wrapper to={`/comic/title/${id}`}>
+              <Button wrapper fullWidth to={`/comic/title/${id}`}>
                 <figure className={cx("dropdown__group__figure")}>
                   <div className={cx("box-img")}>
                     <img src={cover} alt="title" />

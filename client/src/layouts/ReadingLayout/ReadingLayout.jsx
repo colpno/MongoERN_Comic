@@ -1,54 +1,98 @@
 import PropTypes from "prop-types";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import Footer from "layouts/components/Footer";
 import {
-  setChapterImages,
-  setChapterInfo,
-  setChapters,
-  setUserLike,
+  setChapterImages as setChapterImagesStore,
+  setChapterInfo as setChapterInfoStore,
+  setChapters as setChaptersStore,
+  setUserLike as setUserLikeStore,
 } from "libs/redux/slices/readingChapterSlice";
 import {
-  getChapterByID,
-  sortChapters,
+  getAllChapters,
+  getChapter,
   updateChapterView,
 } from "services/chapter";
-import { getAllChapterImagesByChapterID } from "services/chapterImage";
+import { getAllChapterImages } from "services/chapterImage";
 import { addReadingHistory } from "services/readingHistory";
-import { getUserLike } from "services/userLike";
+import { getAllUserLike } from "services/userLike";
 import ReadingHeader from "./components/ReadingHeader";
 
 function ReadingLayout({ children }) {
   const dispatch = useDispatch();
   const { chapterId, titleId } = useParams();
-  const { chapter } = getChapterByID(chapterId, titleId, false);
-  const { chapters } = sortChapters(titleId, "order", true);
-  const { chapterImages } = getAllChapterImagesByChapterID(chapterId);
-  const user = useSelector((state) => state.user.user);
-  const { userLike } = getUserLike(user.guid, chapterId);
+  const userObject = useSelector((state) => state.user);
+  const { user, isLoggingIn } = userObject;
+  const [chapter, setChapter] = useState({});
+  const [chapters, setChapters] = useState([]);
+  const [chapterContents, setChapterContents] = useState([]);
+  const [userLike, setUserLike] = useState({});
+
+  const fetchData = () => {
+    const chapterPromise = getChapter(chapterId, false);
+    const chaptersPromise = getAllChapters(
+      {
+        titleId,
+        sort: "order",
+        order: "asc",
+      },
+      false
+    );
+    const chapterImagesPromise = getAllChapterImages({ chapterId });
+    const userLikePromise = getAllUserLike({
+      userId: user.guid,
+      chapterId,
+    });
+
+    Promise.all([
+      chapterPromise,
+      chaptersPromise,
+      chapterImagesPromise,
+      userLikePromise,
+    ])
+      .then(
+        ([
+          chapterResponse,
+          chaptersResponse,
+          chapterImagesResponse,
+          userLikeResponse,
+        ]) => {
+          setChapter(chapterResponse);
+          setChapters(chaptersResponse);
+          setChapterContents(chapterImagesResponse);
+          setUserLike(userLikeResponse);
+        }
+      )
+      .catch((error) => console.log(error));
+  };
 
   useEffect(() => {
-    chapter?.guid && dispatch(setChapterInfo(chapter));
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    chapter?.guid && dispatch(setChapterInfoStore(chapter));
   }, [chapter]);
 
   useEffect(() => {
-    chapterImages.length > 0 && dispatch(setChapterImages(chapterImages));
-  }, [chapterImages]);
+    chapterContents.length > 0 &&
+      dispatch(setChapterImagesStore(chapterContents));
+  }, [chapterContents]);
 
   useEffect(() => {
-    userLike?.guid && dispatch(setUserLike(userLike));
+    userLike?.guid && dispatch(setUserLikeStore(userLike));
   }, [userLike]);
 
   useEffect(() => {
-    chapters.length > 0 && dispatch(setChapters(chapters));
+    chapters.length > 0 && dispatch(setChaptersStore(chapters));
   }, [chapters]);
 
   useEffect(() => {
     setTimeout(() => {
       updateChapterView(chapterId);
-      addReadingHistory(titleId, chapterId, user.guid);
+      isLoggingIn && addReadingHistory(titleId, chapterId, user.guid);
     }, 60 * 1000);
   }, []);
 

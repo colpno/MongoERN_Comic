@@ -1,23 +1,23 @@
-import PropTypes from "prop-types";
 import classNames from "classnames/bind";
+import PropTypes from "prop-types";
 import { memo } from "react";
 import { Container } from "react-bootstrap";
 
-import CardList from "components/CardList";
+import { CardListWithTitle } from "components";
 import styles from "../../../assets/styles/ComicFollowSection.module.scss";
 
 const cx = classNames.bind(styles);
 
-function ComicFollowSection({ titles, headTitle }) {
+function ComicFollowSection({ titles, genre }) {
   return (
     <section>
       <Container className={cx("follow")}>
-        <CardList
+        <CardListWithTitle
           col={{
             xs: 2,
           }}
           data={titles}
-          headTitle={headTitle}
+          genre={genre}
         />
       </Container>
     </section>
@@ -26,7 +26,7 @@ function ComicFollowSection({ titles, headTitle }) {
 
 ComicFollowSection.propTypes = {
   titles: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired,
-  headTitle: PropTypes.string.isRequired,
+  genre: PropTypes.shape({}).isRequired,
 };
 
 export default memo(ComicFollowSection);

@@ -1,5 +1,5 @@
 import classNames from "classnames/bind";
-import { memo, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import { Container } from "react-bootstrap";
 import { AiFillCaretDown } from "react-icons/ai";
 
@@ -12,13 +12,23 @@ const cx = classNames.bind(styles);
 
 function Recommend() {
   const [isExpand, setIsExpand] = useState(false);
-  const { titles } = getAllTitles(18);
-  const unFoldList = titles.slice(6);
-  const foldList = titles.slice(0, 6);
+  const [titles, setTitles] = useState([]);
+  const unFoldList = useMemo(() => titles?.slice(6), [titles]);
+  const foldList = useMemo(() => titles?.slice(0, 6), [titles]);
+
+  const fetchData = () => {
+    getAllTitles({ limit: 18, page: 1 })
+      .then((response) => setTitles(response.data))
+      .catch((error) => console.log(error));
+  };
 
   const showMoreCards = () => {
-    isExpand ? setIsExpand(false) : setIsExpand(true);
+    setIsExpand((prev) => !prev);
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <Container fluid="md" className={cx("recommend")}>

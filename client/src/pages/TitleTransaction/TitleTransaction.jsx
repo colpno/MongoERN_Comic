@@ -1,5 +1,5 @@
 import classNames from "classnames/bind";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
 
@@ -14,12 +14,22 @@ const cx = classNames.bind(styles);
 function TitleTransaction() {
   const [searchParams] = useSearchParams();
   let queryTab = searchParams.get("tab") || "";
-  const { titles } = getAllTitles();
+  const [titles, setTitles] = useState([]);
 
   const menu = [
     { label: "Đã mua", tab: "purchased-titles", href: "?tab=purchased-titles" },
     { label: "Đã thuê", tab: "hired-titles", href: "?tab=hired-titles" },
   ];
+
+  const fetchData = () => {
+    getAllTitles()
+      .then((response) => setTitles(response))
+      .catch((error) => console.log(error));
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   useEffect(() => {
     queryTab = searchParams.get("tab") || "";

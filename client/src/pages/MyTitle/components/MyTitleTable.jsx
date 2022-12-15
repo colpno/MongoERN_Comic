@@ -1,5 +1,6 @@
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { HiOutlinePencil } from "react-icons/hi";
 import { TbList } from "react-icons/tb";
@@ -12,13 +13,23 @@ import styles from "../assets/styles/MyTitleTable.module.scss";
 const cx = classNames.bind(styles);
 
 function MyTitleTable({ data }) {
-  const { approvedStatuses } = getAllApprovedStatuses();
+  const [approvedStatuses, setApprovedStatuses] = useState([]);
   const options = approvedStatuses.map((status) => {
     return {
       value: status.guid,
       label: status.name,
     };
   });
+
+  const fetchData = () => {
+    getAllApprovedStatuses()
+      .then((response) => setApprovedStatuses(response))
+      .catch((error) => console.log(error));
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <>

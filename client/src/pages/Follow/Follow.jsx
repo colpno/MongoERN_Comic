@@ -1,4 +1,5 @@
 import classNames from "classnames/bind";
+import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
@@ -6,33 +7,52 @@ import { noFavorite } from "assets/images";
 import GridTable from "components/GridTable";
 import TabsContainer from "components/TabsContainer";
 import { NoData, Pagination, Popup } from "features";
-import { useDelete, useToast } from "hooks";
-import { deleteFollow, getLimitedFollowsByUserID } from "services/follow";
+import { useDelete, usePagination, useToast } from "hooks";
+import { deleteFollow, getAllFollows } from "services/follow";
 import styles from "./assets/styles/Follow.module.scss";
 import FollowTable from "./components/FollowTable";
 
 const cx = classNames.bind(styles);
 
 function Follow() {
+  const FOLLOWS_PER_PAGE = 50;
   const user = useSelector((state) => state.user.user);
-  const { follows, pagination, setPagination, fetchLimitFollows } =
-    getLimitedFollowsByUserID(user.guid, 50);
+  const [follows, setFollows] = useState([]);
+  const { pagination, setPagination, setPaginationTotal } =
+    usePagination(FOLLOWS_PER_PAGE);
   const { Toast, options, toastEmitter } = useToast();
-  const hasData = follows.length > 0;
-
   const menu = [
     { href: "", label: "Truyện tranh", tab: "" },
     { href: "?tab=novels", label: "Truyện chữ", tab: "novels" },
   ];
+  const hasData = follows.length > 0;
+
+  const fetchData = () => {
+    const params = {
+      userId: user.guid,
+      page: pagination.page,
+      limit: pagination.limit,
+    };
+    getAllFollows(params)
+      .then((response) => {
+        setFollows(response.data);
+        setPaginationTotal(response.pagination.total);
+      })
+      .catch((error) => console.log(error));
+  };
 
   const { deletedItem, setDeletedItem, popup, setPopup } = useDelete(
     async () => {
       deleteFollow(deletedItem).then(() => {
         toastEmitter("Hủy theo dõi thành công", "success");
-        fetchLimitFollows();
+        fetchData();
       });
     }
   );
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <>

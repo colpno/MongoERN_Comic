@@ -1,6 +1,8 @@
 import classNames from "classnames/bind";
+import { useEffect, useMemo, useState } from "react";
 import { Container } from "react-bootstrap";
-import { sortTitles } from "services/title";
+
+import { getAllTitles } from "services/title";
 import styles from "./assets/styles/Ranking.module.scss";
 import RankingList from "./components/RankingList";
 import Top5 from "./components/Top5";
@@ -8,10 +10,25 @@ import Top5 from "./components/Top5";
 const cx = classNames.bind(styles);
 
 function Ranking() {
-  const { titles } = sortTitles("like", false, 50);
-  const topFiveTitles = titles.slice(0, 5);
-  const restRankTitles = titles.slice(5);
+  const [titles, setTitles] = useState([]);
+  const topFiveTitles = useMemo(() => titles?.slice(0, 5), [titles]);
+  const restRankTitles = useMemo(() => titles?.slice(5), [titles]);
   const hasData = titles.length > 0;
+
+  const fetchData = () => {
+    getAllTitles({
+      sort: "like",
+      order: "asc",
+      limit: 50,
+      page: 1,
+    })
+      .then((response) => setTitles(response.data))
+      .catch((error) => console.log(error));
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <>

@@ -1,13 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import * as Yup from "yup";
 
 import ChapterForm from "components/ChapterForm";
 import FormWrapper from "components/FormWrapper/FormWrapper";
 import { Popup, ProgressCircle } from "features";
 import { useToast } from "hooks";
-import { getChapterByID, updateChapter } from "services/chapter";
-import { getAllChapterImagesByChapterID } from "services/chapterImage";
+import { getChapter, updateChapter } from "services/chapter";
+import { getAllChapterImages } from "services/chapterImage";
+import { updateChapterFormValidation } from "validations/updateChapterFormValidation";
 
 function UpdateChapter() {
   const { titleId, chapterId } = useParams();
@@ -18,27 +18,33 @@ function UpdateChapter() {
     content: "",
   });
   const [progress, setProgress] = useState(0);
-  const { chapter } = getChapterByID(chapterId);
-  const { chapterImages } = getAllChapterImagesByChapterID(chapterId);
+  const [chapter, setChapter] = useState({});
+  const [chapterContents, setChapterContents] = useState([]);
+
+  const fetchData = () => {
+    const chapterPromise = getChapter(chapterId);
+    const chapterContentsPromise = getAllChapterImages({ chapterId });
+
+    Promise.all([chapterPromise, chapterContentsPromise])
+      .then(([chapterResponse, chapterContentsResponse]) => {
+        setChapter(chapterResponse);
+        setChapterContents(chapterContentsResponse);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const INITIAL_VALUE = chapter &&
-    chapterImages.length > 0 && {
+    chapterContents.length > 0 && {
       name: chapter.name,
       cost: `${chapter.cost}`,
       order: `${chapter.order}`,
       cover: chapter.cover,
-      images: chapterImages.map((chapterImage) => chapterImage.image),
+      images: chapterContents.map((chapterImage) => chapterImage.image),
     };
-
-  const VALIDATION_SCHEMA = Yup.object({
-    order: Yup.number(),
-    name: Yup.string()
-      .max(255, "Giới hạn độ dài là 255 ký tự.")
-      .required("Truyện cần phải có tiêu đề."),
-    cost: Yup.string().required("Truyện tối thiểu là miễn phí"),
-    cover: Yup.string().required("Truyện cần phải có ảnh bìa mặc định."),
-    images: Yup.array().of(Yup.string()).min(1, "Cần tối thiểu 1 nội dung"),
-  });
 
   const handleSubmit = (values, { setSubmitting }) => {
     const valueKeys = Object.keys(values);
@@ -86,11 +92,11 @@ function UpdateChapter() {
   return (
     <>
       <FormWrapper title="Chỉnh sửa chương">
-        {Object.keys(chapter).length && chapterImages.length > 0 && (
+        {Object.keys(chapter).length && chapterContents.length > 0 && (
           <ChapterForm
             handleSubmit={handleSubmit}
             initialValues={INITIAL_VALUE}
-            validationSchema={VALIDATION_SCHEMA}
+            validationSchema={updateChapterFormValidation}
           />
         )}
       </FormWrapper>

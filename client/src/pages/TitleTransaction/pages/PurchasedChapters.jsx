@@ -1,18 +1,20 @@
 import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 import GridTable from "components/GridTable";
 import { NoData, Pagination } from "features";
-import { useSelector } from "react-redux";
-import { getLimitedPurchasedChaptersByUserID } from "services/purchasedChapter";
+import { getAllPurchasedChapters } from "services/purchasedChapter";
 
 function PurchasedChapters({ cx, titles }) {
   const user = useSelector((state) => state.user.user);
-  const { purchasedChapters, pagination, setPagination } =
-    getLimitedPurchasedChaptersByUserID(user.guid, 30);
-  const chapters = purchasedChapters.map(
-    (purchasedChapter) => purchasedChapter.chapter
-  );
+  const [chapters, setChapters] = useState([]);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 30,
+    total: 0,
+  });
 
   const finalData = [];
   chapters.forEach((chapter) => {
@@ -22,6 +24,31 @@ function PurchasedChapters({ cx, titles }) {
     });
   });
   const hasData = finalData.length > 0;
+
+  const fetchData = () => {
+    const params = {
+      userId: user.guid,
+      page: pagination.page,
+      limit: pagination.limit,
+    };
+    getAllPurchasedChapters(params)
+      .then((response) => {
+        const purchasedChapters = response.data.map(
+          (purchasedChapter) => purchasedChapter.chapter
+        );
+
+        setChapters(purchasedChapters);
+        setPagination((prev) => ({
+          ...prev,
+          total: response.pagination.total,
+        }));
+      })
+      .catch((error) => console.log(error));
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -50,7 +77,7 @@ function PurchasedChapters({ cx, titles }) {
                   </Col>
                 </Row>
               );
-            })}{" "}
+            })}
           </>
           <Pagination pagination={pagination} setPagination={setPagination} />
         </GridTable>

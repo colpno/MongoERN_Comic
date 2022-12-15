@@ -4,9 +4,10 @@ import { Container, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
 import GridTable from "components/GridTable";
-import { Popup } from "features";
+import { Pagination, Popup } from "features";
+import { usePagination } from "hooks";
 import TicketExplainPopup from "pages/Title/components/TicketExplainPopup";
-import { getLimitedHiredChaptersByUserID } from "services/hiredChapter";
+import { getAllHiredChapters } from "services/hiredChapter";
 import { getAllPurchasedChapters } from "services/purchasedChapter";
 import { sortArray } from "utils/arrayMethods";
 import { ReactComponent as TicketLogo } from "./assets/images/ticket.svg";
@@ -18,18 +19,12 @@ import InventoryTickets from "./components/InventoryTickets";
 const cx = classNames.bind(styles);
 
 function Inventory() {
+  const CHAPTERS_PER_PAGE = 30;
   const user = useSelector((state) => state.user.user);
-  const { hiredChapters } = getLimitedHiredChaptersByUserID({
-    userId: user.guid,
-    limit: 30,
-  });
-  const { purchasedChapters } = getAllPurchasedChapters({
-    userId: user.guid,
-    limit: 30,
-  });
   const [chapters, setChapters] = useState([]);
   const [sorter, setSorter] = useState({ key: "createdAt", isAsc: false });
-
+  const { pagination, setPagination, setPaginationTotal } =
+    usePagination(CHAPTERS_PER_PAGE);
   const sortOptions = [
     { value: "createdAt", label: "Ngày nhận" },
     { value: "expiredDay", label: "Ngày hết hạn" },
@@ -39,6 +34,27 @@ function Inventory() {
     title: "",
     content: "",
   });
+
+  const fetchData = () => {
+    const hiredChapterPromise = getAllHiredChapters({
+      userId: user.guid,
+      page: pagination.page,
+      limit: pagination.limit / 2,
+    });
+    const purchasedChapterPromise = getAllPurchasedChapters({
+      userId: user.guid,
+      page: pagination.page,
+      limit: pagination.limit / 2,
+    });
+
+    Promise.all([hiredChapterPromise, purchasedChapterPromise])
+      .then(([hiredChapters, purchasedChapters]) => {
+        const allData = [...hiredChapters.data, purchasedChapters.data];
+        setChapters(allData);
+        setPaginationTotal(allData.length);
+      })
+      .catch((error) => console.log(error));
+  };
 
   const handleClickIcon = () => {
     setPopup({
@@ -60,18 +76,7 @@ function Inventory() {
   };
 
   const handleSort = () => {
-    let data = [];
-    switch (sorter.key) {
-      case "createdAt":
-        data = sorting([...chapters], !sorter.isAsc, sorter.key);
-        break;
-      case "expiredDay":
-        data = sorting([...hiredChapters], !sorter.isAsc, sorter.key);
-        data.push(...purchasedChapters);
-        break;
-      default:
-        break;
-    }
+    const data = sorting([...chapters], !sorter.isAsc, sorter.key);
     setSorter({ ...sorter, isAsc: !sorter.isAsc });
     setChapters(data);
   };
@@ -79,7 +84,7 @@ function Inventory() {
   const handleFilter = (selected) => {
     const { value } = selected;
     if (sorter.key !== value) {
-      const data = [...hiredChapters, ...purchasedChapters];
+      const data = [...chapters];
 
       switch (value) {
         case "createdAt":
@@ -103,12 +108,8 @@ function Inventory() {
   };
 
   useEffect(() => {
-    if (hiredChapters.length > 0 && purchasedChapters.length > 0) {
-      const data = [...hiredChapters, ...purchasedChapters];
-      sorting(data, sorter.isAsc, sorter.key);
-      setChapters(data);
-    }
-  }, [hiredChapters, purchasedChapters]);
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -142,6 +143,7 @@ function Inventory() {
         >
           <InventoryTable hiredChapters={chapters} />
         </GridTable>
+        <Pagination pagination={pagination} setPagination={setPagination} />
       </Container>
       <Popup popup={popup} setPopup={setPopup} />
     </>

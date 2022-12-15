@@ -6,8 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { roundNumByUnit, separateNumberDigit } from "utils";
 
 import { Popup } from "features";
-import { setMyTitles } from "libs/redux/slices/myTitlesSlice";
-import { getAllTitlesByUserID } from "services/title";
+import { setMyTitles } from "libs/redux/slices/titleSlice";
+import { getAllTitles } from "services/title";
 import {
   BookLine,
   ChatLine,
@@ -25,7 +25,7 @@ const cx = classNames.bind(styles);
 function StatisticCount() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
-  const { titles } = getAllTitlesByUserID(user.guid);
+  const [titles, setTitles] = useState([]);
   const [data, setData] = useState({ likes: 0, views: 0, totalTitles: 0 });
   const [popup, setPopup] = useState({
     trigger: false,
@@ -33,11 +33,23 @@ function StatisticCount() {
     content: <IncomePopup />,
   });
 
+  const fetchData = () => {
+    getAllTitles({
+      userId: user.guid,
+    })
+      .then((response) => setTitles(response))
+      .catch((error) => console.log(error));
+  };
+
   const handleIncomeExplainClick = () => {
     setPopup((prev) => {
       return { ...prev, trigger: true };
     });
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   useEffect(() => {
     titles.length > 0 && dispatch(setMyTitles(titles));

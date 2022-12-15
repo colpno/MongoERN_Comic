@@ -1,6 +1,7 @@
 import classNames from "classnames/bind";
 import { FastField, Form, Formik } from "formik";
 import PropTypes from "prop-types";
+import { useEffect, useMemo, useState } from "react";
 import { Alert } from "react-bootstrap";
 
 import { InputImage } from "components";
@@ -15,6 +16,7 @@ import FormLabel from "libs/formik/FormLabel";
 import { getAllApprovedStatuses } from "services/approvedStatus";
 import { getAllGenres } from "services/genre";
 import styles from "./assets/styles/TitleForm.module.scss";
+import { getReleaseDayOptions } from "./helpers/getReleaseDayOptions";
 
 const cx = classNames.bind(styles);
 
@@ -25,56 +27,45 @@ function TitleForm({
   handleSubmit,
   imageBlob,
 }) {
-  const { genres } = getAllGenres();
-  const genreOptions = genres.map((genre) => {
-    return { value: `${genre.guid}`, label: genre.name };
-  });
-  const { approvedStatuses } = getAllApprovedStatuses();
-  const statusOptions = approvedStatuses.map((status) => {
-    return { value: `${status.guid}`, label: status.name };
-  });
-  const releaseDayOptions = [
-    {
-      value: "T2",
-      label: "Thứ hai",
-    },
-    {
-      value: "T3",
-      label: "Thứ ba",
-    },
-    {
-      value: "T4",
-      label: "Thứ tư",
-    },
-    {
-      value: "T5",
-      label: "Thứ năm",
-    },
-    {
-      value: "T6",
-      label: "Thứ sáu",
-    },
-    {
-      value: "T7",
-      label: "Thứ bảy",
-    },
-    {
-      value: "CN",
-      label: "Chủ nhật",
-    },
-    {
-      value: "paused",
-      label: "Tạm dừng",
-    },
-    {
-      value: "finished",
-      label: "Hoàn thành",
-    },
-  ];
+  const [genres, setGenres] = useState([]);
+  const [approvedStatuses, setApprovedStatuses] = useState([]);
+  const releaseDayOptions = getReleaseDayOptions();
+
+  const genreOptions = useMemo(
+    () =>
+      genres.map((genre) => {
+        return { value: `${genre.guid}`, label: genre.name };
+      }),
+    [genres]
+  );
+
+  const statusOptions = useMemo(
+    () =>
+      approvedStatuses.map((status) => {
+        return { value: `${status.guid}`, label: status.name };
+      }),
+    [approvedStatuses]
+  );
+
+  const fetchData = () => {
+    const genresPromise = getAllGenres();
+    const approvedStatusesPromise = getAllApprovedStatuses();
+
+    Promise.all([genresPromise, approvedStatusesPromise])
+      .then(([genresResponse, approvedStatusesResponse]) => {
+        setGenres(genresResponse);
+        setApprovedStatuses(approvedStatusesResponse);
+      })
+      .catch((error) => console.log(error));
+  };
 
   const handleRemove = (value) => {
     console.log(value);
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <Formik

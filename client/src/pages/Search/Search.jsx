@@ -1,39 +1,50 @@
 import classNames from "classnames/bind";
-import { FastField, Form, Formik } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 
-import { Button, CardList } from "components";
+import { CardList } from "components";
+import FormWrapper from "components/FormWrapper/FormWrapper";
 import { NoData, Pagination } from "features";
-import { CheckBoxGroup, InputField, RadioGroup } from "libs/formik";
+import { usePagination } from "hooks";
 import { getAllGenres } from "services/genre";
-import { filterTitles } from "services/title";
+import { getAllTitles } from "services/title";
 import { isEmpty } from "utils";
+import SearchForm from "./components/SearchForm";
 import styles from "./styles/Search.module.scss";
 
 const cx = classNames.bind(styles);
 
 function Search() {
+  const TITLES_PER_PAGE = 35;
+  const [genres, setGenres] = useState([]);
+  const [titles, setTitles] = useState([]);
+  const { pagination, setPagination, setPaginationTotal } =
+    usePagination(TITLES_PER_PAGE);
   const [initialValues, setInitialValues] = useState({
     genreId: [],
     author: "",
     sort: "updatedAt",
     order: "desc",
   });
-  const {
-    titles,
-    pagination,
-    setPagination,
-    fetch: callFilterTitles,
-  } = filterTitles(
-    { name: "" },
-    {
-      sort: initialValues.sort,
-      order: initialValues.order,
-    },
-    35
-  );
-  const { genres } = getAllGenres();
+  const [titleParams, setTitleParams] = useState({
+    sort: initialValues.sort,
+    order: initialValues.order,
+    page: pagination.page,
+    limit: pagination.limit,
+  });
+
+  const fetchData = (params = {}) => {
+    const genrePromise = getAllGenres();
+    const titlePromise = getAllTitles(params);
+
+    Promise.all([titlePromise, genrePromise])
+      .then(([titleResponse, genreResponse]) => {
+        setGenres(genreResponse);
+        setTitles(titleResponse.data);
+        setPaginationTotal(titleResponse.pagination.total);
+      })
+      .catch((error) => console.log(error));
+  };
 
   const genreOptions = genres.map((genre) => ({
     value: genre.guid,
@@ -53,7 +64,7 @@ function Search() {
     { value: "desc", label: "Giảm dần" },
   ];
 
-  const handleSubmit = (values, { setSubmitting }) => {
+  const checkChange = (values) => {
     const valueKeys = Object.keys(values);
 
     const checkedValues = valueKeys.reduce((obj, key) => {
@@ -68,96 +79,54 @@ function Search() {
       initialValues.sort !== values.sort ||
       initialValues.order !== values.order;
 
-    if (allChecked) {
-      const { sort, order, genreId, ...otherValues } = checkedValues;
+    return { checkedValues, isValid: allChecked };
+  };
+
+  const handleSubmit = (values, { setSubmitting }) => {
+    const { checkedValues, isValid } = checkChange(values);
+
+    if (isValid) {
+      const { sort, order, genreId, author, ...otherValues } = checkedValues;
       const params = {
+        ...otherValues,
+        author_like: author,
         limit: pagination.limit,
         page: 1,
         sort,
         order,
       };
+
       if (checkedValues.genreId) {
         params.embed = "title_genre";
         params.genreId = genreId;
       }
-      callFilterTitles(otherValues, params);
+
+      fetchData(params);
+      setTitleParams(params);
       setInitialValues({ ...values });
     }
 
     setSubmitting(false);
   };
 
+  useEffect(() => {
+    fetchData(titleParams);
+  }, [pagination.page]);
+
   return (
     <Container className={cx("wrapper")}>
       <Row className={cx("filter-container")}>
         <Col>
-          <h2>Tìm kiếm</h2>
-          <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-            {() => {
-              return (
-                <Form>
-                  <Row>
-                    <Col md={2} className={cx("label")}>
-                      Thể loại:
-                    </Col>
-                    <Col md={10}>
-                      {genreOptions.length > 0 && (
-                        <FastField
-                          name="genreId"
-                          component={CheckBoxGroup}
-                          options={genreOptions}
-                          col={{ xs: 6, md: 3, lg: 2 }}
-                        />
-                      )}
-                    </Col>
-                  </Row>
-                  <Row className={cx("author-row")}>
-                    <Col md={2} className={cx("label")}>
-                      Tên tác giả:
-                    </Col>
-                    <Col md={10}>
-                      <FastField
-                        name="author"
-                        component={InputField}
-                        placeholder="Nhập tên tác giả..."
-                      />
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col md={2} className={cx("label")}>
-                      Sắp xếp
-                    </Col>
-                    <Col md={10}>
-                      <FastField
-                        name="sort"
-                        component={RadioGroup}
-                        options={sortOptions}
-                        col={{ md: 3 }}
-                      />
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col md={2} className={cx("label")} />
-                    <Col md={10} className={cx("order-row")}>
-                      <FastField
-                        name="order"
-                        component={RadioGroup}
-                        options={orderOption}
-                        col={{ md: 3 }}
-                      />
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col className={cx("button-container")}>
-                      <Button primary type="submit">
-                        Tìm
-                      </Button>
-                    </Col>
-                  </Row>
-                </Form>
-              );
-            }}
-          </Formik>
+          <FormWrapper title="Tìm kiếm" fullWidth>
+            <SearchForm
+              initialValues={initialValues}
+              handleSubmit={handleSubmit}
+              cx={cx}
+              genreOptions={genreOptions}
+              sortOptions={sortOptions}
+              orderOption={orderOption}
+            />
+          </FormWrapper>
         </Col>
       </Row>
       {titles.length > 0 ? (
