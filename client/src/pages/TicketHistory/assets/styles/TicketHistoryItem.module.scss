@@ -1,0 +1,21 @@
+@use "assets/styles/variables" as var;
+
+.item-wrapper {
+  border-bottom: 1px solid var.$border-gray;
+  padding: 20px 10px;
+  display: flex;
+  align-items: center;
+}
+
+.source {
+  * {
+    margin: 5px 0;
+  }
+}
+
+.quantity {
+  display: flex;
+  justify-content: flex-end;
+  color: var.$clr-green;
+  font-size: 1.3em;
+}
