@@ -1,0 +1,24 @@
+@use "assets/styles/variables" as var;
+
+.content-list-page {
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+.title {
+  padding-left: 1rem;
+  margin-bottom: 2rem;
+
+  position: relative;
+
+  &::before {
+    position: absolute;
+    content: "";
+    top: 0;
+    bottom: 0;
+    left: 0;
+    background-color: var.$primary;
+    width: 4px;
+    border-radius: 100vmax;
+  }
+}
