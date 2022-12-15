@@ -3,15 +3,13 @@ import axiosClient from "libs/axios/axiosClient";
 const url = "/titles";
 
 const titleApi = {
-  getAll: (params) => axiosClient.get(`${url}`, { params }),
+  getAll: (params, isPrivate = true) =>
+    axiosClient.get(`${url}`, { params, withCredentials: isPrivate }),
 
-  getOne: (id, isPrivate) => {
-    const options = isPrivate ? { withCredentials: true } : {};
-
-    return axiosClient.get(
-      `${url}/${isPrivate ? "private/" : ""}${id}`,
-      options
-    );
+  getOne: (id, isPrivate = true) => {
+    return axiosClient.get(`${url}/${isPrivate ? "private/" : ""}${id}`, {
+      withCredentials: isPrivate,
+    });
   },
 
   add: (data, setProgress) =>

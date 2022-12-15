@@ -3,9 +3,10 @@ import axiosClient from "libs/axios/axiosClient";
 const url = "/chapters";
 
 const chapterApi = {
-  getAll: (params) => axiosClient.get(url, { params }),
+  getAll: (params, isPrivate = true) =>
+    axiosClient.get(url, { params, withCredentials: isPrivate }),
 
-  getOne: (id, isPrivate) =>
+  getOne: (id, isPrivate = true) =>
     axiosClient.get(`${url}/${id}`, { withCredentials: isPrivate }),
 
   add: (data, setProgress) =>

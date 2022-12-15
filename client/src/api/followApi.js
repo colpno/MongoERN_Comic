@@ -3,7 +3,7 @@ import axiosClient from "libs/axios/axiosClient";
 const url = "/follows";
 
 const followApi = {
-  getAll: (params) => axiosClient.get(url, { params }),
+  getAll: (params) => axiosClient.get(url, { params, withCredentials: true }),
 
   add: (data) =>
     axiosClient.post(`${url}/create`, data, { withCredentials: true }),
