@@ -38,16 +38,33 @@
   &__btn-container {
     padding: 0.9rem 0 1rem;
     margin-top: 1px;
-    border-top: 1px solid var.$gray-400;
-    box-shadow: 0 -2rem transparent, 0 -1.75rem rgb(255 255 255 / 0.15),
-      0 -1.5rem rgb(255 255 255 / 0.3), 0 -1rem rgb(255 255 255 / 0.5),
-      0 -0.5rem rgb(255 255 255 / 0.7);
+    // box-shadow: 0 -2rem transparent, 0 -1.75rem rgb(255 255 255 / 0.15),
+    //   0 -1.5rem rgb(255 255 255 / 0.3), 0 -1rem rgb(255 255 255 / 0.5),
+    //   0 -0.5rem rgb(255 255 255 / 0.7);
 
     display: flex;
     align-items: center;
     justify-content: center;
 
     position: relative;
+
+    &::before {
+      $size: 1.8rem;
+
+      height: $size;
+      background: linear-gradient(
+        180deg,
+        transparent,
+        rgb(255 255 255 / 0.65) 60%
+      );
+      border-bottom: 1px solid var.$gray-400;
+
+      content: "";
+      position: absolute;
+      top: -$size;
+      left: 0;
+      right: 0;
+    }
 
     button {
       padding: 10px 60px;
