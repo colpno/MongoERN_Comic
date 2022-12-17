@@ -1,21 +1,20 @@
-import { noData } from "assets/images";
 import classNames from "classnames/bind";
-import { Button } from "components";
-import { Slider } from "features";
 import PropTypes from "prop-types";
 import { memo } from "react";
 import { SwiperSlide } from "swiper/react";
+
+import { noData } from "assets/images";
+import { Button } from "components";
+import { Slider } from "features";
 
 import styles from "./assets/BannerSlider.module.scss";
 
 const cx = classNames.bind(styles);
 
 function BannerSlider({ images, clickable, delay }) {
-  const hasImages = images.length > 0;
-
   return (
     <Slider
-      navigation={hasImages}
+      navigation
       grabCursor
       pagination
       clickablePagination={clickable}
@@ -24,7 +23,7 @@ function BannerSlider({ images, clickable, delay }) {
       slidesPerView={1}
       className={cx("slider")}
     >
-      {hasImages ? (
+      {images.length > 0 ? (
         images.map((img, index) => {
           const { image, link } = img;
 
