@@ -1,0 +1,17 @@
+@use "assets/styles/variables" as var;
+
+.toggleable-navbar {
+  background-color: var.$white;
+
+  position: fixed;
+  top: -(var.$header-height);
+  left: 0;
+  right: 0;
+  z-index: 5;
+
+  transition: top 0.2s ease-in-out;
+
+  &.active {
+    top: var.$header-height;
+  }
+}

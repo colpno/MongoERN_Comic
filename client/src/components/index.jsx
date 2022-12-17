@@ -15,3 +15,4 @@ export { default as TabsContainer } from "./TabsContainer/TabsContainer";
 export { default as TitleForm } from "./TitleForm/TitleForm";
 export { default as FloatingContainer } from "./FloatingContainer/FloatingContainer";
 export { default as FloatingForm } from "./FloatingForm/FloatingForm";
+export { default as ToggleableSubNavbar } from "./ToggleableSubNavbar/ToggleableSubNavbar";
