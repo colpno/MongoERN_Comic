@@ -1,9 +1,9 @@
 import { config } from 'dotenv';
-import { transporter } from './config.js';
+import { transporter } from '../../config/nodemailer.config.js';
 
 config();
 
-export default function sendMail(to, subject, html) {
+export const sendMail = (to, subject, html) => {
   const mailDetails = {
     from: process.env.MAIL_FROM,
     to,
@@ -20,4 +20,4 @@ export default function sendMail(to, subject, html) {
 
   console.log('Email sent successfully');
   return { status: true };
-}
+};
