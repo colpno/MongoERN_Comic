@@ -1,4 +1,4 @@
-import { db } from '../../config/database.js';
+import { db } from '../../config/mysql.config.js';
 import { table } from './index.js';
 
 export default function updateChapter(req, res) {

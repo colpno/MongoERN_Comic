@@ -1,4 +1,4 @@
-import { db } from '../../config/database.js';
+import { db } from '../../config/mysql.config.js';
 
 export default function getFollow(req, res) {
   const { userId, titleId } = req.query;

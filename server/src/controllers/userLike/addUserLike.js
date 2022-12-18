@@ -1,7 +1,7 @@
 /* eslint-disable no-unreachable */
 import { v4 as uuidv4 } from 'uuid';
-import { db } from '../../config/database.js';
-import { getCurrentDateTime } from '../common/index.js';
+import { db } from '../../config/mysql.config.js';
+import { getCurrentTime } from '../../helpers/time/index.js';
 
 export default function addUserLike(req, res) {
   const { userId, chapterId } = req.body;
@@ -24,7 +24,7 @@ export default function addUserLike(req, res) {
         VALUES (?)
       `;
 
-      const now = getCurrentDateTime();
+      const now = getCurrentTime();
       const guid = uuidv4();
       const values = [guid, userId, chapterId, now, now];
 

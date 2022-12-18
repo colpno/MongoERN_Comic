@@ -1,4 +1,3 @@
-/* eslint-disable import/no-cycle */
 export { default as getAllQuery } from './getAllQuery.js';
 export { default as getLimitedQuery } from './getLimitedQuery.js';
 export { default as filterQuery } from './filterQuery.js';
@@ -10,4 +9,3 @@ export { default as deleteQuery } from './deleteQuery.js';
 
 export { separateOtherParams } from './separateOtherParams.js';
 export { convertToSQL } from './convertToSQL.js';
-export { default as getCurrentDateTime } from './getCurrentDateTime.js';

@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { db } from '../../config/database.js';
+import { db } from '../../config/mysql.config.js';
 import { postQuery } from '../common/index.js';
 import { table } from './index.js';
 

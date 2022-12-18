@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { table } from './index.js';
-import { db } from '../../config/database.js';
-import { cloudinary } from '../../libs/cloudinary/index.js';
+import { db } from '../../config/mysql.config.js';
+import { cloudinary } from '../../config/cloudinary.config.js';
 
 export default function deleteChapter(req, res) {
   const { params, cookies, body } = req;

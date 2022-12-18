@@ -1,4 +1,4 @@
-import { db } from '../../config/database.js';
+import { db } from '../../config/mysql.config.js';
 import { switchCaseConvert } from '../../helpers/convertDataFormat/switchCaseConvert.js';
 
 export default function getLimitedQuery(
@@ -28,12 +28,10 @@ export default function getLimitedQuery(
     db.query(getTotalRowSQL, (totalRowError, rows) => {
       if (totalRowError) return res.status(500).json({ error: totalRowError });
 
-      return res
-        .status(200)
-        .json({
-          data: switchCaseConvert(data, table),
-          pagination: { total: rows[0].total, page: +page, limit: +limit },
-        });
+      return res.status(200).json({
+        data: switchCaseConvert(data, table),
+        pagination: { total: rows[0].total, page: +page, limit: +limit },
+      });
     });
   });
 }

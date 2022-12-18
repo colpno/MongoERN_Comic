@@ -2,9 +2,9 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
-import { db } from '../../config/database.js';
-import sendMail from '../../libs/nodemailer/sendMail.js';
-import { getCurrentDateTime } from '../common/index.js';
+import { db } from '../../config/mysql.config.js';
+import { sendMail } from '../../helpers/nodemailer/index.js';
+import { getCurrentTime } from '../../helpers/time/index.js';
 
 export default function register(req, res) {
   const { username, password, role, email } = req.body;
@@ -44,7 +44,7 @@ export default function register(req, res) {
     }
     if (role === 'admin') {
       const guid = uuidv4();
-      const now = getCurrentDateTime();
+      const now = getCurrentTime();
       const salt = bcrypt.genSaltSync(10);
       const hashedPassword = bcrypt.hashSync(password, salt);
 

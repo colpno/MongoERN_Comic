@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { db } from '../../config/database.js';
-import { getCurrentDateTime } from '../common/index.js';
+import { db } from '../../config/mysql.config.js';
+import { getCurrentTime } from '../../helpers/time/index.js';
 
 export default function register(req, res) {
   const { token } = req.body;
@@ -17,7 +17,7 @@ export default function register(req, res) {
 
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(password, salt);
-    const now = getCurrentDateTime();
+    const now = getCurrentTime();
 
     const sql = `
       INSERT INTO user

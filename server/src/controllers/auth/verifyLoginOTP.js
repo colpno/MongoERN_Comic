@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { db } from '../../config/database.js';
+import { db } from '../../config/mysql.config.js';
 import { switchCaseConvert } from '../../helpers/convertDataFormat/index.js';
 
 export default function verifyLoginOTP(req, res) {

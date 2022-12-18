@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import moment from 'moment';
-import { db } from '../../config/database.js';
-import sendMail from '../../libs/nodemailer/sendMail.js';
+import { db } from '../../config/mysql.config.js';
+import { sendMail } from '../../helpers/nodemailer/index.js';
 
 function randomOTP(length) {
   let random = '';

@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import { db } from '../../config/database.js';
+import { db } from '../../config/mysql.config.js';
 
 export default function resetPassword(req, res) {
   const { params, cookies, body } = req;

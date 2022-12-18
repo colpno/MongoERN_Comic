@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { table } from './index.js';
-import { db } from '../../config/database.js';
+import { db } from '../../config/mysql.config.js';
 import { switchCaseConvert } from '../../helpers/convertDataFormat/switchCaseConvert.js';
 
 export default function getChapter(req, res) {

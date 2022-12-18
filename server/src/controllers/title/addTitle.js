@@ -1,9 +1,9 @@
 import { config } from 'dotenv';
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
-import { db } from '../../config/database.js';
-import { cloudinary } from '../../libs/cloudinary/index.js';
-import { getCurrentDateTime } from '../common/index.js';
+import { db } from '../../config/mysql.config.js';
+import { cloudinary } from '../../config/cloudinary.config.js';
+import { getCurrentTime } from '../../helpers/time/index.js';
 import { table } from './index.js';
 
 config();
@@ -54,7 +54,7 @@ export default function addTitle(req, res) {
         VALUES (?)
       `;
 
-      const now = getCurrentDateTime();
+      const now = getCurrentTime();
       const titleValues = [
         ...bodyKeys.map((dataKey) => values[dataKey]),
         response.secure_url,

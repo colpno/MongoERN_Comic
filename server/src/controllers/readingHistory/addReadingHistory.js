@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
-import { db } from '../../config/database.js';
-import { getCurrentDateTime } from '../common/index.js';
+import { db } from '../../config/mysql.config.js';
+import { getCurrentTime } from '../../helpers/time/index.js';
 import { table } from './index.js';
 
 export default function addReadingHistory(req, res) {
@@ -29,7 +29,7 @@ export default function addReadingHistory(req, res) {
           WHERE \`titleId\` = ? AND userId = ?;
         `;
 
-        const now = getCurrentDateTime();
+        const now = getCurrentTime();
         const values = [chapterId, now, titleId, userInfo.guid];
 
         db.query(sql, values, (error2, data2) => {
@@ -48,7 +48,7 @@ export default function addReadingHistory(req, res) {
         VALUES (?)
       `;
 
-        const now = getCurrentDateTime();
+        const now = getCurrentTime();
         const guid = uuidv4();
         const values = [...bodyKeys.map((dataKey) => body[dataKey]), guid, now, now];
 

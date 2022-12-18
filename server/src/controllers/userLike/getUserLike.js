@@ -1,4 +1,4 @@
-import { db } from '../../config/database.js';
+import { db } from '../../config/mysql.config.js';
 
 export default function getUserLike(req, res) {
   const { userId, chapterId } = req.query;

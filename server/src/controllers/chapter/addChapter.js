@@ -1,10 +1,10 @@
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 import { config } from 'dotenv';
-import { db } from '../../config/database.js';
+import { db } from '../../config/mysql.config.js';
 import { table } from './index.js';
-import { getCurrentDateTime } from '../common/index.js';
-import { cloudinary } from '../../libs/cloudinary/index.js';
+import { getCurrentTime } from '../../helpers/time/index.js';
+import { cloudinary } from '../../config/cloudinary.config.js';
 
 config();
 
@@ -24,8 +24,8 @@ const first = async (res, image, titleId, chapterId, index) => {
     chapterId,
     response.secure_url,
     `${index + 1}`,
-    getCurrentDateTime(),
-    getCurrentDateTime(),
+    getCurrentTime(),
+    getCurrentTime(),
     uuidv4(),
     response.public_id,
   ];
@@ -69,7 +69,7 @@ export default async function addChapter(req, res) {
       `;
 
     // Values of above SQL
-    const now = getCurrentDateTime();
+    const now = getCurrentTime();
     const chapterValues = [
       ...bodyKeys.map((dataKey) => values[dataKey]),
       uploadResponse.secure_url,

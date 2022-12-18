@@ -1,9 +1,9 @@
 import { config } from 'dotenv';
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
-import { db } from '../../config/database.js';
-import { cloudinary } from '../../libs/cloudinary/index.js';
-import getCurrentDateTime from '../common/getCurrentDateTime.js';
+import { db } from '../../config/mysql.config.js';
+import { cloudinary } from '../../config/cloudinary.config.js';
+import { getCurrentTime } from '../../helpers/time/index.js';
 import { table } from './index.js';
 
 config();
@@ -14,8 +14,8 @@ const first = async (res, image, titleId, chapterId, index) => {
       chapterId,
       image.secure_url,
       `${index + 1}`,
-      getCurrentDateTime(),
-      getCurrentDateTime(),
+      getCurrentTime(),
+      getCurrentTime(),
       uuidv4(),
       image.publicId,
     ];
@@ -35,8 +35,8 @@ const first = async (res, image, titleId, chapterId, index) => {
     chapterId,
     response.secure_url,
     `${index + 1}`,
-    getCurrentDateTime(),
-    getCurrentDateTime(),
+    getCurrentTime(),
+    getCurrentTime(),
     uuidv4(),
     response.public_id,
   ];
@@ -148,7 +148,7 @@ export default function updateChapter(req, res) {
             `;
 
             // Values of above SQL
-            const now = getCurrentDateTime();
+            const now = getCurrentTime();
             const chapterValues = [...otherKeys.map((dataKey) => others[dataKey])];
             uploadCoverResponse?.public_id &&
               chapterValues.push(uploadCoverResponse.secure_url, uploadCoverResponse.public_id);

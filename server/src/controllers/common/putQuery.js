@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
-import { db } from '../../config/database.js';
-import { getCurrentDateTime } from './index.js';
+import { db } from '../../config/mysql.config.js';
+import { getCurrentTime } from '../../helpers/time/index.js';
 
 export default function putQuery(req, res, table) {
   const { body, params } = req;
@@ -20,7 +20,7 @@ export default function putQuery(req, res, table) {
         WHERE guid = ?
       `;
 
-    const now = getCurrentDateTime();
+    const now = getCurrentTime();
     const values = [...bodyKeys.map((dataKey) => body[dataKey]), now, guid];
 
     db.query(sql, [...values], (err, data) => {
@@ -41,7 +41,7 @@ export default function putQuery(req, res, table) {
     //     WHERE guid = ? AND userId = ?
     //   `;
 
-    //   const now = getCurrentDateTime();
+    //   const now = getCurrentTime();
     //   const values = [...bodyKeys.map((dataKey) => body[dataKey]), now, guid, userInfo.guid];
 
     //   db.query(sql, [...values], (err, data) => {

@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
-import { db } from '../../config/database.js';
-import { getCurrentDateTime } from './index.js';
+import { db } from '../../config/mysql.config.js';
+import { getCurrentTime } from '../../helpers/time/index.js';
 
 export default function postQuery(req, res, table) {
   const { body } = req;
@@ -20,7 +20,7 @@ export default function postQuery(req, res, table) {
         VALUES (?)
       `;
 
-      const now = getCurrentDateTime();
+      const now = getCurrentTime();
       const guid = uuidv4();
       const values = [...bodyKeys.map((dataKey) => body[dataKey]), guid, now, now];
 
@@ -36,7 +36,7 @@ export default function postQuery(req, res, table) {
         VALUES (?)
       `;
 
-      const now = getCurrentDateTime();
+      const now = getCurrentTime();
       const guid = uuidv4();
       const values = [...bodyKeys.map((dataKey) => body[dataKey]), guid, userInfo.guid, now, now];
 

@@ -1,9 +1,9 @@
 import { config } from 'dotenv';
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
-import { db } from '../../config/database.js';
-import { cloudinary } from '../../libs/cloudinary/index.js';
-import getCurrentDateTime from '../common/getCurrentDateTime.js';
+import { db } from '../../config/mysql.config.js';
+import { cloudinary } from '../../config/cloudinary.config.js';
+import { getCurrentTime } from '../../helpers/time/index.js';
 import { table } from './index.js';
 
 config();
@@ -74,7 +74,7 @@ export default function updateTitle(req, res) {
                   VALUES ?
                 `;
 
-                const now = getCurrentDateTime();
+                const now = getCurrentTime();
                 const values = genreId.map((id) => [guid, id, now, now, uuidv4()]);
 
                 console.log('file: updateTitle.js ~ line 72 ~ insertGenreSQL', insertGenreSQL);
@@ -98,7 +98,7 @@ export default function updateTitle(req, res) {
           `;
           sql.replace(/,,/g, ',');
 
-          const now = getCurrentDateTime();
+          const now = getCurrentTime();
           const values = [...valueKeys.map((dataKey) => others[dataKey])];
           response?.secure_url && values.push(response.secure_url, response.public_id);
           values.push(now, guid);

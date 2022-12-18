@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
-import { db } from '../../config/database.js';
-import sendMail from '../../libs/nodemailer/sendMail.js';
+import { db } from '../../config/mysql.config.js';
+import { sendMail } from '../../helpers/nodemailer/index.js';
 
 export default function forgotPassword(req, res) {
   const { username, email } = req.body;

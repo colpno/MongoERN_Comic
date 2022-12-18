@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { db } from '../../config/database.js';
+import { db } from '../../config/mysql.config.js';
 
 export default function deleteQuery(req, res, table) {
   const { params } = req;

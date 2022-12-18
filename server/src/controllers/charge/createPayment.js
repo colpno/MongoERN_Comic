@@ -6,7 +6,7 @@
 import moment from 'moment';
 import querystring from 'qs';
 import crypto from 'crypto';
-import { vnpayConfig } from '../../config/vnpay.js';
+import { vnpayConfig } from '../../config/vnpay.config.js';
 
 function sortObject(obj) {
   const sorted = {};
