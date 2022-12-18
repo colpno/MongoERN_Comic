@@ -18,7 +18,7 @@ const cx = classNames.bind(styles);
 function Statistic() {
   // INFO: Data variables
 
-  const titles = useSelector((state) => state.titles.myTitles);
+  const titles = useSelector((state) => state.title.myTitles);
   const [titleReports, setTitleReports] = useState([]);
   const [chapters, setChapters] = useState([]);
   const [chapterReports, setChapterReports] = useState([]);
@@ -50,7 +50,7 @@ function Statistic() {
   }, [titles]);
 
   useEffect(() => {
-    ID.titleID && fetchChapters(ID.titleID);
+    ID.titleID && fetchChapters({ titleId: ID.titleID });
   }, [ID.titleID]);
 
   useEffect(() => {
