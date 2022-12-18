@@ -17,7 +17,11 @@ function DefaultLayout({ children }) {
     <>
       <Header toggleMobileNavbar={handleToggleMobileNavbar} />
       <div className="content skip-header">
-        <ToggleableSubNavbar isToggle={toggleMobileNavbar} menu={subNavMenu} />
+        <ToggleableSubNavbar
+          isToggle={toggleMobileNavbar}
+          setIsToggle={setToggleMobileNavbar}
+          menu={subNavMenu}
+        />
         {children}
       </div>
       <Footer />
