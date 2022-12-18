@@ -1,8 +1,3 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
-import { BrowserRouter } from "react-router-dom";
 import {
   ArcElement,
   BarElement,
@@ -15,8 +10,14 @@ import {
   PointElement,
   Tooltip,
 } from "chart.js";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
+import { PersistGate } from "redux-persist/integration/react";
 
 import GlobalStyles from "assets/styles/GlobalStyles";
+import { socket, SocketContext } from "context/socketContext";
 import store, { persistor } from "libs/redux/store";
 import App from "./App";
 
@@ -36,15 +37,17 @@ Chart.register(
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  // TODO: <React.StrictMode>
-  <BrowserRouter>
-    <GlobalStyles>
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <App />
-        </PersistGate>
-      </Provider>
-    </GlobalStyles>
-  </BrowserRouter>
-  // TODO: </React.StrictMode>
+  <React.StrictMode>
+    <BrowserRouter>
+      <GlobalStyles>
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <SocketContext.Provider value={socket}>
+              <App />
+            </SocketContext.Provider>
+          </PersistGate>
+        </Provider>
+      </GlobalStyles>
+    </BrowserRouter>
+  </React.StrictMode>
 );
