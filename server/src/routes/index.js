@@ -15,3 +15,5 @@ export { default as userLikeRoute } from './userLikeRoute.js';
 export { default as titleGenreRoute } from './titleGenreRoute.js';
 export { default as titleReportRoute } from './titleReportRoute.js';
 export { default as chargeRoute } from './chargeRoute.js';
+
+export { default as routeDivider } from './routeDivider.js';
