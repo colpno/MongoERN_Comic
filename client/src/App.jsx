@@ -1,21 +1,22 @@
-import { Popup } from "features";
-import { DefaultLayout } from "layouts";
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import {
-  Navigate,
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
-import { privateRoutes, publicRoutes } from "routes";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const checkLoggedInCanAccessURL = (url) => {
+import { Popup } from "features";
+import { RouteHandler } from "routes";
+
+const preventLoggedInUserAccess = (url, isLoggingIn, setPopup) => {
   const array = ["login", "register", "reset-password", "forgot-password"];
 
   const haveAccessed = array.some((pathName) => url.includes(pathName));
-  return haveAccessed;
+
+  if (haveAccessed && isLoggingIn) {
+    setPopup((prev) => ({
+      ...prev,
+      trigger: true,
+      content: "Bạn đã đăng nhập nên không thể truy cập vào trang",
+    }));
+  }
 };
 
 function App() {
@@ -26,19 +27,11 @@ function App() {
     content: "",
     isClosed: false,
   });
-  const userState = useSelector((state) => state.user);
-  const { isLoggingIn } = userState;
+  const { isLoggingIn } = useSelector((state) => state.user);
   const url = useLocation().pathname;
-  const haveAccessed = useMemo(() => checkLoggedInCanAccessURL(url), [url]);
 
   useEffect(() => {
-    if (haveAccessed && isLoggingIn) {
-      setPopup((prev) => ({
-        ...prev,
-        trigger: true,
-        content: "Bạn đã đăng nhập nên không thể truy cập vào trang",
-      }));
-    }
+    preventLoggedInUserAccess(url, isLoggingIn, setPopup);
   }, [url]);
 
   useEffect(() => {
@@ -47,62 +40,7 @@ function App() {
 
   return (
     <>
-      <Routes>
-        {publicRoutes.map((route, index) => {
-          const { path, layout } = route;
-          const Component = route.component;
-          let Layout = DefaultLayout;
-
-          if (layout) {
-            Layout = layout;
-          } else if (layout === null) {
-            Layout = Fragment;
-          }
-
-          return (
-            <Route
-              path={path}
-              key={index}
-              element={
-                <Layout>
-                  <Component />
-                </Layout>
-              }
-            />
-          );
-        })}
-
-        {isLoggingIn &&
-          privateRoutes.map((route, index) => {
-            const { path, layout } = route;
-            const Component = route.component;
-            let Layout = DefaultLayout;
-
-            if (layout) {
-              Layout = layout;
-            } else if (layout === null) {
-              Layout = Fragment;
-            }
-
-            return (
-              <Route
-                path={path}
-                key={index}
-                element={
-                  isLoggingIn ? (
-                    <Layout>
-                      <Component />
-                    </Layout>
-                  ) : (
-                    <Navigate to="/login" />
-                  )
-                }
-              />
-            );
-          })}
-
-        <Route path="*" element={<Navigate to="/not-found" />} />
-      </Routes>
+      <RouteHandler isLoggingIn={isLoggingIn} />
       <Popup popup={popup} setPopup={setPopup} />
     </>
   );
