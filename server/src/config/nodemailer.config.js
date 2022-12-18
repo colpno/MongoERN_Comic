@@ -3,10 +3,12 @@ import { config } from 'dotenv';
 
 config();
 
-export const transporter = nodemailer.createTransport({
+const nodemailerConfig = {
   service: 'gmail',
   auth: {
     user: process.env.MAIL_FROM,
     pass: process.env.MAIL_PASS,
   },
-});
+};
+
+export const transporter = nodemailer.createTransport(nodemailerConfig);
