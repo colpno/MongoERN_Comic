@@ -33,6 +33,11 @@
     cursor: default;
     pointer-events: none;
   }
+
+  &:not(.disable)::after {
+    // color: var.$black;
+    font-weight: bold;
+  }
 }
 
 .previous {
