@@ -7,7 +7,7 @@ import { Button } from "components";
 import { Slider } from "features";
 import "./assets/styles/SubNavigator.scss";
 
-function SubNavigator({ menu }) {
+function SubNavigator({ menu, slidesPerView }) {
   const url = useLocation().pathname;
 
   return (
@@ -17,7 +17,7 @@ function SubNavigator({ menu }) {
           <Col>
             <Slider
               grabCursor
-              slidesPerView={3}
+              slidesPerView={slidesPerView}
               outsideNavigation
               className="navigator"
             >
@@ -50,6 +50,11 @@ SubNavigator.propTypes = {
       label: PropTypes.string.isRequired,
     })
   ).isRequired,
+  slidesPerView: PropTypes.number,
+};
+
+SubNavigator.defaultProps = {
+  slidesPerView: 3,
 };
 
 export default SubNavigator;
