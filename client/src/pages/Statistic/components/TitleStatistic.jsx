@@ -27,14 +27,14 @@ function TitleStatistic({
           datasets={[
             {
               label: "Lượt xem",
-              data: chartData.view,
+              data: chartData.views,
               backgroundColor: backgroundColors[6],
               borderColor: borderColors[6],
               borderWidth: 3,
             },
             {
               label: "Lượt thích",
-              data: chartData.like,
+              data: chartData.likes,
               backgroundColor: backgroundColors[7],
               borderColor: borderColors[7],
               borderWidth: 3,
@@ -55,8 +55,8 @@ TitleStatistic.propTypes = {
     }).isRequired
   ).isRequired,
   chartData: PropTypes.shape({
-    view: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
-    like: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
+    views: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
+    likes: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
   }).isRequired,
   changeTitle: PropTypes.func.isRequired,
   chartLabels: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,

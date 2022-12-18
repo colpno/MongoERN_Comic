@@ -27,7 +27,7 @@ function ChapterStatistic({
           datasets={[
             {
               label: "Lượt xem",
-              data: chartData.view,
+              data: chartData.views,
               backgroundColor: backgroundColors[6],
               borderColor: borderColors[6],
             },
@@ -41,7 +41,7 @@ function ChapterStatistic({
           datasets={[
             {
               label: "Lượt thích",
-              data: chartData.like,
+              data: chartData.likes,
               backgroundColor: backgroundColors[7],
               borderColor: borderColors[7],
             },
@@ -61,8 +61,8 @@ ChapterStatistic.propTypes = {
     }).isRequired
   ).isRequired,
   chartData: PropTypes.shape({
-    view: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
-    like: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
+    views: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
+    likes: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
   }).isRequired,
   changeChapter: PropTypes.func.isRequired,
   chartLabels: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
