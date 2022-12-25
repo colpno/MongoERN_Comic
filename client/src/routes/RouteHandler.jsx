@@ -3,7 +3,8 @@ import { Fragment } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 
 import { DefaultLayout } from "layouts";
-import { privateRoutes, publicRoutes } from "./index";
+import { publicRoutes } from "./publicRoutes";
+import { privateRoutes } from "./privateRoutes";
 
 function RouteHandler({ isLoggingIn }) {
   return (
