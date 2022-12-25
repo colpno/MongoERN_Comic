@@ -1,4 +1,4 @@
-import approvedStatusApi from "api/approvedStatusApi";
+import approvedStatusApi from "api/approvedStatus.api";
 
 const approvedStatusService = {
   getAll: async (params = {}) => {

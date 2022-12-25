@@ -1,4 +1,4 @@
-import readingHistoryApi from "api/readingHistoryApi";
+import readingHistoryApi from "api/readingHistory.api";
 
 const readingHistoryService = {
   getAll: async (params = {}) => {

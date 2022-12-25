@@ -1,4 +1,4 @@
-import paymentMethodApi from "api/paymentMethodApi";
+import paymentMethodApi from "api/paymentMethod.api";
 
 const paymentMethodService = {
   getAll: async (params = {}) => {

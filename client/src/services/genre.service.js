@@ -1,4 +1,4 @@
-import genreApi from "api/genreApi";
+import genreApi from "api/genre.api";
 
 const genreService = {
   getAll: async (params = {}) => {

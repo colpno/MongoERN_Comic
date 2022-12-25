@@ -1,4 +1,4 @@
-import followApi from "api/followApi";
+import followApi from "api/follow.api";
 
 const followService = {
   getAll: async (params = {}) => {

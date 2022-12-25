@@ -1,4 +1,4 @@
-import favoriteApi from "api/favoriteApi";
+import favoriteApi from "api/favorite.api";
 
 const favoriteService = {
   getAll: async (params = {}) => {

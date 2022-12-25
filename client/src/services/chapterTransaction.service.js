@@ -1,4 +1,4 @@
-// import chapterTransactionApi from "api/chapterTransactionApi";
+// import chapterTransactionApi from "api/chapterTransaction.api";
 
 const chapterTransactionService = {
   getAll: async () => {

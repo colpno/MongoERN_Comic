@@ -1,4 +1,4 @@
-import coinHistoryApi from "api/coinHistoryApi";
+import coinHistoryApi from "api/coinHistory.api";
 
 const coinHistoryService = {
   getAll: async (params = {}) => {

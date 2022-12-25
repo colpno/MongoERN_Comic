@@ -1,4 +1,4 @@
-import titleApi from "api/titleApi";
+import titleApi from "api/title.api";
 
 const titleService = {
   getAll: async (params = {}, isPrivate = false) => {

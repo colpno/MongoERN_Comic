@@ -1,4 +1,4 @@
-import chapterApi from "api/chapterApi";
+import chapterApi from "api/chapter.api";
 
 const chapterService = {
   getAll: async (params = {}, isPrivate = true) => {
