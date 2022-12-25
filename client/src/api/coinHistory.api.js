@@ -1,4 +1,4 @@
-import axiosClient from "libs/axios/axiosClient";
+import axiosClient from "./axiosClient";
 
 const url = "/coin-transactions";
 
