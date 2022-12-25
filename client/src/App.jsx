@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { Popup } from "features";
-import { RouteHandler } from "routes";
+import RouteHandler from "routes/RouteHandler";
 
 const preventLoggedInUserAccess = (url, isLoggingIn, setPopup) => {
   const array = ["login", "register", "reset-password", "forgot-password"];
