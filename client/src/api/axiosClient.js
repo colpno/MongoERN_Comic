@@ -11,7 +11,13 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.response.use(
   (response) => {
-    return response?.data ? response.data : response;
+    if (response?.data) {
+      if (response.data?.data) {
+        return response.data.data;
+      }
+      return response.data;
+    }
+    return response;
   },
   (error) => {
     const { response } = error;
