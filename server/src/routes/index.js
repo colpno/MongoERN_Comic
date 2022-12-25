@@ -1,19 +1,37 @@
-export { default as authRoute } from './authRoute.js';
-export { default as chapterRoute } from './chapterRoute.js';
-export { default as purchasedChapterRoute } from './purchasedChapterRoute.js';
-export { default as hiredChapterRoute } from './hiredChapterRoute.js';
-export { default as chapterImageRoute } from './chapterImageRoute.js';
-export { default as coinTransactionRoute } from './coinTransactionRoute.js';
-export { default as followRoute } from './followRoute.js';
-export { default as genreRoute } from './genreRoute.js';
-export { default as paymentMethodRoute } from './paymentMethodRoute.js';
-export { default as readingHistoryRoute } from './readingHistoryRoute.js';
-export { default as approvedStatusRoute } from './approvedStatusRoute.js';
-export { default as titleRoute } from './titleRoute.js';
-export { default as userRoute } from './userRoute.js';
-export { default as userLikeRoute } from './userLikeRoute.js';
-export { default as titleGenreRoute } from './titleGenreRoute.js';
-export { default as titleReportRoute } from './titleReportRoute.js';
-export { default as chargeRoute } from './chargeRoute.js';
+import { Router } from 'express';
+import dotenv from 'dotenv';
 
-export { default as routeDivider } from './routeDivider.js';
+import authRoute from './auth.route.js';
+import chapterRoute from './chapter.route.js';
+import chapterTransactionRoute from './chapterTransaction.route.js';
+import coinTransactionRoute from './coinTransaction.route.js';
+import followRoute from './follow.route.js';
+import genreRoute from './genre.route.js';
+import paymentMethodRoute from './paymentMethod.route.js';
+import readingHistoryRoute from './readingHistory.route.js';
+import approvedStatusRoute from './approvedStatus.route.js';
+import titleRoute from './title.route.js';
+import chargeRoute from './charge.route.js';
+import favoriteRoute from './favorite.route.js';
+import userRoute from './user.route.js';
+
+dotenv.config();
+
+const routes = Router();
+const { BASE_URL } = process.env;
+
+routes.use(`${BASE_URL}/approved-statuses`, approvedStatusRoute);
+routes.use(`${BASE_URL}/auth`, authRoute);
+routes.use(`${BASE_URL}/chapters`, chapterRoute);
+routes.use(`${BASE_URL}/chapter-transactions`, chapterTransactionRoute);
+routes.use(`${BASE_URL}/charge`, chargeRoute);
+routes.use(`${BASE_URL}/coin-transactions`, coinTransactionRoute);
+routes.use(`${BASE_URL}/favorites`, favoriteRoute);
+routes.use(`${BASE_URL}/follows`, followRoute);
+routes.use(`${BASE_URL}/genres`, genreRoute);
+routes.use(`${BASE_URL}/payment-methods`, paymentMethodRoute);
+routes.use(`${BASE_URL}/reading-histories`, readingHistoryRoute);
+routes.use(`${BASE_URL}/titles`, titleRoute);
+routes.use(`${BASE_URL}/users`, userRoute);
+
+export default routes;
