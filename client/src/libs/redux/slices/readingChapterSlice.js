@@ -2,8 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   chapters: [],
-  chapter: { info: {}, images: [] },
-  userLike: {},
+  chapter: {},
+  favorite: {},
 };
 
 const readingChapterSlice = createSlice({
@@ -13,21 +13,18 @@ const readingChapterSlice = createSlice({
     setChapters: (state, action) => {
       state.chapters = action.payload;
     },
-    setChapterInfo: (state, action) => {
+    setChapter: (state, action) => {
       state.chapter.info = action.payload;
     },
-    setChapterImages: (state, action) => {
-      state.chapter.images = action.payload;
-    },
-    setUserLike: (state, action) => {
-      state.userLike = action.payload;
+    setFavorite: (state, action) => {
+      state.favorite = action.payload;
     },
   },
 });
 
 const { reducer: readingChapterReducer, actions } = readingChapterSlice;
 
-export const { setChapterInfo, setChapterImages, setChapters, setUserLike } =
+export const { setChapter, setChapterImages, setChapters, setFavorite } =
   actions;
 
 export default readingChapterReducer;

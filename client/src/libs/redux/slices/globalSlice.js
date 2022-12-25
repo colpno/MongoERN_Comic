@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   searchText: "",
-  toggleSideBar: false,
+  toggleHeaderNavBar: false,
 };
 
 const globalSlice = createSlice({
@@ -12,14 +12,14 @@ const globalSlice = createSlice({
     setSearchText: (state, action) => {
       state.searchText = action.payload;
     },
-    toggleSideBar: (state, action) => {
-      state.toggleSideBar = action.payload;
+    toggleHeaderNavBar: (state, action) => {
+      state.toggleHeaderNavBar = action.payload;
     },
   },
 });
 
 const { reducer: globalReducer, actions } = globalSlice;
 
-export const { setSearchText, toggleSideBar } = actions;
+export const { setSearchText, toggleHeaderNavBar } = actions;
 
 export default globalReducer;
