@@ -4,6 +4,7 @@ import { Container } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
+import { TITLE_PAGE_CHAPTERS_PER_PAGE } from "constants/paginate.constant";
 import { NoData, Pagination, Popup, Recommend } from "features";
 import { usePagination, useToast } from "hooks";
 import { chapterService, followService, titleService } from "services";
@@ -13,13 +14,13 @@ import styles from "./styles/Title.module.scss";
 const cx = classNames.bind(styles);
 
 function Title() {
-  const CHAPTERS_PER_PAGE = 50;
   const { titleId } = useParams();
   const user = useSelector((state) => state.user.user);
   const [title, setTitle] = useState({});
   const [chapters, setChapters] = useState([]);
-  const { pagination, setPagination, setPaginationTotal } =
-    usePagination(CHAPTERS_PER_PAGE);
+  const { pagination, setPagination, setPaginationTotal } = usePagination(
+    TITLE_PAGE_CHAPTERS_PER_PAGE
+  );
   const { Toast, options, toastEmitter } = useToast();
   const [isDESCSorting, setIsDESCSorting] = useState(false);
   const hasTitle = Object.keys(title).length > 0;
@@ -41,29 +42,27 @@ function Title() {
     right: "0",
   };
 
-  const fetchData = () => {
+  const fetchChapters = () => {
     const chapterApiParams = {
       title_id: titleId,
       _sort: "order",
-      _order: isDESCSorting ? "desc" : "asc",
+      _order: isDESCSorting,
       _page: pagination.page,
       _limit: pagination.limit,
     };
 
-    const titlePromise = titleService.getOne(titleId, false);
-    const chaptersPromise = chapterService.getAll(chapterApiParams, false);
-
-    Promise.all([titlePromise, chaptersPromise])
-      .then(([titleResponse, chapterResponse]) => {
-        setTitle(titleResponse.data);
-        setChapters(chapterResponse.data);
-        setPaginationTotal(chapterResponse.paginate.total);
+    chapterService
+      .getAll(chapterApiParams, false)
+      .then((response) => {
+        setChapters(response.data);
+        setPaginationTotal(response.paginate.total);
       })
       .catch((error) => console.error(error));
   };
 
   const handleSorting = () => {
     setIsDESCSorting(!isDESCSorting);
+    fetchChapters();
   };
 
   const handleFollow = (titleID) => {
@@ -78,7 +77,24 @@ function Title() {
   };
 
   useEffect(() => {
-    fetchData();
+    const chapterApiParams = {
+      title_id: titleId,
+      _sort: "order",
+      _order: "asc",
+      _page: pagination.page,
+      _limit: pagination.limit,
+    };
+
+    const titlePromise = titleService.getOne(titleId, false);
+    const chaptersPromise = chapterService.getAll(chapterApiParams, false);
+
+    Promise.all([titlePromise, chaptersPromise])
+      .then(([titleResponse, chapterResponse]) => {
+        setTitle(titleResponse.data);
+        setChapters(chapterResponse.data);
+        setPaginationTotal(chapterResponse.paginate.total);
+      })
+      .catch((error) => console.error(error));
   }, [titleId]);
 
   return (
