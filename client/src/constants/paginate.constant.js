@@ -1,0 +1,1 @@
+export const CONTENT_LIST_TITLES_PER_PAGE = 24;
