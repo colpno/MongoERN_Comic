@@ -4,6 +4,7 @@ import { Col, Container, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
 import { CircleC } from "assets/images";
+import { COIN_HISTORIES_PER_PAGE } from "constants/paginate.constant";
 import { NoData, Pagination } from "features";
 import { usePagination } from "hooks";
 import { coinHistoryService } from "services";
@@ -13,13 +14,13 @@ import styles from "./CoinHistory.module.scss";
 const cx = classNames.bind(styles);
 
 function CoinHistory() {
-  const HISTORIES_PER_PAGE = 30;
   const user = useSelector((state) => state.user.user);
   const [histories, setHistories] = useState([]);
-  const { pagination, setPagination, setPaginationTotal } =
-    usePagination(HISTORIES_PER_PAGE);
+  const { pagination, setPagination, setPaginationTotal } = usePagination(
+    COIN_HISTORIES_PER_PAGE
+  );
 
-  const fetchData = () => {
+  useEffect(() => {
     const params = {
       user_id: user._id,
       _sort: "createdAt",
@@ -27,6 +28,7 @@ function CoinHistory() {
       _page: pagination.page,
       _limit: pagination.limit,
     };
+
     coinHistoryService
       .getAll(params)
       .then((response) => {
@@ -34,31 +36,28 @@ function CoinHistory() {
         setPaginationTotal(response.paginate.total);
       })
       .catch((error) => console.error(error));
-  };
-
-  useEffect(() => {
-    fetchData();
   }, []);
 
   return (
     <>
       {histories.length > 0 ? (
         <Container className={cx("coin-history")}>
-          {histories.map((coinHistory) => {
-            const { id, amount, createdAt } = coinHistory;
-            // TODO: const { label } = payMethod;
-
+          {histories.map((history) => {
             return (
-              <Row className={cx("coin-history__row")} key={id}>
+              <Row className={cx("coin-history__row")} key={history._id}>
                 <Col sm={1}>
                   <CircleC className={cx("coin-icon")} />
                 </Col>
                 <Col className={cx("coin-history__row__content")}>
-                  {/* TODO: <h5>Nhận Coin từ {label}</h5> */}
-                  <small>{convertToDateTimeString(createdAt)}</small>
+                  <h5>Nhận Coin từ {history.payment_method}</h5>
+                  <small>{convertToDateTimeString(history.createdAt)}</small>
                 </Col>
                 <Col className={cx("coin-history__row__quantity")}>
-                  <strong>{amount >= 0 ? `+${amount}` : `-${amount}`}</strong>
+                  <strong>
+                    {history.amount >= 0
+                      ? `+${history.amount}`
+                      : `-${history.amount}`}
+                  </strong>
                 </Col>
               </Row>
             );
@@ -69,7 +68,7 @@ function CoinHistory() {
         </Container>
       ) : (
         <NoData>
-          <h5>Hiện tại không có lịch sử Coint</h5>
+          <h5>Bạn không có lịch sử coin nào</h5>
         </NoData>
       )}
       {}
