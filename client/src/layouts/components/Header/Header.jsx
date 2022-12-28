@@ -39,7 +39,7 @@ function Header({ menu }) {
           <div className={cx("desktop-screen")}>
             <div className={cx("logo")}>
               <Button wrapper to="/">
-                <Logo className={cx("logo")} />
+                <Logo className={cx("logo")} title="Trang chủ" />
               </Button>
             </div>
             <Button className={cx("sub-navbar--toggle")}>
