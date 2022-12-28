@@ -1,7 +1,7 @@
 export { default as approvedStatusController } from './approvedStatus.controller';
 export { default as authController } from './auth.controller';
 export { default as chapterController } from './chapter.controller';
-export { default as coinTransactionController } from './coinTransaction.controller';
+export { default as coinHistoryController } from './coinHistory.controller';
 export { default as favoriteController } from './favorite.controller';
 export { default as followController } from './follow.controller';
 export { default as genreController } from './genre.controller';

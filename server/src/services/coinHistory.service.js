@@ -1,20 +1,20 @@
 import paginateSort from '../helpers/paginateSort.js';
-import { CoinTransaction } from '../models/index.js';
+import { CoinHistory } from '../models/index.js';
 
-const coinTransactionService = {
+const coinHistoryService = {
   getAll: async (params = {}) => {
     const { _limit, _sort, _order } = params;
 
     if (_limit || (_sort && _order)) {
-      const response = await paginateSort(params, CoinTransaction);
+      const response = await paginateSort(params, CoinHistory);
       return response;
     }
 
-    const response = await CoinTransaction.find(params);
+    const response = await CoinHistory.find(params);
     return { data: response };
   },
   add: async (userId = '', paymentMethodId = '', amount = 0) => {
-    const model = new CoinTransaction({
+    const model = new CoinHistory({
       user_id: userId,
       payment_method_id: paymentMethodId,
       amount,
@@ -24,9 +24,9 @@ const coinTransactionService = {
     return response;
   },
   delete: async (id) => {
-    const response = await CoinTransaction.findOneAndDelete({ _id: id });
+    const response = await CoinHistory.findOneAndDelete({ _id: id });
     return response;
   },
 };
 
-export default coinTransactionService;
+export default coinHistoryService;

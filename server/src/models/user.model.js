@@ -3,7 +3,7 @@ import moment from 'moment';
 import mongoose from 'mongoose';
 
 import ChapterTransaction from './chapterTransaction.model.js';
-import CoinTransaction from './coinTransaction.model.js';
+import CoinHistory from './coinHistory.model.js';
 import Favorite from './favorite.model.js';
 import Follow from './follow.model.js';
 import Income from './income.model.js';
@@ -47,7 +47,7 @@ userSchema.pre('save', function (next) {
 
 userSchema.pre('remove', function (next) {
   ChapterTransaction.remove({ user_id: this._id }).exec();
-  CoinTransaction.remove({ user_id: this._id }).exec();
+  CoinHistory.remove({ user_id: this._id }).exec();
   Favorite.remove({ user_id: this._id }).exec();
   Follow.remove({ user_id: this._id }).exec();
   Income.remove({ user_id: this._id }).exec();

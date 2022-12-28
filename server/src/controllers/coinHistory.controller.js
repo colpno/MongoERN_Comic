@@ -1,15 +1,15 @@
 import createError from 'http-errors';
 import transformQueryParams from '../helpers/transformQueryParams.js';
-import { coinTransactionService } from '../services/index.js';
+import { coinHistoryService } from '../services/index.js';
 
-const coinTransactionController = {
+const coinHistoryController = {
   getAll: async (req, res, next) => {
     try {
       const { id: userId } = req.userInfo;
       req.query.userId = userId;
 
       const params = transformQueryParams(req.query);
-      const response = await coinTransactionService.getAll(params);
+      const response = await coinHistoryService.getAll(params);
 
       if (response.length === 0 || response.data?.length === 0) {
         return res.status(200).json({
@@ -31,7 +31,7 @@ const coinTransactionController = {
       const { id: userId } = req.userInfo;
       const { paymentMethodId, amount } = req.body;
 
-      const response = await coinTransactionService.add(userId, paymentMethodId, amount);
+      const response = await coinHistoryService.add(userId, paymentMethodId, amount);
 
       if (!response) {
         return next(createError(400, 'Không thể hoàn thành việc tạo giao dịch'));
@@ -47,4 +47,4 @@ const coinTransactionController = {
   },
 };
 
-export default coinTransactionController;
+export default coinHistoryController;

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const coinTransactionSchema = mongoose.Schema(
+const coinHistorySchema = mongoose.Schema(
   {
     user_id: { type: String, require: true },
     payment_method: { type: String, require: true },
@@ -9,6 +9,6 @@ const coinTransactionSchema = mongoose.Schema(
   { timestamps: true }
 );
 
-const CoinTransaction = mongoose.model('coin_transaction', coinTransactionSchema);
+const CoinHistory = mongoose.model('coin_history', coinHistorySchema);
 
-export default CoinTransaction;
+export default CoinHistory;

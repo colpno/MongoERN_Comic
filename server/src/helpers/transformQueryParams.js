@@ -6,6 +6,7 @@ const querySuffixes = [
   '_ne', // Not equal
   '_in', // In array
   '_nin', // Not in array
+  '_all', // Match all elements in array
   '_like', // Contains part of string
 ];
 
@@ -27,6 +28,8 @@ const convertToMongoQueryOperator = (suffix, value) => {
       return { $in: value };
     case '_nin':
       return { $nin: value };
+    case '_all':
+      return { $all: value };
     case '_like':
       return { $regex: value, $options: 'i' };
     default:
@@ -65,11 +68,6 @@ const transformQueryParams = (queries = {}) => {
         }
       }
     }
-
-    // if (additionQuerySuffixes.includes(queryKey)) {
-    //   newResult[queryKey] = queryValue;
-    //   return newResult;
-    // }
 
     // else just query like normal key = value pairs
     newResult[queryKey] = queryValue;
