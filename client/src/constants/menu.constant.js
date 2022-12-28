@@ -13,8 +13,8 @@ const MY_TITLE_MENU = [
 const HISTORY_MENU = [
   { href: "/profile/coin/add", label: "Nạp coin" },
   { href: "/profile/history/coin", label: "Lịch sử coin" },
-  { href: "/profile/history/point", label: "Lịch sử point" },
-  { href: "/profile/history/ticket", label: "Lịch sử vé" },
+  // { href: "/profile/history/point", label: "Lịch sử point" },
+  // { href: "/profile/history/ticket", label: "Lịch sử vé" },
 ];
 
 const MOBILE_NAV_MENU = [
