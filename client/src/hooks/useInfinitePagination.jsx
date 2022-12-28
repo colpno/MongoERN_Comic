@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 function useInfinitePagination(limit) {
   const [pagination, setPagination] = useState({ page: 1, limit, total: 0 });
-  const [lastElement, setLastElement] = useState(null);
+  const [lastElementRef, setLastElementRef] = useState(null);
 
   const observer = useRef(
     new IntersectionObserver((entries) => {
@@ -20,7 +20,7 @@ function useInfinitePagination(limit) {
   };
 
   useEffect(() => {
-    const currentElement = lastElement;
+    const currentElement = lastElementRef;
     const currentObserver = observer.current;
 
     if (currentElement) {
@@ -32,9 +32,9 @@ function useInfinitePagination(limit) {
         currentObserver.unobserve(currentElement);
       }
     };
-  }, [lastElement]);
+  }, [lastElementRef]);
 
-  return { pagination, setPaginationTotal, setLastElement };
+  return { pagination, setPaginationTotal, setLastElementRef };
 }
 
 export default useInfinitePagination;
