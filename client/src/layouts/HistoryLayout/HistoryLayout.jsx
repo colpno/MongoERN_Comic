@@ -11,7 +11,7 @@ function HistoryLayout({ children }) {
       <Header />
       <div className="content skip-header">
         <CurrencyCount />
-        <SubNavigator menu={HISTORY_MENU} />
+        <SubNavigator menu={HISTORY_MENU} slidesPerView={2} />
         {children}
       </div>
       <Footer />
