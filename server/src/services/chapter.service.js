@@ -69,7 +69,7 @@ const chapterService = {
     return response;
   },
   update: async (id, data = {}) => {
-    const response = await Chapter.findOneAndUpdate({ _id: id }, data, { new: true });
+    const response = await Chapter.findOneAndUpdate({ _id: id }, data);
     return response;
   },
   delete: async (id) => {
@@ -88,8 +88,10 @@ const chapterService = {
 
     return { finalCover, finalContents };
   },
-  removeFromCloud: async (contents) => {
-    const promises = contents?.map(async (publicId) => {
+  removeFromCloud: async (coverPublicId, contentsPublicId) => {
+    coverPublicId && (await cloudinaryService.remove(coverPublicId));
+
+    const promises = contentsPublicId?.map(async (publicId) => {
       const cloudResponse = await cloudinaryService.remove(publicId);
       return cloudResponse;
     });

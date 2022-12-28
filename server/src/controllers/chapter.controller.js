@@ -110,12 +110,15 @@ const chapterController = {
         return next(createError(400, 'không thể hoàn thành việc cập nhật chương'));
       }
 
-      await chapterService.removeFromCloud(oldContents);
+      (cover || oldContents) &&
+        (await chapterService.removeFromCloud(
+          cover ? response.cover.cloud_public_id : undefined,
+          oldContents
+        ));
 
       return res.status(200).json({
         code: 200,
         message: 'Chương đã được cập nhật thành công',
-        data: {},
       });
     } catch (error) {
       return next(error);
