@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 function useDelete(deleteFunc) {
-  const [deletedItem, setDeletedItem] = useState({});
+  const [deletedItem, setDeletedItem] = useState(null);
   const [popup, setPopup] = useState({
     trigger: false,
     isConfirm: false,

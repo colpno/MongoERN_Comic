@@ -6,9 +6,8 @@ import { useParams } from "react-router-dom";
 import { Logo } from "assets/images";
 import { Button } from "components";
 import { useToast } from "hooks";
-import { setUserLike } from "libs/redux/slices/readingChapterSlice";
-import { getTitle } from "services/title";
-import { addUserLike, deleteUserLike } from "services/userLike";
+import { setFavorite } from "libs/redux/slices/readingChapterSlice";
+import { favoriteService, titleService } from "services";
 import { isEmpty } from "utils";
 import styles from "../assets/styles/ReadingHeader.module.scss";
 import ReadingNav from "./ReadingNav";
@@ -19,21 +18,20 @@ const cx = classNames.bind(styles);
 function ReadingHeader() {
   const dispatch = useDispatch();
   const { titleId } = useParams();
-  const [title, setTitle] = useState({});
   const [darkTheme, setDarkTheme] = useState(false);
   const [isLike, setIsLike] = useState(false);
-  const chapter = useSelector((state) => state.chapter.chapter.info);
-  const user = useSelector((state) => state.user.user);
-  const userLike = useSelector((state) => state.chapter.userLike);
   const { toastEmitter } = useToast();
-  const [controls, setControls] = useState({
-    isLiked: false,
-  });
+  const [controls, setControls] = useState({ isLiked: false });
+  const [title, setTitle] = useState({});
+  const chapter = useSelector((state) => state.chapter.chapter);
+  const user = useSelector((state) => state.user.user);
+  const favorite = useSelector((state) => state.chapter.favorite);
 
   const fetchData = () => {
-    getTitle(titleId, false)
-      .then((response) => setTitle(response))
-      .catch((error) => console.log(error));
+    titleService
+      .getOne(titleId, false)
+      .then((response) => setTitle(response.data))
+      .catch((error) => console.error(error));
   };
 
   const handleChangeTheme = () => {
@@ -41,30 +39,32 @@ function ReadingHeader() {
   };
 
   const handleLikeClick = () => {
-    if (isEmpty(user.guid)) {
+    if (isEmpty(user._id)) {
       toastEmitter("Bạn cần phải đăng nhập để thích truyện", "error");
       return;
     }
 
     if (!controls.isLiked) {
-      addUserLike(user.guid, chapter.guid)
+      favoriteService
+        .add(user._id, chapter._id)
         .then((response) => {
           toastEmitter(response.message, "success");
           setControls((prev) => ({ ...prev, isLiked: true }));
-          dispatch(setUserLike(response.data));
+          dispatch(setFavorite(response.data));
         })
         .catch((error) => {
-          toastEmitter(error.data.error, "error");
+          toastEmitter(error, "error");
         });
     }
     if (controls.isLiked) {
-      deleteUserLike(user.guid, chapter.guid)
+      favoriteService
+        .delete(user._id, chapter._id)
         .then(() => {
           setControls((prev) => ({ ...prev, isLiked: false }));
-          dispatch(setUserLike({}));
+          dispatch(setFavorite({}));
         })
         .catch((error) => {
-          toastEmitter(error.data.error, "error");
+          toastEmitter(error, "error");
         });
     }
   };
@@ -74,13 +74,13 @@ function ReadingHeader() {
   }, []);
 
   useEffect(() => {
-    if (userLike.userId === user.guid) {
+    if (favorite.user_id === user._id) {
       setIsLike(true);
     }
-    if (Object.keys(userLike).length === 0) {
+    if (Object.keys(favorite).length === 0) {
       setIsLike(false);
     }
-  }, [userLike]);
+  }, [favorite]);
 
   return (
     <>
@@ -90,14 +90,14 @@ function ReadingHeader() {
             <Logo className={cx("logo")} />
           </Button>
           <div className={cx("reading-header__title")}>
-            <Button text to={`/comic/title/${title.guid}`} title={title.name}>
-              {title.name}
+            <Button text to={`/comic/title/${title._id}`} title={title.title}>
+              {title.title}
             </Button>
           </div>
           <ReadingNav
             cx={cx}
             chapter={chapter}
-            totalChapter={title.totalChapter}
+            totalChapter={title.total_chapter}
             titleId={titleId}
           />
           <ReadingTools

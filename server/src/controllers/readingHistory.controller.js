@@ -1,4 +1,4 @@
-import createHttpError from 'http-errors';
+import createError from 'http-errors';
 import transformQueryParams from '../helpers/transformQueryParams.js';
 import { readingHistoryService } from '../services/index.js';
 
@@ -12,15 +12,18 @@ const readingHistoryController = {
       const response = await readingHistoryService.getAll(params);
 
       if (response.length === 0 || response.data?.length === 0) {
-        next(createHttpError(404, 'Không tìm thấy lịch sử đọc nào'));
+        return res.status(200).json({
+          ...response,
+          code: 200,
+        });
       }
 
       return res.status(200).json({
+        ...response,
         code: 200,
-        data: response,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
   add: async (req, res, next) => {
@@ -28,7 +31,7 @@ const readingHistoryController = {
       const { id: userId } = req.userInfo;
       const { titleId, chapterId } = req.body;
 
-      const duplicated = await readingHistoryService.getAll({ userId, titleId });
+      const duplicated = (await readingHistoryService.getAll({ userId, titleId })).data;
 
       if (duplicated.length > 0) {
         const response = await readingHistoryService.update(userId, titleId, {
@@ -36,7 +39,7 @@ const readingHistoryController = {
         });
 
         if (!response) {
-          next(createHttpError(400, 'không thể hoàn thành việc cập nhật lịch sử đọc'));
+          return next(createError(400, 'không thể hoàn thành việc cập nhật lịch sử đọc'));
         }
 
         return res.status(200).json({
@@ -48,7 +51,7 @@ const readingHistoryController = {
       const response = await readingHistoryService.add(userId, titleId, chapterId);
 
       if (!response) {
-        next(createHttpError(400, 'Không thể hoàn thành việc tạo lịch sử đọc'));
+        return next(createError(400, 'Không thể hoàn thành việc tạo lịch sử đọc'));
       }
 
       return res.status(201).json({
@@ -56,7 +59,7 @@ const readingHistoryController = {
         data: response,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 };

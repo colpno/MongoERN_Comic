@@ -6,39 +6,39 @@ const genreService = {
       const response = await genreApi.getAll(params);
       return response;
     } catch (error) {
-      return error?.data?.error || error?.data?.message;
+      return Promise.reject(error.data);
     }
   },
   getOne: async (genreID) => {
     try {
       const response = await genreApi.getOne(genreID);
-      return response[0];
+      return response;
     } catch (error) {
-      return error?.data?.error || error?.data?.message;
+      return Promise.reject(error.data);
     }
   },
-  add: async (genre, setProgress) => {
+  add: async (genre, setProgress = () => {}) => {
     try {
       const response = await genreApi.add(genre, setProgress);
       return response;
     } catch (error) {
-      return error?.data?.error || error?.data?.message;
+      return Promise.reject(error.data);
     }
   },
-  update: async (id, genre, setProgress) => {
+  update: async (id, genre, setProgress = () => {}) => {
     try {
       const response = await genreApi.update(id, genre, setProgress);
       return response;
     } catch (error) {
-      return error?.data?.error || error?.data?.message;
+      return Promise.reject(error.data);
     }
   },
-  delete: async (id, setProgress) => {
+  delete: async (id, setProgress = () => {}) => {
     try {
       const response = await genreApi.delete(id, setProgress);
       return response;
     } catch (error) {
-      return error?.data?.error || error?.data?.message;
+      return Promise.reject(error.data);
     }
   },
 };

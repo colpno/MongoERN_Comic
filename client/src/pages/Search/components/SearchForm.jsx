@@ -25,7 +25,7 @@ function SearchForm({
               <Col md={10}>
                 {genreOptions.length > 0 && (
                   <FastField
-                    name="genreId"
+                    name="genres"
                     component={CheckBoxGroup}
                     options={genreOptions}
                     col={{
@@ -93,7 +93,7 @@ function SearchForm({
 
 SearchForm.propTypes = {
   initialValues: PropTypes.shape({
-    genreId: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+    genres: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     author: PropTypes.string.isRequired,
     sort: PropTypes.string.isRequired,
     order: PropTypes.string.isRequired,

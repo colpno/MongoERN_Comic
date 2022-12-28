@@ -3,33 +3,34 @@ import { useEffect, useState } from "react";
 
 import { NoData } from "features";
 import { useSelector } from "react-redux";
-import { getAllHiredChapters } from "services/hiredChapter";
+import { chapterTransactionService } from "services";
 import HiredChaptersTable from "./components/HiredChaptersTable";
 
 function HiredChapters({ cx, titles }) {
   const user = useSelector((state) => state.user.user);
   const [chapters, setChapters] = useState([]);
   const [pagination, setPagination] = useState({
-    page: 1,
-    limit: 30,
+    _page: 1,
+    _limit: 30,
     total: 0,
   });
   const finalData = [];
   chapters.forEach((chapter) => {
     finalData.push({
       chapter,
-      title: titles.find((title) => chapter.titleId === title.id),
+      title: titles.find((title) => chapter.title_id === title._id),
     });
   });
   const hasData = finalData.length > 0;
 
   const fetchData = () => {
     const params = {
-      userId: user.guid,
-      page: pagination.page,
-      limit: pagination.limit,
+      userId: user._id,
+      _page: pagination.page,
+      _limit: pagination.limit,
     };
-    getAllHiredChapters(params)
+    chapterTransactionService
+      .getAll(params)
       .then((response) => {
         const hiredChapters = response.data.map(
           (hiredChapter) => hiredChapter.chapter
@@ -38,10 +39,10 @@ function HiredChapters({ cx, titles }) {
         setChapters(hiredChapters);
         setPagination((prev) => ({
           ...prev,
-          total: response.pagination.total,
+          total: response.paginate.total,
         }));
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   };
 
   useEffect(() => {
@@ -73,8 +74,10 @@ HiredChapters.propTypes = {
   titles: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      cover: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
+      cover: PropTypes.shape({
+        source: PropTypes.string.isRequired,
+      }).isRequired,
+      title: PropTypes.string.isRequired,
     }).isRequired
   ).isRequired,
 };

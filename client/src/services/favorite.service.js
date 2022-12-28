@@ -6,7 +6,7 @@ const favoriteService = {
       const response = await favoriteApi.getAll(params);
       return response;
     } catch (error) {
-      return error?.data?.error || error?.data?.message;
+      return Promise.reject(error.data);
     }
   },
   add: async (userId, chapterId) => {
@@ -14,7 +14,7 @@ const favoriteService = {
       const response = await favoriteApi.add(userId, chapterId);
       return response;
     } catch (error) {
-      return error?.data?.error || error?.data?.message;
+      return Promise.reject(error.data);
     }
   },
   delete: async (userId, chapterId) => {
@@ -22,7 +22,7 @@ const favoriteService = {
       const response = await favoriteApi.delete(userId, chapterId);
       return response;
     } catch (error) {
-      return error?.data?.error || error?.data?.message;
+      return Promise.reject(error.data);
     }
   },
 };

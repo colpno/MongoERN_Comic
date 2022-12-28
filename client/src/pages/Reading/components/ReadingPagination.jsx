@@ -39,19 +39,19 @@ function ReadingPagination({ chapters }) {
         >
           {chapters.map((chapter) => {
             return (
-              <SwiperSlide key={chapter.guid}>
+              <SwiperSlide key={chapter._id}>
                 <Button
                   wrapper
-                  to={`/comic/title/${titleId}/${chapter.guid}`}
+                  to={`/comic/title/${titleId}/${chapter._id}`}
                   className={cx(
                     "slide-wrapper",
-                    chapterId === chapter.guid ? "active" : ""
+                    chapterId === chapter._id ? "active" : ""
                   )}
                 >
                   <div className={cx("box-img")}>
-                    <img src={chapter.cover} alt={chapter.name} />
+                    <img src={chapter.cover.source} alt={chapter.title} />
                   </div>
-                  <span className={cx("content")}>{chapter.name}</span>
+                  <span className={cx("content")}>{chapter.title}</span>
                 </Button>
               </SwiperSlide>
             );
@@ -65,10 +65,12 @@ function ReadingPagination({ chapters }) {
 ReadingPagination.propTypes = {
   chapters: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      _id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
       order: PropTypes.number.isRequired,
-      cover: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
+      cover: PropTypes.shape({
+        source: PropTypes.string.isRequired,
+      }).isRequired,
+      title: PropTypes.string.isRequired,
     }).isRequired
   ).isRequired,
 };

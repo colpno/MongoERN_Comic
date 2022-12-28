@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
@@ -5,12 +6,11 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
-import Button from "components/Button";
+import { Button } from "components";
 import { NoData, Popup, ProgressCircle, Search } from "features";
 import { useDelete, usePagination, useToast } from "hooks";
-import { deleteChapter, getAllChapters } from "services/chapter";
-import { deleteTitle, getTitle } from "services/title";
-import styles from "./assets/styles/Chapters.module.scss";
+import { chapterService, titleService } from "services";
+import styles from "./styles/Chapters.module.scss";
 import ChapterTable from "./components/ChapterTable";
 import TitlePart from "./components/TitlePart";
 
@@ -32,17 +32,20 @@ function Chapters() {
   const searchText = useSelector((state) => state.global.searchText);
   const [progress, setProgress] = useState(0);
   const { Toast, options: toastOptions, toastEmitter } = useToast();
+  const { pagination, setPagination, setPaginationTotal } =
+    usePagination(CHAPTERS_PER_PAGE);
   const defaultChapterApiParams = {
-    sort: "order",
-    order: "asc",
+    title_id: titleId,
+    _sort: "order",
+    _order: "asc",
+    _page: pagination.page,
+    _limit: pagination.limit,
   };
   const [chapterApiParams, setChapterApiParams] = useState(
     defaultChapterApiParams
   );
   const [title, setTitle] = useState({});
   const [chapters, setChapters] = useState([]);
-  const { pagination, setPagination, setPaginationTotal } =
-    usePagination(CHAPTERS_PER_PAGE);
   const [popup, setPopup] = useState({
     trigger: false,
     title: "Thông báo",
@@ -52,23 +55,23 @@ function Chapters() {
   const hasData = chapters.length > 0;
 
   const fetchData = (params) => {
-    const titlePromise = getTitle(titleId);
-    const chapterPromise = getAllChapters(params);
+    const titlePromise = titleService.getOne(titleId);
+    const chapterPromise = chapterService.getAll(params);
 
     Promise.all([titlePromise, chapterPromise])
       .then(([titleResponse, chaptersResponse]) => {
-        setTitle(titleResponse);
+        setTitle(titleResponse.data);
         setChapters(chaptersResponse.data);
-        setPaginationTotal(chaptersResponse.pagination.total);
+        setPaginationTotal(chaptersResponse.paginate.total);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   };
 
   const handleSortingColumn = (column) => {
     fetchData({
       ...chapterApiParams,
-      sort: column,
-      order: !isTableColDescSort,
+      _sort: column,
+      _order: !isTableColDescSort,
     });
     setIsTableColDescSort((prev) => !prev);
   };
@@ -78,31 +81,18 @@ function Chapters() {
     popup: titlePopup,
     setDeletedItem: setTitleDeletedItem,
     setPopup: setTitlePopup,
-  } = useDelete(async () => {
-    deleteTitle(
-      titleDeletedItem.titleId,
-      {
-        publicId: titleDeletedItem.publicId,
-      },
-      setProgress
-    )
+  } = useDelete(() => {
+    const { _id, _guid } = titleDeletedItem;
+
+    titleService
+      .delete(_id, setProgress, { guid: _guid })
       .then((response) => {
-        if (response.errno === 1451) {
-          setTitlePopup((prev) => ({
-            ...prev,
-            trigger: false,
-          }));
-          toastEmitter("Không thể xóa do các chương vẫn tồn tại", "error");
-          setProgress(0);
-        }
-        if (response.affectedRows > 0) {
-          toastEmitter("Truyện đã được xóa thành công", "success");
-          setProgress(0);
-          navigate(-1);
-        }
+        toastEmitter(response.message, "success");
+        setProgress(0);
+        navigate(-1);
       })
       .catch((error) => {
-        toastEmitter(error.data.error || error.data.message, "error");
+        toastEmitter(error, "error");
         setProgress(0);
       });
   });
@@ -112,19 +102,17 @@ function Chapters() {
     popup: chapterPopup,
     setDeletedItem: setChapterDeletedItem,
     setPopup: setChapterPopup,
-  } = useDelete(async () => {
-    const { guid, titleId: titleID } = chapterDeletedItem;
-    const data = { titleId: titleID };
-    deleteChapter(guid, data, setProgress)
-      .then((response) => {
-        if (response.affectedRows > 0) {
-          toastEmitter("Truyện đã được xóa thành công", "success");
-          fetchData(chapterApiParams);
-          setProgress(0);
-        }
+  } = useDelete(() => {
+    const { id } = chapterDeletedItem;
+    chapterService
+      .delete(id, setProgress)
+      .then(() => {
+        toastEmitter("Truyện đã được xóa thành công", "success");
+        fetchData(chapterApiParams);
+        setProgress(0);
       })
       .catch((error) => {
-        toastEmitter(error.data.error || error.data.message, "error");
+        toastEmitter(error, "error");
         setProgress(0);
       });
   });
@@ -137,13 +125,13 @@ function Chapters() {
     if (searchText.length > 0) {
       const params = {
         ...chapterApiParams,
-        name: searchText,
-        titleId,
+        title: searchText,
+        title_id: titleId,
       };
       fetchData(params);
       setChapterApiParams(params);
     }
-    if (searchText.length === 0 && title?.guid) {
+    if (searchText.length === 0 && title?._id) {
       setChapterApiParams(defaultChapterApiParams);
     }
   }, [searchText]);
@@ -202,7 +190,8 @@ function Chapters() {
           />
         ) : (
           <NoData>
-            <h5>Không tìm thấy chương phù hợp!</h5>
+            <h5>Hiện tại truyện không có chương nào</h5>
+            <BtnCreate />
           </NoData>
         )}
       </Container>

@@ -4,9 +4,9 @@ import { BiChevronDown } from "react-icons/bi";
 import { useSelector } from "react-redux";
 
 import { Image } from "components";
-import Button from "components/Button";
+import { Button } from "components";
 import { useClickOutSide, useLogout } from "hooks";
-import styles from "../assets/styles/Avatar.module.scss";
+import styles from "../styles/Avatar.module.scss";
 import getAvatarMenu from "../utils/getAvatarMenu";
 import AvatarDropdownList from "./AvatarDropdownList";
 

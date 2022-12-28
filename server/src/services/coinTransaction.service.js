@@ -11,7 +11,7 @@ const coinTransactionService = {
     }
 
     const response = await CoinTransaction.find(params);
-    return response;
+    return { data: response };
   },
   add: async (userId = '', paymentMethodId = '', amount = 0) => {
     const model = new CoinTransaction({

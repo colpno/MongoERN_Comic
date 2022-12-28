@@ -2,21 +2,21 @@ import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 
-import CardList from "components/CardList";
+import { CardList } from "components";
 import { NoData } from "features";
-import { getAllTitles } from "services/title";
-import styles from "./assets/styles/Complete.module.scss";
+import { titleService } from "services";
+import styles from "./Complete.module.scss";
 
 const cx = classNames.bind(styles);
 
 function Complete() {
   const [titles, setTitles] = useState([]);
-  const hasData = titles.length;
 
   const fetchData = () => {
-    getAllTitles({ releaseDay: "finished" })
-      .then((response) => setTitles(response))
-      .catch((error) => console.log(error));
+    titleService
+      .getAll({ release_day: "finished" })
+      .then((response) => setTitles(response.data))
+      .catch((error) => console.error(error));
   };
 
   useEffect(() => {
@@ -25,7 +25,7 @@ function Complete() {
 
   return (
     <Container className={cx("complete-page")}>
-      {hasData ? (
+      {titles.length > 0 ? (
         <CardList
           wrap
           data={titles}

@@ -15,8 +15,16 @@
 }
 
 .message {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   padding: 20px;
   text-align: center;
   width: 60%;
+}
+
+.button-container {
+  margin-top: 1.6rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

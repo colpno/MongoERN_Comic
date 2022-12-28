@@ -2,7 +2,7 @@ import classNames from "classnames/bind";
 import PropTypes from "prop-types";
 import { memo } from "react";
 
-import Button from "components/Button";
+import { Button } from "components";
 import CardList from "./CardList";
 import Styles from "./CardList.module.scss";
 
@@ -11,7 +11,6 @@ const cx = classNames.bind(Styles);
 function CardListWithTitle({
   col,
   data,
-  genre,
   showTotalChapter,
   showSummary,
   showAuthor,
@@ -22,14 +21,14 @@ function CardListWithTitle({
   return (
     <div className={cx(`cards-wrapper`, wrap ? "wrap" : "")}>
       <header className={cx("cards-wrapper__head")}>
-        <h3 className={cx("cards-wrapper__head__title")}>{genre.name}</h3>
-        <Button text to={`/content-list/${genre.guid}`}>
+        <h3 className={cx("cards-wrapper__head__title")}>{data.name}</h3>
+        <Button text to={`/content-list/${data._id}`}>
           Xem thêm
         </Button>
       </header>
       <CardList
         col={col}
-        data={data}
+        data={data.titles}
         showTotalChapter={showTotalChapter}
         showSummary={showSummary}
         showAuthor={showAuthor}
@@ -48,10 +47,10 @@ CardListWithTitle.propTypes = {
     xl: PropTypes.number,
     xxl: PropTypes.number,
   }),
-  data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  genre: PropTypes.shape({
-    guid: PropTypes.string.isRequired,
+  data: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
+    titles: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired,
   }).isRequired,
   showTotalChapter: PropTypes.bool,
   showSummary: PropTypes.bool,

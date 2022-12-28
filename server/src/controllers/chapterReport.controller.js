@@ -1,4 +1,3 @@
-import createHttpError from 'http-errors';
 import { getCurrentTime } from '../helpers/getCurrentTime';
 import transformQueryParams from '../helpers/transformQueryParams';
 import chapterReportService from '../services/chapterReport.service';
@@ -9,11 +8,19 @@ const chapterReportController = {
       const params = transformQueryParams(req.query);
       const reports = await chapterReportService.getAll(params);
 
-      if (reports.length === 0) next(createHttpError(404, 'Không tìm thấy báo cáo nào'));
+      if (reports.length === 0) {
+        return res.status(200).json({
+          ...reports,
+          code: 200,
+        });
+      }
 
-      return res.status(200).json({ data: reports });
+      return res.status(200).json({
+        ...reports,
+        code: 200,
+      });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
   getOne: async (req, res, next) => {
@@ -22,11 +29,19 @@ const chapterReportController = {
 
       const report = await chapterReportService.getOne(chapterId, month, year);
 
-      if (!report) next(createHttpError(404, 'Không tìm thấy báo cáo nào'));
+      if (!report) {
+        return res.status(200).json({
+          code: 200,
+          data: {},
+        });
+      }
 
-      return res.status(200).json({ data: report });
+      return res.status(200).json({
+        code: 200,
+        data: report,
+      });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
   add: async (chapterId = '', type = 'views' || 'likes', value = 1) => {

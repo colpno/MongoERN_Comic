@@ -25,8 +25,8 @@ function PointHistoryList({ histories }) {
 PointHistoryList.propTypes = {
   histories: PropTypes.arrayOf(
     PropTypes.shape({
-      guid: PropTypes.string.isRequired,
-      payMethod: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired,
+      paymentMethod: PropTypes.string.isRequired,
       amount: PropTypes.number.isRequired,
       createdAt: PropTypes.string.isRequired,
     }).isRequired

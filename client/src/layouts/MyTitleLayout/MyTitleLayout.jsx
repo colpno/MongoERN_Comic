@@ -1,9 +1,8 @@
 import PropTypes from "prop-types";
 
-import SubNavigator from "components/SubNavigator";
-import { navMenu } from "constants/myTitleLayout.constant";
-import Footer from "layouts/components/Footer";
-import Header from "layouts/components/Header";
+import { SubNavigator } from "components";
+import { MY_TITLE_MENU } from "constants/menu.constant";
+import { Footer, Header } from "layouts/components";
 import StatisticCount from "./components/StatisticCount";
 
 function MyTitleLayout({ children }) {
@@ -12,7 +11,7 @@ function MyTitleLayout({ children }) {
       <Header />
       <div className="content skip-header">
         <StatisticCount />
-        <SubNavigator menu={navMenu} />
+        <SubNavigator menu={MY_TITLE_MENU} />
         {children}
       </div>
       <Footer />

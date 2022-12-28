@@ -6,15 +6,15 @@ const approvedStatusService = {
       const response = await approvedStatusApi.getAll(params);
       return response;
     } catch (error) {
-      return error?.data?.error || error?.data?.message;
+      return Promise.reject(error.data);
     }
   },
   getOne: async (approvedStatusID) => {
     try {
       const response = await approvedStatusApi.getOne(approvedStatusID);
-      return response[0];
+      return response;
     } catch (error) {
-      return error?.data?.error || error?.data?.message;
+      return Promise.reject(error.data);
     }
   },
 };

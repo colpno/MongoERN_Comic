@@ -11,7 +11,7 @@ const chapterTransactionService = {
     }
 
     const response = await ChapterTransaction.find(params).populate('chapter');
-    return response;
+    return { data: response };
   },
   add: async (userId = '', chapterId = '', expiredAt = null, method = '', cost = 0) => {
     const model = new ChapterTransaction({

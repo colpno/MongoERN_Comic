@@ -16,17 +16,17 @@ const handleHighlightText = (text, searchValue) => {
 const handleSearchTitleNameAuthor = (searchedArray, searchValue, limit) => {
   let index = 0;
 
-  return searchedArray.reduce((titleArray, title) => {
-    const { name, author } = title;
+  return searchedArray.reduce((titleArray, ttl) => {
+    const { title, author } = ttl;
 
     if (
       index !== limit &&
-      checkContains(name, searchValue) &&
+      checkContains(title, searchValue) &&
       checkContains(author, searchValue)
     ) {
       titleArray.push({
-        ...title,
-        name: handleHighlightText(name, searchValue),
+        ...ttl,
+        title: handleHighlightText(title, searchValue),
         author: handleHighlightText(author, searchValue),
       });
       index += 1;
@@ -39,13 +39,13 @@ const handleSearchTitleNameAuthor = (searchedArray, searchValue, limit) => {
 const handleSearchTitleName = (searchedArray, searchValue, limit) => {
   let index = 0;
 
-  return searchedArray.reduce((titleArray, title) => {
-    const { name } = title;
+  return searchedArray.reduce((titleArray, ttl) => {
+    const { title } = ttl;
 
-    if (index !== limit && checkContains(name, searchValue)) {
+    if (index !== limit && checkContains(title, searchValue)) {
       titleArray.push({
-        ...title,
-        name: handleHighlightText(name, searchValue),
+        ...ttl,
+        title: handleHighlightText(title, searchValue),
       });
       index += 1;
     }
@@ -72,11 +72,27 @@ const handleSearchTitleAuthor = (searchedArray, searchValue, limit) => {
   }, []);
 };
 
+const checkDuplicate = (result = [], array = [], field = "") => {
+  const temp = [];
+
+  for (let i = 0; i < array.length; i++) {
+    const arr = array[i];
+
+    const isDuplicate = result.some((res) => arr[field] === res[field]);
+
+    if (!isDuplicate) temp.push(arr);
+  }
+
+  return temp;
+};
+
 function useSearch(searchedArray, searchValue, limit) {
   const checkEmpty = (...array) => {
     const tmp = array.map((arr) => arr.length === 0);
     return tmp.some((item) => item === true);
   };
+
+  const result = [];
 
   const searchTitleNameAuthor = handleSearchTitleNameAuthor(
     searchedArray,
@@ -84,19 +100,21 @@ function useSearch(searchedArray, searchValue, limit) {
     limit
   );
 
+  result.push(...searchTitleNameAuthor);
+
   const searchTitleAuthor = checkEmpty(searchTitleNameAuthor)
     ? handleSearchTitleAuthor(searchedArray, searchValue, limit)
     : [];
+
+  result.push(...checkDuplicate(result, searchTitleAuthor, "_id"));
 
   const searchTitleName = checkEmpty(searchTitleNameAuthor, searchTitleAuthor)
     ? handleSearchTitleName(searchedArray, searchValue, limit)
     : [];
 
-  return [
-    ...searchTitleNameAuthor,
-    ...searchTitleName,
-    ...searchTitleAuthor,
-  ].slice(0, limit);
+  result.push(...checkDuplicate(result, searchTitleName, "_id"));
+
+  return result.slice(0, limit);
 }
 
 export default useSearch;

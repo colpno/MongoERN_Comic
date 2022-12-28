@@ -17,13 +17,13 @@ function InventoryTickets({ cx, handleClickIcon, user }) {
         <span className={cx("ticket")}>
           <RentTicket />
           <strong>x</strong>
-          <span className={cx("rent-quantity")}>{user.ticketForRenting}</span>
+          <span className={cx("rent-quantity")}>{user.ticket_for_renting}</span>
         </span>
         <div className={cx("divider")} />
         <span className={cx("ticket")}>
           <BuyTicket />
           <strong>x</strong>
-          <span className={cx("buy-quantity")}>{user.ticketForBuying}</span>
+          <span className={cx("buy-quantity")}>{user.ticket_for_buying}</span>
         </span>
       </div>
     </Col>
@@ -34,8 +34,8 @@ InventoryTickets.propTypes = {
   cx: PropTypes.func.isRequired,
   handleClickIcon: PropTypes.func.isRequired,
   user: PropTypes.shape({
-    ticketForRenting: PropTypes.number.isRequired,
-    ticketForBuying: PropTypes.number.isRequired,
+    ticket_for_renting: PropTypes.number.isRequired,
+    ticket_for_buying: PropTypes.number.isRequired,
   }).isRequired,
 };
 

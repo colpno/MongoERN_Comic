@@ -3,7 +3,7 @@ import { memo } from "react";
 import PropTypes from "prop-types";
 import { Col, Row } from "react-bootstrap";
 
-import styles from "pages/Ranking/assets/styles/Top5.module.scss";
+import styles from "../styles/Top5.module.scss";
 import RankingFigure from "./RankingFigure";
 
 const cx = classNames.bind(styles);

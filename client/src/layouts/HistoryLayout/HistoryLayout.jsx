@@ -1,9 +1,8 @@
 import PropTypes from "prop-types";
 
-import SubNavigator from "components/SubNavigator";
-import { navMenu } from "constants/historyLayout.constant";
-import Footer from "layouts/components/Footer";
-import Header from "layouts/components/Header";
+import { SubNavigator } from "components";
+import { HISTORY_MENU } from "constants/menu.constant";
+import { Footer, Header } from "layouts/components";
 import CurrencyCount from "./components/CurrencyCount";
 
 function HistoryLayout({ children }) {
@@ -12,7 +11,7 @@ function HistoryLayout({ children }) {
       <Header />
       <div className="content skip-header">
         <CurrencyCount />
-        <SubNavigator menu={navMenu} />
+        <SubNavigator menu={HISTORY_MENU} />
         {children}
       </div>
       <Footer />

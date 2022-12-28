@@ -2,10 +2,8 @@ import classNames from "classnames/bind";
 import { FastField, Form, Formik } from "formik";
 import PropTypes from "prop-types";
 
-import { Image } from "components";
-import Button from "components/Button";
-import { InputField } from "libs/formik";
-import FormLabel from "libs/formik/FormLabel";
+import { Image, Button } from "components";
+import { InputField, FormLabel } from "libs/formik";
 import { profileFormValidation } from "validations/profileForm.validation";
 import styles from "../styles/ProfileForm.module.scss";
 
@@ -45,6 +43,13 @@ function ProfileForm({
               name="username"
               component={InputField}
               placeholder="Viết tên người dùng..."
+            />
+
+            <FormLabel name="password" label="Mật khẩu" required />
+            <FastField
+              name="password"
+              component={InputField}
+              placeholder="Viết mật khẩu..."
             />
 
             <FormLabel name="email" label="Địa chỉ email" required />

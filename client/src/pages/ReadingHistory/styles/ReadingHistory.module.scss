@@ -1,0 +1,21 @@
+.reading-history {
+  margin-top: 20px;
+  margin-bottom: 30px;
+
+  .col:not(:first-child) {
+    display: flex;
+    justify-content: center;
+  }
+
+  :global(.grid-table .row) {
+    min-width: 1144px;
+  }
+}
+
+@media (max-width: 768px) {
+  .follow {
+    :global(.grid-table .row) {
+      min-width: 890px;
+    }
+  }
+}

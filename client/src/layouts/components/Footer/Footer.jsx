@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 import { Logo } from "assets/images";
 import { BackToTop } from "features";
-import styles from "./assets/styles/Footer.module.scss";
+import styles from "./Footer.module.scss";
 
 const cx = classNames.bind(styles);
 

@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import InputImage from "components/InputImage";
+import { InputImage } from "components";
 
 function FileField(props) {
   return <InputImage {...props} />;

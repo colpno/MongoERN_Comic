@@ -1,4 +1,4 @@
-import createHttpError from 'http-errors';
+import createError from 'http-errors';
 import transformQueryParams from '../helpers/transformQueryParams.js';
 import { chapterTransactionService } from '../services/index.js';
 
@@ -12,15 +12,18 @@ const chapterTransactionController = {
       const response = await chapterTransactionService.getAll(params);
 
       if (response.length === 0 || response.data?.length === 0) {
-        next(createHttpError(404, 'Không tìm thấy giao dịch nào'));
+        return res.status(200).json({
+          ...response,
+          code: 200,
+        });
       }
 
       return res.status(200).json({
+        ...response,
         code: 200,
-        data: response,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
   add: async (req, res, next) => {
@@ -28,10 +31,11 @@ const chapterTransactionController = {
       const { id: userId } = req.userInfo;
       const { chapterId, expiredAt, method, cost } = req.body;
 
-      const duplicated = await chapterTransactionService.getAll({ userId, chapterId, method });
+      const duplicated = (await chapterTransactionService.getAll({ userId, chapterId, method }))
+        .data;
 
       if (duplicated.length > 0) {
-        next(createHttpError(409, 'Đã tồn tại giao dịch'));
+        return next(createError(409, 'Đã tồn tại giao dịch'));
       }
 
       const response = await chapterTransactionService.add(
@@ -43,7 +47,7 @@ const chapterTransactionController = {
       );
 
       if (!response) {
-        next(createHttpError(400, 'Không thể hoàn thành việc tạo giao dịch'));
+        return next(createError(400, 'Không thể hoàn thành việc tạo giao dịch'));
       }
 
       return res.status(201).json({
@@ -51,7 +55,7 @@ const chapterTransactionController = {
         data: response,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 };

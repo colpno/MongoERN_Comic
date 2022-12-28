@@ -4,19 +4,17 @@ import PropTypes from "prop-types";
 import { useEffect, useMemo, useState } from "react";
 import { Alert } from "react-bootstrap";
 
-import { InputImage } from "components";
-import Button from "components/Button";
+import { InputImage, Button } from "components";
 import {
   CheckBoxGroup,
   InputField,
   RadioGroup,
   TextAreaField,
+  FormLabel,
 } from "libs/formik";
-import FormLabel from "libs/formik/FormLabel";
-import { getAllApprovedStatuses } from "services/approvedStatus";
-import { getAllGenres } from "services/genre";
-import styles from "./assets/styles/TitleForm.module.scss";
-import { getReleaseDayOptions } from "./helpers/getReleaseDayOptions";
+import { genreService } from "services";
+import { getReleaseDayOptions } from "utils";
+import styles from "./TitleForm.module.scss";
 
 const cx = classNames.bind(styles);
 
@@ -28,35 +26,37 @@ function TitleForm({
   imageBlob,
 }) {
   const [genres, setGenres] = useState([]);
-  const [approvedStatuses, setApprovedStatuses] = useState([]);
+  // TODO const [approvedStatuses, setApprovedStatuses] = useState([]);
   const releaseDayOptions = getReleaseDayOptions();
 
   const genreOptions = useMemo(
     () =>
       genres.map((genre) => {
-        return { value: `${genre.guid}`, label: genre.name };
+        return { value: `${genre.name}`, label: genre.name };
       }),
     [genres]
   );
 
-  const statusOptions = useMemo(
-    () =>
-      approvedStatuses.map((status) => {
-        return { value: `${status.guid}`, label: status.name };
-      }),
-    [approvedStatuses]
-  );
+  // TODO const statusOptions = useMemo(
+  //   () =>
+  //     approvedStatuses.map((status) => {
+  //       return { value: `${status._id}`, label: status.status };
+  //     }),
+  //   [approvedStatuses]
+  // );
 
   const fetchData = () => {
-    const genresPromise = getAllGenres();
-    const approvedStatusesPromise = getAllApprovedStatuses();
+    const genresPromise = genreService.getAll();
+    // TODO const approvedStatusesPromise = approvedStatusService.getAll();
 
-    Promise.all([genresPromise, approvedStatusesPromise])
-      .then(([genresResponse, approvedStatusesResponse]) => {
-        setGenres(genresResponse);
-        setApprovedStatuses(approvedStatusesResponse);
+    // TODO Promise.all([genresPromise, approvedStatusesPromise])
+    Promise.all([genresPromise])
+      // .then(([genresResponse, approvedStatusesResponse]) => {
+      .then(([genresResponse]) => {
+        setGenres(genresResponse.data);
+        // setApprovedStatuses(approvedStatusesResponse.data);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   };
 
   const handleRemove = (value) => {
@@ -76,9 +76,9 @@ function TitleForm({
       {({ errors, setFieldValue }) => {
         return (
           <Form>
-            <FormLabel name="name" label="Tiêu đề truyện" required />
+            <FormLabel name="title" label="Tiêu đề truyện" required />
             <FastField
-              name="name"
+              name="title"
               component={InputField}
               placeholder="Nhập tiêu đề truyện..."
               maxLength={255}
@@ -86,28 +86,28 @@ function TitleForm({
               autoFocus
             />
 
-            {statusOptions.length > 0 && "titleStatusId" in initialValues && (
+            {/* TODO {statusOptions.length > 0 && "title_status_id" in initialValues && (
               <>
-                <FormLabel name="titleStatusId" label="Trạng thái" />
+                <FormLabel name="title_status_id" label="Trạng thái" />
                 <FastField
-                  name="titleStatusId"
+                  name="title_status_id"
                   component={RadioGroup}
                   options={statusOptions}
                   col={{ xs: 6, md: 4 }}
                 />
               </>
-            )}
+            )} */}
 
             {genreOptions.length > 0 && (
               <>
                 <FormLabel
-                  name="genreId"
+                  name="genres"
                   label="Thể loại"
                   subLabel="Tối đa 3 thể loại"
                   required
                 />
                 <FastField
-                  name="genreId"
+                  name="genres"
                   component={CheckBoxGroup}
                   options={genreOptions}
                   col={{ xs: 6, md: 4 }}
@@ -146,9 +146,13 @@ function TitleForm({
               letterCount
             />
 
-            <FormLabel name="releaseDay" label="Ngày đăng hàng tuần" />
+            <FormLabel
+              name="release_day"
+              label="Ngày đăng hàng tuần"
+              required
+            />
             <FastField
-              name="releaseDay"
+              name="release_day"
               component={RadioGroup}
               options={releaseDayOptions}
               col={{ xs: 6, md: 4 }}
@@ -201,14 +205,15 @@ function TitleForm({
 
 TitleForm.propTypes = {
   initialValues: PropTypes.shape({
-    name: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
     summary: PropTypes.string.isRequired,
-    titleStatusId: PropTypes.string,
-    genreId: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+    title_status_id: PropTypes.string,
+    genres: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     cover: PropTypes.string.isRequired,
     // TODO: largeCover: PropTypes.string.isRequired,
     coin: PropTypes.string.isRequired,
     author: PropTypes.string.isRequired,
+    release_day: PropTypes.string.isRequired,
   }).isRequired,
   validationSchema: PropTypes.shape({}).isRequired,
   handleCancel: PropTypes.func.isRequired,

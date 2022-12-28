@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { useEffect } from "react";
 import { FiUpload } from "react-icons/fi";
 
-import "../assets/InputMultiFile.scss";
+import "../styles/InputMultiFile.scss";
 
 function InputMultiFile({
   field,

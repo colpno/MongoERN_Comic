@@ -11,7 +11,7 @@ const chapterService = {
     }
 
     const response = await Follow.find(params);
-    return response;
+    return { data: response };
   },
   add: async (userId = '', titleId = '') => {
     const model = new Follow({

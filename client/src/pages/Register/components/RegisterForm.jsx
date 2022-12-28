@@ -3,8 +3,7 @@ import { FastField, Form, Formik } from "formik";
 import PropTypes from "prop-types";
 
 import { Button } from "components";
-import { InputField } from "libs/formik";
-import FormLabel from "libs/formik/FormLabel";
+import { InputField, FormLabel } from "libs/formik";
 import styles from "../styles/RegisterForm.module.scss";
 
 const cx = classNames.bind(styles);

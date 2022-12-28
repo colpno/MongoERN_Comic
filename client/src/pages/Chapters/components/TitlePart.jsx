@@ -4,13 +4,13 @@ import { Col, Row } from "react-bootstrap";
 import { BsTrash } from "react-icons/bs";
 import { HiOutlinePencil } from "react-icons/hi";
 
-import Button from "components/Button";
-import styles from "../assets/styles/TitlePart.module.scss";
+import { Button } from "components";
+import styles from "../styles/TitlePart.module.scss";
 
 const cx = classNames.bind(styles);
 
 function TitlePart({ title, setPopup, setDeletedItem }) {
-  const handlePopup = (titleId, publicId) => {
+  const handlePopup = (item) => {
     setPopup((prev) => {
       return {
         ...prev,
@@ -19,7 +19,7 @@ function TitlePart({ title, setPopup, setDeletedItem }) {
         content: "Bạn có muốn xóa truyện?",
       };
     });
-    setDeletedItem({ titleId, publicId });
+    setDeletedItem(item);
   };
 
   return (
@@ -27,13 +27,13 @@ function TitlePart({ title, setPopup, setDeletedItem }) {
       <Col>
         <Button
           wrapper
-          to={`/comic/title/${title.guid}`}
+          to={`/comic/title/${title._id}`}
           className={cx("chapters__title__box")}
         >
           <div className={cx("box-img")}>
-            <img src={title.cover} alt="Title's cover " />
+            <img src={title.cover.source} alt="Title's cover " />
           </div>
-          <span className={cx("title")}>{title.name}</span>
+          <span className={cx("title")}>{title.title}</span>
         </Button>
       </Col>
       <Col
@@ -43,7 +43,7 @@ function TitlePart({ title, setPopup, setDeletedItem }) {
       >
         <Button
           outline
-          to={`/my-title/update/${title.guid}`}
+          to={`/my-title/update/${title._id}`}
           className={cx("chapters__title-accelerate__button")}
         >
           <HiOutlinePencil />
@@ -53,7 +53,7 @@ function TitlePart({ title, setPopup, setDeletedItem }) {
           outline
           gray
           className={cx("chapters__title-accelerate__button")}
-          onClick={() => handlePopup(title.guid, title.publicId)}
+          onClick={() => handlePopup(title)}
         >
           <BsTrash />
           Xóa truyện
@@ -65,10 +65,11 @@ function TitlePart({ title, setPopup, setDeletedItem }) {
 
 TitlePart.propTypes = {
   title: PropTypes.shape({
-    guid: PropTypes.string.isRequired,
-    publicId: PropTypes.string.isRequired,
-    cover: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
+    _id: PropTypes.string.isRequired,
+    cover: PropTypes.shape({
+      source: PropTypes.string.isRequired,
+    }).isRequired,
+    title: PropTypes.string.isRequired,
   }).isRequired,
   setPopup: PropTypes.func.isRequired,
   setDeletedItem: PropTypes.func.isRequired,

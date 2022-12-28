@@ -4,9 +4,7 @@ import { Col, Container, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
 import { NoData } from "features";
-import { getAllChapters } from "services/chapter";
-import { getAllChapterReports } from "services/chapterReport";
-import { getAllTitleReports } from "services/titleReport";
+import { chapterService } from "services";
 import { getChartColors, getMonthArray } from "utils/constants";
 import { formatTime } from "utils/convertTime";
 import ChapterStatistic from "./components/ChapterStatistic";
@@ -19,69 +17,81 @@ function Statistic() {
   // INFO: Data variables
 
   const titles = useSelector((state) => state.title.myTitles);
-  const [titleReports, setTitleReports] = useState([]);
+  // const [titleReports, setTitleReports] = useState([]);
   const [chapters, setChapters] = useState([]);
-  const [chapterReports, setChapterReports] = useState([]);
+  // const [chapterReports, setChapterReports] = useState([]);
   const [ID, setID] = useState({
     titleID: "",
     chapterID: "",
   });
 
-  const fetchTitleReports = (params) => {
-    getAllTitleReports(params)
-      .then((response) => setTitleReports(response))
-      .catch((error) => console.log(error));
-  };
+  // const fetchTitleReports = (params) => {
+  //   getAllTitleReports(params)
+  //     .then((response) => setTitleReports(response))
+  //     .catch((error) => console.error(error));
+  // };
 
-  const fetchChapterReports = (params) => {
-    getAllChapterReports(params)
-      .then((response) => setChapterReports(response))
-      .catch((error) => console.log(error));
-  };
+  // const fetchChapterReports = (params) => {
+  //   getAllChapterReports(params)
+  //     .then((response) => setChapterReports(response))
+  //     .catch((error) => console.error(error));
+  // };
 
   const fetchChapters = (params) => {
-    getAllChapters(params)
-      .then((response) => setChapters(response))
-      .catch((error) => console.log(error));
+    chapterService
+      .getAll(params)
+      .then((response) => setChapters(response.data))
+      .catch((error) => console.error(error));
   };
 
   useEffect(() => {
-    titles.length > 0 && fetchChapters({ titleId: titles[0].guid });
+    titles.length > 0 && fetchChapters({ title_id: titles[0]._id });
   }, [titles]);
 
   useEffect(() => {
-    ID.titleID && fetchChapters({ titleId: ID.titleID });
+    ID.titleID && fetchChapters({ title_id: ID.titleID });
   }, [ID.titleID]);
 
-  useEffect(() => {
-    ID.chapterID &&
-      fetchChapterReports({
-        chapterId: ID.chapterID,
-      });
-  }, [ID.chapterID]);
+  // useEffect(() => {
+  //   ID.chapterID &&
+  //     fetchChapterReports({
+  //       chapterId: ID.chapterID,
+  //     });
+  // }, [ID.chapterID]);
+
+  // useEffect(() => {
+  //   ID.titleID &&
+  //     fetchTitleReports({
+  //       titleId: ID.titleID,
+  //     });
+  // }, [ID.titleID]);
 
   useEffect(() => {
-    ID.titleID &&
-      fetchTitleReports({
-        titleId: ID.titleID,
-      });
-  }, [ID.titleID]);
-
-  useEffect(() => {
-    if (titles.length > 0 && chapters.length > 0) {
-      setID({
-        titleID: titles[0].guid,
-        chapterID: chapters[0].guid,
-      });
+    if (titles.length > 0) {
+      setID((prev) => ({
+        ...prev,
+        titleID: titles[0]._id,
+      }));
     }
-  }, [titles, chapters]);
+  }, [titles]);
+
+  useEffect(() => {
+    if (chapters.length > 0) {
+      setID((prev) => ({
+        ...prev,
+        chapterID: chapters[0]._id,
+      }));
+    }
+  }, [chapters]);
 
   // INFO: Chart variables
   const months = getMonthArray();
   const { backgroundColors, borderColors } = getChartColors();
+  // eslint-disable-next-line no-unused-vars
   const { month: currentMonth, year: currentYear } = useMemo(() => {
     return formatTime(new Date());
   }, []);
+  // eslint-disable-next-line no-unused-vars
   const [chartData, setChartData] = useState({
     title: {
       likes: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -108,7 +118,7 @@ function Statistic() {
     () =>
       titles.length > 0
         ? titles.reduce((options, title) => {
-            return [...options, { value: title.guid, label: title.name }];
+            return [...options, { value: title._id, label: title.title }];
           }, [])
         : [],
     [titles]
@@ -117,65 +127,65 @@ function Statistic() {
   const chapterSelectOptions =
     chapters.length > 0
       ? chapters.reduce((options, chapter) => {
-          return [...options, { value: chapter.guid, label: chapter.name }];
+          return [...options, { value: chapter._id, label: chapter.title }];
         }, [])
       : [];
 
   // INFO: Calculate views and likes
 
-  const getReportByTitle = (reports = [], titleId = "") => {
-    return reports.filter((report) => report.titleId === titleId);
-  };
+  // const getReportByTitle = (reports = [], titleId = "") => {
+  //   return reports.filter((report) => report.titleId === titleId);
+  // };
 
-  const getReportByChapter = (reports = [], chapterId = "") => {
-    return reports.filter((report) => report.chapterId === chapterId);
-  };
+  // const getReportByChapter = (reports = [], chapterId = "") => {
+  //   return reports.filter((report) => report.chapterId === chapterId);
+  // };
 
-  const getViews = (reports = [], year = currentYear) => {
-    const views = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  // const getViews = (reports = [], year = currentYear) => {
+  //   const views = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-    const reportsByYear = reports.filter((report) => report.year === year);
-    reportsByYear.forEach((report) => {
-      const { month } = report;
-      views[month] = report.view;
-    });
+  //   const reportsByYear = reports.filter((report) => report.year === year);
+  //   reportsByYear.forEach((report) => {
+  //     const { month } = report;
+  //     views[month] = report.view;
+  //   });
 
-    return views;
-  };
+  //   return views;
+  // };
 
-  const getLikes = (reports = [], year = currentYear) => {
-    const likes = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  // const getLikes = (reports = [], year = currentYear) => {
+  //   const likes = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-    const reportsByYear = reports.filter((report) => report.year === year);
-    reportsByYear.forEach((report) => {
-      const { month } = report;
-      likes[month] = report.like;
-    });
+  //   const reportsByYear = reports.filter((report) => report.year === year);
+  //   reportsByYear.forEach((report) => {
+  //     const { month } = report;
+  //     likes[month] = report.like;
+  //   });
 
-    return likes;
-  };
+  //   return likes;
+  // };
 
-  useEffect(() => {
-    const reports = getReportByTitle(titleReports, ID.titleID);
-    const likes = getLikes(reports);
-    const views = getViews(reports);
+  // useEffect(() => {
+  //   const reports = getReportByTitle(titleReports, ID.titleID);
+  //   const likes = getLikes(reports);
+  //   const views = getViews(reports);
 
-    setChartData((prev) => ({
-      ...prev,
-      title: { likes, views },
-    }));
-  }, [titleReports, ID.titleID]);
+  //   setChartData((prev) => ({
+  //     ...prev,
+  //     title: { likes, views },
+  //   }));
+  // }, [titleReports, ID.titleID]);
 
-  useEffect(() => {
-    const reports = getReportByChapter(chapterReports, ID.chapterID);
-    const likes = getLikes(reports);
-    const views = getViews(reports);
+  // useEffect(() => {
+  //   const reports = getReportByChapter(chapterReports, ID.chapterID);
+  //   const likes = getLikes(reports);
+  //   const views = getViews(reports);
 
-    setChartData((prev) => ({
-      ...prev,
-      chapter: { likes, views },
-    }));
-  }, [chapterReports, ID.chapterID]);
+  //   setChartData((prev) => ({
+  //     ...prev,
+  //     chapter: { likes, views },
+  //   }));
+  // }, [chapterReports, ID.chapterID]);
 
   const changeTitle = (option) => {
     setID({ ...ID, titleID: option.value });

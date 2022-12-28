@@ -6,7 +6,7 @@ const readingHistoryService = {
       const response = await readingHistoryApi.getAll(params);
       return response;
     } catch (error) {
-      return error?.data?.error || error?.data?.message;
+      return Promise.reject(error.data);
     }
   },
   add: async (titleId, chapterId, userId) => {
@@ -18,7 +18,7 @@ const readingHistoryService = {
       });
       return response;
     } catch (error) {
-      return error?.data?.error || error?.data?.message;
+      return Promise.reject(error.data);
     }
   },
 };

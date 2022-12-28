@@ -6,7 +6,7 @@ const followService = {
       const response = await followApi.getAll(params);
       return response;
     } catch (error) {
-      return error?.data?.error || error?.data?.message;
+      return Promise.reject(error.data);
     }
   },
   add: async (titleId) => {
@@ -14,7 +14,7 @@ const followService = {
       const response = await followApi.add(titleId);
       return response;
     } catch (error) {
-      return error?.data?.error || error?.data?.message;
+      return Promise.reject(error.data);
     }
   },
   delete: async (followId) => {
@@ -22,7 +22,7 @@ const followService = {
       const response = await followApi.delete(followId);
       return response;
     } catch (error) {
-      return error?.data?.error || error?.data?.message;
+      return Promise.reject(error.data);
     }
   },
 };

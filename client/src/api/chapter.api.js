@@ -24,7 +24,6 @@ const chapterApi = {
 
   add: (
     titleId,
-    approvedStatusId,
     title,
     cover,
     contents,
@@ -34,7 +33,7 @@ const chapterApi = {
   ) => {
     return axiosClient.post(
       `${url}/create`,
-      { titleId, approvedStatusId, title, cover, contents, order, cost },
+      { titleId, title, cover, contents, order, cost },
       {
         withCredentials: true,
         onUploadProgress: (e) => {
@@ -47,14 +46,18 @@ const chapterApi = {
   },
 
   update: (id, data, setProgress) => {
-    return axiosClient.put(`${url}/update/${id}`, data, {
-      withCredentials: true,
-      onUploadProgress: (e) => {
-        const { loaded, total } = e;
-        const percentage = (loaded / total) * 100;
-        setProgress(percentage);
-      },
-    });
+    return axiosClient.put(
+      `${url}/update${data.view ? "/view" : ""}/${id}`,
+      data,
+      {
+        withCredentials: true,
+        onUploadProgress: (e) => {
+          const { loaded, total } = e;
+          const percentage = (loaded / total) * 100;
+          setProgress(percentage);
+        },
+      }
+    );
   },
 
   delete: (id, setProgress) => {
@@ -62,7 +65,7 @@ const chapterApi = {
       withCredentials: true,
       onUploadProgress: (e) => {
         const { loaded, total } = e;
-        const percentage = Math.floor((loaded / total) * 100);
+        const percentage = (loaded / total) * 100;
         setProgress(percentage);
       },
     });

@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import ChapterForm from "components/ChapterForm";
-import FormWrapper from "components/FormWrapper/FormWrapper";
+import { ChapterForm, FormWrapper } from "components";
 import { Popup, ProgressCircle } from "features";
 import { useToast } from "hooks";
-import { addChapter, getAllChapters } from "services/chapter";
 import { createChapterFormValidation } from "validations";
+import { chapterService } from "services";
 
 function CreateChapter() {
   const { titleId } = useParams();
@@ -21,45 +20,38 @@ function CreateChapter() {
 
   const INITIAL_VALUE = {
     order: `${Number.parseInt(chapters[0]?.order || 0, 10) + 1}`,
-    name: "",
+    title: "",
     cost: "false",
     cover: "",
-    images: [],
+    contents: [],
   };
 
   const fetchData = () => {
     const params = {
-      titleId,
-      sort: "order",
-      order: "desc",
-      limit: 1,
+      title_id: titleId,
+      _sort: "order",
+      _order: "desc",
+      _limit: 1,
     };
-    getAllChapters(params)
+    chapterService
+      .getAll(params)
       .then((response) => setChapters(response.data))
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   };
 
-  const handleSubmit = (
-    { cover, images, ...values },
-    { setSubmitting, resetForm }
-  ) => {
-    const data = {
-      ...values,
-      titleId,
-      cover,
-      images,
-    };
-    addChapter(data, setProgress)
-      .then((response) => {
-        if (response.affectedRows > 0) {
-          toastEmitter("Truyện đã được thêm thành công", "success");
-          setProgress(0);
-          resetForm();
-          fetchData();
-        }
+  const handleSubmit = (values, { setSubmitting, resetForm }) => {
+    const { title, cover, contents, order, cost } = values;
+
+    chapterService
+      .add(titleId, title, cover, contents, order, cost, setProgress)
+      .then(() => {
+        toastEmitter("Truyện đã được thêm thành công", "success");
+        setProgress(0);
+        fetchData();
+        resetForm();
       })
       .catch((error) => {
-        toastEmitter(error.data.error || error.data.message, "error");
+        toastEmitter(error, "error");
         setProgress(0);
       });
 

@@ -8,14 +8,14 @@ function HiredChaptersTableRow({ titlesAndChapters, cx }) {
         const { title, chapter } = object;
 
         return (
-          <Row className={cx("transaction__container")} key={chapter.id}>
+          <Row className={cx("transaction__container")} key={chapter._id}>
             <Col md={8} className={cx("transaction__container__content")}>
               <div className={cx("box-img")}>
-                <img src={title.cover} alt={title.name} />
+                <img src={title.cover.source} alt={title.title} />
               </div>
               <div>
-                <p className={cx("title")}>{title.name}</p>
-                <p className={cx("author")}>{chapter.name}</p>
+                <p className={cx("title")}>{title.title}</p>
+                <p className={cx("author")}>{chapter.title}</p>
               </div>
             </Col>
           </Row>
@@ -29,12 +29,14 @@ HiredChaptersTableRow.propTypes = {
   titlesAndChapters: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.shape({
-        cover: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
+        cover: PropTypes.shape({
+          source: PropTypes.string.isRequired,
+        }).isRequired,
+        title: PropTypes.string.isRequired,
       }).isRequired,
       chapter: PropTypes.shape({
         id: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
       }).isRequired,
     }).isRequired
   ).isRequired,

@@ -1,6 +1,7 @@
-import Button from "components/Button";
 import PropTypes from "prop-types";
 import { BiChevronRight } from "react-icons/bi";
+
+import { Button } from "components";
 
 function AvatarDropdownItem({ children, cx, path, icon, onClick }) {
   return (

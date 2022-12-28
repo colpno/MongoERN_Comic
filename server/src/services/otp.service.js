@@ -22,12 +22,14 @@ const otpService = {
     try {
       const subject = 'Mã xác thực';
       const html = `
-      <div>Hết hạn sau <strong>15</strong> phút</div>
-      <div style="backgroundColor: #ededed; marginTop: 2rem; padding: 1rem 0">
+      <div style="backgroundColor: #ededed">
+        <span>Mã xác thực của bạn là: </span>
         <strong style="fontSize: 19px; letterSpacing: 1px;">
           ${otp}
         </strong>
       </div>
+      </br>
+      <p>Hết hạn sau <strong>15</strong> phút</p>
     `;
 
       sendMail(email, subject, html);
@@ -36,7 +38,10 @@ const otpService = {
     }
   },
   getOne: (username, email) => {
-    const response = Otp.findOne({ username, email });
+    const response = Otp.findOne({
+      username,
+      email,
+    });
     return response;
   },
   async add(username, email, code) {
@@ -44,7 +49,7 @@ const otpService = {
     const hashedOTP = this.hashOTP(code);
 
     if (existedOTP) {
-      const response = await Otp.updateOne({ username, email }, hashedOTP);
+      const response = await Otp.updateOne({ username, email }, { code: hashedOTP });
       return response;
     }
 

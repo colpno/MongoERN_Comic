@@ -11,7 +11,7 @@ const chapterService = {
     }
 
     const response = await Genre.find(params);
-    return response;
+    return { data: response };
   },
   getOne: async (params = {}) => {
     const response = await Genre.findOne(params);

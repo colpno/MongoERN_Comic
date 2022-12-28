@@ -1,0 +1,16 @@
+.comic {
+  &-1 {
+    :global(.card-figure__image) {
+      width: 100%;
+      aspect-ratio: 1 / 1.35;
+    }
+  }
+
+  &:last-child {
+    :global(.card-figure__image) {
+      width: 100%;
+      aspect-ratio: 1.7 / 1;
+      border-radius: 2rem 2rem 0 0;
+    }
+  }
+}

@@ -1,0 +1,32 @@
+@use "assets/styles/variables" as var;
+
+.resend-code {
+  margin-bottom: 10px;
+
+  display: flex;
+  align-items: center;
+}
+
+.btn-resend {
+  color: var.$primary;
+  margin-left: 0.4rem;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.countdown {
+  margin-left: 0.5rem;
+  width: 1.2rem;
+  height: 1.2rem;
+  padding: 4px;
+  font-size: 0.77em;
+  border: 1px solid var.$gray-500;
+  border-radius: 100%;
+  cursor: default;
+  pointer-events: none;
+  user-select: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

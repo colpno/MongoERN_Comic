@@ -6,9 +6,9 @@ import { useSelector } from "react-redux";
 import { CircleC } from "assets/images";
 import { NoData, Pagination } from "features";
 import { usePagination } from "hooks";
-import { getAllCoinHistories } from "services/coinHistory";
+import { coinHistoryService } from "services";
 import { convertToDateTimeString } from "utils/convertTime";
-import styles from "./assets/styles/CoinHistory.module.scss";
+import styles from "./CoinHistory.module.scss";
 
 const cx = classNames.bind(styles);
 
@@ -21,18 +21,19 @@ function CoinHistory() {
 
   const fetchData = () => {
     const params = {
-      userId: user.guid,
-      sort: "createdAt",
-      order: "desc",
-      page: pagination.page,
-      limit: pagination.limit,
+      user_id: user._id,
+      _sort: "createdAt",
+      _order: "desc",
+      _page: pagination.page,
+      _limit: pagination.limit,
     };
-    getAllCoinHistories(params)
+    coinHistoryService
+      .getAll(params)
       .then((response) => {
         setHistories(response.data);
-        setPaginationTotal(response.pagination.total);
+        setPaginationTotal(response.paginate.total);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   };
 
   useEffect(() => {

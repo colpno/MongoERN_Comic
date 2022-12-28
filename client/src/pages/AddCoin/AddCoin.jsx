@@ -1,22 +1,30 @@
 import classNames from "classnames/bind";
+import { useEffect, useState } from "react";
+import { Container, Row } from "react-bootstrap";
+
 import { Button, Radio } from "components";
 import { NoData } from "features";
-import { useState } from "react";
-import { Container, Row } from "react-bootstrap";
-import { useSelector } from "react-redux";
-import styles from "./assets/styles/AddCoin.module.scss";
+import { paymentMethodService } from "services";
+import styles from "./AddCoin.module.scss";
 
 const cx = classNames.bind(styles);
 
 function AddCoin() {
   const [choseMethod, setChoseMethod] = useState({ value: "0", label: "" });
-  const payMethods = useSelector((state) => state.paymentMethod.paymentMethods);
+  const [payMethods, setPayMethods] = useState([]);
+
+  const fetchData = () => {
+    paymentMethodService
+      .getAll()
+      .then((response) => setPayMethods(response.data))
+      .catch((error) => console.error(error));
+  };
 
   const options = payMethods.map((payMethod) => {
-    return { value: payMethod.guid, label: payMethod.name };
+    return { value: payMethod._id, label: payMethod.name };
   });
 
-  const onMethodChange = (e) => {
+  const handleMethodChange = (e) => {
     const { value } = e.target;
     setChoseMethod({
       value,
@@ -25,6 +33,12 @@ function AddCoin() {
       }).label,
     });
   };
+
+  const handleSubmit = () => {};
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <Container className={cx("add-coin")}>
@@ -42,7 +56,7 @@ function AddCoin() {
                 <Radio
                   field={{
                     name: "payMethod",
-                    onChange: onMethodChange,
+                    onChange: handleMethodChange,
                     value: choseMethod.value,
                   }}
                   value={method.value}
@@ -81,7 +95,12 @@ function AddCoin() {
             <span className={cx("note__content--mark")}>Hỗ trợ.</span>
           </p>
         </div>
-        <Button primary large className={cx("add-coin__step__submit")}>
+        <Button
+          primary
+          large
+          className={cx("add-coin__step__submit")}
+          onClick={handleSubmit}
+        >
           Xác nhận
         </Button>
       </div>

@@ -4,7 +4,6 @@ import cors from 'cors';
 import { config } from 'dotenv';
 
 import corsMiddleWare from './cors.middleware.js';
-import serverError from './serverError.middleware.js';
 
 config();
 
@@ -13,11 +12,15 @@ const app = express();
 const { CLIENT_URL, ADMIN_URL } = process.env;
 const corsURL = { origin: [CLIENT_URL, ADMIN_URL] };
 
-app.use(express.json({ limit: '50mb' }));
+app.use(express.json({ limit: '10mb' }));
 app.use(cookieParser());
-app.use(cors(corsURL));
+app.use(
+  cors({
+    origin: corsURL.origin,
+    credentials: true,
+  })
+);
 
 app.use((req, res, next) => corsMiddleWare(req, res, next, corsURL.origin));
-app.use(serverError);
 
 export { app as middlewares, corsURL };

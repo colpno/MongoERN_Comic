@@ -6,13 +6,9 @@ import { useParams } from "react-router-dom";
 
 import { NoData, Pagination, Popup, Recommend } from "features";
 import { usePagination, useToast } from "hooks";
-import styles from "pages/Title/assets/styles/Title.module.scss";
-import { getAllChapters } from "services/chapter";
-import { addFollow } from "services/follow";
-import { getAllGenres } from "services/genre";
-import { getTitle } from "services/title";
-import { getAllTitleGenres } from "services/titleGenre";
+import { chapterService, followService, titleService } from "services";
 import { ComicChapters, Introduction, TitleAbout } from "./components";
+import styles from "./styles/Title.module.scss";
 
 const cx = classNames.bind(styles);
 
@@ -22,8 +18,6 @@ function Title() {
   const user = useSelector((state) => state.user.user);
   const [title, setTitle] = useState({});
   const [chapters, setChapters] = useState([]);
-  const [genres, setGenres] = useState([]);
-  const [titleGenres, setTitleGenres] = useState([]);
   const { pagination, setPagination, setPaginationTotal } =
     usePagination(CHAPTERS_PER_PAGE);
   const { Toast, options, toastEmitter } = useToast();
@@ -36,7 +30,7 @@ function Title() {
     content: "",
   });
   const backgroundImageCSS = hasTitle && {
-    backgroundImage: `url(${title.cover})`,
+    backgroundImage: `url(${title.cover.source})`,
     backgroundRepeat: "no-repeat",
     backgroundSize: "100% 360px",
     filter: "blur(4px)",
@@ -46,41 +40,26 @@ function Title() {
     left: "0",
     right: "0",
   };
-  const chapterApiParams = {
-    titleId,
-    sort: "order",
-    order: isDESCSorting ? "desc" : "asc",
-    page: pagination.page,
-    limit: pagination.limit,
-  };
 
   const fetchData = () => {
-    const titlePromise = getTitle(titleId, false);
-    const genrePromise = getAllGenres();
-    const titleGenrePromise = getAllTitleGenres({ titleId });
-    const chaptersPromise = getAllChapters(chapterApiParams, false);
+    const chapterApiParams = {
+      title_id: titleId,
+      _sort: "order",
+      _order: isDESCSorting ? "desc" : "asc",
+      _page: pagination.page,
+      _limit: pagination.limit,
+    };
 
-    Promise.all([
-      titlePromise,
-      genrePromise,
-      titleGenrePromise,
-      chaptersPromise,
-    ])
-      .then(
-        ([
-          titleResponse,
-          genreResponse,
-          titleGenreResponse,
-          chapterResponse,
-        ]) => {
-          setTitle(titleResponse);
-          setGenres(genreResponse);
-          setTitleGenres(titleGenreResponse);
-          setChapters(chapterResponse.data);
-          setPaginationTotal(chapterResponse.pagination.total);
-        }
-      )
-      .catch((error) => console.log(error));
+    const titlePromise = titleService.getOne(titleId, false);
+    const chaptersPromise = chapterService.getAll(chapterApiParams, false);
+
+    Promise.all([titlePromise, chaptersPromise])
+      .then(([titleResponse, chapterResponse]) => {
+        setTitle(titleResponse.data);
+        setChapters(chapterResponse.data);
+        setPaginationTotal(chapterResponse.paginate.total);
+      })
+      .catch((error) => console.error(error));
   };
 
   const handleSorting = () => {
@@ -88,37 +67,19 @@ function Title() {
   };
 
   const handleFollow = (titleID) => {
-    addFollow({ titleId: titleID })
-      .then((response) => {
-        if (response.affectedRows > 0) {
-          toastEmitter(`Bạn đã theo dõi truyện ${title.name}`, "success");
-        }
+    followService
+      .add(titleID)
+      .then(() => {
+        toastEmitter(`Bạn đã theo dõi truyện ${title.name}`, "success");
       })
       .catch((error) => {
-        toastEmitter(error.data.error, "error");
+        toastEmitter(error, "error");
       });
-  };
-
-  const convertGenreIdToString = () => {
-    const genreString = titleGenres.reduce((str, titleGenre, index) => {
-      const genre = genres.find((res) => res.guid === titleGenre.genreId);
-      return index === 0 ? `${str}${genre.name}` : `${str}, ${genre.name}`;
-    }, "");
-    return genreString;
-  };
-
-  const fetchChapters = async () => {
-    const response = await getAllChapters(chapterApiParams, false);
-    setChapters(response.data);
   };
 
   useEffect(() => {
     fetchData();
-  }, []);
-
-  useEffect(() => {
-    fetchChapters();
-  }, [isDESCSorting, pagination.page]);
+  }, [titleId]);
 
   return (
     <>
@@ -130,8 +91,7 @@ function Title() {
           {hasTitle && (
             <Introduction
               title={title}
-              genres={convertGenreIdToString()}
-              firstChapter={chapters.length > 0 ? chapters[0].guid : "#"}
+              firstChapter={chapters.length > 0 ? chapters[0]._id : "#"}
               setPopup={setPopup}
               handleFollow={handleFollow}
             />

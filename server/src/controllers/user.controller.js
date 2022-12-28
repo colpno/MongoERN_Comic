@@ -1,4 +1,4 @@
-import createHttpError from 'http-errors';
+import createError from 'http-errors';
 import jwt from 'jsonwebtoken';
 
 import transformQueryParams from '../helpers/transformQueryParams.js';
@@ -11,15 +11,18 @@ const userController = {
       const response = await userService.getAll(params);
 
       if (response.length === 0 || response.data?.length === 0) {
-        next(createHttpError(404, 'Không tìm thấy tài khoản nào'));
+        return res.status(200).json({
+          ...response,
+          code: 200,
+        });
       }
 
       return res.status(200).json({
+        ...response,
         code: 200,
-        data: response,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
   getOne: async (req, res, next) => {
@@ -28,24 +31,28 @@ const userController = {
       const response = await userService.getOne({ _id: id });
 
       if (!response) {
-        next(createHttpError(404, 'Không tìm thấy tài khoản nào'));
+        return res.status(200).json({
+          code: 200,
+          data: {},
+        });
       }
 
       return res.status(200).json({
+        code: 200,
         data: response,
       });
     } catch (error) {
-      next();
+      return next();
     }
   },
   register: async (req, res, next) => {
     try {
       const { username, password, avatar, email, role, dateOfBirth } = req.body;
 
-      const duplicated = await userService.getAll({ username });
+      const duplicated = (await userService.getAll({ username })).data;
 
       if (duplicated.length > 0) {
-        next(createHttpError(409, 'Đã tồn tại tên tài khoản, vui lòng thay đổi'));
+        return next(createError(409, 'Đã tồn tại tên tài khoản, vui lòng thay đổi'));
       }
 
       const response = await userService.register(
@@ -58,7 +65,7 @@ const userController = {
       );
 
       if (!response) {
-        next(createHttpError(400, 'Không thể hoàn thành việc tạo tài khoản'));
+        return next(createError(400, 'Không thể hoàn thành việc tạo tài khoản'));
       }
 
       const TOKEN_EXPIRED_TIME = 15;
@@ -75,7 +82,7 @@ const userController = {
         message: `Link kích hoạt tài khoản đã được gửi đến ${email}`,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
   update: async (req, res, next) => {
@@ -93,14 +100,15 @@ const userController = {
       });
 
       if (!response) {
-        next(createHttpError(400, 'không thể hoàn thành việc cập nhật tài khoản'));
+        return next(createError(400, 'không thể hoàn thành việc cập nhật tài khoản'));
       }
 
       return res.status(200).json({
+        code: 200,
         data: response,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
   delete: async (req, res, next) => {
@@ -110,7 +118,7 @@ const userController = {
       const response = await userService.delete(id);
 
       if (!response) {
-        next(createHttpError(400, 'không thể hoàn thành việc xóa tài khoản'));
+        return next(createError(400, 'không thể hoàn thành việc xóa tài khoản'));
       }
 
       return res.status(200).json({
@@ -118,7 +126,7 @@ const userController = {
         data: response,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 };

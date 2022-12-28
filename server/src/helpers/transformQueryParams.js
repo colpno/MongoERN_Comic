@@ -9,7 +9,7 @@ const querySuffixes = [
   '_like', // Contains part of string
 ];
 
-const additionQuerySuffixes = ['_page', '_limit', '_sort', '_order'];
+// const additionQuerySuffixes = ['_page', '_limit', '_sort', '_order'];
 
 const convertToMongoQueryOperator = (suffix, value) => {
   switch (suffix) {
@@ -66,13 +66,13 @@ const transformQueryParams = (queries = {}) => {
       }
     }
 
-    if (additionQuerySuffixes.includes(suffix)) {
-      newResult[suffix] = queryValue;
-      return newResult;
-    }
+    // if (additionQuerySuffixes.includes(queryKey)) {
+    //   newResult[queryKey] = queryValue;
+    //   return newResult;
+    // }
 
     // else just query like normal key = value pairs
-    newResult[docField] = queryValue;
+    newResult[queryKey] = queryValue;
     return newResult;
   }, {});
 

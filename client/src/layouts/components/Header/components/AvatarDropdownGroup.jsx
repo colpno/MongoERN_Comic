@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+
 import AvatarDropdownItem from "./AvatarDropdownItem";
 
 function AvatarDropdownGroup({ cx, menu, onClick }) {

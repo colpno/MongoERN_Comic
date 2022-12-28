@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { Col, Row } from "react-bootstrap";
 import { IoTrashSharp } from "react-icons/io5";
 import { formatTime } from "utils/convertTime";
-import styles from "../assets/styles/FollowTable.module.scss";
+import styles from "../styles/FollowTable.module.scss";
 
 const cx = classNames.bind(styles);
 
@@ -22,22 +22,25 @@ function FollowTable({ setDeletedItem, popup, setPopup, follows }) {
   return (
     <>
       {follows.map((follow) => {
-        const { title, updatedAt, guid } = follow;
-        const { cover, name, author } = title;
-        const timeObj = formatTime(updatedAt);
+        const { ttl } = follow;
+        const timeObj = formatTime(follow.updatedAt);
 
         return (
-          <Row className={cx("follow__container__content")} key={guid}>
+          <Row className={cx("follow__container__content")} key={follow._id}>
             <Col
               xs={8}
               className={cx("follow__container__content__title-info")}
             >
               <div className={cx("box-img")}>
-                <img src={cover} alt={name} className={cx("cover-image")} />
+                <img
+                  src={ttl.cover.source}
+                  alt={ttl.name}
+                  className={cx("cover-image")}
+                />
               </div>
               <div>
-                <p className={cx("title")}>{name}</p>
-                <p className={cx("author")}>{author}</p>
+                <p className={cx("title")}>{ttl.name}</p>
+                <p className={cx("author")}>{ttl.author}</p>
               </div>
             </Col>
             <Col className="center">
@@ -47,7 +50,7 @@ function FollowTable({ setDeletedItem, popup, setPopup, follows }) {
               <Button
                 wrapper
                 className={cx("trash-can-button")}
-                onClick={() => handleClick(title.guid)}
+                onClick={() => handleClick(ttl._id)}
               >
                 <IoTrashSharp />
               </Button>
@@ -68,12 +71,14 @@ FollowTable.propTypes = {
   setPopup: PropTypes.func.isRequired,
   follows: PropTypes.arrayOf(
     PropTypes.shape({
-      guid: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired,
       updatedAt: PropTypes.string.isRequired,
       title: PropTypes.shape({
-        guid: PropTypes.string.isRequired,
-        cover: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
+        id: PropTypes.string.isRequired,
+        cover: PropTypes.shape({
+          source: PropTypes.string.isRequired,
+        }).isRequired,
+        title: PropTypes.string.isRequired,
         author: PropTypes.string.isRequired,
       }),
     }).isRequired

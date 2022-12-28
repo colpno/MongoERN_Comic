@@ -2,9 +2,9 @@
 import classNames from "classnames/bind";
 import { AiOutlineClockCircle } from "react-icons/ai";
 
-import Button from "components/Button";
+import { Button } from "components";
 import { formatTime } from "utils/convertTime";
-import styles from "../assets/styles/Notification.module.scss";
+import styles from "../styles/Notification.module.scss";
 
 const cx = classNames.bind(styles);
 
@@ -24,7 +24,7 @@ export default function Notification() {
           {/* {notices.map((notice) => {
             const timeObj = formatTime(notice.createdAt);
             return (
-              <li key={notice.id}>
+              <li key={notice._id}>
                 <Button wrapper to="/notice/1">
                   <span className={cx("title")}>{notice.title}</span>
                   <span>

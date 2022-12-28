@@ -1,4 +1,4 @@
-import Input from "components/Input/Input";
+import { Input } from "components";
 import PropTypes from "prop-types";
 import { FormGroup } from "react-bootstrap";
 

@@ -9,7 +9,7 @@ function useToast() {
     hideProgressBar: false,
     closeOnClick: true,
     draggable: false,
-    pauseOnHover: false,
+    pauseOnHover: true,
     pauseOnFocusLoss: false,
     progress: undefined,
     rtl: false,

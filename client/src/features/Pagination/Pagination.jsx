@@ -2,9 +2,9 @@ import classNames from "classnames/bind";
 import PropTypes from "prop-types";
 import { memo } from "react";
 
-import Button from "components/Button";
+import { Button } from "components";
 import { createArrayFromTo } from "utils";
-import styles from "./assets/Pagination.module.scss";
+import styles from "./Pagination.module.scss";
 
 const cx = classNames.bind(styles);
 

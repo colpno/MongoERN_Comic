@@ -1,17 +1,21 @@
+/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
-import { useToast } from "hooks";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { Button } from "components";
 import { Popup } from "features";
-import { login } from "services/auth";
+import { useToast } from "hooks";
+import { setLoginInfo } from "libs/redux/slices/loginSlice";
+import { authService } from "services";
 import LoginForm from "./components/LoginForm";
 import styles from "./styles/Login.module.scss";
 
 const cx = classNames.bind(styles);
 
 function Login() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [popup, setPopup] = useState({
     trigger: false,
@@ -23,13 +27,19 @@ function Login() {
 
   const handleSubmit = (values, { setSubmitting }) => {
     const { username, password } = values;
-    login(username, password)
+    authService
+      .login(username, password)
       .then((response) => {
-        setPopup((prev) => ({ ...prev, trigger: true, content: response }));
+        dispatch(setLoginInfo(response.data));
+
+        setPopup((prev) => ({
+          ...prev,
+          trigger: true,
+          content: response.message,
+        }));
       })
       .catch((error) => {
-        const { data } = error;
-        toastEmitter(data.error || data.message, "error");
+        toastEmitter(error, "error");
       });
 
     setSubmitting(false);

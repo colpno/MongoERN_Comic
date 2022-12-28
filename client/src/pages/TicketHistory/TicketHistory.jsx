@@ -5,8 +5,8 @@ import { useSelector } from "react-redux";
 
 import { NoData, Pagination } from "features";
 import { usePagination } from "hooks";
-import { getAllTicketHistories } from "services/ticketHistory";
-import styles from "./assets/styles/TicketHistory.module.scss";
+import { ticketHistoryService } from "services";
+import styles from "./styles/TicketHistory.module.scss";
 import TicketHistoryList from "./components/TicketHistoryList";
 
 const cx = classNames.bind(styles);
@@ -23,12 +23,12 @@ function TicketHistory() {
     const params = {
       userId,
       createdAt: false,
-      page: pagination.page,
-      limit: pagination.limit,
+      _page: pagination.page,
+      _limit: pagination.limit,
     };
-    getAllTicketHistories(params).then((response) => {
+    ticketHistoryService.getAll(params).then((response) => {
       setHistories(response.data);
-      setPaginationTotal(response.pagination.total);
+      setPaginationTotal(response.paginate.total);
     });
   };
 

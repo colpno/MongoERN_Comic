@@ -4,11 +4,11 @@ import { Col, Container, Row } from "react-bootstrap";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useSelector } from "react-redux";
 
-import Button from "components/Button";
+import { Button } from "components";
 import { NoData, Search } from "features";
 import { usePagination } from "hooks";
-import { getAllTitles } from "services/title";
-import styles from "./assets/styles/MyTitle.module.scss";
+import { titleService } from "services";
+import styles from "./styles/MyTitle.module.scss";
 import MyTitleContent from "./components/MyTitleContent";
 import MyTitleHeader from "./components/MyTitleHeader";
 
@@ -31,30 +31,31 @@ function MyTitle() {
   const { pagination, setPagination, setPaginationTotal } =
     usePagination(TITLES_PER_PAGE);
   const defaultTitleApiParams = {
-    userId: user.guid,
-    sort: "id",
-    order: "asc",
-    page: pagination.page,
-    limit: pagination.limit,
+    user_id: user._id,
+    _sort: "_id",
+    _order: "asc",
+    _page: pagination.page,
+    _limit: pagination.limit,
   };
   const [titleApiParams, setTitleApiParams] = useState(defaultTitleApiParams);
   const [isDescSort, setIsDescSort] = useState(true);
   const hasData = titles.length > 0;
 
   const fetchData = (params) => {
-    getAllTitles(params)
+    titleService
+      .getAll(params)
       .then((response) => {
         setTitles(response.data);
-        setPaginationTotal(response.pagination.total);
+        setPaginationTotal(response.paginate.total);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   };
 
   const handleSorting = (column) => {
     setTitleApiParams((prev) => ({
       ...prev,
-      sort: column,
-      order: !isDescSort,
+      _sort: column,
+      _order: isDescSort ? "desc" : "asc",
     }));
     setIsDescSort((prev) => !prev);
   };

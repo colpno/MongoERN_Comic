@@ -5,9 +5,9 @@ import { useSelector } from "react-redux";
 
 import { NoData, Pagination } from "features";
 import { usePagination } from "hooks";
-import { getAllReadingHistories } from "services/readingHistory";
+import { readingHistoryService } from "services";
 import ReadingHistoryTable from "./components/ReadingHistoryTable";
-import styles from "./ReadingHistory.module.scss";
+import styles from "./styles/ReadingHistory.module.scss";
 
 const cx = classNames.bind(styles);
 
@@ -19,16 +19,17 @@ function ReadingHistory() {
     usePagination(HISTORIES_PER_PAGE);
 
   const fetchData = () => {
-    getAllReadingHistories({
-      userId: user.guid,
-      page: pagination.page,
-      limit: pagination.limit,
-    })
+    readingHistoryService
+      .getAll({
+        user_id: user._id,
+        _page: pagination.page,
+        _limit: pagination.limit,
+      })
       .then((response) => {
         setHistories(response.data);
-        setPaginationTotal(response.pagination.total);
+        setPaginationTotal(response.paginate.total);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   };
 
   useEffect(() => {

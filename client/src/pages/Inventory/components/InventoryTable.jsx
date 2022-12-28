@@ -12,25 +12,25 @@ function InventoryTable({ hiredChapters }) {
     <>
       {hiredChapters.map((hiredTitle) => {
         const beginTime = formatTime(hiredTitle.createdAt);
-        const expiredTime = hiredTitle.expiredDay
-          ? formatTime(hiredTitle.expiredDay)
+        const expiredTime = hiredTitle.expiredAt
+          ? formatTime(hiredTitle.expiredAt)
           : "";
         const { chapter } = hiredTitle;
 
         return (
           <Row
             className={cx("inventory__container__content")}
-            key={hiredTitle.id}
+            key={hiredTitle._id}
           >
             <Col md={6} className={cx("chapter")}>
               <div className={cx("box-img")}>
-                <img src={chapter.cover} alt={chapter.name} />
+                <img src={chapter.cover.source} alt={chapter.title} />
               </div>
-              <span className={cx("chapter")}>{chapter.name}</span>
+              <span className={cx("chapter")}>{chapter.title}</span>
             </Col>
             <Col>
               <span className={cx("chapter")}>
-                {hiredTitle.ticketId === 1 ? <BuyTicket /> : <RentTicket />}
+                {hiredTitle.ticket_id === 1 ? <BuyTicket /> : <RentTicket />}
                 <strong className={cx("separate")}>x</strong>
                 <strong className={cx("rent-quantity")}>1</strong>
               </span>
@@ -56,11 +56,13 @@ InventoryTable.propTypes = {
   hiredChapters: PropTypes.arrayOf(
     PropTypes.shape({
       createdAt: PropTypes.string.isRequired,
-      expiredDay: PropTypes.string.isRequired,
+      expiredAt: PropTypes.string.isRequired,
       id: PropTypes.string.isRequired,
       chapter: PropTypes.shape({
-        cover: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
+        cover: PropTypes.shape({
+          source: PropTypes.string.isRequired,
+        }).isRequired,
+        title: PropTypes.string.isRequired,
       }).isRequired,
     })
   ).isRequired,

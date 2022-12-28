@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import Select from "components/Select";
+import { Select } from "components";
 
 function SelectField(props) {
   const { field, options, label } = props;

@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
 
-import TabsContainer from "components/TabsContainer";
-import { getAllTitles } from "services/title";
+import { TabsContainer } from "components";
+import { titleService } from "services";
 import HiredChapters from "./pages/HiredChapters";
 import PurchasedChapters from "./pages/PurchasedChapters";
 import styles from "./styles/TitleTransaction.module.scss";
@@ -22,9 +22,10 @@ function TitleTransaction() {
   ];
 
   const fetchData = () => {
-    getAllTitles()
+    titleService
+      .getAll()
       .then((response) => setTitles(response))
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   };
 
   useEffect(() => {

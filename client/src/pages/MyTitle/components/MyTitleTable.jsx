@@ -5,10 +5,10 @@ import { Col, Row } from "react-bootstrap";
 import { HiOutlinePencil } from "react-icons/hi";
 import { TbList } from "react-icons/tb";
 
-import Button from "components/Button";
-import { getAllApprovedStatuses } from "services/approvedStatus";
+import { Button } from "components";
+import { approvedStatusService } from "services";
 import { formatTime } from "utils/convertTime";
-import styles from "../assets/styles/MyTitleTable.module.scss";
+import styles from "../styles/MyTitleTable.module.scss";
 
 const cx = classNames.bind(styles);
 
@@ -16,15 +16,25 @@ function MyTitleTable({ data }) {
   const [approvedStatuses, setApprovedStatuses] = useState([]);
   const options = approvedStatuses.map((status) => {
     return {
-      value: status.guid,
-      label: status.name,
+      value: status._id,
+      label: status.status,
     };
   });
 
+  const getHexColor = (approvedStatusId) => {
+    const approvedStatus = approvedStatuses.find(
+      (status) => status._id === approvedStatusId
+    );
+    return approvedStatus.color.hex;
+  };
+
   const fetchData = () => {
-    getAllApprovedStatuses()
-      .then((response) => setApprovedStatuses(response))
-      .catch((error) => console.log(error));
+    approvedStatusService
+      .getAll()
+      .then((response) => {
+        setApprovedStatuses(response.data);
+      })
+      .catch((error) => console.error(error));
   };
 
   useEffect(() => {
@@ -33,39 +43,43 @@ function MyTitleTable({ data }) {
 
   return (
     <>
-      {data.map((title) => {
-        const { id, guid, cover, name, totalChapter, approvedStatusId } = title;
+      {data.map((title, index) => {
         const timeObj = formatTime(new Date(2022, 7, 16, 23, 16, 0, 0));
         const approvedStatus =
           options.length > 0 &&
-          options.find((option) => option.value === approvedStatusId);
+          options.find((option) => option.value === title.approved_status_id);
 
         return (
-          <Row key={guid} className={cx("my-title__container__content")}>
+          <Row key={title._id} className={cx("my-title__container__content")}>
             <Col xs={1}>
-              <span>{id}</span>
+              <span>{index}</span>
             </Col>
             <Col>
               <div className={cx("box-img")}>
-                <img src={cover} alt={name} />
+                <img src={title.cover.source} alt={title.title} />
               </div>
             </Col>
             <Col xs={3}>
-              <Button text to={`/comic/title/${guid}`} className={cx("title")}>
-                {name}
+              <Button
+                text
+                to={`/comic/title/${title._id}`}
+                className={cx("title")}
+              >
+                {title.title}
               </Button>
             </Col>
             <Col>
-              <span className={cx("total-chapter")}>{totalChapter}</span>
+              <span className={cx("total-chapter")}>{title.total_chapter}</span>
             </Col>
             <Col>
-              <span
-                className={cx(
-                  `approve-approvedStatusIdapprovedStatus-${approvedStatusId}`
-                )}
-              >
-                {approvedStatus.label}
-              </span>
+              {approvedStatuses.length > 0 ? (
+                <span
+                  className={cx("approved-status")}
+                  style={{ color: getHexColor(title.approved_status_id) }}
+                >
+                  {approvedStatus.label}
+                </span>
+              ) : null}
             </Col>
             <Col>
               <span
@@ -81,7 +95,7 @@ function MyTitleTable({ data }) {
               <Button
                 outline
                 gray
-                to={`update/${guid}`}
+                to={`update/${title._id}`}
                 className="action"
                 title="Chỉnh sửa truyện"
               >
@@ -90,7 +104,7 @@ function MyTitleTable({ data }) {
               <Button
                 outline
                 gray
-                to={`${guid}`}
+                to={`${title._id}`}
                 className="action"
                 title="Xem danh sách chương"
               >
@@ -107,9 +121,8 @@ function MyTitleTable({ data }) {
 MyTitleTable.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      guid: PropTypes.string.isRequired,
-      name: PropTypes.oneOfType([
+      _id: PropTypes.string.isRequired,
+      title: PropTypes.oneOfType([
         PropTypes.string.isRequired,
         PropTypes.arrayOf(
           PropTypes.oneOfType([
@@ -118,9 +131,11 @@ MyTitleTable.propTypes = {
           ]).isRequired
         ).isRequired,
       ]).isRequired,
-      cover: PropTypes.string.isRequired,
-      totalChapter: PropTypes.number.isRequired,
-      approvedStatusId: PropTypes.string.isRequired,
+      cover: PropTypes.shape({
+        source: PropTypes.string.isRequired,
+      }).isRequired,
+      total_chapter: PropTypes.number.isRequired,
+      approved_status_id: PropTypes.string.isRequired,
     })
   ).isRequired,
 };

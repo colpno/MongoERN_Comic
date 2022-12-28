@@ -1,15 +1,16 @@
-export { msToSeconds } from "./convertTime";
-export { msToMinutes } from "./convertTime";
-export { msToHours } from "./convertTime";
-export { msToTime } from "./convertTime";
-export { secondToMinute } from "./convertTime";
-export { secondToHour } from "./convertTime";
-export { minuteToSecond } from "./convertTime";
-export { minuteToHour } from "./convertTime";
-export { hourToSecond } from "./convertTime";
-export { hourToMinute } from "./convertTime";
-export { roundNumByUnit } from "./numberMethods";
-export { separateNumberDigit } from "./numberMethods";
-export { createArrayFromTo } from "./arrayMethods";
-export { makeUnique } from "./arrayMethods";
+export { createArrayFromTo, makeUnique } from "./arrayMethods";
+export {
+  hourToMinute,
+  hourToSecond,
+  minuteToHour,
+  minuteToSecond,
+  msToHours,
+  msToMinutes,
+  msToSeconds,
+  msToTime,
+  secondToHour,
+  secondToMinute,
+} from "./convertTime";
+export { getReleaseDayOptions } from "./getReleaseDayOptions";
 export { isEmpty } from "./isEmpty";
+export { roundNumByUnit, separateNumberDigit } from "./numberMethods";

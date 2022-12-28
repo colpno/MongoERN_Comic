@@ -1,7 +1,8 @@
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
+
 import { countdown } from "utils/convertTime";
-import styles from "../assets/styles/ChargeBar.module.scss";
+import styles from "../styles/ChargeBar.module.scss";
 
 const cx = classNames.bind(styles);
 

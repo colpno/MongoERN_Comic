@@ -1,19 +1,21 @@
 import classNames from "classnames/bind";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import * as Yup from "yup";
 
-import FormWrapper from "components/FormWrapper/FormWrapper";
+import { FormWrapper } from "components";
 import { Popup } from "features";
 import { useToast } from "hooks";
 import { Container } from "react-bootstrap";
-import { resetPassword } from "services/auth";
+import { authService } from "services";
 import styles from "./ResetPassword.module.scss";
-import ResetPasswordForm from "./ResetPasswordForm";
+import ResetPasswordForm from "./components/ResetPasswordForm";
 
 const cx = classNames.bind(styles);
 
 function ResetPassword() {
+  const loginInfo = useSelector((state) => state.login.info);
   const { token } = useParams();
   const { Toast, options, toastEmitter } = useToast();
   const [popup, setPopup] = useState({
@@ -42,11 +44,10 @@ function ResetPassword() {
     const { password } = values;
 
     if (password) {
-      resetPassword(token, password)
+      authService
+        .resetPassword(loginInfo.id, password, token)
         .then((response) => {
-          if (response.affectedRows > 0) {
-            setPopup({ ...popup, trigger: true });
-          }
+          setPopup({ ...popup, trigger: true, content: response.message });
         })
         .catch((error) => {
           toastEmitter(

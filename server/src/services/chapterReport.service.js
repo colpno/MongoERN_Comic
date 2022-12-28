@@ -12,7 +12,7 @@ const chapterReportService = {
     }
 
     const response = await ChapterReport.find(params);
-    return response;
+    return { data: response };
   },
   getOne: async (chapterId, month, year) => {
     const response = await ChapterReport.findOne({ chapter_id: chapterId, month, year });

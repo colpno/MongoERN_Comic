@@ -5,7 +5,7 @@ import {
   ForgotPassword,
   Home,
   Login,
-  LoginOTP,
+  VerifyLogin,
   NotFound,
   Notice,
   NoticeList,
@@ -20,7 +20,7 @@ import {
 } from "pages";
 
 export const publicRoutes = [
-  { path: "/not-found", component: NotFound },
+  { path: "/404", component: NotFound },
   { path: "/", component: Home },
   {
     path: "/login",
@@ -29,7 +29,7 @@ export const publicRoutes = [
   },
   {
     path: "/login/verify",
-    component: LoginOTP,
+    component: VerifyLogin,
   },
   {
     path: "/register",

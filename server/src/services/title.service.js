@@ -1,5 +1,21 @@
 import paginateSort from '../helpers/paginateSort.js';
 import { Title } from '../models/index.js';
+import cloudinaryService from './cloudinary.service.js';
+
+const cloudOptions = (id, path = '') => ({
+  upload_preset: process.env.CLOUDINARY_TITLE_UPLOAD_PRESET,
+  folder: `comic/titles/${id}/${path}`,
+});
+
+const sortGenres = (titles) => {
+  const sorted = titles.map((title) => {
+    const sortedGenres = title.genres.sort();
+    // eslint-disable-next-line no-param-reassign
+    title.genres = sortedGenres;
+    return title;
+  });
+  return sorted;
+};
 
 const titleService = {
   getAll: async (params = {}) => {
@@ -11,7 +27,7 @@ const titleService = {
     }
 
     const response = await Title.find(params);
-    return response;
+    return { data: sortGenres(response) };
   },
   getOne: async (params = {}) => {
     const response = await Title.findOne(params);
@@ -19,20 +35,18 @@ const titleService = {
   },
   add: async (
     userId = '',
-    approvedStatusId = '',
     releaseDay = '',
     title = '',
-    cover = '',
+    cover = {},
     author = '',
     summary = '',
     genres = [],
     coin = 0,
     point = 0,
-    cloudPublicId = ''
+    guid = ''
   ) => {
     const model = new Title({
       user_id: userId,
-      approved_status_id: approvedStatusId,
       release_day: releaseDay,
       title,
       cover,
@@ -41,7 +55,7 @@ const titleService = {
       genres,
       coin,
       point,
-      cloud_public_id: cloudPublicId,
+      _guid: guid,
     });
 
     const response = await model.save();
@@ -70,6 +84,16 @@ const titleService = {
   delete: async (id) => {
     const response = await Title.findOneAndDelete({ _id: id });
     return response;
+  },
+  uploadToCloud: async (cover, titleGuid) => {
+    const finalCover = cover
+      ? await cloudinaryService.upload(cover, cloudOptions(titleGuid, 'cover'))
+      : undefined;
+
+    return finalCover;
+  },
+  removeFromCloud: async (publicId) => {
+    await cloudinaryService.remove(publicId);
   },
 };
 

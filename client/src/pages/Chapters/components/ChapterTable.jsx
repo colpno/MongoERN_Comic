@@ -1,5 +1,5 @@
-import React from "react";
 import PropTypes from "prop-types";
+
 import { GridTable } from "components";
 import { Pagination } from "features";
 import ChaptersTableRow from "./ChapterTableRow";
@@ -18,10 +18,10 @@ function ChapterTable({
         head={[
           { label: "#", name: "order", xs: 1 },
           { label: "Ảnh bìa" },
-          { label: "Tên chương", name: "name", xs: 3 },
+          { label: "Tên chương", name: "title", xs: 3 },
           { label: "Ngày tạo", name: "createdAt" },
           { label: "Ngày sửa", name: "updatedAt" },
-          { label: "Trạng thái", name: "approvedStatusId" },
+          { label: "Trạng thái", name: "approved_status_id" },
           { label: "" },
         ]}
         sorting={sorting}

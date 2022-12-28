@@ -4,7 +4,7 @@ const chapterTransactionSchema = mongoose.Schema(
   {
     user_id: { type: String, require: true },
     chapter_id: { type: String, require: true },
-    expired_at: { type: Date },
+    expiredAt: { type: Date },
     method: {
       type: String,
       enum: ['coin', 'point', 'ticketForRenting', 'ticketForPurchasing'],

@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-import { Scrollbar } from "components/Scrollbar";
+import { Scrollbar } from "components";
 import AvatarDropdownGroup from "./AvatarDropdownGroup";
 
 function AvatarDropdownList({ cx, isLoggingIn, menu, logoutClick }) {

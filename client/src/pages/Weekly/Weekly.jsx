@@ -1,11 +1,12 @@
 import classNames from "classnames/bind";
 import { useEffect, useMemo, useState } from "react";
 
-import CardList from "components/CardList";
+import { CardList } from "components";
+import { DAYS_OF_WEEK } from "constants/time.constant";
 import { BannerSlider, NoData } from "features";
 import { useInfinitePagination } from "hooks";
 import { Container } from "react-bootstrap";
-import { getAllTitles } from "services/title";
+import { titleService } from "services";
 import Calendar from "./assets/images/icons8-new-year-calendar-24.png";
 import styles from "./assets/styles/Weekly.module.scss";
 import DaysOfWeek from "./components/DaysOfWeek";
@@ -20,64 +21,51 @@ function Weekly() {
     useInfinitePagination(TITLES_PER_PAGE);
   const [limit, setLimit] = useState(TITLES_PER_PAGE);
 
-  const [dayFilter, setDayFilter] = useState(() => {
-    switch (today) {
-      case 0:
-        return "CN";
-      case 1:
-        return "T2";
-      case 2:
-        return "T3";
-      case 3:
-        return "T4";
-      case 4:
-        return "T5";
-      case 5:
-        return "T6";
-      case 6:
-        return "T7";
-      default:
-        return "T2";
-    }
-  });
+  const getShortDayLabel = (numberInDay) => {
+    return DAYS_OF_WEEK.find((day) => day.number === numberInDay).shortLabel;
+  };
+
+  const [dayFilter, setDayFilter] = useState(getShortDayLabel(today));
 
   const slider = useMemo(
     () =>
       titles?.slice(0, 10).map((title) => {
-        return { image: title.cover, link: `/comic/title/${title.guid}` };
+        return { image: title.cover.source, link: `/comic/title/${title._id}` };
       }),
     [titles]
   );
 
   const fetchTitles = (selectedDay) => {
-    getAllTitles(
-      {
-        releaseDay: selectedDay,
-        page: pagination.page,
-        limit: pagination.limit,
-      },
-      false
-    )
+    titleService
+      .getAll(
+        {
+          release_day: selectedDay,
+          _page: pagination.page,
+          _limit: pagination.limit,
+        },
+        false
+      )
       .then((response) => {
         setTitles(response.data);
-        setPaginationTotal(response.pagination.total);
+        setPaginationTotal(response.paginate.total);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   };
 
   const scrollFetchTitles = (selectedDay) => {
-    getAllTitles(
-      {
-        releaseDay: selectedDay,
-        page: pagination.page,
-        limit: pagination.limit,
-      },
-      false
-    )
+    titleService
+      .getAll(
+        {
+          releaseDay: selectedDay,
+          _page: pagination.page,
+          _limit: pagination.limit,
+        },
+        false
+      )
       .then((response) => {
         setTitles((prev) => [...prev, ...response.data]);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   };
 
   const handleDayClick = (day) => {

@@ -3,7 +3,7 @@ import { useState } from "react";
 
 import { Button } from "components";
 import { Popup } from "features";
-import { register } from "services/auth";
+import { userService } from "services";
 import { registerFormValidation } from "validations/registerForm.validation";
 import RegisterForm from "./components/RegisterForm";
 import styles from "./styles/Register.module.scss";
@@ -19,13 +19,15 @@ function Register() {
 
   const handleSubmit = (values, { setSubmitting }) => {
     const { username, email, password } = values;
-    register({ username, password, email, role: "member" }).then((response) => {
-      setPopup({
-        trigger: true,
-        title: "Thông báo",
-        content: response.message,
+    userService
+      .register({ username, password, email, role: "member" })
+      .then((response) => {
+        setPopup({
+          trigger: true,
+          title: "Thông báo",
+          content: response.message,
+        });
       });
-    });
 
     setSubmitting(false);
   };

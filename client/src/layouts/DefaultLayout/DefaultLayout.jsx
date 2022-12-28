@@ -1,27 +1,15 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
 
 import { ToggleableSubNavbar } from "components";
-import { subNavMenu } from "constants/defaultLayout.constant";
-import Footer from "layouts/components/Footer";
-import Header from "layouts/components/Header";
+import { MOBILE_NAV_MENU } from "constants/menu.constant";
+import { Footer, Header } from "layouts/components";
 
 function DefaultLayout({ children }) {
-  const [toggleMobileNavbar, setToggleMobileNavbar] = useState(false);
-
-  const handleToggleMobileNavbar = () => {
-    setToggleMobileNavbar((prev) => !prev);
-  };
-
   return (
     <>
-      <Header toggleMobileNavbar={handleToggleMobileNavbar} />
+      <Header />
       <div className="content skip-header">
-        <ToggleableSubNavbar
-          isToggle={toggleMobileNavbar}
-          setIsToggle={setToggleMobileNavbar}
-          menu={subNavMenu}
-        />
+        <ToggleableSubNavbar menu={MOBILE_NAV_MENU} />
         {children}
       </div>
       <Footer />

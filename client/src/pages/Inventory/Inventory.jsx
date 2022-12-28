@@ -3,18 +3,19 @@ import { useEffect, useState } from "react";
 import { Container, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
-import GridTable from "components/GridTable";
+import { GridTable } from "components";
 import { Pagination, Popup } from "features";
 import { usePagination } from "hooks";
 import TicketExplainPopup from "pages/Title/components/TicketExplainPopup";
-import { getAllHiredChapters } from "services/hiredChapter";
-import { getAllPurchasedChapters } from "services/purchasedChapter";
+import { chapterTransactionService } from "services";
 import { sortArray } from "utils/arrayMethods";
 import { ReactComponent as TicketLogo } from "./assets/images/ticket.svg";
 import styles from "./assets/styles/Inventory.module.scss";
-import InventoryInteract from "./components/InventoryInteract";
-import InventoryTable from "./components/InventoryTable";
-import InventoryTickets from "./components/InventoryTickets";
+import {
+  InventoryInteract,
+  InventoryTable,
+  InventoryTickets,
+} from "./components";
 
 const cx = classNames.bind(styles);
 
@@ -27,7 +28,7 @@ function Inventory() {
     usePagination(CHAPTERS_PER_PAGE);
   const sortOptions = [
     { value: "createdAt", label: "Ngày nhận" },
-    { value: "expiredDay", label: "Ngày hết hạn" },
+    { value: "expiredAt", label: "Ngày hết hạn" },
   ];
   const [popup, setPopup] = useState({
     trigger: false,
@@ -36,24 +37,23 @@ function Inventory() {
   });
 
   const fetchData = () => {
-    const hiredChapterPromise = getAllHiredChapters({
-      userId: user.guid,
-      page: pagination.page,
-      limit: pagination.limit / 2,
-    });
-    const purchasedChapterPromise = getAllPurchasedChapters({
-      userId: user.guid,
-      page: pagination.page,
-      limit: pagination.limit / 2,
-    });
-
-    Promise.all([hiredChapterPromise, purchasedChapterPromise])
-      .then(([hiredChapters, purchasedChapters]) => {
-        const allData = [...hiredChapters.data, purchasedChapters.data];
-        setChapters(allData);
-        setPaginationTotal(allData.length);
+    chapterTransactionService
+      .getAll({
+        user_id: user._id,
+        _page: pagination.page,
+        _limit: pagination.limit / 2,
       })
-      .catch((error) => console.log(error));
+      // .then((response) => {
+      .then(() => {
+        // TODO const { purchasedChapters, hiredChapters } = response;
+
+        // const allData = [...hiredChapters.data, purchasedChapters.data];
+        // setChapters(allData);
+        // setPaginationTotal(allData.length);
+        setChapters([]);
+        setPaginationTotal(0);
+      })
+      .catch((error) => console.error(error));
   };
 
   const handleClickIcon = () => {
@@ -91,9 +91,9 @@ function Inventory() {
           sorting(data, false, value);
           setSorter({ key: value, isAsc: false });
           break;
-        case "expiredDay":
+        case "expiredAt":
           sorting(
-            data.filter((item) => item.ticketId === 2),
+            data.filter((item) => item.ticket_id === 2),
             true,
             value
           );

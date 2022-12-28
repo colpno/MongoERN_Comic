@@ -9,6 +9,7 @@ route.get('/:id', chapterController.getOne);
 route.get('/owned', isAuthenticated, chapterController.getAll);
 route.get('/owned/:id', isAuthenticated, chapterController.getOne);
 route.post('/create', isAuthenticated, chapterController.add);
+route.put('/update/view/:id', chapterController.updateView);
 route.put('/update/:id', isAuthenticated, chapterController.update);
 route.delete('/delete/:id', isAuthenticated, chapterController.delete);
 

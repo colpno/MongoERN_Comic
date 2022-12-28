@@ -3,10 +3,9 @@ import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 
-import CardList from "components/CardList";
-import { getGenre } from "services/genre";
-import { getAllTitles } from "services/title";
-import styles from "./assets/styles/ContentList.module.scss";
+import { CardList } from "components";
+import { genreService, titleService } from "services";
+import styles from "./ContentList.module.scss";
 
 const cx = classNames.bind(styles);
 
@@ -16,15 +15,19 @@ function ContentList() {
   const [genre, setGenre] = useState({});
 
   const fetchData = () => {
-    const titlesPromise = getAllTitles({ embed: "title_genre", genreId });
-    const genrePromise = getGenre(genreId);
-
-    Promise.all([titlesPromise, genrePromise])
-      .then(([titlesResponse, genreResponse]) => {
-        setTitles(titlesResponse);
+    genreService
+      .getOne(genreId)
+      .then((genreResponse) => {
         setGenre(genreResponse);
+
+        titleService
+          .getAll({ genres_in: genreResponse.data.name })
+          .then((titleResponse) => {
+            setTitles(titleResponse.data);
+          })
+          .catch((titleError) => console.log(titleError));
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   };
 
   useEffect(() => {

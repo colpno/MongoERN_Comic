@@ -11,7 +11,7 @@ const readingHistoryService = {
     }
 
     const response = await ReadingHistory.find(params);
-    return response;
+    return { data: response };
   },
   add: async (userId = '', titleId = '', chapterId = '') => {
     const model = new ReadingHistory({

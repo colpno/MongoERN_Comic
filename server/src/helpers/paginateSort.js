@@ -1,7 +1,9 @@
 const paginateSort = async (queries, MongooseModel) => {
-  const { _page, _limit, _sort, _order } = queries;
+  const { _limit, _sort, _order } = queries;
+  let { _page } = queries;
+  _page = _page || 1;
 
-  if (_page && _limit && _sort && _order) {
+  if (_limit && _sort && _order) {
     const params = { ...queries };
 
     delete params._page;
@@ -13,20 +15,20 @@ const paginateSort = async (queries, MongooseModel) => {
       .skip(_limit * _page - _limit)
       .limit(_limit)
       .sort({ [_sort]: _order });
-    const total = await MongooseModel.countDocuments();
 
     return {
       paginate: {
         page: _page,
         limit: _limit,
-        total,
+        total: data.length,
       },
       data,
     };
   }
 
-  if (_page && _limit) {
+  if (_limit) {
     const params = { ...queries };
+    // console.log('file: paginateSort.js:29 ~ params', params);
 
     delete params._page;
     delete params._limit;
@@ -34,13 +36,12 @@ const paginateSort = async (queries, MongooseModel) => {
     const data = await MongooseModel.find(params)
       .skip(_limit * _page - _limit)
       .limit(_limit);
-    const total = await MongooseModel.countDocuments();
 
     return {
       paginate: {
         page: _page,
         limit: _limit,
-        total,
+        total: data.length,
       },
       data,
     };
@@ -54,7 +55,7 @@ const paginateSort = async (queries, MongooseModel) => {
 
     const data = await MongooseModel.find(params).sort({ [_sort]: _order });
 
-    return data;
+    return { data };
   }
 };
 

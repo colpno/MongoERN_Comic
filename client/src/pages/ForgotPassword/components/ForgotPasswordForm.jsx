@@ -1,9 +1,9 @@
-import { Button } from "components";
 import { FastField, Form, Formik } from "formik";
 import PropTypes from "prop-types";
-import { InputField } from "libs/formik";
-import FormLabel from "libs/formik/FormLabel";
 import { FaChevronRight } from "react-icons/fa";
+
+import { Button } from "components";
+import { InputField, FormLabel } from "libs/formik";
 
 function ForgotPasswordForm({
   INITIAL_VALUES,

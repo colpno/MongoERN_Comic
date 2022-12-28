@@ -11,7 +11,7 @@ const favoriteService = {
     }
 
     const response = await Favorite.find(params);
-    return response;
+    return { data: response };
   },
   add: async (userId = '', chapterId = '') => {
     const model = new Favorite({

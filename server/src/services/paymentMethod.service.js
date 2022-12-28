@@ -11,7 +11,7 @@ const chapterService = {
     }
 
     const response = await PaymentMethod.find(params);
-    return response;
+    return { data: response };
   },
   add: async (name = '') => {
     const model = new PaymentMethod({ name });

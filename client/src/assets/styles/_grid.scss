@@ -101,6 +101,11 @@
 }
 
 @media (min-width: 1280px) {
+  .container-xs,
+  .container-sm,
+  .container-md,
+  .container-lg,
+  .container-xs,
   .container {
     $width: 1170px;
     width: $width;
@@ -108,13 +113,13 @@
   }
 }
 
-@media (min-width: 1600px) {
-  .container {
-    $width: 1320px;
-    width: $width;
-    max-width: $width;
-  }
-}
+// @media (min-width: 1600px) {
+//   .container {
+//     $width: 1320px;
+//     width: $width;
+//     max-width: $width;
+//   }
+// }
 
 // $container-max-widths: (
 //   sm: 540px,

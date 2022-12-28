@@ -23,29 +23,25 @@ const titleApi = {
   },
 
   add: (
-    approvedStatusId,
-    releaseDay,
     title,
     cover,
     author,
     summary,
     genres,
     coin,
-    point,
+    releaseDay,
     setProgress = () => {}
   ) => {
     return axiosClient.post(
       `${url}/create`,
       {
-        approvedStatusId,
-        releaseDay,
         title,
         cover,
         author,
         summary,
         genres,
         coin,
-        point,
+        releaseDay,
       },
       {
         withCredentials: true,
@@ -68,8 +64,9 @@ const titleApi = {
       },
     }),
 
-  delete: (id, setProgress) =>
+  delete: (id, setProgress, params = {}) =>
     axiosClient.delete(`${url}/delete/${id}`, {
+      params,
       withCredentials: true,
       onUploadProgress: (e) => {
         const { loaded, total } = e;

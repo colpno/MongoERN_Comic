@@ -2,7 +2,7 @@ import classNames from "classnames/bind";
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-import { verifyAccount } from "services/auth";
+import { authService } from "services";
 import styles from "./VerifyAccount.module.scss";
 
 const cx = classNames.bind(styles);
@@ -15,14 +15,13 @@ function VerifyAccount() {
     const token = searchParams.get("token");
 
     if (token) {
-      verifyAccount({ token })
+      authService
+        .verifyRegister(token)
         .then((response) => {
-          if (response.affectedRows) {
-            alert("Đăng ký thành công");
-            navigate("/login");
-          }
+          alert(response.message);
+          navigate("/login");
         })
-        .catch((error) => console.log(error));
+        .catch((error) => console.error(error));
     } else {
       navigate("/");
     }

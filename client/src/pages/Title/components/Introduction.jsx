@@ -1,16 +1,44 @@
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
-import { memo } from "react";
+import { Fragment, memo, useEffect, useMemo, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { AiFillCopy, AiFillEye, AiFillHeart, AiFillStar } from "react-icons/ai";
 
-import Button from "components/Button";
-import styles from "pages/Title/assets/styles/introduction.module.scss";
+import { Button } from "components";
+import { genreService } from "services";
 import { roundNumByUnit } from "utils";
+import styles from "../styles/Introduction.module.scss";
 
 const cx = classNames.bind(styles);
 
-function Introduction({ title, firstChapter, genres, setPopup, handleFollow }) {
+function Introduction({ title, firstChapter, setPopup, handleFollow }) {
+  const [genreArray, setGenreArray] = useState([]);
+
+  const genres = useMemo(() => {
+    const genreLength = title.genres.length - 1;
+
+    return title.genres.map((genre, index) => {
+      const genreObj = genreArray.find((genr) => genr.name === genre);
+      const redirect = genreObj ? `/content-list/${genreObj._id}` : null;
+
+      return (
+        <Fragment key={index}>
+          <Button to={redirect} wrapper className={cx("genre")}>
+            {genre}
+          </Button>
+          {index !== genreLength ? ", " : null}
+        </Fragment>
+      );
+    });
+  }, [title, genreArray]);
+
+  const fetchData = () => {
+    genreService
+      .getAll({ name_in: title.genres })
+      .then((response) => setGenreArray(response.data))
+      .catch((error) => console.error(error));
+  };
+
   const handlePopupContent = () => {
     setPopup({
       trigger: true,
@@ -23,14 +51,18 @@ function Introduction({ title, firstChapter, genres, setPopup, handleFollow }) {
     });
   };
 
+  useEffect(() => {
+    fetchData();
+  }, [title]);
+
   return (
     <Container fluid="md" className={cx("introduction")}>
       <Row>
         <Col md={12} lg={5} className={cx("box-img")}>
-          <img src={title.cover} alt={title.name} />
+          <img src={title.cover.source} alt={title.title} />
         </Col>
         <Col md={12} lg={7} className={cx("introduction__info")}>
-          <h4 className={cx("title")}>{title.name}</h4>
+          <h4 className={cx("title")}>{title.title}</h4>
           <div className={cx("introduction__info__statistic")}>
             <span className="like">
               <AiFillHeart />
@@ -64,7 +96,7 @@ function Introduction({ title, firstChapter, genres, setPopup, handleFollow }) {
             </small>
           </div>
           <div className={cx("button-container")}>
-            <Button outline large onClick={() => handleFollow(title.guid)}>
+            <Button outline large onClick={() => handleFollow(title._id)}>
               <AiFillStar />
               Theo dõi
             </Button>
@@ -84,15 +116,17 @@ function Introduction({ title, firstChapter, genres, setPopup, handleFollow }) {
 Introduction.propTypes = {
   setPopup: PropTypes.func.isRequired,
   title: PropTypes.shape({
-    cover: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
+    cover: PropTypes.shape({
+      source: PropTypes.string.isRequired,
+    }).isRequired,
+    title: PropTypes.string.isRequired,
+    genres: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     like: PropTypes.number.isRequired,
     view: PropTypes.number.isRequired,
     author: PropTypes.string.isRequired,
     summary: PropTypes.string.isRequired,
-    guid: PropTypes.string.isRequired,
+    _id: PropTypes.string.isRequired,
   }).isRequired,
-  genres: PropTypes.string.isRequired,
   handleFollow: PropTypes.func.isRequired,
   firstChapter: PropTypes.string.isRequired,
 };

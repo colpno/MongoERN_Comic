@@ -1,6 +1,7 @@
 import classNames from "classnames/bind";
-import styles from "pages/Title/assets/styles/ChargeExplainPopup.module.scss";
 import { BsFillLightningFill } from "react-icons/bs";
+
+import styles from "../styles/ChargeExplainPopup.module.scss";
 
 const cx = classNames.bind(styles);
 

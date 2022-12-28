@@ -5,8 +5,8 @@ import { useSelector } from "react-redux";
 
 import { NoData, Pagination } from "features";
 import { usePagination } from "hooks";
-import { getAllPointHistories } from "services/pointHistory";
-import styles from "./assets/styles/PointHistory.module.scss";
+import { pointHistoryService } from "services";
+import styles from "./styles/PointHistory.module.scss";
 import PointHistoryList from "./components/PointHistoryList";
 
 const cx = classNames.bind(styles);
@@ -22,17 +22,18 @@ function PointHistory() {
   const fetchData = () => {
     const params = {
       userId,
-      sort: "createdAt",
-      order: "desc",
-      page: pagination.page,
-      limit: pagination.limit,
+      _sort: "createdAt",
+      _order: "desc",
+      _page: pagination.page,
+      _limit: pagination.limit,
     };
-    getAllPointHistories(params)
+    pointHistoryService
+      .getAll(params)
       .then((response) => {
         setHistories(response.data);
-        setPaginationTotal(response.pagination.total);
+        setPaginationTotal(response.paginate.total);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   };
 
   useEffect(() => {

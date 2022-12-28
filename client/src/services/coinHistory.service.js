@@ -6,7 +6,7 @@ const coinHistoryService = {
       const response = await coinHistoryApi.getAll(params);
       return response;
     } catch (error) {
-      return error?.data?.error || error?.data?.message;
+      return Promise.reject(error.data);
     }
   },
 };

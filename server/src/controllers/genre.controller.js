@@ -1,4 +1,4 @@
-import createHttpError from 'http-errors';
+import createError from 'http-errors';
 import transformQueryParams from '../helpers/transformQueryParams.js';
 import { genreService } from '../services/index.js';
 
@@ -9,15 +9,18 @@ const genreController = {
       const response = await genreService.getAll(params);
 
       if (response.length === 0 || response.data?.length === 0) {
-        next(createHttpError(404, 'Không tìm thấy thể loại nào'));
+        return res.status(200).json({
+          ...response,
+          code: 200,
+        });
       }
 
       return res.status(200).json({
+        ...response,
         code: 200,
-        data: response,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
   getOne: async (req, res, next) => {
@@ -26,7 +29,10 @@ const genreController = {
       const response = await genreService.getOne({ _id: id });
 
       if (!response) {
-        next(createHttpError(404, 'Không tìm thấy thể loại nào'));
+        return res.status(200).json({
+          code: 200,
+          data: {},
+        });
       }
 
       return res.status(200).json({
@@ -34,23 +40,23 @@ const genreController = {
         data: response,
       });
     } catch (error) {
-      next();
+      return next();
     }
   },
   add: async (req, res, next) => {
     try {
       const { name } = req.body;
 
-      const duplicated = await genreService.getAll({ name });
+      const duplicated = (await genreService.getAll({ name })).data;
 
       if (duplicated.length > 0) {
-        next(createHttpError(409, 'Đã tồn tại tên thể loại, vui lòng thay đổi'));
+        return next(createError(409, 'Đã tồn tại tên thể loại, vui lòng thay đổi'));
       }
 
       const response = await genreService.add(name);
 
       if (!response) {
-        next(createHttpError(400, 'Không thể hoàn thành việc tạo thể loại'));
+        return next(createError(400, 'Không thể hoàn thành việc tạo thể loại'));
       }
 
       return res.status(201).json({
@@ -58,7 +64,7 @@ const genreController = {
         data: response,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
   update: async (req, res, next) => {
@@ -71,7 +77,7 @@ const genreController = {
       });
 
       if (!response) {
-        next(createHttpError(400, 'không thể hoàn thành việc cập nhật thể loại'));
+        return next(createError(400, 'không thể hoàn thành việc cập nhật thể loại'));
       }
 
       return res.status(200).json({
@@ -79,7 +85,7 @@ const genreController = {
         data: response,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
   delete: async (req, res, next) => {
@@ -89,7 +95,7 @@ const genreController = {
       const response = await genreService.delete(id);
 
       if (!response) {
-        next(createHttpError(400, 'không thể hoàn thành việc xóa thể loại'));
+        return next(createError(400, 'không thể hoàn thành việc xóa thể loại'));
       }
 
       return res.status(200).json({
@@ -97,7 +103,7 @@ const genreController = {
         data: response,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 };

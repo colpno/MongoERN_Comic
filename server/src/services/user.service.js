@@ -11,7 +11,7 @@ const userService = {
     }
 
     const response = await User.find(params);
-    return response;
+    return { data: response };
   },
   getOne: async (params = {}) => {
     try {

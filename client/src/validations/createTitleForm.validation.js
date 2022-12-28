@@ -1,10 +1,10 @@
 import * as Yup from "yup";
 
 export const createTitleFormValidation = Yup.object({
-  name: Yup.string()
+  title: Yup.string()
     .max(255, "Giới hạn độ dài là 255 ký tự.")
     .required("Tiêu đề truyện không được để trống."),
-  genreId: Yup.array()
+  genres: Yup.array()
     .min(1, "Truyện cần phải có tối thiểu 1 thể loại.")
     .max(3, "Truyện có tối đa 3 thể loại.")
     .of(Yup.string()),
@@ -17,7 +17,7 @@ export const createTitleFormValidation = Yup.object({
   coin: Yup.string()
     .max(3, "Giới hạn độ dài là 3 ký tự.")
     .required("Coin không được để trống."),
-  releaseDay: Yup.string().required(
+  release_day: Yup.string().required(
     "Ngày đăng hàng tuần phải không được để trống"
   ),
   cover: Yup.string().required("Ảnh bìa không được để trống."),

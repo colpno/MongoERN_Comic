@@ -1,4 +1,4 @@
-import createHttpError from 'http-errors';
+import createError from 'http-errors';
 import transformQueryParams from '../helpers/transformQueryParams.js';
 import { coinTransactionService } from '../services/index.js';
 
@@ -12,15 +12,18 @@ const coinTransactionController = {
       const response = await coinTransactionService.getAll(params);
 
       if (response.length === 0 || response.data?.length === 0) {
-        next(createHttpError(404, 'Không tìm thấy giao dịch nào'));
+        return res.status(200).json({
+          ...response,
+          code: 200,
+        });
       }
 
       return res.status(200).json({
+        ...response,
         code: 200,
-        data: response,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
   add: async (req, res, next) => {
@@ -31,7 +34,7 @@ const coinTransactionController = {
       const response = await coinTransactionService.add(userId, paymentMethodId, amount);
 
       if (!response) {
-        next(createHttpError(400, 'Không thể hoàn thành việc tạo giao dịch'));
+        return next(createError(400, 'Không thể hoàn thành việc tạo giao dịch'));
       }
 
       return res.status(201).json({
@@ -39,7 +42,7 @@ const coinTransactionController = {
         data: response,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 };

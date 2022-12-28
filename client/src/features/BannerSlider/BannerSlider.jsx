@@ -7,14 +7,16 @@ import { noData } from "assets/images";
 import { Button } from "components";
 import { Slider } from "features";
 
-import styles from "./assets/BannerSlider.module.scss";
+import styles from "./BannerSlider.module.scss";
 
 const cx = classNames.bind(styles);
 
 function BannerSlider({ images, clickable, delay }) {
+  const hasImages = images.length > 0;
+
   return (
     <Slider
-      navigation
+      navigation={hasImages}
       grabCursor
       pagination
       clickablePagination={clickable}
@@ -23,7 +25,7 @@ function BannerSlider({ images, clickable, delay }) {
       slidesPerView={1}
       className={cx("slider")}
     >
-      {images.length > 0 ? (
+      {hasImages ? (
         images.map((img, index) => {
           const { image, link } = img;
 

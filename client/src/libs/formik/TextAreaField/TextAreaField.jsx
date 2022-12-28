@@ -1,4 +1,4 @@
-import TextArea from "components/TextArea/TextArea";
+import { TextArea } from "components";
 import PropTypes from "prop-types";
 import { FormGroup } from "react-bootstrap";
 

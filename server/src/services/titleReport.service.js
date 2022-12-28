@@ -12,7 +12,7 @@ const titleReportService = {
     }
 
     const response = await TitleReport.find(params);
-    return response;
+    return { data: response };
   },
   getOne: async (titleId, month, year) => {
     const response = await TitleReport.findOne({ title_id: titleId, month, year });

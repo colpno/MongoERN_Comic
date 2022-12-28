@@ -1,7 +1,6 @@
-import React from "react";
 import PropTypes from "prop-types";
-import Header from "layouts/components/Header";
-import Footer from "layouts/components/Footer";
+
+import { Footer, Header } from "layouts/components";
 import BookshelfHeader from "./components/BookshelfHeader";
 
 function BookshelfLayout({ children }) {

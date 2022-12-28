@@ -1,6 +1,7 @@
 import { BuyTicket, RentTicket } from "assets/images";
 import classNames from "classnames/bind";
-import styles from "pages/Title/assets/styles/TicketExplainPopup.module.scss";
+
+import styles from "../styles/TicketExplainPopup.module.scss";
 
 const cx = classNames.bind(styles);
 

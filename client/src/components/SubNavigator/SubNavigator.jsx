@@ -5,7 +5,7 @@ import { SwiperSlide } from "swiper/react";
 
 import { Button } from "components";
 import { Slider } from "features";
-import "./assets/styles/SubNavigator.scss";
+import "./SubNavigator.scss";
 
 function SubNavigator({ menu, slidesPerView }) {
   const url = useLocation().pathname;

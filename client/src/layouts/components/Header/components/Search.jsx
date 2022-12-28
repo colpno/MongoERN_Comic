@@ -1,13 +1,14 @@
+/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
-import { useClickOutSide, useDebounce, useSearch } from "hooks";
 import { useEffect, useState } from "react";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { IoSearchOutline } from "react-icons/io5";
 import { MdOutlineOpenInNew } from "react-icons/md";
 
-import styles from "layouts/components/Header/assets/styles/Search.module.scss";
-import { getAllTitles } from "services/title";
 import { Button } from "components";
+import { useClickOutSide, useDebounce, useSearch } from "hooks";
+import { titleService } from "services";
+import styles from "../styles/Search.module.scss";
 import SearchDropdownList from "./SearchDropdownList";
 
 const cx = classNames.bind(styles);
@@ -25,9 +26,10 @@ function Search() {
   );
 
   const fetchData = () => {
-    getAllTitles()
+    titleService
+      .getAll()
       .then((response) => setTitles(response))
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   };
 
   const handleClear = () => {
@@ -41,10 +43,15 @@ function Search() {
 
   useEffect(() => {
     if (searchText.length > 0) {
-      const searched = useSearch(titles, searchValue, 3);
-      setSearchResult(searched);
+      titleService
+        .getAll()
+        .then((response) => {
+          const searched = useSearch(response, searchValue, 3);
+          setSearchResult(searched);
+        })
+        .catch((error) => console.error(error));
     }
-  }, [titles, searchText]);
+  }, [searchText]);
 
   useEffect(() => {
     if (!searchValue.trim()) {

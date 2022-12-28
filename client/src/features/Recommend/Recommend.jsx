@@ -3,10 +3,9 @@ import { memo, useEffect, useMemo, useState } from "react";
 import { Container } from "react-bootstrap";
 import { AiFillCaretDown } from "react-icons/ai";
 
-import Button from "components/Button";
-import CardList from "components/CardList";
-import { getAllTitles } from "services/title";
-import styles from "./assets/styles/Recommend.module.scss";
+import { Button, CardList } from "components";
+import { titleService } from "services";
+import styles from "./Recommend.module.scss";
 
 const cx = classNames.bind(styles);
 
@@ -17,9 +16,10 @@ function Recommend() {
   const foldList = useMemo(() => titles?.slice(0, 6), [titles]);
 
   const fetchData = () => {
-    getAllTitles({ limit: 18, page: 1 })
+    titleService
+      .getAll({ _limit: 18, _page: 1 })
       .then((response) => setTitles(response.data))
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   };
 
   const showMoreCards = () => {

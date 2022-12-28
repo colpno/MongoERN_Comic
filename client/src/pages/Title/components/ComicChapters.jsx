@@ -5,12 +5,12 @@ import { memo } from "react";
 import { AiFillHeart } from "react-icons/ai";
 import { BsSortNumericDown, BsSortNumericUp } from "react-icons/bs";
 
-import { ChargeIcon, CircleC, CircleP } from "assets/images";
-import Button from "components/Button";
+import { CircleC, CircleP } from "assets/images";
+import { Button } from "components";
 import { NoData } from "features";
-import styles from "pages/Title/assets/styles/ComicChapters.module.scss";
-import { convertToDateString, formatTime } from "utils/convertTime";
 import { separateNumberDigit } from "utils";
+import { convertToDateString, formatTime } from "utils/convertTime";
+import styles from "../styles/ComicChapters.module.scss";
 
 const cx = classNames.bind(styles);
 
@@ -29,7 +29,7 @@ function ComicChapters({
             <span className="chapters__head__total">
               Số chương hiện tại:
               <strong className={cx("chapters__head__total__number")}>
-                {title.totalChapter}
+                {title.total_chapter}
               </strong>
             </span>
             <Button
@@ -48,15 +48,15 @@ function ComicChapters({
               return (
                 <Button
                   wrapper
-                  to={chapter.guid}
+                  to={chapter._id}
                   className={cx("chapters__content__chapter")}
-                  key={chapter.guid}
+                  key={chapter._id}
                 >
                   <div className={cx("chapters__content__chapter__box-img")}>
-                    <img src={chapter.cover} alt={chapter.name} />
+                    <img src={chapter.cover.source} alt={chapter.title} />
                   </div>
                   <div className={cx("chapters__content__chapter__info")}>
-                    <h4 className={cx("title")}>{chapter.name}</h4>
+                    <h4 className={cx("title")}>{chapter.title}</h4>
                     <div className={`like ${cx("like")}`}>
                       <AiFillHeart />
                       <span>{separateNumberDigit(chapter.like)}</span>
@@ -135,7 +135,7 @@ function ComicChapters({
 
 ComicChapters.propTypes = {
   title: PropTypes.shape({
-    totalChapter: PropTypes.number.isRequired,
+    total_chapter: PropTypes.number.isRequired,
     coin: PropTypes.number.isRequired,
     point: PropTypes.number.isRequired,
     // TODO: chargeTime: PropTypes.number.isRequired,
@@ -144,9 +144,11 @@ ComicChapters.propTypes = {
     PropTypes.shape({
       cost: PropTypes.bool.isRequired,
       order: PropTypes.number.isRequired,
-      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-      cover: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
+      _id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      cover: PropTypes.shape({
+        source: PropTypes.string.isRequired,
+      }).isRequired,
+      title: PropTypes.string.isRequired,
       like: PropTypes.number.isRequired,
     }).isRequired
   ).isRequired,

@@ -162,12 +162,12 @@ function Slider({
   };
 
   const handleBreakpointChange = (swiper) => {
-    const isChecked =
+    const isOverFlowed =
       numberOfSlides > breakpoints[swiper.currentBreakpoint].slidesPerView &&
       swiper.isBeginning &&
       swiper.isEnd;
 
-    isChecked ? setHideNavigation(false) : setHideNavigation(true);
+    isOverFlowed ? setHideNavigation(false) : setHideNavigation(true);
   };
 
   const swiperProps = {

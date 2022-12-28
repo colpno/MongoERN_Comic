@@ -12,7 +12,7 @@ const incomeService = {
     }
 
     const response = await Income.find(params);
-    return response;
+    return { data: response };
   },
   getOne: async (userId, month, year) => {
     const response = await Income.findOne({ user_id: userId, month, year });

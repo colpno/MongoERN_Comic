@@ -1,41 +1,45 @@
-import createHttpError from 'http-errors';
+/* eslint-disable no-unused-vars */
+import { randomUUID } from 'crypto';
+import createError from 'http-errors';
 
 import transformQueryParams from '../helpers/transformQueryParams.js';
-import { chapterService, titleService } from '../services/index.js';
+import { chapterService, cloudinaryService, titleService } from '../services/index.js';
 
 const chapterController = {
   getAll: async (req, res, next) => {
     try {
-      const { userInfo, query } = req;
-
-      if (userInfo) query.userId = userInfo.id;
+      const { query } = req;
 
       const params = transformQueryParams(query);
       const response = await chapterService.getAll(params);
 
       if (response.length === 0 || response.data?.length === 0) {
-        next(createHttpError(404, 'Không tìm thấy chương nào'));
+        return res.status(200).json({
+          ...response,
+          code: 200,
+        });
       }
 
       return res.status(200).json({
+        ...response,
         code: 200,
-        data: response,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
   getOne: async (req, res, next) => {
     try {
-      const { userInfo, params } = req;
+      const { params } = req;
 
-      if (userInfo) params.userId = userInfo.id;
-
-      const { id, userId } = params;
-      const response = await chapterService.getOne({ _id: id, userId });
+      const { id } = params;
+      const response = await chapterService.getOne({ _id: id });
 
       if (!response) {
-        next(createHttpError(404, 'Không tìm thấy chương nào'));
+        return res.status(200).json({
+          code: 200,
+          data: {},
+        });
       }
 
       return res.status(200).json({
@@ -43,27 +47,34 @@ const chapterController = {
         data: response,
       });
     } catch (error) {
-      next();
+      return next();
     }
   },
   add: async (req, res, next) => {
     try {
-      const { titleId, approvedStatusId, title, cover, contents, order, cost, cloudPublicId } =
-        req.body;
+      const { titleId, title, cover, contents, order, cost } = req.body;
+
+      const guid = randomUUID();
+
+      const { finalCover, finalContents } = await chapterService.uploadToCloud(
+        cover,
+        contents,
+        titleId,
+        guid
+      );
 
       const response = await chapterService.add(
         titleId,
-        approvedStatusId,
         title,
-        cover,
-        contents,
+        finalCover,
+        finalContents,
         order,
         cost,
-        cloudPublicId
+        guid
       );
 
       if (!response) {
-        next(createHttpError(400, 'Không thể hoàn thành việc tạo chương'));
+        return next(createError(400, 'Không thể hoàn thành việc tạo chương'));
       }
 
       return res.status(201).json({
@@ -71,56 +82,64 @@ const chapterController = {
         data: response,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
   update: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const {
-        titleId,
-        approvedStatusId,
-        title,
-        cover,
-        contents,
-        order,
-        cost,
-        cloudPublicId,
-        views,
-        likes,
-      } = req.body;
+      const { titleId, title, cover, contents, order, cost, guid } = req.body;
+      const { new: newContents, remove: oldContents } = contents;
 
-      if (views) {
-        await titleService.increaseView(titleId);
-        return res.status(200);
-      }
-      if (likes) {
-        await titleService.increaseLike(titleId);
-        return res.status(200);
-      }
+      const { finalCover, finalContents } = await chapterService.uploadToCloud(
+        cover,
+        newContents,
+        titleId,
+        guid
+      );
 
       const response = await chapterService.update(id, {
-        approvedStatusId,
         title,
-        cover,
-        contents,
+        cover: finalCover,
+        contents: finalContents,
         order,
         cost,
-        cloudPublicId,
-        views,
-        likes,
       });
 
       if (!response) {
-        next(createHttpError(400, 'không thể hoàn thành việc cập nhật chương'));
+        return next(createError(400, 'không thể hoàn thành việc cập nhật chương'));
       }
+
+      await chapterService.removeFromCloud(oldContents);
 
       return res.status(200).json({
         code: 200,
-        data: response,
+        message: 'Chương đã được cập nhật thành công',
+        data: {},
       });
     } catch (error) {
-      next(error);
+      return next(error);
+    }
+  },
+  updateView: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const { view, like } = req.body;
+
+      const response = await chapterService.update(id, {
+        view,
+        like,
+      });
+
+      if (view) {
+        await titleService.increaseView(response.title_id);
+        return res.status(200);
+      }
+
+      await titleService.increaseLike(response.title_id);
+      return res.status(200);
+    } catch (error) {
+      return next(error);
     }
   },
   delete: async (req, res, next) => {
@@ -130,15 +149,19 @@ const chapterController = {
       const response = await chapterService.delete(id);
 
       if (!response) {
-        next(createHttpError(400, 'không thể hoàn thành việc xóa chương'));
+        return next(createError(400, 'không thể hoàn thành việc xóa chương'));
       }
+
+      const title = await titleService.getOne({ _id: response.title_id });
+
+      await cloudinaryService.remove(`comic/titles/${title._guid}/chapters/${response._guid}`);
 
       return res.status(200).json({
         code: 200,
         data: response,
       });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   },
 };

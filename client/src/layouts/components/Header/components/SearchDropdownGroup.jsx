@@ -1,26 +1,25 @@
 import PropTypes from "prop-types";
 
-import Button from "components/Button";
+import { Button } from "components";
 
 function SearchDropdownGroup({ cx, searchResult, label }) {
   return (
     <div className={cx("dropdown__group")}>
       <p className={cx("dropdown__group__title")}>{label}</p>
       <ul>
-        {searchResult.map((title) => {
-          const { id, cover, name, author } = title;
+        {searchResult.map((ttl) => {
           return (
-            <li key={id} className={cx("dropdown__item")}>
-              <Button wrapper fullWidth to={`/comic/title/${id}`}>
+            <li key={ttl._id} className={cx("dropdown__item")}>
+              <Button wrapper fullWidth to={`/comic/title/${ttl._id}`}>
                 <figure className={cx("dropdown__group__figure")}>
                   <div className={cx("box-img")}>
-                    <img src={cover} alt="title" />
+                    <img src={ttl.cover.source} alt="title" />
                   </div>
                   <figcaption
                     className={cx("dropdown__group__figure__figcaption")}
                   >
-                    <h6 className={cx("title")}>{name}</h6>
-                    <span className={cx("author")}>{author}</span>
+                    <h6 className={cx("title")}>{ttl.title}</h6>
+                    <span className={cx("author")}>{ttl.author}</span>
                   </figcaption>
                 </figure>
               </Button>
@@ -36,8 +35,10 @@ SearchDropdownGroup.propTypes = {
   cx: PropTypes.func.isRequired,
   searchResult: PropTypes.arrayOf(
     PropTypes.shape({
-      cover: PropTypes.string.isRequired,
-      name: PropTypes.oneOfType([
+      cover: PropTypes.shape({
+        source: PropTypes.string.isRequired,
+      }).isRequired,
+      title: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired,
         PropTypes.string.isRequired,
       ]).isRequired,

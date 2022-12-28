@@ -3,16 +3,15 @@ import { robotHead1 } from "assets/images";
 
 const initialState = {
   user: {
-    id: null,
-    guid: "",
+    _id: "",
     avatar: robotHead1,
     username: "Đăng nhập",
     role: "",
     point: 0,
     coin: 0,
     income: 0,
-    ticketForRenting: 0,
-    ticketForBuying: 0,
+    ticket_for_renting: 0,
+    ticket_for_buying: 0,
   },
   isLoggingIn: false,
 };

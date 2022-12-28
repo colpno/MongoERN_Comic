@@ -1,19 +1,18 @@
 import moment from "moment";
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
-import FormWrapper from "components/FormWrapper/FormWrapper";
+import { FormWrapper } from "components";
 import { Popup, ProgressCircle } from "features";
 import { useToast } from "hooks";
 import { login } from "libs/redux/slices/userSlice";
 import ProfileForm from "pages/Profile/components/ProfileForm";
-import { getUser, updateUser } from "services/user";
+import { userService } from "services";
 import AvatarBox from "./components/AvatarBox";
 
 function Profile() {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.user);
-  const [avatar, setAvatar] = useState(user.avatar);
+  const [user, setUser] = useState({});
   const [progress, setProgress] = useState(0);
   const { Toast, options, toastEmitter } = useToast();
   const [popup, setPopup] = useState({
@@ -23,28 +22,33 @@ function Profile() {
     content: "",
   });
 
-  const INITIAL_VALUE = {
+  const INITIAL_VALUE = user?.username && {
     avatar: user.avatar,
     username: user.username,
+    password: user.password,
     email: user.email,
     dateOfBirth: user.dateOfBirth
       ? moment(user.dateOfBirth, "DD/MM/YYYY").toString()
       : "",
   };
 
+  const fetchData = () => {
+    userService
+      .getOne()
+      .then((response) => setUser(response.data))
+      .catch((error) => console.error(error));
+  };
+
   const handleUpdateUser = (data) => {
-    updateUser(user.guid, data, setProgress)
+    userService
+      .update(data, setProgress)
       .then((response) => {
-        if (response.affectedRows > 0) {
-          getUser(user.guid).then(() => {
-            dispatch(login({ ...user, ...data }));
-          });
-          toastEmitter("Đổi thông tin cá nhân thành công", "success");
-          setProgress(0);
-        }
+        dispatch(login({ ...user, ...data, ...response.data }));
+        toastEmitter("Đổi thông tin cá nhân thành công", "success");
+        setProgress(0);
       })
       .catch((error) => {
-        toastEmitter(error.data.error || error.data.message, "error");
+        toastEmitter(error, "error");
         setProgress(0);
       });
   };
@@ -67,7 +71,7 @@ function Profile() {
   };
 
   const handleSubmit = (values, { setSubmitting }) => {
-    values.avatar = avatar;
+    values.avatar = user.avatar;
     const changedValues = getChangedValues(values);
 
     Object.keys(changedValues).length > 0 && handleUpdateUser(changedValues);
@@ -77,7 +81,7 @@ function Profile() {
 
   const handleChooseAvatar = (e) => {
     const val = e.target.value;
-    setAvatar(val);
+    setUser((prev) => ({ ...prev, avatar: val }));
   };
 
   const handleOpenChooseAvatar = () => {
@@ -87,26 +91,37 @@ function Profile() {
     }));
   };
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <>
-      <FormWrapper title="Thông tin cá nhân">
-        <ProfileForm
-          avatar={avatar}
-          INITIAL_VALUE={INITIAL_VALUE}
-          handleSubmit={handleSubmit}
-          handleOpenChooseAvatar={handleOpenChooseAvatar}
-        />
-      </FormWrapper>
-      <Popup
-        popup={{
-          ...popup,
-          content: (
-            <AvatarBox value={avatar} handleOnChange={handleChooseAvatar} />
-          ),
-        }}
-        setPopup={setPopup}
-        height={350}
-      />
+      {user?.username ? (
+        <>
+          <FormWrapper title="Thông tin cá nhân">
+            <ProfileForm
+              avatar={user.avatar}
+              INITIAL_VALUE={INITIAL_VALUE}
+              handleSubmit={handleSubmit}
+              handleOpenChooseAvatar={handleOpenChooseAvatar}
+            />
+          </FormWrapper>
+          <Popup
+            popup={{
+              ...popup,
+              content: (
+                <AvatarBox
+                  value={user.avatar}
+                  handleOnChange={handleChooseAvatar}
+                />
+              ),
+            }}
+            setPopup={setPopup}
+            height={350}
+          />
+        </>
+      ) : null}
       <Toast {...options} />
       <ProgressCircle percentage={progress} />
     </>

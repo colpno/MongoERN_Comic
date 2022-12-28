@@ -8,7 +8,6 @@ export { default as Pagination } from "./Pagination/Pagination";
 export { default as Popup } from "./Popup/Popup";
 export { default as Recommend } from "./Recommend/Recommend";
 export { default as Dialog } from "./Dialog/Dialog";
-export { default as SideBar } from "./SideBar/SideBar";
 export { default as ProgressCircle } from "./ProgressCircle/ProgressCircle";
 export { default as Loading } from "./Loading/Loading";
 export { default as Search } from "./Search/Search";

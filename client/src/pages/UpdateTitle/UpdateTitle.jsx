@@ -1,75 +1,56 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import FormWrapper from "components/FormWrapper/FormWrapper";
-import TitleForm from "components/TitleForm";
+import { FormWrapper, TitleForm } from "components";
 import { Popup, ProgressCircle } from "features";
 import { useToast } from "hooks";
-import { getTitle, updateTitle } from "services/title";
-import { getAllTitleGenres } from "services/titleGenre";
 import { updateTitleFormValidation } from "validations/updateTitleForm.validation";
+import { titleService } from "services";
 
 function UpdateTitle() {
   const { titleId } = useParams();
   const [progress, setProgress] = useState(0);
   const [title, setTitle] = useState({});
-  const [titleGenres, setTitleGenres] = useState([]);
   const { Toast, options: toastOptions, toastEmitter } = useToast();
   const [popup, setPopup] = useState({
     trigger: false,
     title: "Thông báo",
     content: "Thay đổi thành công",
   });
-  const hasData = Object.keys(title).length > 0 && titleGenres.length > 0;
+  const hasData = Object.keys(title).length > 0;
   const INITIAL_VALUE = hasData && {
-    name: title.name,
+    title: title.title,
     summary: title.summary,
-    titleStatusId: `${title.approvedStatusId}`,
-    releaseDay: title.releaseDay,
-    genreId:
-      titleGenres.length > 0
-        ? titleGenres.map((genre) => {
-            return `${genre.genreId}`;
-          })
-        : [""],
+    // TODO title_status_id: `${title.approved_status_id}`,
+    release_day: title.release_day,
+    genres: title.genres,
     author: title.author,
-    coin: title.coin,
-    cover: title.cover,
-    largeCover: title.cover,
+    coin: `${title.coin}`,
+    cover: title.cover.source,
+    // TODO largeCover: title.cover.source,
   };
 
   const fetchData = () => {
-    const titlePromise = getTitle(titleId);
-    const titleGenresPromise = getAllTitleGenres({ titleId });
-
-    Promise.all([titlePromise, titleGenresPromise])
-      .then(([titleResponse, titleGenresResponse]) => {
-        setTitle(titleResponse);
-        setTitleGenres(titleGenresResponse);
+    titleService
+      .getOne(titleId)
+      .then((response) => {
+        setTitle(response.data);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   };
 
   const handleUpdate = (values) => {
-    updateTitle(
-      titleId,
-      {
-        oldCover: INITIAL_VALUE.cover.slice(
-          INITIAL_VALUE.cover.indexOf("comic"),
-          INITIAL_VALUE.cover.lastIndexOf(".")
-        ),
-        newValues: values,
-      },
-      setProgress
-    )
+    const data = { ...values, guid: title._guid };
+    if (values.cover) data.oldCover = title.cover;
+
+    titleService
+      .update(titleId, data, setProgress)
       .then((response) => {
-        if (response.affectedRows > 0) {
-          toastEmitter("Truyện đã được thay đổi thành công", "success");
-          setProgress(0);
-        }
+        toastEmitter(response.message, "success");
+        setProgress(0);
       })
       .catch((error) => {
-        toastEmitter(error.data.error || error.data.message, "error");
+        toastEmitter(error, "error");
         setProgress(0);
       });
   };
@@ -85,6 +66,14 @@ function UpdateTitle() {
     }, {});
 
     return changedValues;
+  };
+
+  const handleCancel = () => {
+    setPopup((prev) => ({
+      ...prev,
+      trigger: true,
+      content: "Bạn có chắc muốn quay lại?",
+    }));
   };
 
   const handleSubmit = (values, { setSubmitting }) => {
@@ -103,10 +92,11 @@ function UpdateTitle() {
         {hasData && (
           <TitleForm
             handleSubmit={handleSubmit}
+            handleCancel={handleCancel}
             initialValues={INITIAL_VALUE}
             imageBlob={{
-              cover: title.cover,
-              largeCover: title.cover,
+              cover: title.cover.source,
+              largeCover: title.cover.source,
             }}
             validationSchema={updateTitleFormValidation}
           />

@@ -1,18 +1,21 @@
 import classNames from "classnames/bind";
 import { useState } from "react";
 import { Container } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 
-import FormWrapper from "components/FormWrapper/FormWrapper";
+import { FormWrapper } from "components";
 import { Popup } from "features";
 import { useToast } from "hooks";
-import { forgotPassword } from "services/auth";
+import { setLoginInfo } from "libs/redux/slices/loginSlice";
+import { authService } from "services";
 import ForgotPasswordForm from "./components/ForgotPasswordForm";
 import styles from "./ForgotPassword.module.scss";
 
 const cx = classNames.bind(styles);
 
 function ForgotPassword() {
+  const dispatch = useDispatch();
   const { Toast, options, toastEmitter } = useToast();
   const [popup, setPopup] = useState({
     trigger: false,
@@ -39,16 +42,14 @@ function ForgotPassword() {
     const { username, email } = values;
 
     if (username && email) {
-      forgotPassword({ username, email })
+      authService
+        .forgotPassword(username, email)
         .then((response) => {
-          const content = (
-            <p style={{ textAlign: "center" }}>{response.message}</p>
-          );
-
+          dispatch(setLoginInfo(response.data));
           setPopup({
             ...popup,
             trigger: true,
-            content,
+            content: response.message,
           });
         })
         .catch((error) => {

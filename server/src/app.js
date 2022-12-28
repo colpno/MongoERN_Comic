@@ -8,6 +8,7 @@ import { socketConfig } from './config/socket.config.js';
 import { middlewares } from './middlewares/index.js';
 import routes from './routes/index.js';
 import connectMongoose from './helpers/connectMongoose.js';
+import errorHandler from './middlewares/errorHandler.middleware.js';
 
 const app = express();
 const server = http.createServer(app);
@@ -32,5 +33,7 @@ app.use(routes);
 //     console.log(`${moment().format('hh:mm:ss')} ${socket.id} left`);
 //   });
 // });
+
+app.use(errorHandler);
 
 export { server };

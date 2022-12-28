@@ -6,15 +6,15 @@ const authService = {
       const response = await authApi.login(username, password);
       return response;
     } catch (error) {
-      return error?.data?.error || error?.data?.message;
+      return Promise.reject(error.data);
     }
   },
   verifyLogin: async (id, username, email, otp) => {
     try {
-      const response = await authApi.verifyLogin(otp);
-      return response[0];
+      const response = await authApi.verifyLogin(id, username, email, otp);
+      return response;
     } catch (error) {
-      return error?.data?.error || error?.data?.message;
+      return Promise.reject(error.data);
     }
   },
   logout: async () => {
@@ -22,7 +22,7 @@ const authService = {
       const response = await authApi.logout();
       return response;
     } catch (error) {
-      return error?.data?.error || error?.data?.message;
+      return Promise.reject(error.data);
     }
   },
   verifyRegister: async (token) => {
@@ -30,7 +30,7 @@ const authService = {
       const response = await authApi.verifyRegister(token);
       return response;
     } catch (error) {
-      return error?.data?.error || error?.data?.message;
+      return Promise.reject(error.data);
     }
   },
   sendOTP: async (id, username, email) => {
@@ -38,7 +38,7 @@ const authService = {
       const response = await authApi.reSendOTP(id, username, email);
       return response;
     } catch (error) {
-      return error?.data?.error || error?.data?.message;
+      return Promise.reject(error.data);
     }
   },
   forgotPassword: async (username, email) => {
@@ -46,7 +46,7 @@ const authService = {
       const response = await authApi.forgot(username, email);
       return response;
     } catch (error) {
-      return error?.data?.error || error?.data?.message;
+      return Promise.reject(error.data);
     }
   },
   resetPassword: async (userId, password, token) => {
@@ -54,7 +54,7 @@ const authService = {
       const response = await authApi.reset(userId, password, token);
       return response;
     } catch (error) {
-      return error?.data?.error || error?.data?.message;
+      return Promise.reject(error.data);
     }
   },
 };

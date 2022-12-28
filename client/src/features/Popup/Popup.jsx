@@ -1,11 +1,10 @@
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
 
-import { Scrollbar } from "components";
-import Button from "components/Button";
+import { Scrollbar, Button } from "components";
 import { Dialog } from "features";
-import styles from "./assets/styles/Popup.module.scss";
-import YesNoPopupButtons from "./components/YesNoPopupButtons";
+import styles from "./styles/Popup.module.scss";
+import YesNoPopupButton from "./components/YesNoPopupButton";
 
 const cx = classNames.bind(styles);
 
@@ -23,7 +22,7 @@ function Popup({ popup, setPopup, yesno, width, center }) {
   );
 
   if (yesno) {
-    Component = <YesNoPopupButtons cx={cx} popup={popup} setPopup={setPopup} />;
+    Component = <YesNoPopupButton cx={cx} popup={popup} setPopup={setPopup} />;
   }
 
   const handleClickOutside = () => {

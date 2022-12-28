@@ -2,8 +2,7 @@ import PropTypes from "prop-types";
 import { Col } from "react-bootstrap";
 import { BiSort } from "react-icons/bi";
 
-import Button from "components/Button";
-import Select from "components/Select";
+import { Button, Select } from "components";
 import { memo } from "react";
 
 function InventoryInteract({ cx, handleSort, sortOptions, handleFilter }) {

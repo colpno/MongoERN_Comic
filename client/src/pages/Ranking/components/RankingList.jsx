@@ -1,15 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Col, Row } from "react-bootstrap";
+
 import RankingFigure from "./RankingFigure";
-import "../assets/styles/RankingList.scss";
+import "../styles/RankingList.scss";
 
 function RankingList({ col, titles, startRank }) {
   return (
     <Row>
       {titles.map((title, index) => {
         return (
-          <Col {...col} key={title.id} className="ranking-card__wrapper">
+          <Col {...col} key={title._id} className="ranking-card__wrapper">
             <RankingFigure rank={startRank + index} data={title} />
           </Col>
         );
@@ -28,7 +29,7 @@ RankingList.propTypes = {
   }),
   titles: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      _id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     }).isRequired
   ).isRequired,
   startRank: PropTypes.number.isRequired,

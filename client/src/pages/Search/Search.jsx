@@ -2,12 +2,10 @@ import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 
-import { CardList } from "components";
-import FormWrapper from "components/FormWrapper/FormWrapper";
+import { CardList, FormWrapper } from "components";
 import { NoData, Pagination } from "features";
 import { usePagination } from "hooks";
-import { getAllGenres } from "services/genre";
-import { getAllTitles } from "services/title";
+import { genreService, titleService } from "services";
 import { isEmpty } from "utils";
 import SearchForm from "./components/SearchForm";
 import styles from "./styles/Search.module.scss";
@@ -16,38 +14,38 @@ const cx = classNames.bind(styles);
 
 function Search() {
   const TITLES_PER_PAGE = 35;
-  const [genres, setGenres] = useState([]);
+  const [genreArray, setGenreArray] = useState([]);
   const [titles, setTitles] = useState([]);
   const { pagination, setPagination, setPaginationTotal } =
     usePagination(TITLES_PER_PAGE);
   const [initialValues, setInitialValues] = useState({
-    genreId: [],
+    genres: [],
     author: "",
     sort: "updatedAt",
-    order: "desc",
+    _order: "desc",
   });
   const [titleParams, setTitleParams] = useState({
-    sort: initialValues.sort,
-    order: initialValues.order,
-    page: pagination.page,
-    limit: pagination.limit,
+    _sort: initialValues.sort,
+    _order: initialValues.order,
+    _page: pagination.page,
+    _limit: pagination.limit,
   });
 
   const fetchData = (params = {}) => {
-    const genrePromise = getAllGenres();
-    const titlePromise = getAllTitles(params);
+    const genrePromise = genreService.getAll();
+    const titlePromise = titleService.getAll(params);
 
     Promise.all([titlePromise, genrePromise])
       .then(([titleResponse, genreResponse]) => {
-        setGenres(genreResponse);
+        setGenreArray(genreResponse);
         setTitles(titleResponse.data);
-        setPaginationTotal(titleResponse.pagination.total);
+        setPaginationTotal(titleResponse.paginate.total);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   };
 
-  const genreOptions = genres.map((genre) => ({
-    value: genre.guid,
+  const genreOptions = genreArray.map((genre) => ({
+    value: genre._id,
     label: genre.name,
   }));
 
@@ -86,19 +84,19 @@ function Search() {
     const { checkedValues, isValid } = checkChange(values);
 
     if (isValid) {
-      const { sort, order, genreId, author, ...otherValues } = checkedValues;
+      const { sort, order, genres, author, ...otherValues } = checkedValues;
       const params = {
         ...otherValues,
         author_like: author,
-        limit: pagination.limit,
-        page: 1,
+        _limit: pagination.limit,
+        _page: 1,
         sort,
         order,
       };
 
-      if (checkedValues.genreId) {
+      if (checkedValues.genres) {
         params.embed = "title_genre";
-        params.genreId = genreId;
+        params.genres = genres;
       }
 
       fetchData(params);

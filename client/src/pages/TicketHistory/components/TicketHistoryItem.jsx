@@ -4,7 +4,7 @@ import classNames from "classnames/bind";
 
 import { RentTicket } from "assets/images";
 import { convertToDateTimeString } from "utils/convertTime";
-import styles from "../assets/styles/TicketHistoryItem.module.scss";
+import styles from "../styles/TicketHistoryItem.module.scss";
 
 const cx = classNames.bind(styles);
 

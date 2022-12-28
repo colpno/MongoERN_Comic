@@ -1,11 +1,11 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import FormWrapper from "components/FormWrapper/FormWrapper";
-import TitleForm from "components/TitleForm";
+import { FormWrapper, TitleForm } from "components";
 import { Popup, ProgressCircle } from "features";
 import { useToast } from "hooks";
-import { addTitle } from "services/title";
+import { titleService } from "services";
 import { createTitleFormValidation } from "validations/createTitleForm.validation";
 
 function CreateTitle() {
@@ -20,13 +20,13 @@ function CreateTitle() {
   });
 
   const INITIAL_VALUE = {
-    name: "",
-    genreId: [],
+    title: "",
+    genres: [],
     summary: "",
     author: "",
     coin: "",
     cover: "",
-    releaseDay: "",
+    release_day: "",
     // TODO largeCoverTemp: "",
   };
 
@@ -43,15 +43,24 @@ function CreateTitle() {
   }, [popup.isConfirm]);
 
   const handleSubmit = (values, { setSubmitting }) => {
-    addTitle(values, setProgress)
+    const {
+      title,
+      cover,
+      author,
+      summary,
+      genres,
+      coin,
+      release_day: releaseDay,
+    } = values;
+
+    titleService
+      .add(title, cover, author, summary, genres, coin, releaseDay, setProgress)
       .then((response) => {
-        if (response.affectedRows > 0) {
-          toastEmitter("Truyện đã được thêm thành công", "success");
-          setProgress(0);
-        }
+        toastEmitter(response.message, "success");
+        setProgress(0);
       })
       .catch((error) => {
-        toastEmitter(error.data.error || error.data.message, "error");
+        toastEmitter(error, "error");
         setProgress(0);
       });
 

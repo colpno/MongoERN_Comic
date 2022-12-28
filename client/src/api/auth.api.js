@@ -32,7 +32,7 @@ const authApi = {
   },
 
   logout: () => {
-    return axiosClient.get(`${url}/logout`, { withCredentials: "include" });
+    return axiosClient.get(`${url}/logout`, { withCredentials: true });
   },
 
   forgot: (username, email) => {

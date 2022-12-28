@@ -5,10 +5,18 @@ import { useParams } from "react-router-dom";
 
 import { Recommend } from "features";
 import { useToast } from "hooks";
-import { setUserLike } from "libs/redux/slices/readingChapterSlice";
+import {
+  setChapter as setChapterStore,
+  setChapters as setChaptersStore,
+  setFavorite as setFavoriteStore,
+} from "libs/redux/slices/readingChapterSlice";
 import styles from "pages/Reading/assets/styles/Reading.module.scss";
-import { addFollow, deleteFollow, getAllFollows } from "services/follow";
-import { addUserLike, deleteUserLike } from "services/userLike";
+import {
+  chapterService,
+  favoriteService,
+  followService,
+  readingHistoryService,
+} from "services";
 import { isEmpty } from "utils";
 import {
   ReadingComics,
@@ -20,12 +28,12 @@ const cx = classNames.bind(styles);
 
 function Reading() {
   const dispatch = useDispatch();
-  const { titleId } = useParams();
-  const chapterImages = useSelector((state) => state.chapter.chapter.images);
-  const chapter = useSelector((state) => state.chapter.chapter.info);
+  const { chapterId, titleId } = useParams();
   const user = useSelector((state) => state.user.user);
-  const chapters = useSelector((state) => state.chapter.chapters);
-  const userLike = useSelector((state) => state.chapter.userLike);
+  const isLoggingIn = useSelector((state) => state.user.isLoggingIn);
+  const [chapter, setChapter] = useState({});
+  const [chapters, setChapters] = useState([]);
+  const [favorite, setFavorite] = useState({});
   const [follows, setFollows] = useState([]);
   const { Toast, options, toastEmitter } = useToast();
   const [controls, setControls] = useState({
@@ -34,44 +42,78 @@ function Reading() {
   });
 
   const fetchData = () => {
-    getAllFollows({
-      userId: user.guid,
+    const chapterPromise = chapterService.getOne(chapterId, false);
+    const chaptersPromise = chapterService.getAll(
+      {
+        titleId,
+        _sort: "order",
+        _order: "asc",
+      },
+      false
+    );
+    const favoritePromise = favoriteService.getAll({
+      userId: user._id,
+      chapterId,
+    });
+    const followPromise = followService.getAll({
+      userId: user._id,
       titleId,
-    })
-      .then((response) => setFollows(response))
-      .catch((error) => console.log(error));
+    });
+
+    Promise.all([
+      chapterPromise,
+      chaptersPromise,
+      favoritePromise,
+      followPromise,
+    ])
+      .then(
+        ([
+          chapterResponse,
+          chaptersResponse,
+          favoriteResponse,
+          followResponse,
+        ]) => {
+          setChapter(chapterResponse.data);
+          setChapters(chaptersResponse.data);
+          setFavorite(favoriteResponse.data);
+          setFollows(followResponse.data);
+        }
+      )
+      .catch((error) => console.error(error));
   };
 
   const handleUserLike = () => {
-    addUserLike(user.guid, chapter.guid)
+    favoriteService
+      .add(user._id, chapter._id)
       .then((response) => {
         toastEmitter(response.message, "success");
         setControls((prev) => ({ ...prev, isLiked: true }));
-        dispatch(setUserLike(response.data));
+        dispatch(setFavorite(response.data));
       })
       .catch((error) => {
-        toastEmitter(error.data.error, "error");
+        toastEmitter(error, "error");
       });
   };
 
   const handleRemoveUserLike = () => {
-    deleteUserLike(user.guid, chapter.guid)
+    favoriteService
+      .delete(user._id, chapter._id)
       .then(() => {
         setControls((prev) => ({ ...prev, isLiked: false }));
-        dispatch(setUserLike({}));
+        dispatch(setFavorite({}));
       })
       .catch((error) => {
-        toastEmitter(error.data.error, "error");
+        toastEmitter(error, "error");
       });
   };
 
   const handleLikeClick = () => {
-    if (isEmpty(user.guid)) {
+    if (isEmpty(user._id)) {
       toastEmitter("Bạn cần phải đăng nhập để thích truyện", "error");
       return;
     }
 
-    if (!userLike.guid && !controls.isLiked) {
+    if (!favorite._id && !controls.isLiked) {
       handleUserLike();
     }
     if (controls.isLiked) {
@@ -80,7 +122,8 @@ function Reading() {
   };
 
   const handleFollow = () => {
-    addFollow({ titleId })
+    followService
+      .add(titleId)
       .then((response) => {
         if (response.affectedRows > 0) {
           toastEmitter("Bạn đã theo dõi truyện", "success");
@@ -88,23 +131,24 @@ function Reading() {
         }
       })
       .catch((error) => {
-        toastEmitter(error.data.error, "error");
+        toastEmitter(error, "error");
       });
   };
 
   const handleUnFollow = () => {
-    deleteFollow(titleId)
+    followService
+      .delete(titleId)
       .then(() => {
         setControls((prev) => ({ ...prev, isFollowed: false }));
       })
       .catch((error) => {
         console.log("file: Reading.jsx ~ line 57 ~ error", error);
-        toastEmitter(error.data.error, "error");
+        toastEmitter(error, "error");
       });
   };
 
   const handleFollowClick = () => {
-    if (isEmpty(user.guid)) {
+    if (isEmpty(user._id)) {
       toastEmitter("Bạn cần phải đăng nhập để theo dõi truyện", "error");
       return;
     }
@@ -122,25 +166,44 @@ function Reading() {
   }, []);
 
   useEffect(() => {
-    if (userLike?.userId === user.guid) {
+    if (favorite?.user_id === user._id) {
       setControls((prev) => ({ ...prev, isLiked: true }));
     }
-    if (Object.keys(userLike).length === 0) {
+    if (Object.keys(favorite).length === 0) {
       setControls((prev) => ({ ...prev, isLiked: false }));
     }
-  }, [userLike]);
+  }, [favorite]);
 
   useEffect(() => {
-    if (follows?.userId === user.guid) {
+    if (follows?.user_id === user._id) {
       setControls((prev) => ({ ...prev, isFollowed: true }));
     }
   }, [follows]);
 
+  useEffect(() => {
+    chapter?._id && dispatch(setChapterStore(chapter));
+  }, [chapter]);
+
+  useEffect(() => {
+    favorite?._id && dispatch(setFavoriteStore(favorite));
+  }, [favorite]);
+
+  useEffect(() => {
+    chapters.length > 0 && dispatch(setChaptersStore(chapters));
+  }, [chapters]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      chapterService.update(chapterId, { view: 1 });
+      isLoggingIn && readingHistoryService.add(titleId, chapterId, user._id);
+    }, 60 * 1000);
+  }, []);
+
   return (
     <>
       <div className={cx("reading-page")}>
-        {chapterImages.length > 0 && (
-          <ReadingComics cx={cx} images={chapterImages} />
+        {chapter?.contents?.length > 0 && (
+          <ReadingComics cx={cx} images={chapter.contents} />
         )}
         <ReadingControls
           cx={cx}

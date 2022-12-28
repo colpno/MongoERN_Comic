@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { memo } from "react";
 import { Col, Row } from "react-bootstrap";
 
-import CardFigure from "components/CardFigure/CardFigure";
+import { CardFigure } from "components";
 import Styles from "./CardList.module.scss";
 
 const cx = classNames.bind(Styles);
@@ -19,12 +19,11 @@ function CardList({
 }) {
   return (
     <Row className={cx("cards-wrapper__cards")}>
-      {data.map((card) => {
+      {data.map((card, index) => {
         return (
-          <Col {...col} key={card.guid}>
+          <Col {...col} key={index}>
             <CardFigure
-              key={card.guid}
-              to={`/comic/title/${card.guid}`}
+              to={`/comic/title/${card._id}`}
               data={card}
               showTotalChapter={showTotalChapter}
               showSummary={showSummary}

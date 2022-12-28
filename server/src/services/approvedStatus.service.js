@@ -11,7 +11,7 @@ const approvedStatusService = {
     }
 
     const response = await ApprovedStatus.find(params);
-    return response;
+    return { data: response };
   },
   getOne: async (params = {}) => {
     const response = await ApprovedStatus.findOne(params);

@@ -1,15 +1,16 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { rootPersistConfig } from "libs/redux-persist/rootPersistConfig";
 import {
-  persistStore,
-  persistReducer,
   FLUSH,
-  REHYDRATE,
   PAUSE,
   PERSIST,
+  persistReducer,
+  persistStore,
   PURGE,
   REGISTER,
+  REHYDRATE,
 } from "redux-persist";
+
+import { rootPersistConfig } from "libs/redux-persist";
 import rootReducer from "./rootReducer";
 
 const handleMiddleware = (getDefaultMiddleware) => {
@@ -27,6 +28,8 @@ const store = configureStore({
   middleware: handleMiddleware,
 });
 
-export const persistor = persistStore(store);
+const persistor = persistStore(store);
+
+export { persistor };
 
 export default store;

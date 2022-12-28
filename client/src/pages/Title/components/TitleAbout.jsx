@@ -4,13 +4,14 @@ import PropTypes from "prop-types";
 import { AiOutlineInfoCircle, AiOutlineQuestionCircle } from "react-icons/ai";
 
 import { BuyTicket, ChargeIcon, RentTicket } from "assets/images";
-import styles from "pages/Title/assets/styles/TitleAbout.module.scss";
+import styles from "../styles/TitleAbout.module.scss";
 // TODO: import ChargeBar from "./ChargeBar";
 import ChargeExplainPopup from "./ChargeExplainPopup";
 import TicketExplainPopup from "./TicketExplainPopup";
 
+const cx = classNames.bind(styles);
+
 function TitleAbout({ user, title, setPopup }) {
-  const cx = classNames.bind(styles);
   const status = (sta) => {
     switch (sta) {
       case "finished":
@@ -29,18 +30,18 @@ function TitleAbout({ user, title, setPopup }) {
   return (
     <div className={cx("title-page__about")}>
       <div className={cx("title-page__about__published-status", "side-info")}>
-        {title.releaseDay === "finished" || title.releaseDay === "paused" ? (
+        {title.release_day === "finished" || title.release_day === "paused" ? (
           <>
             Tình trạng cập nhật:
-            <span className={cx(title.releaseDay)}>
-              {status(title.releaseDay)}
+            <span className={cx(title.release_day)}>
+              {status(title.release_day)}
             </span>
           </>
         ) : (
           <>
             Cập nhật mỗi tuần vào:
             <span className={cx("day-in-week")}>
-              {status(title.releaseDay)}
+              {status(title.release_day)}
             </span>
           </>
         )}
@@ -61,13 +62,15 @@ function TitleAbout({ user, title, setPopup }) {
         <div className={cx("user-tickets")}>
           <span className={cx("ticket")}>
             Vé thuê chương:
-            <span className={cx("rent-quantity")}>{user.ticketForRenting}</span>
+            <span className={cx("rent-quantity")}>
+              {user.ticket_for_renting}
+            </span>
             <strong className={cx("ticket-separate")}>x</strong>
             <RentTicket />
           </span>
           <span className={cx("ticket")}>
             Vẽ mua chương:
-            <span className={cx("buy-quantity")}>{user.ticketForBuying}</span>
+            <span className={cx("buy-quantity")}>{user.ticket_for_buying}</span>
             <strong className={cx("ticket-separate")}>x</strong>
             <BuyTicket />
           </span>
@@ -113,13 +116,13 @@ function TitleAbout({ user, title, setPopup }) {
 TitleAbout.propTypes = {
   setPopup: PropTypes.func.isRequired,
   title: PropTypes.shape({
-    approvedStatusId: PropTypes.string.isRequired,
-    releaseDay: PropTypes.string.isRequired,
+    approved_status_id: PropTypes.string.isRequired,
+    release_day: PropTypes.string.isRequired,
     // TODO: chargeTime: PropTypes.number.isRequired,
   }).isRequired,
   user: PropTypes.shape({
-    ticketForRenting: PropTypes.number.isRequired,
-    ticketForBuying: PropTypes.number.isRequired,
+    ticket_for_renting: PropTypes.number.isRequired,
+    ticket_for_buying: PropTypes.number.isRequired,
   }).isRequired,
 };
 

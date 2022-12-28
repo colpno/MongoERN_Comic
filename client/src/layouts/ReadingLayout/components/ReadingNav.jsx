@@ -1,4 +1,4 @@
-import Button from "components/Button";
+import { Button } from "components";
 import PropTypes from "prop-types";
 import { memo } from "react";
 import {
@@ -21,8 +21,8 @@ function ReadingNav({ cx, chapter, totalChapter, titleId }) {
       >
         <IoChevronBackCircleOutline />
       </Button>
-      <span className={cx("reading-header__nav__title")} title={chapter.name}>
-        {chapter.name}
+      <span className={cx("reading-header__nav__title")} title={chapter.title}>
+        {chapter.title}
       </span>
       <Button
         text
@@ -44,7 +44,7 @@ ReadingNav.propTypes = {
   cx: PropTypes.func.isRequired,
   chapter: PropTypes.shape({
     order: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
   }).isRequired,
   totalChapter: PropTypes.number.isRequired,
   titleId: PropTypes.string.isRequired,

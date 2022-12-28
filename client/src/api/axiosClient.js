@@ -11,10 +11,10 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.response.use(
   (response) => {
+    if (response?.data?.data?.paginate) {
+      return response.data.data;
+    }
     if (response?.data) {
-      if (response.data?.data) {
-        return response.data.data;
-      }
       return response.data;
     }
     return response;
@@ -24,8 +24,7 @@ axiosClient.interceptors.response.use(
     const { status } = response;
 
     if (status === 403) {
-      window.location.href = "/login";
-      alert(response.data.error);
+      window.location.href = "/404";
     }
     return Promise.reject(response);
   }

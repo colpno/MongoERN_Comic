@@ -2,7 +2,7 @@
 import classNames from "classnames/bind";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { formatTime } from "utils/convertTime";
-import styles from "./assets/Notice.module.scss";
+import styles from "./Notice.module.scss";
 
 const cx = classNames.bind(styles);
 

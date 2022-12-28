@@ -2,8 +2,8 @@ import classNames from "classnames/bind";
 import { useEffect, useMemo, useState } from "react";
 import { Container } from "react-bootstrap";
 
-import { getAllTitles } from "services/title";
-import styles from "./assets/styles/Ranking.module.scss";
+import { titleService } from "services";
+import styles from "./styles/Ranking.module.scss";
 import RankingList from "./components/RankingList";
 import Top5 from "./components/Top5";
 
@@ -16,14 +16,15 @@ function Ranking() {
   const hasData = titles.length > 0;
 
   const fetchData = () => {
-    getAllTitles({
-      sort: "like",
-      order: "asc",
-      limit: 50,
-      page: 1,
-    })
+    titleService
+      .getAll({
+        _sort: "like",
+        _order: "asc",
+        _limit: 50,
+        _page: 1,
+      })
       .then((response) => setTitles(response.data))
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   };
 
   useEffect(() => {

@@ -14,7 +14,7 @@ const readingChapterSlice = createSlice({
       state.chapters = action.payload;
     },
     setChapter: (state, action) => {
-      state.chapter.info = action.payload;
+      state.chapter = action.payload;
     },
     setFavorite: (state, action) => {
       state.favorite = action.payload;

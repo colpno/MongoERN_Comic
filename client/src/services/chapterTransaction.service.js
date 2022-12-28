@@ -7,7 +7,7 @@ const chapterTransactionService = {
 
     // return response;
     // } catch (error) {
-    //   return error?.data?.error || error?.data?.message;
+    //   return Promise.reject(error.data);
     // }
 
     return { purchasedChapters: [], hiredChapters: [] };

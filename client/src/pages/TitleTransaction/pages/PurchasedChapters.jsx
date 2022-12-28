@@ -3,16 +3,16 @@ import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
-import GridTable from "components/GridTable";
+import { GridTable } from "components";
 import { NoData, Pagination } from "features";
-import { getAllPurchasedChapters } from "services/purchasedChapter";
+import { chapterTransactionService } from "services";
 
 function PurchasedChapters({ cx, titles }) {
   const user = useSelector((state) => state.user.user);
   const [chapters, setChapters] = useState([]);
   const [pagination, setPagination] = useState({
-    page: 1,
-    limit: 30,
+    _page: 1,
+    _limit: 30,
     total: 0,
   });
 
@@ -20,30 +20,33 @@ function PurchasedChapters({ cx, titles }) {
   chapters.forEach((chapter) => {
     finalData.push({
       chapter,
-      title: titles.find((title) => chapter.titleId === title.id),
+      title: titles.find((title) => chapter.title_id === title._id),
     });
   });
   const hasData = finalData.length > 0;
 
   const fetchData = () => {
     const params = {
-      userId: user.guid,
-      page: pagination.page,
-      limit: pagination.limit,
+      userId: user.id,
+      _page: pagination.page,
+      _limit: pagination.limit,
     };
-    getAllPurchasedChapters(params)
+    chapterTransactionService
+      .getAll(params)
       .then((response) => {
-        const purchasedChapters = response.data.map(
-          (purchasedChapter) => purchasedChapter.chapter
+        const purchasedChapters = response.data.filter(
+          (purchasedChapter) =>
+            purchasedChapter.expiredAt !== "" &&
+            purchasedChapter.expiredAt !== null
         );
 
         setChapters(purchasedChapters);
         setPagination((prev) => ({
           ...prev,
-          total: response.pagination.total,
+          total: response.paginate.total,
         }));
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   };
 
   useEffect(() => {
@@ -65,14 +68,14 @@ function PurchasedChapters({ cx, titles }) {
               const { title, chapter } = titleAndChapter;
 
               return (
-                <Row className={cx("transaction__container")} key={chapter.id}>
+                <Row className={cx("transaction__container")} key={chapter._id}>
                   <Col md={8} className={cx("transaction__container__content")}>
                     <div className={cx("box-img")}>
-                      <img src={title.cover} alt={title.name} />
+                      <img src={title.cover.source} alt={title.title} />
                     </div>
                     <div>
-                      <p className={cx("title")}>{title.name}</p>
-                      <p className={cx("chapter")}>{chapter.name}</p>
+                      <p className={cx("title")}>{title.title}</p>
+                      <p className={cx("chapter")}>{chapter.title}</p>
                     </div>
                   </Col>
                 </Row>
@@ -96,9 +99,11 @@ PurchasedChapters.propTypes = {
   cx: PropTypes.func.isRequired,
   titles: PropTypes.arrayOf(
     PropTypes.shape({
-      guid: PropTypes.string.isRequired,
-      cover: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired,
+      cover: PropTypes.shape({
+        source: PropTypes.string.isRequired,
+      }).isRequired,
+      title: PropTypes.string.isRequired,
     }).isRequired
   ).isRequired,
 };

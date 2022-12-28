@@ -4,7 +4,7 @@ import { Container } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
 import { BannerSlider } from "features";
-import styles from "pages/Home/assets/styles/Home.module.scss";
+import styles from "./styles/Home.module.scss";
 import { ComicSection, Notification } from "./components";
 
 const cx = classNames.bind(styles);
@@ -15,8 +15,8 @@ function Home() {
   const banners = useMemo(
     () =>
       top5Titles.map((title) => ({
-        image: title.cover,
-        link: `/comic/title/${title.guid}`,
+        image: title.cover.source,
+        link: `/comic/title/${title._id}`,
       })),
     [top5Titles]
   );
@@ -24,29 +24,20 @@ function Home() {
   return (
     <main className={cx("home")}>
       <BannerSlider images={banners} />
-      <section className={cx("section-comic")}>
-        <Container>
-          <h1 className={cx("title", "line-clamp")}>Comic</h1>
-        </Container>
-        <ComicSection />
-      </section>
+      <ComicSection />
       <Notification />
-      <section className={cx("section-novel")}>
-        <Container>
-          <h1 className={cx("title")}>Novels</h1>
-        </Container>
-        <div className={cx("novel-action")} />
-        <div className={cx("novel-horror")} />
-        <div className={cx("novel-ranking")} />
-      </section>
-      <section className={cx("section-anime")}>
-        <Container>
-          <h1 className={cx("title")}>Anime</h1>
-        </Container>
-        <div className={cx("anime-action")} />
-        <div className={cx("anime-horror")} />
-        <div className={cx("anime-ranking")} />
-      </section>
+      <Container>
+        <h1 className={cx("title")}>Novels</h1>
+        <section className={cx("novel-action")} />
+        <section className={cx("novel-horror")} />
+        <section className={cx("novel-ranking")} />
+      </Container>
+      <Container>
+        <h1 className={cx("title")}>Anime</h1>
+        <section className={cx("anime-action")} />
+        <section className={cx("anime-horror")} />
+        <section className={cx("anime-ranking")} />
+      </Container>
     </main>
   );
 }

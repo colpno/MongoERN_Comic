@@ -7,7 +7,7 @@ import { roundNumByUnit, separateNumberDigit } from "utils";
 
 import { Popup } from "features";
 import { setMyTitles } from "libs/redux/slices/titleSlice";
-import { getAllTitles } from "services/title";
+import { titleService } from "services";
 import {
   BookLine,
   ChatLine,
@@ -34,11 +34,12 @@ function StatisticCount() {
   });
 
   const fetchData = () => {
-    getAllTitles({
-      userId: user.guid,
-    })
-      .then((response) => setTitles(response))
-      .catch((error) => console.log(error));
+    titleService
+      .getAll({
+        user_id: user._id,
+      })
+      .then((response) => setTitles(response.data))
+      .catch((error) => console.error(error));
   };
 
   const handleIncomeExplainClick = () => {

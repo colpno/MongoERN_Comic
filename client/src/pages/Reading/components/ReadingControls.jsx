@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-import Button from "components/Button";
+import { Button } from "components";
 import { AiFillApple, AiFillHeart, AiFillStar } from "react-icons/ai";
 import { FaShareAlt } from "react-icons/fa";
 import GGPlay from "../assets/images/icons8-google-play-48.png";

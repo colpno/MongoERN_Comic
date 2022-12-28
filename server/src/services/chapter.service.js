@@ -1,5 +1,34 @@
 import paginateSort from '../helpers/paginateSort.js';
-import { Chapter } from '../models/index.js';
+import { Chapter, Title } from '../models/index.js';
+import cloudinaryService from './cloudinary.service.js';
+
+const cloudOptions = (titleGuid, chapterGuid, path = '') => ({
+  upload_preset: process.env.CLOUDINARY_TITLE_UPLOAD_PRESET,
+  folder: `comic/titles/${titleGuid}/chapters/${chapterGuid}/${path}`,
+});
+
+const uploadCover = async (cover, titleGuid, chapterGuid) => {
+  const response = await cloudinaryService.upload(
+    cover,
+    cloudOptions(titleGuid, chapterGuid, 'cover')
+  );
+  return response;
+};
+
+const uploadContents = async (contents, titleGuid, chapterGuid) => {
+  const promises = contents.map(async (content) => {
+    const finalContent = await cloudinaryService.upload(
+      content,
+      cloudOptions(titleGuid, chapterGuid, 'contents')
+    );
+
+    return finalContent;
+  });
+
+  const finalContents = await Promise.all(promises);
+
+  return finalContents;
+};
 
 const chapterService = {
   getAll: async (params = {}) => {
@@ -11,7 +40,7 @@ const chapterService = {
     }
 
     const response = await Chapter.find(params);
-    return response;
+    return { data: response };
   },
   getOne: async (params = {}) => {
     const response = await Chapter.findOne(params);
@@ -19,23 +48,21 @@ const chapterService = {
   },
   add: async (
     titleId = '',
-    approvedStatusId = '',
     title = '',
-    cover = '',
-    contents = '',
+    cover = {},
+    contents = [],
     order = 1,
     cost = false,
-    cloudPublicId = ''
+    guid = ''
   ) => {
     const model = new Chapter({
       title_id: titleId,
-      approved_status_id: approvedStatusId,
       title,
       cover,
       contents,
       order,
       cost,
-      cloud_public_id: cloudPublicId,
+      _guid: guid,
     });
 
     const response = await model.save();
@@ -48,6 +75,26 @@ const chapterService = {
   delete: async (id) => {
     const response = await Chapter.findOneAndDelete({ _id: id });
     return response;
+  },
+  uploadToCloud: async (cover, contents, titleId, chapterGuid) => {
+    const titleObject = cover || contents ? await Title.findById(titleId) : undefined;
+
+    const finalCover = cover ? await uploadCover(cover, titleObject._guid, chapterGuid) : undefined;
+
+    const finalContents =
+      contents?.length > 0
+        ? await uploadContents(contents, titleObject._guid, chapterGuid)
+        : undefined;
+
+    return { finalCover, finalContents };
+  },
+  removeFromCloud: async (contents) => {
+    const promises = contents?.map(async (publicId) => {
+      const cloudResponse = await cloudinaryService.remove(publicId);
+      return cloudResponse;
+    });
+
+    await Promise.all(promises);
   },
 };
 

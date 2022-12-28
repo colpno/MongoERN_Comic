@@ -4,7 +4,7 @@ import { Col, Row } from "react-bootstrap";
 
 import { CircleP } from "assets/images";
 import { convertToDateTimeString } from "utils/convertTime";
-import styles from "../assets/styles/PointHistoryItem.module.scss";
+import styles from "../styles/PointHistoryItem.module.scss";
 
 const cx = classNames.bind(styles);
 
