@@ -16,9 +16,16 @@ function CardList({
   showAuthor,
   showLike,
   showView,
+
+  dropRow,
 }) {
+  const classes = `${cx(
+    "cards-wrapper__cards",
+    dropRow ? "drop-row" : null
+  )} row`;
+
   return (
-    <Row className={cx("cards-wrapper__cards")}>
+    <Row className={classes}>
       {data.map((card, index) => {
         return (
           <Col {...col} key={index}>
@@ -53,6 +60,7 @@ CardList.propTypes = {
   showLike: PropTypes.bool,
   showView: PropTypes.bool,
   wrap: PropTypes.bool,
+  dropRow: PropTypes.bool,
 };
 
 CardList.defaultProps = {
@@ -63,6 +71,7 @@ CardList.defaultProps = {
   showLike: true,
   showView: true,
   wrap: false,
+  dropRow: true,
 };
 
 export default memo(CardList);

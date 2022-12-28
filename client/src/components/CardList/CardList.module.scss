@@ -1,5 +1,6 @@
 @use "assets/styles/variables";
 @use "assets/styles/mixins";
+@use "components/Scrollbar/Scrollbar.module.scss";
 
 .cards-wrapper {
   margin-bottom: 12px;
@@ -49,4 +50,11 @@
       padding-bottom: 1.4rem;
     }
   }
+}
+
+.drop-row {
+  flex-wrap: nowrap;
+
+  @extend .scrollbar;
+  @extend .x-axis;
 }
