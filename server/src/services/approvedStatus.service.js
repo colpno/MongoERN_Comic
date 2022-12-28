@@ -3,7 +3,7 @@ import { ApprovedStatus } from '../models/index.js';
 
 const approvedStatusService = {
   getAll: async (params = {}) => {
-    const { _page, _limit, _sort, _order } = params;
+    const { _limit, _sort, _order } = params;
 
     if (_limit || (_sort && _order)) {
       const response = await paginateSort(params, ApprovedStatus);

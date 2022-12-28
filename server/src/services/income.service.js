@@ -4,7 +4,7 @@ import { MIN_MONTH, MAX_YEAR } from '../validations/index.js';
 
 const incomeService = {
   getAll: async (params = {}) => {
-    const { _page, _limit, _sort, _order } = params;
+    const { _limit, _sort, _order } = params;
 
     if (_limit || (_sort && _order)) {
       const response = await paginateSort(params, Income);
