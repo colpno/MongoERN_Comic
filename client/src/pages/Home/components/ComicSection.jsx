@@ -31,26 +31,6 @@ function ComicSection() {
     return approvedTitles;
   };
 
-  const fetchData = () => {
-    const titlesPromise = titleService.getAll();
-    const genresPromise = genreService.getAll({
-      _sort: "_id",
-      _order: "asc",
-      _limit: 4,
-      _page: 1,
-    });
-
-    Promise.all([titlesPromise, genresPromise])
-      .then(([titlesResponse, genresResponse]) => {
-        const top5 = getTop5Titles(titlesResponse.data);
-        const approvedTitles = getApprovedTitles(titlesResponse.data);
-
-        setGenres(genresResponse.data);
-        setTitles({ top5, approvedTitles });
-      })
-      .catch((error) => console.error(error));
-  };
-
   useEffect(() => {
     const genreLength = genres.length;
     const data = genres.map((genre, genreIndex) => {
@@ -81,7 +61,22 @@ function ComicSection() {
   }, [titles.approvedTitles, genres]);
 
   useEffect(() => {
-    fetchData();
+    const titlesPromise = titleService.getAll();
+    const genresPromise = genreService.getAll({
+      _sort: "_id",
+      _order: "asc",
+      _limit: 4,
+    });
+
+    Promise.all([titlesPromise, genresPromise])
+      .then(([titlesResponse, genresResponse]) => {
+        const top5 = getTop5Titles(titlesResponse.data);
+        const approvedTitles = getApprovedTitles(titlesResponse.data);
+
+        setGenres(genresResponse.data);
+        setTitles({ top5, approvedTitles });
+      })
+      .catch((error) => console.error(error));
   }, []);
 
   useEffect(() => {
