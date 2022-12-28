@@ -1,9 +1,9 @@
 import classNames from "classnames/bind";
-import { useEffect, useState } from "react";
-import { Col, Container, Row } from "react-bootstrap";
+import { useEffect, useMemo, useState } from "react";
+import { Container } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 
-import { CardList } from "components";
+import { CardListWithTitle } from "components";
 import { genreService, titleService } from "services";
 import styles from "./ContentList.module.scss";
 
@@ -14,34 +14,33 @@ function ContentList() {
   const [titles, setTitles] = useState([]);
   const [genre, setGenre] = useState({});
 
-  const fetchData = () => {
+  const data = useMemo(
+    () => ({
+      name: genre.name,
+      titles,
+    }),
+    [genre, titles]
+  );
+
+  useEffect(() => {
     genreService
       .getOne(genreId)
       .then((genreResponse) => {
-        setGenre(genreResponse);
+        setGenre(genreResponse.data);
 
         titleService
           .getAll({ genres_in: genreResponse.data.name })
-          .then((titleResponse) => {
-            setTitles(titleResponse.data);
-          })
+          .then((titleResponse) => setTitles(titleResponse.data))
           .catch((titleError) => console.log(titleError));
       })
       .catch((error) => console.error(error));
-  };
-
-  useEffect(() => {
-    fetchData();
   }, []);
 
   return (
     <Container className={cx("content-list-page")}>
-      <Row>
-        <Col>
-          <h3 className={cx("title")}>{genre.name}</h3>
-        </Col>
-      </Row>
-      <CardList data={titles} col={{ lg: 2 }} />
+      {!!data.name && data.titles.length > 0 ? (
+        <CardListWithTitle data={data} col={{ xs: 6, sm: 3, lg: 2 }} />
+      ) : null}
     </Container>
   );
 }
