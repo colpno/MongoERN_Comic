@@ -6,7 +6,7 @@ const titleReportService = {
   getAll: async (params = {}) => {
     const { _page, _limit, _sort, _order } = params;
 
-    if ((_page && _limit) || (_sort && _order)) {
+    if (_limit || (_sort && _order)) {
       const response = await paginateSort(params, TitleReport);
       return response;
     }
