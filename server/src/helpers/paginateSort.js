@@ -28,7 +28,6 @@ const paginateSort = async (queries, MongooseModel) => {
 
   if (_limit) {
     const params = { ...queries };
-    // console.log('file: paginateSort.js:29 ~ params', params);
 
     delete params._page;
     delete params._limit;
