@@ -22,9 +22,11 @@ function CardListWithTitle({
     <div className={cx(`cards-wrapper`, wrap ? "wrap" : "")}>
       <header className={cx("cards-wrapper__head")}>
         <h3 className={cx("cards-wrapper__head__title")}>{data.name}</h3>
-        <Button text to={`/content-list/${data._id}`}>
-          Xem thêm
-        </Button>
+        {data._id ? (
+          <Button text to={`/content-list/${data._id}`}>
+            Xem thêm
+          </Button>
+        ) : null}
       </header>
       <CardList
         col={col}
@@ -48,7 +50,7 @@ CardListWithTitle.propTypes = {
     xxl: PropTypes.number,
   }),
   data: PropTypes.shape({
-    _id: PropTypes.string.isRequired,
+    _id: PropTypes.string,
     name: PropTypes.string.isRequired,
     titles: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired,
   }).isRequired,
