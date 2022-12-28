@@ -32,6 +32,7 @@ function Top5({ titles }) {
                   boxImg: cx("box-img"),
                   content: cx("figure__content"),
                 }}
+                showSummary
               />
             </Col>
           );
@@ -39,8 +40,8 @@ function Top5({ titles }) {
         {top3.map((data, index) => {
           return (
             <Col
-              md={12}
-              lg={4}
+              md={{ span: 8, offset: 2 }}
+              lg={{ span: 4, offset: 0 }}
               key={index}
               className={cx("top5-wrapper__cards__card", "top-3")}
             >
