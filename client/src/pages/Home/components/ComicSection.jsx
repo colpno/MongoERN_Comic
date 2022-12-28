@@ -6,7 +6,6 @@ import { useDispatch } from "react-redux";
 import { CardListWithTitle } from "components";
 import { setTop5Titles } from "libs/redux/slices/titleSlice";
 import { genreService, titleService } from "services";
-import { sortArray } from "utils/arrayMethods";
 import styles from "../styles/ComicSection.module.scss";
 import ComicRankingSection from "./ComicRankingSection";
 
@@ -17,19 +16,6 @@ function ComicSection() {
   const [genres, setGenres] = useState([]);
   const [titles, setTitles] = useState({ top5: [], approvedTitles: [] });
   const [titlesByGenre, setTitlesByGenre] = useState([]);
-
-  const getTop5Titles = (titleArray = []) => {
-    const sortedTitles = sortArray(titleArray, "like", "asc");
-    const top5 = sortedTitles.slice(0, 5);
-    return top5;
-  };
-
-  const getApprovedTitles = (titleArray = []) => {
-    const approvedTitles = titleArray.filter(
-      (title) => title.approved_status_id === "63a6fb6216ee77053d6feb93"
-    );
-    return approvedTitles;
-  };
 
   useEffect(() => {
     const genreLength = genres.length;
@@ -61,20 +47,30 @@ function ComicSection() {
   }, [titles.approvedTitles, genres]);
 
   useEffect(() => {
-    const titlesPromise = titleService.getAll();
+    const top5Promise = titleService.getAll({
+      _sort: "like",
+      _order: "desc",
+      _limit: 5,
+    });
     const genresPromise = genreService.getAll({
       _sort: "_id",
       _order: "asc",
       _limit: 4,
     });
 
-    Promise.all([titlesPromise, genresPromise])
-      .then(([titlesResponse, genresResponse]) => {
-        const top5 = getTop5Titles(titlesResponse.data);
-        const approvedTitles = getApprovedTitles(titlesResponse.data);
+    Promise.all([top5Promise, genresPromise])
+      .then(([top5Response, genresResponse]) => {
+        const top5 = top5Response.data;
+
+        const allGenres = genresResponse.data.map((genre) => genre.name);
+
+        titleService.getAll({ genres_in: allGenres }).then((titleResponse) => {
+          const approvedTitles = titleResponse.data;
+
+          setTitles({ top5, approvedTitles });
+        });
 
         setGenres(genresResponse.data);
-        setTitles({ top5, approvedTitles });
       })
       .catch((error) => console.error(error));
   }, []);
