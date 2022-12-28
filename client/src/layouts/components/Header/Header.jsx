@@ -7,8 +7,8 @@ import { useLocation } from "react-router-dom";
 import { SwiperSlide } from "swiper/react";
 
 import { Logo } from "assets/images";
-import { Button } from "components";
-import { HEADER_MENU } from "constants/menu.constant";
+import { Button, ToggleableSubNavbar } from "components";
+import { HEADER_MENU, MOBILE_NAV_MENU } from "constants/menu.constant";
 import { Slider } from "features";
 import { toggleHeaderNavBar } from "libs/redux/slices/globalSlice";
 import Avatar from "./components/Avatar";
@@ -33,50 +33,53 @@ function Header({ menu }) {
   };
 
   return (
-    <header className={cx("header")}>
-      <Container fluid="md">
-        <div className={cx("desktop-screen")}>
-          <div className={cx("logo")}>
-            <Button wrapper to="/">
-              <Logo className={cx("logo")} />
+    <>
+      <header className={cx("header")}>
+        <Container fluid="md">
+          <div className={cx("desktop-screen")}>
+            <div className={cx("logo")}>
+              <Button wrapper to="/">
+                <Logo className={cx("logo")} />
+              </Button>
+            </div>
+            <Button className={cx("sub-navbar--toggle")}>
+              <FaBars onClick={handleToggleMobileNavBar} />
             </Button>
+            <Slider
+              outsideNavigation
+              grabCursor
+              slidesPerView={4}
+              breakpoints={{
+                0: { slidesPerView: 1 },
+                996: { slidesPerView: 1 },
+                1200: { slidesPerView: 4 },
+              }}
+              className={cx("nav-menu")}
+            >
+              {HEADER_MENU.map((nav, index) => {
+                return (
+                  <SwiperSlide key={index}>
+                    <Button
+                      wrapper
+                      to={nav.href}
+                      className={cx(
+                        "nav-link",
+                        url.includes(nav.href) ? "active" : ""
+                      )}
+                    >
+                      {nav.label}
+                    </Button>
+                  </SwiperSlide>
+                );
+              })}
+            </Slider>
+            <Search />
+            <Avatar />
           </div>
-          <Button className={cx("sub-navbar--toggle")}>
-            <FaBars onClick={handleToggleMobileNavBar} />
-          </Button>
-          <Slider
-            outsideNavigation
-            grabCursor
-            slidesPerView={4}
-            breakpoints={{
-              0: { slidesPerView: 1 },
-              996: { slidesPerView: 1 },
-              1200: { slidesPerView: 4 },
-            }}
-            className={cx("nav-menu")}
-          >
-            {HEADER_MENU.map((nav, index) => {
-              return (
-                <SwiperSlide key={index}>
-                  <Button
-                    wrapper
-                    to={nav.href}
-                    className={cx(
-                      "nav-link",
-                      url.includes(nav.href) ? "active" : ""
-                    )}
-                  >
-                    {nav.label}
-                  </Button>
-                </SwiperSlide>
-              );
-            })}
-          </Slider>
-          <Search />
-          <Avatar />
-        </div>
-      </Container>
-    </header>
+        </Container>
+      </header>
+      <ToggleableSubNavbar menu={MOBILE_NAV_MENU} />
+    </>
   );
 }
 

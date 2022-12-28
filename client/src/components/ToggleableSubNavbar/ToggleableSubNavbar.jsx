@@ -14,7 +14,7 @@ function ToggleableSubNavbar({ menu }) {
   const isToggle = useSelector((state) => state.global.toggleHeaderNavBar);
 
   const navbarRef = useClickOutSide(isToggle, () =>
-    dispatch(toggleHeaderNavBar(isToggle))
+    dispatch(toggleHeaderNavBar(!isToggle))
   );
 
   return (

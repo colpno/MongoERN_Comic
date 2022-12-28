@@ -16,4 +16,8 @@
   &.active {
     top: var.$header-height;
   }
+
+  :global(.col) {
+    display: flex;
+  }
 }
