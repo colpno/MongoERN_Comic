@@ -4,6 +4,7 @@ const initialState = {
   titles: [],
   myTitles: [],
   top5: [],
+  genresOfTitle: [],
 };
 
 const titleSlice = createSlice({
@@ -19,11 +20,15 @@ const titleSlice = createSlice({
     setTop5Titles: (state, action) => {
       state.top5 = action.payload;
     },
+    setGenresOfTitle: (state, action) => {
+      state.genresOfTitle = action.payload;
+    },
   },
 });
 
 const { reducer: titleReducer, actions } = titleSlice;
 
-export const { setTitles, setMyTitles, setTop5Titles } = actions;
+export const { setTitles, setMyTitles, setTop5Titles, setGenresOfTitle } =
+  actions;
 
 export default titleReducer;
