@@ -1,5 +1,5 @@
 import express from 'express';
-import paymentMethodController from '../controllers/paymentMethod.controller.js';
+import { paymentMethodController } from '../controllers/index.js';
 import { isAdmin } from '../middlewares/authenticate.middleware.js';
 
 const route = express.Router();

@@ -1,5 +1,5 @@
 import express from 'express';
-import readingHistoryController from '../controllers/readingHistory.controller.js';
+import { readingHistoryController } from '../controllers/index.js';
 import { isAuthenticated } from '../middlewares/authenticate.middleware.js';
 
 const route = express.Router();

@@ -1,5 +1,5 @@
 import express from 'express';
-import favoriteController from '../controllers/favorite.controller.js';
+import { favoriteController } from '../controllers/index.js';
 import { isAuthenticated } from '../middlewares/authenticate.middleware.js';
 
 const favoriteRoute = express.Router();

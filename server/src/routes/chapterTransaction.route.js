@@ -1,5 +1,5 @@
 import express from 'express';
-import chapterTransactionController from '../controllers/chapterTransaction.controller.js';
+import { chapterTransactionController } from '../controllers/index.js';
 import { isAuthenticated } from '../middlewares/authenticate.middleware.js';
 
 const route = express.Router();

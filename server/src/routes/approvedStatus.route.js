@@ -1,5 +1,5 @@
 import express from 'express';
-import approvedStatusController from '../controllers/approvedStatus.controller.js';
+import { approvedStatusController } from '../controllers/index.js';
 import { isAdmin } from '../middlewares/authenticate.middleware.js';
 
 const route = express.Router();

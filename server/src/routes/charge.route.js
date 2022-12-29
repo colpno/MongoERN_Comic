@@ -1,5 +1,5 @@
 import express from 'express';
-import vnpayController from '../controllers/vnpay.controllers.js';
+import { vnpayController } from '../controllers/index.js';
 import { isAuthenticated } from '../middlewares/authenticate.middleware.js';
 
 const route = express.Router();

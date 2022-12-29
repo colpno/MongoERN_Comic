@@ -1,5 +1,5 @@
 import express from 'express';
-import followController from '../controllers/follow.controller.js';
+import { followController } from '../controllers/index.js';
 import { isAuthenticated } from '../middlewares/authenticate.middleware.js';
 
 const route = express.Router();
