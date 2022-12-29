@@ -115,9 +115,8 @@ function TextAreaQuill({
       <ReactQuill
         modules={TextAreaQuill.modules}
         formats={TextAreaQuill.formats}
-        onChange={onChange}
+        onChange={onChange(name)}
         value={value}
-        name={name}
         placeholder={placeholder}
       />
       {/* <span
