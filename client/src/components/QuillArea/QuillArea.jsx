@@ -2,7 +2,6 @@ import PropTypes from "prop-types";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import classNames from "classnames/bind";
-import Feedback from "react-bootstrap/esm/Feedback";
 import { memo, useEffect } from "react";
 
 import styles from "./QuillArea.module.scss";
@@ -13,10 +12,8 @@ function TextAreaQuill({
   name,
   value,
   onChange,
-  error,
 
   placeholder,
-  maxLength,
 
   header,
   bold,
@@ -123,10 +120,10 @@ function TextAreaQuill({
         name={name}
         placeholder={placeholder}
       />
-      <span
+      {/* <span
         className={cx("text-length")}
       >{`${value.length}/${maxLength}`}</span>
-      <Feedback type="invalid">{error}</Feedback>
+      <Feedback type="invalid">{error}</Feedback> */}
     </div>
   );
 }
@@ -160,19 +157,13 @@ TextAreaQuill.formats = [
 TextAreaQuill.propTypes = {
   name: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
-  // onBlur: PropTypes.func,
   onChange: PropTypes.func.isRequired,
   form: PropTypes.shape({
     touched: PropTypes.shape({}),
     errors: PropTypes.shape({}),
   }),
-  error: PropTypes.string,
-  // touched: PropTypes.bool,
 
   placeholder: PropTypes.string,
-  maxLength: PropTypes.number,
-  // readOnly: PropTypes.bool,
-  // rows: PropTypes.number,
 
   header: PropTypes.bool,
   bold: PropTypes.bool,
@@ -189,15 +180,9 @@ TextAreaQuill.propTypes = {
 };
 
 TextAreaQuill.defaultProps = {
-  // onBlur: () => {},
   form: {},
-  error: "",
-  // touched: false,
 
   placeholder: "",
-  maxLength: 1000,
-  // readOnly: false,
-  // rows: 5,
 
   header: false,
   bold: false,
