@@ -12,21 +12,7 @@
     align-items: center;
     justify-content: space-between;
 
-    position: relative;
-
-    &::before {
-      position: absolute;
-      content: "";
-      top: 0;
-      bottom: 0;
-      left: 0;
-      background-color: variables.$primary;
-      width: 4px;
-      border-radius: 100vmax;
-    }
-
     &__title {
-      padding-left: 20px;
       @include mixins.singleLineClamp();
     }
   }

@@ -1,0 +1,22 @@
+@use "assets/styles/variables" as var;
+
+.mark {
+  padding-left: 1.3rem;
+
+  position: relative;
+
+  & > * {
+    vertical-align: middle;
+  }
+
+  &::before {
+    position: absolute;
+    content: "";
+    top: 0;
+    bottom: 0;
+    left: 0;
+    background-color: var.$primary;
+    width: 4px;
+    border-radius: 100vmax;
+  }
+}

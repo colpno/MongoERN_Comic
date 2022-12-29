@@ -2,7 +2,7 @@ import classNames from "classnames/bind";
 import PropTypes from "prop-types";
 import { memo } from "react";
 
-import { Button } from "components";
+import { Button, HeadTitleMark } from "components";
 import CardList from "./CardList";
 import Styles from "./CardList.module.scss";
 
@@ -20,14 +20,16 @@ function CardListWithTitle({
 }) {
   return (
     <div className={cx(`cards-wrapper`, wrap ? "wrap" : "")}>
-      <header className={cx("cards-wrapper__head")}>
-        <h3 className={cx("cards-wrapper__head__title")}>{data.name}</h3>
-        {data._id ? (
-          <Button text to={`/content-list/${data._id}`}>
-            Xem thêm
-          </Button>
-        ) : null}
-      </header>
+      <HeadTitleMark>
+        <header className={cx("cards-wrapper__head")}>
+          <h3 className={cx("cards-wrapper__head__title")}>{data.name}</h3>
+          {data._id ? (
+            <Button text to={`/content-list/${data._id}`}>
+              Xem thêm
+            </Button>
+          ) : null}
+        </header>
+      </HeadTitleMark>
       <CardList
         col={col}
         data={data.titles}
