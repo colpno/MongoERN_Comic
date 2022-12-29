@@ -1,12 +1,13 @@
 import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import { TITLE_PAGE_CHAPTERS_PER_PAGE } from "constants/paginate.constant";
 import { NoData, Pagination, Popup, Recommend } from "features";
 import { usePagination, useToast } from "hooks";
+import { setGenresOfTitle } from "libs/redux/slices/titleSlice";
 import { chapterService, followService, titleService } from "services";
 import { ComicChapters, Introduction, TitleAbout } from "./components";
 import styles from "./styles/Title.module.scss";
@@ -14,6 +15,7 @@ import styles from "./styles/Title.module.scss";
 const cx = classNames.bind(styles);
 
 function Title() {
+  const dispatch = useDispatch();
   const { titleId } = useParams();
   const user = useSelector((state) => state.user.user);
   const [title, setTitle] = useState({});
@@ -91,6 +93,7 @@ function Title() {
     Promise.all([titlePromise, chaptersPromise])
       .then(([titleResponse, chapterResponse]) => {
         setTitle(titleResponse.data);
+        dispatch(setGenresOfTitle(titleResponse.data.genres));
         setChapters(chapterResponse.data);
         setPaginationTotal(chapterResponse.paginate.total);
       })
