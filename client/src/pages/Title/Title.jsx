@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import { TITLE_PAGE_CHAPTERS_PER_PAGE } from "constants/paginate.constant";
-import { NoData, Pagination, Popup, Recommend } from "features";
+import { Comment, NoData, Pagination, Popup, Recommend } from "features";
 import { usePagination, useToast } from "hooks";
 import { setGenresOfTitle } from "libs/redux/slices/titleSlice";
 import { chapterService, followService, titleService } from "services";
@@ -119,7 +119,7 @@ function Title() {
             {hasTitle && (
               <TitleAbout title={title} user={user} setPopup={setPopup} />
             )}
-            <div className={cx("chapters")}>
+            <section className={cx("chapters")}>
               {hasTitle && haveChapters ? (
                 <ComicChapters
                   title={title}
@@ -139,9 +139,11 @@ function Title() {
                   setPagination={setPagination}
                 />
               )}
-            </div>
+            </section>
           </Container>
-          {/* TODO: random title */}
+          <Container>
+            <Comment />
+          </Container>
           <Recommend />
         </div>
       </main>
