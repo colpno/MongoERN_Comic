@@ -1,31 +1,13 @@
-/* eslint-disable no-unused-vars */
 import PropTypes from "prop-types";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import classNames from "classnames/bind";
 import Feedback from "react-bootstrap/esm/Feedback";
-import { useEffect } from "react";
+import { memo, useEffect } from "react";
 
 import styles from "./QuillArea.module.scss";
 
 const cx = classNames.bind(styles);
-
-let textAreaOptions = {
-  header: false,
-  fontStyle: {
-    bold: false,
-    italic: false,
-    underline: false,
-    strike: false,
-    blockQuote: false,
-  },
-  fontSize: false,
-  listHead: false,
-  indent: false,
-  image: false,
-  video: false,
-  link: false,
-};
 
 function TextAreaQuill({
   name,
@@ -37,7 +19,11 @@ function TextAreaQuill({
   maxLength,
 
   header,
-  fontStyle,
+  bold,
+  italic,
+  underline,
+  strike,
+  blockquote,
   fontSize,
   listHead,
   indent,
@@ -45,16 +31,83 @@ function TextAreaQuill({
   video,
   link,
 }) {
-  textAreaOptions = {
+  const textAreaOptions = {
     header,
+    bold,
+    italic,
+    underline,
+    strike,
+    blockquote,
     fontSize,
-    fontStyle,
     listHead,
     indent,
     image,
     video,
     link,
   };
+
+  function showToolbarElement() {
+    const options = [["clean"]];
+
+    if (textAreaOptions.header) {
+      options.push([{ header: "1" }, { header: "2" }, { font: [] }]);
+    }
+
+    if (textAreaOptions.fontSize) {
+      options.push([{ size: [] }]);
+    }
+
+    const fontStyles = [];
+    if (textAreaOptions.bold) {
+      fontStyles.push("bold");
+    }
+    if (textAreaOptions.italic) {
+      fontStyles.push("italic");
+    }
+    if (textAreaOptions.underline) {
+      fontStyles.push("underline");
+    }
+    if (textAreaOptions.strike) {
+      fontStyles.push("strike");
+    }
+    if (textAreaOptions.blockquote) {
+      fontStyles.push("blockquote");
+    }
+    options.push(fontStyles);
+
+    const listOptions = [];
+    if (textAreaOptions.listHead) {
+      listOptions.push({ list: "ordered" }, { list: "bullet" });
+    }
+    if (textAreaOptions.indent) {
+      listOptions.push({ indent: "-1" }, { indent: "+1" });
+    }
+    options.push(listOptions);
+
+    const media = [];
+    if (textAreaOptions.link) {
+      media.push("link");
+    }
+    if (textAreaOptions.image) {
+      media.push("image");
+    }
+    if (textAreaOptions.video) {
+      media.push("video");
+    }
+    options.push(media);
+
+    return options;
+  }
+
+  const getModules = () => {
+    const modules = {
+      toolbar: showToolbarElement(),
+      clipboard: { matchVisual: false },
+    };
+
+    TextAreaQuill.modules = modules;
+  };
+  getModules();
 
   useEffect(() => {
     document.querySelector(".ql-editor").setAttribute("name", name);
@@ -63,24 +116,12 @@ function TextAreaQuill({
   return (
     <div className={cx("wrapper")}>
       <ReactQuill
-        // ref={passRef}
         modules={TextAreaQuill.modules}
         formats={TextAreaQuill.formats}
-        // onKeyDown={onKeyDown}
         onChange={onChange}
         value={value}
-        placeholder={placeholder}
-        // as="textarea"
         name={name}
-        // value={value}
-        // onChange={onChange}
-        // onBlur={onBlur}
-        // rows={rows}
-        // placeholder={placeholder}
-        // readOnly={readOnly}
-        // isInvalid={touched && !!error}
-        // className={cx("textarea")}
-        // maxLength={maxLength}
+        placeholder={placeholder}
       />
       <span
         className={cx("text-length")}
@@ -90,83 +131,15 @@ function TextAreaQuill({
   );
 }
 
-function showToolbarElement() {
-  const options = [["clean"]];
+/*
+ * Quill modules to attach to editor
+ * See https://quilljs.com/docs/modules/ for complete options
+ */
 
-  if (textAreaOptions.header) {
-    options.push([{ header: "1" }, { header: "2" }, { font: [] }]);
-  }
-
-  if (textAreaOptions.fontSize) {
-    options.push([{ size: [] }]);
-  }
-
-  const fontStyles = [];
-  if (textAreaOptions.fontStyle.bold) {
-    fontStyles.push("bold");
-  }
-  if (textAreaOptions.fontStyle.italic) {
-    fontStyles.push("italic");
-  }
-  if (textAreaOptions.fontStyle.underline) {
-    fontStyles.push("underline");
-  }
-  if (textAreaOptions.fontStyle.strike) {
-    fontStyles.push("strike");
-  }
-  if (textAreaOptions.fontStyle.blockQuote) {
-    fontStyles.push("blockquote");
-  }
-  options.push(fontStyles);
-
-  const listOptions = [];
-  if (textAreaOptions.listHead) {
-    listOptions.push({ list: "ordered" }, { list: "bullet" });
-  }
-  if (textAreaOptions.indent) {
-    listOptions.push({ indent: "-1" }, { indent: "+1" });
-  }
-  options.push(listOptions);
-
-  const media = [];
-  if (textAreaOptions.link) {
-    media.push("link");
-  }
-  if (textAreaOptions.image) {
-    media.push("image");
-  }
-  if (textAreaOptions.video) {
-    media.push("video");
-  }
-  options.push(media);
-
-  return options;
-}
-
-TextAreaQuill.modules = {
-  toolbar: [
-    // [{ header: "1" }, { header: "2" }, { font: [] }],
-    // [{ size: [] }],
-    // ["bold", "italic", "underline", "strike", "blockquote"],
-    ["bold", "italic", "underline", "strike"],
-    // [
-    //   { list: "ordered" },
-    //   { list: "bullet" },
-    //   { indent: "-1" },
-    //   { indent: "+1" },
-    // ],
-    // ["link", "image", "video"],
-    ["link", "image"],
-    ["clean"],
-  ],
-  clipboard: {
-    // toggle to add extra line breaks when pasting HTML:
-    matchVisual: false,
-  },
-};
-// // REMOVE: Quill Quill formats
-// // REMOVE: See https:quilljs.com/docs/formats/
-
+/*
+ * Quill editor formats
+ * See https://quilljs.com/docs/formats/
+ */
 TextAreaQuill.formats = [
   "header",
   "font",
@@ -202,13 +175,11 @@ TextAreaQuill.propTypes = {
   // rows: PropTypes.number,
 
   header: PropTypes.bool,
-  fontStyle: PropTypes.shape({
-    bold: PropTypes.bool,
-    italic: PropTypes.bool,
-    underline: PropTypes.bool,
-    strike: PropTypes.bool,
-    blockQuote: PropTypes.bool,
-  }),
+  bold: PropTypes.bool,
+  italic: PropTypes.bool,
+  underline: PropTypes.bool,
+  strike: PropTypes.bool,
+  blockquote: PropTypes.bool,
   fontSize: PropTypes.bool,
   listHead: PropTypes.bool,
   indent: PropTypes.bool,
@@ -229,13 +200,11 @@ TextAreaQuill.defaultProps = {
   // rows: 5,
 
   header: false,
-  fontStyle: {
-    bold: false,
-    italic: false,
-    underline: false,
-    strike: false,
-    blockQuote: false,
-  },
+  bold: false,
+  italic: false,
+  underline: false,
+  strike: false,
+  blockquote: false,
   fontSize: false,
   listHead: false,
   indent: false,
@@ -244,4 +213,4 @@ TextAreaQuill.defaultProps = {
   link: false,
 };
 
-export default TextAreaQuill;
+export default memo(TextAreaQuill);
