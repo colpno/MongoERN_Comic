@@ -3,7 +3,7 @@ import axiosClient from "./axiosClient";
 const url = "/titles";
 
 const titleApi = {
-  getAll: (params, isPrivate = true) => {
+  getAll: (params = {}, isPrivate = true) => {
     if (isPrivate) {
       return axiosClient.get(`${url}/owned`, {
         params,
@@ -20,6 +20,15 @@ const titleApi = {
       });
     }
     return axiosClient.get(`${url}/${id}`, { withCredentials: isPrivate });
+  },
+
+  random: (count, params = {}) => {
+    return axiosClient.get(`${url}/random`, {
+      params: {
+        ...params,
+        count,
+      },
+    });
   },
 
   add: (

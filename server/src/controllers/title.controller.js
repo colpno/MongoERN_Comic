@@ -53,6 +53,19 @@ const titleController = {
       return next();
     }
   },
+  random: async (req, res, next) => {
+    const { count, ...others } = req.query;
+    const params = transformQueryParams(others);
+
+    const titles = await titleService.random(count, params);
+
+    if (titles.length === 0) return next(404, 'Không tìm thấy truyện nào');
+
+    return res.status(200).json({
+      code: 200,
+      data: titles,
+    });
+  },
   add: async (req, res, next) => {
     try {
       const { id: userId } = req.userInfo;

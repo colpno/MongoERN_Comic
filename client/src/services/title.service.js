@@ -17,6 +17,14 @@ const titleService = {
       return Promise.reject(error.data);
     }
   },
+  random: async (count, params = {}) => {
+    try {
+      const response = await titleApi.random(count, params);
+      return response;
+    } catch (error) {
+      return Promise.reject(error.data);
+    }
+  },
   add: async (
     title,
     cover,

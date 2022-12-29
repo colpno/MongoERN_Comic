@@ -33,6 +33,10 @@ const titleService = {
     const response = await Title.findOne(params);
     return response;
   },
+  random: async (count, params = {}) => {
+    const response = await Title.aggregate([{ $match: params }, { $sample: { size: +count } }]);
+    return response;
+  },
   add: async (
     userId = '',
     releaseDay = '',
