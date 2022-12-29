@@ -23,11 +23,14 @@ svg {
   }
 
   &__wrapper {
-    > div {
+    > div,
+    > section {
       background: #fff;
+
       &:not(:last-child) {
         margin-bottom: $section-padding;
       }
+
       &:last-child {
         padding-bottom: 0;
         padding: $section-padding;
@@ -49,6 +52,7 @@ svg {
   .title-page {
     padding-top: 0;
   }
+
   .background-image {
     display: none;
   }

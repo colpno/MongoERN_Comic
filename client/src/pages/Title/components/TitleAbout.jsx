@@ -28,7 +28,7 @@ function TitleAbout({ user, title, setPopup }) {
   };
 
   return (
-    <div className={cx("title-page__about")}>
+    <section className={cx("title-page__about")}>
       <div className={cx("title-page__about__published-status", "side-info")}>
         {title.release_day === "finished" || title.release_day === "paused" ? (
           <>
@@ -109,7 +109,7 @@ function TitleAbout({ user, title, setPopup }) {
           <span>7 chuong moi nhat chi ap dung Coin hoac Ve mua</span>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 
