@@ -1,6 +1,19 @@
 import paginateSort from '../helpers/paginateSort.js';
 import { Comment } from '../models/index.js';
 
+class CommentSocket {
+  constructor(io, socket) {
+    this.socket = socket;
+    this.io = io;
+
+    socket.on('join-title', (titleId) => this.join(titleId));
+  }
+
+  join(titleId) {
+    this.socket.join(titleId);
+  }
+}
+
 const commentService = {
   getAll: async (params = {}) => {
     const { _limit, _sort, _order } = params;
@@ -46,5 +59,7 @@ const commentService = {
     return response;
   },
 };
+
+export { CommentSocket };
 
 export default commentService;
