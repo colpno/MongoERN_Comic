@@ -22,7 +22,6 @@ function CommentForm({ initialValues, handleSubmit }) {
               underline
               strike
               link
-              image
             />
 
             <div className={cx("button-container")}>
