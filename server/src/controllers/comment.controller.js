@@ -63,6 +63,9 @@ const commentController = {
         await commentService.update({ slug: parentSlug }, { $inc: { comment_replies_num: 1 } });
       }
 
+      const room = commentAt.slice(commentAt.indexOf('_') + 1);
+      global.io.to(room).emit('send-comment', response);
+
       return res.status(201).json({
         code: 201,
         data: response,

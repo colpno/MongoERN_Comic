@@ -50,10 +50,7 @@ function ResetPassword() {
           setPopup({ ...popup, trigger: true, content: response.message });
         })
         .catch((error) => {
-          toastEmitter(
-            error.data || error.data.error || error.date.message,
-            "error"
-          );
+          toastEmitter(error, "error");
         });
     }
   };

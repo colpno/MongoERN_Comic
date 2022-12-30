@@ -172,7 +172,7 @@ const authController = {
       const resetPasswordLink = `${process.env.CLIENT_URL}/reset-password/${token}`;
       console.log(resetPasswordLink);
 
-      authService.sendResetPasswordLink(email, TOKEN_EXPIRED_TIME, resetPasswordLink);
+      // authService.sendResetPasswordLink(email, TOKEN_EXPIRED_TIME, resetPasswordLink);
 
       const expiredAt = moment().add(TOKEN_EXPIRED_TIME, 'm').toISOString();
 
@@ -196,20 +196,19 @@ const authController = {
   resetPassword: async (req, res, next) => {
     try {
       const { token } = req.params;
-      const { forgotPasswordToken } = req.cookies;
-      const { userId, password } = req.body;
+      const { password } = req.body;
 
-      if (!forgotPasswordToken) {
-        return next(
-          createError(401, 'Không thể thực hiện do không đủ quy trình thay đổi mật khẩu')
-        );
-      }
-      if (forgotPasswordToken !== token) return next(createError(403, 'Token không hợp lệ'));
+      // if (!forgotPasswordToken) {
+      //   return next(
+      //     createError(401, 'Không thể thực hiện do không đủ quy trình thay đổi mật khẩu')
+      //   );
+      // }
+      // if (forgotPasswordToken !== token) return next(createError(403, 'Token không hợp lệ'));
 
       jwt.verify(token, process.env.FORGOT_PASSWORD_TOKEN_KEY, async (error, userInfo) => {
         if (error) return next(createError(403, 'Token không hợp lệ'));
 
-        if (userInfo.id !== userId) return next(createError(403, 'Token không hợp lệ'));
+        // if (userInfo.id !== userId) return next(createError(403, 'Token không hợp lệ'));
 
         const hashedPassword = authService.hashPassword(password);
         await userService.update(userInfo.id, { password: hashedPassword });

@@ -3,10 +3,11 @@ import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import { Button, HeadTitleMark } from "components";
+import { socket } from "context/socketContext";
 import { Pagination, ProgressCircle } from "features";
 import { commentService } from "services";
-import styles from "./styles/Comment.module.scss";
 import { CommentForm, CommentList } from "./components";
+import styles from "./styles/Comment.module.scss";
 
 const cx = classNames.bind(styles);
 
@@ -36,10 +37,8 @@ function Comment() {
 
       const newComment = commentService
         .add(data, setProgress)
-        .then((response) => {
-          setComments((prev) => [response.data, ...prev]);
+        .then(() => {
           setProgress(0);
-          return response.data;
         })
         .catch((error) => {
           console.error(error);
@@ -62,6 +61,14 @@ function Comment() {
     },
     [comments]
   );
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("send-comment", (comment) => {
+        setComments((prev) => [comment, ...prev]);
+      });
+    }
+  }, [socket]);
 
   useEffect(() => {
     const root = comments.filter((comment) => {

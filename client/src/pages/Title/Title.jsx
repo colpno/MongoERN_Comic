@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import { TITLE_PAGE_CHAPTERS_PER_PAGE } from "constants/paginate.constant";
+import { socket } from "context/socketContext";
 import { Comment, NoData, Pagination, Popup, Recommend } from "features";
 import { usePagination, useToast } from "hooks";
 import { setCommentPlace } from "libs/redux/slices/comment.slice";
@@ -78,6 +79,12 @@ function Title() {
         toastEmitter(error, "error");
       });
   };
+
+  useEffect(() => {
+    if (socket) {
+      socket.emit("join-title", titleId);
+    }
+  }, [socket]);
 
   useEffect(() => {
     dispatch(setCommentPlace(`title_${titleId}`));

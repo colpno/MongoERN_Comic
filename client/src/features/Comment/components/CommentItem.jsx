@@ -1,10 +1,11 @@
 import classNames from "classnames/bind";
+import DOMPurify from "dompurify";
 import moment from "moment";
 import PropTypes from "prop-types";
-import { memo, useState } from "react";
-import DOMPurify from "dompurify";
+import { memo, useEffect, useState } from "react";
 
 import { Button } from "components";
+import { socket } from "context/socketContext";
 import styles from "../styles/CommentItem.module.scss";
 import CommentForm from "./CommentForm";
 import ReadMore from "./ReadMore";
@@ -28,16 +29,18 @@ function CommentItem({ comment, handleReplySubmit, getReplies, canReply }) {
     setPaginate((prev) => ({ ...prev, page: newPage }));
   };
 
-  const handleSubmit = async (values, { setSubmitting }) => {
-    const newComment = await handleReplySubmit(values, { setSubmitting });
-    setReplies((prev) => [newComment, ...prev]);
-
-    setSubmitting(false);
-  };
-
   const purifyDOM = (text) => {
     return { __html: DOMPurify.sanitize(text) };
   };
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("send-comment", (cmt) => {
+        if (cmt.parent_slug === comment.slug)
+          setReplies((prev) => [cmt, ...prev]);
+      });
+    }
+  }, [socket]);
 
   return (
     <>
@@ -74,7 +77,7 @@ function CommentItem({ comment, handleReplySubmit, getReplies, canReply }) {
         <div className={cx("replies")}>
           {toggleReply ? (
             <CommentForm
-              handleSubmit={handleSubmit}
+              handleSubmit={handleReplySubmit}
               initialValues={initialFormValues}
             />
           ) : null}

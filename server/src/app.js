@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable no-param-reassign */
 import express from 'express';
 import http from 'http';
 import { Server } from 'socket.io';
@@ -14,25 +14,36 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, socketConfig);
 
-// Mongoose
 connectMongoose();
 
 app.use(middlewares);
 
 app.use(routes);
 
-// app.use((req, res, next) => {
-// res.io = io;
-//   next();
-// });
+let users = [];
+io.on('connection', (socket) => {
+  console.log(`\n${moment().format('hh:mm:ss')} ${socket.id} connected`);
 
-// io.on('connection', (socket) => {
-//   console.log(`\n${moment().format('hh:mm:ss')} ${socket.id} connected`);
+  const newUser = { userId: socket.id, room: '' };
+  users.push(newUser);
 
-//   socket.on('disconnect', () => {
-//     console.log(`${moment().format('hh:mm:ss')} ${socket.id} left`);
-//   });
-// });
+  socket.on('join-title', (titleId) => {
+    users.forEach((user) => {
+      if (user.userId === socket.id) {
+        user.room = titleId;
+      }
+    });
+    socket.join(titleId);
+  });
+
+  socket.on('disconnect', () => {
+    console.log(`${moment().format('hh:mm:ss')} ${socket.id} left`);
+    const newUsers = users.filter((user) => user.userId !== socket.id);
+    users = newUsers;
+  });
+});
+
+global.io = io;
 
 app.use(errorHandler);
 
