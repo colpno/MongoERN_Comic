@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import createError from 'http-errors';
 
 import transformQueryParams from '../helpers/transformQueryParams.js';
@@ -6,7 +7,16 @@ import { commentService } from '../services/index.js';
 const commentController = {
   getAll: async (req, res, next) => {
     try {
+      const { slug } = req.query;
+      if (!!slug) {
+        req.query.full_slug_like = slug;
+        delete req.query.slug;
+      }
+      req.query._sort = 'full_slug';
+      req.query._order = 'desc';
+
       const params = transformQueryParams(req.query);
+
       const response = await commentService.getAll(params);
 
       if (response.length === 0 || response.data?.length === 0) {
@@ -26,12 +36,32 @@ const commentController = {
   },
   add: async (req, res, next) => {
     try {
-      const { userId, text, parentId } = req.body;
+      const { author, commentAt, text, parentSlug } = req.body;
 
-      const response = await commentService.add(userId, text, parentId);
+      let slug = '';
+      let fullSlug = '';
+      if (parentSlug) {
+        const parent = await commentService.getOne({ slug: parentSlug });
+
+        slug = `${parent.slug}/`;
+        fullSlug = `${parent.full_slug}/`;
+      }
+
+      const response = await commentService.add(
+        author,
+        commentAt,
+        text,
+        slug,
+        parentSlug,
+        fullSlug
+      );
 
       if (!response) {
         return next(createError(400, 'Không thể hoàn thành việc tạo bình luận'));
+      }
+
+      if (parentSlug) {
+        await commentService.update({ slug: parentSlug }, { $inc: { comment_replies_num: 1 } });
       }
 
       return res.status(201).json({
@@ -46,7 +76,8 @@ const commentController = {
     try {
       const { id, text, hide } = req.body;
 
-      const response = await commentService.update(id, {
+      const match = { _id: id };
+      const response = await commentService.update(match, {
         text,
         hide,
       });

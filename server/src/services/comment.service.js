@@ -13,18 +13,36 @@ const commentService = {
     const response = await Comment.find(params);
     return { data: response };
   },
-  add: async (userId = '', text = '', parentId = '') => {
+  getOne: async (params = {}) => {
+    try {
+      const response = await Comment.findOne(params);
+      return response;
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+  add: async (
+    author = {},
+    commentAt = '',
+    text = '',
+    slug = '',
+    parentSlug = '',
+    fullSlug = ''
+  ) => {
     const model = new Comment({
-      user_id: userId,
+      author,
+      comment_at: commentAt,
       text,
-      parent_id: parentId,
+      slug,
+      parent_slug: parentSlug,
+      full_slug: fullSlug,
     });
 
     const response = await model.save();
     return response;
   },
-  update: async (id, data = {}) => {
-    const response = await Comment.findOneAndUpdate({ _id: id }, data, { new: true });
+  update: async (match, data = {}) => {
+    const response = await Comment.findOneAndUpdate(match, data, { new: true });
     return response;
   },
 };
