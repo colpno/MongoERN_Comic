@@ -1,0 +1,16 @@
+@use "assets/styles/variables" as var;
+
+.total-comments {
+  color: #333333;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 30px;
+  margin: 0px 0px 4.4px;
+  margin-bottom: 1rem;
+}
+
+.sign-in {
+  .link {
+    color: var.$blue-300;
+  }
+}

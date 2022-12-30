@@ -1,0 +1,125 @@
+import classNames from "classnames/bind";
+import { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+
+import { Button, HeadTitleMark } from "components";
+import { Pagination, ProgressCircle } from "features";
+import { commentService } from "services";
+import styles from "./styles/Comment.module.scss";
+import { CommentForm, CommentList } from "./components";
+
+const cx = classNames.bind(styles);
+
+function Comment() {
+  const { comment_at: commentAt } = useSelector((state) => state.comment);
+  const { user, isLoggingIn } = useSelector((state) => state.user);
+  const [comments, setComments] = useState([]);
+  const [rootComments, setRootComments] = useState([]);
+  const [paginate, setPaginate] = useState({ page: 1, limit: 15, total: 0 });
+  const [progress, setProgress] = useState(0);
+  const initialFormValues = { text: "" };
+
+  const handleSubmit = (values, { setSubmitting }) => {
+    const { text, slug } = values;
+
+    if (text && commentAt) {
+      const data = {
+        author: {
+          _id: user._id,
+          name: user.username,
+          avatar: user.avatar,
+        },
+        commentAt,
+        text,
+        parentSlug: slug,
+      };
+
+      const newComment = commentService
+        .add(data, setProgress)
+        .then((response) => {
+          setComments((prev) => [response.data, ...prev]);
+          setProgress(0);
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          setProgress(0);
+        });
+
+      return newComment;
+    }
+
+    setSubmitting(false);
+    return null;
+  };
+
+  const getReplies = useCallback(
+    (slug, limit = 5, page = 1) => {
+      const replies = comments.filter((comment) => {
+        return !!comment.parent_slug && slug.includes(comment.parent_slug);
+      });
+      return replies.slice(0, limit * page);
+    },
+    [comments]
+  );
+
+  useEffect(() => {
+    const root = comments.filter((comment) => {
+      return comment.parent_slug === "";
+    });
+    setRootComments(root);
+  }, [comments]);
+
+  useEffect(() => {
+    if (commentAt) {
+      commentService
+        .getAll({
+          comment_at: commentAt,
+          _page: paginate.page,
+          _limit: paginate.limit,
+        })
+        .then((response) => {
+          setComments(response.data);
+          setPaginate((prev) => ({ ...prev, total: response.paginate.total }));
+        })
+        .catch((error) => console.error(error));
+    }
+  }, [commentAt]);
+
+  return (
+    <>
+      <section>
+        <HeadTitleMark>
+          <p className={cx("total-comments")}>Bình luận (7471)</p>
+        </HeadTitleMark>
+        {isLoggingIn ? (
+          <CommentForm
+            handleSubmit={handleSubmit}
+            initialValues={initialFormValues}
+          />
+        ) : (
+          <p className={cx("sign-in")}>
+            Bạn phải{" "}
+            <Button text to="/login" className={cx("link")}>
+              đăng nhập
+            </Button>{" "}
+            hoặc{" "}
+            <Button text to="/register" className={cx("link")}>
+              tạo tài khoản
+            </Button>{" "}
+            để bình luận.
+          </p>
+        )}
+        <CommentList
+          comments={rootComments}
+          getReplies={getReplies}
+          handleSubmit={handleSubmit}
+        />
+        <Pagination pagination={paginate} setPagination={setPaginate} />
+      </section>
+      <ProgressCircle percentage={progress} />
+    </>
+  );
+}
+
+export default Comment;

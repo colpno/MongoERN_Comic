@@ -1,0 +1,81 @@
+@use "assets/styles/variables" as var;
+
+.comments {
+  border-top: 1px solid var.$gray-500;
+  margin-top: 2rem;
+  padding-top: 1rem;
+}
+
+.comment-group {
+  padding: 10px 0;
+}
+
+.comment {
+  display: flex;
+}
+
+.content {
+  background-color: #f1f2f4;
+  border-radius: 4px;
+  color: #111111;
+  line-height: 22px;
+  margin: 0px 0px 10px 20px;
+  padding: 6px 40px 6px 10px;
+  text-align: left;
+
+  flex: 1;
+}
+
+.username {
+  color: #111111;
+  display: inline;
+  font-weight: 700;
+  line-height: 22px;
+  text-align: left;
+}
+
+.text {
+  color: #111111;
+  line-height: 22px;
+  margin: 0px 0px 10px;
+  text-align: left;
+}
+
+.avatar {
+  &-container {
+    $size: 45px;
+    width: $size;
+    height: $size;
+    min-width: $size;
+    min-height: $size;
+    background-color: #d4d4d4;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+}
+
+.comment-time {
+  color: rgb(0 0 0 / 0.46);
+  display: inline;
+  font-size: 0.9em;
+  line-height: 22px;
+  text-align: left;
+}
+
+.reply {
+  color: rgb(0 0 0 / 0.46);
+  margin-left: 1.2rem;
+  font-size: 0.9em;
+
+  display: inline;
+
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #000;
+  }
+}
+
+.replies {
+  margin-left: 65px;
+}
