@@ -67,21 +67,19 @@ function Comment() {
     const root = comments.filter((comment) => {
       return comment.parent_slug === "";
     });
-    setRootComments(root);
-  }, [comments]);
+    const paginated = root.slice(
+      (paginate.page - 1) * paginate.limit,
+      paginate.limit * paginate.page
+    );
+    setPaginate((prev) => ({ ...prev, total: root.length }));
+    setRootComments(paginated);
+  }, [comments, paginate.page]);
 
   useEffect(() => {
     if (commentAt) {
       commentService
-        .getAll({
-          comment_at: commentAt,
-          _page: paginate.page,
-          _limit: paginate.limit,
-        })
-        .then((response) => {
-          setComments(response.data);
-          setPaginate((prev) => ({ ...prev, total: response.paginate.total }));
-        })
+        .getAll({ comment_at: commentAt })
+        .then((response) => setComments(response.data))
         .catch((error) => console.error(error));
     }
   }, [commentAt]);
