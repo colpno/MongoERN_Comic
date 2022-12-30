@@ -45,7 +45,7 @@ const transformQueryParams = (queries = {}) => {
 
   const transformedQuery = queryKeys.reduce((result, queryKey) => {
     const queryValue = queries[queryKey];
-    const startOfSuffixIndex = queryKey.indexOf('_');
+    const startOfSuffixIndex = queryKey.lastIndexOf('_');
     const suffix = queryKey.slice(startOfSuffixIndex);
     const docField = sliceOffCondition(queryKey, suffix);
 
