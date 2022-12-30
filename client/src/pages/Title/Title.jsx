@@ -153,7 +153,7 @@ function Title() {
               )}
             </section>
           </Container>
-          <Container>
+          <Container fluid="md">
             <Comment />
           </Container>
           <Recommend />
