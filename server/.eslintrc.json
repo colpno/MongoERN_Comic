@@ -27,6 +27,7 @@
     "no-confusing-arrow": "off",
     "implicit-arrow-linebreak": "off",
     "function-paren-newline": "off",
-    "no-underscore-dangle": "off"
+    "no-underscore-dangle": "off",
+    "no-new": "off"
   }
 }
