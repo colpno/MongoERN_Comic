@@ -9,7 +9,7 @@ import {
   setChapter as setChapterStore,
   setChapters as setChaptersStore,
   setFavorite as setFavoriteStore,
-} from "libs/redux/slices/readingChapterSlice";
+} from "libs/redux/slices/readingChapter.slice";
 import styles from "pages/Reading/assets/styles/Reading.module.scss";
 import {
   chapterService,

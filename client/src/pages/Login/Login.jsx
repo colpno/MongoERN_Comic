@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "components";
 import { Popup } from "features";
 import { useToast } from "hooks";
-import { setLoginInfo } from "libs/redux/slices/loginSlice";
+import { setLoginInfo } from "libs/redux/slices/login.slice";
 import { authService } from "services";
 import LoginForm from "./components/LoginForm";
 import styles from "./styles/Login.module.scss";

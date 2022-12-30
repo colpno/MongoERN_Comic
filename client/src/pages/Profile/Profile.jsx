@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { FormWrapper } from "components";
 import { Popup, ProgressCircle } from "features";
 import { useToast } from "hooks";
-import { login } from "libs/redux/slices/userSlice";
+import { login } from "libs/redux/slices/user.slice";
 import ProfileForm from "pages/Profile/components/ProfileForm";
 import { userService } from "services";
 import AvatarBox from "./components/AvatarBox";

@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import { Logo } from "assets/images";
 import { Button } from "components";
 import { useToast } from "hooks";
-import { setFavorite } from "libs/redux/slices/readingChapterSlice";
+import { setFavorite } from "libs/redux/slices/readingChapter.slice";
 import { favoriteService, titleService } from "services";
 import { isEmpty } from "utils";
 import styles from "../assets/styles/ReadingHeader.module.scss";

@@ -4,7 +4,7 @@ import { Container, Row } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 
 import { CardListWithTitle } from "components";
-import { setTop5Titles } from "libs/redux/slices/titleSlice";
+import { setTop5Titles } from "libs/redux/slices/title.slice";
 import { genreService, titleService } from "services";
 import styles from "../styles/ComicSection.module.scss";
 import ComicRankingSection from "./ComicRankingSection";

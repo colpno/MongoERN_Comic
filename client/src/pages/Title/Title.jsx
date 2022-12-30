@@ -7,7 +7,8 @@ import { useParams } from "react-router-dom";
 import { TITLE_PAGE_CHAPTERS_PER_PAGE } from "constants/paginate.constant";
 import { Comment, NoData, Pagination, Popup, Recommend } from "features";
 import { usePagination, useToast } from "hooks";
-import { setGenresOfTitle } from "libs/redux/slices/titleSlice";
+import { setCommentPlace } from "libs/redux/slices/comment.slice";
+import { setGenresOfTitle } from "libs/redux/slices/title.slice";
 import { chapterService, followService, titleService } from "services";
 import { ComicChapters, Introduction, TitleAbout } from "./components";
 import styles from "./styles/Title.module.scss";
@@ -77,6 +78,10 @@ function Title() {
         toastEmitter(error, "error");
       });
   };
+
+  useEffect(() => {
+    dispatch(setCommentPlace(`title_${titleId}`));
+  }, []);
 
   useEffect(() => {
     const chapterApiParams = {

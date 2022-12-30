@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { roundNumByUnit, separateNumberDigit } from "utils";
 
 import { Popup } from "features";
-import { setMyTitles } from "libs/redux/slices/titleSlice";
+import { setMyTitles } from "libs/redux/slices/title.slice";
 import { titleService } from "services";
 import {
   BookLine,

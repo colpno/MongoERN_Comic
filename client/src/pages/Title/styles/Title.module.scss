@@ -26,14 +26,14 @@ svg {
     > div,
     > section {
       background: #fff;
+      margin-bottom: $section-padding;
 
-      &:not(:last-child) {
-        margin-bottom: $section-padding;
+      &:not(:nth-child(2)) {
+        padding: $section-padding;
       }
 
       &:last-child {
-        padding-bottom: 0;
-        padding: $section-padding;
+        margin-bottom: 0;
       }
     }
 

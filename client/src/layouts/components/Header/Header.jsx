@@ -10,7 +10,7 @@ import { Logo } from "assets/images";
 import { Button, ToggleableSubNavbar } from "components";
 import { HEADER_MENU, MOBILE_NAV_MENU } from "constants/menu.constant";
 import { Slider } from "features";
-import { toggleHeaderNavBar } from "libs/redux/slices/globalSlice";
+import { toggleHeaderNavBar } from "libs/redux/slices/global.slice";
 import Avatar from "./components/Avatar";
 import Search from "./components/Search";
 import styles from "./styles/Header.module.scss";

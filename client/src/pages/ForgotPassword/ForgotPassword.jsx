@@ -7,7 +7,7 @@ import * as Yup from "yup";
 import { FormWrapper } from "components";
 import { Popup } from "features";
 import { useToast } from "hooks";
-import { setLoginInfo } from "libs/redux/slices/loginSlice";
+import { setLoginInfo } from "libs/redux/slices/login.slice";
 import { authService } from "services";
 import ForgotPasswordForm from "./components/ForgotPasswordForm";
 import styles from "./ForgotPassword.module.scss";

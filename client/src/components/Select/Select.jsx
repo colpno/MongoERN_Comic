@@ -3,7 +3,7 @@ import { memo, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import ReactSelect from "react-select";
 
-import { setSelectedOption } from "libs/redux/slices/selectFieldSlice";
+import { setSelectedOption } from "libs/redux/slices/selectField.slice";
 
 const customStyles = (height) => {
   return {
