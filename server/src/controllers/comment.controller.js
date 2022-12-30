@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import createError from 'http-errors';
 
 import transformQueryParams from '../helpers/transformQueryParams.js';

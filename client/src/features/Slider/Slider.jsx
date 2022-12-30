@@ -100,7 +100,6 @@ function Slider({
   if (creativeEffect) effect = "creative";
 
   // Slides per
-  // eslint-disable-next-line no-unused-vars
   const viewSlide = slidesPerView !== 0 ? slidesPerView : false;
   const groupSlide = slidesPerGroup !== 0 ? slidesPerGroup : false;
 
