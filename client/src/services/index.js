@@ -3,6 +3,7 @@ export { default as authService } from "./auth.service";
 export { default as chapterService } from "./chapter.service";
 export { default as chapterTransactionService } from "./chapterTransaction.service";
 export { default as coinHistoryService } from "./coinHistory.service";
+export { default as commentService } from "./comment.service";
 export { default as favoriteService } from "./favorite.service";
 export { default as followService } from "./follow.service";
 export { default as genreService } from "./genre.service";
