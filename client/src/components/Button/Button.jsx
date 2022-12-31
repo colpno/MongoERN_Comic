@@ -43,6 +43,8 @@ function Button(props) {
     light20,
     light10,
 
+    marginTop1,
+
     wrapper,
     text,
     small,
@@ -83,6 +85,8 @@ function Button(props) {
       light30,
       light20,
       light10,
+
+      marginTop1,
 
       wrapper,
       text,
@@ -150,6 +154,8 @@ Button.propTypes = {
   light20: PropTypes.bool,
   light10: PropTypes.bool,
 
+  marginTop1: PropTypes.bool,
+
   wrapper: PropTypes.bool,
   text: PropTypes.bool,
   small: PropTypes.bool,
@@ -192,6 +198,8 @@ Button.defaultProps = {
   light30: false,
   light20: false,
   light10: false,
+
+  marginTop1: false,
 
   wrapper: false,
   text: false,

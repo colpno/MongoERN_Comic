@@ -181,7 +181,6 @@
 }
 
 .wrapper {
-  background-color: transparent;
   border: 0;
 
   + .wrapper {
@@ -191,4 +190,8 @@
 
 .round {
   border-radius: 20vmax !important;
+}
+
+.marginTop1 {
+  margin-top: 1rem;
 }
