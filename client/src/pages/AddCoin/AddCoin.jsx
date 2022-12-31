@@ -70,16 +70,11 @@ function AddCoin() {
   return (
     <Container className={cx("add-coin")}>
       <Row className={cx("add-coin__step")}>
-        <p className={cx("add-coin__step__title")}>
-          Chọn phương thức thanh toán
-        </p>
+        <p className={cx("add-coin__step__title")}>Chọn phương thức thanh toán</p>
         <div className={cx("add-coin__step__methods")}>
           {options.map((method) => {
             return (
-              <div
-                className={cx("add-coin__step__methods__method")}
-                key={method.value}
-              >
+              <div className={cx("add-coin__step__methods__method")} key={method.value}>
                 <Radio
                   field={{
                     name: "payMethod",
@@ -89,9 +84,7 @@ function AddCoin() {
                   value={method.value}
                 >
                   <span>{method.label}</span>
-                  {!!method.subLabel && (
-                    <span className={cx("sub-label")}>{method.subLabel}</span>
-                  )}
+                  {!!method.subLabel && <span className={cx("sub-label")}>{method.subLabel}</span>}
                 </Radio>
               </div>
             );
@@ -106,8 +99,8 @@ function AddCoin() {
         <div className={cx("note")}>
           <p className={cx("note__title")}>GHI CHÚ</p>
           <p className={cx("note__content")}>
-            Coin được nạp vào hệ thống sẽ được sử dụng trên tất cả các nền tảng
-            bao gồm Website / Android / iOS.
+            Coin được nạp vào hệ thống sẽ được sử dụng trên tất cả các nền tảng bao gồm Website /
+            Android / iOS.
             <br />
             Coin sẽ được sử dụng để mua Chương truyện.
             <br />
