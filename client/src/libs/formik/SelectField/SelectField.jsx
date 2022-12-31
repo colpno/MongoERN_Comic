@@ -1,22 +1,28 @@
 import PropTypes from "prop-types";
 import { Select } from "components";
 
-function SelectField(props) {
-  const { field, options, label } = props;
+function SelectField({ field, form, options, label }) {
   const { text, subText, isRequired } = label;
+  const { name, value, onBlur } = field;
+  const { setFieldValue } = form;
 
   return (
     <div className="field">
       {text && (
-        <label name={field.name} className="field__label">
+        <label name={name} className="field__label">
           {text}
           {isRequired && <span className="field__label--required"> *</span>}
-          {subText && (
-            <span className="field__label__sub-label"> ({subText})</span>
-          )}
+          {subText && <span className="field__label__sub-label"> ({subText})</span>}
         </label>
       )}
-      <Select field={field} options={options} />
+      <Select
+        name={name}
+        value={value}
+        onBlur={onBlur}
+        setValue={setFieldValue}
+        options={options}
+        isFormik
+      />
     </div>
   );
 }
@@ -24,9 +30,22 @@ function SelectField(props) {
 SelectField.propTypes = {
   field: PropTypes.shape({
     name: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
+    value: PropTypes.oneOfType([
+      PropTypes.shape({
+        value: PropTypes.string.isRequired,
+        label: PropTypes.string.isRequired,
+      }),
+      PropTypes.arrayOf(
+        PropTypes.shape({
+          value: PropTypes.string.isRequired,
+          label: PropTypes.string.isRequired,
+        }).isRequired
+      ),
+    ]).isRequired,
     onBlur: PropTypes.func.isRequired,
-    onChange: PropTypes.func.isRequired,
+  }).isRequired,
+  form: PropTypes.shape({
+    setFieldValue: PropTypes.func.isRequired,
   }).isRequired,
   options: PropTypes.arrayOf(
     PropTypes.shape({
@@ -34,6 +53,7 @@ SelectField.propTypes = {
       label: PropTypes.string.isRequired,
     }).isRequired
   ).isRequired,
+
   label: PropTypes.shape({
     text: PropTypes.string,
     subText: PropTypes.string,

@@ -11,12 +11,14 @@ function ChapterStatistic({
   chartLabels,
   backgroundColors,
   borderColors,
+  selectedChapter,
 }) {
   return (
     <>
       <SelectorContainer
         cx={cx}
         titleLabel="Chương"
+        value={selectedChapter}
         options={chapterSelectOptions}
         handleChange={changeChapter}
       />
@@ -68,6 +70,7 @@ ChapterStatistic.propTypes = {
   chartLabels: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
   backgroundColors: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
   borderColors: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  selectedChapter: PropTypes.shape({}).isRequired,
 };
 
 export default ChapterStatistic;

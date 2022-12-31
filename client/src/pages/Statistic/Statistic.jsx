@@ -104,11 +104,7 @@ function Statistic() {
   });
 
   const chartLabels = useMemo(
-    () => [
-      ...months.slice(currentMonth),
-      ...months.slice(0, currentMonth - 1),
-      "Tháng hiện tại",
-    ],
+    () => [...months.slice(currentMonth), ...months.slice(0, currentMonth - 1), "Tháng hiện tại"],
     []
   );
 
@@ -123,6 +119,12 @@ function Statistic() {
         : [],
     [titles]
   );
+  const [selectedTitle, setSelectedTitle] = useState(titleSelectOptions[0]);
+
+  const changeTitle = (option) => {
+    setID({ ...ID, titleID: option.value });
+    setSelectedTitle(option);
+  };
 
   const chapterSelectOptions =
     chapters.length > 0
@@ -130,6 +132,12 @@ function Statistic() {
           return [...options, { value: chapter._id, label: chapter.title }];
         }, [])
       : [];
+  const [selectedChapter, setSelectedChapter] = useState(chapterSelectOptions[0]);
+
+  const changeChapter = (option) => {
+    setID({ ...ID, chapterID: option.value });
+    setSelectedChapter(option);
+  };
 
   // INFO: Calculate views and likes
 
@@ -187,14 +195,6 @@ function Statistic() {
   //   }));
   // }, [chapterReports, ID.chapterID]);
 
-  const changeTitle = (option) => {
-    setID({ ...ID, titleID: option.value });
-  };
-
-  const changeChapter = (option) => {
-    setID({ ...ID, chapterID: option.value });
-  };
-
   return (
     <Container className={cx("wrapper")}>
       {titleSelectOptions.length > 0 ? (
@@ -208,6 +208,7 @@ function Statistic() {
               chartData={chartData.title}
               backgroundColors={backgroundColors}
               borderColors={borderColors}
+              selectedTitle={selectedTitle}
             />
           </Col>
           <Col md={4}>
@@ -220,6 +221,7 @@ function Statistic() {
                 chartLabels={chartLabels}
                 backgroundColors={backgroundColors}
                 borderColors={borderColors}
+                selectedChapter={selectedChapter}
               />
             ) : (
               <NoData>

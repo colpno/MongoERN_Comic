@@ -11,6 +11,7 @@ function TitleStatistic({
   chartLabels,
   backgroundColors,
   borderColors,
+  selectedTitle,
 }) {
   return (
     <>
@@ -19,6 +20,7 @@ function TitleStatistic({
         titleLabel="Truyện"
         options={titleSelectOptions}
         handleChange={changeTitle}
+        value={selectedTitle}
       />
       <Row>
         <LineChart
@@ -62,6 +64,7 @@ TitleStatistic.propTypes = {
   chartLabels: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
   backgroundColors: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
   borderColors: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  selectedTitle: PropTypes.shape({}).isRequired,
 };
 
 export default TitleStatistic;

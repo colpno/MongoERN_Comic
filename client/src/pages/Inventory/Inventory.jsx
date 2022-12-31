@@ -11,11 +11,7 @@ import { chapterTransactionService } from "services";
 import { sortArray } from "utils/arrayMethods";
 import { ReactComponent as TicketLogo } from "./assets/images/ticket.svg";
 import styles from "./assets/styles/Inventory.module.scss";
-import {
-  InventoryInteract,
-  InventoryTable,
-  InventoryTickets,
-} from "./components";
+import { InventoryInteract, InventoryTable, InventoryTickets } from "./components";
 
 const cx = classNames.bind(styles);
 
@@ -24,12 +20,12 @@ function Inventory() {
   const user = useSelector((state) => state.user.user);
   const [chapters, setChapters] = useState([]);
   const [sorter, setSorter] = useState({ key: "createdAt", isAsc: false });
-  const { pagination, setPagination, setPaginationTotal } =
-    usePagination(CHAPTERS_PER_PAGE);
+  const { pagination, setPagination, setPaginationTotal } = usePagination(CHAPTERS_PER_PAGE);
   const sortOptions = [
     { value: "createdAt", label: "Ngày nhận" },
     { value: "expiredAt", label: "Ngày hết hạn" },
   ];
+  const [filterValue, setFilterValue] = useState(sortOptions[1]);
   const [popup, setPopup] = useState({
     trigger: false,
     title: "",
@@ -82,7 +78,9 @@ function Inventory() {
   };
 
   const handleFilter = (selected) => {
+    setFilterValue(selected);
     const { value } = selected;
+
     if (sorter.key !== value) {
       const data = [...chapters];
 
@@ -121,13 +119,10 @@ function Inventory() {
       </header>
       <Container className={cx("inventory")}>
         <Row className={cx("inventory__general")}>
-          <InventoryTickets
-            cx={cx}
-            handleClickIcon={handleClickIcon}
-            user={user}
-          />
+          <InventoryTickets cx={cx} handleClickIcon={handleClickIcon} user={user} />
           <InventoryInteract
             cx={cx}
+            filterValue={filterValue}
             handleSort={handleSort}
             sortOptions={sortOptions}
             handleFilter={handleFilter}

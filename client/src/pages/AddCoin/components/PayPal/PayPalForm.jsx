@@ -1,30 +1,30 @@
 import { FastField, Form, Formik } from "formik";
+import { useState } from "react";
 
 import { Button } from "components";
 import { coinOptions } from "constants/controlOptions.constant";
 import { Loading } from "features";
 import { FormLabel, SelectField } from "libs/formik";
-import { useState } from "react";
-import { paypalService } from "services";
+// import { paypalService } from "services";
 
 function PayPalForm() {
   const [loading, setLoading] = useState(false);
   const init = {
-    price: "",
+    price: coinOptions[0],
   };
 
   const handleSubmit = (values, { setSubmitting }) => {
-    const { price } = values;
-    setLoading(true);
+    const price = values?.price?.value;
+    setLoading(false);
 
     if (price) {
-      paypalService
-        .create("coin", price)
-        .then((response) => {
-          setLoading(false);
-          window.location.assign(response.link);
-        })
-        .catch((err) => console.error(err));
+      // paypalService
+      //   .create("coin", price)
+      //   .then((response) => {
+      //     setLoading(false);
+      //     window.location.assign(response.link);
+      //   })
+      //   .catch((err) => console.error(err));
     }
 
     setSubmitting(false);
@@ -37,11 +37,7 @@ function PayPalForm() {
           return (
             <Form>
               <FormLabel name="price" label="Chọn mức giá" required />
-              <FastField
-                name="price"
-                component={SelectField}
-                options={coinOptions}
-              />
+              <FastField name="price" component={SelectField} options={coinOptions} />
 
               <Button primary large type="submit">
                 Xác nhận
