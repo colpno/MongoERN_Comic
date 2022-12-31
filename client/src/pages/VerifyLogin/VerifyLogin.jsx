@@ -10,7 +10,7 @@ import { Button } from "components";
 import { Popup } from "features";
 import { useToast } from "hooks";
 import { setLoginInfo as setLoginInfoStore } from "libs/redux/slices/login.slice";
-import { login as dispatchLogin } from "libs/redux/slices/user.slice";
+import { setUser } from "libs/redux/slices/user.slice";
 import { authService } from "services";
 import Numpad from "./components/Numpad";
 import OTPHead from "./components/OTPHead";
@@ -79,7 +79,7 @@ function VerifyLogin() {
         .verifyLogin(id, username, email, OTPString)
         .then((response) => {
           // save user's account info to redux
-          dispatch(dispatchLogin(response.data));
+          dispatch(setUser(response.data));
 
           toastEmitter("Đăng nhập thành công", "success");
 

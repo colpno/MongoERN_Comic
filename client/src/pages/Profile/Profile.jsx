@@ -5,7 +5,6 @@ import { useDispatch } from "react-redux";
 import { FormWrapper } from "components";
 import { Popup, ProgressCircle } from "features";
 import { useToast } from "hooks";
-import { login } from "libs/redux/slices/user.slice";
 import ProfileForm from "pages/Profile/components/ProfileForm";
 import { userService } from "services";
 import AvatarBox from "./components/AvatarBox";
@@ -43,7 +42,7 @@ function Profile() {
     userService
       .update(data, setProgress)
       .then((response) => {
-        dispatch(login({ ...user, ...data, ...response.data }));
+        dispatch(setUser({ ...user, ...data, ...response.data }));
         toastEmitter("Đổi thông tin cá nhân thành công", "success");
         setProgress(0);
       })
