@@ -30,6 +30,9 @@
     padding: 20px;
     line-height: 1.4;
 
+    display: flex;
+    justify-content: center;
+
     > * {
       height: 100%;
     }
@@ -52,11 +55,7 @@
       $size: 1.8rem;
 
       height: $size;
-      background: linear-gradient(
-        180deg,
-        transparent,
-        rgb(255 255 255 / 0.65) 60%
-      );
+      background: linear-gradient(180deg, transparent, rgb(255 255 255 / 0.65) 60%);
       border-bottom: 1px solid var.$gray-400;
 
       content: "";
