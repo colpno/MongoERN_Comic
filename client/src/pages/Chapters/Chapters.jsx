@@ -32,8 +32,7 @@ function Chapters() {
   const searchText = useSelector((state) => state.global.searchText);
   const [progress, setProgress] = useState(0);
   const { Toast, options: toastOptions, toastEmitter } = useToast();
-  const { pagination, setPagination, setPaginationTotal } =
-    usePagination(CHAPTERS_PER_PAGE);
+  const { pagination, setPagination, setPaginationTotal } = usePagination(CHAPTERS_PER_PAGE);
   const defaultChapterApiParams = {
     title_id: titleId,
     _sort: "order",
@@ -41,9 +40,7 @@ function Chapters() {
     _page: pagination.page,
     _limit: pagination.limit,
   };
-  const [chapterApiParams, setChapterApiParams] = useState(
-    defaultChapterApiParams
-  );
+  const [chapterApiParams, setChapterApiParams] = useState(defaultChapterApiParams);
   const [title, setTitle] = useState({});
   const [chapters, setChapters] = useState([]);
   const [popup, setPopup] = useState({
@@ -143,37 +140,21 @@ function Chapters() {
           <h3>Danh sách chương</h3>
         </Row>
         {Object.keys(title).length !== 0 && (
-          <TitlePart
-            title={title}
-            setPopup={setTitlePopup}
-            setDeletedItem={setTitleDeletedItem}
-          />
+          <TitlePart title={title} setPopup={setTitlePopup} setDeletedItem={setTitleDeletedItem} />
         )}
         <Row className={cx("chapters__general")}>
           <Col xs={12} md="auto" className={cx("chapters__general__box")}>
             <span className={cx("chapters__general__total")}>
               Tổng số chương:{" "}
-              <span className={cx("chapters__general__total__number")}>
-                {pagination.total}
-              </span>
+              <span className={cx("chapters__general__total__number")}>{pagination.total}</span>
             </span>
           </Col>
           {hasData && (
             <>
-              <Col
-                xs={6}
-                md={4}
-                lg={4}
-                className={`${cx("chapters__general__box")} right`}
-              >
+              <Col xs={6} md={4} lg={4} className={`${cx("chapters__general__box")} right`}>
                 <Search />
               </Col>
-              <Col
-                xs={6}
-                md={3}
-                lg={3}
-                className={`${cx("chapters__general__box")} right`}
-              >
+              <Col xs={6} md={3} lg={3} className={`${cx("chapters__general__box")} right`}>
                 <BtnCreate />
               </Col>{" "}
             </>
