@@ -5,7 +5,7 @@ import { Button } from "components";
 import { coinOptions } from "constants/controlOptions.constant";
 import { Loading } from "features";
 import { FormLabel, SelectField } from "libs/formik";
-// import { paypalService } from "services";
+import { paypalService } from "services";
 
 function PayPalForm() {
   const [loading, setLoading] = useState(false);
@@ -18,13 +18,13 @@ function PayPalForm() {
     setLoading(false);
 
     if (price) {
-      // paypalService
-      //   .create("coin", price)
-      //   .then((response) => {
-      //     setLoading(false);
-      //     window.location.assign(response.link);
-      //   })
-      //   .catch((err) => console.error(err));
+      paypalService
+        .create("coin", price)
+        .then((response) => {
+          setLoading(false);
+          window.location.assign(response.link);
+        })
+        .catch((err) => console.error(err));
     }
 
     setSubmitting(false);
@@ -39,7 +39,7 @@ function PayPalForm() {
               <FormLabel name="price" label="Chọn mức giá" required />
               <FastField name="price" component={SelectField} options={coinOptions} />
 
-              <Button primary large type="submit">
+              <Button primary large type="submit" marginTop1>
                 Xác nhận
               </Button>
             </Form>
