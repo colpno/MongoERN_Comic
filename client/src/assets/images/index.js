@@ -1,3 +1,6 @@
+export { default as checked } from "./checked.png";
+export { default as cancel } from "./cancel.png";
+
 export { default as Image1 } from "./title1.jpg";
 export { default as Image2 } from "./title2.png";
 export { default as AStore } from "./title2.png";
