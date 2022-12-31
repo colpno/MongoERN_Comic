@@ -95,7 +95,7 @@ function Comment() {
     <>
       <section>
         <HeadTitleMark>
-          <p className={cx("total-comments")}>Bình luận (7471)</p>
+          <p className={cx("total-comments")}>Bình luận ({comments.length})</p>
         </HeadTitleMark>
         {isLoggingIn ? (
           <CommentForm handleSubmit={handleSubmit} initialValues={initialFormValues} />
