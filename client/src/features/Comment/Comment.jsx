@@ -98,10 +98,7 @@ function Comment() {
           <p className={cx("total-comments")}>Bình luận (7471)</p>
         </HeadTitleMark>
         {isLoggingIn ? (
-          <CommentForm
-            handleSubmit={handleSubmit}
-            initialValues={initialFormValues}
-          />
+          <CommentForm handleSubmit={handleSubmit} initialValues={initialFormValues} />
         ) : (
           <p className={cx("sign-in")}>
             Bạn phải{" "}
@@ -115,11 +112,7 @@ function Comment() {
             để bình luận.
           </p>
         )}
-        <CommentList
-          comments={rootComments}
-          getReplies={getReplies}
-          handleSubmit={handleSubmit}
-        />
+        <CommentList comments={rootComments} getReplies={getReplies} handleSubmit={handleSubmit} />
         <Pagination pagination={paginate} setPagination={setPaginate} />
       </section>
       <ProgressCircle percentage={progress} />
