@@ -115,9 +115,7 @@ function Title() {
   return (
     <>
       <main className={cx("title-page")}>
-        {hasTitle && (
-          <div style={backgroundImageCSS} className={cx("background-image")} />
-        )}
+        {hasTitle && <div style={backgroundImageCSS} className={cx("background-image")} />}
         <div className={cx("title-page__wrapper")}>
           {hasTitle && (
             <Introduction
@@ -128,9 +126,7 @@ function Title() {
             />
           )}
           <Container fluid="md" className={cx("title-page__wrapper__content")}>
-            {hasTitle && (
-              <TitleAbout title={title} user={user} setPopup={setPopup} />
-            )}
+            {hasTitle && <TitleAbout title={title} user={user} setPopup={setPopup} />}
             <section className={cx("chapters")}>
               {hasTitle && haveChapters ? (
                 <ComicChapters
@@ -145,12 +141,7 @@ function Title() {
                   <h6>Không có chương nào để hiển thị!</h6>
                 </NoData>
               )}
-              {haveChapters && (
-                <Pagination
-                  pagination={pagination}
-                  setPagination={setPagination}
-                />
-              )}
+              {haveChapters && <Pagination pagination={pagination} setPagination={setPagination} />}
             </section>
           </Container>
           <Container fluid="md">
