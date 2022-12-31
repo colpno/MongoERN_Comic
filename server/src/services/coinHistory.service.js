@@ -23,6 +23,14 @@ const coinHistoryService = {
     const response = await model.save();
     return response;
   },
+  addMany: async (array = []) => {
+    try {
+      const response = await CoinHistory.insertMany(array);
+      return response;
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
   delete: async (id) => {
     const response = await CoinHistory.findOneAndDelete({ _id: id });
     return response;

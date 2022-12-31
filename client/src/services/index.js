@@ -13,3 +13,4 @@ export { default as readingHistoryService } from "./readingHistory.service";
 export { default as ticketHistoryService } from "./ticketHistory.service";
 export { default as titleService } from "./title.service";
 export { default as userService } from "./user.service";
+export { default as paypalService } from "./paypal.service";

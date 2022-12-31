@@ -1,43 +1,70 @@
 import classNames from "classnames/bind";
-import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import { useEffect, useMemo, useState } from "react";
 import { Container, Row } from "react-bootstrap";
 
-import { Button, Radio } from "components";
+import { Radio } from "components";
 import { NoData } from "features";
 import { paymentMethodService } from "services";
 import styles from "./AddCoin.module.scss";
+import { PayPalForm, VNPayForm } from "./components";
 
 const cx = classNames.bind(styles);
 
+function EmptyForm() {
+  return (
+    <NoData>
+      <h5>Bạn chưa chọn phương thức thanh toán nào!</h5>
+      <p>Vui lòng chọn hình thức thanh toán!</p>
+    </NoData>
+  );
+}
+
+function Form({ form }) {
+  switch (form.toLowerCase()) {
+    case "vnpay":
+      return <VNPayForm />;
+    case "paypal":
+      return <PayPalForm />;
+    default:
+      return <EmptyForm />;
+  }
+}
+
 function AddCoin() {
-  const [choseMethod, setChoseMethod] = useState({ value: "0", label: "" });
+  const [choseMethod, setChoseMethod] = useState({
+    value: "",
+    label: "",
+  });
   const [payMethods, setPayMethods] = useState([]);
 
-  const fetchData = () => {
+  const options = useMemo(
+    () =>
+      payMethods.map((payMethod) => {
+        return {
+          value: payMethod.name,
+          label: payMethod.name,
+        };
+      }),
+    [payMethods]
+  );
+
+  const handleMethodChange = (e) => {
+    const { value } = e.target;
+    const option = options.find((method) => {
+      return method.value === value;
+    });
+    setChoseMethod({
+      ...option,
+      value,
+    });
+  };
+
+  useEffect(() => {
     paymentMethodService
       .getAll()
       .then((response) => setPayMethods(response.data))
       .catch((error) => console.error(error));
-  };
-
-  const options = payMethods.map((payMethod) => {
-    return { value: payMethod._id, label: payMethod.name };
-  });
-
-  const handleMethodChange = (e) => {
-    const { value } = e.target;
-    setChoseMethod({
-      value,
-      label: options.find((method) => {
-        return method.value === value;
-      }).label,
-    });
-  };
-
-  const handleSubmit = () => {};
-
-  useEffect(() => {
-    fetchData();
   }, []);
 
   return (
@@ -73,12 +100,7 @@ function AddCoin() {
       </Row>
       <Row className={cx("add-coin__step")}>
         <div className={cx("add-coin__step__title")}>{choseMethod.label}</div>
-        {choseMethod.value === "0" && (
-          <NoData>
-            <h5>Bạn chưa chọn phương thức thanh toán nào!</h5>
-            <p>Vui lòng chọn hình thức thanh toán!</p>
-          </NoData>
-        )}
+        <Form form={choseMethod.label} />
       </Row>
       <div className={cx("add-coin__step")}>
         <div className={cx("note")}>
@@ -95,17 +117,17 @@ function AddCoin() {
             <span className={cx("note__content--mark")}>Hỗ trợ.</span>
           </p>
         </div>
-        <Button
-          primary
-          large
-          className={cx("add-coin__step__submit")}
-          onClick={handleSubmit}
-        >
-          Xác nhận
-        </Button>
       </div>
     </Container>
   );
 }
+
+Form.propTypes = {
+  form: PropTypes.string,
+};
+
+Form.defaultProps = {
+  form: "",
+};
 
 export default AddCoin;

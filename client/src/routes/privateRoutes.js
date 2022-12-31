@@ -1,4 +1,9 @@
-import { BookshelfLayout, HistoryLayout, MyTitleLayout } from "layouts";
+import {
+  BlankLayout,
+  BookshelfLayout,
+  HistoryLayout,
+  MyTitleLayout,
+} from "layouts";
 import {
   AddCoin,
   Chapters,
@@ -18,6 +23,8 @@ import {
   UpdateChapter,
   UpdateTitle,
 } from "pages";
+import Cancel from "pages/AddCoin/components/PayPal/Cancel";
+import Success from "pages/AddCoin/components/PayPal/Success";
 
 export const privateRoutes = [
   { path: "/profile/update", component: Profile },
@@ -84,5 +91,15 @@ export const privateRoutes = [
     path: "/my-title/notice",
     component: MyNotice,
     layout: MyTitleLayout,
+  },
+  {
+    path: "/paypal/success",
+    component: Success,
+    layout: BlankLayout,
+  },
+  {
+    path: "/paypal/cancel",
+    component: Cancel,
+    layout: BlankLayout,
   },
 ];

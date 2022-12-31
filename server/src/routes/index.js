@@ -14,6 +14,8 @@ import genreRoute from './genre.route.js';
 import paymentMethodRoute from './paymentMethod.route.js';
 import readingHistoryRoute from './readingHistory.route.js';
 import titleRoute from './title.route.js';
+import vnpayRoute from './vnpay.route.js';
+import paypalRoute from './paypal.route.js';
 import userRoute from './user.route.js';
 
 dotenv.config();
@@ -34,6 +36,8 @@ routes.use(`${BASE_URL}/genres`, genreRoute);
 routes.use(`${BASE_URL}/payment-methods`, paymentMethodRoute);
 routes.use(`${BASE_URL}/reading-histories`, readingHistoryRoute);
 routes.use(`${BASE_URL}/titles`, titleRoute);
+routes.use(`${BASE_URL}/vnpay`, vnpayRoute);
+routes.use(`${BASE_URL}/paypal`, paypalRoute);
 routes.use(`${BASE_URL}/users`, userRoute);
 
 export default routes;
