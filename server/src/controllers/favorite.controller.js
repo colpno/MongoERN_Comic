@@ -31,7 +31,8 @@ const favoriteController = {
       const { id: userId } = req.userInfo;
       const { chapterId } = req.body;
 
-      const duplicated = (await favoriteService.getAll({ userId, chapterId })).data;
+      const duplicated = (await favoriteService.getAll({ user_id: userId, chapter_id: chapterId }))
+        .data;
 
       if (duplicated.length > 0) {
         return next(createError(409, 'Đã tồn tại lượt thích, không thể lặp lại hành động'));

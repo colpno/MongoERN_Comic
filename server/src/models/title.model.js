@@ -9,6 +9,11 @@ const titleSchema = mongoose.Schema(
   {
     user_id: { type: String, require: true },
     approved_status_id: { type: String, default: '63a6fb6216ee77053d6feb91' },
+    status: {
+      type: String,
+      enum: ['inv', 'vis'],
+      require: true,
+    },
     release_day: {
       type: String,
       enum: ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN', 'paused', 'finished'],

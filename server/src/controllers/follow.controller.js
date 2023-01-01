@@ -31,7 +31,7 @@ const followController = {
       const { id: userId } = req.userInfo;
       const { titleId } = req.body;
 
-      const duplicated = (await followService.getAll({ userId, titleId })).data;
+      const duplicated = (await followService.getAll({ user_id: userId, title_id: titleId })).data;
 
       if (duplicated.length > 0) {
         return next(createError(409, 'Bạn đã theo dõi truyện trước đó'));

@@ -8,13 +8,7 @@ import { roundNumByUnit, separateNumberDigit } from "utils";
 import { Popup } from "features";
 import { setMyTitles } from "libs/redux/slices/title.slice";
 import { titleService } from "services";
-import {
-  BookLine,
-  ChatLine,
-  DollarLine,
-  EyeLine,
-  ThumbUpLine,
-} from "../assets/images";
+import { BookLine, ChatLine, DollarLine, EyeLine, ThumbUpLine } from "../assets/images";
 import styles from "../assets/styles/StatisticCount.module.scss";
 import IncomePopup from "./IncomePopup";
 
@@ -69,12 +63,8 @@ function StatisticCount() {
       <Row>
         <Col className={cx("statistic-count__col")}>
           <BookLine className={cx("statistic-count__total-title__icon")} />
-          <p className={cx("statistic-count__total-title__label")}>
-            Tổng số truyện
-          </p>
-          <strong className={cx("statistic-count__total-title__number")}>
-            {data.totalTitles}
-          </strong>
+          <p className={cx("statistic-count__total-title__label")}>Tổng số truyện</p>
+          <strong className={cx("statistic-count__total-title__number")}>{data.totalTitles}</strong>
         </Col>
         <Col className={cx("statistic-count__col")}>
           <EyeLine className={cx("statistic-count__view__icon")} />
@@ -92,17 +82,13 @@ function StatisticCount() {
         </Col>
         <Col className={cx("statistic-count__col")}>
           <ChatLine className={cx("statistic-count__comment__icon")} />
-          <p className={cx("statistic-count__comment__label")}>
-            Lượt bình luận
-          </p>
+          <p className={cx("statistic-count__comment__label")}>Lượt bình luận</p>
           <strong className={cx("statistic-count__comment__number")}>0</strong>
         </Col>
         <Col className={cx("statistic-count__col")}>
           <DollarLine className={cx("statistic-count__income__icon")} />
           <div className={cx("statistic-count__label-container")}>
-            <p className={cx("statistic-count__income__label")}>
-              Thu nhập (VNĐ)
-            </p>
+            <p className={cx("statistic-count__income__label")}>Thu nhập (VNĐ)</p>
             <BsQuestionCircle
               className={cx("statistic-count__income__question-icon")}
               onClick={handleIncomeExplainClick}

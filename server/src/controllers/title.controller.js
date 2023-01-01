@@ -9,7 +9,11 @@ const titleController = {
     try {
       const { userInfo, query } = req;
 
-      if (userInfo) query.userId = userInfo.id;
+      if (userInfo) query.user_id = userInfo.id;
+      else {
+        query.approved_status_id = '63a6fb6216ee77053d6feb93';
+        query.status = 'vis';
+      }
 
       const params = transformQueryParams(query);
       const response = await titleService.getAll(params);
@@ -36,7 +40,7 @@ const titleController = {
       if (userInfo) params.userId = userInfo.id;
 
       const { id, userId } = params;
-      const response = await titleService.getOne({ _id: id, userId });
+      const response = await titleService.getOne({ _id: id, user_id: userId });
 
       if (!response) {
         return res.status(200).json({
@@ -55,6 +59,9 @@ const titleController = {
   },
   random: async (req, res, next) => {
     const { count, ...others } = req.query;
+    others.approved_status_id = '63a6fb6216ee77053d6feb93';
+    others.status = 'vis';
+
     const params = transformQueryParams(others);
 
     const titles = await titleService.random(count, params);
@@ -69,7 +76,7 @@ const titleController = {
   add: async (req, res, next) => {
     try {
       const { id: userId } = req.userInfo;
-      const { releaseDay, title, cover, author, summary, genres, coin, point } = req.body;
+      const { releaseDay, title, status, cover, author, summary, genres, coin, point } = req.body;
 
       const duplicated = (await titleService.getAll({ title })).data;
 
@@ -85,6 +92,7 @@ const titleController = {
         userId,
         releaseDay,
         title,
+        status,
         finalCover,
         author,
         summary,
@@ -111,8 +119,19 @@ const titleController = {
     try {
       const { id } = req.params;
       const { userId } = req.userInfo;
-      const { releaseDay, title, cover, author, summary, genres, coin, point, oldCover, guid } =
-        req.body;
+      const {
+        releaseDay,
+        title,
+        status,
+        cover,
+        author,
+        summary,
+        genres,
+        coin,
+        point,
+        oldCover,
+        guid,
+      } = req.body;
 
       const finalCover = await titleService.uploadToCloud(cover, guid);
 
@@ -120,6 +139,7 @@ const titleController = {
         user_id: userId,
         release_day: releaseDay,
         title,
+        status,
         cover: finalCover,
         author,
         summary,

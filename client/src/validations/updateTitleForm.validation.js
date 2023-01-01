@@ -4,6 +4,7 @@ export const updateTitleFormValidation = Yup.object({
   title: Yup.string()
     .max(255, "Giới hạn độ dài của tiêu đề là 255 ký tự.")
     .required("Truyện cần phải có tiêu đề."),
+  status: Yup.string().oneOf(["vis", "inv"]).required("Trạng thái truyện không được để trống."),
   summary: Yup.string()
     .max(1000, "Giới hạn độ dài của mô tả là 1000 ký tự.")
     .required("Truyện cần phải có mô tả."),
@@ -15,9 +16,7 @@ export const updateTitleFormValidation = Yup.object({
     .min(1, "Truyện cần phải có tối thiểu 1 thể loại.")
     .max(3, "Truyện có tối đa 3 thể loại.")
     .of(Yup.string()),
-  release_day: Yup.string().required(
-    "Ngày đăng hàng tuần phải không được để trống"
-  ),
+  release_day: Yup.string().required("Ngày đăng hàng tuần phải không được để trống"),
   cover: Yup.string().required("Truyện cần phải có ảnh bìa mặc định."),
   // TODO: largeCover: Yup.string().required("Truyện cần phải có ảnh bìa."),
   coin: Yup.string()

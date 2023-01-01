@@ -31,16 +31,7 @@ const titleApi = {
     });
   },
 
-  add: (
-    title,
-    cover,
-    author,
-    summary,
-    genres,
-    coin,
-    releaseDay,
-    setProgress = () => {}
-  ) => {
+  add: (title, cover, author, summary, genres, coin, releaseDay, setProgress = () => {}) => {
     return axiosClient.post(
       `${url}/create`,
       {

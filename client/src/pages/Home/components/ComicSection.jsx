@@ -47,11 +47,14 @@ function ComicSection() {
   }, [titles.approvedTitles, genres]);
 
   useEffect(() => {
-    const top5Promise = titleService.getAll({
-      _sort: "like",
-      _order: "desc",
-      _limit: 5,
-    });
+    const top5Promise = titleService.getAll(
+      {
+        _sort: "like",
+        _order: "desc",
+        _limit: 5,
+      },
+      false
+    );
     const genresPromise = genreService.getAll({
       _sort: "_id",
       _order: "asc",
@@ -64,7 +67,7 @@ function ComicSection() {
 
         const allGenres = genresResponse.data.map((genre) => genre.name);
 
-        titleService.getAll({ genres_in: allGenres }).then((titleResponse) => {
+        titleService.getAll({ genres_in: allGenres }, false).then((titleResponse) => {
           const approvedTitles = titleResponse.data;
 
           setTitles({ top5, approvedTitles });
@@ -98,15 +101,9 @@ function ComicSection() {
                     };
 
               return (
-                <Row
-                  key={genre._id}
-                  className={cx("comic", `comic-${index + 1}`)}
-                >
+                <Row key={genre._id} className={cx("comic", `comic-${index + 1}`)}>
                   <section>
-                    <CardListWithTitle
-                      col={responsive}
-                      data={titlesByGenre[index]}
-                    />
+                    <CardListWithTitle col={responsive} data={titlesByGenre[index]} />
                   </section>
                 </Row>
               );

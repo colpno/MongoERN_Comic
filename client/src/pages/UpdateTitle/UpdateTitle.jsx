@@ -21,7 +21,7 @@ function UpdateTitle() {
   const INITIAL_VALUE = hasData && {
     title: title.title,
     summary: title.summary,
-    // TODO title_status_id: `${title.approved_status_id}`,
+    status: title.status,
     release_day: title.release_day,
     genres: title.genres,
     author: title.author,

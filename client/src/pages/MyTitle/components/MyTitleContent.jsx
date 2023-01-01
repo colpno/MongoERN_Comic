@@ -23,11 +23,11 @@ function MyTitleContent({ titles, pagination, setPagination, sorting }) {
             xs: 3,
           },
           {
-            label: "Số chương",
-            name: "total_chapter",
+            label: "Trạng thái",
+            name: "status",
           },
           {
-            label: "Trạng thái",
+            label: "Duyệt",
             name: "approve_status_id",
           },
           {

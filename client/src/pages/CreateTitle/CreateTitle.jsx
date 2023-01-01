@@ -21,6 +21,7 @@ function CreateTitle() {
 
   const INITIAL_VALUE = {
     title: "",
+    status: "",
     genres: [],
     summary: "",
     author: "",
@@ -43,15 +44,7 @@ function CreateTitle() {
   }, [popup.isConfirm]);
 
   const handleSubmit = (values, { setSubmitting }) => {
-    const {
-      title,
-      cover,
-      author,
-      summary,
-      genres,
-      coin,
-      release_day: releaseDay,
-    } = values;
+    const { title, cover, author, summary, genres, coin, release_day: releaseDay } = values;
 
     titleService
       .add(title, cover, author, summary, genres, coin, releaseDay, setProgress)

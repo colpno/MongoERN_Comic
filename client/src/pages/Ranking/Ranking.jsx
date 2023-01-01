@@ -17,12 +17,15 @@ function Ranking() {
 
   const fetchData = () => {
     titleService
-      .getAll({
-        _sort: "like",
-        _order: "asc",
-        _limit: 50,
-        _page: 1,
-      })
+      .getAll(
+        {
+          _sort: "like",
+          _order: "asc",
+          _limit: 50,
+          _page: 1,
+        },
+        false
+      )
       .then((response) => setTitles(response.data))
       .catch((error) => console.error(error));
   };
@@ -41,11 +44,7 @@ function Ranking() {
             </Container>
           </div>
           <Container className={cx("top-wrapper")}>
-            <RankingList
-              col={{ md: 6, lg: 4 }}
-              startRank={6}
-              titles={restRankTitles}
-            />
+            <RankingList col={{ md: 6, lg: 4 }} startRank={6} titles={restRankTitles} />
           </Container>
         </div>
       )}

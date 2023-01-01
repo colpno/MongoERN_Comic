@@ -12,6 +12,17 @@ import styles from "../styles/MyTitleTable.module.scss";
 
 const cx = classNames.bind(styles);
 
+const convertStatus = (status) => {
+  switch (status) {
+    case "vis":
+      return "Lưu hành";
+    case "inv":
+      return "Tạm ẩn";
+    default:
+      return "";
+  }
+};
+
 function MyTitleTable({ data }) {
   const [approvedStatuses, setApprovedStatuses] = useState([]);
   const options = approvedStatuses.map((status) => {
@@ -62,7 +73,7 @@ function MyTitleTable({ data }) {
               </Button>
             </Col>
             <Col>
-              <span className={cx("total-chapter")}>{title.total_chapter}</span>
+              <span className={cx("status")}>{convertStatus(title.status)}</span>
             </Col>
             <Col>
               {approvedStatuses.length > 0 ? (
@@ -124,7 +135,7 @@ MyTitleTable.propTypes = {
       cover: PropTypes.shape({
         source: PropTypes.string.isRequired,
       }).isRequired,
-      total_chapter: PropTypes.number.isRequired,
+      status: PropTypes.string.isRequired,
       approved_status_id: PropTypes.string.isRequired,
     })
   ).isRequired,

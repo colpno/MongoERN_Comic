@@ -14,7 +14,7 @@ function Complete() {
 
   const fetchData = () => {
     titleService
-      .getAll({ release_day: "finished" })
+      .getAll({ release_day: "finished" }, false)
       .then((response) => setTitles(response.data))
       .catch((error) => console.error(error));
   };

@@ -56,7 +56,7 @@ function Search() {
 
   const fetchData = (params = {}) => {
     titleService
-      .getAll(params)
+      .getAll(params, false)
       .then((titleResponse) => {
         setTitles(titleResponse.data);
         setPaginationTotal(titleResponse.paginate.total);
@@ -110,7 +110,7 @@ function Search() {
 
   useEffect(() => {
     const genrePromise = genreService.getAll();
-    const titlePromise = titleService.getAll(titleParams);
+    const titlePromise = titleService.getAll(titleParams, false);
 
     Promise.all([titlePromise, genrePromise])
       .then(([titleResponse, genreResponse]) => {

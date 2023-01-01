@@ -34,10 +34,13 @@ function ContentList() {
         setGenre(genreResponse.data);
 
         titleService
-          .getAll({
-            genres_in: genreResponse.data.name,
-            _limit: CONTENT_LIST_TITLES_PER_PAGE,
-          })
+          .getAll(
+            {
+              genres_in: genreResponse.data.name,
+              _limit: CONTENT_LIST_TITLES_PER_PAGE,
+            },
+            false
+          )
           .then((titleResponse) => {
             setTitles(titleResponse.data);
             setPaginationTotal(titleResponse.paginate.total);

@@ -16,14 +16,14 @@ const cx = classNames.bind(styles);
 function Statistic() {
   // INFO: Data variables
 
-  const titles = useSelector((state) => state.title.myTitles);
-  // const [titleReports, setTitleReports] = useState([]);
-  const [chapters, setChapters] = useState([]);
-  // const [chapterReports, setChapterReports] = useState([]);
   const [ID, setID] = useState({
     titleID: "",
     chapterID: "",
   });
+  const titles = useSelector((state) => state.title.myTitles);
+  const [chapters, setChapters] = useState([]);
+  // const [titleReports, setTitleReports] = useState([]);
+  // const [chapterReports, setChapterReports] = useState([]);
 
   // const fetchTitleReports = (params) => {
   //   getAllTitleReports(params)
@@ -119,20 +119,28 @@ function Statistic() {
         : [],
     [titles]
   );
-  const [selectedTitle, setSelectedTitle] = useState(titleSelectOptions[0]);
-
-  const changeTitle = (option) => {
-    setID({ ...ID, titleID: option.value });
-    setSelectedTitle(option);
-  };
-
   const chapterSelectOptions =
     chapters.length > 0
       ? chapters.reduce((options, chapter) => {
           return [...options, { value: chapter._id, label: chapter.title }];
         }, [])
       : [];
+
+  const [selectedTitle, setSelectedTitle] = useState(titleSelectOptions[0]);
   const [selectedChapter, setSelectedChapter] = useState(chapterSelectOptions[0]);
+
+  useEffect(() => {
+    setSelectedTitle(titleSelectOptions[0]);
+  }, [titleSelectOptions]);
+
+  useEffect(() => {
+    setSelectedChapter(chapterSelectOptions[0]);
+  }, [chapterSelectOptions]);
+
+  const changeTitle = (option) => {
+    setID({ ...ID, titleID: option.value });
+    setSelectedTitle(option);
+  };
 
   const changeChapter = (option) => {
     setID({ ...ID, chapterID: option.value });
@@ -195,9 +203,12 @@ function Statistic() {
   //   }));
   // }, [chapterReports, ID.chapterID]);
 
+  const checkSumTitle = titleSelectOptions.length > 0 && selectedTitle?.value;
+  const checkSumChapter = chapterSelectOptions.length > 0 && selectedChapter?.value;
+
   return (
     <Container className={cx("wrapper")}>
-      {titleSelectOptions.length > 0 ? (
+      {checkSumTitle ? (
         <Row>
           <Col md={8}>
             <TitleStatistic
@@ -212,7 +223,7 @@ function Statistic() {
             />
           </Col>
           <Col md={4}>
-            {chapterSelectOptions.length > 0 ? (
+            {checkSumChapter ? (
               <ChapterStatistic
                 cx={cx}
                 chapterSelectOptions={chapterSelectOptions}

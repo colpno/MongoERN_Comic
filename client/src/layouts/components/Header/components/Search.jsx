@@ -20,14 +20,11 @@ function Search() {
   const [titles, setTitles] = useState([]);
   const searchText = useDebounce(searchValue, 500);
 
-  const searchRef = useClickOutSide(
-    showResult,
-    () => showResult && setShowResult(false)
-  );
+  const searchRef = useClickOutSide(showResult, () => showResult && setShowResult(false));
 
   const fetchData = () => {
     titleService
-      .getAll()
+      .getAll({}, false)
       .then((response) => setTitles(response))
       .catch((error) => console.error(error));
   };
@@ -44,7 +41,7 @@ function Search() {
   useEffect(() => {
     if (searchText.length > 0) {
       titleService
-        .getAll()
+        .getAll({}, false)
         .then((response) => {
           const searched = useSearch(response, searchValue, 3);
           setSearchResult(searched);
@@ -80,9 +77,7 @@ function Search() {
         )}
         <IoSearchOutline className={cx("search__icon")} />
       </div>
-      {showResult && searchText && (
-        <SearchDropdownList cx={cx} searchResult={searchResult} />
-      )}
+      {showResult && searchText && <SearchDropdownList cx={cx} searchResult={searchResult} />}
     </div>
   );
 }

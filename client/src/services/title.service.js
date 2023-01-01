@@ -1,7 +1,7 @@
 import titleApi from "api/title.api";
 
 const titleService = {
-  getAll: async (params = {}, isPrivate = false) => {
+  getAll: async (params = {}, isPrivate = true) => {
     try {
       const response = await titleApi.getAll(params, isPrivate);
       return response;
@@ -9,7 +9,7 @@ const titleService = {
       return Promise.reject(error.data);
     }
   },
-  getOne: async (id, isPrivate = false) => {
+  getOne: async (id, isPrivate = true) => {
     try {
       const response = await titleApi.getOne(id, isPrivate);
       return response;
@@ -25,16 +25,7 @@ const titleService = {
       return Promise.reject(error.data);
     }
   },
-  add: async (
-    title,
-    cover,
-    author,
-    summary,
-    genres,
-    coin,
-    releaseDay,
-    setProgress = () => {}
-  ) => {
+  add: async (title, cover, author, summary, genres, coin, releaseDay, setProgress = () => {}) => {
     try {
       const response = await titleApi.add(
         title,

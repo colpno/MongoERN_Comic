@@ -25,34 +25,20 @@ function TitleForm({ initialValues, validationSchema, handleCancel, handleSubmit
     [genres]
   );
 
-  // TODO const statusOptions = useMemo(
-  //   () =>
-  //     approvedStatuses.map((status) => {
-  //       return { value: `${status._id}`, label: status.status };
-  //     }),
-  //   [approvedStatuses]
-  // );
-
-  const fetchData = () => {
-    const genresPromise = genreService.getAll();
-    // TODO const approvedStatusesPromise = approvedStatusService.getAll();
-
-    // TODO Promise.all([genresPromise, approvedStatusesPromise])
-    Promise.all([genresPromise])
-      // .then(([genresResponse, approvedStatusesResponse]) => {
-      .then(([genresResponse]) => {
-        setGenres(genresResponse.data);
-        // setApprovedStatuses(approvedStatusesResponse.data);
-      })
-      .catch((error) => console.error(error));
-  };
+  const statusOptions = [
+    { value: "vis", label: "Lưu hành" },
+    { value: "inv", label: "Tạm ẩn" },
+  ];
 
   const handleRemove = (value) => {
     console.log(value);
   };
 
   useEffect(() => {
-    fetchData();
+    genreService
+      .getAll()
+      .then((response) => setGenres(response.data))
+      .catch((error) => console.error(error));
   }, []);
 
   return (
@@ -74,17 +60,17 @@ function TitleForm({ initialValues, validationSchema, handleCancel, handleSubmit
               autoFocus
             />
 
-            {/* TODO {statusOptions.length > 0 && "title_status_id" in initialValues && (
+            {statusOptions.length > 0 && (
               <>
-                <FormLabel name="title_status_id" label="Trạng thái" />
+                <FormLabel name="status" label="Trạng thái" />
                 <FastField
-                  name="title_status_id"
+                  name="status"
                   component={RadioGroup}
                   options={statusOptions}
-                  col={{ xs: 6, md: 4 }}
+                  col={{ xs: 6 }}
                 />
               </>
-            )} */}
+            )}
 
             {genreOptions.length > 0 && (
               <>
