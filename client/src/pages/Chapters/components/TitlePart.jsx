@@ -25,22 +25,14 @@ function TitlePart({ title, setPopup, setDeletedItem }) {
   return (
     <Row className={cx("chapters__title")}>
       <Col>
-        <Button
-          wrapper
-          to={`/comic/title/${title._id}`}
-          className={cx("chapters__title__box")}
-        >
+        <Button wrapper to={`/comic/title/${title._id}`} className={cx("chapters__title__box")}>
           <div className={cx("box-img")}>
             <img src={title.cover.source} alt="Title's cover " />
           </div>
           <span className={cx("title")}>{title.title}</span>
         </Button>
       </Col>
-      <Col
-        sm={12}
-        md="auto"
-        className={cx("chapters__title__box", "button-container")}
-      >
+      <Col sm={12} md="auto" className={cx("chapters__title__box", "button-container")}>
         <Button
           outline
           to={`/my-title/update/${title._id}`}
