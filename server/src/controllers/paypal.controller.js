@@ -81,7 +81,7 @@ const paypalController = {
         const getResponse = async (response) => {
           const docs = response.data.transactions[0].item_list.items.map((item) => ({
             user_id: userId,
-            payment_method: 'paypal',
+            payment_method: 'PayPal',
             amount: convertMoneyToCoin(item.price),
           }));
           await coinHistoryService.addMany(docs);
