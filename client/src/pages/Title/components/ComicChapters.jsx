@@ -14,13 +14,7 @@ import styles from "../styles/ComicChapters.module.scss";
 
 const cx = classNames.bind(styles);
 
-function ComicChapters({
-  title,
-  chapters,
-  user,
-  isDESCSorting,
-  handleSorting,
-}) {
+function ComicChapters({ title, chapters, user, isDESCSorting, handleSorting }) {
   return (
     <>
       {chapters.length > 0 ? (
@@ -28,15 +22,9 @@ function ComicChapters({
           <div className={cx("chapters__head")}>
             <span className="chapters__head__total">
               Số chương hiện tại:
-              <strong className={cx("chapters__head__total__number")}>
-                {title.total_chapter}
-              </strong>
+              <strong className={cx("chapters__head__total__number")}>{title.total_chapter}</strong>
             </span>
-            <Button
-              text
-              className={cx("chapters__head__sorting")}
-              onClick={handleSorting}
-            >
+            <Button text className={cx("chapters__head__sorting")} onClick={handleSorting}>
               {isDESCSorting ? <BsSortNumericUp /> : <BsSortNumericDown />}
               <span>Sắp xếp</span>
             </Button>
@@ -70,9 +58,7 @@ function ComicChapters({
                       <Button
                         outline
                         success
-                        className={cx(
-                          "chapters__content__chapter__price__free"
-                        )}
+                        className={cx("chapters__content__chapter__price__free")}
                       >
                         Miễn phí
                       </Button>
@@ -97,20 +83,12 @@ function ComicChapters({
                     )} */}
                     {chapter.cost && (
                       <>
-                        <div
-                          className={cx(
-                            "chapters__content__chapter__price__point"
-                          )}
-                        >
+                        <div className={cx("chapters__content__chapter__price__point")}>
                           <span>{title.point}</span>
                           <CircleP />
                         </div>
                         <div className={cx("divider")} />
-                        <div
-                          className={cx(
-                            "chapters__content__chapter__price__coin"
-                          )}
-                        >
+                        <div className={cx("chapters__content__chapter__price__coin")}>
                           <span>{title.coin}</span>
                           <CircleC />
                         </div>
