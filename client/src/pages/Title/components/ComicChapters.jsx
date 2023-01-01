@@ -57,13 +57,15 @@ function ComicChapters({
             {chapters.map((chapter) => {
               const { day, month, year } = formatTime(chapter.createdAt);
               const isPurchased = findPurchasedChapter(chapter._id);
+              const canRead = !chapter.cost || isPurchased;
+              const cannotRead = !canRead;
 
               return (
                 <Button
                   wrapper
-                  // to={chapter._id}
+                  to={canRead ? chapter._id : ""}
                   className={cx("chapters__content__chapter")}
-                  onClick={() => handleOpenPurchaseBox(chapter)}
+                  onClick={() => cannotRead && handleOpenPurchaseBox(chapter)}
                   key={chapter._id}
                 >
                   <div className={cx("chapters__content__chapter__box-img")}>
@@ -80,7 +82,7 @@ function ComicChapters({
                     </small>
                   </div>
                   <div className={cx("chapters__content__chapter__price")}>
-                    {(!chapter.cost || isPurchased) && (
+                    {canRead && (
                       <Button
                         outline
                         success
@@ -107,7 +109,7 @@ function ComicChapters({
                       </Button>
                       <div className={cx("divider")} />
                     )} */}
-                    {(chapter.cost || !isPurchased) && (
+                    {cannotRead && (
                       <>
                         <div className={cx("chapters__content__chapter__price__point")}>
                           <span>{title.point}</span>
