@@ -36,7 +36,7 @@ function Popup({ popup, setPopup, yesno, width, center }) {
 
   return (
     trigger && (
-      <Dialog onClickOutside={handleClickOutside}>
+      <Dialog handleClickOutside={handleClickOutside}>
         <div className={cx("popup")} style={{ width: `${width}px` }}>
           <div className={cx("popup__head")}>
             <span>{title}</span>
