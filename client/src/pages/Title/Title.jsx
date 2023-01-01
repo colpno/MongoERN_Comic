@@ -51,8 +51,6 @@ function Title() {
     () => [
       { amount: title.coin, icon: circleC },
       { amount: title.point, icon: circleP },
-      { amount: title.point, icon: circleP },
-      { amount: title.point, icon: circleP },
     ],
     [title]
   );
