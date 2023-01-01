@@ -58,7 +58,8 @@ const chapterTransactionService = {
     });
 
     const response = await model.save();
-    return response;
+    const final = await getAttachData({ data: [response] });
+    return final[0];
   },
   delete: async (id) => {
     const response = await ChapterTransaction.findOneAndDelete({ _id: id });
