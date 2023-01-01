@@ -11,18 +11,9 @@ import {
   setFavorite as setFavoriteStore,
 } from "libs/redux/slices/readingChapter.slice";
 import styles from "pages/Reading/assets/styles/Reading.module.scss";
-import {
-  chapterService,
-  favoriteService,
-  followService,
-  readingHistoryService,
-} from "services";
+import { chapterService, favoriteService, followService, readingHistoryService } from "services";
 import { isEmpty } from "utils";
-import {
-  ReadingComics,
-  ReadingControls,
-  ReadingPagination,
-} from "./components";
+import { ReadingComics, ReadingControls, ReadingPagination } from "./components";
 
 const cx = classNames.bind(styles);
 
@@ -60,25 +51,13 @@ function Reading() {
       titleId,
     });
 
-    Promise.all([
-      chapterPromise,
-      chaptersPromise,
-      favoritePromise,
-      followPromise,
-    ])
-      .then(
-        ([
-          chapterResponse,
-          chaptersResponse,
-          favoriteResponse,
-          followResponse,
-        ]) => {
-          setChapter(chapterResponse.data);
-          setChapters(chaptersResponse.data);
-          setFavorite(favoriteResponse.data);
-          setFollows(followResponse.data);
-        }
-      )
+    Promise.all([chapterPromise, chaptersPromise, favoritePromise, followPromise])
+      .then(([chapterResponse, chaptersResponse, favoriteResponse, followResponse]) => {
+        setChapter(chapterResponse.data);
+        setChapters(chaptersResponse.data);
+        setFavorite(favoriteResponse.data);
+        setFollows(followResponse.data);
+      })
       .catch((error) => console.error(error));
   };
 
@@ -202,9 +181,7 @@ function Reading() {
   return (
     <>
       <div className={cx("reading-page")}>
-        {chapter?.contents?.length > 0 && (
-          <ReadingComics cx={cx} images={chapter.contents} />
-        )}
+        {chapter?.contents?.length > 0 && <ReadingComics cx={cx} images={chapter.contents} />}
         <ReadingControls
           cx={cx}
           handleLikeClick={handleLikeClick}
