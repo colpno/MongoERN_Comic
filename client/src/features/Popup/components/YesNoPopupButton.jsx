@@ -22,7 +22,7 @@ function YesNoPopupButton({ setPopup }) {
       </Button>
       <Button
         outline
-        gray
+        grey
         className={cx("popup__confirm__btn-close")}
         onClick={() => handleClick(false)}
       >

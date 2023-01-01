@@ -51,7 +51,7 @@ function TitlePart({ title, setPopup, setDeletedItem }) {
         </Button>
         <Button
           outline
-          gray
+          grey
           className={cx("chapters__title-accelerate__button")}
           onClick={() => handlePopup(title)}
         >

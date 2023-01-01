@@ -28,7 +28,7 @@ function getAvatarMenu(cx, user, isLoggingIn) {
             <p className={cx("coin-balance")}>{user.coin}</p>
           </>
         ),
-        icon: <CircleC className={cx(isLoggingIn ? "" : "gray")} />,
+        icon: <CircleC className={cx(isLoggingIn ? "" : "grey")} />,
       },
       {
         path: "/profile/coin/add",
@@ -38,29 +38,29 @@ function getAvatarMenu(cx, user, isLoggingIn) {
             <p className={cx("point-balance")}>{user.point}</p>
           </>
         ),
-        icon: <CircleP className={cx(isLoggingIn ? "" : "gray")} />,
+        icon: <CircleP className={cx(isLoggingIn ? "" : "grey")} />,
       },
     ],
     [
       {
         path: "/redeem",
         label: <span>Thẻ quà tặng</span>,
-        icon: <IoGiftSharp className={cx(isLoggingIn ? "" : "gray")} />,
+        icon: <IoGiftSharp className={cx(isLoggingIn ? "" : "grey")} />,
       },
       {
         path: "/inventory",
         label: <span>Hộp vé</span>,
-        icon: <FaTicketAlt className={cx(isLoggingIn ? "" : "gray")} />,
+        icon: <FaTicketAlt className={cx(isLoggingIn ? "" : "grey")} />,
       },
       {
         path: "/bookshelf/follow",
         label: <span>Tủ sách</span>,
-        icon: <ImBooks className={cx(isLoggingIn ? "" : "gray")} />,
+        icon: <ImBooks className={cx(isLoggingIn ? "" : "grey")} />,
       },
       {
         path: "/my-title",
         label: <span>Truyện của tôi</span>,
-        icon: <ImQuill className={cx(isLoggingIn ? "" : "gray")} />,
+        icon: <ImQuill className={cx(isLoggingIn ? "" : "grey")} />,
       },
     ],
     [
