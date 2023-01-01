@@ -27,10 +27,10 @@ function PurchaseBox({ chapter, payments, handleSubmit, handleClose }) {
                 </Button>
               );
             })}
-            <Button primary round className={cx("submit")} onClick={handleSubmit}>
-              Mua/Thuê
-            </Button>
           </div>
+          <Button primary round className={cx("submit")} onClick={handleSubmit}>
+            Mua/Thuê
+          </Button>
         </div>
       </div>
     </Dialog>
