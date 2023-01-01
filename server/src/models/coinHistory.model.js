@@ -4,7 +4,7 @@ const coinHistorySchema = mongoose.Schema(
   {
     user_id: { type: String, require: true },
     payment_method: { type: String, require: true },
-    amount: { type: Number, require: true, min: 1 },
+    amount: { type: Number, require: true },
   },
   { timestamps: true }
 );
