@@ -21,7 +21,7 @@ function Button(props) {
     secondary,
     outline,
     success,
-    gray,
+    grey,
 
     dark90,
     dark80,
@@ -64,7 +64,7 @@ function Button(props) {
       secondary,
       outline,
       success,
-      gray,
+      grey,
 
       dark90,
       dark80,
@@ -132,7 +132,7 @@ Button.propTypes = {
   secondary: PropTypes.bool,
   outline: PropTypes.bool,
   success: PropTypes.bool,
-  gray: PropTypes.bool,
+  grey: PropTypes.bool,
 
   dark90: PropTypes.bool,
   dark80: PropTypes.bool,
@@ -177,7 +177,7 @@ Button.defaultProps = {
   secondary: false,
   outline: false,
   success: false,
-  gray: false,
+  grey: false,
 
   dark90: false,
   dark80: false,
