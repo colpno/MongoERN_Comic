@@ -13,10 +13,10 @@ const coinHistoryService = {
     const response = await CoinHistory.find(params);
     return { data: response };
   },
-  add: async (userId = '', paymentMethodId = '', amount = 0) => {
+  add: async (userId = '', paymentMethod = '', amount = 0) => {
     const model = new CoinHistory({
       user_id: userId,
-      payment_method_id: paymentMethodId,
+      payment_method: paymentMethod,
       amount,
     });
 
