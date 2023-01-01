@@ -11,6 +11,8 @@ export { default as coins } from "./coins.svg";
 export { default as topSales } from "./top-sales.svg";
 export { ReactComponent as ChargeIcon } from "./charge.svg";
 
+export { default as circleC } from "./currency/circle-c.svg";
+export { default as circleP } from "./currency/circle-p.svg";
 export { ReactComponent as CircleC } from "./currency/circle-c.svg";
 export { ReactComponent as CircleP } from "./currency/circle-p.svg";
 
