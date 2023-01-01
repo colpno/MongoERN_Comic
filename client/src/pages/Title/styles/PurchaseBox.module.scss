@@ -63,7 +63,6 @@
 }
 
 .button {
-  background-color: var.$white;
   min-width: 100px;
   width: 200px;
   height: 40px;
@@ -72,6 +71,8 @@
   box-shadow: 0 0 32px 4px rgb(0 0 0 / 0.06);
 
   justify-content: center;
+
+  position: relative;
 
   + .button {
     margin-left: 0;
@@ -105,4 +106,15 @@
   position: absolute;
   top: 1rem;
   right: 1rem;
+}
+
+.radio {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 0;
+
+  cursor: pointer;
 }
