@@ -7,7 +7,7 @@
     display: flex;
     align-items: center;
     height: calc(variables.$header-height - 15px);
-    border-bottom: 1px solid variables.$border-gray-dark;
+    border-bottom: 1px solid variables.$border-grey-dark;
 
     .container {
       display: flex;
@@ -96,7 +96,7 @@
       .icon {
         font-size: 20px;
         color: #888;
-        border: 1px solid variables.$border-gray-dark;
+        border: 1px solid variables.$border-grey-dark;
         border-right: 0;
         padding: $padding-top-bottom 0;
         width: 36px;
@@ -106,7 +106,7 @@
       }
 
       .select {
-        border: 1px solid variables.$border-gray-dark;
+        border: 1px solid variables.$border-grey-dark;
         outline: none;
         height: fit-content;
         font-size: 0.9rem;
@@ -118,7 +118,7 @@
   .divider {
     width: 1px;
     height: 30px;
-    background-color: variables.$border-gray;
+    background-color: variables.$border-grey;
     margin: 0 20px;
   }
 }

@@ -46,7 +46,7 @@
   border: 0;
 
   &:not(:last-child) {
-    border-bottom: 1px solid var.$border-gray-dark;
+    border-bottom: 1px solid var.$border-grey-dark;
   }
 
   + .option {

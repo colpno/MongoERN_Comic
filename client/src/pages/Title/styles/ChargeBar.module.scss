@@ -3,12 +3,11 @@
 .charge-bar {
   height: 25px;
   width: 350px;
-  background: variables.$gray-400;
+  background: variables.$grey-400;
   position: relative;
   overflow: hidden;
   border-radius: 100vmax;
-  box-shadow: inset 0 8px 8px rgb(0 0 0 / 0.1),
-    inset 0 8px 8px rgb(255 255 255 /0.1),
+  box-shadow: inset 0 8px 8px rgb(0 0 0 / 0.1), inset 0 8px 8px rgb(255 255 255 /0.1),
     inset 0 -4px 4px rgb(255 255 255 /0.1);
 }
 

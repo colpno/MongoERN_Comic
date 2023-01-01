@@ -1,7 +1,7 @@
 @use "assets/styles/variables";
 
 .wrapper {
-  border: 1px solid variables.$border-gray;
+  border: 1px solid variables.$border-grey;
   padding: 20px 0;
   margin-top: calc(variables.$header-height + 30px);
 

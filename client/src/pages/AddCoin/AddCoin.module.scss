@@ -10,7 +10,7 @@
   }
 
   &__step__methods {
-    border: 1px solid variables.$border-gray;
+    border: 1px solid variables.$border-grey;
   }
 
   &__step__methods__method {
@@ -20,7 +20,7 @@
     align-items: center;
 
     &:not(:first-child) {
-      border-top: 1px solid variables.$border-gray;
+      border-top: 1px solid variables.$border-grey;
     }
 
     input[type="radio"] {
