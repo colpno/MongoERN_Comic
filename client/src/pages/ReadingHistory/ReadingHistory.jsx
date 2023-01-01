@@ -2,8 +2,8 @@ import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 
-import { NoData, Pagination } from "features";
-import { usePagination } from "hooks";
+import { Loading, NoData, Pagination } from "features";
+import { usePagination, useToast } from "hooks";
 import { readingHistoryService } from "services";
 import ReadingHistoryTable from "./components/ReadingHistoryTable";
 import styles from "./styles/ReadingHistory.module.scss";
@@ -12,10 +12,14 @@ const cx = classNames.bind(styles);
 
 function ReadingHistory() {
   const HISTORIES_PER_PAGE = 25;
+  const [loading, setLoading] = useState(false);
   const [histories, setHistories] = useState([]);
   const { pagination, setPagination, setPaginationTotal } = usePagination(HISTORIES_PER_PAGE);
+  const { Toast, options, toastEmitter } = useToast();
 
-  const fetchData = () => {
+  useEffect(() => {
+    setLoading(true);
+
     readingHistoryService
       .getAll({
         _page: pagination.page,
@@ -24,12 +28,12 @@ function ReadingHistory() {
       .then((response) => {
         setHistories(response.data);
         setPaginationTotal(response.paginate.total);
+        setLoading(false);
       })
-      .catch((error) => console.error(error));
-  };
-
-  useEffect(() => {
-    fetchData();
+      .catch((error) => {
+        toastEmitter(error, "error");
+        setLoading(false);
+      });
   }, [pagination.page]);
 
   return (
@@ -45,7 +49,8 @@ function ReadingHistory() {
           <small>Vui lòng quay lại sau nhé!</small>
         </NoData>
       )}
-      <div />
+      {loading && <Loading />}
+      <Toast {...options} />
     </>
   );
 }
