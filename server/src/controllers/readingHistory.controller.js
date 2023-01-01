@@ -1,4 +1,5 @@
 import createError from 'http-errors';
+import moment from 'moment';
 import transformQueryParams from '../helpers/transformQueryParams.js';
 import { readingHistoryService } from '../services/index.js';
 
@@ -36,9 +37,16 @@ const readingHistoryController = {
       ).data;
 
       if (duplicated.length > 0) {
-        if (duplicated[0].chapter_id === chapterId) return res.status(200);
-
         const match = { user_id: userId, title_id: titleId };
+
+        if (duplicated[0].chapter_id === chapterId) {
+          match.chapter_id = chapterId;
+          await readingHistoryService.update(match, {
+            updatedAt: moment().toISOString(),
+          });
+          return res.status(200).json({ code: 200 });
+        }
+
         const response = await readingHistoryService.update(match, {
           chapter_id: chapterId,
         });
@@ -49,7 +57,6 @@ const readingHistoryController = {
 
         return res.status(200).json({
           code: 200,
-          data: response,
         });
       }
 
@@ -61,7 +68,6 @@ const readingHistoryController = {
 
       return res.status(201).json({
         code: 201,
-        data: response,
       });
     } catch (error) {
       return next(error);

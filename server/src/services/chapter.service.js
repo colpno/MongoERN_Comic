@@ -72,6 +72,22 @@ const chapterService = {
     const response = await Chapter.findOneAndUpdate({ _id: id }, data);
     return response;
   },
+  increaseView: async (id) => {
+    const response = await Chapter.findOneAndUpdate(
+      { _id: id },
+      { $inc: { view: 1 } },
+      { new: true, timestamps: false }
+    );
+    return response;
+  },
+  increaseLike: async (id) => {
+    const response = await Chapter.findOneAndUpdate(
+      { _id: id },
+      { $inc: { like: 1 } },
+      { new: true, timestamps: false }
+    );
+    return response;
+  },
   delete: async (id) => {
     const response = await Chapter.findOneAndDelete({ _id: id });
     return response;

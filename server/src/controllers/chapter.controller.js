@@ -129,18 +129,17 @@ const chapterController = {
       const { id } = req.params;
       const { view, like } = req.body;
 
-      const response = await chapterService.update(id, {
-        view,
-        like,
-      });
-
       if (view) {
+        const response = await chapterService.increaseView(id);
         await titleService.increaseView(response.title_id);
-        return res.status(200);
       }
 
-      await titleService.increaseLike(response.title_id);
-      return res.status(200);
+      if (like) {
+        const response = await chapterService.increaseLike(id);
+        await titleService.increaseLike(response.title_id);
+      }
+
+      return res.status(200).json({ code: 200 });
     } catch (error) {
       return next(error);
     }
