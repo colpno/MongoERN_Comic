@@ -1,5 +1,5 @@
 import classNames from "classnames/bind";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -11,7 +11,8 @@ import { usePagination, useToast } from "hooks";
 import { setCommentPlace } from "libs/redux/slices/comment.slice";
 import { setGenresOfTitle } from "libs/redux/slices/title.slice";
 import { chapterService, followService, titleService } from "services";
-import { ComicChapters, Introduction, TitleAbout } from "./components";
+import { circleC, circleP } from "../../assets/images";
+import { ComicChapters, Introduction, PurchaseBox, TitleAbout } from "./components";
 import styles from "./styles/Title.module.scss";
 
 const cx = classNames.bind(styles);
@@ -27,6 +28,7 @@ function Title() {
   );
   const { Toast, options, toastEmitter } = useToast();
   const [isDESCSorting, setIsDESCSorting] = useState(false);
+  const [purchaseBoxInfo, setPurchaseBoxInfo] = useState({ isToggle: false, chapter: {} });
   const hasTitle = Object.keys(title).length > 0;
   const haveChapters = chapters.length > 0;
   const [popup, setPopup] = useState({
@@ -44,6 +46,28 @@ function Title() {
     top: "0",
     left: "0",
     right: "0",
+  };
+  const paymentChoices = useMemo(
+    () => [
+      { amount: title.coin, icon: circleC },
+      { amount: title.point, icon: circleP },
+      { amount: title.point, icon: circleP },
+      { amount: title.point, icon: circleP },
+    ],
+    [title]
+  );
+
+  const handlePurchase = () => {};
+
+  const handleClosePurchaseBox = () => {
+    setPurchaseBoxInfo((prev) => ({ ...prev, isToggle: false }));
+  };
+
+  const handleOpenPurchaseBox = (chapter) => {
+    setPurchaseBoxInfo({
+      isToggle: true,
+      chapter,
+    });
   };
 
   const fetchChapters = () => {
@@ -135,6 +159,7 @@ function Title() {
                   user={user}
                   isDESCSorting={isDESCSorting}
                   handleSorting={handleSorting}
+                  handleOpenPurchaseBox={handleOpenPurchaseBox}
                 />
               ) : (
                 <NoData>
@@ -150,6 +175,14 @@ function Title() {
           <Recommend />
         </div>
       </main>
+      {purchaseBoxInfo.isToggle && (
+        <PurchaseBox
+          chapter={purchaseBoxInfo.chapter}
+          payments={paymentChoices}
+          handleSubmit={handlePurchase}
+          handleClose={handleClosePurchaseBox}
+        />
+      )}
       <Popup popup={popup} setPopup={setPopup} />
       <Toast {...options} />
     </>

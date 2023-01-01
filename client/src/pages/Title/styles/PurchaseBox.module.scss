@@ -1,0 +1,106 @@
+@use "assets/styles/variables" as var;
+@use "assets/styles/mixins";
+
+.purchase-box {
+  padding: 20px;
+
+  width: 900px;
+  height: 380px;
+  max-height: 400px;
+
+  background: radial-gradient(circle at 18.7% 37.8%, rgb(225, 234, 238) 0%, rgb(250, 250, 250) 90%);
+
+  box-shadow: inset 0px 0px 56px 11px rgba(0, 0, 0, 0.12);
+  -webkit-box-shadow: inset 0px 0px 56px 11px rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: inset 0px 0px 56px 11px rgba(0, 0, 0, 0.12);
+
+  border: 1px solid var.$grey-500;
+  border-radius: 2rem;
+
+  display: flex;
+  gap: 1.8rem;
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  z-index: 21;
+}
+
+.title {
+  text-align: center;
+  margin: 1rem 0;
+
+  @include mixins.multiLineClamp(1);
+}
+
+.choices {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  flex: 1;
+  gap: 0.6rem;
+}
+
+.image {
+  &-box {
+    box-shadow: 0 0 12px 4px rgb(0 0 0 / 0.08);
+    border-radius: 1rem;
+    overflow: hidden;
+    flex: 1;
+  }
+}
+
+.payment {
+  &-box {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+  }
+}
+
+.button {
+  background-color: var.$white;
+  min-width: 100px;
+  width: 200px;
+  height: 40px;
+  border-radius: 6px;
+
+  box-shadow: 0 0 32px 4px rgb(0 0 0 / 0.06);
+
+  justify-content: center;
+
+  + .button {
+    margin-left: 0;
+  }
+
+  > span {
+    width: 50px;
+    font-size: 1.1em;
+    letter-spacing: 2px;
+  }
+
+  > img {
+    $size: 24px;
+    width: $size;
+    height: $size;
+  }
+}
+
+.submit {
+  margin-top: 1rem;
+  width: 250px;
+
+  box-shadow: 0 0 32px 4px rgb(0 0 0 / 0.08);
+}
+
+.close-button {
+  font-size: 2rem;
+  cursor: pointer;
+
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
