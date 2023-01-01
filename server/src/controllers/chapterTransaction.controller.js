@@ -1,12 +1,12 @@
 import createError from 'http-errors';
 import transformQueryParams from '../helpers/transformQueryParams.js';
-import { chapterTransactionService } from '../services/index.js';
+import { chapterTransactionService, userService } from '../services/index.js';
 
 const chapterTransactionController = {
   getAll: async (req, res, next) => {
     try {
       const { id: userId } = req.userInfo;
-      req.query.userId = userId;
+      req.query.user_id = userId;
 
       const params = transformQueryParams(req.query);
       const response = await chapterTransactionService.getAll(params);
@@ -29,30 +29,74 @@ const chapterTransactionController = {
   add: async (req, res, next) => {
     try {
       const { id: userId } = req.userInfo;
-      const { chapterId, expiredAt, method, cost } = req.body;
+      const { titleId, chapterId, expiredAt, method, cost } = req.body;
 
-      const duplicated = (await chapterTransactionService.getAll({ userId, chapterId, method }))
-        .data;
+      if (titleId && chapterId && method && cost) {
+        const duplicated = (
+          await chapterTransactionService.getAll({
+            user_id: userId,
+            title_id: titleId,
+            chapter_id: chapterId,
+            method,
+          })
+        ).data;
 
-      if (duplicated.length > 0) {
-        return next(createError(409, 'Đã tồn tại giao dịch'));
+        if (duplicated.length > 0) {
+          return next(createError(409, 'Đã tồn tại giao dịch'));
+        }
+
+        // minus user currency
+        let user;
+        if (method === 'coin') {
+          user = await userService.update(userId, { $inc: { coin: -cost } });
+        }
+        if (method === 'point') {
+          user = await userService.update(userId, { $inc: { point: -cost } });
+        }
+        if (method === 'rent ticket') {
+          user = await userService.update(userId, { $inc: { ticket_for_renting: -1 } });
+        }
+        if (method === 'purchase ticket') {
+          user = await userService.update(userId, { $inc: { ticket_for_buying: -1 } });
+        }
+
+        // save to mongo
+        const response = await chapterTransactionService.add(
+          userId,
+          titleId,
+          chapterId,
+          expiredAt,
+          method,
+          cost
+        );
+
+        if (!response) {
+          return next(createError(400, 'Không thể hoàn thành việc tạo giao dịch'));
+        }
+
+        const rentList = ['rent ticket'];
+
+        if (rentList.includes(method)) {
+          return res.status(201).json({
+            code: 201,
+            message: `Bạn đã thuê thành công. Bạn có thể đọc đến ${expiredAt}, sau thời gian này bạn sẽ không thể đọc được tiếp nữa.`,
+            data: response,
+          });
+        }
+
+        return res.status(201).json({
+          code: 201,
+          message: 'Bạn đã mua thành công',
+          data: {
+            transaction: response,
+            user,
+          },
+        });
       }
 
-      const response = await chapterTransactionService.add(
-        userId,
-        chapterId,
-        expiredAt,
-        method,
-        cost
-      );
-
-      if (!response) {
-        return next(createError(400, 'Không thể hoàn thành việc tạo giao dịch'));
-      }
-
-      return res.status(201).json({
-        code: 201,
-        data: response,
+      return res.status(400).json({
+        code: 400,
+        message: 'Không đủ dữ liệu đầu vào',
       });
     } catch (error) {
       return next(error);

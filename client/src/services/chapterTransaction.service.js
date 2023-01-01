@@ -9,9 +9,10 @@ const chapterTransactionService = {
       return Promise.reject(error.data);
     }
   },
-  add: async (chapterId, method, cost, expiredAt, setProgress = () => {}) => {
+  add: async (titleId, chapterId, method, cost, expiredAt, setProgress = () => {}) => {
     try {
       const response = await chapterTransactionApi.add(
+        titleId,
         chapterId,
         method,
         cost,

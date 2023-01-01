@@ -1,13 +1,12 @@
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
-import { memo, useEffect, useState } from "react";
+import { memo } from "react";
 import { AiFillEye, AiFillHeart } from "react-icons/ai";
 import { BsSortNumericDown, BsSortNumericUp } from "react-icons/bs";
 
 import { CircleC, CircleP } from "assets/images";
 import { Button } from "components";
 import { NoData } from "features";
-import { chapterTransactionService } from "services";
 import { separateNumberDigit } from "utils";
 import { convertToDateString, formatTime } from "utils/convertTime";
 import styles from "../styles/ComicChapters.module.scss";
@@ -17,23 +16,11 @@ const cx = classNames.bind(styles);
 function ComicChapters({
   title,
   chapters,
-  user,
+  purchasedHistories,
   isDESCSorting,
   handleSorting,
   handleOpenPurchaseBox,
 }) {
-  const [purchasedHistories, setPurchasedHistories] = useState([]);
-
-  useEffect(() => {
-    chapterTransactionService
-      .getAll({
-        user_id: user._id,
-        title_id: title._id,
-      })
-      .then((response) => setPurchasedHistories(response.data))
-      .catch((error) => console.error(error));
-  }, []);
-
   const findPurchasedChapter = (chapterId) => {
     const isPurchased = purchasedHistories.some((history) => history.chapter_id === chapterId);
     return isPurchased;
@@ -165,9 +152,11 @@ ComicChapters.propTypes = {
       like: PropTypes.number.isRequired,
     }).isRequired
   ).isRequired,
-  user: PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-  }).isRequired,
+  purchasedHistories: PropTypes.arrayOf(
+    PropTypes.shape({
+      chapter_id: PropTypes.string.isRequired,
+    }).isRequired
+  ).isRequired,
   isDESCSorting: PropTypes.bool.isRequired,
   handleSorting: PropTypes.func.isRequired,
   handleOpenPurchaseBox: PropTypes.func.isRequired,

@@ -10,12 +10,20 @@ const chapterTransactionService = {
       return response;
     }
 
-    const response = await ChapterTransaction.find(params).populate('chapter');
+    const response = await ChapterTransaction.find(params);
     return { data: response };
   },
-  add: async (userId = '', chapterId = '', expiredAt = null, method = '', cost = 0) => {
+  add: async (
+    userId = '',
+    titleId = '',
+    chapterId = '',
+    expiredAt = null,
+    method = '',
+    cost = 0
+  ) => {
     const model = new ChapterTransaction({
       user_id: userId,
+      title_id: titleId,
       chapter_id: chapterId,
       expired_at: expiredAt,
       method,

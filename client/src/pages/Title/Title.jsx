@@ -1,4 +1,5 @@
 import classNames from "classnames/bind";
+import moment from "moment";
 import { useEffect, useMemo, useState } from "react";
 import { Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,11 +7,12 @@ import { useParams } from "react-router-dom";
 
 import { TITLE_PAGE_CHAPTERS_PER_PAGE } from "constants/paginate.constant";
 import { socket } from "context/socketContext";
-import { Comment, NoData, Pagination, Popup, Recommend } from "features";
+import { Comment, Loading, NoData, Pagination, Popup, Recommend } from "features";
 import { usePagination, useToast } from "hooks";
 import { setCommentPlace } from "libs/redux/slices/comment.slice";
 import { setGenresOfTitle } from "libs/redux/slices/title.slice";
-import { chapterService, followService, titleService } from "services";
+import { setUser } from "libs/redux/slices/user.slice";
+import { chapterService, chapterTransactionService, followService, titleService } from "services";
 import { circleC, circleP } from "../../assets/images";
 import { ComicChapters, Introduction, PurchaseBox, TitleAbout } from "./components";
 import styles from "./styles/Title.module.scss";
@@ -28,7 +30,9 @@ function Title() {
   );
   const { Toast, options, toastEmitter } = useToast();
   const [isDESCSorting, setIsDESCSorting] = useState(false);
+  const [purchasedHistories, setPurchasedHistories] = useState([]);
   const [purchaseBoxInfo, setPurchaseBoxInfo] = useState({ isToggle: false, chapter: {} });
+  const [loading, setLoading] = useState(false);
   const hasTitle = Object.keys(title).length > 0;
   const haveChapters = chapters.length > 0;
   const [popup, setPopup] = useState({
@@ -49,13 +53,53 @@ function Title() {
   };
   const paymentChoices = useMemo(
     () => [
-      { amount: title.coin, icon: circleC },
-      { amount: title.point, icon: circleP },
+      { amount: title.coin, icon: circleC, method: "coin" },
+      { amount: title.point, icon: circleP, method: "point" },
     ],
     [title]
   );
 
-  const handlePurchase = () => {};
+  const checkCanPurchase = (method, amount) => {
+    switch (method.toLowerCase()) {
+      case "coin":
+        return user.coin > amount;
+      case "point":
+        return user.point > amount;
+      case "rent ticket":
+        return user.ticket_for_renting > amount;
+      case "purchase ticket":
+        return user.ticket_for_buying > amount;
+      default:
+        return false;
+    }
+  };
+
+  const handlePurchase = ({ icon, ...others }, chapter) => {
+    const { amount, method } = others;
+    const { _id: chapterId } = chapter;
+
+    if (!!amount && !!method && !!chapterId && checkCanPurchase(method, amount)) {
+      setLoading(true);
+
+      const rentList = ["rent ticket"];
+      const expiredAt = rentList.includes(method)
+        ? moment().add(5, "days").toISOString()
+        : undefined;
+
+      chapterTransactionService
+        .add(titleId, chapterId, method, amount, expiredAt)
+        .then((response) => {
+          dispatch(setUser(response.data.user));
+          setPurchasedHistories((prev) => [...prev, response.data.transaction]);
+          toastEmitter(response.message, "success");
+          setLoading(false);
+        })
+        .catch((error) => {
+          toastEmitter(error, "error");
+          setLoading(false);
+        });
+    }
+  };
 
   const handleClosePurchaseBox = () => {
     setPurchaseBoxInfo((prev) => ({ ...prev, isToggle: false }));
@@ -69,6 +113,7 @@ function Title() {
   };
 
   const fetchChapters = () => {
+    setLoading(true);
     const chapterApiParams = {
       title_id: titleId,
       _sort: "order",
@@ -82,8 +127,12 @@ function Title() {
       .then((response) => {
         setChapters(response.data);
         setPaginationTotal(response.paginate.total);
+        setLoading(false);
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        toastEmitter(error, "error");
+        setLoading(false);
+      });
   };
 
   const handleSorting = () => {
@@ -113,6 +162,7 @@ function Title() {
   }, []);
 
   useEffect(() => {
+    setLoading(true);
     const chapterApiParams = {
       title_id: titleId,
       _sort: "order",
@@ -123,16 +173,22 @@ function Title() {
 
     const titlePromise = titleService.getOne(titleId, false);
     const chaptersPromise = chapterService.getAll(chapterApiParams, false);
+    const chapterTransactionPromise = chapterTransactionService.getAll({ title_id: titleId });
 
-    Promise.all([titlePromise, chaptersPromise])
-      .then(([titleResponse, chapterResponse]) => {
+    Promise.all([titlePromise, chaptersPromise, chapterTransactionPromise])
+      .then(([titleResponse, chapterResponse, chapterTransactionResponse]) => {
         setTitle(titleResponse.data);
         dispatch(setGenresOfTitle(titleResponse.data.genres));
         setChapters(chapterResponse.data);
         setPaginationTotal(chapterResponse.paginate.total);
+        setPurchasedHistories(chapterTransactionResponse.data);
+        setLoading(false);
       })
-      .catch((error) => console.error(error));
-  }, [titleId]);
+      .catch((error) => {
+        toastEmitter(error, "error");
+        setLoading(false);
+      });
+  }, [titleId, user]);
 
   return (
     <>
@@ -158,6 +214,7 @@ function Title() {
                   isDESCSorting={isDESCSorting}
                   handleSorting={handleSorting}
                   handleOpenPurchaseBox={handleOpenPurchaseBox}
+                  purchasedHistories={purchasedHistories}
                 />
               ) : (
                 <NoData>
@@ -182,6 +239,7 @@ function Title() {
         />
       )}
       <Popup popup={popup} setPopup={setPopup} />
+      {loading && <Loading />}
       <Toast {...options} />
     </>
   );

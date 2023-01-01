@@ -5,10 +5,11 @@ const url = "/chapter-transactions";
 const chapterTransactionApi = {
   getAll: (params) => axiosClient.get(url, { params, withCredentials: true }),
 
-  add: (chapterId, method, cost, expiredAt, setProgress = () => {}) => {
+  add: (titleId, chapterId, method, cost, expiredAt, setProgress = () => {}) => {
     return axiosClient.post(
       `${url}/create`,
       {
+        titleId,
         chapterId,
         method,
         cost,
