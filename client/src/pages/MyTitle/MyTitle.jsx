@@ -65,7 +65,7 @@ function MyTitle() {
 
   useEffect(() => {
     if (searchText) {
-      setTitleApiParams((prev) => ({ ...prev, name: searchText }));
+      setTitleApiParams((prev) => ({ ...prev, title_like: searchText }));
     }
     if (searchText.length === 0) {
       setTitleApiParams(defaultTitleApiParams);
