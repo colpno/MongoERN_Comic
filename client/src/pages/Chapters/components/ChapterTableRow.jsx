@@ -64,18 +64,10 @@ function ChaptersTableRow({ setPopup, setDeleteItem, chapters }) {
               <span className={cx("order")}>{chapter.order}</span>
             </Col>
             <Col>
-              <img
-                className={cx("cover")}
-                src={chapter.cover.source}
-                alt={chapter.title}
-              />
+              <img className={cx("cover")} src={chapter.cover.source} alt={chapter.title} />
             </Col>
             <Col xs={3}>
-              <Button
-                text
-                to={`/comic/title/${titleId}/${chapter._id}`}
-                className={cx("title")}
-              >
+              <Button text to={`/comic/title/${titleId}/${chapter._id}`} className={cx("title")}>
                 {chapter.title}
               </Button>
             </Col>
@@ -90,19 +82,15 @@ function ChaptersTableRow({ setPopup, setDeleteItem, chapters }) {
               </span>
             </Col>
             <Col>
-              <span
-                className={cx(`approved-status-${chapter.approved_status_id}`)}
-              >
+              <span className={cx(`approved-status-${chapter.approved_status_id}`)}>
                 {options.length > 0 &&
-                  options.find(
-                    (option) => option.value === chapter.approved_status_id
-                  ).label}
+                  options.find((option) => option.value === chapter.approved_status_id).label}
               </span>
             </Col>
             <Col className={cx("actions")}>
               <Button
                 outline
-                gray
+                grey
                 to={`update/${chapter._id}`}
                 className="action"
                 title="Chỉnh sửa truyện"
@@ -111,7 +99,7 @@ function ChaptersTableRow({ setPopup, setDeleteItem, chapters }) {
               </Button>
               <Button
                 outline
-                gray
+                grey
                 className={cx("action")}
                 title="Xóa chương"
                 onClick={() => handleDeleteClick(chapter._id)}

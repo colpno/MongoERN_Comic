@@ -14,15 +14,7 @@ function CommentForm({ initialValues, handleSubmit }) {
       {() => {
         return (
           <Form>
-            <FastField
-              component={QuillAreaField}
-              name="text"
-              bold
-              italic
-              underline
-              strike
-              link
-            />
+            <FastField component={QuillAreaField} name="text" bold italic underline strike link />
 
             <div className={cx("button-container")}>
               <Button primary type="submit" className={cx("submit-button")}>

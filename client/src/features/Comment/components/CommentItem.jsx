@@ -16,8 +16,7 @@ function CommentItem({ comment, handleReplySubmit, getReplies, canReply }) {
   const [toggleReply, setToggleReply] = useState(false);
   const [replies, setReplies] = useState([]);
   const [paginate, setPaginate] = useState({ page: 0, limit: 5 });
-  const repliesRemaining =
-    comment.comment_replies_num - paginate.page * paginate.limit;
+  const repliesRemaining = comment.comment_replies_num - paginate.page * paginate.limit;
   const initialFormValues = { ...comment, text: "" };
 
   const handleToggleReply = () => {
@@ -36,8 +35,7 @@ function CommentItem({ comment, handleReplySubmit, getReplies, canReply }) {
   useEffect(() => {
     if (socket) {
       socket.on("send-comment", (cmt) => {
-        if (cmt.parent_slug === comment.slug)
-          setReplies((prev) => [cmt, ...prev]);
+        if (cmt.parent_slug === comment.slug) setReplies((prev) => [cmt, ...prev]);
       });
     }
   }, [socket]);
@@ -46,11 +44,7 @@ function CommentItem({ comment, handleReplySubmit, getReplies, canReply }) {
     <>
       <div className={cx("comment")}>
         <div className={cx("avatar-container")}>
-          <img
-            src={comment.author.avatar}
-            alt="avatar"
-            className={cx("avatar")}
-          />
+          <img src={comment.author.avatar} alt="avatar" className={cx("avatar")} />
         </div>
         <div className={cx("content")}>
           <div className={cx("username")}>{comment.author.name}</div>
@@ -62,9 +56,7 @@ function CommentItem({ comment, handleReplySubmit, getReplies, canReply }) {
             />
           </ReadMore>
           <div>
-            <div className={cx("comment-time")}>
-              {moment(comment.createdAt).fromNow(true)}
-            </div>
+            <div className={cx("comment-time")}>{moment(comment.createdAt).fromNow(true)}</div>
             {canReply ? (
               <Button text className={cx("reply")} onClick={handleToggleReply}>
                 Phản hồi
@@ -76,19 +68,13 @@ function CommentItem({ comment, handleReplySubmit, getReplies, canReply }) {
       {canReply ? (
         <div className={cx("replies")}>
           {toggleReply ? (
-            <CommentForm
-              handleSubmit={handleReplySubmit}
-              initialValues={initialFormValues}
-            />
+            <CommentForm handleSubmit={handleReplySubmit} initialValues={initialFormValues} />
           ) : null}
           {replies.map((reply) => {
             return <CommentItem comment={reply} key={reply._id} />;
           })}
           {repliesRemaining > 0 && (
-            <Button
-              text
-              onClick={() => moreReplies(comment.slug, paginate.page + 1)}
-            >
+            <Button text onClick={() => moreReplies(comment.slug, paginate.page + 1)}>
               Xem thêm {repliesRemaining} bình luận.
             </Button>
           )}
@@ -104,10 +90,7 @@ CommentItem.propTypes = {
       avatar: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
     }).isRequired,
-    text: PropTypes.oneOfType([
-      PropTypes.string.isRequired,
-      PropTypes.node.isRequired,
-    ]).isRequired,
+    text: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.node.isRequired]).isRequired,
     slug: PropTypes.string.isRequired,
     comment_replies_num: PropTypes.number.isRequired,
     createdAt: PropTypes.string.isRequired,

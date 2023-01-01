@@ -25,9 +25,7 @@ function SubNavigator({ menu, slidesPerView }) {
                 return (
                   <SwiperSlide
                     key={index}
-                    className={`navigator__link ${
-                      item.href === url ? "active" : ""
-                    }`}
+                    className={`navigator__link ${item.href === url ? "active" : ""}`}
                   >
                     <Button wrapper to={item.href} className="navigator__label">
                       {item.label}

@@ -21,22 +21,12 @@ function CardFigure(props) {
   } = props;
 
   return (
-    <Button
-      wrapper
-      to={to}
-      className={`card-figure${horizontal ? " horizontal" : ""}`}
-    >
-      <Image
-        src={data.cover.source}
-        alt={data.title}
-        className="card-figure__image"
-      />
+    <Button wrapper to={to} className={`card-figure${horizontal ? " horizontal" : ""}`}>
+      <Image src={data.cover.source} alt={data.title} className="card-figure__image" />
       <figcaption className="card-figure__content">
         <div className="card-figure__content__wrapper">
           <h5 className="card-figure__content__title">{data.title}</h5>
-          {showSummary && (
-            <p className="card-figure__content__summary">{data.summary}</p>
-          )}
+          {showSummary && <p className="card-figure__content__summary">{data.summary}</p>}
         </div>
 
         <div className="card-figure__content__wrapper">
@@ -45,11 +35,7 @@ function CardFigure(props) {
               {data.total_chapter} chương
             </small>
           )}
-          {showAuthor && (
-            <small className="card-figure__content__author">
-              {data.author}
-            </small>
-          )}
+          {showAuthor && <small className="card-figure__content__author">{data.author}</small>}
           {(showLike || showView) && (
             <div className="card-figure__content__counting">
               {showLike && (
