@@ -1,15 +1,16 @@
+import moment from "moment";
 import PropTypes from "prop-types";
 import { Col, Row } from "react-bootstrap";
 
-function HiredChaptersTableRow({ titlesAndChapters, cx }) {
+function HiredChaptersTableRow({ transactions, cx }) {
   return (
     <>
-      {titlesAndChapters.map((object) => {
-        const { title, chapter } = object;
+      {transactions.map((object) => {
+        const { transaction, title, chapter } = object;
 
         return (
-          <Row className={cx("transaction__container")} key={chapter._id}>
-            <Col md={8} className={cx("transaction__container__content")}>
+          <Row className={cx("transaction__container")} key={transaction._id}>
+            <Col xs={8} className={cx("transaction__container__content")}>
               <div className={cx("box-img")}>
                 <img src={title.cover.source} alt={title.title} />
               </div>
@@ -17,6 +18,9 @@ function HiredChaptersTableRow({ titlesAndChapters, cx }) {
                 <p className={cx("title")}>{title.title}</p>
                 <p className={cx("author")}>{chapter.title}</p>
               </div>
+            </Col>
+            <Col xs={4} className="center">
+              <span>{`Thời gian thuê còn ${moment(transaction.expiredAt).toNow()}`}</span>
             </Col>
           </Row>
         );
@@ -26,8 +30,12 @@ function HiredChaptersTableRow({ titlesAndChapters, cx }) {
 }
 
 HiredChaptersTableRow.propTypes = {
-  titlesAndChapters: PropTypes.arrayOf(
+  transactions: PropTypes.arrayOf(
     PropTypes.shape({
+      transaction: PropTypes.shape({
+        _id: PropTypes.string.isRequired,
+        expiredAt: PropTypes.string.isRequired,
+      }).isRequired,
       title: PropTypes.shape({
         cover: PropTypes.shape({
           source: PropTypes.string.isRequired,
@@ -35,7 +43,6 @@ HiredChaptersTableRow.propTypes = {
         title: PropTypes.string.isRequired,
       }).isRequired,
       chapter: PropTypes.shape({
-        id: PropTypes.string.isRequired,
         title: PropTypes.string.isRequired,
       }).isRequired,
     }).isRequired

@@ -24,7 +24,7 @@ function TitleTransaction() {
   const fetchData = () => {
     titleService
       .getAll()
-      .then((response) => setTitles(response))
+      .then((response) => setTitles(response.data))
       .catch((error) => console.error(error));
   };
 
@@ -41,12 +41,8 @@ function TitleTransaction() {
       {titles.length > 0 && (
         <Container className={cx("transaction")}>
           <TabsContainer menu={menu} />
-          {queryTab.includes(menu[0].tab) && (
-            <PurchasedChapters cx={cx} titles={titles} />
-          )}
-          {queryTab.includes(menu[1].tab) && (
-            <HiredChapters cx={cx} titles={titles} />
-          )}
+          {queryTab.includes(menu[0].tab) && <PurchasedChapters cx={cx} titles={titles} />}
+          {queryTab.includes(menu[1].tab) && <HiredChapters cx={cx} titles={titles} />}
         </Container>
       )}
       {}

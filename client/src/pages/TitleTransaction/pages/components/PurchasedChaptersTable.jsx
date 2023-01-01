@@ -1,9 +1,9 @@
 import { GridTable } from "components";
-import { Pagination } from "features";
 import PropTypes from "prop-types";
-import HiredChaptersTableRow from "./HiredChaptersTableRow";
+import { Pagination } from "features";
+import PurchasedChaptersTableRow from "./PurchasedChaptersTableRow";
 
-function HiredChaptersTable({ transactions, cx, pagination, setPagination }) {
+function PurchasedChaptersTable({ transactions, cx, pagination, setPagination }) {
   return (
     <GridTable
       head={[
@@ -12,17 +12,23 @@ function HiredChaptersTable({ transactions, cx, pagination, setPagination }) {
         },
       ]}
     >
-      <HiredChaptersTableRow transactions={transactions} cx={cx} />
+      <>
+        {transactions.map((history) => {
+          return (
+            <PurchasedChaptersTableRow cx={cx} history={history} key={history.transaction._id} />
+          );
+        })}
+      </>
       <Pagination pagination={pagination} setPagination={setPagination} />
     </GridTable>
   );
 }
 
-HiredChaptersTable.propTypes = {
+PurchasedChaptersTable.propTypes = {
   transactions: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired,
   cx: PropTypes.func.isRequired,
   pagination: PropTypes.shape({}).isRequired,
   setPagination: PropTypes.func.isRequired,
 };
 
-export default HiredChaptersTable;
+export default PurchasedChaptersTable;

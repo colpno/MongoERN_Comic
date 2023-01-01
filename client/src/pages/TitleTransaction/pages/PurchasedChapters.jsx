@@ -1,89 +1,59 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { Col, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
-import { GridTable } from "components";
-import { NoData, Pagination } from "features";
+import { Loading, NoData } from "features";
 import { chapterTransactionService } from "services";
+import PurchasedChaptersTable from "./components/PurchasedChaptersTable";
 
-function PurchasedChapters({ cx, titles }) {
+function PurchasedChapters({ cx }) {
   const user = useSelector((state) => state.user.user);
-  const [chapters, setChapters] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [transactions, setTransactions] = useState([]);
   const [pagination, setPagination] = useState({
-    _page: 1,
-    _limit: 30,
+    page: 1,
+    limit: 30,
     total: 0,
   });
 
-  const finalData = [];
-  chapters.forEach((chapter) => {
-    finalData.push({
-      chapter,
-      title: titles.find((title) => chapter.title_id === title._id),
-    });
-  });
-  const hasData = finalData.length > 0;
+  useEffect(() => {
+    setLoading(true);
 
-  const fetchData = () => {
     const params = {
-      userId: user.id,
+      user_id: user._id,
       _page: pagination.page,
       _limit: pagination.limit,
     };
+
     chapterTransactionService
       .getAll(params)
       .then((response) => {
         const purchasedChapters = response.data.filter(
-          (purchasedChapter) =>
-            purchasedChapter.expiredAt !== "" &&
-            purchasedChapter.expiredAt !== null
+          (purchasedChapter) => !purchasedChapter.transaction.expiredAt
         );
 
-        setChapters(purchasedChapters);
+        setTransactions(purchasedChapters);
         setPagination((prev) => ({
           ...prev,
           total: response.paginate.total,
         }));
+        setLoading(false);
       })
-      .catch((error) => console.error(error));
-  };
-
-  useEffect(() => {
-    fetchData();
+      .catch((error) => {
+        console.error(error);
+        setLoading(false);
+      });
   }, []);
 
   return (
     <>
-      {hasData ? (
-        <GridTable
-          head={[
-            {
-              label: `Hiển thị có tổng cộng ${chapters.length} nội dung`,
-            },
-          ]}
-        >
-          <>
-            {finalData.map((titleAndChapter) => {
-              const { title, chapter } = titleAndChapter;
-
-              return (
-                <Row className={cx("transaction__container")} key={chapter._id}>
-                  <Col md={8} className={cx("transaction__container__content")}>
-                    <div className={cx("box-img")}>
-                      <img src={title.cover.source} alt={title.title} />
-                    </div>
-                    <div>
-                      <p className={cx("title")}>{title.title}</p>
-                      <p className={cx("chapter")}>{chapter.title}</p>
-                    </div>
-                  </Col>
-                </Row>
-              );
-            })}
-          </>
-          <Pagination pagination={pagination} setPagination={setPagination} />
-        </GridTable>
+      {transactions.length > 0 ? (
+        <PurchasedChaptersTable
+          transactions={transactions}
+          cx={cx}
+          pagination={pagination}
+          setPagination={setPagination}
+        />
       ) : (
         <NoData>
           <h5>Hiện tại chưa có truyện nào được bạn theo dõi!</h5>
@@ -91,21 +61,13 @@ function PurchasedChapters({ cx, titles }) {
         </NoData>
       )}
       <div />
+      {loading && <Loading />}
     </>
   );
 }
 
 PurchasedChapters.propTypes = {
   cx: PropTypes.func.isRequired,
-  titles: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      cover: PropTypes.shape({
-        source: PropTypes.string.isRequired,
-      }).isRequired,
-      title: PropTypes.string.isRequired,
-    }).isRequired
-  ).isRequired,
 };
 
 export default PurchasedChapters;
