@@ -1,6 +1,6 @@
 import createError from 'http-errors';
 import transformQueryParams from '../helpers/transformQueryParams.js';
-import { chapterTransactionService, userService } from '../services/index.js';
+import { chapterTransactionService, coinHistoryService, userService } from '../services/index.js';
 
 const chapterTransactionController = {
   getAll: async (req, res, next) => {
@@ -49,6 +49,7 @@ const chapterTransactionController = {
         let user;
         if (method === 'coin') {
           user = await userService.update(userId, { $inc: { coin: -cost } });
+          await coinHistoryService.add(userId, 'Mua chương', -cost);
         }
         if (method === 'point') {
           user = await userService.update(userId, { $inc: { point: -cost } });
@@ -80,7 +81,10 @@ const chapterTransactionController = {
           return res.status(201).json({
             code: 201,
             message: `Bạn đã thuê thành công. Bạn có thể đọc đến ${expiredAt}, sau thời gian này bạn sẽ không thể đọc được tiếp nữa.`,
-            data: response,
+            data: {
+              transaction: response,
+              user,
+            },
           });
         }
 
