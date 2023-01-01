@@ -28,8 +28,7 @@ function MyTitle() {
   const user = useSelector((state) => state.user.user);
   const searchText = useSelector((state) => state.global.searchText);
   const [titles, setTitles] = useState([]);
-  const { pagination, setPagination, setPaginationTotal } =
-    usePagination(TITLES_PER_PAGE);
+  const { pagination, setPagination, setPaginationTotal } = usePagination(TITLES_PER_PAGE);
   const defaultTitleApiParams = {
     user_id: user._id,
     _sort: "_id",
