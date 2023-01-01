@@ -22,7 +22,9 @@ function ComicChapters({
   handleOpenPurchaseBox,
 }) {
   const findPurchasedChapter = (chapterId) => {
-    const isPurchased = purchasedHistories.some((history) => history.chapter_id === chapterId);
+    const isPurchased = purchasedHistories.some(
+      (history) => history.transaction.chapter_id === chapterId
+    );
     return isPurchased;
   };
 
@@ -140,6 +142,7 @@ ComicChapters.propTypes = {
     point: PropTypes.number.isRequired,
     // TODO: chargeTime: PropTypes.number.isRequired,
   }).isRequired,
+
   chapters: PropTypes.arrayOf(
     PropTypes.shape({
       cost: PropTypes.bool.isRequired,
@@ -152,11 +155,19 @@ ComicChapters.propTypes = {
       like: PropTypes.number.isRequired,
     }).isRequired
   ).isRequired,
+
   purchasedHistories: PropTypes.arrayOf(
     PropTypes.shape({
-      chapter_id: PropTypes.string.isRequired,
+      transaction: PropTypes.shape({
+        _id: PropTypes.string.isRequired,
+        chapter_id: PropTypes.string.isRequired,
+      }).isRequired,
+      chapter: PropTypes.shape({
+        _id: PropTypes.string.isRequired,
+      }).isRequired,
     }).isRequired
   ).isRequired,
+
   isDESCSorting: PropTypes.bool.isRequired,
   handleSorting: PropTypes.func.isRequired,
   handleOpenPurchaseBox: PropTypes.func.isRequired,

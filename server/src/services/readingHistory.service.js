@@ -1,6 +1,28 @@
 import paginateSort from '../helpers/paginateSort.js';
 import { Chapter, ReadingHistory, Title } from '../models/index.js';
 
+const getAttachData = async (response) => {
+  const titleIds = response.data.map((history) => history.title_id);
+  const chapterIds = response.data.map((history) => history.chapter_id);
+
+  const titles = await Title.find({ _id: { $in: titleIds } });
+  const chapters = await Chapter.find({ _id: { $in: chapterIds } });
+
+  const histories = response.data.map((history) => {
+    const title = titles.find((tit) => {
+      const id = tit._id.toString();
+      return id === history.title_id;
+    });
+    const chapter = chapters.find((chap) => {
+      const id = chap._id.toString();
+      return id === history.chapter_id;
+    });
+    return { history, title, chapter };
+  });
+
+  return histories;
+};
+
 const readingHistoryService = {
   getAll: async (params = {}) => {
     const { _limit, _sort, _order } = params;
@@ -9,32 +31,14 @@ const readingHistoryService = {
       const response = await paginateSort(params, ReadingHistory);
 
       if (response.data.length > 0) {
-        const titleIds = response.data.map((history) => history.title_id);
-        const chapterIds = response.data.map((history) => history.chapter_id);
-
-        const titles = await Title.find({ _id: { $in: titleIds } });
-        const chapters = await Chapter.find({ _id: { $in: chapterIds } });
-
-        const histories = response.data.map((history) => {
-          const title = titles.find((tit) => {
-            const id = tit._id.toString();
-            return id === history.title_id;
-          });
-          const chapter = chapters.find((chap) => {
-            const id = chap._id.toString();
-            return id === history.chapter_id;
-          });
-          return { history, title, chapter };
-        });
-
-        return { ...response, data: histories };
+        return { ...response, data: await getAttachData(response) };
       }
 
-      return response;
+      return { data: response };
     }
 
     const response = await ReadingHistory.find(params);
-    return { data: response };
+    return { data: await getAttachData({ data: response }) };
   },
   add: async (userId = '', titleId = '', chapterId = '') => {
     const model = new ReadingHistory({
