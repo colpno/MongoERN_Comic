@@ -1,20 +1,44 @@
-/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
-import { memo } from "react";
+import { memo, useEffect, useState } from "react";
 import { AiFillHeart } from "react-icons/ai";
 import { BsSortNumericDown, BsSortNumericUp } from "react-icons/bs";
 
 import { CircleC, CircleP } from "assets/images";
 import { Button } from "components";
 import { NoData } from "features";
+import { chapterTransactionService } from "services";
 import { separateNumberDigit } from "utils";
 import { convertToDateString, formatTime } from "utils/convertTime";
 import styles from "../styles/ComicChapters.module.scss";
 
 const cx = classNames.bind(styles);
 
-function ComicChapters({ title, chapters, user, isDESCSorting, handleSorting }) {
+function ComicChapters({
+  title,
+  chapters,
+  user,
+  isDESCSorting,
+  handleSorting,
+  handleOpenPurchaseBox,
+}) {
+  const [purchasedHistories, setPurchasedHistories] = useState([]);
+
+  useEffect(() => {
+    chapterTransactionService
+      .getAll({
+        user_id: user._id,
+        title_id: title._id,
+      })
+      .then((response) => setPurchasedHistories(response.data))
+      .catch((error) => console.error(error));
+  }, []);
+
+  const findPurchasedChapter = (chapterId) => {
+    const isPurchased = purchasedHistories.some((history) => history.chapter_id === chapterId);
+    return isPurchased;
+  };
+
   return (
     <>
       {chapters.length > 0 ? (
@@ -32,12 +56,14 @@ function ComicChapters({ title, chapters, user, isDESCSorting, handleSorting }) 
           <div className={cx("chapters__content")}>
             {chapters.map((chapter) => {
               const { day, month, year } = formatTime(chapter.createdAt);
+              const isPurchased = findPurchasedChapter(chapter._id);
 
               return (
                 <Button
                   wrapper
-                  to={chapter._id}
+                  // to={chapter._id}
                   className={cx("chapters__content__chapter")}
+                  onClick={() => handleOpenPurchaseBox(chapter)}
                   key={chapter._id}
                 >
                   <div className={cx("chapters__content__chapter__box-img")}>
@@ -54,7 +80,7 @@ function ComicChapters({ title, chapters, user, isDESCSorting, handleSorting }) 
                     </small>
                   </div>
                   <div className={cx("chapters__content__chapter__price")}>
-                    {!chapter.cost && (
+                    {(!chapter.cost || isPurchased) && (
                       <Button
                         outline
                         success
@@ -81,7 +107,7 @@ function ComicChapters({ title, chapters, user, isDESCSorting, handleSorting }) 
                       </Button>
                       <div className={cx("divider")} />
                     )} */}
-                    {chapter.cost && (
+                    {(chapter.cost || !isPurchased) && (
                       <>
                         <div className={cx("chapters__content__chapter__price__point")}>
                           <span>{title.point}</span>
@@ -113,6 +139,7 @@ function ComicChapters({ title, chapters, user, isDESCSorting, handleSorting }) 
 
 ComicChapters.propTypes = {
   title: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
     total_chapter: PropTypes.number.isRequired,
     coin: PropTypes.number.isRequired,
     point: PropTypes.number.isRequired,
@@ -131,10 +158,11 @@ ComicChapters.propTypes = {
     }).isRequired
   ).isRequired,
   user: PropTypes.shape({
-    // TODO paid: PropTypes.bool.isRequired,
+    _id: PropTypes.string.isRequired,
   }).isRequired,
   isDESCSorting: PropTypes.bool.isRequired,
   handleSorting: PropTypes.func.isRequired,
+  handleOpenPurchaseBox: PropTypes.func.isRequired,
 };
 
 export default memo(ComicChapters);
