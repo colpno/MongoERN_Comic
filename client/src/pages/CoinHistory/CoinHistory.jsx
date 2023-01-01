@@ -1,4 +1,5 @@
 import classNames from "classnames/bind";
+import moment from "moment";
 import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
@@ -8,7 +9,6 @@ import { COIN_HISTORIES_PER_PAGE } from "constants/paginate.constant";
 import { NoData, Pagination } from "features";
 import { usePagination } from "hooks";
 import { coinHistoryService } from "services";
-import { convertToDateTimeString } from "utils/convertTime";
 import styles from "./CoinHistory.module.scss";
 
 const cx = classNames.bind(styles);
@@ -16,9 +16,7 @@ const cx = classNames.bind(styles);
 function CoinHistory() {
   const user = useSelector((state) => state.user.user);
   const [histories, setHistories] = useState([]);
-  const { pagination, setPagination, setPaginationTotal } = usePagination(
-    COIN_HISTORIES_PER_PAGE
-  );
+  const { pagination, setPagination, setPaginationTotal } = usePagination(COIN_HISTORIES_PER_PAGE);
 
   useEffect(() => {
     const params = {
@@ -49,15 +47,18 @@ function CoinHistory() {
                   <CircleC className={cx("coin-icon")} />
                 </Col>
                 <Col className={cx("coin-history__row__content")}>
-                  <h5>Nhận Coin từ {history.payment_method}</h5>
-                  <small>{convertToDateTimeString(history.createdAt)}</small>
+                  <h5>
+                    {history.amount >= 0 ? "Nhận" : "Trừ"} coin từ {history.payment_method}
+                  </h5>
+                  <small>{moment(history.createdAt).format("DD/MM/YYYY hh:mm:ss")}</small>
                 </Col>
-                <Col className={cx("coin-history__row__quantity")}>
-                  <strong>
-                    {history.amount >= 0
-                      ? `+${history.amount}`
-                      : `-${history.amount}`}
-                  </strong>
+                <Col
+                  className={cx(
+                    "coin-history__row__quantity",
+                    history.amount >= 0 ? "green" : "red"
+                  )}
+                >
+                  <strong>{history.amount >= 0 ? `+${history.amount}` : history.amount}</strong>
                 </Col>
               </Row>
             );

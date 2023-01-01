@@ -20,8 +20,15 @@
   &__row__quantity {
     display: flex;
     justify-content: flex-end;
-    color: variables.$clr-green;
     font-size: 1.3em;
+
+    &.green {
+      color: variables.$clr-green;
+    }
+
+    &.red {
+      color: variables.$red;
+    }
   }
 }
 
