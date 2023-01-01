@@ -9,13 +9,9 @@ const readingHistoryService = {
       return Promise.reject(error.data);
     }
   },
-  add: async (titleId, chapterId, userId) => {
+  add: async (titleId, chapterId) => {
     try {
-      const response = await readingHistoryApi.add({
-        titleId,
-        chapterId,
-        userId,
-      });
+      const response = await readingHistoryApi.add(titleId, chapterId);
       return response;
     } catch (error) {
       return Promise.reject(error.data);

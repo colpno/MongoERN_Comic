@@ -1,7 +1,7 @@
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
 import { memo, useEffect, useState } from "react";
-import { AiFillHeart } from "react-icons/ai";
+import { AiFillEye, AiFillHeart } from "react-icons/ai";
 import { BsSortNumericDown, BsSortNumericUp } from "react-icons/bs";
 
 import { CircleC, CircleP } from "assets/images";
@@ -73,9 +73,15 @@ function ComicChapters({
                   </div>
                   <div className={cx("chapters__content__chapter__info")}>
                     <h4 className={cx("title")}>{chapter.title}</h4>
-                    <div className={`like ${cx("like")}`}>
-                      <AiFillHeart />
-                      <span>{separateNumberDigit(chapter.like)}</span>
+                    <div className={cx("popular-numbers")}>
+                      <div className={`like ${cx("like")}`}>
+                        <AiFillHeart />
+                        <span>{separateNumberDigit(chapter.like)}</span>
+                      </div>
+                      <span className={`view ${cx("view")}`}>
+                        <AiFillEye />
+                        <span>{separateNumberDigit(chapter.view)}</span>
+                      </span>
                     </div>
                     <small className={cx("release-date")}>
                       {convertToDateString(day, month, year)}

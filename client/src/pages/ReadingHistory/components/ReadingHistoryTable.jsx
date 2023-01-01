@@ -22,8 +22,7 @@ function ReadingHistoryTable({ readingHistories, cx }) {
 }
 
 ReadingHistoryTable.propTypes = {
-  readingHistories: PropTypes.arrayOf(PropTypes.shape({}).isRequired)
-    .isRequired,
+  readingHistories: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired,
   cx: PropTypes.func.isRequired,
 };
 

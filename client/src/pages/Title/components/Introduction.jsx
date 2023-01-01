@@ -77,18 +77,11 @@ function Introduction({ title, firstChapter, setPopup, handleFollow }) {
             <small className={cx("author")}>{title.author}</small>
             <small className={cx("genres")}>{genres}</small>
             <small className={cx("summary")}>
-              {title.summary.slice(
-                0,
-                title.summary.slice(0, 135).lastIndexOf(" ")
-              )}
+              {title.summary.slice(0, title.summary.slice(0, 135).lastIndexOf(" "))}
               {title.summary.length >= 135 && (
                 <>
                   <span> ... </span>
-                  <Button
-                    text
-                    className={cx("more")}
-                    onClick={handlePopupContent}
-                  >
+                  <Button text className={cx("more")} onClick={handlePopupContent}>
                     Xem thêm
                   </Button>
                 </>

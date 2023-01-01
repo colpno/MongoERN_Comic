@@ -9,46 +9,16 @@ import styles from "../styles/ReadingHistoryTableRow.module.scss";
 const cx = classNames.bind(styles);
 
 function ReadingHistoryTableRow({ readingHistories }) {
-  const calculateCountdown = (now, time) => {
-    const duration = moment.duration(moment(now).diff(time));
-
-    if (duration.years() > 1) {
-      return `${duration.years()} năm ${duration.months()} tháng`;
-    }
-    if (duration.months() > 1) {
-      return `${duration.months()} tháng ${duration.days()} ngày`;
-    }
-    if (duration.days() > 1) {
-      return `${duration.days()} ngày ${duration.hours()} giờ`;
-    }
-    if (duration.hours() > 1) {
-      return `${duration.hours()} giờ ${duration.minutes()} phút`;
-    }
-    if (duration.minutes() > 1) {
-      return `${duration.minutes()} phút ${duration.seconds()} giây`;
-    }
-
-    return `${duration.seconds()} giây`;
-  };
-  const now = moment().format("YYYY-MM-DD hh:mm:ss");
-
   return (
     <>
-      {readingHistories.map((history) => {
-        const { title, id, chapter, updatedAt } = history;
+      {readingHistories.map((data) => {
+        const { history, title, chapter } = data;
 
         return (
-          <Row className={cx("reading-history__container__content")} key={id}>
-            <Col
-              md={8}
-              className={cx("reading-history__container__content__title-info")}
-            >
+          <Row className={cx("reading-history__container__content")} key={history._id}>
+            <Col md={8} className={cx("reading-history__container__content__title-info")}>
               <div className={cx("box-img")}>
-                <img
-                  src={title.cover.source}
-                  alt={title.title}
-                  className={cx("cover-image")}
-                />
+                <img src={title.cover.source} alt={title.title} className={cx("cover-image")} />
               </div>
               <div>
                 <p className={cx("title")}>{title.title}</p>
@@ -59,10 +29,7 @@ function ReadingHistoryTableRow({ readingHistories }) {
               </div>
             </Col>
             <Col className="center">
-              <span>{`Đọc cách đây ${calculateCountdown(
-                now,
-                updatedAt
-              )}`}</span>
+              <span>{`Đọc cách đây ${moment(history.updatedAt).fromNow()}`}</span>
             </Col>
           </Row>
         );
@@ -74,11 +41,13 @@ function ReadingHistoryTableRow({ readingHistories }) {
 ReadingHistoryTableRow.propTypes = {
   readingHistories: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number.isRequired,
+      history: PropTypes.shape({
+        _id: PropTypes.string.isRequired,
+        updatedAt: PropTypes.string.isRequired,
+      }).isRequired,
       chapter: PropTypes.shape({
         title: PropTypes.string.isRequired,
       }).isRequired,
-      updatedAt: PropTypes.string.isRequired,
       title: PropTypes.shape({
         cover: PropTypes.shape({
           source: PropTypes.string.isRequired,

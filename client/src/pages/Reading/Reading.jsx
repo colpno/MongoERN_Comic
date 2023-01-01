@@ -174,8 +174,8 @@ function Reading() {
   useEffect(() => {
     setTimeout(() => {
       chapterService.update(chapterId, { view: 1 });
-      isLoggingIn && readingHistoryService.add(titleId, chapterId, user._id);
-    }, 60 * 1000);
+      isLoggingIn && readingHistoryService.add(titleId, chapterId);
+    }, 5 * 1000);
   }, []);
 
   return (

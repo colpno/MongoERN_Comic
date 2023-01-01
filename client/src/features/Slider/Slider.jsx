@@ -1,20 +1,20 @@
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
-import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Autoplay,
-  Lazy,
-  Pagination,
-  Navigation,
-  Thumbs,
-  Scrollbar,
-  Parallax,
-  EffectFade,
-  EffectCube,
-  EffectFlip,
   EffectCards,
   EffectCoverflow,
   EffectCreative,
+  EffectCube,
+  EffectFade,
+  EffectFlip,
+  Lazy,
+  Navigation,
+  Pagination,
+  Parallax,
+  Scrollbar,
+  Thumbs,
 } from "swiper";
 import { Swiper } from "swiper/react";
 
@@ -210,9 +210,7 @@ function Slider({
 
       setNumberOfSlides(child);
 
-      child <= slidesPerView
-        ? setHideNavigation(true)
-        : setHideNavigation(false);
+      child <= slidesPerView ? setHideNavigation(true) : setHideNavigation(false);
     }
   }, [sliderRef]);
 
@@ -220,26 +218,16 @@ function Slider({
     <>
       {outsideNavigation && !hideNavigation && (
         <div
-          className={`${cx(
-            "previous",
-            swiperLength.reachBegin && "disable"
-          )} swiper-button-prev`}
+          className={`${cx("previous", swiperLength.reachBegin && "disable")} swiper-button-prev`}
           ref={navigationPrevRef}
           onClick={handlePrev}
         />
       )}
-      {slidesPerView !== 0 && (
-        <Swiper {...nonGroupSliderProps}>{children}</Swiper>
-      )}
-      {slidesPerGroup !== 0 && (
-        <Swiper {...groupSliderProps}>{children}</Swiper>
-      )}
+      {slidesPerView !== 0 && <Swiper {...nonGroupSliderProps}>{children}</Swiper>}
+      {slidesPerGroup !== 0 && <Swiper {...groupSliderProps}>{children}</Swiper>}
       {outsideNavigation && !hideNavigation && (
         <div
-          className={`${cx(
-            "next",
-            swiperLength.reachEnd && "disable"
-          )} swiper-button-next`}
+          className={`${cx("next", swiperLength.reachEnd && "disable")} swiper-button-next`}
           ref={navigationNextRef}
           onClick={handleNext}
         />
@@ -325,4 +313,4 @@ Slider.defaultProps = {
   creativeEffect: false,
 };
 
-export default memo(Slider);
+export default Slider;

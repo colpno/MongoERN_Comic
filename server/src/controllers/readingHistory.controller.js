@@ -6,7 +6,7 @@ const readingHistoryController = {
   getAll: async (req, res, next) => {
     try {
       const { id: userId } = req.userInfo;
-      req.query.userId = userId;
+      req.query.user_id = userId;
 
       const params = transformQueryParams(req.query);
       const response = await readingHistoryService.getAll(params);
@@ -31,11 +31,16 @@ const readingHistoryController = {
       const { id: userId } = req.userInfo;
       const { titleId, chapterId } = req.body;
 
-      const duplicated = (await readingHistoryService.getAll({ userId, titleId })).data;
+      const duplicated = (
+        await readingHistoryService.getAll({ user_id: userId, title_id: titleId })
+      ).data;
 
       if (duplicated.length > 0) {
-        const response = await readingHistoryService.update(userId, titleId, {
-          chapterId,
+        if (duplicated[0].chapter_id === chapterId) return res.status(200);
+
+        const match = { user_id: userId, title_id: titleId };
+        const response = await readingHistoryService.update(match, {
+          chapter_id: chapterId,
         });
 
         if (!response) {

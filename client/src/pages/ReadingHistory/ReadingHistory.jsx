@@ -1,7 +1,6 @@
 import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
-import { useSelector } from "react-redux";
 
 import { NoData, Pagination } from "features";
 import { usePagination } from "hooks";
@@ -13,15 +12,12 @@ const cx = classNames.bind(styles);
 
 function ReadingHistory() {
   const HISTORIES_PER_PAGE = 25;
-  const user = useSelector((state) => state.user.user);
   const [histories, setHistories] = useState([]);
-  const { pagination, setPagination, setPaginationTotal } =
-    usePagination(HISTORIES_PER_PAGE);
+  const { pagination, setPagination, setPaginationTotal } = usePagination(HISTORIES_PER_PAGE);
 
   const fetchData = () => {
     readingHistoryService
       .getAll({
-        user_id: user._id,
         _page: pagination.page,
         _limit: pagination.limit,
       })

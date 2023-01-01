@@ -129,7 +129,16 @@
   }
 }
 
+.popular-numbers {
+  margin: 0.8rem 0;
+}
+
+.view {
+  display: inline;
+}
+
 .like {
-  margin: 12px 0;
+  display: inline;
+  margin-right: 0.8rem;
   font-weight: 700;
 }

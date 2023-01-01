@@ -72,7 +72,7 @@ const titleService = {
   increaseView: async (id) => {
     const response = await Title.findOneAndUpdate(
       { _id: id },
-      { $inc: { views: 1 } },
+      { $inc: { view: 1 } },
       { new: true, timestamps: false }
     );
     return response;
@@ -80,7 +80,7 @@ const titleService = {
   increaseLike: async (id) => {
     const response = await Title.findOneAndUpdate(
       { _id: id },
-      { $inc: { likes: 1 } },
+      { $inc: { like: 1 } },
       { new: true, timestamps: false }
     );
     return response;
