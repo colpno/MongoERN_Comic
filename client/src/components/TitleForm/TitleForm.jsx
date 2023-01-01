@@ -5,26 +5,14 @@ import { useEffect, useMemo, useState } from "react";
 import { Alert } from "react-bootstrap";
 
 import { InputImage, Button } from "components";
-import {
-  CheckBoxGroup,
-  InputField,
-  RadioGroup,
-  TextAreaField,
-  FormLabel,
-} from "libs/formik";
+import { CheckBoxGroup, InputField, RadioGroup, TextAreaField, FormLabel } from "libs/formik";
 import { genreService } from "services";
 import { getReleaseDayOptions } from "utils";
 import styles from "./TitleForm.module.scss";
 
 const cx = classNames.bind(styles);
 
-function TitleForm({
-  initialValues,
-  validationSchema,
-  handleCancel,
-  handleSubmit,
-  imageBlob,
-}) {
+function TitleForm({ initialValues, validationSchema, handleCancel, handleSubmit, imageBlob }) {
   const [genres, setGenres] = useState([]);
   // TODO const [approvedStatuses, setApprovedStatuses] = useState([]);
   const releaseDayOptions = getReleaseDayOptions();
@@ -100,12 +88,7 @@ function TitleForm({
 
             {genreOptions.length > 0 && (
               <>
-                <FormLabel
-                  name="genres"
-                  label="Thể loại"
-                  subLabel="Tối đa 3 thể loại"
-                  required
-                />
+                <FormLabel name="genres" label="Thể loại" subLabel="Tối đa 3 thể loại" required />
                 <FastField
                   name="genres"
                   component={CheckBoxGroup}
@@ -146,11 +129,7 @@ function TitleForm({
               letterCount
             />
 
-            <FormLabel
-              name="release_day"
-              label="Ngày đăng hàng tuần"
-              required
-            />
+            <FormLabel name="release_day" label="Ngày đăng hàng tuần" required />
             <FastField
               name="release_day"
               component={RadioGroup}
@@ -184,7 +163,7 @@ function TitleForm({
             </div>
 
             <div className={cx("button-group")}>
-              <Button outline gray onClick={handleCancel}>
+              <Button outline grey onClick={handleCancel}>
                 Hủy bỏ
               </Button>
               <div className={cx("button-group__submit-group")}>

@@ -9,12 +9,7 @@ import styles from "../styles/ProfileForm.module.scss";
 
 const cx = classNames.bind(styles);
 
-function ProfileForm({
-  avatar,
-  INITIAL_VALUE,
-  handleSubmit,
-  handleOpenChooseAvatar,
-}) {
+function ProfileForm({ avatar, INITIAL_VALUE, handleSubmit, handleOpenChooseAvatar }) {
   return (
     <Formik
       enableReinitialize
@@ -26,14 +21,8 @@ function ProfileForm({
         return (
           <Form>
             <div className={cx("avatar-container")}>
-              <Image
-                src={avatar}
-                alt="avatar"
-                width={150}
-                height={150}
-                className={cx("avatar")}
-              />
-              <Button gray dark80 small onClick={handleOpenChooseAvatar}>
+              <Image src={avatar} alt="avatar" width={150} height={150} className={cx("avatar")} />
+              <Button grey dark80 small onClick={handleOpenChooseAvatar}>
                 Đổi ảnh đại diện
               </Button>
             </div>
@@ -46,25 +35,13 @@ function ProfileForm({
             />
 
             <FormLabel name="password" label="Mật khẩu" required />
-            <FastField
-              name="password"
-              component={InputField}
-              placeholder="Viết mật khẩu..."
-            />
+            <FastField name="password" component={InputField} placeholder="Viết mật khẩu..." />
 
             <FormLabel name="email" label="Địa chỉ email" required />
-            <FastField
-              name="email"
-              component={InputField}
-              placeholder="Viết địa chỉ email..."
-            />
+            <FastField name="email" component={InputField} placeholder="Viết địa chỉ email..." />
 
             <FormLabel name="dateOfBirth" label="Ngày sinh" />
-            <FastField
-              name="dateOfBirth"
-              component={InputField}
-              placeholder="dd/mm/yyyy"
-            />
+            <FastField name="dateOfBirth" component={InputField} placeholder="dd/mm/yyyy" />
 
             <Button primary type="submit" className={cx("form__submit")}>
               Thay đổi

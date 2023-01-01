@@ -22,9 +22,7 @@ function MyTitleTable({ data }) {
   });
 
   const getHexColor = (approvedStatusId) => {
-    const approvedStatus = approvedStatuses.find(
-      (status) => status._id === approvedStatusId
-    );
+    const approvedStatus = approvedStatuses.find((status) => status._id === approvedStatusId);
     return approvedStatus.color.hex;
   };
 
@@ -46,8 +44,7 @@ function MyTitleTable({ data }) {
       {data.map((title, index) => {
         const timeObj = formatTime(new Date(2022, 7, 16, 23, 16, 0, 0));
         const approvedStatus =
-          options.length > 0 &&
-          options.find((option) => option.value === title.approved_status_id);
+          options.length > 0 && options.find((option) => option.value === title.approved_status_id);
 
         return (
           <Row key={title._id} className={cx("my-title__container__content")}>
@@ -60,11 +57,7 @@ function MyTitleTable({ data }) {
               </div>
             </Col>
             <Col xs={3}>
-              <Button
-                text
-                to={`/comic/title/${title._id}`}
-                className={cx("title")}
-              >
+              <Button text to={`/comic/title/${title._id}`} className={cx("title")}>
                 {title.title}
               </Button>
             </Col>
@@ -94,7 +87,7 @@ function MyTitleTable({ data }) {
             <Col className="actions">
               <Button
                 outline
-                gray
+                grey
                 to={`update/${title._id}`}
                 className="action"
                 title="Chỉnh sửa truyện"
@@ -103,7 +96,7 @@ function MyTitleTable({ data }) {
               </Button>
               <Button
                 outline
-                gray
+                grey
                 to={`${title._id}`}
                 className="action"
                 title="Xem danh sách chương"
@@ -125,10 +118,7 @@ MyTitleTable.propTypes = {
       title: PropTypes.oneOfType([
         PropTypes.string.isRequired,
         PropTypes.arrayOf(
-          PropTypes.oneOfType([
-            PropTypes.node.isRequired,
-            PropTypes.string.isRequired,
-          ]).isRequired
+          PropTypes.oneOfType([PropTypes.node.isRequired, PropTypes.string.isRequired]).isRequired
         ).isRequired,
       ]).isRequired,
       cover: PropTypes.shape({

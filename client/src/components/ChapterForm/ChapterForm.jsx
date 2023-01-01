@@ -13,9 +13,7 @@ import InputMultiFile from "./components/InputMultiFile";
 const cx = classNames.bind(styles);
 
 function ChapterForm({ initialValues, validationSchema, handleSubmit }) {
-  const [blobs, setBlobs] = useState(
-    initialValues.contents ? [...initialValues.contents] : []
-  );
+  const [blobs, setBlobs] = useState(initialValues.contents ? [...initialValues.contents] : []);
 
   const costOptions = [
     { value: "false", label: "Miễn phí" },
@@ -81,9 +79,7 @@ function ChapterForm({ initialValues, validationSchema, handleSubmit }) {
             </div>
 
             <FormLabel name="contents" label="Nội dung chương" required />
-            {!!errors.contents && (
-              <Alert variant="danger">{errors.contents}</Alert>
-            )}
+            {!!errors.contents && <Alert variant="danger">{errors.contents}</Alert>}
             <div className={cx("contents-field")}>
               <FastField
                 name="contents"
@@ -108,9 +104,7 @@ function ChapterForm({ initialValues, validationSchema, handleSubmit }) {
                     />
                     <IoCloseCircle
                       className={cx("close-icon")}
-                      onClick={() =>
-                        handleCloseIconClick(values, index, setFieldValue)
-                      }
+                      onClick={() => handleCloseIconClick(values, index, setFieldValue)}
                     />
                   </div>
                 );
@@ -133,7 +127,7 @@ function ChapterForm({ initialValues, validationSchema, handleSubmit }) {
             /> */}
 
             <div className={cx("button-group")}>
-              <Button outline gray>
+              <Button outline grey>
                 Hủy bỏ
               </Button>
               <div className={cx("button-group__submit-group")}>
