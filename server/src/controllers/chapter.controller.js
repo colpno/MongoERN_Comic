@@ -4,6 +4,7 @@ import createError from 'http-errors';
 
 import transformQueryParams from '../helpers/transformQueryParams.js';
 import { chapterService, cloudinaryService, titleService } from '../services/index.js';
+import chapterReportController from './chapterReport.controller.js';
 
 const chapterController = {
   getAll: async (req, res, next) => {
@@ -127,17 +128,19 @@ const chapterController = {
   updateView: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const { view, like } = req.body;
+      const { view } = req.body;
+      const whiteListValues = [-1, 0, 1];
 
-      if (view) {
-        const response = await chapterService.increaseView(id);
-        await titleService.increaseView(response.title_id);
+      if (view && !whiteListValues.includes(view)) {
+        return res.status(400).json({ code: 400, message: 'Dữ liệu không hợp lệ' });
       }
 
-      if (like) {
-        const response = await chapterService.increaseLike(id);
-        await titleService.increaseLike(response.title_id);
-      }
+      const chapter = await chapterService.getOne({ _id: id });
+
+      const chapterPromise = chapterService.increaseView(id);
+      const titlePromise = titleService.increaseView(chapter.title_id);
+      const chapterReportPromise = chapterReportController.add(id, view, 0);
+      await Promise.all([chapterPromise, titlePromise, chapterReportPromise]);
 
       return res.status(200).json({ code: 200 });
     } catch (error) {
