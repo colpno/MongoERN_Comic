@@ -2,15 +2,17 @@
 
 .wrapper {
   $margin: 60px;
-  margin-top: $margin;
   margin-bottom: $margin;
 }
 
 .selector-container {
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  margin-bottom: 1rem;
+  flex-direction: row;
 }
 
 .select {

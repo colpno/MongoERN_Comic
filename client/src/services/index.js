@@ -1,6 +1,7 @@
 export { default as approvedStatusService } from "./approvedStatus.service";
 export { default as authService } from "./auth.service";
 export { default as chapterService } from "./chapter.service";
+export { default as chapterReportService } from "./chapterReport.service";
 export { default as chapterTransactionService } from "./chapterTransaction.service";
 export { default as coinHistoryService } from "./coinHistory.service";
 export { default as commentService } from "./comment.service";

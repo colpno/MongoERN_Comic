@@ -1,12 +1,13 @@
 import classNames from "classnames/bind";
+import moment from "moment";
 import { useEffect, useMemo, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
 import { NoData } from "features";
-import { chapterService } from "services";
+import { chapterReportService, chapterService } from "services";
 import { getChartColors, getMonthArray } from "utils/constants";
-import { formatTime } from "utils/convertTime";
+import getYearOptions from "utils/getYearOptions";
 import ChapterStatistic from "./components/ChapterStatistic";
 import TitleStatistic from "./components/TitleStatistic";
 import styles from "./styles/Statistic.module.scss";
@@ -16,192 +17,219 @@ const cx = classNames.bind(styles);
 function Statistic() {
   // INFO: Data variables
 
-  const [ID, setID] = useState({
-    titleID: "",
-    chapterID: "",
-  });
+  const yearOptions = getYearOptions();
+
+  const [selectedTitle, setSelectedTitle] = useState({});
+  const [selectedChapter, setSelectedChapter] = useState({});
+
+  const [titleReportYear, setTitleReportYear] = useState(yearOptions[0]);
+  const [chapterReportYear, setChapterReportYear] = useState(yearOptions[0]);
+
   const titles = useSelector((state) => state.title.myTitles);
   const [chapters, setChapters] = useState([]);
-  // const [titleReports, setTitleReports] = useState([]);
-  // const [chapterReports, setChapterReports] = useState([]);
 
-  // const fetchTitleReports = (params) => {
-  //   getAllTitleReports(params)
-  //     .then((response) => setTitleReports(response))
-  //     .catch((error) => console.error(error));
-  // };
-
-  // const fetchChapterReports = (params) => {
-  //   getAllChapterReports(params)
-  //     .then((response) => setChapterReports(response))
-  //     .catch((error) => console.error(error));
-  // };
+  // TODO: const [titleReports, setTitleReports] = useState([]);
+  const [chapterReports, setChapterReports] = useState([]);
 
   const fetchChapters = (params) => {
+    // get only title and _id fields
+    params.fields = "title";
+
     chapterService
       .getAll(params)
       .then((response) => setChapters(response.data))
       .catch((error) => console.error(error));
   };
 
+  // fetch all chapters of selected chapter
   useEffect(() => {
-    titles.length > 0 && fetchChapters({ title_id: titles[0]._id });
-  }, [titles]);
+    if (selectedTitle?.value) {
+      fetchChapters({ title_id: selectedTitle.value });
+    }
+  }, [selectedTitle]);
 
+  // fetch all reports of selected chapter
   useEffect(() => {
-    ID.titleID && fetchChapters({ title_id: ID.titleID });
-  }, [ID.titleID]);
+    if (selectedChapter?.value) {
+      const params = {
+        chapter_id: selectedChapter.value,
+        year: chapterReportYear.value,
+      };
 
-  // useEffect(() => {
-  //   ID.chapterID &&
-  //     fetchChapterReports({
-  //       chapterId: ID.chapterID,
-  //     });
-  // }, [ID.chapterID]);
+      chapterReportService
+        .getAll(params)
+        .then((response) => setChapterReports(response.data))
+        .catch((error) => console.error(error));
+    }
+  }, [selectedChapter, chapterReportYear]);
 
-  // useEffect(() => {
-  //   ID.titleID &&
-  //     fetchTitleReports({
-  //       titleId: ID.titleID,
-  //     });
-  // }, [ID.titleID]);
-
+  // fetch all reports of selected title
+  /* TODO:
   useEffect(() => {
+    const params = {
+      title_id: selectedTitle.value,
+      year: chapterReportYear.value,
+    };
+
+    if (selectedTitle?.value) {
+      titleReportService
+        .getAll(params)
+        .then((response) => setTitleReports(response.data))
+        .catch((error) => console.error(error));
+    }
+  }, [selectedTitle, titleReportYear]); 
+  */
+
+  // INFO: Select controls
+
+  // convert all titles into options array with value-label object
+  const titleSelectOptions = useMemo(() => {
     if (titles.length > 0) {
-      setID((prev) => ({
-        ...prev,
-        titleID: titles[0]._id,
-      }));
+      const optionArray = titles.reduce((options, title) => {
+        return [
+          ...options,
+          {
+            value: title._id,
+            label: title.title,
+          },
+        ];
+      }, []);
+
+      return optionArray;
     }
+
+    return [];
   }, [titles]);
 
-  useEffect(() => {
+  // convert all chapters into options array with value-label object
+  const chapterSelectOptions = useMemo(() => {
     if (chapters.length > 0) {
-      setID((prev) => ({
-        ...prev,
-        chapterID: chapters[0]._id,
-      }));
+      const optionArray = chapters.reduce((options, chapter) => {
+        return [
+          ...options,
+          {
+            value: chapter._id,
+            label: chapter.title,
+          },
+        ];
+      }, []);
+
+      return optionArray;
     }
+
+    return [];
   }, [chapters]);
 
-  // INFO: Chart variables
-  const months = getMonthArray();
-  const { backgroundColors, borderColors } = getChartColors();
-  // eslint-disable-next-line no-unused-vars
-  const { month: currentMonth, year: currentYear } = useMemo(() => {
-    return formatTime(new Date());
-  }, []);
-  // eslint-disable-next-line no-unused-vars
-  const [chartData, setChartData] = useState({
-    title: {
-      likes: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      views: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    },
-    chapter: {
-      likes: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      views: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    },
-  });
+  // set title report year every time change title report year
+  const changeTitleReportYear = (option) => {
+    setTitleReportYear(option);
+  };
 
-  const chartLabels = useMemo(
-    () => [...months.slice(currentMonth), ...months.slice(0, currentMonth - 1), "Tháng hiện tại"],
-    []
-  );
+  // set title report year every time change chapter report year
+  const changeChapterReportYear = (option) => {
+    setChapterReportYear(option);
+  };
 
-  // INFO: Select control options
+  // set selected title every time select title control change
+  const changeSelectedTitle = (option) => {
+    setSelectedTitle(option);
+  };
 
-  const titleSelectOptions = useMemo(
-    () =>
-      titles.length > 0
-        ? titles.reduce((options, title) => {
-            return [...options, { value: title._id, label: title.title }];
-          }, [])
-        : [],
-    [titles]
-  );
-  const chapterSelectOptions =
-    chapters.length > 0
-      ? chapters.reduce((options, chapter) => {
-          return [...options, { value: chapter._id, label: chapter.title }];
-        }, [])
-      : [];
+  // set selected chapter every time select chapter control change
+  const changeSelectedChapter = (option) => {
+    setSelectedChapter(option);
+  };
 
-  const [selectedTitle, setSelectedTitle] = useState(titleSelectOptions[0]);
-  const [selectedChapter, setSelectedChapter] = useState(chapterSelectOptions[0]);
-
+  // set initial selected title
   useEffect(() => {
     setSelectedTitle(titleSelectOptions[0]);
   }, [titleSelectOptions]);
 
+  // set initial selected chapter
   useEffect(() => {
     setSelectedChapter(chapterSelectOptions[0]);
   }, [chapterSelectOptions]);
 
-  const changeTitle = (option) => {
-    setID({ ...ID, titleID: option.value });
-    setSelectedTitle(option);
-  };
+  // INFO: Chart variables
 
-  const changeChapter = (option) => {
-    setID({ ...ID, chapterID: option.value });
-    setSelectedChapter(option);
-  };
+  const months = getMonthArray();
+  const arrayOfZero = useMemo(() => new Array(months.length).fill(0), []);
+  const currentMonth = useMemo(() => moment().month() + 1, []);
+  const { backgroundColors, borderColors } = getChartColors();
 
-  // INFO: Calculate views and likes
+  const [chartData, setChartData] = useState({
+    title: {
+      likes: [...arrayOfZero],
+      views: [...arrayOfZero],
+    },
+    chapter: {
+      likes: [...arrayOfZero],
+      views: [...arrayOfZero],
+    },
+  });
 
-  // const getReportByTitle = (reports = [], titleId = "") => {
-  //   return reports.filter((report) => report.titleId === titleId);
-  // };
+  const chartLabels = useMemo(
+    () =>
+      months.map((month) => {
+        if (month.number === currentMonth) return `Tháng hiện tại (${currentMonth})`;
+        return `Tháng ${month.number}`;
+      }),
+    []
+  );
 
-  // const getReportByChapter = (reports = [], chapterId = "") => {
-  //   return reports.filter((report) => report.chapterId === chapterId);
-  // };
+  // INFO: Calculate chart data: views, likes
 
-  // const getViews = (reports = [], year = currentYear) => {
-  //   const views = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  // sum all likes and views in a year of a title
+  /* TODO:
+  useEffect(() => {
+    const tempData = {
+      likes: [...arrayOfZero],
+      views: [...arrayOfZero],
+    };
 
-  //   const reportsByYear = reports.filter((report) => report.year === year);
-  //   reportsByYear.forEach((report) => {
-  //     const { month } = report;
-  //     views[month] = report.view;
-  //   });
+    if (titleReports.length > 0) {
+      const { length } = titleReports;
 
-  //   return views;
-  // };
+      for (let i = 0; i < length; i++) {
+        const { like, view, month } = titleReports[i];
 
-  // const getLikes = (reports = [], year = currentYear) => {
-  //   const likes = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        tempData.likes[month - 1] += like;
+        tempData.views[month - 1] += view;
+      }
+    }
 
-  //   const reportsByYear = reports.filter((report) => report.year === year);
-  //   reportsByYear.forEach((report) => {
-  //     const { month } = report;
-  //     likes[month] = report.like;
-  //   });
+    setChartData((prev) => ({
+      ...prev,
+      title: tempData,
+    }));
+  }, [titleReports]); 
+  */
 
-  //   return likes;
-  // };
+  // sum all likes and views in a year of a chapter
+  useEffect(() => {
+    const tempData = {
+      likes: [...arrayOfZero],
+      views: [...arrayOfZero],
+    };
 
-  // useEffect(() => {
-  //   const reports = getReportByTitle(titleReports, ID.titleID);
-  //   const likes = getLikes(reports);
-  //   const views = getViews(reports);
+    if (chapterReports.length > 0) {
+      const { length } = chapterReports;
 
-  //   setChartData((prev) => ({
-  //     ...prev,
-  //     title: { likes, views },
-  //   }));
-  // }, [titleReports, ID.titleID]);
+      for (let i = 0; i < length; i++) {
+        const { like, view, month } = chapterReports[i];
 
-  // useEffect(() => {
-  //   const reports = getReportByChapter(chapterReports, ID.chapterID);
-  //   const likes = getLikes(reports);
-  //   const views = getViews(reports);
+        tempData.likes[month - 1] += like;
+        tempData.views[month - 1] += view;
+      }
+    }
 
-  //   setChartData((prev) => ({
-  //     ...prev,
-  //     chapter: { likes, views },
-  //   }));
-  // }, [chapterReports, ID.chapterID]);
+    setChartData((prev) => ({
+      ...prev,
+      chapter: tempData,
+    }));
+  }, [chapterReports]);
+
+  // INFO: check sum
 
   const checkSumTitle = titleSelectOptions.length > 0 && selectedTitle?.value;
   const checkSumChapter = chapterSelectOptions.length > 0 && selectedChapter?.value;
@@ -209,38 +237,48 @@ function Statistic() {
   return (
     <Container className={cx("wrapper")}>
       {checkSumTitle ? (
-        <Row>
-          <Col md={8}>
-            <TitleStatistic
-              cx={cx}
-              titleSelectOptions={titleSelectOptions}
-              changeTitle={changeTitle}
-              chartLabels={chartLabels}
-              chartData={chartData.title}
-              backgroundColors={backgroundColors}
-              borderColors={borderColors}
-              selectedTitle={selectedTitle}
-            />
-          </Col>
-          <Col md={4}>
-            {checkSumChapter ? (
-              <ChapterStatistic
+        <>
+          <Row>
+            <Col>
+              <TitleStatistic
                 cx={cx}
-                chapterSelectOptions={chapterSelectOptions}
-                changeChapter={changeChapter}
-                chartData={chartData.chapter}
+                titleSelectOptions={titleSelectOptions}
+                selectedTitle={selectedTitle}
+                changeTitle={changeSelectedTitle}
+                yearOptions={yearOptions}
+                selectedYear={titleReportYear}
+                changeYear={changeTitleReportYear}
                 chartLabels={chartLabels}
+                chartData={chartData.title}
                 backgroundColors={backgroundColors}
                 borderColors={borderColors}
-                selectedChapter={selectedChapter}
               />
-            ) : (
-              <NoData>
-                <h5>Truyện không có chương nào để thống kê</h5>
-              </NoData>
-            )}
-          </Col>
-        </Row>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              {checkSumChapter ? (
+                <ChapterStatistic
+                  cx={cx}
+                  chapterSelectOptions={chapterSelectOptions}
+                  selectedChapter={selectedChapter}
+                  changeChapter={changeSelectedChapter}
+                  yearOptions={yearOptions}
+                  selectedYear={chapterReportYear}
+                  changeYear={changeChapterReportYear}
+                  chartData={chartData.chapter}
+                  chartLabels={chartLabels}
+                  backgroundColors={backgroundColors}
+                  borderColors={borderColors}
+                />
+              ) : (
+                <NoData>
+                  <h5>Truyện không có chương nào để thống kê</h5>
+                </NoData>
+              )}
+            </Col>
+          </Row>
+        </>
       ) : (
         <NoData>
           <h5>Hiện tại chưa có dữ liệu để thống kê!</h5>

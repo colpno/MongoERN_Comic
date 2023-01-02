@@ -10,7 +10,7 @@ import {
 
 const chapterReportSchema = mongoose.Schema(
   {
-    chapter_id: { type: String, require: true },
+    chapter_id: { type: mongoose.Schema.Types.ObjectId, ref: 'chapter' },
     like: { type: Number, min: 0, default: 0 },
     view: { type: Number, min: 0, default: 0 },
     month: {

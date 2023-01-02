@@ -1,27 +1,46 @@
-import { LineChart } from "features";
 import PropTypes from "prop-types";
 import { Row } from "react-bootstrap";
-import SelectorContainer from "./SelectorContainer";
+
+import { Select } from "components";
+import { LineChart } from "features";
 
 function TitleStatistic({
   cx,
+
   titleSelectOptions,
+  selectedTitle,
   changeTitle,
+
+  yearOptions,
+  changeYear,
+  selectedYear,
+
   chartData,
   chartLabels,
   backgroundColors,
   borderColors,
-  selectedTitle,
 }) {
   return (
     <>
-      <SelectorContainer
-        cx={cx}
-        titleLabel="Truyện"
-        options={titleSelectOptions}
-        handleChange={changeTitle}
-        value={selectedTitle}
-      />
+      <div className={cx("selector-container")}>
+        <h4>Truyện:</h4>
+        <Select
+          className={cx("select")}
+          options={titleSelectOptions}
+          value={selectedTitle}
+          setValue={changeTitle}
+          searchable
+          height={30}
+        />
+        <Select
+          className={cx("select")}
+          options={yearOptions}
+          value={selectedYear}
+          setValue={changeYear}
+          searchable
+          height={30}
+        />
+      </div>
       <Row>
         <LineChart
           beginAtZero
@@ -50,21 +69,32 @@ function TitleStatistic({
 
 TitleStatistic.propTypes = {
   cx: PropTypes.func.isRequired,
+
   titleSelectOptions: PropTypes.arrayOf(
     PropTypes.shape({
       value: PropTypes.string.isRequired,
       label: PropTypes.string.isRequired,
     }).isRequired
   ).isRequired,
+  selectedTitle: PropTypes.shape({}).isRequired,
+  changeTitle: PropTypes.func.isRequired,
+
+  yearOptions: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+    }).isRequired
+  ).isRequired,
+  changeYear: PropTypes.func.isRequired,
+  selectedYear: PropTypes.shape({}).isRequired,
+
   chartData: PropTypes.shape({
     views: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
     likes: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
   }).isRequired,
-  changeTitle: PropTypes.func.isRequired,
   chartLabels: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
   backgroundColors: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
   borderColors: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-  selectedTitle: PropTypes.shape({}).isRequired,
 };
 
 export default TitleStatistic;
