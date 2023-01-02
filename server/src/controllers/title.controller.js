@@ -1,5 +1,6 @@
 import { randomUUID } from 'crypto';
 import createError from 'http-errors';
+import { filterFalsy } from '../helpers/filterFalsy.js';
 
 import transformQueryParams from '../helpers/transformQueryParams.js';
 import { titleService } from '../services/index.js';
@@ -35,12 +36,13 @@ const titleController = {
   },
   getOne: async (req, res, next) => {
     try {
-      const { userInfo, params } = req;
+      if (req.userInfo) req.params.userId = req.userInfo.id;
 
-      if (userInfo) params.userId = userInfo.id;
+      const { id, userId } = req.params;
+      const params = { _id: id, user_id: userId };
+      const match = filterFalsy(params);
 
-      const { id, userId } = params;
-      const response = await titleService.getOne({ _id: id, user_id: userId });
+      const response = await titleService.getOne(match);
 
       if (!response) {
         return res.status(200).json({
