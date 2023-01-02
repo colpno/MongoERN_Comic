@@ -40,7 +40,7 @@ function StatisticCount() {
       })
       .then((response) => {
         setTitles(response.data);
-        dispatch(setMyTitles(titles));
+        dispatch(setMyTitles(response.data));
       })
       .catch((error) => console.error(error));
   }, []);
