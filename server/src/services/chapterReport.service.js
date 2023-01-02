@@ -6,7 +6,7 @@ import { MAX_YEAR } from '../validations/index.js';
 
 const chapterReportService = {
   getAll: async (params = {}) => {
-    const { _page, _limit, _sort, _order, fields, ...others } = params;
+    const { _limit, _sort, _order, fields, ...others } = params;
 
     if (others.chapter_id) others.chapter_id = Types.ObjectId(others.chapter_id);
 
@@ -17,6 +17,14 @@ const chapterReportService = {
 
     const response = await ChapterReport.find(others).select(fields);
     return { data: response };
+  },
+  getOne: async (chapterId = '', month = '', year = '') => {
+    const response = await ChapterReport.findOne({
+      chapter_id: Types.ObjectId(chapterId),
+      month,
+      year,
+    });
+    return response;
   },
   add: async (
     chapterId = '',
