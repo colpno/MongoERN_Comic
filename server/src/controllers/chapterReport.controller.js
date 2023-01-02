@@ -36,13 +36,13 @@ const chapterReportController = {
         const report = await chapterReportService.getOne(chapterId, month, year);
 
         if (report) {
-          await chapterReportService.update(chapterId, month, year, view, like);
+          return await chapterReportService.update(chapterId, month, year, view, like);
         }
 
-        await chapterReportService.add(chapterId, month, year, like, view);
-      } else {
-        throw new Error('Dữ liệu không hợp lệ');
+        return await chapterReportService.add(chapterId, month, year, like, view);
       }
+
+      throw new Error('Dữ liệu không hợp lệ');
     } catch (error) {
       throw new Error(error);
     }
