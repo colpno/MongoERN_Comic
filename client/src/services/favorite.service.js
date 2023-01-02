@@ -9,17 +9,17 @@ const favoriteService = {
       return Promise.reject(error.data);
     }
   },
-  add: async (userId, chapterId) => {
+  add: async (chapterId) => {
     try {
-      const response = await favoriteApi.add(userId, chapterId);
+      const response = await favoriteApi.add(chapterId);
       return response;
     } catch (error) {
       return Promise.reject(error.data);
     }
   },
-  delete: async (userId, chapterId) => {
+  delete: async (chapterId) => {
     try {
-      const response = await favoriteApi.delete(userId, chapterId);
+      const response = await favoriteApi.delete(chapterId);
       return response;
     } catch (error) {
       return Promise.reject(error.data);

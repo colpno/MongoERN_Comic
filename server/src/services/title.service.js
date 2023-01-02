@@ -79,10 +79,10 @@ const titleService = {
     );
     return response;
   },
-  increaseLike: async (id) => {
+  increaseLike: async (id, value = 1) => {
     const response = await Title.findOneAndUpdate(
       { _id: id },
-      { $inc: { like: 1 } },
+      { $inc: { like: value } },
       { new: true, timestamps: false }
     );
     return response;

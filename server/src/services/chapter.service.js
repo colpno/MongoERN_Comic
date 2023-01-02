@@ -32,14 +32,14 @@ const uploadContents = async (contents, titleGuid, chapterGuid) => {
 
 const chapterService = {
   getAll: async (params = {}) => {
-    const { _limit, _sort, _order } = params;
+    const { _page, _limit, _sort, _order, fields, ...others } = params;
 
     if (_limit || (_sort && _order)) {
       const response = await paginateSort(params, Chapter);
       return response;
     }
 
-    const response = await Chapter.find(params);
+    const response = await Chapter.find(others).select(fields);
     return { data: response };
   },
   getOne: async (params = {}) => {
@@ -72,18 +72,18 @@ const chapterService = {
     const response = await Chapter.findOneAndUpdate({ _id: id }, data);
     return response;
   },
-  increaseView: async (id) => {
+  increaseView: async (id, value = 1) => {
     const response = await Chapter.findOneAndUpdate(
       { _id: id },
-      { $inc: { view: 1 } },
+      { $inc: { view: value } },
       { new: true, timestamps: false }
     );
     return response;
   },
-  increaseLike: async (id) => {
+  increaseLike: async (id, value = 1) => {
     const response = await Chapter.findOneAndUpdate(
       { _id: id },
-      { $inc: { like: 1 } },
+      { $inc: { like: value } },
       { new: true, timestamps: false }
     );
     return response;

@@ -7,7 +7,7 @@ const initialState = {
 };
 
 const readingChapterSlice = createSlice({
-  name: "readingChapter",
+  name: "reading",
   initialState,
   reducers: {
     setChapters: (state, action) => {
@@ -24,7 +24,6 @@ const readingChapterSlice = createSlice({
 
 const { reducer: readingChapterReducer, actions } = readingChapterSlice;
 
-export const { setChapter, setChapterImages, setChapters, setFavorite } =
-  actions;
+export const { setChapter, setChapterImages, setChapters, setFavorite } = actions;
 
 export default readingChapterReducer;

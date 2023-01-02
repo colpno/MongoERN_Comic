@@ -23,9 +23,9 @@ function ReadingHeader() {
   const { toastEmitter } = useToast();
   const [controls, setControls] = useState({ isLiked: false });
   const [title, setTitle] = useState({});
-  const chapter = useSelector((state) => state.chapter.chapter);
+  const chapter = useSelector((state) => state.reading.chapter);
   const user = useSelector((state) => state.user.user);
-  const favorite = useSelector((state) => state.chapter.favorite);
+  const favorite = useSelector((state) => state.reading.favorite);
 
   const fetchData = () => {
     titleService

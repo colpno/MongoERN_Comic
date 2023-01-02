@@ -6,11 +6,7 @@ const followApi = {
   getAll: (params) => axiosClient.get(url, { params, withCredentials: true }),
 
   add: (titleId) => {
-    return axiosClient.post(
-      `${url}/create`,
-      { titleId },
-      { withCredentials: true }
-    );
+    return axiosClient.post(`${url}/create`, { titleId }, { withCredentials: true });
   },
 
   delete: (titleId) => {

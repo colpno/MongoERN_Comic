@@ -5,33 +5,14 @@ const url = "/favorites";
 const favoriteApi = {
   getAll: (params) => axiosClient.get(url, { params, withCredentials: true }),
 
-  add: (userId, chapterId, setProgress = () => {}) => {
-    return axiosClient.post(
-      `${url}/create`,
-      { userId, chapterId },
-      {
-        withCredentials: true,
-        onUploadProgress: (e) => {
-          const { loaded, total } = e;
-          const percentage = (loaded / total) * 100;
-          setProgress(percentage);
-        },
-      }
-    );
+  add: (chapterId) => {
+    return axiosClient.post(`${url}/create`, { chapterId }, { withCredentials: true });
   },
 
-  delete: (chapterId, setProgress = () => {}) => {
+  delete: (chapterId) => {
     const params = { chapterId };
 
-    return axiosClient.delete(`${url}/delete`, {
-      params,
-      withCredentials: true,
-      onUploadProgress: (e) => {
-        const { loaded, total } = e;
-        const percentage = (loaded / total) * 100;
-        setProgress(percentage);
-      },
-    });
+    return axiosClient.delete(`${url}/delete`, { params, withCredentials: true });
   },
 };
 

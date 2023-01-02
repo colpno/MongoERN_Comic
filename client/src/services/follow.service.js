@@ -17,9 +17,9 @@ const followService = {
       return Promise.reject(error.data);
     }
   },
-  delete: async (followId) => {
+  delete: async (titleId) => {
     try {
-      const response = await followApi.delete(followId);
+      const response = await followApi.delete(titleId);
       return response;
     } catch (error) {
       return Promise.reject(error.data);

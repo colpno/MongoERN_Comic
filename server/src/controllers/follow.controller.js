@@ -45,6 +45,7 @@ const followController = {
 
       return res.status(201).json({
         code: 201,
+        message: 'Theo dõi truyện thành công',
         data: response,
       });
     } catch (error) {

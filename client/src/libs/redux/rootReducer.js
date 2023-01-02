@@ -19,7 +19,7 @@ const rootReducer = combineReducers({
   global: globalReducer,
   login: loginReducer,
   paymentMethod: paymentMethodReducer,
-  chapter: readingChapterReducer,
+  reading: readingChapterReducer,
   selectField: selectFieldReducer,
   statisticCount: statisticCountReducer,
   title: titleReducer,
