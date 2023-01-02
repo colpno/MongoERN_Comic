@@ -4,8 +4,9 @@ import { useEffect, useMemo, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
-import { NoData } from "features";
+import { Loading, NoData } from "features";
 import { chapterReportService, chapterService } from "services";
+import { sortArray } from "utils/arrayMethods";
 import { getChartColors, getMonthArray } from "utils/constants";
 import getYearOptions from "utils/getYearOptions";
 import ChapterStatistic from "./components/ChapterStatistic";
@@ -15,6 +16,8 @@ import styles from "./styles/Statistic.module.scss";
 const cx = classNames.bind(styles);
 
 function Statistic() {
+  const [loading, setLoading] = useState(false);
+
   // INFO: Data variables
 
   const yearOptions = getYearOptions();
@@ -22,23 +25,37 @@ function Statistic() {
   const [selectedTitle, setSelectedTitle] = useState({});
   const [selectedChapter, setSelectedChapter] = useState({});
 
-  const [titleReportYear, setTitleReportYear] = useState(yearOptions[0]);
-  const [chapterReportYear, setChapterReportYear] = useState(yearOptions[0]);
+  const [reportYear, setReportYear] = useState({
+    title: yearOptions[0],
+    chapter: yearOptions[0],
+  });
 
-  const titles = useSelector((state) => state.title.myTitles);
+  const myTitles = useSelector((state) => state.title.myTitles);
+  const titles = useMemo(() => {
+    if (myTitles.length > 0) return sortArray([...myTitles], "title", "asc");
+    return [];
+  }, [myTitles]);
   const [chapters, setChapters] = useState([]);
 
   // TODO: const [titleReports, setTitleReports] = useState([]);
   const [chapterReports, setChapterReports] = useState([]);
 
   const fetchChapters = (params) => {
+    setLoading(true);
+
     // get only title and _id fields
     params.fields = "title";
 
     chapterService
       .getAll(params)
-      .then((response) => setChapters(response.data))
-      .catch((error) => console.error(error));
+      .then((response) => {
+        setChapters(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        setLoading(false);
+      });
   };
 
   // fetch all chapters of selected chapter
@@ -51,33 +68,49 @@ function Statistic() {
   // fetch all reports of selected chapter
   useEffect(() => {
     if (selectedChapter?.value) {
+      setLoading(true);
+
       const params = {
         chapter_id: selectedChapter.value,
-        year: chapterReportYear.value,
+        year: reportYear.chapter.value,
       };
 
       chapterReportService
         .getAll(params)
-        .then((response) => setChapterReports(response.data))
-        .catch((error) => console.error(error));
+        .then((response) => {
+          setChapterReports(response.data);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error(error);
+          setLoading(false);
+        });
     }
-  }, [selectedChapter, chapterReportYear]);
+  }, [selectedChapter, reportYear.chapter]);
 
   // fetch all reports of selected title
   /* TODO:
   useEffect(() => {
-    const params = {
-      title_id: selectedTitle.value,
-      year: chapterReportYear.value,
-    };
+      setLoading(true);
 
     if (selectedTitle?.value) {
+    const params = {
+      title_id: selectedTitle.value,
+      year: reportYear.chapter.value,
+    };
+
       titleReportService
         .getAll(params)
-        .then((response) => setTitleReports(response.data))
-        .catch((error) => console.error(error));
+        .then((response) => {
+setTitleReports(response.data)
+      setLoading(false);
+        })
+        .catch((error) => {
+console.error(error)
+      setLoading(false);
+        });
     }
-  }, [selectedTitle, titleReportYear]); 
+  }, [selectedTitle, reportYear.title]); 
   */
 
   // INFO: Select controls
@@ -122,12 +155,12 @@ function Statistic() {
 
   // set title report year every time change title report year
   const changeTitleReportYear = (option) => {
-    setTitleReportYear(option);
+    setReportYear((prev) => ({ ...prev, title: option }));
   };
 
   // set title report year every time change chapter report year
   const changeChapterReportYear = (option) => {
-    setChapterReportYear(option);
+    setReportYear((prev) => ({ ...prev, chapter: option }));
   };
 
   // set selected title every time select title control change
@@ -235,57 +268,60 @@ function Statistic() {
   const checkSumChapter = chapterSelectOptions.length > 0 && selectedChapter?.value;
 
   return (
-    <Container className={cx("wrapper")}>
-      {checkSumTitle ? (
-        <>
-          <Row>
-            <Col>
-              <TitleStatistic
-                cx={cx}
-                titleSelectOptions={titleSelectOptions}
-                selectedTitle={selectedTitle}
-                changeTitle={changeSelectedTitle}
-                yearOptions={yearOptions}
-                selectedYear={titleReportYear}
-                changeYear={changeTitleReportYear}
-                chartLabels={chartLabels}
-                chartData={chartData.title}
-                backgroundColors={backgroundColors}
-                borderColors={borderColors}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              {checkSumChapter ? (
-                <ChapterStatistic
+    <>
+      <Container className={cx("wrapper")}>
+        {checkSumTitle ? (
+          <>
+            <Row>
+              <Col>
+                <TitleStatistic
                   cx={cx}
-                  chapterSelectOptions={chapterSelectOptions}
-                  selectedChapter={selectedChapter}
-                  changeChapter={changeSelectedChapter}
+                  titleSelectOptions={titleSelectOptions}
+                  selectedTitle={selectedTitle}
+                  changeTitle={changeSelectedTitle}
                   yearOptions={yearOptions}
-                  selectedYear={chapterReportYear}
-                  changeYear={changeChapterReportYear}
-                  chartData={chartData.chapter}
+                  selectedYear={reportYear.title}
+                  changeYear={changeTitleReportYear}
                   chartLabels={chartLabels}
+                  chartData={chartData.title}
                   backgroundColors={backgroundColors}
                   borderColors={borderColors}
                 />
-              ) : (
-                <NoData>
-                  <h5>Truyện không có chương nào để thống kê</h5>
-                </NoData>
-              )}
-            </Col>
-          </Row>
-        </>
-      ) : (
-        <NoData>
-          <h5>Hiện tại chưa có dữ liệu để thống kê!</h5>
-          <small>Vui lòng quay lại sau nhé!</small>
-        </NoData>
-      )}
-    </Container>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                {checkSumChapter ? (
+                  <ChapterStatistic
+                    cx={cx}
+                    chapterSelectOptions={chapterSelectOptions}
+                    selectedChapter={selectedChapter}
+                    changeChapter={changeSelectedChapter}
+                    yearOptions={yearOptions}
+                    selectedYear={reportYear.chapter}
+                    changeYear={changeChapterReportYear}
+                    chartData={chartData.chapter}
+                    chartLabels={chartLabels}
+                    backgroundColors={backgroundColors}
+                    borderColors={borderColors}
+                  />
+                ) : (
+                  <NoData>
+                    <h5>Truyện không có chương nào để thống kê</h5>
+                  </NoData>
+                )}
+              </Col>
+            </Row>
+          </>
+        ) : (
+          <NoData>
+            <h5>Hiện tại chưa có dữ liệu để thống kê!</h5>
+            <small>Vui lòng quay lại sau nhé!</small>
+          </NoData>
+        )}
+      </Container>
+      {loading && <Loading />}
+    </>
   );
 }
 
