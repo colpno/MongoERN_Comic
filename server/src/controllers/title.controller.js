@@ -60,20 +60,30 @@ const titleController = {
     }
   },
   random: async (req, res, next) => {
-    const { count, ...others } = req.query;
-    others.approved_status_id = '63a6fb6216ee77053d6feb93';
-    others.status = 'vis';
+    try {
+      const { count, ...others } = req.query;
+      others.approved_status_id = '63a6fb6216ee77053d6feb93';
+      others.status = 'vis';
 
-    const params = transformQueryParams(others);
+      const params = transformQueryParams(others);
 
-    const titles = await titleService.random(count, params);
+      const titles = await titleService.random(count, params);
 
-    if (titles.length === 0) return next(404, 'Không tìm thấy truyện nào');
+      if (titles.length === 0) {
+        return res.status(200).json({
+          code: 404,
+          message: 'Không tìm thấy truyện nào',
+          data: [],
+        });
+      }
 
-    return res.status(200).json({
-      code: 200,
-      data: titles,
-    });
+      return res.status(200).json({
+        code: 200,
+        data: titles,
+      });
+    } catch (error) {
+      next(error);
+    }
   },
   add: async (req, res, next) => {
     try {
