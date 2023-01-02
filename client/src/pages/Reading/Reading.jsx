@@ -175,7 +175,7 @@ function Reading() {
     const timeout = setTimeout(() => {
       chapterService.update(chapterId, { view: 1 });
       isLoggingIn && readingHistoryService.add(titleId, chapterId);
-    }, 5 * 1000);
+    }, 60 * 1000);
 
     return () => {
       clearTimeout(timeout);
