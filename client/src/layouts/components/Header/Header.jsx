@@ -20,9 +20,7 @@ const cx = classNames.bind(styles);
 function Header({ menu }) {
   const dispatch = useDispatch();
   const url = useLocation().pathname;
-  const isToggleMobileNavBar = useSelector(
-    (state) => state.global.toggleHeaderNavBar
-  );
+  const isToggleMobileNavBar = useSelector((state) => state.global.toggleHeaderNavBar);
 
   if (menu === null) {
     menu = HEADER_MENU;
@@ -62,10 +60,7 @@ function Header({ menu }) {
                     <Button
                       wrapper
                       to={nav.href}
-                      className={cx(
-                        "nav-link",
-                        url.includes(nav.href) ? "active" : ""
-                      )}
+                      className={cx("nav-link", url.includes(nav.href) ? "active" : "")}
                     >
                       {nav.label}
                     </Button>

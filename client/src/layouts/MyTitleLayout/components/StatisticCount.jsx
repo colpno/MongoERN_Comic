@@ -27,15 +27,6 @@ function StatisticCount() {
     content: <IncomePopup />,
   });
 
-  const fetchData = () => {
-    titleService
-      .getAll({
-        user_id: user._id,
-      })
-      .then((response) => setTitles(response.data))
-      .catch((error) => console.error(error));
-  };
-
   const handleIncomeExplainClick = () => {
     setPopup((prev) => {
       return { ...prev, trigger: true };
@@ -43,12 +34,16 @@ function StatisticCount() {
   };
 
   useEffect(() => {
-    fetchData();
+    titleService
+      .getAll({
+        user_id: user._id,
+      })
+      .then((response) => {
+        setTitles(response.data);
+        dispatch(setMyTitles(titles));
+      })
+      .catch((error) => console.error(error));
   }, []);
-
-  useEffect(() => {
-    titles.length > 0 && dispatch(setMyTitles(titles));
-  }, [titles]);
 
   useEffect(() => {
     if (titles.length > 0) {

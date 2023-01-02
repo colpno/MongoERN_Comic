@@ -32,13 +32,6 @@ function Introduction({ title, firstChapter, setPopup, handleFollow }) {
     });
   }, [title, genreArray]);
 
-  const fetchData = () => {
-    genreService
-      .getAll({ name_in: title.genres })
-      .then((response) => setGenreArray(response.data))
-      .catch((error) => console.error(error));
-  };
-
   const handlePopupContent = () => {
     setPopup({
       trigger: true,
@@ -52,7 +45,10 @@ function Introduction({ title, firstChapter, setPopup, handleFollow }) {
   };
 
   useEffect(() => {
-    fetchData();
+    genreService
+      .getAll({ name_in: title.genres })
+      .then((response) => setGenreArray(response.data))
+      .catch((error) => console.error(error));
   }, [title]);
 
   return (
