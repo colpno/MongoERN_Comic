@@ -7,7 +7,7 @@ import { checked } from "assets/images";
 import { Button } from "components";
 import { setUser } from "libs/redux/slices/user.slice";
 import { paypalService } from "services";
-import styles from "./Success.module.scss";
+import styles from "../styles/Success.module.scss";
 
 const cx = classNames.bind(styles);
 
@@ -37,9 +37,7 @@ function Success() {
             <div className={cx("title")}>
               <h3>Success!</h3>
             </div>
-            <p className={cx("para")}>
-              Your account has been created successfully
-            </p>
+            <p className={cx("para")}>Your account has been created successfully</p>
             <Button className={cx("button")} id={cx("s_button")} to="/">
               OKAY
             </Button>

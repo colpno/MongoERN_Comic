@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { cancel } from "assets/images";
 import { Button } from "components";
-import styles from "./Cancel.module.scss";
+import styles from "../styles/Cancel.module.scss";
 
 const cx = classNames.bind(styles);
 
@@ -21,11 +21,7 @@ function Cancel() {
             <h3>Sorry</h3>
           </div>
           <p className={cx("para")}>Something went wrong. Please try again!</p>
-          <Button
-            className={cx("button")}
-            id={cx("e_button")}
-            onClick={() => navigate("/")}
-          >
+          <Button className={cx("button")} id={cx("e_button")} onClick={() => navigate("/")}>
             TRY AGAIN
           </Button>
         </div>

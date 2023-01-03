@@ -1,9 +1,4 @@
-import {
-  BlankLayout,
-  BookshelfLayout,
-  HistoryLayout,
-  MyTitleLayout,
-} from "layouts";
+import { BlankLayout, BookshelfLayout, HistoryLayout, MyTitleLayout } from "layouts";
 import {
   AddCoin,
   Chapters,
@@ -23,8 +18,8 @@ import {
   UpdateChapter,
   UpdateTitle,
 } from "pages";
-import Cancel from "pages/AddCoin/components/PayPal/Cancel";
-import Success from "pages/AddCoin/components/PayPal/Success";
+import Cancel from "pages/AddCoin/components/Cancel";
+import Success from "pages/AddCoin/components/Success";
 
 export const privateRoutes = [
   { path: "/profile/update", component: Profile },
