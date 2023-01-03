@@ -28,7 +28,7 @@ function MyTitleContent({ titles, pagination, setPagination, sorting }) {
           },
           {
             label: "Duyệt",
-            name: "approve_status_id",
+            name: "approved_status_id",
           },
           {
             label: "Ngày đăng",
