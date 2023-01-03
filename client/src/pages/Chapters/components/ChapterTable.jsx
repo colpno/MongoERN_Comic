@@ -4,14 +4,7 @@ import { GridTable } from "components";
 import { Pagination } from "features";
 import ChaptersTableRow from "./ChapterTableRow";
 
-function ChapterTable({
-  chapters,
-  setPopup,
-  setDeleteItem,
-  pagination,
-  setPagination,
-  sorting,
-}) {
+function ChapterTable({ chapters, setPopup, setDeleteItem, pagination, setPagination, sorting }) {
   return (
     <>
       <GridTable
@@ -27,11 +20,7 @@ function ChapterTable({
         sorting={sorting}
       >
         {chapters.length > 0 && (
-          <ChaptersTableRow
-            chapters={chapters}
-            setPopup={setPopup}
-            setDeleteItem={setDeleteItem}
-          />
+          <ChaptersTableRow chapters={chapters} setPopup={setPopup} setDeleteItem={setDeleteItem} />
         )}
       </GridTable>
       <Pagination pagination={pagination} setPagination={setPagination} />
