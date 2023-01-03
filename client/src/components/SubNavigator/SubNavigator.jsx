@@ -22,10 +22,14 @@ function SubNavigator({ menu, slidesPerView }) {
               className="navigator"
             >
               {menu.map((item, index) => {
+                const href = item.href.includes("?")
+                  ? item.href.slice(0, item.href.indexOf("?"))
+                  : item.href;
+
                 return (
                   <SwiperSlide
                     key={index}
-                    className={`navigator__link ${item.href === url ? "active" : ""}`}
+                    className={`navigator__link ${href === url ? "active" : ""}`}
                   >
                     <Button wrapper to={item.href} className="navigator__label">
                       {item.label}

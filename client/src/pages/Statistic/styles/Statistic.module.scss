@@ -1,12 +1,12 @@
 @use "assets/styles/variables" as var;
 
 .wrapper {
-  $margin: 60px;
-  margin-bottom: $margin;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .selector-container {
-  margin-top: 3rem;
+  margin-top: 1rem;
   margin-bottom: 1rem;
 
   display: flex;

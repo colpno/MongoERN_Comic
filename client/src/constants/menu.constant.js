@@ -6,7 +6,7 @@ const HEADER_MENU = [
 
 const MY_TITLE_MENU = [
   { href: "/my-title", label: "Truyện của tôi" },
-  { href: "/my-title/statistic", label: "Thống kê" },
+  { href: "/my-title/statistic?tab=like-view", label: "Thống kê" },
   { href: "/my-title/notice", label: "Thông báo" },
 ];
 
@@ -36,11 +36,4 @@ const BOOKSHELF_MENU = [
   { href: "/bookshelf/transaction?tab=purchased-titles", label: "Thuê/Mua" },
 ];
 
-export {
-  HEADER_MENU,
-  MY_TITLE_MENU,
-  HISTORY_MENU,
-  MOBILE_NAV_MENU,
-  COMIC_MENU,
-  BOOKSHELF_MENU,
-};
+export { HEADER_MENU, MY_TITLE_MENU, HISTORY_MENU, MOBILE_NAV_MENU, COMIC_MENU, BOOKSHELF_MENU };
