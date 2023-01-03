@@ -2,6 +2,7 @@ import createError from 'http-errors';
 import transformQueryParams from '../helpers/transformQueryParams.js';
 import { chapterService, favoriteService, titleService } from '../services/index.js';
 import chapterReportController from './chapterReport.controller.js';
+import titleReportController from './titleReport.controller.js';
 
 const favoriteController = {
   getAll: async (req, res, next) => {
@@ -50,7 +51,8 @@ const favoriteController = {
       const chapterPromise = chapterService.increaseLike(chapterId);
       const titlePromise = titleService.increaseLike(chapter.title_id);
       const chapterReportPromise = chapterReportController.add(chapterId, 0, 1);
-      await Promise.all([chapterPromise, titlePromise, chapterReportPromise]);
+      const titleReportPromise = titleReportController.add(chapter.title_id, 0, 1);
+      await Promise.all([chapterPromise, titlePromise, chapterReportPromise, titleReportPromise]);
 
       return res.status(201).json({
         code: 201,
@@ -76,7 +78,8 @@ const favoriteController = {
       const chapterPromise = chapterService.increaseLike(chapterId, -1);
       const titlePromise = titleService.increaseLike(chapter.title_id, -1);
       const chapterReportPromise = chapterReportController.add(chapterId, 0, -1);
-      await Promise.all([chapterPromise, titlePromise, chapterReportPromise]);
+      const titleReportPromise = titleReportController.add(chapter.title_id, 0, -1);
+      await Promise.all([chapterPromise, titlePromise, chapterReportPromise, titleReportPromise]);
 
       return res.status(200).json({
         code: 200,

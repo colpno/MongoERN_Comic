@@ -16,6 +16,7 @@ import paymentMethodRoute from './paymentMethod.route.js';
 import paypalRoute from './paypal.route.js';
 import readingHistoryRoute from './readingHistory.route.js';
 import titleRoute from './title.route.js';
+import titleReportRoute from './titleReport.route.js';
 import userRoute from './user.route.js';
 import vnpayRoute from './vnpay.route.js';
 
@@ -38,6 +39,7 @@ routes.use(`${BASE_URL}/genres`, genreRoute);
 routes.use(`${BASE_URL}/payment-methods`, paymentMethodRoute);
 routes.use(`${BASE_URL}/reading-histories`, readingHistoryRoute);
 routes.use(`${BASE_URL}/titles`, titleRoute);
+routes.use(`${BASE_URL}/title-reports`, titleReportRoute);
 routes.use(`${BASE_URL}/vnpay`, vnpayRoute);
 routes.use(`${BASE_URL}/paypal`, paypalRoute);
 routes.use(`${BASE_URL}/users`, userRoute);

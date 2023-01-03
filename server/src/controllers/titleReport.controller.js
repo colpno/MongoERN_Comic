@@ -1,6 +1,6 @@
-import { getCurrentTime } from '../helpers/getCurrentTime';
-import transformQueryParams from '../helpers/transformQueryParams';
-import titleReportService from '../services/titleReport.service';
+import { getCurrentTime } from '../helpers/getCurrentTime.js';
+import transformQueryParams from '../helpers/transformQueryParams.js';
+import titleReportService from '../services/titleReport.service.js';
 
 const titleReportController = {
   getAll: async (req, res, next) => {
@@ -16,60 +16,32 @@ const titleReportController = {
       }
 
       return res.status(200).json({
+        ...reports,
         code: 200,
-        data: reports,
       });
     } catch (error) {
       return next(error);
     }
   },
-  getOne: async (req, res, next) => {
-    try {
-      const { titleId, month, year } = req.query;
-
-      const report = await titleReportService.getOne(titleId, month, year);
-
-      if (!report) {
-        return res.status(200).json({
-          code: 200,
-          data: {},
-        });
-      }
-
-      return res.status(200).json({
-        code: 200,
-        data: report,
-      });
-    } catch (error) {
-      return next(error);
-    }
-  },
-  add: async (titleId = '', type = 'views' || 'likes') => {
+  add: async (titleId, view, like) => {
     try {
       const { month, year } = getCurrentTime('number');
+      const whiteListValues = [-1, 0, 1];
 
-      const report = await titleReportService.getOne(titleId, month, year);
+      if (view && !whiteListValues.includes(view)) throw new Error('Dữ liệu không hợp lệ');
+      if (like && !whiteListValues.includes(like)) throw new Error('Dữ liệu không hợp lệ');
 
-      if (report) {
-        await titleReportService.update(titleId, month, year, type, 1); // increase by 1
-      } else {
-        const views = type === 'views' ? 1 : 0;
-        const likes = type === 'likes' ? 1 : 0;
+      if (titleId) {
+        const report = await titleReportService.getOne(titleId, month, year);
 
-        await titleReportService.add(titleId, likes, views, month, year);
+        if (report) {
+          return await titleReportService.update(titleId, month, year, view, like);
+        }
+
+        return await titleReportService.add(titleId, month, year, like, view);
       }
-    } catch (error) {
-      throw new Error(error);
-    }
-  },
-  delete: async (titleId, month, year, value) => {
-    try {
-      const report = await titleReportService.getOne(titleId, month, year);
 
-      if (report) {
-        await titleReportService.update(titleId, month, year, 'views', -value);
-        await titleReportService.update(titleId, month, year, 'likes', -value);
-      }
+      throw new Error('Dữ liệu không hợp lệ');
     } catch (error) {
       throw new Error(error);
     }

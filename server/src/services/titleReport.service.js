@@ -1,28 +1,29 @@
+import moment from 'moment';
 import paginateSort from '../helpers/paginateSort.js';
 import { TitleReport } from '../models/index.js';
-import { MIN_MONTH, MAX_YEAR } from '../validations/index.js';
+import { MAX_YEAR } from '../validations/index.js';
 
 const titleReportService = {
   getAll: async (params = {}) => {
-    const { _limit, _sort, _order } = params;
+    const { _page, _limit, _sort, _order, _fields, ...others } = params;
 
     if (_limit || (_sort && _order)) {
       const response = await paginateSort(params, TitleReport);
       return response;
     }
 
-    const response = await TitleReport.find(params);
+    const response = await TitleReport.find(others).select(_fields);
     return { data: response };
   },
   getOne: async (titleId, month, year) => {
     const response = await TitleReport.findOne({ title_id: titleId, month, year });
     return response;
   },
-  add: async (titleId = '', likes = 0, views = 0, month = MIN_MONTH, year = MAX_YEAR) => {
+  add: async (titleId = '', month = moment().month() + 1, year = MAX_YEAR, like = 0, view = 0) => {
     const model = new TitleReport({
       title_id: titleId,
-      likes,
-      views,
+      like,
+      view,
       month,
       year,
     });
@@ -30,12 +31,14 @@ const titleReportService = {
     const response = await model.save();
     return response;
   },
-  update: async (titleId, month, year, type = 'views' || 'likes', value = 1) => {
-    const response = await TitleReport.findOneAndUpdate(
-      { title_id: titleId, month, year },
-      { $inc: { [type]: value } },
-      { new: true }
-    );
+  update: async (titleId, month, year, view = 0, like = 0) => {
+    const data = { $inc: {} };
+    if (view !== 0) data.$inc.view = view;
+    if (like !== 0) data.$inc.like = like;
+
+    const response = await TitleReport.findOneAndUpdate({ title_id: titleId, month, year }, data, {
+      new: true,
+    });
 
     return response;
   },

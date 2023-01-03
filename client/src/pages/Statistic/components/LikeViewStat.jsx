@@ -6,7 +6,7 @@ import { Col, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
 import { NoData } from "features";
-import { chapterReportService, chapterService } from "services";
+import { chapterReportService, chapterService, titleReportService } from "services";
 import { sortArray } from "utils/arrayMethods";
 import { getChartColors, getMonthArray } from "utils/constants";
 import getYearOptions from "utils/getYearOptions";
@@ -36,7 +36,7 @@ function LikeViewStat({ setLoading, toastEmitter }) {
   }, [myTitles]);
   const [chapters, setChapters] = useState([]);
 
-  // TODO: const [titleReports, setTitleReports] = useState([]);
+  const [titleReports, setTitleReports] = useState([]);
   const [chapterReports, setChapterReports] = useState([]);
 
   const fetchChapters = (params) => {
@@ -88,29 +88,27 @@ function LikeViewStat({ setLoading, toastEmitter }) {
   }, [selectedChapter, reportYear.chapter]);
 
   // fetch all reports of selected title
-  /* TODO:
   useEffect(() => {
-      setLoading(true);
+    setLoading(true);
 
     if (selectedTitle?.value) {
-    const params = {
-      title_id: selectedTitle.value,
-      year: reportYear.chapter.value,
-    };
+      const params = {
+        title_id: selectedTitle.value,
+        year: reportYear.chapter.value,
+      };
 
       titleReportService
         .getAll(params)
         .then((response) => {
-setTitleReports(response.data)
-      setLoading(false);
+          setTitleReports(response.data);
+          setLoading(false);
         })
         .catch((error) => {
           toastEmitter(error, "error");
-      setLoading(false);
+          setLoading(false);
         });
     }
-  }, [selectedTitle, reportYear.title]); 
-  */
+  }, [selectedTitle, reportYear.title]);
 
   // INFO: Select controls
 
@@ -212,7 +210,6 @@ setTitleReports(response.data)
   // INFO: Calculate chart data: views, likes
 
   // sum all likes and views in a year of a title
-  /* TODO:
   useEffect(() => {
     const tempData = {
       likes: [...arrayOfZero],
@@ -234,8 +231,7 @@ setTitleReports(response.data)
       ...prev,
       title: tempData,
     }));
-  }, [titleReports]); 
-  */
+  }, [titleReports]);
 
   // sum all likes and views in a year of a chapter
   useEffect(() => {
