@@ -8,8 +8,6 @@ const chapterReportService = {
   getAll: async (params = {}) => {
     const { _page, _limit, _sort, _order, fields, ...others } = params;
 
-    if (others.chapter_id) others.chapter_id = Types.ObjectId(others.chapter_id);
-
     if (_limit || (_sort && _order)) {
       const response = await paginateSort(params, ChapterReport);
       return response;
