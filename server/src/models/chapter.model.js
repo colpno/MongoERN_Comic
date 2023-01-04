@@ -12,7 +12,7 @@ const chapterSchema = mongoose.Schema(
     approved_status_id: {
       type: mongoose.Types.ObjectId,
       ref: 'approved_status',
-      default: '63a6fb6216ee77053d6feb91',
+      default: '63b5978d7d56b429568608c5',
     },
     title: { type: String, require: true },
     cover: {
