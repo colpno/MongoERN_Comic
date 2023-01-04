@@ -209,7 +209,7 @@ function LikeViewStat({ setLoading, toastEmitter }) {
 
   // INFO: Calculate chart data: views, likes
 
-  // sum all likes and views in a year of a title
+  // sum all likes and views by month of a title
   useEffect(() => {
     const tempData = {
       likes: [...arrayOfZero],
@@ -233,7 +233,7 @@ function LikeViewStat({ setLoading, toastEmitter }) {
     }));
   }, [titleReports]);
 
-  // sum all likes and views in a year of a chapter
+  // sum all likes and views by month of a chapter
   useEffect(() => {
     const tempData = {
       likes: [...arrayOfZero],
