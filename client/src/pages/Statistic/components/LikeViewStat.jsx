@@ -43,7 +43,7 @@ function LikeViewStat({ setLoading, toastEmitter }) {
     setLoading(true);
 
     // get only title and _id fields
-    params.fields = "title";
+    params._fields = "title";
 
     chapterService
       .getAll(params)
