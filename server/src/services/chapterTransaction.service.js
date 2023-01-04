@@ -25,7 +25,7 @@ const getAttachData = async (response) => {
 
 const chapterTransactionService = {
   getAll: async (params = {}) => {
-    const { _limit, _sort, _order } = params;
+    const { _page, _limit, _sort, _order, _fields, ...others } = params;
 
     if (_limit || (_sort && _order)) {
       const response = await paginateSort(params, ChapterTransaction);
@@ -37,7 +37,7 @@ const chapterTransactionService = {
       return response;
     }
 
-    const response = await ChapterTransaction.find(params);
+    const response = await ChapterTransaction.find(others).select(_fields);
     return { data: await getAttachData({ data: response }) };
   },
   add: async (

@@ -3,14 +3,14 @@ import { CoinHistory } from '../models/index.js';
 
 const coinHistoryService = {
   getAll: async (params = {}) => {
-    const { _limit, _sort, _order } = params;
+    const { _page, _limit, _sort, _order, _fields, ...others } = params;
 
     if (_limit || (_sort && _order)) {
       const response = await paginateSort(params, CoinHistory);
       return response;
     }
 
-    const response = await CoinHistory.find(params);
+    const response = await CoinHistory.find(others).select(_fields);
     return { data: response };
   },
   add: async (userId = '', paymentMethod = '', amount = 0) => {

@@ -32,14 +32,14 @@ const uploadContents = async (contents, titleGuid, chapterGuid) => {
 
 const chapterService = {
   getAll: async (params = {}) => {
-    const { _page, _limit, _sort, _order, fields, ...others } = params;
+    const { _page, _limit, _sort, _order, _fields, ...others } = params;
 
     if (_limit || (_sort && _order)) {
       const response = await paginateSort(params, Chapter);
       return response;
     }
 
-    const response = await Chapter.find(others).select(fields);
+    const response = await Chapter.find(others).select(_fields);
     return { data: response };
   },
   getOne: async (params = {}) => {

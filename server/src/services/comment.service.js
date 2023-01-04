@@ -16,14 +16,14 @@ class CommentSocket {
 
 const commentService = {
   getAll: async (params = {}) => {
-    const { _limit, _sort, _order } = params;
+    const { _page, _limit, _sort, _order, _fields, ...others } = params;
 
     if (_limit || (_sort && _order)) {
       const response = await paginateSort(params, Comment);
       return response;
     }
 
-    const response = await Comment.find(params);
+    const response = await Comment.find(others).select(_fields);
     return { data: response };
   },
   getOne: async (params = {}) => {

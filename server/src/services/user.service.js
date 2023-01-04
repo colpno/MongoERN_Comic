@@ -3,14 +3,14 @@ import { User } from '../models/index.js';
 
 const userService = {
   getAll: async (params = {}) => {
-    const { _limit, _sort, _order } = params;
+    const { _page, _limit, _sort, _order, _fields, ...others } = params;
 
     if (_limit || (_sort && _order)) {
       const response = await paginateSort(params, User);
       return response;
     }
 
-    const response = await User.find(params);
+    const response = await User.find(others).select(_fields);
     return { data: response };
   },
   getOne: async (params = {}) => {

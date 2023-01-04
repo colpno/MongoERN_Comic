@@ -3,14 +3,14 @@ import { PaymentMethod } from '../models/index.js';
 
 const chapterService = {
   getAll: async (params = {}) => {
-    const { _limit, _sort, _order } = params;
+    const { _page, _limit, _sort, _order, _fields, ...others } = params;
 
     if (_limit || (_sort && _order)) {
       const response = await paginateSort(params, PaymentMethod);
       return response;
     }
 
-    const response = await PaymentMethod.find(params);
+    const response = await PaymentMethod.find(others).select(_fields);
     return { data: response };
   },
   add: async (name = '') => {
