@@ -28,6 +28,8 @@
     "implicit-arrow-linebreak": "off",
     "function-paren-newline": "off",
     "no-underscore-dangle": "off",
-    "no-new": "off"
+    "no-new": "off",
+    "camelcase": "off",
+    "no-param-reassign": "off"
   }
 }
