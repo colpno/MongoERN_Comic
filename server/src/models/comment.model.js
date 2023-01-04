@@ -3,11 +3,7 @@ import { allowCommentPlaceList } from '../validations/commentAt.validation.js';
 
 const commentSchema = mongoose.Schema(
   {
-    author: {
-      _id: { type: String, require: true },
-      name: { type: String, require: true },
-      avatar: { type: String, require: true },
-    },
+    user_id: { type: mongoose.Types.ObjectId, ref: 'user', require: true },
     comment_at: {
       type: String,
       require: true,
@@ -26,6 +22,13 @@ const commentSchema = mongoose.Schema(
 commentSchema.pre('save', function (next) {
   this.slug += this._id;
   this.full_slug += `${new Date().toISOString()}:${this._id}`;
+
+  next();
+});
+
+commentSchema.pre(/^find/, function (next) {
+  this.user_id = mongoose.Types.ObjectId(this.user_id);
+  this.approved_status_id = mongoose.Types.ObjectId(this.approved_status_id);
 
   next();
 });

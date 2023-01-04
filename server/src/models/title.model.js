@@ -7,8 +7,12 @@ import TitleReport from './titleReport.model.js';
 
 const titleSchema = mongoose.Schema(
   {
-    user_id: { type: String, require: true },
-    approved_status_id: { type: String, default: '63a6fb6216ee77053d6feb91' },
+    user_id: { type: mongoose.Types.ObjectId, ref: 'user', require: true },
+    approved_status_id: {
+      type: mongoose.Types.ObjectId,
+      ref: 'approved_status',
+      default: '63a6fb6216ee77053d6feb91',
+    },
     status: {
       type: String,
       enum: ['inv', 'vis'],
@@ -42,6 +46,13 @@ titleSchema.pre('remove', function (next) {
   Follow.remove({ title_id: this._id }).exec();
   ReadingHistory.remove({ title_id: this._id }).exec();
   TitleReport.remove({ title_id: this._id }).exec();
+
+  next();
+});
+
+titleSchema.pre(/^find/, function (next) {
+  this.user_id = mongoose.Types.ObjectId(this.user_id);
+  this.approved_status_id = mongoose.Types.ObjectId(this.approved_status_id);
 
   next();
 });

@@ -10,7 +10,7 @@ import {
 
 const incomeSchema = mongoose.Schema(
   {
-    user_id: { type: String, require: true },
+    user_id: { type: mongoose.Types.ObjectId, ref: 'user', require: true },
     total_income: { type: Number, min: 0, default: 0 },
     purchased_chapter_income: { type: Number, min: 0, default: 0 },
     payment_income: { type: Number, min: 0, default: 0 },
@@ -31,6 +31,12 @@ const incomeSchema = mongoose.Schema(
   },
   { timestamps: true }
 );
+
+incomeSchema.pre(/^find/, function (next) {
+  this.user_id = mongoose.Types.ObjectId(this.user_id);
+
+  next();
+});
 
 const Income = mongoose.model('income', incomeSchema);
 

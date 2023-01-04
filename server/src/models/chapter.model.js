@@ -8,8 +8,12 @@ import ReadingHistory from './readingHistory.model.js';
 
 const chapterSchema = mongoose.Schema(
   {
-    title_id: { type: String, require: true },
-    approved_status_id: { type: String, default: '63a6fb6216ee77053d6feb91' },
+    title_id: { type: mongoose.Types.ObjectId, ref: 'title', require: true },
+    approved_status_id: {
+      type: mongoose.Types.ObjectId,
+      ref: 'approved_status',
+      default: '63a6fb6216ee77053d6feb91',
+    },
     title: { type: String, require: true },
     cover: {
       source: { type: String, require: true },
@@ -38,6 +42,13 @@ chapterSchema.pre('remove', function (next) {
   ChapterTransaction.remove({ chapter_id: this._id }).exec();
   Favorite.remove({ chapter_id: this._id }).exec();
   ReadingHistory.remove({ chapter_id: this._id }).exec();
+
+  next();
+});
+
+chapterSchema.pre(/^find/, function (next) {
+  this.title_id = mongoose.Types.ObjectId(this.title_id);
+  this.approved_status_id = mongoose.Types.ObjectId(this.approved_status_id);
 
   next();
 });
