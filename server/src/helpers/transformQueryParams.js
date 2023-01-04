@@ -8,9 +8,8 @@ const querySuffixes = [
   '_nin', // Not in array
   '_all', // Match all elements in array
   '_like', // Contains part of string
+  '_embed', // Embed collection
 ];
-
-// const additionQuerySuffixes = ['_page', '_limit', '_sort', '_order'];
 
 const convertToMongoQueryOperator = (suffix, value) => {
   switch (suffix) {
@@ -45,13 +44,28 @@ const transformQueryParams = (queries = {}) => {
 
   const transformedQuery = queryKeys.reduce((result, queryKey) => {
     const queryValue = queries[queryKey];
-    const startOfSuffixIndex = queryKey.lastIndexOf('_');
-    const suffix = queryKey.slice(startOfSuffixIndex);
-    const docField = sliceOffCondition(queryKey, suffix);
-
     const newResult = {
       ...result,
     };
+
+    if (queryKey === '_embed') {
+      if (Array.isArray(queryValue)) {
+        const converted = queryValue.map((val) => {
+          const returnValue = { path: val };
+          if (val.collection) returnValue.path = val.collection;
+          if (val.fields) returnValue.select = val.fields;
+          if (val.match) returnValue.match = transformQueryParams(val.match);
+          return returnValue;
+        });
+        newResult[queryKey] = converted;
+        return newResult;
+      }
+      throw new Error('_embed phải là kiểu dữ liệu mảng');
+    }
+
+    const startOfSuffixIndex = queryKey.lastIndexOf('_');
+    const suffix = queryKey.slice(startOfSuffixIndex);
+    const docField = sliceOffCondition(queryKey, suffix);
 
     if (startOfSuffixIndex !== -1) {
       // if query key contains suffix

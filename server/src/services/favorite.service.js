@@ -3,14 +3,14 @@ import { Favorite } from '../models/index.js';
 
 const favoriteService = {
   getAll: async (params = {}) => {
-    const { _page, _limit, _sort, _order, _fields, ...others } = params;
+    const { _page, _limit, _sort, _order, _fields, _embed, ...others } = params;
 
     if (_limit || (_sort && _order)) {
       const response = await paginateSort(params, Favorite);
       return response;
     }
 
-    const response = await Favorite.find(others).select(_fields);
+    const response = await Favorite.find(others).select(_fields).populate(_embed);
     return { data: response };
   },
   add: async (userId = '', chapterId = '') => {

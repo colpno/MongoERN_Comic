@@ -1,10 +1,11 @@
 const paginateSort = async (queries, MongooseModel) => {
   if (!queries._page) queries._page = 1;
-  const { _page, _limit, _sort, _order, _fields, ...others } = queries;
+  const { _page, _limit, _sort, _order, _fields, _embed, ...others } = queries;
 
   if (_limit && _sort && _order) {
     const data = await MongooseModel.find(others)
       .select(_fields)
+      .populate(_embed)
       .skip(_limit * _page - _limit)
       .limit(_limit)
       .sort({ [_sort]: _order });
@@ -24,6 +25,7 @@ const paginateSort = async (queries, MongooseModel) => {
   if (_limit) {
     const data = await MongooseModel.find(others)
       .select(_fields)
+      .populate(_embed)
       .skip(_limit * _page - _limit)
       .limit(_limit);
 
@@ -42,6 +44,7 @@ const paginateSort = async (queries, MongooseModel) => {
   if (_sort && _order) {
     const data = await MongooseModel.find(others)
       .select(_fields)
+      .populate(_embed)
       .sort({ [_sort]: _order });
 
     return { data };

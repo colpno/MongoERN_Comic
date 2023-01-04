@@ -19,14 +19,14 @@ const sortGenres = (titles) => {
 
 const titleService = {
   getAll: async (params = {}) => {
-    const { _page, _limit, _sort, _order, _fields, ...others } = params;
+    const { _page, _limit, _sort, _order, _fields, _embed, ...others } = params;
 
     if (_limit || (_sort && _order)) {
       const response = await paginateSort(params, Title);
       return response;
     }
 
-    const response = await Title.find(others).select(_fields);
+    const response = await Title.find(others).select(_fields).populate(_embed);
     return { data: sortGenres(response) };
   },
   getOne: async (params = {}) => {

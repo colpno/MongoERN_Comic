@@ -6,14 +6,14 @@ import { MAX_YEAR } from '../validations/index.js';
 
 const chapterReportService = {
   getAll: async (params = {}) => {
-    const { _page, _limit, _sort, _order, fields, ...others } = params;
+    const { _page, _limit, _sort, _order, _fields, _embed, ...others } = params;
 
     if (_limit || (_sort && _order)) {
       const response = await paginateSort(params, ChapterReport);
       return response;
     }
 
-    const response = await ChapterReport.find(others).select(fields);
+    const response = await ChapterReport.find(others).select(_fields).populate(_embed);
     return { data: response };
   },
   getOne: async (chapterId = '', month = '', year = '') => {
