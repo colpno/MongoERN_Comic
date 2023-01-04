@@ -72,8 +72,7 @@ function UpdateChapter() {
           if (!isIn) {
             // get cloud_public_id of the content
             chapter.contents.forEach((cont) => {
-              if (cont.source === content)
-                removeContents.push(cont.cloud_public_id);
+              cont.source === content && removeContents.push(cont.cloud_public_id);
             });
           }
         }
@@ -97,7 +96,6 @@ function UpdateChapter() {
 
   const handleSubmit = (values, { setSubmitting }) => {
     const changedValues = getChangedValues(values);
-    changedValues.guid = chapter._guid;
     changedValues.titleId = chapter.title_id;
 
     if (Object.keys(changedValues).length > 1) {
