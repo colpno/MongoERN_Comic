@@ -73,7 +73,7 @@ const paypalController = {
           });
         };
 
-        paypalService.create(paymentData, getResponse);
+        paypalService.createPayment(paymentData, getResponse);
       } else {
         res.status(400).json({
           code: 400,
@@ -86,7 +86,11 @@ const paypalController = {
   },
   payout: async (req, res, next) => {
     try {
-      const payoutData = paypalService.getPayoutData();
+      const {
+        data: { amount, receiver },
+      } = req.body;
+
+      const payoutData = paypalService.getPayoutData(amount, receiver);
 
       const getResponse = (response) => {
         res.status(201).json({
@@ -95,7 +99,7 @@ const paypalController = {
         });
       };
 
-      paypalService.create(payoutData, getResponse);
+      await paypalService.createPayout(payoutData, getResponse);
     } catch (error) {
       next(error);
     }

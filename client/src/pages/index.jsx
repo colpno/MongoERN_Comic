@@ -32,3 +32,4 @@ export { default as UpdateTitle } from "./UpdateTitle/UpdateTitle";
 export { default as VerifyAccount } from "./VerifyAccount/VerifyAccount";
 export { default as VerifyLogin } from "./VerifyLogin/VerifyLogin";
 export { default as Weekly } from "./Weekly/Weekly";
+export { default as Withdraw } from "./Withdraw/Withdraw";

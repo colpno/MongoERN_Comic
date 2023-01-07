@@ -17,25 +17,27 @@ import {
   TitleTransaction,
   UpdateChapter,
   UpdateTitle,
+  Withdraw,
 } from "pages";
 import Cancel from "pages/AddCoin/components/Cancel";
 import Success from "pages/AddCoin/components/Success";
 
 export const privateRoutes = [
   { path: "/profile/update", component: Profile },
-  { path: "/profile/coin/add", component: AddCoin, layout: HistoryLayout },
+  { path: "/coin/add", component: AddCoin, layout: HistoryLayout },
+  { path: "/withdraw", component: Withdraw, layout: HistoryLayout },
   {
-    path: "/profile/history/coin",
+    path: "/history/coin",
     component: CoinHistory,
     layout: HistoryLayout,
   },
   {
-    path: "/profile/history/point",
+    path: "/history/point",
     component: PointHistory,
     layout: HistoryLayout,
   },
   {
-    path: "/profile/history/ticket",
+    path: "/history/ticket",
     component: TicketHistory,
     layout: HistoryLayout,
   },

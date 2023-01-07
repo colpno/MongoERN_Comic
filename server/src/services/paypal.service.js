@@ -1,4 +1,6 @@
 import dotenv from 'dotenv';
+import { randomUUID } from 'crypto';
+import axios from 'axios';
 import paypal from 'paypal-rest-sdk';
 import paypalConfig from '../config/paypal.config.js';
 
@@ -6,7 +8,7 @@ dotenv.config();
 paypal.configure(paypalConfig);
 
 const paypalService = {
-  create: (data = {}, getResponse = () => {}) => {
+  createPayment: (data = {}, getResponse = () => {}) => {
     try {
       paypal.payment.create(data, (error, payment) => {
         if (error) {
@@ -16,6 +18,37 @@ const paypalService = {
         getResponse(approvedObject);
       });
     } catch (error) {
+      throw new Error(error);
+    }
+  },
+  createPayout: async (data = {}, getResponse = () => {}) => {
+    try {
+      const {
+        data: { access_token, token_type },
+      } = await axios.post(
+        'https://api-m.sandbox.paypal.com/v1/oauth2/token',
+        { grant_type: 'client_credentials' },
+        {
+          auth: {
+            username:
+              'AWRfCXIMEDTS30Sh_aUxlwxjFL3s7bKeq_Bg9Ruuf4FuVM4GMydWfyFDfw-Ij3KVyLn4Byzxtvgy6vxp',
+            password:
+              'EBX-mF1IcruXg1RjceSf35jTiPzbyL4lN-hqtw3WJvJJuh7RaxLZ2zJcG6j7fpd_Cf4OTvjKDs8lyDWz',
+          },
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        }
+      );
+
+      const { data: payout } = await axios.post(
+        'https://api-m.sandbox.paypal.com/v1/payments/payouts',
+        data,
+        { headers: { Authorization: `${token_type} ${access_token}` } }
+      );
+
+      const approvedObject = payout.links.find((link) => link.rel === 'self');
+      getResponse(approvedObject);
+    } catch (error) {
+      console.log('file: paypal.service.js:78 ~ error', error.response.data);
       throw new Error(error);
     }
   },
@@ -66,25 +99,23 @@ const paypalService = {
 
     return paymentData;
   },
-  // getPayoutData: (amount = 0, receiver = '', note = '') => {
-  getPayoutData: () => {
-    const sender_batch_id = Math.random().toString(36).substring(9);
-
+  getPayoutData: (amount = '', receiver = '') => {
     const payoutData = {
       sender_batch_header: {
-        sender_batch_id,
-        email_subject: 'You have a payment',
+        sender_batch_id: randomUUID(),
+        email_subject: 'Rút tiền thành công',
+        email_message: 'Cảm ơn bạn đã sử dụng dịch vụ của Comico.',
       },
       items: [
         {
-          recipient_type: 'EMAIL',
           amount: {
-            value: '1.00',
+            value: Number.parseFloat(amount).toFixed(2).toString(),
             currency: 'USD',
           },
-          receiver: 'sb-gkrrx24563237@business.example.com',
-          note: 'Rút tiền',
-          sender_item_id: 'item_3',
+          sender_item_id: randomUUID(),
+          recipient_type: 'EMAIL',
+          note: 'Cảm ơn bạn đã sử dụng dịch vụ của Comico.',
+          receiver,
         },
       ],
     };
