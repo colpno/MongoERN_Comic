@@ -3,7 +3,7 @@ import { Col, Container, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
 import { CircleC, CircleP } from "assets/images";
-import styles from "../assets/styles/CurrencyCount.module.scss";
+import styles from "../styles/CurrencyCount.module.scss";
 
 const cx = classNames.bind(styles);
 
@@ -15,10 +15,7 @@ function CurrencyCount() {
       <Row>
         <Col>
           <p className={cx("wrapper__account")}>
-            Tài khoản:{" "}
-            <span className={cx("wrapper__account__name")}>
-              {user.username}
-            </span>
+            Tài khoản: <span className={cx("wrapper__account__name")}>{user.username}</span>
           </p>
           <h4 className={cx("wrapper__title")}>Số dư hiện tại</h4>
         </Col>
