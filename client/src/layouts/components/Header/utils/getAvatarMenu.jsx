@@ -21,7 +21,7 @@ function getAvatarMenu(cx, user, isLoggingIn) {
         icon: <img src={user.avatar} alt="User avatar" />,
       },
       {
-        path: "/profile/coin/add",
+        path: "/coin/add",
         label: (
           <>
             <p className={cx("coin-label")}>Coin</p>
@@ -31,7 +31,7 @@ function getAvatarMenu(cx, user, isLoggingIn) {
         icon: <CircleC className={cx(isLoggingIn ? "" : "grey")} />,
       },
       {
-        path: "/profile/coin/add",
+        path: "/coin/add",
         label: (
           <>
             <p className={cx("point-label")}>Point</p>
