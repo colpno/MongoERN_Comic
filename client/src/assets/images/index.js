@@ -1,3 +1,5 @@
+export { default as imageSrcError } from "./bg_frame_275x275.jpg";
+
 export { default as checked } from "./checked.png";
 export { default as cancel } from "./cancel.png";
 

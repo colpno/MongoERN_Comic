@@ -4,6 +4,7 @@ import { AiFillEye, AiFillHeart } from "react-icons/ai";
 
 import { Button, Image } from "components";
 import { roundNumByUnit } from "utils";
+import { imageSrcError } from "assets/images";
 import "./CardFigure.scss";
 
 function CardFigure(props) {
@@ -19,10 +20,19 @@ function CardFigure(props) {
     showLike,
     showView,
   } = props;
+  const imageOnError = ({ currentTarget }) => {
+    currentTarget.onError = null;
+    currentTarget.src = imageSrcError;
+  };
 
   return (
     <Button wrapper to={to} className={`card-figure${horizontal ? " horizontal" : ""}`}>
-      <Image src={data.cover.source} alt={data.title} className="card-figure__image" />
+      <Image
+        src={data.cover.source}
+        alt={data.title}
+        handleError={imageOnError}
+        className="card-figure__image"
+      />
       <figcaption className="card-figure__content">
         <div className="card-figure__content__wrapper">
           <h5 className="card-figure__content__title">{data.title}</h5>
