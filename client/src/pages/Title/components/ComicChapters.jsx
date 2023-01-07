@@ -22,9 +22,7 @@ function ComicChapters({
   handleOpenPurchaseBox,
 }) {
   const findPurchasedChapter = (chapterId) => {
-    const isPurchased = purchasedHistories.some(
-      (history) => history.transaction.chapter_id === chapterId
-    );
+    const isPurchased = purchasedHistories.some((history) => history.chapter_id._id === chapterId);
     return isPurchased;
   };
 
@@ -158,19 +156,20 @@ ComicChapters.propTypes = {
 
   purchasedHistories: PropTypes.arrayOf(
     PropTypes.shape({
-      transaction: PropTypes.shape({
-        _id: PropTypes.string.isRequired,
-        chapter_id: PropTypes.string.isRequired,
-      }).isRequired,
-      chapter: PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      chapter_id: PropTypes.shape({
         _id: PropTypes.string.isRequired,
       }).isRequired,
     }).isRequired
-  ).isRequired,
+  ),
 
   isDESCSorting: PropTypes.bool.isRequired,
   handleSorting: PropTypes.func.isRequired,
   handleOpenPurchaseBox: PropTypes.func.isRequired,
+};
+
+ComicChapters.defaultProps = {
+  purchasedHistories: [],
 };
 
 export default memo(ComicChapters);

@@ -47,7 +47,7 @@ function CommentItem({ comment, handleReplySubmit, getReplies, canReply }) {
           <img src={comment.author.avatar} alt="avatar" className={cx("avatar")} />
         </div>
         <div className={cx("content")}>
-          <div className={cx("username")}>{comment.author.name}</div>
+          <div className={cx("username")}>{comment.author.username}</div>
           <ReadMore>
             <div
               className={cx("text")}
@@ -88,7 +88,7 @@ CommentItem.propTypes = {
   comment: PropTypes.shape({
     author: PropTypes.shape({
       avatar: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
+      username: PropTypes.string.isRequired,
     }).isRequired,
     text: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.node.isRequired]).isRequired,
     slug: PropTypes.string.isRequired,

@@ -20,16 +20,12 @@ function Comment() {
   const [progress, setProgress] = useState(0);
   const initialFormValues = { text: "" };
 
-  const handleSubmit = (values, { setSubmitting }) => {
+  const handleSubmit = (values, { setSubmitting, resetForm }) => {
     const { text, slug } = values;
 
     if (text && commentAt) {
       const data = {
-        author: {
-          _id: user._id,
-          name: user.username,
-          avatar: user.avatar,
-        },
+        author: user._id,
         commentAt,
         text,
         parentSlug: slug,
@@ -38,6 +34,7 @@ function Comment() {
       const newComment = commentService
         .add(data, setProgress)
         .then(() => {
+          resetForm();
           setProgress(0);
         })
         .catch((error) => {
@@ -84,8 +81,13 @@ function Comment() {
 
   useEffect(() => {
     if (commentAt) {
+      const params = {
+        comment_at: commentAt,
+        _embed: JSON.stringify([{ collection: "author", fields: "avatar username" }]),
+      };
+
       commentService
-        .getAll({ comment_at: commentAt })
+        .getAll(params)
         .then((response) => setComments(response.data))
         .catch((error) => console.error(error));
     }
