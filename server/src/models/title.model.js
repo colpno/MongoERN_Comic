@@ -31,6 +31,7 @@ const titleSchema = mongoose.Schema(
     author: { type: String, require: true },
     summary: { type: String, require: true },
     genres: { type: [{ type: String }], validate: [minimumLength, 'Tối thiểu 1 thể loại'] },
+    comment_num: { type: Number, min: 0, default: 0 },
     coin: { type: Number, min: 0, require: true },
     point: { type: Number, min: 0, require: true },
     like: { type: Number, min: 0, default: 0 },
