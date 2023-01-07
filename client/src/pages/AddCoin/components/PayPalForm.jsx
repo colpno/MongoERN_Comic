@@ -24,7 +24,7 @@ function PayPalForm() {
         .payment(data)
         .then((response) => {
           setLoading(false);
-          window.location.assign(response.link);
+          window.open(response.link, "_blank");
         })
         .catch((err) => console.error(err));
     }
