@@ -170,10 +170,14 @@ function Title() {
       _page: pagination.page,
       _limit: pagination.limit,
     };
+    const chapterTranParams = {
+      title_id: titleId,
+      _embed: JSON.stringify([{ collection: "chapter_id", fields: "_id" }]),
+    };
 
     const titlePromise = titleService.getOne(titleId, false);
     const chaptersPromise = chapterService.getAll(chapterApiParams, false);
-    const chapterTransactionPromise = chapterTransactionService.getAll({ title_id: titleId });
+    const chapterTransactionPromise = chapterTransactionService.getAll(chapterTranParams);
 
     Promise.all([titlePromise, chaptersPromise, chapterTransactionPromise])
       .then(([titleResponse, chapterResponse, chapterTransactionResponse]) => {
