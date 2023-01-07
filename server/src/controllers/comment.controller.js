@@ -1,7 +1,7 @@
 import createError from 'http-errors';
 
 import transformQueryParams from '../helpers/transformQueryParams.js';
-import { commentService } from '../services/index.js';
+import { commentService, titleService } from '../services/index.js';
 
 const commentController = {
   getAll: async (req, res, next) => {
@@ -61,6 +61,12 @@ const commentController = {
 
       if (parentSlug) {
         await commentService.update({ slug: parentSlug }, { $inc: { comment_replies_num: 1 } });
+      }
+
+      const splittedPlace = commentAt.split('_');
+      if (splittedPlace[0] === 'title') {
+        const titleId = splittedPlace[1];
+        await titleService.updateNoTimestamp(titleId, { comment_num: { $inc: 1 } });
       }
 
       const room = commentAt.slice(commentAt.indexOf('_') + 1);
