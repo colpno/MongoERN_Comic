@@ -22,36 +22,49 @@ const convertMoneyToCoin = (money) => {
   }
 };
 
-const calcTotal = (items) => {
-  const tl = items.reduce(
-    (total, item) => total + Number.parseInt(item.price, 10) * item.quantity,
-    0
-  );
-  return `${tl}.00`;
+const prepareData = (data = []) => {
+  const initialValues = {
+    items: [],
+    amount: {
+      currency: 'USD',
+      total: '0.00',
+    },
+    description: '',
+  };
+
+  const { items, amount, description } = data.reduce((object, item) => {
+    const { name, price, quantity, description: desc } = item;
+    const total = Number.parseFloat(object.amount.total) + price * quantity;
+
+    return {
+      items: [
+        ...object.items,
+        {
+          name,
+          sku: name,
+          price,
+          currency: 'USD',
+          quantity,
+        },
+      ],
+      amount: {
+        ...object.amount,
+        total: total.toFixed(2).toString(),
+      },
+      description: desc,
+    };
+  }, initialValues);
+  return { items, amount, description };
 };
 
 const paypalController = {
-  create: async (req, res, next) => {
+  payment: async (req, res, next) => {
     try {
-      const { name, price } = req.body;
+      const { data } = req.body;
 
-      if (name && price) {
-        const items = [
-          {
-            name,
-            sku: name,
-            price,
-            currency: 'USD',
-            quantity: 1,
-          },
-        ];
-        const amount = {
-          currency: 'USD',
-          total: calcTotal(items),
-        };
-        const description = 'Purchase coin.';
-
-        const paymentData = paypalService.getPayMentData(items, amount, description);
+      if (Array.isArray(data) && data.length > 0) {
+        const { items, amount, description } = prepareData(data);
+        const paymentData = paypalService.getPaymentData(items, amount, description);
 
         const getResponse = (response) => {
           res.status(201).json({
@@ -71,6 +84,22 @@ const paypalController = {
       next(error);
     }
   },
+  payout: async (req, res, next) => {
+    try {
+      const payoutData = paypalService.getPayoutData();
+
+      const getResponse = (response) => {
+        res.status(201).json({
+          code: 201,
+          link: response.href,
+        });
+      };
+
+      paypalService.create(payoutData, getResponse);
+    } catch (error) {
+      next(error);
+    }
+  },
   success: async (req, res, next) => {
     try {
       const { id: userId } = req.userInfo;
@@ -79,17 +108,25 @@ const paypalController = {
 
       if (paymentId && userId && payerId) {
         const getResponse = async (response) => {
-          const docs = response.data.transactions[0].item_list.items.map((item) => ({
-            user_id: userId,
-            payment_method: 'PayPal',
-            amount: convertMoneyToCoin(item.price),
-          }));
-          await coinHistoryService.addMany(docs);
+          let product = '';
+          const docs = response.data.transactions[0].item_list.items.map((item) => {
+            product = item.name;
 
-          const coins = docs.reduce((coin, doc) => coin + doc.amount, 0);
-          const user = await userService.update(userId, { $inc: { coin: coins } });
+            return {
+              user_id: userId,
+              payment_method: 'PayPal',
+              amount: convertMoneyToCoin(item.price),
+            };
+          });
 
-          res.status(response.code).json({ ...response, user });
+          if (product === 'coin') {
+            await coinHistoryService.addMany(docs);
+
+            const coins = docs.reduce((coin, doc) => coin + doc.amount, 0);
+            const user = await userService.update(userId, { $inc: { coin: coins } });
+
+            res.status(response.code).json({ ...response, user });
+          }
         };
 
         paypalService.success(paymentId, payerId, getResponse);

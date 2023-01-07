@@ -43,7 +43,7 @@ const paypalService = {
       throw new Error(error);
     }
   },
-  getPayMentData: (items, amount, description) => {
+  getPaymentData: (items, amount, description) => {
     const paymentData = {
       intent: 'authorize',
       payer: {
@@ -65,6 +65,31 @@ const paypalService = {
     };
 
     return paymentData;
+  },
+  // getPayoutData: (amount = 0, receiver = '', note = '') => {
+  getPayoutData: () => {
+    const sender_batch_id = Math.random().toString(36).substring(9);
+
+    const payoutData = {
+      sender_batch_header: {
+        sender_batch_id,
+        email_subject: 'You have a payment',
+      },
+      items: [
+        {
+          recipient_type: 'EMAIL',
+          amount: {
+            value: '1.00',
+            currency: 'USD',
+          },
+          receiver: 'sb-gkrrx24563237@business.example.com',
+          note: 'Rút tiền',
+          sender_item_id: 'item_3',
+        },
+      ],
+    };
+
+    return payoutData;
   },
 };
 

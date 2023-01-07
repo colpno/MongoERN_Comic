@@ -18,8 +18,10 @@ function PayPalForm() {
     setLoading(false);
 
     if (price) {
+      const data = [{ name: "coin", price, quantity: 1, description: "Purchase coin" }];
+
       paypalService
-        .create("coin", price)
+        .payment(data)
         .then((response) => {
           setLoading(false);
           window.location.assign(response.link);
