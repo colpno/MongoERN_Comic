@@ -3,7 +3,7 @@ import { allowCommentPlaceList } from '../validations/commentAt.validation.js';
 
 const commentSchema = mongoose.Schema(
   {
-    user_id: { type: mongoose.Types.ObjectId, ref: 'user', require: true },
+    author: { type: mongoose.Types.ObjectId, ref: 'user', require: true },
     comment_at: {
       type: String,
       require: true,
