@@ -35,7 +35,7 @@ const commentService = {
     }
   },
   add: async (
-    author = {},
+    author = '',
     commentAt = '',
     text = '',
     slug = '',
@@ -51,7 +51,8 @@ const commentService = {
       full_slug: fullSlug,
     });
 
-    const response = await model.save();
+    const createdOne = await model.save();
+    const response = await Comment.findById(createdOne._id).populate('author', 'username avatar');
     return response;
   },
   update: async (match, data = {}) => {
