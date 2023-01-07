@@ -66,7 +66,7 @@ const commentController = {
       const splittedPlace = commentAt.split('_');
       if (splittedPlace[0] === 'title') {
         const titleId = splittedPlace[1];
-        await titleService.updateNoTimestamp(titleId, { comment_num: { $inc: 1 } });
+        await titleService.increaseCommentNum(titleId);
       }
 
       const room = commentAt.slice(commentAt.indexOf('_') + 1);

@@ -71,6 +71,17 @@ const titleService = {
     const response = await Title.findOneAndUpdate({ _id: id }, data, { new: true });
     return response;
   },
+  increaseCommentNum: async (id) => {
+    const response = await Title.findOneAndUpdate(
+      { _id: id },
+      { $inc: { comment_num: 1 } },
+      {
+        new: true,
+        timestamps: false,
+      }
+    );
+    return response;
+  },
   increaseView: async (id) => {
     const response = await Title.findOneAndUpdate(
       { _id: id },
