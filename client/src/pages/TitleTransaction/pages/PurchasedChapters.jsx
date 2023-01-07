@@ -23,13 +23,17 @@ function PurchasedChapters({ cx }) {
       user_id: user._id,
       _page: pagination.page,
       _limit: pagination.limit,
+      _embed: JSON.stringify([
+        { collection: "title_id", fields: "cover title" },
+        { collection: "chapter_id", fields: "title" },
+      ]),
     };
 
     chapterTransactionService
       .getAll(params)
       .then((response) => {
         const purchasedChapters = response.data.filter(
-          (purchasedChapter) => !purchasedChapter.transaction.expiredAt
+          (purchasedChapter) => !purchasedChapter.expiredAt
         );
 
         setTransactions(purchasedChapters);

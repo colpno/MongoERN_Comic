@@ -5,22 +5,20 @@ import { Col, Row } from "react-bootstrap";
 function HiredChaptersTableRow({ transactions, cx }) {
   return (
     <>
-      {transactions.map((object) => {
-        const { transaction, title, chapter } = object;
-
+      {transactions.map((history) => {
         return (
-          <Row className={cx("transaction__container")} key={transaction._id}>
+          <Row className={cx("transaction__container")} key={history._id}>
             <Col xs={8} className={cx("transaction__container__content")}>
               <div className={cx("box-img")}>
-                <img src={title.cover.source} alt={title.title} />
+                <img src={history.title_id.cover.source} alt={history.title_id.title} />
               </div>
               <div>
-                <p className={cx("title")}>{title.title}</p>
-                <p className={cx("author")}>{chapter.title}</p>
+                <p className={cx("title")}>{history.title_id.title}</p>
+                <p className={cx("author")}>{history.chapter_id.title}</p>
               </div>
             </Col>
             <Col xs={4} className="center">
-              <span>{`Thời gian thuê còn ${moment(transaction.expiredAt).toNow()}`}</span>
+              <span>{`Thời gian thuê còn ${moment(history.expiredAt).toNow()}`}</span>
             </Col>
           </Row>
         );
@@ -32,17 +30,15 @@ function HiredChaptersTableRow({ transactions, cx }) {
 HiredChaptersTableRow.propTypes = {
   transactions: PropTypes.arrayOf(
     PropTypes.shape({
-      transaction: PropTypes.shape({
-        _id: PropTypes.string.isRequired,
-        expiredAt: PropTypes.string.isRequired,
-      }).isRequired,
-      title: PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      expiredAt: PropTypes.string.isRequired,
+      title_id: PropTypes.shape({
         cover: PropTypes.shape({
           source: PropTypes.string.isRequired,
         }).isRequired,
         title: PropTypes.string.isRequired,
       }).isRequired,
-      chapter: PropTypes.shape({
+      chapter_id: PropTypes.shape({
         title: PropTypes.string.isRequired,
       }).isRequired,
     }).isRequired

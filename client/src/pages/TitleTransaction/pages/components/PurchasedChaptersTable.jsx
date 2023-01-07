@@ -14,9 +14,7 @@ function PurchasedChaptersTable({ transactions, cx, pagination, setPagination })
     >
       <>
         {transactions.map((history) => {
-          return (
-            <PurchasedChaptersTableRow cx={cx} history={history} key={history.transaction._id} />
-          );
+          return <PurchasedChaptersTableRow cx={cx} history={history} key={history._id} />;
         })}
       </>
       <Pagination pagination={pagination} setPagination={setPagination} />

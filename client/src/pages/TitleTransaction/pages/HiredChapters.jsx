@@ -23,14 +23,16 @@ function HiredChapters({ cx }) {
       user_id: user._id,
       _page: pagination.page,
       _limit: pagination.limit,
+      _embed: JSON.stringify([
+        { collection: "title_id", fields: "cover title" },
+        { collection: "chapter_id", fields: "title" },
+      ]),
     };
 
     chapterTransactionService
       .getAll(params)
       .then((response) => {
-        const hiredChapters = response.data.filter(
-          (purchasedChapter) => purchasedChapter.transaction.expiredAt
-        );
+        const hiredChapters = response.data.filter((hiredChapter) => hiredChapter.expiredAt);
 
         setTransactions(hiredChapters);
         setPagination((prev) => ({

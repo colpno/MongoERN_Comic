@@ -49,8 +49,9 @@ const transformQueryParams = (queries = {}) => {
     };
 
     if (queryKey === '_embed') {
-      if (Array.isArray(queryValue)) {
-        const converted = queryValue.map((val) => {
+      const values = JSON.parse(queryValue);
+      if (Array.isArray(values)) {
+        const converted = values.map((val) => {
           const returnValue = { path: val };
           if (val.collection) returnValue.path = val.collection;
           if (val.fields) returnValue.select = val.fields;

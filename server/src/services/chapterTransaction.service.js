@@ -1,27 +1,5 @@
 import paginateSort from '../helpers/paginateSort.js';
-import { Chapter, ChapterTransaction, Title } from '../models/index.js';
-
-const getAttachData = async (response) => {
-  const titleIds = response.data.map((transaction) => transaction.title_id);
-  const chapterIds = response.data.map((transaction) => transaction.chapter_id);
-
-  const titles = await Title.find({ _id: { $in: titleIds } });
-  const chapters = await Chapter.find({ _id: { $in: chapterIds } });
-
-  const transactions = response.data.map((transaction) => {
-    const title = titles.find((tit) => {
-      const id = tit._id.toString();
-      return id === transaction.title_id;
-    });
-    const chapter = chapters.find((chap) => {
-      const id = chap._id.toString();
-      return id === transaction.chapter_id;
-    });
-    return { transaction, title, chapter };
-  });
-
-  return transactions;
-};
+import { ChapterTransaction } from '../models/index.js';
 
 const chapterTransactionService = {
   getAll: async (params = {}) => {
@@ -31,14 +9,14 @@ const chapterTransactionService = {
       const response = await paginateSort(params, ChapterTransaction);
 
       if (response.data.length > 0) {
-        return { ...response, data: await getAttachData(response) };
+        return { ...response };
       }
 
       return response;
     }
 
     const response = await ChapterTransaction.find(others).select(_fields).populate(_embed);
-    return { data: await getAttachData({ data: response }) };
+    return { data: response };
   },
   add: async (
     userId = '',
@@ -58,8 +36,7 @@ const chapterTransactionService = {
     });
 
     const response = await model.save();
-    const final = await getAttachData({ data: [response] });
-    return final[0];
+    return response;
   },
   delete: async (id) => {
     const response = await ChapterTransaction.findOneAndDelete({ _id: id });
