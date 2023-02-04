@@ -18,6 +18,7 @@ export { default as Scrollbar } from "./Scrollbar/Scrollbar";
 export { default as Select } from "./Select/Select";
 export { default as SelectTable } from "./SelectTable/SelectTable";
 export { default as SubNavigator } from "./SubNavigator/SubNavigator";
+export { default as Table } from "./Table/Table";
 export { default as TabsContainer } from "./TabsContainer/TabsContainer";
 export { default as TextArea } from "./TextArea/TextArea";
 export { default as TitleForm } from "./TitleForm/TitleForm";

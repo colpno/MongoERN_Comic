@@ -1,0 +1,17 @@
+@use "assets/styles/variables" as var;
+@use "../Scrollbar/Scrollbar.module.scss";
+
+.MuiDataGrid {
+  &-toolbarContainer {
+    .MuiButtonBase-root {
+      &,
+      > * {
+        color: var.$primary-dark;
+      }
+    }
+  }
+
+  &-virtualScroller {
+    @extend .scrollbar;
+  }
+}
