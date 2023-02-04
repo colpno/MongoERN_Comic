@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Popup } from "features";
 import RouteHandler from "routes/RouteHandler";
 
-const preventLoggedInUserAccess = (url, isLoggingIn, setPopup) => {
+const handlePrivateRouteForGuess = (url, isLoggingIn, setPopup) => {
   const array = ["login", "register", "reset-password", "forgot-password"];
 
   const haveAccessed = array.some((pathName) => url.includes(pathName));
@@ -31,7 +31,7 @@ function App() {
   const url = useLocation().pathname;
 
   useEffect(() => {
-    preventLoggedInUserAccess(url, isLoggingIn, setPopup);
+    handlePrivateRouteForGuess(url, isLoggingIn, setPopup);
   }, [url]);
 
   useEffect(() => {
