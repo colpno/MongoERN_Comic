@@ -1,5 +1,5 @@
 @use "assets/styles/variables" as var;
-@use "../Scrollbar/Scrollbar.module.scss";
+@use "components/Scrollbar/Scrollbar.module.scss";
 
 .MuiDataGrid {
   &-toolbarContainer {
