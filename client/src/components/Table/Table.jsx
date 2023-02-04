@@ -1,40 +1,81 @@
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { Pagination } from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import {
+  DataGrid,
+  GridFooterContainer,
+  gridPageCountSelector,
+  GridPagination,
+  GridToolbar,
+  useGridApiContext,
+  useGridSelector,
+  viVN,
+} from "@mui/x-data-grid";
 import PropTypes from "prop-types";
+import { useState } from "react";
 
-import "./Table.scss";
+import "./styles/Table.scss";
+
+function Footer({ rowsPerPage }) {
+  const apiRef = useGridApiContext();
+  const total = useGridSelector(apiRef, gridPageCountSelector);
+
+  const handlePageChange = (event, value) => apiRef.current.setPage(value - 1);
+
+  return (
+    <GridFooterContainer>
+      <GridPagination rowsPerPage={rowsPerPage} />
+      <Pagination count={total} onChange={handlePageChange} shape="rounded" />
+    </GridFooterContainer>
+  );
+}
 
 function Table({
-  height,
   headers,
   data,
+  height,
 
   rowsPerPageOptions,
-  toolbar,
+  hasToolbar,
   pinnedColumns,
   disableColumnFilter,
   disableDensitySelector,
   disableColumnMenu,
 }) {
+  const [rowsPerPage, setRowsPerPage] = useState(rowsPerPageOptions[0]);
+
+  const theme = createTheme(
+    {},
+    viVN // x-data-grid translations
+  );
+
   const dataGridProps = {
-    components: {},
+    components: {
+      Footer,
+    },
     initialState: {},
+    componentsProps: {
+      footer: { rowsPerPage },
+    },
   };
 
-  if (toolbar) dataGridProps.components.Toolbar = GridToolbar;
+  if (hasToolbar) dataGridProps.components.Toolbar = GridToolbar;
   if (pinnedColumns) dataGridProps.initialState.pinnedColumns = pinnedColumns;
 
   return (
-    <DataGrid
-      columns={headers}
-      rows={data}
-      sx={{ height }}
-      components={dataGridProps.components}
-      initialState={dataGridProps.initialState}
-      disableColumnFilter={disableColumnFilter}
-      disableDensitySelector={disableDensitySelector}
-      disableColumnMenu={disableColumnMenu}
-      rowsPerPageOptions={rowsPerPageOptions}
-    />
+    <ThemeProvider theme={theme}>
+      <DataGrid
+        {...dataGridProps}
+        columns={headers}
+        rows={data}
+        sx={{ height }}
+        disableColumnFilter={disableColumnFilter}
+        disableDensitySelector={disableDensitySelector}
+        disableColumnMenu={disableColumnMenu}
+        pageSize={rowsPerPage}
+        onPageSizeChange={(size) => setRowsPerPage(size)}
+        rowsPerPageOptions={rowsPerPageOptions}
+      />
+    </ThemeProvider>
   );
 }
 
@@ -47,7 +88,7 @@ Table.propTypes = {
       description: PropTypes.string,
 
       disableColumnMenu: PropTypes.bool,
-      disableExport: PropTypes.bool, // Exclude column from excel
+      disableExport: PropTypes.bool, // Exclude column from export
       disableReorder: PropTypes.bool, // Prevent column to be dragged and dropped
 
       resizable: PropTypes.bool,
@@ -61,8 +102,8 @@ Table.propTypes = {
       minWidth: PropTypes.number,
       colSpan: PropTypes.number,
 
-      renderHeader: PropTypes.func, // custom header with a callback
-      renderCell: PropTypes.func, // custom cell with a callback
+      renderHeader: PropTypes.func, // custom header by using callback
+      renderCell: PropTypes.func, // custom cell by using callback
 
       type: PropTypes.oneOf([
         "string",
@@ -93,7 +134,7 @@ Table.propTypes = {
   height: PropTypes.number.isRequired,
 
   rowsPerPageOptions: PropTypes.arrayOf(PropTypes.number.isRequired),
-  toolbar: PropTypes.bool,
+  hasToolbar: PropTypes.bool,
   pinnedColumns: PropTypes.shape({
     /* pinned checkbox use GRID_CHECKBOX_SELECTION_COL_DEF.field */
     left: PropTypes.arrayOf(PropTypes.string.isRequired),
@@ -105,12 +146,16 @@ Table.propTypes = {
 };
 
 Table.defaultProps = {
-  rowsPerPageOptions: [25, 50, 100],
-  toolbar: true,
+  rowsPerPageOptions: [2, 25, 50, 100],
+  hasToolbar: true,
   pinnedColumns: {},
   disableColumnFilter: false,
   disableDensitySelector: false,
   disableColumnMenu: false,
+};
+
+Footer.propTypes = {
+  rowsPerPage: PropTypes.number.isRequired,
 };
 
 export default Table;

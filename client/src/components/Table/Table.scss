@@ -2,6 +2,18 @@
 @use "components/Scrollbar/Scrollbar.module.scss";
 
 .MuiDataGrid {
+  &-root {
+    .MuiTablePagination-actions {
+      display: none;
+    }
+
+    .Mui-selected {
+      background-color: var.$primary !important;
+      color: #fff;
+      cursor: default;
+    }
+  }
+
   &-toolbarContainer {
     .MuiButtonBase-root {
       &,
