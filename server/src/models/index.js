@@ -8,6 +8,7 @@ export { default as Favorite } from './favorite.model.js';
 export { default as Follow } from './follow.model.js';
 export { default as Genre } from './genre.model.js';
 export { default as Income } from './income.model.js';
+export { default as ObjectStatus } from './objectStatus.model.js';
 export { default as Otp } from './otp.model.js';
 export { default as PaymentMethod } from './paymentMethod.model.js';
 export { default as ReadingHistory } from './readingHistory.model.js';
