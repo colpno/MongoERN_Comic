@@ -6,12 +6,12 @@ import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { Button } from "components";
-import { NoData, Popup, ProgressCircle, Search } from "features";
-import { useDelete, usePagination, useToast } from "hooks";
+import { NoData, Popup, ProgressCircle } from "features";
+import { useDelete, useToast } from "hooks";
 import { chapterService, titleService } from "services";
-import styles from "./styles/Chapters.module.scss";
 import ChapterTable from "./components/ChapterTable";
 import TitlePart from "./components/TitlePart";
+import styles from "./styles/Chapters.module.scss";
 
 const cx = classNames.bind(styles);
 
@@ -25,19 +25,20 @@ function BtnCreate() {
 }
 
 function Chapters() {
-  const CHAPTERS_PER_PAGE = 50;
   const navigate = useNavigate();
   const { titleId } = useParams();
   const searchText = useSelector((state) => state.global.searchText);
   const [progress, setProgress] = useState(0);
   const { Toast, options: toastOptions, toastEmitter } = useToast();
-  const { pagination, setPagination, setPaginationTotal } = usePagination(CHAPTERS_PER_PAGE);
   const defaultChapterApiParams = {
     title_id: titleId,
     _sort: "order",
     _order: "asc",
-    _page: pagination.page,
-    _limit: pagination.limit,
+    _embed: JSON.stringify([
+      { collection: "status_id", fields: "-_id status" },
+      { collection: "approved_status_id", fields: "-_id status color" },
+    ]),
+    _fields: "-__v -_guid -cover.cloud_public_id -contents.cloud_public_id",
   };
   const [chapterApiParams, setChapterApiParams] = useState(defaultChapterApiParams);
   const [title, setTitle] = useState({});
@@ -47,7 +48,6 @@ function Chapters() {
     title: "Thông báo",
     content: "",
   });
-  const [isTableColDescSort, setIsTableColDescSort] = useState(false);
   const hasData = chapters.length > 0;
 
   const fetchData = (params) => {
@@ -58,18 +58,8 @@ function Chapters() {
       .then(([titleResponse, chaptersResponse]) => {
         setTitle(titleResponse.data);
         setChapters(chaptersResponse.data);
-        setPaginationTotal(chaptersResponse.paginate.total);
       })
       .catch((error) => console.error(error));
-  };
-
-  const handleSortingColumn = (column) => {
-    fetchData({
-      ...chapterApiParams,
-      _sort: column,
-      _order: !isTableColDescSort,
-    });
-    setIsTableColDescSort((prev) => !prev);
   };
 
   const {
@@ -142,31 +132,21 @@ function Chapters() {
           <TitlePart title={title} setPopup={setTitlePopup} setDeletedItem={setTitleDeletedItem} />
         )}
         <Row className={cx("chapters__general")}>
-          <Col xs={12} md="auto" className={cx("chapters__general__box")}>
-            <span className={cx("chapters__general__total")}>
-              Tổng số chương:{" "}
-              <span className={cx("chapters__general__total__number")}>{pagination.total}</span>
-            </span>
+          <Col className={cx("chapters__general__total")}>
+            Tổng số chương:{" "}
+            <span className={cx("chapters__general__total__number")}>{chapters.length}</span>
           </Col>
           {hasData && (
-            <>
-              <Col xs={6} md={4} lg={4} className={`${cx("chapters__general__box")} right`}>
-                <Search />
-              </Col>
-              <Col xs={6} md={3} lg={3} className={`${cx("chapters__general__box")} right`}>
-                <BtnCreate />
-              </Col>{" "}
-            </>
+            <Col className={`${cx("chapters__general__box")}`}>
+              <BtnCreate />
+            </Col>
           )}
         </Row>
         {chapters.length > 0 ? (
           <ChapterTable
             chapters={chapters}
-            pagination={pagination}
             setPopup={setChapterPopup}
             setDeleteItem={setChapterDeletedItem}
-            setPagination={setPagination}
-            sorting={handleSortingColumn}
           />
         ) : (
           <NoData>

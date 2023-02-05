@@ -15,60 +15,41 @@
 
   &__general {
     margin: 60px 0 20px;
+    // justify-content: space-between;
+    // flex-wrap: nowrap;
 
     &__box {
-      &:first-child {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        padding-left: 0;
-      }
+      height: 42px;
+      padding-right: 0;
 
-      &:nth-child(2) {
-        padding-left: 0;
-      }
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
 
-      &:last-child {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        height: 42px;
-        padding-right: 0;
-
-        svg {
-          font-size: 24px;
-        }
+      svg {
+        font-size: 24px;
       }
     }
-  }
 
-  &__general__total {
-    font-weight: 500;
+    &__total {
+      width: fit-content;
+      font-weight: 500;
+      padding-left: 0;
+
+      display: flex;
+      align-items: flex-end;
+
+      &__number {
+        font-weight: 700;
+      }
+    }
   }
 
   .chapters__button {
     padding: 9.5px min(25px, 1vw + 0.2rem);
   }
 
-  &__general__total__number {
-    font-weight: 700;
-  }
-
   :global(.grid-table .row) {
     min-width: 1144px;
-  }
-}
-
-@media (min-width: 768px) {
-  .chapters__general__box {
-    &:first-child {
-      flex: 1;
-    }
-  }
-}
-
-@media (max-width: 768px) {
-  .chapters__general :global([class*="col"]):first-child {
-    margin-bottom: 0.5rem;
   }
 }

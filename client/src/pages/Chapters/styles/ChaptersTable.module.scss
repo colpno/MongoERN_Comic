@@ -1,0 +1,21 @@
+@use "assets/styles/variables" as var;
+@use "assets/styles/mixins";
+
+.title {
+  font-weight: 500;
+}
+
+.box-img {
+  $size: 80px;
+  width: $size;
+  height: $size;
+  border: 1px solid var.$grey-400;
+  border-radius: 1rem;
+  margin-right: 1rem;
+  overflow: hidden;
+  user-select: none;
+}
+
+.timestamp {
+  color: #888;
+}
