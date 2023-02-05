@@ -2,7 +2,6 @@
 @use "assets/styles/mixins";
 
 .title {
-  @include mixins.multiLineClamp(3);
   font-weight: 500;
 }
 
@@ -10,13 +9,13 @@
   $size: 80px;
   width: $size;
   height: $size;
+  border: 1px solid var.$grey-400;
+  border-radius: 1rem;
+  margin-right: 1rem;
+  overflow: hidden;
+  user-select: none;
 }
 
-.posted-time,
-.updated-time {
+.timestamp {
   color: #888;
-}
-
-.approved-status {
-  font-weight: 700;
 }
