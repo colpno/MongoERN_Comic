@@ -1,4 +1,4 @@
-import { GridActionsCellItem } from "@mui/x-data-grid";
+import { GridActionsCellItem } from "@mui/x-data-grid-pro";
 import classNames from "classnames/bind";
 import moment from "moment";
 import PropTypes from "prop-types";
