@@ -45,9 +45,7 @@ function Recommend() {
             </Button>
           </div>
           <CardList wrap col={{ xs: 6, sm: 3, xl: 2 }} data={foldList} />
-          {isExpand && (
-            <CardList wrap col={{ xs: 6, sm: 3, xl: 2 }} data={unFoldList} />
-          )}
+          {isExpand && <CardList wrap col={{ xs: 6, sm: 3, xl: 2 }} data={unFoldList} />}
         </Container>
       ) : null}
       {}
