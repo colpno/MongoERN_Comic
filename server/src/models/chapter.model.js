@@ -14,6 +14,11 @@ const chapterSchema = mongoose.Schema(
       ref: 'approved_status',
       default: '63b5978d7d56b429568608c5',
     },
+    status_id: {
+      type: mongoose.Types.ObjectId,
+      ref: 'object_status',
+      require: true,
+    },
     title: { type: String, require: true },
     cover: {
       source: { type: String, require: true },
@@ -49,6 +54,7 @@ chapterSchema.pre('remove', function (next) {
 chapterSchema.pre(/^find/, function (next) {
   this.title_id = mongoose.Types.ObjectId(this.title_id);
   this.approved_status_id = mongoose.Types.ObjectId(this.approved_status_id);
+  this.status_id = mongoose.Types.ObjectId(this.status_id);
 
   next();
 });

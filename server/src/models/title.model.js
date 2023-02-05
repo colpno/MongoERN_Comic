@@ -13,9 +13,9 @@ const titleSchema = mongoose.Schema(
       ref: 'approved_status',
       default: '63b5978d7d56b429568608c5',
     },
-    status: {
-      type: String,
-      enum: ['inv', 'vis'],
+    status_id: {
+      type: mongoose.Types.ObjectId,
+      ref: 'object_status',
       require: true,
     },
     release_day: {
@@ -54,6 +54,7 @@ titleSchema.pre('remove', function (next) {
 titleSchema.pre(/^find/, function (next) {
   this.user_id = mongoose.Types.ObjectId(this.user_id);
   this.approved_status_id = mongoose.Types.ObjectId(this.approved_status_id);
+  this.status_id = mongoose.Types.ObjectId(this.status_id);
 
   next();
 });
