@@ -1,31 +1,48 @@
+/* 
+  MUI license warn file path: 
+  client/node_modules/@mui/x-license-pro/legacy/utils/licenseErrorMessageUtils.js
+  client/node_modules/@mui/x-license-pro/modern/utils/licenseErrorMessageUtils.js
+  client/node_modules/@mui/x-license-pro/node/utils/licenseErrorMessageUtils.js
+  client/node_modules/@mui/x-license-pro/utils/licenseErrorMessageUtils.js
+  Table.scss
+ */
 import { Pagination } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import {
-  DataGrid,
+  DataGridPro,
   GridFooterContainer,
   gridPageCountSelector,
   GridPagination,
   GridToolbar,
+  GridToolbarContainer,
   useGridApiContext,
   useGridSelector,
   viVN,
-} from "@mui/x-data-grid";
+} from "@mui/x-data-grid-pro";
 import PropTypes from "prop-types";
 import { useCallback, useState } from "react";
 
 import "./Table.scss";
 
-function Footer({ rowsPerPage }) {
+function CustomFooter() {
   const apiRef = useGridApiContext();
   const total = useGridSelector(apiRef, gridPageCountSelector);
 
-  const handlePageChange = (event, value) => apiRef.current.setPage(value - 1);
+  const handlePageChange = useCallback((event, value) => apiRef.current.setPage(value - 1), []); // page start from 0
 
   return (
-    <GridFooterContainer>
-      <GridPagination rowsPerPage={rowsPerPage} />
-      <Pagination count={total} onChange={handlePageChange} shape="rounded" />
+    <GridFooterContainer sx={{ justifyContent: "center" }}>
+      <Pagination count={total} onChange={handlePageChange} shape="rounded" siblingCount={3} />
     </GridFooterContainer>
+  );
+}
+
+function CustomToolBar({ rowsPerPage }) {
+  return (
+    <GridToolbarContainer sx={{ display: "flex", justifyContent: "space-between" }}>
+      <GridToolbar />
+      <GridPagination rowsPerPage={rowsPerPage} />
+    </GridToolbarContainer>
   );
 }
 
@@ -36,6 +53,8 @@ function Table({
   height,
   autoHeight,
 
+  initialState,
+  rowHeight,
   rowsPerPageOptions,
   hasToolbar,
   disableColumnFilter,
@@ -51,31 +70,23 @@ function Table({
 
   const dataGridProps = {
     components: {
-      Footer,
+      Footer: CustomFooter,
     },
-    initialState: {},
+    initialState,
     componentsProps: {
-      footer: { rowsPerPage },
+      toolbar: { rowsPerPage },
     },
     autoHeight: false,
     sx: {},
   };
 
-  if (hasToolbar) dataGridProps.components.Toolbar = GridToolbar;
+  if (hasToolbar) dataGridProps.components.Toolbar = CustomToolBar;
   if (height) dataGridProps.sx.height = height;
   if (autoHeight) dataGridProps.autoHeight = true;
 
-  const handleRowSpacing = useCallback(
-    (params) => ({
-      top: params.isFirstVisible ? 0 : 5,
-      bottom: params.isLastVisible ? 0 : 5,
-    }),
-    []
-  );
-
   return (
     <ThemeProvider theme={theme}>
-      <DataGrid
+      <DataGridPro
         {...dataGridProps}
         columns={headers}
         rows={data}
@@ -87,8 +98,7 @@ function Table({
         onPageSizeChange={(size) => setRowsPerPage(size)}
         rowsPerPageOptions={rowsPerPageOptions}
         getRowId={(row) => row._id}
-        getRowSpacing={handleRowSpacing}
-        getRowHeight={() => "auto"}
+        getRowHeight={() => rowHeight}
       />
     </ThemeProvider>
   );
@@ -152,8 +162,23 @@ Table.propTypes = {
   ).isRequired,
   data: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired,
 
+  initialState: PropTypes.shape({
+    sorting: PropTypes.shape({
+      sortModel: PropTypes.arrayOf(
+        PropTypes.shape({
+          field: PropTypes.string.isRequired,
+          sort: PropTypes.string.isRequired,
+        }).isRequired
+      ).isRequired,
+    }),
+    pinnedColumns: PropTypes.shape({
+      left: PropTypes.arrayOf(PropTypes.string.isRequired),
+      right: PropTypes.arrayOf(PropTypes.string.isRequired),
+    }),
+  }),
   height: PropTypes.number,
   autoHeight: PropTypes.bool,
+  rowHeight: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   rowsPerPageOptions: PropTypes.arrayOf(PropTypes.number.isRequired),
   hasToolbar: PropTypes.bool,
   disableColumnFilter: PropTypes.bool,
@@ -162,8 +187,10 @@ Table.propTypes = {
 };
 
 Table.defaultProps = {
+  initialState: {},
   height: null,
   autoHeight: false,
+  rowHeight: "auto",
   rowsPerPageOptions: [25, 50, 100],
   hasToolbar: true,
   disableColumnFilter: false,
@@ -171,7 +198,7 @@ Table.defaultProps = {
   disableColumnMenu: false,
 };
 
-Footer.propTypes = {
+CustomToolBar.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
