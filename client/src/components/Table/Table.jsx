@@ -11,9 +11,9 @@ import {
   viVN,
 } from "@mui/x-data-grid";
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
-import "./styles/Table.scss";
+import "./Table.scss";
 
 function Footer({ rowsPerPage }) {
   const apiRef = useGridApiContext();
@@ -32,11 +32,12 @@ function Footer({ rowsPerPage }) {
 function Table({
   headers,
   data,
+
   height,
+  autoHeight,
 
   rowsPerPageOptions,
   hasToolbar,
-  pinnedColumns,
   disableColumnFilter,
   disableDensitySelector,
   disableColumnMenu,
@@ -56,10 +57,21 @@ function Table({
     componentsProps: {
       footer: { rowsPerPage },
     },
+    autoHeight: false,
+    sx: {},
   };
 
   if (hasToolbar) dataGridProps.components.Toolbar = GridToolbar;
-  if (pinnedColumns) dataGridProps.initialState.pinnedColumns = pinnedColumns;
+  if (height) dataGridProps.sx.height = height;
+  if (autoHeight) dataGridProps.autoHeight = true;
+
+  const handleRowSpacing = useCallback(
+    (params) => ({
+      top: params.isFirstVisible ? 0 : 5,
+      bottom: params.isLastVisible ? 0 : 5,
+    }),
+    []
+  );
 
   return (
     <ThemeProvider theme={theme}>
@@ -74,6 +86,9 @@ function Table({
         pageSize={rowsPerPage}
         onPageSizeChange={(size) => setRowsPerPage(size)}
         rowsPerPageOptions={rowsPerPageOptions}
+        getRowId={(row) => row._id}
+        getRowSpacing={handleRowSpacing}
+        getRowHeight={() => "auto"}
       />
     </ThemeProvider>
   );
@@ -90,20 +105,25 @@ Table.propTypes = {
       disableColumnMenu: PropTypes.bool,
       disableExport: PropTypes.bool, // Exclude column from export
       disableReorder: PropTypes.bool, // Prevent column to be dragged and dropped
+      hideSortIcons: PropTypes.bool,
 
       resizable: PropTypes.bool,
       searchable: PropTypes.bool,
       sortable: PropTypes.bool,
       filterable: PropTypes.bool,
       hidable: PropTypes.bool,
+      editable: PropTypes.bool,
 
       flex: PropTypes.number,
       width: PropTypes.number,
       minWidth: PropTypes.number,
       colSpan: PropTypes.number,
+      align: PropTypes.oneOf(["left", "right", "center"]),
+      headerAlign: PropTypes.oneOf(["left", "right", "center"]),
 
       renderHeader: PropTypes.func, // custom header by using callback
       renderCell: PropTypes.func, // custom cell by using callback
+      valueGetter: PropTypes.func,
 
       type: PropTypes.oneOf([
         "string",
@@ -131,24 +151,21 @@ Table.propTypes = {
     }).isRequired
   ).isRequired,
   data: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired,
-  height: PropTypes.number.isRequired,
 
+  height: PropTypes.number,
+  autoHeight: PropTypes.bool,
   rowsPerPageOptions: PropTypes.arrayOf(PropTypes.number.isRequired),
   hasToolbar: PropTypes.bool,
-  pinnedColumns: PropTypes.shape({
-    /* pinned checkbox use GRID_CHECKBOX_SELECTION_COL_DEF.field */
-    left: PropTypes.arrayOf(PropTypes.string.isRequired),
-    right: PropTypes.arrayOf(PropTypes.string.isRequired),
-  }),
   disableColumnFilter: PropTypes.bool,
   disableDensitySelector: PropTypes.bool,
   disableColumnMenu: PropTypes.bool,
 };
 
 Table.defaultProps = {
-  rowsPerPageOptions: [2, 25, 50, 100],
+  height: null,
+  autoHeight: false,
+  rowsPerPageOptions: [25, 50, 100],
   hasToolbar: true,
-  pinnedColumns: {},
   disableColumnFilter: false,
   disableDensitySelector: false,
   disableColumnMenu: false,
