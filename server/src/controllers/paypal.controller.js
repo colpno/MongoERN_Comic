@@ -1,26 +1,5 @@
+import { convertMoneyToCoin } from '../helpers/convertCurrency.js';
 import { coinHistoryService, paypalService, userService } from '../services/index.js';
-
-const convertMoneyToCoin = (money) => {
-  switch (money) {
-    case '1.00': {
-      return 10;
-    }
-    case '2.00': {
-      return 20;
-    }
-    case '5.00': {
-      return 50;
-    }
-    case '10.00': {
-      return 100;
-    }
-    case '20.00': {
-      return 200;
-    }
-    default:
-      throw new Error('Số tiền không phù hợp');
-  }
-};
 
 const prepareData = (data = []) => {
   const initialValues = {
