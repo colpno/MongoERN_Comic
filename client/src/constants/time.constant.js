@@ -8,4 +8,9 @@ const DAYS_OF_WEEK = [
   { shortLabel: "CN", label: "Chủ nhật", number: 0 },
 ];
 
-export { DAYS_OF_WEEK };
+const convertTimeLabel = (value, from, to) => {
+  const found = DAYS_OF_WEEK.find((day) => day[from] === value)[to];
+  return found;
+};
+
+export { DAYS_OF_WEEK, convertTimeLabel };
