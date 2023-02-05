@@ -17,8 +17,7 @@ function Follow() {
   const FOLLOWS_PER_PAGE = 50;
   const user = useSelector((state) => state.user.user);
   const [follows, setFollows] = useState([]);
-  const { pagination, setPagination, setPaginationTotal } =
-    usePagination(FOLLOWS_PER_PAGE);
+  const { pagination, setPagination, setPaginationTotal } = usePagination(FOLLOWS_PER_PAGE);
   const { Toast, options, toastEmitter } = useToast();
   const hasData = follows.length > 0;
 
@@ -37,14 +36,12 @@ function Follow() {
       .catch((error) => console.error(error));
   };
 
-  const { deletedItem, setDeletedItem, popup, setPopup } = useDelete(
-    async () => {
-      followService.delete(deletedItem).then(() => {
-        toastEmitter("Hủy theo dõi thành công", "success");
-        fetchData();
-      });
-    }
-  );
+  const { deletedItem, setDeletedItem, popup, setPopup } = useDelete(async () => {
+    followService.delete(deletedItem).then(() => {
+      toastEmitter("Hủy theo dõi thành công", "success");
+      fetchData();
+    });
+  });
 
   useEffect(() => {
     fetchData();
