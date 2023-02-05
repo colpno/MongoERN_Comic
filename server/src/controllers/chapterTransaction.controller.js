@@ -1,6 +1,12 @@
 import createError from 'http-errors';
+import { convertPurchaseTransactionToMoney } from '../helpers/convertCurrency.js';
 import transformQueryParams from '../helpers/transformQueryParams.js';
-import { chapterTransactionService, coinHistoryService, userService } from '../services/index.js';
+import {
+  chapterTransactionService,
+  coinHistoryService,
+  titleService,
+  userService,
+} from '../services/index.js';
 
 const chapterTransactionController = {
   getAll: async (req, res, next) => {
@@ -45,22 +51,6 @@ const chapterTransactionController = {
           return next(createError(409, 'Đã tồn tại giao dịch'));
         }
 
-        // minus user currency
-        let user;
-        if (method === 'coin') {
-          user = await userService.update(userId, { $inc: { coin: -cost } });
-          await coinHistoryService.add(userId, 'Mua chương', -cost);
-        }
-        if (method === 'point') {
-          user = await userService.update(userId, { $inc: { point: -cost } });
-        }
-        if (method === 'rent ticket') {
-          user = await userService.update(userId, { $inc: { ticket_for_renting: -1 } });
-        }
-        if (method === 'purchase ticket') {
-          user = await userService.update(userId, { $inc: { ticket_for_buying: -1 } });
-        }
-
         // save to mongo
         const response = await chapterTransactionService.add(
           userId,
@@ -73,6 +63,26 @@ const chapterTransactionController = {
 
         if (!response) {
           return next(createError(400, 'Không thể hoàn thành việc tạo giao dịch'));
+        }
+
+        // minus user currency
+        let user;
+        if (method === 'coin') {
+          user = await userService.update(userId, { $inc: { coin: -cost } });
+          await coinHistoryService.add(userId, 'Mua chương', -cost);
+
+          // increase title owner income
+          const title = await titleService.getOne({ _id: titleId });
+          await userService.increaseIncome(title.userId, convertPurchaseTransactionToMoney(cost));
+        }
+        if (method === 'point') {
+          user = await userService.update(userId, { $inc: { point: -cost } });
+        }
+        if (method === 'rent ticket') {
+          user = await userService.update(userId, { $inc: { ticket_for_renting: -1 } });
+        }
+        if (method === 'purchase ticket') {
+          user = await userService.update(userId, { $inc: { ticket_for_buying: -1 } });
         }
 
         const rentList = ['rent ticket'];

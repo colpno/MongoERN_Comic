@@ -52,6 +52,14 @@ const userService = {
       throw new Error(error);
     }
   },
+  increaseIncome: async (id, value) => {
+    try {
+      const response = await User.findOneAndUpdate({ _id: id }, { $inc: { income: value } });
+      return response;
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
 };
 
 export default userService;

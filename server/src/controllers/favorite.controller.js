@@ -1,6 +1,7 @@
 import createError from 'http-errors';
+import { convertLikeToMoney } from '../helpers/convertCurrency.js';
 import transformQueryParams from '../helpers/transformQueryParams.js';
-import { chapterService, favoriteService, titleService } from '../services/index.js';
+import { chapterService, favoriteService, titleService, userService } from '../services/index.js';
 import chapterReportController from './chapterReport.controller.js';
 import titleReportController from './titleReport.controller.js';
 
@@ -52,7 +53,14 @@ const favoriteController = {
       const titlePromise = titleService.increaseLike(chapter.title_id);
       const chapterReportPromise = chapterReportController.add(chapterId, 0, 1);
       const titleReportPromise = titleReportController.add(chapter.title_id, 0, 1);
-      await Promise.all([chapterPromise, titlePromise, chapterReportPromise, titleReportPromise]);
+      const increaseUserIncome = userService.increaseIncome(userId, convertLikeToMoney());
+      await Promise.all([
+        chapterPromise,
+        titlePromise,
+        chapterReportPromise,
+        titleReportPromise,
+        increaseUserIncome,
+      ]);
 
       return res.status(201).json({
         code: 201,
