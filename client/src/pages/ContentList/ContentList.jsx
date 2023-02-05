@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 
 import { CardListWithTitle } from "components";
 import { CONTENT_LIST_TITLES_PER_PAGE } from "constants/paginate.constant";
-import { useInfinitePagination } from "hooks";
+import { useInfinitePagination, useToast } from "hooks";
 import { genreService, titleService } from "services";
 import styles from "./ContentList.module.scss";
 
@@ -18,6 +18,7 @@ function ContentList() {
   const { setPaginationTotal, setLastElementRef } = useInfinitePagination(
     CONTENT_LIST_TITLES_PER_PAGE
   );
+  const { Toast, options, toastEmitter } = useToast();
 
   const data = useMemo(
     () => ({
@@ -45,18 +46,21 @@ function ContentList() {
             setTitles(titleResponse.data);
             setPaginationTotal(titleResponse.paginate.total);
           })
-          .catch((titleError) => console.log(titleError));
+          .catch((titleError) => toastEmitter(titleError, "error"));
       })
-      .catch((error) => console.error(error));
+      .catch((error) => toastEmitter(error, "error"));
   }, []);
 
   return (
-    <Container className={cx("content-list-page")}>
-      {!!data.name && data.titles.length > 0 ? (
-        <CardListWithTitle data={data} col={{ xs: 6, sm: 3, lg: 2 }} />
-      ) : null}
-      <div ref={setLastElementRef} />
-    </Container>
+    <>
+      <Container className={cx("content-list-page")}>
+        {!!data.name && data.titles.length > 0 ? (
+          <CardListWithTitle data={data} col={{ xs: 6, sm: 3, lg: 2 }} />
+        ) : null}
+        <div ref={setLastElementRef} />
+      </Container>
+      <Toast {...options} />
+    </>
   );
 }
 
