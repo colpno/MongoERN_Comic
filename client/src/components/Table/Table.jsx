@@ -126,6 +126,7 @@ Table.propTypes = {
 
       flex: PropTypes.number,
       width: PropTypes.number,
+      maxWidth: PropTypes.number,
       minWidth: PropTypes.number,
       colSpan: PropTypes.number,
       align: PropTypes.oneOf(["left", "right", "center"]),
