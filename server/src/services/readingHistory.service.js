@@ -1,27 +1,5 @@
 import paginateSort from '../helpers/paginateSort.js';
-import { Chapter, ReadingHistory, Title } from '../models/index.js';
-
-const getAttachData = async (response) => {
-  const titleIds = response.data.map((history) => history.title_id);
-  const chapterIds = response.data.map((history) => history.chapter_id);
-
-  const titles = await Title.find({ _id: { $in: titleIds } });
-  const chapters = await Chapter.find({ _id: { $in: chapterIds } });
-
-  const histories = response.data.map((history) => {
-    const title = titles.find((tit) => {
-      const id = tit._id.toString();
-      return id === history.title_id;
-    });
-    const chapter = chapters.find((chap) => {
-      const id = chap._id.toString();
-      return id === history.chapter_id;
-    });
-    return { history, title, chapter };
-  });
-
-  return histories;
-};
+import { ReadingHistory } from '../models/index.js';
 
 const readingHistoryService = {
   getAll: async (params = {}) => {
@@ -29,16 +7,11 @@ const readingHistoryService = {
 
     if (_limit || (_sort && _order)) {
       const response = await paginateSort(params, ReadingHistory);
-
-      if (response.data.length > 0) {
-        return { ...response, data: await getAttachData(response) };
-      }
-
-      return { data: response };
+      return response;
     }
 
     const response = await ReadingHistory.find(others).select(_fields).populate(_embed);
-    return { data: await getAttachData({ data: response }) };
+    return { data: response };
   },
   add: async (userId = '', titleId = '', chapterId = '') => {
     const model = new ReadingHistory({
