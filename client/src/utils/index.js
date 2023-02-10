@@ -14,3 +14,4 @@ export {
 export { getReleaseDayOptions } from "./getReleaseDayOptions";
 export { isEmpty } from "./isEmpty";
 export { roundNumByUnit, separateNumberDigit } from "./numberMethods";
+export { default as handlePromiseAllSettled } from "./handlePromiseAllSettled";
