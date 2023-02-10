@@ -33,16 +33,12 @@ function TitleAbout({ user, title, setPopup }) {
         {title.release_day === "finished" || title.release_day === "paused" ? (
           <>
             Tình trạng cập nhật:
-            <span className={cx(title.release_day)}>
-              {status(title.release_day)}
-            </span>
+            <span className={cx(title.release_day)}>{status(title.release_day)}</span>
           </>
         ) : (
           <>
             Cập nhật mỗi tuần vào:
-            <span className={cx("day-in-week")}>
-              {status(title.release_day)}
-            </span>
+            <span className={cx("day-in-week")}>{status(title.release_day)}</span>
           </>
         )}
       </div>
@@ -62,9 +58,7 @@ function TitleAbout({ user, title, setPopup }) {
         <div className={cx("user-tickets")}>
           <span className={cx("ticket")}>
             Vé thuê chương:
-            <span className={cx("rent-quantity")}>
-              {user.ticket_for_renting}
-            </span>
+            <span className={cx("rent-quantity")}>{user.ticket_for_renting}</span>
             <strong className={cx("ticket-separate")}>x</strong>
             <RentTicket />
           </span>
@@ -80,9 +74,7 @@ function TitleAbout({ user, title, setPopup }) {
         <div className={cx("charge-info")}>
           <div className={cx("charge__icon")}>
             <ChargeIcon />
-            <span className={cx("charge__icon__label")}>
-              {/* TODO: {title.chargeTime} */}6
-            </span>
+            <span className={cx("charge__icon__label")}>{/* TODO: {title.chargeTime} */}6</span>
           </div>
           <span>
             {`Đọc miễn phí 1 chương như có "Vé thuê" khi sạc đủ`}
@@ -116,7 +108,6 @@ function TitleAbout({ user, title, setPopup }) {
 TitleAbout.propTypes = {
   setPopup: PropTypes.func.isRequired,
   title: PropTypes.shape({
-    approved_status_id: PropTypes.string.isRequired,
     release_day: PropTypes.string.isRequired,
     // TODO: chargeTime: PropTypes.number.isRequired,
   }).isRequired,
