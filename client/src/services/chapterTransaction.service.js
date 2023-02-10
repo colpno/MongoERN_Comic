@@ -1,7 +1,9 @@
 import chapterTransactionApi from "api/chapterTransaction.api";
 
 const chapterTransactionService = {
-  getAll: async (params = {}) => {
+  getAll: async (params = {}, isPrivate = true) => {
+    if (!isPrivate) return [];
+
     try {
       const response = await chapterTransactionApi.getAll(params);
       return response;
