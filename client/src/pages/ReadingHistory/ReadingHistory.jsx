@@ -2,8 +2,8 @@ import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 
-import { Loading, NoData, Pagination } from "features";
-import { usePagination, useToast } from "hooks";
+import { Loading, NoData } from "features";
+import { useToast } from "hooks";
 import { readingHistoryService } from "services";
 import ReadingHistoryTable from "./components/ReadingHistoryTable";
 import styles from "./styles/ReadingHistory.module.scss";
@@ -11,37 +11,38 @@ import styles from "./styles/ReadingHistory.module.scss";
 const cx = classNames.bind(styles);
 
 function ReadingHistory() {
-  const HISTORIES_PER_PAGE = 25;
   const [loading, setLoading] = useState(false);
   const [histories, setHistories] = useState([]);
-  const { pagination, setPagination, setPaginationTotal } = usePagination(HISTORIES_PER_PAGE);
   const { Toast, options, toastEmitter } = useToast();
 
   useEffect(() => {
     setLoading(true);
 
+    const params = {
+      _embed: JSON.stringify([
+        { collection: "chapter_id", fields: "title" },
+        { collection: "title_id", fields: "cover.source title" },
+      ]),
+      _fields: "-user_id -__v",
+    };
+
     readingHistoryService
-      .getAll({
-        _page: pagination.page,
-        _limit: pagination.limit,
-      })
+      .getAll(params)
       .then((response) => {
         setHistories(response.data);
-        setPaginationTotal(response.paginate.total);
         setLoading(false);
       })
       .catch((error) => {
         toastEmitter(error, "error");
         setLoading(false);
       });
-  }, [pagination.page]);
+  }, []);
 
   return (
     <>
       {histories.length > 0 ? (
         <Container className={cx("reading-history")}>
           <ReadingHistoryTable readingHistories={histories} cx={cx} />
-          <Pagination pagination={pagination} setPagination={setPagination} />
         </Container>
       ) : (
         <NoData>

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import { Loading, NoData } from "features";
+import { useToast } from "hooks";
 import { chapterTransactionService } from "services";
 import PurchasedChaptersTable from "./components/PurchasedChaptersTable";
 
@@ -10,23 +11,18 @@ function PurchasedChapters({ cx }) {
   const user = useSelector((state) => state.user.user);
   const [loading, setLoading] = useState(false);
   const [transactions, setTransactions] = useState([]);
-  const [pagination, setPagination] = useState({
-    page: 1,
-    limit: 30,
-    total: 0,
-  });
+  const { Toast, options, toastEmitter } = useToast();
 
   useEffect(() => {
     setLoading(true);
 
     const params = {
       user_id: user._id,
-      _page: pagination.page,
-      _limit: pagination.limit,
       _embed: JSON.stringify([
         { collection: "title_id", fields: "cover title" },
         { collection: "chapter_id", fields: "title" },
       ]),
+      _fields: "-__v -user_id",
     };
 
     chapterTransactionService
@@ -37,14 +33,10 @@ function PurchasedChapters({ cx }) {
         );
 
         setTransactions(purchasedChapters);
-        setPagination((prev) => ({
-          ...prev,
-          total: response.paginate.total,
-        }));
         setLoading(false);
       })
       .catch((error) => {
-        console.error(error);
+        toastEmitter(error, "error");
         setLoading(false);
       });
   }, []);
@@ -52,12 +44,7 @@ function PurchasedChapters({ cx }) {
   return (
     <>
       {transactions.length > 0 ? (
-        <PurchasedChaptersTable
-          transactions={transactions}
-          cx={cx}
-          pagination={pagination}
-          setPagination={setPagination}
-        />
+        <PurchasedChaptersTable transactions={transactions} cx={cx} />
       ) : (
         <NoData>
           <h5>Hiện tại chưa có truyện nào được bạn theo dõi!</h5>
@@ -66,6 +53,7 @@ function PurchasedChapters({ cx }) {
       )}
       <div />
       {loading && <Loading />}
+      <Toast {...options} />
     </>
   );
 }

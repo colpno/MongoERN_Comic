@@ -1,29 +1,57 @@
-import { GridTable } from "components";
+import classNames from "classnames/bind";
+import moment from "moment";
 import PropTypes from "prop-types";
-import ReadingHistoryTableRow from "./ReadingHistoryTableRow";
+import { BiBookmark } from "react-icons/bi";
 
-function ReadingHistoryTable({ readingHistories, cx }) {
-  return (
-    <GridTable
-      head={[
-        {
-          label: "Hiển thị 25 nội dung được đọc gần đây nhất",
-          md: 8,
-        },
-        {
-          label: "Ngày đọc",
-          center: true,
-        },
-      ]}
-    >
-      <ReadingHistoryTableRow readingHistories={readingHistories} cx={cx} />
-    </GridTable>
-  );
+import { Table } from "components";
+import styles from "../styles/ReadingHistoryTable.module.scss";
+
+const cx = classNames.bind(styles);
+
+const headers = [
+  {
+    headerName: "Các nội dung được đọc gần đây nhất",
+    field: "title",
+    flex: 1,
+    valueGetter: ({ row }) => row.title_id.title,
+    renderCell: ({ row }) => (
+      <div className={cx("reading-history__container__content__title-info")}>
+        <div className={cx("box-img")}>
+          <img
+            src={row.title_id.cover.source}
+            alt={row.title_id.title}
+            className={cx("cover-image")}
+          />
+        </div>
+        <div>
+          <p className={cx("title")} title={row.title_id.title}>
+            {row.title_id.title}
+          </p>
+          <p className={cx("chapter-number")} title={row.chapter_id.title}>
+            <BiBookmark className={cx("bookmark-icon")} />
+            Chương: {row.chapter_id.title}
+          </p>
+        </div>
+      </div>
+    ),
+  },
+  {
+    headerName: "Ngày đọc",
+    field: "updatedAt",
+    maxWidth: 400,
+    minWidth: 200,
+    headerAlign: "center",
+    align: "center",
+    renderCell: ({ value }) => <span>Đọc cách đây {moment(value).fromNow(true)}</span>,
+  },
+];
+
+function ReadingHistoryTable({ readingHistories }) {
+  return <Table headers={headers} data={readingHistories} hasToolbar autoHeight rowHeight={100} />;
 }
 
 ReadingHistoryTable.propTypes = {
   readingHistories: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired,
-  cx: PropTypes.func.isRequired,
 };
 
 export default ReadingHistoryTable;

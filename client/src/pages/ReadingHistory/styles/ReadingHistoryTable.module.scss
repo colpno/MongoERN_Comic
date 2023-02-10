@@ -1,18 +1,14 @@
 @use "assets/styles/variables" as var;
 
-.transaction {
-  margin-top: 20px;
-  margin-bottom: 30px;
-
+.reading-history {
   &__container__content {
     display: flex;
     align-items: center;
-  }
 
-  :global(.tabs__tab) {
-    $horizon-padding: 50px;
-    padding-right: $horizon-padding;
-    padding-left: $horizon-padding;
+    &__title-info {
+      display: flex;
+      align-items: center;
+    }
   }
 }
 
@@ -25,12 +21,17 @@
   border: 1px solid var.$grey-400;
 }
 
-.title,
-.cost {
+.title {
   font-weight: 500;
 }
 
-.cost {
-  font-size: 1.1em;
-  margin-right: 0.2rem;
+.chapter-number {
+  display: flex;
+  align-items: center;
+  color: #888;
+}
+
+.bookmark-icon {
+  font-size: 17px;
+  margin-right: 5px;
 }

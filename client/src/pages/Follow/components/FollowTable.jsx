@@ -1,15 +1,65 @@
+import { GridActionsCellItem } from "@mui/x-data-grid-pro";
 import classNames from "classnames/bind";
-import { Button } from "components";
+import moment from "moment";
 import PropTypes from "prop-types";
-import { Col, Row } from "react-bootstrap";
+import { useMemo } from "react";
 import { IoTrashSharp } from "react-icons/io5";
-import { formatTime } from "utils/convertTime";
+
+import { Table } from "components";
 import styles from "../styles/FollowTable.module.scss";
 
 const cx = classNames.bind(styles);
 
+const getHeaders = (handleDelete) => [
+  {
+    headerName: "Tiêu đề",
+    field: "title_id",
+    flex: 2,
+    valueGetter: ({ row }) => row.title_id._id,
+    renderCell: ({ row }) => {
+      return (
+        <div className={cx("follow__container__content__title-info")}>
+          <div className={cx("box-img")}>
+            <img
+              src={row.title_id.cover.source}
+              alt={row.title_id.title}
+              className={cx("cover-image")}
+            />
+          </div>
+          <div>
+            <p className={cx("title")}>{row.title_id.title}</p>
+            <p className={cx("author")}>{row.title_id.author}</p>
+          </div>
+        </div>
+      );
+    },
+  },
+  {
+    headerName: "Cập nhật lần cuối",
+    field: "updatedAt",
+    maxWidth: 300,
+    minWidth: 140,
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    renderCell: ({ value }) => <span>{moment(value).format("DD.MM.YYYY")}</span>,
+  },
+  {
+    field: "actions",
+    type: "actions",
+    width: 60,
+    getActions: ({ row }) => [
+      <GridActionsCellItem
+        icon={<IoTrashSharp />}
+        onClick={() => handleDelete(row._id)}
+        label="Delete"
+      />,
+    ],
+  },
+];
+
 function FollowTable({ setDeletedItem, popup, setPopup, follows }) {
-  const handleClick = (followId) => {
+  const handleDelete = (followId) => {
     setPopup({
       ...popup,
       trigger: true,
@@ -19,47 +69,9 @@ function FollowTable({ setDeletedItem, popup, setPopup, follows }) {
     setDeletedItem(followId);
   };
 
-  return (
-    <>
-      {follows.map((follow) => {
-        const { ttl } = follow;
-        const timeObj = formatTime(follow.updatedAt);
+  const headers = useMemo(() => getHeaders(handleDelete), []);
 
-        return (
-          <Row className={cx("follow__container__content")} key={follow._id}>
-            <Col
-              xs={8}
-              className={cx("follow__container__content__title-info")}
-            >
-              <div className={cx("box-img")}>
-                <img
-                  src={ttl.cover.source}
-                  alt={ttl.name}
-                  className={cx("cover-image")}
-                />
-              </div>
-              <div>
-                <p className={cx("title")}>{ttl.name}</p>
-                <p className={cx("author")}>{ttl.author}</p>
-              </div>
-            </Col>
-            <Col className="center">
-              <span>{`${timeObj.day}.${timeObj.month}.${timeObj.year}`}</span>
-            </Col>
-            <Col className="center">
-              <Button
-                wrapper
-                className={cx("trash-can-button")}
-                onClick={() => handleClick(ttl._id)}
-              >
-                <IoTrashSharp />
-              </Button>
-            </Col>
-          </Row>
-        );
-      })}
-    </>
-  );
+  return <Table headers={headers} data={follows} hasToolbar autoHeight rowHeight={100} />;
 }
 
 FollowTable.propTypes = {
@@ -71,10 +83,10 @@ FollowTable.propTypes = {
   setPopup: PropTypes.func.isRequired,
   follows: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
+      _id: PropTypes.string.isRequired,
       updatedAt: PropTypes.string.isRequired,
-      title: PropTypes.shape({
-        id: PropTypes.string.isRequired,
+      title_id: PropTypes.shape({
+        _id: PropTypes.string.isRequired,
         cover: PropTypes.shape({
           source: PropTypes.string.isRequired,
         }).isRequired,

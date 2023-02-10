@@ -4,9 +4,8 @@ import { Container } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
 import { noFavorite } from "assets/images";
-import { GridTable } from "components";
-import { NoData, Pagination, Popup } from "features";
-import { useDelete, usePagination, useToast } from "hooks";
+import { NoData, Popup } from "features";
+import { useDelete, useToast } from "hooks";
 import { followService } from "services";
 import FollowTable from "./components/FollowTable";
 import styles from "./styles/Follow.module.scss";
@@ -14,26 +13,21 @@ import styles from "./styles/Follow.module.scss";
 const cx = classNames.bind(styles);
 
 function Follow() {
-  const FOLLOWS_PER_PAGE = 50;
   const user = useSelector((state) => state.user.user);
   const [follows, setFollows] = useState([]);
-  const { pagination, setPagination, setPaginationTotal } = usePagination(FOLLOWS_PER_PAGE);
   const { Toast, options, toastEmitter } = useToast();
   const hasData = follows.length > 0;
 
   const fetchData = () => {
     const params = {
-      userId: user._id,
-      _page: pagination.page,
-      _limit: pagination.limit,
+      user_id: user._id,
+      _embed: JSON.stringify([{ collection: "title_id", fields: "title cover.source author" }]),
+      _fields: "-user_id -__v",
     };
     followService
       .getAll(params)
-      .then((response) => {
-        setFollows(response.data);
-        setPaginationTotal(response.paginate.total);
-      })
-      .catch((error) => console.error(error));
+      .then((response) => setFollows(response.data))
+      .catch((error) => toastEmitter(error, "error"));
   };
 
   const { deletedItem, setDeletedItem, popup, setPopup } = useDelete(async () => {
@@ -51,23 +45,12 @@ function Follow() {
     <>
       <Container className={cx("follow")}>
         {hasData ? (
-          <>
-            <GridTable
-              head={[
-                { label: "Tiêu đề", xs: 8 },
-                { label: "Cập nhật lần cuối", center: true },
-                { label: "Xóa", center: true },
-              ]}
-            >
-              <FollowTable
-                follows={follows}
-                popup={popup}
-                setPopup={setPopup}
-                setDeletedItem={setDeletedItem}
-              />
-            </GridTable>
-            <Pagination pagination={pagination} setPagination={setPagination} />
-          </>
+          <FollowTable
+            follows={follows}
+            popup={popup}
+            setPopup={setPopup}
+            setDeletedItem={setDeletedItem}
+          />
         ) : (
           <NoData image={noFavorite}>
             <>

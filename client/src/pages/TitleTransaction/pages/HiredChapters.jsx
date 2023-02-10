@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import { Loading, NoData } from "features";
+import { useToast } from "hooks";
 import { chapterTransactionService } from "services";
 import HiredChaptersTable from "./components/HiredChaptersTable";
 
@@ -10,23 +11,18 @@ function HiredChapters({ cx }) {
   const user = useSelector((state) => state.user.user);
   const [loading, setLoading] = useState(false);
   const [transactions, setTransactions] = useState([]);
-  const [pagination, setPagination] = useState({
-    page: 1,
-    limit: 30,
-    total: 0,
-  });
+  const { Toast, options, toastEmitter } = useToast();
 
   useEffect(() => {
     setLoading(true);
 
     const params = {
       user_id: user._id,
-      _page: pagination.page,
-      _limit: pagination.limit,
       _embed: JSON.stringify([
         { collection: "title_id", fields: "cover title" },
         { collection: "chapter_id", fields: "title" },
       ]),
+      _fields: "-__v -user_id",
     };
 
     chapterTransactionService
@@ -35,14 +31,10 @@ function HiredChapters({ cx }) {
         const hiredChapters = response.data.filter((hiredChapter) => hiredChapter.expiredAt);
 
         setTransactions(hiredChapters);
-        setPagination((prev) => ({
-          ...prev,
-          total: response.paginate.total,
-        }));
         setLoading(false);
       })
       .catch((error) => {
-        console.error(error);
+        toastEmitter(error, "error");
         setLoading(false);
       });
   }, []);
@@ -50,12 +42,7 @@ function HiredChapters({ cx }) {
   return (
     <>
       {transactions.length > 0 ? (
-        <HiredChaptersTable
-          transactions={transactions}
-          cx={cx}
-          pagination={pagination}
-          setPagination={setPagination}
-        />
+        <HiredChaptersTable transactions={transactions} cx={cx} />
       ) : (
         <NoData>
           <h5>Hiện tại chưa có truyện nào được bạn thuê!</h5>
@@ -64,6 +51,7 @@ function HiredChapters({ cx }) {
       )}
       <div />
       {loading && <Loading />}
+      <Toast {...options} />
     </>
   );
 }
