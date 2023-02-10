@@ -10,7 +10,7 @@ import { socket } from "context/socketContext";
 import { Comment, Loading, NoData, Pagination, Popup, Recommend } from "features";
 import { usePagination, useToast } from "hooks";
 import { setCommentPlace } from "libs/redux/slices/comment.slice";
-import { setGenresOfTitle } from "libs/redux/slices/title.slice";
+import { setTitle as setStoreTitle, setGenresOfTitle } from "libs/redux/slices/title.slice";
 import { setUser } from "libs/redux/slices/user.slice";
 import { chapterService, chapterTransactionService, followService, titleService } from "services";
 import { circleC, circleP } from "../../assets/images";
@@ -117,7 +117,7 @@ function Title() {
     const chapterApiParams = {
       title_id: titleId,
       _sort: "order",
-      _order: isDESCSorting,
+      _order: isDESCSorting ? "asc" : "desc",
       _page: pagination.page,
       _limit: pagination.limit,
     };
@@ -136,7 +136,7 @@ function Title() {
   };
 
   const handleSorting = () => {
-    setIsDESCSorting(!isDESCSorting);
+    setIsDESCSorting((prev) => !prev);
     fetchChapters();
   };
 
@@ -144,7 +144,7 @@ function Title() {
     followService
       .add(titleID)
       .then(() => {
-        toastEmitter(`Bạn đã theo dõi truyện ${title.name}`, "success");
+        toastEmitter(`Bạn đã theo dõi truyện ${title.title}`, "success");
       })
       .catch((error) => {
         toastEmitter(error, "error");
@@ -182,11 +182,13 @@ function Title() {
     Promise.all([titlePromise, chaptersPromise, chapterTransactionPromise])
       .then(([titleResponse, chapterResponse, chapterTransactionResponse]) => {
         setTitle(titleResponse.data);
-        dispatch(setGenresOfTitle(titleResponse.data.genres));
         setChapters(chapterResponse.data);
         setPaginationTotal(chapterResponse.paginate.total);
         setPurchasedHistories(chapterTransactionResponse.data);
         setLoading(false);
+
+        dispatch(setGenresOfTitle(titleResponse.data.genres));
+        dispatch(setStoreTitle(titleResponse.data));
       })
       .catch((error) => {
         toastEmitter(error, "error");
