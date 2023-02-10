@@ -30,7 +30,7 @@ const authController = {
       jwt.verify(token, process.env.REGISTER_TOKEN_KEY, async (error, userInfo) => {
         if (error) return next(createError(403, 'Token không hợp lệ'));
 
-        await userService.update(userInfo.id, { active: true });
+        await userService.update(userInfo.id, { isActivated: true });
 
         return res.status(200).json({
           code: 200,
@@ -84,10 +84,18 @@ const authController = {
       const { username, password } = req.body;
       const TOKEN_EXPIRED_TIME = 15;
 
-      const user = (await userService.getAll({ username })).data;
-      if (!user[0]) return next(createError(404, 'Tên đăng nhập không tồn tại'));
+      const user = (await userService.getAll({ username })).data[0];
+      if (!user) return next(createError(404, 'Sai tên đăng nhập'));
 
-      const { _id, email, password: userPassword } = user[0];
+      if (!user.isActivated) {
+        return res.status(403).json({
+          status: 403,
+          message:
+            'Bạn đã bị cấm sử dụng dịch vụ của chúng tôi. Nếu có vấn đề nào, vui lòng liên hệ help@mail.domain',
+        });
+      }
+
+      const { _id, email, password: userPassword } = user;
 
       const samePassword = bcrypt.compareSync(password, userPassword);
       if (!samePassword) return next(createError(401, 'Mật khẩu không chính xác'));
@@ -130,8 +138,8 @@ const authController = {
       const user = await userService.getOne({ username });
       if (!user) return next(createError(404, 'Không tìm thấy tài khoản'));
 
-      const { active, role, password, ...others } = user._doc;
-      const token = jwt.sign({ id: user._id, role, active }, process.env.ACCESS_TOKEN_KEY);
+      const { isActivated, role, password, ...others } = user._doc;
+      const token = jwt.sign({ id: user._id, role, isActivated }, process.env.ACCESS_TOKEN_KEY);
 
       await otpService.delete(username, email);
 
