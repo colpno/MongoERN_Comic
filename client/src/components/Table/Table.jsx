@@ -1,4 +1,4 @@
-/* 
+/* INFO
   MUI license warn file path: 
   client/node_modules/@mui/x-license-pro/legacy/utils/licenseErrorMessageUtils.js
   client/node_modules/@mui/x-license-pro/modern/utils/licenseErrorMessageUtils.js
@@ -6,7 +6,7 @@
   client/node_modules/@mui/x-license-pro/utils/licenseErrorMessageUtils.js
   Table.scss
  */
-import { Pagination } from "@mui/material";
+import { Box, Pagination } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import {
   DataGridPro,
@@ -21,8 +21,13 @@ import {
 } from "@mui/x-data-grid-pro";
 import PropTypes from "prop-types";
 import { useCallback, useState } from "react";
+import { BsQuestionCircle } from "react-icons/bs";
+import classNames from "classnames/bind";
 
-import "./Table.scss";
+import { Popup } from "features";
+import styles from "./Table.module.scss";
+
+const cx = classNames.bind(styles);
 
 function CustomFooter() {
   const apiRef = useGridApiContext();
@@ -37,11 +42,46 @@ function CustomFooter() {
   );
 }
 
-function CustomToolBar({ rowsPerPage }) {
+const guidePopupContent = () => {
+  return (
+    <Box width="100%">
+      <div className={cx("guide-wrapper")}>
+        <span className={cx("key")}>shift + lăn chuột giữa</span>
+        <span className={cx("guide")}>Cuộn ngang</span>
+      </div>
+      <div className={cx("guide-wrapper")}>
+        <span className={cx("key")}>ctrl + nhấn chuột trái</span>
+        <span className={cx("guide")}>Hủy dòng được chọn</span>
+      </div>
+    </Box>
+  );
+};
+
+function CustomToolBar({ rowsPerPage, setPopup }) {
+  const apiRef = useGridApiContext();
+
+  const handlePageChange = useCallback(
+    ({ target }) => apiRef.current.setPageSize(target.value),
+    []
+  );
+
+  const handleGuideOpen = () => {
+    setPopup((prev) => {
+      return { ...prev, trigger: true };
+    });
+  };
+
   return (
     <GridToolbarContainer sx={{ display: "flex", justifyContent: "space-between" }}>
       <GridToolbar />
-      <GridPagination rowsPerPage={rowsPerPage} />
+      <Box display="flex" alignItems="center">
+        <GridPagination rowsPerPage={rowsPerPage} onRowsPerPageChange={handlePageChange} />
+        <BsQuestionCircle
+          onClick={handleGuideOpen}
+          className={cx("question-icon")}
+          title="Các thao tác sử dụng bảng"
+        />
+      </Box>
     </GridToolbarContainer>
   );
 }
@@ -62,6 +102,11 @@ function Table({
   disableColumnMenu,
 }) {
   const [rowsPerPage, setRowsPerPage] = useState(rowsPerPageOptions[0]);
+  const [popup, setPopup] = useState({
+    trigger: false,
+    title: "Các thao tác sẵn có",
+    content: guidePopupContent(),
+  });
 
   const theme = createTheme(
     {},
@@ -74,7 +119,10 @@ function Table({
     },
     initialState,
     componentsProps: {
-      toolbar: { rowsPerPage },
+      toolbar: {
+        rowsPerPage,
+        setPopup,
+      },
     },
     autoHeight: false,
     sx: {},
@@ -85,22 +133,27 @@ function Table({
   if (autoHeight) dataGridProps.autoHeight = true;
 
   return (
-    <ThemeProvider theme={theme}>
-      <DataGridPro
-        {...dataGridProps}
-        columns={headers}
-        rows={data}
-        sx={{ height }}
-        disableColumnFilter={disableColumnFilter}
-        disableDensitySelector={disableDensitySelector}
-        disableColumnMenu={disableColumnMenu}
-        pageSize={rowsPerPage}
-        onPageSizeChange={(size) => setRowsPerPage(size)}
-        rowsPerPageOptions={rowsPerPageOptions}
-        getRowId={(row) => row._id}
-        getRowHeight={() => rowHeight}
-      />
-    </ThemeProvider>
+    <>
+      <ThemeProvider theme={theme}>
+        <DataGridPro
+          {...dataGridProps}
+          autoHeight
+          columns={headers}
+          rows={data}
+          sx={{ height }}
+          disableColumnFilter={disableColumnFilter}
+          disableDensitySelector={disableDensitySelector}
+          disableColumnMenu={disableColumnMenu}
+          pageSize={rowsPerPage}
+          onPageSizeChange={(size) => setRowsPerPage(size)}
+          rowsPerPageOptions={rowsPerPageOptions}
+          pagination
+          getRowId={(row) => row._id}
+          getRowHeight={() => rowHeight}
+        />
+      </ThemeProvider>
+      <Popup popup={popup} setPopup={setPopup} />
+    </>
   );
 }
 
@@ -192,7 +245,7 @@ Table.defaultProps = {
   height: null,
   autoHeight: false,
   rowHeight: "auto",
-  rowsPerPageOptions: [25, 50, 100],
+  rowsPerPageOptions: [2, 25, 50, 100],
   hasToolbar: true,
   disableColumnFilter: false,
   disableDensitySelector: false,
@@ -201,6 +254,7 @@ Table.defaultProps = {
 
 CustomToolBar.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
+  setPopup: PropTypes.func.isRequired,
 };
 
 export default Table;
