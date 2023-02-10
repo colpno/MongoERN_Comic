@@ -4,22 +4,15 @@ const url = "/chapters";
 
 const chapterApi = {
   getAll: (params, isPrivate = true) => {
-    if (isPrivate) {
-      return axiosClient.get(`${url}/owned`, {
-        params,
-        withCredentials: isPrivate,
-      });
-    }
-    return axiosClient.get(url, { params, withCredentials: isPrivate });
+    const fullURL = isPrivate ? `${url}/owned` : url;
+
+    return axiosClient.get(fullURL, { params, withCredentials: isPrivate });
   },
 
   getOne: (id, isPrivate = true) => {
-    if (isPrivate) {
-      return axiosClient.get(`${url}/owned/${id}`, {
-        withCredentials: isPrivate,
-      });
-    }
-    return axiosClient.get(`${url}/${id}`, { withCredentials: isPrivate });
+    const fullURL = isPrivate ? `${url}/owned/${id}` : `${url}/${id}`;
+
+    return axiosClient.get(fullURL, { withCredentials: isPrivate });
   },
 
   add: (titleId, title, cover, contents, order, cost, setProgress = () => {}) => {
