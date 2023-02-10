@@ -21,7 +21,7 @@ function UpdateTitle() {
   const INITIAL_VALUE = hasData && {
     title: title.title,
     summary: title.summary,
-    status: title.status,
+    status_id: title.status_id,
     release_day: title.release_day,
     genres: title.genres,
     author: title.author,
@@ -78,6 +78,7 @@ function UpdateTitle() {
 
   const handleSubmit = (values, { setSubmitting }) => {
     const changedValues = getChangedValues(values);
+    console.log("file: UpdateTitle.jsx:81 ~ changedValues", changedValues);
     Object.keys(changedValues).length > 0 && handleUpdate(changedValues);
     setSubmitting(false);
   };
@@ -99,6 +100,7 @@ function UpdateTitle() {
               largeCover: title.cover.source,
             }}
             validationSchema={updateTitleFormValidation}
+            toastEmitter={toastEmitter}
           />
         )}
       </FormWrapper>

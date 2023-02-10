@@ -21,7 +21,7 @@ function CreateTitle() {
 
   const INITIAL_VALUE = {
     title: "",
-    status: "",
+    status_id: "",
     genres: [],
     summary: "",
     author: "",
