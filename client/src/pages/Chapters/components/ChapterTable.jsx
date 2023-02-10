@@ -1,4 +1,5 @@
 import { GridActionsCellItem } from "@mui/x-data-grid-pro";
+import { useMemo } from "react";
 import classNames from "classnames/bind";
 import moment from "moment";
 import PropTypes from "prop-types";
@@ -140,9 +141,11 @@ function ChapterTable({ chapters, setPopup, setDeleteItem }) {
     setDeleteItem({ id: chapterId, titleId });
   };
 
+  const headers = useMemo(() => getHeaders(handleDeleteClick), []);
+
   return (
     <Table
-      headers={() => getHeaders(handleDeleteClick)}
+      headers={headers}
       data={chapters}
       hasToolbar
       autoHeight
