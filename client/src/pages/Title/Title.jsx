@@ -3,7 +3,7 @@ import moment from "moment";
 import { useEffect, useMemo, useState } from "react";
 import { Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { TITLE_PAGE_CHAPTERS_PER_PAGE } from "constants/paginate.constant";
 import { socket } from "context/socketContext";
@@ -13,7 +13,7 @@ import { setCommentPlace } from "libs/redux/slices/comment.slice";
 import { setGenresOfTitle, setTitle as setStoreTitle } from "libs/redux/slices/title.slice";
 import { setUser } from "libs/redux/slices/user.slice";
 import { chapterService, chapterTransactionService, followService, titleService } from "services";
-import { handlePromiseAllSettled } from "utils";
+import { getObjectLength, handlePromiseAllSettled } from "utils";
 import { circleC, circleP } from "../../assets/images";
 import { ComicChapters, Introduction, PurchaseBox, TitleAbout } from "./components";
 import styles from "./styles/Title.module.scss";
@@ -22,6 +22,7 @@ const cx = classNames.bind(styles);
 
 function Title() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { titleId } = useParams();
   const user = useSelector((state) => state.user.user);
   const [title, setTitle] = useState({});
@@ -153,6 +154,15 @@ function Title() {
   };
 
   useEffect(() => {
+    if (
+      getObjectLength(title) > 0 &&
+      (title.approved_status_id?.code !== "apd" || title.status_id?.code !== "vis")
+    ) {
+      navigate("/not-found");
+    }
+  }, [title]);
+
+  useEffect(() => {
     if (socket) {
       socket.emit("join-title", titleId);
     }
@@ -179,7 +189,7 @@ function Title() {
 
       const titlePromise = titleService.getOne(titleId, false);
       const chaptersPromise = chapterService.getAll(chapterApiParams, false);
-      const chapterTransactionPromise = chapterTransactionService.getAll(chapterTranParams);
+      const chapterTransactionPromise = chapterTransactionService.getAll(chapterTranParams, false);
       const promises = [titlePromise, chaptersPromise, chapterTransactionPromise];
 
       const results = await Promise.allSettled(promises);
