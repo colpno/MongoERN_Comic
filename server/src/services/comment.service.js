@@ -52,11 +52,16 @@ const commentService = {
     });
 
     const createdOne = await model.save();
-    const response = await Comment.findById(createdOne._id).populate('author', 'username avatar');
+    const response = await Comment.findById(createdOne._id)
+      .populate('author', 'username avatar')
+      .populate('deletedBy', 'username');
+
     return response;
   },
   update: async (match, data = {}) => {
-    const response = await Comment.findOneAndUpdate(match, data, { new: true });
+    const response = await Comment.findOneAndUpdate(match, data, { new: true })
+      .populate('author', 'username avatar')
+      .populate('deletedBy', 'username');
     return response;
   },
 };

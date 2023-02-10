@@ -82,17 +82,22 @@ const commentController = {
   },
   update: async (req, res, next) => {
     try {
-      const { id, text, hide } = req.body;
+      const { text, deletedBy } = req.body;
+      const { id } = req.params;
 
       const match = { _id: id };
       const response = await commentService.update(match, {
         text,
-        hide,
+        deletedBy,
       });
 
       if (!response) {
-        return next(createError(400, 'không thể hoàn thành việc cập nhật tài khoản'));
+        return next(createError(400, 'không thể hoàn thành việc cập nhật bình luận'));
       }
+
+      const { comment_at } = response;
+      const room = comment_at.slice(comment_at.indexOf('_') + 1);
+      global.io.to(room).emit('delete-comment', response);
 
       return res.status(200).json({
         code: 200,

@@ -14,7 +14,7 @@ const commentSchema = mongoose.Schema(
     slug: { type: String, require: true },
     parent_slug: { type: String, require: true, default: '' },
     full_slug: { type: String, require: true },
-    hide: { type: Boolean, default: false },
+    deletedBy: { type: mongoose.Types.ObjectId, ref: 'user', default: null },
   },
   { timestamps: true }
 );
