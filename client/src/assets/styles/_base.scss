@@ -8,9 +8,7 @@ img {
 
 .skip-header {
   margin-top: variables.$header-height;
-  min-height: calc(
-    100vh - (variables.$header-height + variables.$footer-height)
-  );
+  min-height: calc(100vh - (variables.$header-height + variables.$footer-height));
 }
 
 .like,
@@ -22,6 +20,12 @@ img {
   svg {
     margin-right: 4px;
   }
+}
+
+.disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.5;
 }
 
 :where(.line-clamp) {
