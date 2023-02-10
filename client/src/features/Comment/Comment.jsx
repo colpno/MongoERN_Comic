@@ -4,7 +4,8 @@ import { useSelector } from "react-redux";
 
 import { Button, HeadTitleMark } from "components";
 import { socket } from "context/socketContext";
-import { Pagination, ProgressCircle } from "features";
+import { Pagination, Popup, ProgressCircle } from "features";
+import { useToast } from "hooks";
 import { commentService } from "services";
 import { CommentForm, CommentList } from "./components";
 import styles from "./styles/Comment.module.scss";
@@ -18,7 +19,30 @@ function Comment() {
   const [rootComments, setRootComments] = useState([]);
   const [paginate, setPaginate] = useState({ page: 1, limit: 15, total: 0 });
   const [progress, setProgress] = useState(0);
+  const { Toast, options, toastEmitter } = useToast();
+  const [popup, setPopup] = useState({
+    trigger: false,
+    isConfirm: false,
+    title: "Xóa bình luận",
+    content: "Bạn có chắc chắn muốn xóa?",
+  });
   const initialFormValues = { text: "" };
+
+  const fetchComments = () => {
+    const params = {
+      comment_at: commentAt,
+      _embed: JSON.stringify([
+        { collection: "author", fields: "avatar username" },
+        { collection: "deletedBy", fields: "username" },
+      ]),
+      _fields: "author text slug parent_slug comment_replies_num createdAt deletedBy",
+    };
+
+    commentService
+      .getAll(params)
+      .then((response) => setComments(response.data))
+      .catch((error) => toastEmitter(error, "error"));
+  };
 
   const handleSubmit = (values, { setSubmitting, resetForm }) => {
     const { text, slug } = values;
@@ -35,13 +59,12 @@ function Comment() {
         .add(data, setProgress)
         .then(() => {
           resetForm();
-          setProgress(0);
         })
         .catch((error) => {
-          console.error(error);
-          setProgress(0);
+          toastEmitter(error, "error");
         });
 
+      setProgress(0);
       return newComment;
     }
 
@@ -59,10 +82,41 @@ function Comment() {
     [comments]
   );
 
+  const handleDelete = (commentId) => {
+    setPopup((prev) => ({ ...prev, trigger: true, commentId }));
+    console.log(popup);
+  };
+
+  useEffect(() => {
+    if (popup.isConfirm) {
+      commentService
+        .update(popup.commentId, { deletedBy: user._id }, setProgress)
+        .then(() => {
+          setProgress(0);
+        })
+        .catch((error) => {
+          setProgress(0);
+          toastEmitter(error, "error");
+        });
+      setPopup((prev) => ({ ...prev, isConfirm: false }));
+    }
+  }, [popup.isConfirm]);
+
   useEffect(() => {
     if (socket) {
       socket.on("send-comment", (comment) => {
         setComments((prev) => [comment, ...prev]);
+      });
+      socket.on("delete-comment", (comment) => {
+        setComments((prev) => {
+          const newComments = prev.map((oldComment) => {
+            if (oldComment._id === comment._id) {
+              return comment;
+            }
+            return oldComment;
+          });
+          return newComments;
+        });
       });
     }
   }, [socket]);
@@ -81,15 +135,7 @@ function Comment() {
 
   useEffect(() => {
     if (commentAt) {
-      const params = {
-        comment_at: commentAt,
-        _embed: JSON.stringify([{ collection: "author", fields: "avatar username" }]),
-      };
-
-      commentService
-        .getAll(params)
-        .then((response) => setComments(response.data))
-        .catch((error) => console.error(error));
+      fetchComments();
     }
   }, [commentAt]);
 
@@ -114,10 +160,17 @@ function Comment() {
             để bình luận.
           </p>
         )}
-        <CommentList comments={rootComments} getReplies={getReplies} handleSubmit={handleSubmit} />
+        <CommentList
+          comments={rootComments}
+          getReplies={getReplies}
+          handleSubmit={handleSubmit}
+          handleDelete={handleDelete}
+        />
         <Pagination pagination={paginate} setPagination={setPaginate} />
       </section>
       <ProgressCircle percentage={progress} />
+      <Toast {...options} />
+      <Popup yesno popup={popup} setPopup={setPopup} />
     </>
   );
 }
