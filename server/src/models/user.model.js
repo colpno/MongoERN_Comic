@@ -27,7 +27,8 @@ const userSchema = mongoose.Schema(
       enum: ['member', 'administrator'],
       require: true,
     },
-    active: { type: Boolean, default: false },
+    isActivated: { type: Boolean, default: false },
+    isBanned: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
