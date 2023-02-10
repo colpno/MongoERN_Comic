@@ -1,20 +1,21 @@
 import classNames from "classnames/bind";
 import DOMPurify from "dompurify";
-import { useSelector } from "react-redux";
 import moment from "moment";
 import PropTypes from "prop-types";
 import { memo, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 import { Button } from "components";
 import { socket } from "context/socketContext";
 import styles from "../styles/CommentItem.module.scss";
 import CommentForm from "./CommentForm";
+import DeletedComment from "./DeletedComment";
 import ReadMore from "./ReadMore";
 
 const cx = classNames.bind(styles);
 
 function CommentItem({ comment, handleReplySubmit, getReplies, canReply, handleDelete }) {
-  const user = useSelector((state) => state.user.user);
+  const { user, isLoggingIn } = useSelector((state) => state.user);
   const title = useSelector((state) => state.title.title);
   const [toggleReply, setToggleReply] = useState(false);
   const [replies, setReplies] = useState([]);
@@ -41,51 +42,63 @@ function CommentItem({ comment, handleReplySubmit, getReplies, canReply, handleD
       socket.on("send-comment", (cmt) => {
         if (cmt.parent_slug === comment.slug) setReplies((prev) => [cmt, ...prev]);
       });
+      socket.on("delete-comment", (cmt) => {
+        setReplies((prev) => {
+          const newReplies = prev.map((oldReply) => {
+            if (oldReply._id === cmt._id) {
+              return cmt;
+            }
+            return oldReply;
+          });
+          return newReplies;
+        });
+      });
     }
   }, [socket]);
 
   return (
     <>
-      <div className={cx("comment")}>
-        <div className={cx("avatar-container")}>
-          <img src={comment.author.avatar} alt="avatar" className={cx("avatar")} />
-        </div>
-        <div className={cx("content")}>
-          <p className={cx("username")}>{comment.author.username}</p>
-          <ReadMore>
-            <div
-              className={cx("text")}
-              // eslint-disable-next-line react/no-danger
-              dangerouslySetInnerHTML={purifyDOM(comment.text)}
-            />
-          </ReadMore>
+      {comment.deletedBy ? (
+        <DeletedComment comment={comment} />
+      ) : (
+        <div className={cx("comment")}>
+          <div className={cx("avatar-container")}>
+            <img src={comment.author.avatar} alt="avatar" className={cx("avatar")} />
+          </div>
+          <div className={cx("content")}>
+            <p className={cx("username")}>{comment.author.username}</p>
+            <ReadMore>
+              {/* eslint-disable-next-line react/no-danger */}
+              <div className={cx("text")} dangerouslySetInnerHTML={purifyDOM(comment.text)} />
+            </ReadMore>
 
-          <div>
-            <div className={cx("comment-time")}>{moment(comment.createdAt).fromNow(true)}</div>
-            {canReply ? (
-              <Button text className={cx("reply")} onClick={handleToggleReply}>
-                Phản hồi
-              </Button>
-            ) : null}
-            {canDelete && (
-              <Button
-                text
-                onClick={() => handleDelete(comment._id)}
-                className={cx("delete-button")}
-              >
-                Xóa
-              </Button>
-            )}
+            <div>
+              <div className={cx("comment-time")}>{moment(comment.createdAt).fromNow(true)}</div>
+              {canReply && isLoggingIn ? (
+                <Button text className={cx("reply")} onClick={handleToggleReply}>
+                  Phản hồi
+                </Button>
+              ) : null}
+              {canDelete && (
+                <Button
+                  text
+                  onClick={() => handleDelete(comment._id)}
+                  className={cx("delete-button")}
+                >
+                  Xóa
+                </Button>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
       {canReply ? (
         <div className={cx("replies")}>
           {toggleReply ? (
             <CommentForm handleSubmit={handleReplySubmit} initialValues={initialFormValues} />
           ) : null}
           {replies.map((reply) => {
-            return <CommentItem comment={reply} key={reply._id} />;
+            return <CommentItem comment={reply} handleDelete={handleDelete} key={reply._id} />;
           })}
           {repliesRemaining > 0 && (
             <Button text onClick={() => moreReplies(comment.slug, paginate.page + 1)}>
@@ -109,6 +122,7 @@ CommentItem.propTypes = {
     text: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.node.isRequired]).isRequired,
     slug: PropTypes.string.isRequired,
     comment_replies_num: PropTypes.number.isRequired,
+    deletedBy: PropTypes.shape({}),
     createdAt: PropTypes.string.isRequired,
   }).isRequired,
   handleReplySubmit: PropTypes.func,

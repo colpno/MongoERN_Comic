@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 
 import styles from "../styles/CommentList.module.scss";
 import CommentItem from "./CommentItem";
-import DeletedComment from "./DeletedComment";
 
 const cx = classNames.bind(styles);
 
@@ -13,17 +12,13 @@ function CommentList({ comments, handleSubmit, getReplies, handleDelete }) {
       {comments.map((comment) => {
         return (
           <div className={cx("comment-group")} key={comment._id}>
-            {comment.deletedBy ? (
-              <DeletedComment comment={comment} />
-            ) : (
-              <CommentItem
-                comment={comment}
-                handleReplySubmit={handleSubmit}
-                getReplies={getReplies}
-                canReply
-                handleDelete={handleDelete}
-              />
-            )}
+            <CommentItem
+              comment={comment}
+              handleReplySubmit={handleSubmit}
+              getReplies={getReplies}
+              canReply
+              handleDelete={handleDelete}
+            />
           </div>
         );
       })}
