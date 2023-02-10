@@ -11,10 +11,6 @@ const titleController = {
       const { userInfo, query } = req;
 
       if (userInfo) query.user_id = userInfo.id;
-      else {
-        query.approved_status_id = '63a6fb6216ee77053d6feb93';
-        query.status = 'vis';
-      }
 
       const params = transformQueryParams(query);
       const response = await titleService.getAll(params);
