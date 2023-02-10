@@ -62,7 +62,7 @@ function RouteHandler({ isLoggingIn }) {
           );
         })}
 
-      <Route path="*" element={<Navigate to="/404" />} />
+      <Route path="*" element={<Navigate to="/not-found" />} />
     </Routes>
   );
 }

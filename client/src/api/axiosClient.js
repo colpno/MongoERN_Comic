@@ -24,7 +24,7 @@ axiosClient.interceptors.response.use(
     const { status } = response;
 
     if (status === 403) {
-      window.location.href = "/404";
+      window.location.href = "/not-found";
     }
     return Promise.reject(response);
   }

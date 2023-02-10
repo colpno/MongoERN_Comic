@@ -20,7 +20,7 @@ import {
 } from "pages";
 
 export const publicRoutes = [
-  { path: "/404", component: NotFound },
+  { path: "/not-found", component: NotFound },
   { path: "/", component: Home },
   {
     path: "/login",
