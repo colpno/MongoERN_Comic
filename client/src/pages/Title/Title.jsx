@@ -10,9 +10,10 @@ import { socket } from "context/socketContext";
 import { Comment, Loading, NoData, Pagination, Popup, Recommend } from "features";
 import { usePagination, useToast } from "hooks";
 import { setCommentPlace } from "libs/redux/slices/comment.slice";
-import { setTitle as setStoreTitle, setGenresOfTitle } from "libs/redux/slices/title.slice";
+import { setGenresOfTitle, setTitle as setStoreTitle } from "libs/redux/slices/title.slice";
 import { setUser } from "libs/redux/slices/user.slice";
 import { chapterService, chapterTransactionService, followService, titleService } from "services";
+import { handlePromiseAllSettled } from "utils";
 import { circleC, circleP } from "../../assets/images";
 import { ComicChapters, Introduction, PurchaseBox, TitleAbout } from "./components";
 import styles from "./styles/Title.module.scss";
@@ -162,38 +163,44 @@ function Title() {
   }, []);
 
   useEffect(() => {
-    setLoading(true);
-    const chapterApiParams = {
-      title_id: titleId,
-      _sort: "order",
-      _order: "asc",
-      _page: pagination.page,
-      _limit: pagination.limit,
+    const fetchData = async () => {
+      setLoading(true);
+      const chapterApiParams = {
+        title_id: titleId,
+        _sort: "order",
+        _order: "asc",
+        _page: pagination.page,
+        _limit: pagination.limit,
+      };
+      const chapterTranParams = {
+        title_id: titleId,
+        _embed: JSON.stringify([{ collection: "chapter_id", fields: "_id" }]),
+      };
+
+      const titlePromise = titleService.getOne(titleId, false);
+      const chaptersPromise = chapterService.getAll(chapterApiParams, false);
+      const chapterTransactionPromise = chapterTransactionService.getAll(chapterTranParams);
+      const promises = [titlePromise, chaptersPromise, chapterTransactionPromise];
+
+      const results = await Promise.allSettled(promises);
+      const { fulfilledResults } = handlePromiseAllSettled(results, toastEmitter);
+      const [titleResult, chaptersResult, chapterTransactionResult] = fulfilledResults;
+
+      if (titleResult) {
+        setTitle(titleResult.data);
+        dispatch(setGenresOfTitle(titleResult.data.genres));
+        dispatch(setStoreTitle(titleResult.data));
+      }
+      if (chaptersResult) {
+        setChapters(chaptersResult.data);
+        setPaginationTotal(chaptersResult.paginate.total);
+      }
+      if (chapterTransactionResult) {
+        setPurchasedHistories(chapterTransactionResult.data);
+      }
+      setLoading(false);
     };
-    const chapterTranParams = {
-      title_id: titleId,
-      _embed: JSON.stringify([{ collection: "chapter_id", fields: "_id" }]),
-    };
-
-    const titlePromise = titleService.getOne(titleId, false);
-    const chaptersPromise = chapterService.getAll(chapterApiParams, false);
-    const chapterTransactionPromise = chapterTransactionService.getAll(chapterTranParams);
-
-    Promise.all([titlePromise, chaptersPromise, chapterTransactionPromise])
-      .then(([titleResponse, chapterResponse, chapterTransactionResponse]) => {
-        setTitle(titleResponse.data);
-        setChapters(chapterResponse.data);
-        setPaginationTotal(chapterResponse.paginate.total);
-        setPurchasedHistories(chapterTransactionResponse.data);
-        setLoading(false);
-
-        dispatch(setGenresOfTitle(titleResponse.data.genres));
-        dispatch(setStoreTitle(titleResponse.data));
-      })
-      .catch((error) => {
-        toastEmitter(error, "error");
-        setLoading(false);
-      });
+    fetchData();
   }, [titleId, user]);
 
   return (
