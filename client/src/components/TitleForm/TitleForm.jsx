@@ -6,15 +6,22 @@ import { Alert } from "react-bootstrap";
 
 import { InputImage, Button } from "components";
 import { CheckBoxGroup, InputField, RadioGroup, TextAreaField, FormLabel } from "libs/formik";
-import { genreService } from "services";
-import { getReleaseDayOptions } from "utils";
+import { genreService, objectStatusService } from "services";
+import { getReleaseDayOptions, handlePromiseAllSettled } from "utils";
 import styles from "./TitleForm.module.scss";
 
 const cx = classNames.bind(styles);
 
-function TitleForm({ initialValues, validationSchema, handleCancel, handleSubmit, imageBlob }) {
+function TitleForm({
+  initialValues,
+  validationSchema,
+  handleCancel,
+  handleSubmit,
+  imageBlob,
+  toastEmitter,
+}) {
   const [genres, setGenres] = useState([]);
-  // TODO const [approvedStatuses, setApprovedStatuses] = useState([]);
+  const [statuses, setStatuses] = useState([]);
   const releaseDayOptions = getReleaseDayOptions();
 
   const genreOptions = useMemo(
@@ -25,20 +32,37 @@ function TitleForm({ initialValues, validationSchema, handleCancel, handleSubmit
     [genres]
   );
 
-  const statusOptions = [
-    { value: "vis", label: "Lưu hành" },
-    { value: "inv", label: "Tạm ẩn" },
-  ];
+  const statusOptions = useMemo(
+    () =>
+      statuses.map((status) => {
+        return { value: status._id, label: status.status };
+      }),
+    [statuses]
+  );
 
   const handleRemove = (value) => {
     console.log(value);
   };
 
   useEffect(() => {
-    genreService
-      .getAll()
-      .then((response) => setGenres(response.data))
-      .catch((error) => console.error(error));
+    const fetchData = async () => {
+      const genresParams = { _fields: "-_id name" };
+      const statusParams = { _fields: "code status" };
+
+      const genrePromise = genreService.getAll(genresParams);
+      const statusPromise = objectStatusService.getAll(statusParams);
+
+      const results = await Promise.allSettled([genrePromise, statusPromise]);
+      const { fulfilledResults, rejectedResults } = handlePromiseAllSettled(results);
+      const [genreResult, statusResult] = fulfilledResults;
+
+      if (rejectedResults.length > 0) {
+        rejectedResults.forEach((result) => toastEmitter(result, "error"));
+      }
+      setGenres(genreResult.data);
+      setStatuses(statusResult.data);
+    };
+    fetchData();
   }, []);
 
   return (
@@ -62,9 +86,9 @@ function TitleForm({ initialValues, validationSchema, handleCancel, handleSubmit
 
             {statusOptions.length > 0 && (
               <>
-                <FormLabel name="status" label="Trạng thái" />
+                <FormLabel name="status_id" label="Trạng thái" />
                 <FastField
-                  name="status"
+                  name="status_id"
                   component={RadioGroup}
                   options={statusOptions}
                   col={{ xs: 6 }}
@@ -187,6 +211,7 @@ TitleForm.propTypes = {
     cover: PropTypes.string,
     largeCover: PropTypes.string,
   }),
+  toastEmitter: PropTypes.func.isRequired,
 };
 
 TitleForm.defaultProps = {
