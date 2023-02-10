@@ -2,12 +2,12 @@ import classNames from "classnames/bind";
 import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-import { Button, HeadTitleMark } from "components";
+import { HeadTitleMark } from "components";
 import { socket } from "context/socketContext";
 import { Pagination, Popup, ProgressCircle } from "features";
 import { useToast } from "hooks";
 import { commentService } from "services";
-import { CommentForm, CommentList } from "./components";
+import { CommentForm, CommentList, RequireSignIn } from "./components";
 import styles from "./styles/Comment.module.scss";
 
 const cx = classNames.bind(styles);
@@ -19,7 +19,7 @@ function Comment() {
   const [rootComments, setRootComments] = useState([]);
   const [paginate, setPaginate] = useState({ page: 1, limit: 15, total: 0 });
   const [progress, setProgress] = useState(0);
-  const { Toast, options, toastEmitter } = useToast();
+  const { toastEmitter } = useToast();
   const [popup, setPopup] = useState({
     trigger: false,
     isConfirm: false,
@@ -55,21 +55,19 @@ function Comment() {
         parentSlug: slug,
       };
 
-      const newComment = commentService
+      commentService
         .add(data, setProgress)
         .then(() => {
           resetForm();
+          setProgress(0);
         })
         .catch((error) => {
           toastEmitter(error, "error");
+          setProgress(0);
         });
-
-      setProgress(0);
-      return newComment;
     }
 
     setSubmitting(false);
-    return null;
   };
 
   const getReplies = useCallback(
@@ -84,7 +82,6 @@ function Comment() {
 
   const handleDelete = (commentId) => {
     setPopup((prev) => ({ ...prev, trigger: true, commentId }));
-    console.log(popup);
   };
 
   useEffect(() => {
@@ -148,17 +145,7 @@ function Comment() {
         {isLoggingIn ? (
           <CommentForm handleSubmit={handleSubmit} initialValues={initialFormValues} />
         ) : (
-          <p className={cx("sign-in")}>
-            Bạn phải{" "}
-            <Button text to="/login" className={cx("link")}>
-              đăng nhập
-            </Button>{" "}
-            hoặc{" "}
-            <Button text to="/register" className={cx("link")}>
-              tạo tài khoản
-            </Button>{" "}
-            để bình luận.
-          </p>
+          <RequireSignIn cx={cx} />
         )}
         <CommentList
           comments={rootComments}
@@ -169,7 +156,6 @@ function Comment() {
         <Pagination pagination={paginate} setPagination={setPaginate} />
       </section>
       <ProgressCircle percentage={progress} />
-      <Toast {...options} />
       <Popup yesno popup={popup} setPopup={setPopup} />
     </>
   );
