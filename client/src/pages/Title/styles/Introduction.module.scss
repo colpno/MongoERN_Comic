@@ -5,6 +5,10 @@
   display: flex;
   position: relative;
 
+  > :global(.row) {
+    width: 100%;
+  }
+
   &__info {
     padding-top: 30px;
     display: flex;
