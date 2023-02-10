@@ -17,6 +17,14 @@ function ComicSection() {
   const [titles, setTitles] = useState({ top5: [], approvedTitles: [] });
   const [titlesByGenre, setTitlesByGenre] = useState([]);
 
+  const getConfirmedTitles = (array) => {
+    const confirmedTitles = array.filter(
+      (title) => title.approved_status_id.code === "apd" && title.status_id.code === "vis"
+    );
+
+    return confirmedTitles;
+  };
+
   useEffect(() => {
     const genreLength = genres.length;
     const data = genres.map((genre, genreIndex) => {
@@ -47,28 +55,41 @@ function ComicSection() {
   }, [titles.approvedTitles, genres]);
 
   useEffect(() => {
-    const top5Promise = titleService.getAll(
-      {
-        _sort: "like",
-        _order: "desc",
-        _limit: 5,
-      },
-      false
-    );
-    const genresPromise = genreService.getAll({
+    const top5QueryParams = {
+      _sort: "like",
+      _order: "desc",
+      _limit: 5,
+      _embed: JSON.stringify([
+        { collection: "approved_status_id", fields: "-_id code" },
+        { collection: "status_id", fields: "-_id code" },
+      ]),
+      _fields: "-__v -_guid -cover.cloud_public_id",
+    };
+    const genresQueryParams = {
       _sort: "_id",
       _order: "asc",
       _limit: 4,
-    });
+    };
+
+    const top5Promise = titleService.getAll(top5QueryParams, false);
+    const genresPromise = genreService.getAll(genresQueryParams);
 
     Promise.all([top5Promise, genresPromise])
       .then(([top5Response, genresResponse]) => {
-        const top5 = top5Response.data;
+        const top5 = getConfirmedTitles(top5Response.data);
 
         const allGenres = genresResponse.data.map((genre) => genre.name);
 
-        titleService.getAll({ genres_in: allGenres }, false).then((titleResponse) => {
-          const approvedTitles = titleResponse.data;
+        const titlesQueryParams = {
+          genres_in: allGenres,
+          _embed: JSON.stringify([
+            { collection: "approved_status_id", fields: "-_id code" },
+            { collection: "status_id", fields: "-_id code" },
+          ]),
+          _fields: "-__v -_guid -cover.cloud_public_id",
+        };
+        titleService.getAll(titlesQueryParams, false).then((titleResponse) => {
+          const approvedTitles = getConfirmedTitles(titleResponse.data);
 
           setTitles({ top5, approvedTitles });
         });
