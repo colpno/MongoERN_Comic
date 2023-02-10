@@ -3,12 +3,17 @@ import classNames from "classnames/bind";
 import moment from "moment";
 import PropTypes from "prop-types";
 import { memo } from "react";
+import { BsEyeFill } from "react-icons/bs";
+import { FaCommentDots } from "react-icons/fa";
+import { FcLike } from "react-icons/fc";
 import { HiOutlinePencil } from "react-icons/hi";
 import { TbList } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 
+import { circleC, circleP } from "assets/images";
 import { Button, Table } from "components";
 import { convertTimeLabel } from "constants/time.constant";
+import { roundNumByUnit } from "utils";
 import styles from "../styles/MyTitleTable.module.scss";
 
 const cx = classNames.bind(styles);
@@ -17,18 +22,19 @@ const headers = [
   {
     headerName: "Truyện",
     field: "title",
-    width: 350,
-    minWidth: 350,
+    maxWidth: 250,
+    minWidth: 250,
     headerAlign: "center",
-    renderCell: ({ row }) => (
-      <>
+    resizable: true,
+    renderCell: ({ row, value }) => (
+      <div title={value} className={cx("title-wrapper")}>
         <div className={cx("box-img")}>
-          <img src={row.cover.source} alt={row.title} />
+          <img src={row.cover.source} alt={value} />
         </div>
         <Button text to={`/comic/title/${row._id}`} className={cx("title")}>
-          {row.title}
+          {value}
         </Button>
-      </>
+      </div>
     ),
   },
   {
@@ -56,7 +62,8 @@ const headers = [
     width: 140,
     headerAlign: "center",
     align: "center",
-    renderCell: ({ value }) => <span>{convertTimeLabel(value, "shortLabel", "label")}</span>,
+    valueGetter: ({ value }) => convertTimeLabel(value, "shortLabel", "label"),
+    renderCell: ({ value }) => <span title={value}>{value}</span>,
   },
   {
     headerName: "Tác giả",
@@ -85,35 +92,65 @@ const headers = [
     field: "coin",
     width: 80,
     headerAlign: "center",
-    align: "center",
+    align: "right",
+    renderCell: ({ value }) => (
+      <>
+        <span>{value}</span>
+        <img src={circleC} alt="coin" className={cx("icon", "coin-icon")} />
+      </>
+    ),
   },
   {
     headerName: "Point",
     field: "point",
     width: 80,
     headerAlign: "center",
-    align: "center",
+    align: "right",
+    renderCell: ({ value }) => (
+      <>
+        <span>{value}</span>
+        <img src={circleP} alt="point" className={cx("icon", "point-icon")} />
+      </>
+    ),
   },
   {
     headerName: "Lượt thích",
     field: "like",
     width: 80,
     headerAlign: "center",
-    align: "center",
+    align: "right",
+    renderCell: ({ value }) => (
+      <div title={value} className={cx("number-wrapper")}>
+        <span>{roundNumByUnit(value)}</span>
+        <FcLike className={cx("icon", "like-icon")} />
+      </div>
+    ),
   },
   {
     headerName: "Lượt xem",
     field: "view",
     width: 80,
     headerAlign: "center",
-    align: "center",
+    align: "right",
+    renderCell: ({ value }) => (
+      <div title={value} className={cx("number-wrapper")}>
+        <span>{roundNumByUnit(value)}</span>
+        <BsEyeFill className={cx("icon", "view-icon")} />
+      </div>
+    ),
   },
   {
     headerName: "Số bình luận",
     field: "comment_num",
     width: 80,
     headerAlign: "center",
-    align: "center",
+    align: "right",
+    renderCell: ({ value }) => (
+      <div title={value} className={cx("number-wrapper")}>
+        <span>{roundNumByUnit(value)}</span>
+        <FaCommentDots className={cx("icon", "comment-icon")} />
+      </div>
+    ),
   },
   {
     headerName: "Tóm tắt",
@@ -165,6 +202,13 @@ const headers = [
 ];
 
 function MyTitleTable({ titles }) {
+  const initialState = {
+    sorting: {
+      sortModel: [{ field: "approved_status_id", sort: "asc" }],
+    },
+    pinnedColumns: { left: ["title"], right: ["actions"] },
+  };
+
   return (
     <Table
       headers={headers}
@@ -172,12 +216,7 @@ function MyTitleTable({ titles }) {
       hasToolbar
       autoHeight
       rowHeight={100}
-      initialState={{
-        sorting: {
-          sortModel: [{ field: "approved_status_id", sort: "asc" }],
-        },
-        pinnedColumns: { left: ["title"], right: ["actions"] },
-      }}
+      initialState={initialState}
     />
   );
 }
