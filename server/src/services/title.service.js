@@ -30,7 +30,9 @@ const titleService = {
     return { data: sortGenres(response) };
   },
   getOne: async (params = {}) => {
-    const response = await Title.findOne(params);
+    const response = await Title.findOne(params)
+      .populate('approved_status_id')
+      .populate('status_id');
     return response;
   },
   random: async (count, params = {}) => {
