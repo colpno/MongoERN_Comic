@@ -4,7 +4,7 @@ export const createTitleFormValidation = Yup.object({
   title: Yup.string()
     .max(255, "Giới hạn độ dài là 255 ký tự.")
     .required("Tiêu đề truyện không được để trống."),
-  status: Yup.string().oneOf(["vis", "inv"]).required("Trạng thái truyện không được để trống."),
+  status_id: Yup.string().oneOf(["vis", "inv"]).required("Trạng thái truyện không được để trống."),
   genres: Yup.array()
     .min(1, "Truyện cần phải có tối thiểu 1 thể loại.")
     .max(3, "Truyện có tối đa 3 thể loại.")
