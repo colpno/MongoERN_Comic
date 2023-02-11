@@ -14,6 +14,7 @@ const titleController = {
 
       const params = transformQueryParams(query);
       const response = await titleService.getAll(params);
+      response.data = response.data.filter((title) => title.approved_status_id && title.status_id);
 
       if (response.length === 0 || response.data?.length === 0) {
         return res.status(200).json({

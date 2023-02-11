@@ -13,6 +13,9 @@ const chapterController = {
 
       const params = transformQueryParams(query);
       const response = await chapterService.getAll(params);
+      response.data = response.data.filter(
+        (chapter) => chapter.approved_status_id && chapter.status_id
+      );
 
       if (response.length === 0 || response.data?.length === 0) {
         return res.status(200).json({
