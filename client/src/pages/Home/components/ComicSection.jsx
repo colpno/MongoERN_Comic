@@ -18,14 +18,6 @@ function ComicSection() {
   const [titles, setTitles] = useState({ top5: [], approvedTitles: [] });
   const [titlesByGenre, setTitlesByGenre] = useState([]);
 
-  const getConfirmedTitles = (array) => {
-    const confirmedTitles = array.filter(
-      (title) => title.approved_status_id.code === "apd" && title.status_id.code === "vis"
-    );
-
-    return confirmedTitles;
-  };
-
   useEffect(() => {
     const genreLength = genres.length;
     const data = genres.map((genre, genreIndex) => {
@@ -69,17 +61,15 @@ function ComicSection() {
         const titlesQueryParams = {
           genres_in: allGenres,
           _embed: JSON.stringify([
-            { collection: "approved_status_id", fields: "-_id code" },
-            { collection: "status_id", fields: "-_id code" },
+            { collection: "approved_status_id", fields: "-_id code", match: { code: "apd" } },
+            { collection: "status_id", fields: "-_id code", match: { code: "vis" } },
           ]),
-          _fields: "-__v -_guid -cover.cloud_public_id",
         };
 
         titleService.getAll(titlesQueryParams, false).then((titleResult) => {
-          const approvedTitles = getConfirmedTitles(titleResult.data);
-          const top5 = sortArray(approvedTitles, "like", "desc").slice(0, 5);
+          const top5 = sortArray(titleResult.data, "like", "desc").slice(0, 5);
 
-          setTitles({ top5, approvedTitles });
+          setTitles({ top5, approvedTitles: titleResult.data });
           setGenres(genresResult.data);
         });
       })

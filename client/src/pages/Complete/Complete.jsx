@@ -21,14 +21,10 @@ function Complete() {
             { collection: "approved_status_id", fields: "-_id code", match: { code: "apd" } },
             { collection: "status_id", fields: "-_id code", match: { code: "vis" } },
           ]),
-          _fields: "-__v -_guid -cover.cloud_public_id",
         },
         false
       )
-      .then((response) => {
-        const approvedTitles = response.data.filter((title) => title.approved_status_id);
-        setTitles(approvedTitles);
-      })
+      .then((response) => setTitles(response.data))
       .catch((error) => console.error(error));
   };
 

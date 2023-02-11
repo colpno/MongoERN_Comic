@@ -30,6 +30,10 @@ function Search() {
     _order: initialValues.order,
     _page: pagination.page,
     _limit: pagination.limit,
+    _embed: JSON.stringify([
+      { collection: "approved_status_id", fields: "-_id code", match: { code: "apd" } },
+      { collection: "status_id", fields: "-_id code", match: { code: "vis" } },
+    ]),
   });
 
   const genreOptions = useMemo(
