@@ -17,8 +17,7 @@ function Weekly() {
   const TITLES_PER_PAGE = 15;
   const today = new Date().getDay();
   const [titles, setTitles] = useState([]);
-  const { pagination, setPaginationTotal, setLastElement } =
-    useInfinitePagination(TITLES_PER_PAGE);
+  const { pagination, setPaginationTotal, setLastElement } = useInfinitePagination(TITLES_PER_PAGE);
   const [limit, setLimit] = useState(TITLES_PER_PAGE);
 
   const getShortDayLabel = (numberInDay) => {
@@ -35,35 +34,29 @@ function Weekly() {
     [titles]
   );
 
-  const fetchTitles = (selectedDay) => {
+  const fetchTitles = (selectedDay, isNextPage = false) => {
     titleService
       .getAll(
         {
           release_day: selectedDay,
           _page: pagination.page,
           _limit: pagination.limit,
+          _embed: JSON.stringify([
+            { collection: "approved_status_id", fields: "-_id code", match: { code: "apd" } },
+            { collection: "status_id", fields: "-_id code", match: { code: "vis" } },
+          ]),
+          _fields: "-__v -_guid -cover.cloud_public_id",
         },
         false
       )
       .then((response) => {
-        setTitles(response.data);
-        setPaginationTotal(response.paginate.total);
-      })
-      .catch((error) => console.error(error));
-  };
-
-  const scrollFetchTitles = (selectedDay) => {
-    titleService
-      .getAll(
-        {
-          releaseDay: selectedDay,
-          _page: pagination.page,
-          _limit: pagination.limit,
-        },
-        false
-      )
-      .then((response) => {
-        setTitles((prev) => [...prev, ...response.data]);
+        const approvedTitles = response.data.filter((title) => title.approved_status_id);
+        if (!isNextPage) {
+          setTitles(approvedTitles);
+          setPaginationTotal(response.paginate.total);
+        } else {
+          setTitles((prev) => [...prev, ...approvedTitles]);
+        }
       })
       .catch((error) => console.error(error));
   };
@@ -79,14 +72,12 @@ function Weekly() {
   }, []);
 
   useEffect(() => {
-    scrollFetchTitles(dayFilter);
+    fetchTitles(dayFilter, true);
   }, [pagination.page]);
 
   return (
     <div className={cx("weekly-page")}>
-      <div className={cx("slider")}>
-        {titles && <BannerSlider images={slider} />}
-      </div>
+      <div className={cx("slider")}>{titles && <BannerSlider images={slider} />}</div>
       <div className={cx("notice-wrapper")}>
         <Container>
           <img src={Calendar} alt="Calendar" />
@@ -103,11 +94,7 @@ function Weekly() {
       />
       {titles.length > 0 ? (
         <Container className="cards-content">
-          <CardList
-            wrap
-            data={titles.slice(0, limit)}
-            col={{ xs: 6, sm: 4, md: 20 }}
-          />
+          <CardList wrap data={titles.slice(0, limit)} col={{ xs: 6, sm: 4, md: 20 }} />
           <div ref={setLastElement} />
         </Container>
       ) : (
