@@ -26,6 +26,7 @@ const titleService = {
 
     if (_limit || (_sort && _order)) {
       const response = await paginateSort(params, Title);
+      response.data = sortGenres(response.data);
       return response;
     }
 
@@ -36,7 +37,7 @@ const titleService = {
     const response = await Title.findOne(params)
       .populate('approved_status_id')
       .populate('status_id');
-    return response;
+    return sortGenres(response);
   },
   random: async (count, params = {}) => {
     const response = await Title.aggregate([{ $match: params }, { $sample: { size: +count } }]);
