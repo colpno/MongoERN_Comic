@@ -32,6 +32,9 @@ const uploadContents = async (contents, titleGuid, chapterGuid) => {
 
 const chapterService = {
   getAll: async (params = {}) => {
+    params._fields = `-__v -_guid -cover.cloud_public_id${
+      params._fields ? ` ${params._fields}` : ''
+    }`;
     const { _page, _limit, _sort, _order, _fields, _embed, ...others } = params;
 
     if (_limit || (_sort && _order)) {

@@ -4,6 +4,7 @@ import { MIN_MONTH, MAX_YEAR } from '../validations/index.js';
 
 const incomeService = {
   getAll: async (params = {}) => {
+    params._fields = `-__v${params._fields ? ` ${params._fields}` : ''}`;
     const { _page, _limit, _sort, _order, _fields, _embed, ...others } = params;
 
     if (_limit || (_sort && _order)) {

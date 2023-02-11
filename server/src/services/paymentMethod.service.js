@@ -3,6 +3,7 @@ import { PaymentMethod } from '../models/index.js';
 
 const chapterService = {
   getAll: async (params = {}) => {
+    params._fields = `-__v${params._fields ? ` ${params._fields}` : ''}`;
     const { _page, _limit, _sort, _order, _fields, ...others } = params;
 
     if (_limit || (_sort && _order)) {
