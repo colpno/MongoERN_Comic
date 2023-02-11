@@ -15,11 +15,7 @@ function SearchDropdownList({ searchResult }) {
       {searchResult.length > 0 ? (
         <div className={cx("dropdown")}>
           <Scrollbar yAxis>
-            <SearchDropdownGroup
-              cx={cx}
-              searchResult={searchResult}
-              label="Truyện chính thức"
-            />
+            <SearchDropdownGroup cx={cx} searchResult={searchResult} />
           </Scrollbar>
         </div>
       ) : (

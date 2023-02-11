@@ -1,11 +1,10 @@
-@use "assets/styles/variables";
+@use "assets/styles/variables" as var;
 
 .dropdown {
-  background: variables.$white;
-  color: variables.$black;
-  padding: 0 0 10px 10px;
-  width: 404px;
-  max-height: calc(60vh - variables.$header-height);
+  background: var.$white;
+  color: var.$black;
+  width: 350px;
+  max-height: calc(60vh - var.$header-height);
   border: 1px solid #d7d7d7;
   border-radius: 0 0 10px 10px;
   box-shadow: 0 5px 10px 4px rgb(0 0 0 / 0.2);
@@ -16,16 +15,9 @@
   overflow: hidden;
 
   &__group {
-    padding: 6px 0;
   }
   &__group:not(:last-child) {
     border-bottom: 1px solid #d7d7d7;
-  }
-
-  &__group__title {
-    margin: 10px 0;
-    color: variables.$txt-black;
-    font-weight: 500;
   }
 
   &__group__figure {
@@ -40,28 +32,45 @@
     }
   }
 
-  .dropdown__group__figure__figcaption {
-    flex-grow: 1;
+  .dropdown {
+    &__item {
+      padding: 10px 0 10px 20px;
+      background-color: var.$grey-100;
+      border-top: 1px solid var.$grey-400;
+      border-bottom: 1px solid var.$grey-400;
 
-    .title {
-      font-size: 15px;
-      margin-bottom: 10px;
-      -webkit-line-clamp: 2;
+      &:not(:last-child) {
+        margin-bottom: 10px;
+      }
     }
 
-    > * {
-      color: #020202;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      line-height: normal;
-    }
+    &__group__figure {
+      margin-bottom: 0;
 
-    .author {
-      font-size: 14px;
-      -webkit-line-clamp: 1;
-      font-weight: 400;
-      -webkit-line-clamp: 1;
+      &__figcaption {
+        flex-grow: 1;
+
+        .title {
+          font-size: 15px;
+          margin-bottom: 10px;
+          -webkit-line-clamp: 2;
+        }
+
+        > * {
+          color: #020202;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          line-height: normal;
+        }
+
+        .author {
+          font-size: 14px;
+          -webkit-line-clamp: 1;
+          font-weight: 400;
+          -webkit-line-clamp: 1;
+        }
+      }
     }
   }
 }

@@ -2,10 +2,9 @@ import PropTypes from "prop-types";
 
 import { Button } from "components";
 
-function SearchDropdownGroup({ cx, searchResult, label }) {
+function SearchDropdownGroup({ cx, searchResult }) {
   return (
     <div className={cx("dropdown__group")}>
-      <p className={cx("dropdown__group__title")}>{label}</p>
       <ul>
         {searchResult.map((ttl) => {
           return (
@@ -15,9 +14,7 @@ function SearchDropdownGroup({ cx, searchResult, label }) {
                   <div className={cx("box-img")}>
                     <img src={ttl.cover.source} alt="title" />
                   </div>
-                  <figcaption
-                    className={cx("dropdown__group__figure__figcaption")}
-                  >
+                  <figcaption className={cx("dropdown__group__figure__figcaption")}>
                     <h6 className={cx("title")}>{ttl.title}</h6>
                     <span className={cx("author")}>{ttl.author}</span>
                   </figcaption>
@@ -48,7 +45,6 @@ SearchDropdownGroup.propTypes = {
       ]).isRequired,
     }).isRequired
   ).isRequired,
-  label: PropTypes.string.isRequired,
 };
 
 export default SearchDropdownGroup;

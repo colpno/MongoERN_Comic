@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 import { AiFillCloseCircle } from "react-icons/ai";
@@ -17,17 +16,9 @@ function Search() {
   const [searchValue, setSearchValue] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [showResult, setShowResult] = useState(true);
-  const [titles, setTitles] = useState([]);
   const searchText = useDebounce(searchValue, 500);
 
   const searchRef = useClickOutSide(showResult, () => showResult && setShowResult(false));
-
-  const fetchData = () => {
-    titleService
-      .getAll({}, false)
-      .then((response) => setTitles(response))
-      .catch((error) => console.error(error));
-  };
 
   const handleClear = () => {
     setSearchValue("");
@@ -35,15 +26,15 @@ function Search() {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
-
-  useEffect(() => {
     if (searchText.length > 0) {
+      const params = {
+        _or: JSON.stringify([{ title_like: searchText }, { author_like: searchText }]),
+      };
+
       titleService
-        .getAll({}, false)
+        .getAll(params, false)
         .then((response) => {
-          const searched = useSearch(response, searchValue, 3);
+          const searched = useSearch(response.data, searchValue, ["title", "author"]);
           setSearchResult(searched);
         })
         .catch((error) => console.error(error));
@@ -59,7 +50,7 @@ function Search() {
   return (
     <div className={cx("search")} ref={searchRef}>
       <div className={cx("wrapper")}>
-        <Button wrapper to="/search" className={cx("search-extend")}>
+        <Button wrapper to="/search" className={cx("search-extend")} title="Tìm kiếm nâng cao">
           <MdOutlineOpenInNew className={cx("icon")} />
         </Button>
         <input
@@ -77,7 +68,9 @@ function Search() {
         )}
         <IoSearchOutline className={cx("search__icon")} />
       </div>
-      {showResult && searchText && <SearchDropdownList cx={cx} searchResult={searchResult} />}
+      {showResult && searchResult.length > 0 && (
+        <SearchDropdownList cx={cx} searchResult={searchResult} />
+      )}
     </div>
   );
 }
