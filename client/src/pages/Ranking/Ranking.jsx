@@ -23,10 +23,18 @@ function Ranking() {
           _order: "asc",
           _limit: 50,
           _page: 1,
+          _embed: JSON.stringify([
+            { collection: "approved_status_id", fields: "-_id code", match: { code: "apd" } },
+            { collection: "status_id", fields: "-_id code", match: { code: "vis" } },
+          ]),
+          _fields: "-__v -_guid -cover.cloud_public_id",
         },
         false
       )
-      .then((response) => setTitles(response.data))
+      .then((response) => {
+        const approvedTitles = response.data.filter((title) => title.approved_status_id);
+        setTitles(approvedTitles);
+      })
       .catch((error) => console.error(error));
   };
 

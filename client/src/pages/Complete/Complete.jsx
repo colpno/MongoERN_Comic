@@ -14,8 +14,21 @@ function Complete() {
 
   const fetchData = () => {
     titleService
-      .getAll({ release_day: "finished" }, false)
-      .then((response) => setTitles(response.data))
+      .getAll(
+        {
+          release_day: "finished",
+          _embed: JSON.stringify([
+            { collection: "approved_status_id", fields: "-_id code", match: { code: "apd" } },
+            { collection: "status_id", fields: "-_id code", match: { code: "vis" } },
+          ]),
+          _fields: "-__v -_guid -cover.cloud_public_id",
+        },
+        false
+      )
+      .then((response) => {
+        const approvedTitles = response.data.filter((title) => title.approved_status_id);
+        setTitles(approvedTitles);
+      })
       .catch((error) => console.error(error));
   };
 
