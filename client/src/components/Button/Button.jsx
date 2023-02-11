@@ -16,6 +16,7 @@ function Button(props) {
     disabled,
     target,
     type,
+    title,
 
     primary,
     secondary,
@@ -96,7 +97,7 @@ function Button(props) {
     },
     className
   );
-  const attributes = { onClick, type, ...others };
+  const attributes = { onClick, type, title, ...others };
   attributes.target = target || null;
   attributes.type = type || "button";
 
@@ -127,6 +128,7 @@ Button.propTypes = {
   disabled: PropTypes.bool,
   target: PropTypes.string,
   type: PropTypes.string,
+  title: PropTypes.string,
 
   primary: PropTypes.bool,
   secondary: PropTypes.bool,
@@ -172,6 +174,7 @@ Button.defaultProps = {
   disabled: false,
   target: "",
   type: "",
+  title: "",
 
   primary: false,
   secondary: false,
