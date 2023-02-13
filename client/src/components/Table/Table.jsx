@@ -245,7 +245,7 @@ Table.defaultProps = {
   height: null,
   autoHeight: false,
   rowHeight: "auto",
-  rowsPerPageOptions: [2, 25, 50, 100],
+  rowsPerPageOptions: [25, 50, 100],
   hasToolbar: true,
   disableColumnFilter: false,
   disableDensitySelector: false,
