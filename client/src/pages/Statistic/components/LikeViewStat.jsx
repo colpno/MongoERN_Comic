@@ -31,7 +31,8 @@ function LikeViewStat({ setLoading, toastEmitter }) {
 
   const myTitles = useSelector((state) => state.title.myTitles);
   const titles = useMemo(() => {
-    if (myTitles.length > 0) return sortArray([...myTitles], "title", "asc");
+    const approvedTitles = myTitles.filter((title) => title.approved_status_id.code === "apd");
+    if (myTitles.length > 0) return sortArray([...approvedTitles], "title", "asc");
     return [];
   }, [myTitles]);
   const [chapters, setChapters] = useState([]);
@@ -42,7 +43,10 @@ function LikeViewStat({ setLoading, toastEmitter }) {
   const fetchChapters = (params) => {
     setLoading(true);
 
-    // get only title and _id fields
+    params._embed = JSON.stringify([
+      { collection: "approved_status_id", fields: "-_id code", match: { code: "apd" } },
+      { collection: "status_id", fields: "-_id code", match: { code: "vis" } },
+    ]);
     params._fields = "title";
 
     chapterService
