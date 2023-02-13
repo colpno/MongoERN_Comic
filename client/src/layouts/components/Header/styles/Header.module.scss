@@ -11,8 +11,18 @@
   z-index: 20;
 }
 
-.desktop-screen {
-  display: flex;
+.left {
+  align-items: center;
+
+  :global(.swiper-button-next),
+  :global(.swiper-button-prev) {
+    top: 0;
+    translate: 0 0;
+  }
+}
+
+.right {
+  justify-content: flex-end;
   align-items: center;
 }
 
@@ -29,7 +39,7 @@
 
 .sub-navbar--toggle {
   color: var.$white;
-  margin: 0 3rem 0 2rem;
+  // margin: 0 3rem 0 2rem;
 
   display: none;
 
@@ -94,6 +104,7 @@
 @media (max-width: 996px) {
   .sub-navbar--toggle {
     display: block;
+    width: fit-content;
   }
 
   .nav-menu,

@@ -71,7 +71,9 @@ function MyTitle() {
       </Row>
       {hasData ? (
         <Row>
-          <MyTitleTable titles={titles} />
+          <Col>
+            <MyTitleTable titles={titles} />
+          </Col>
         </Row>
       ) : (
         <NoData>

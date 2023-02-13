@@ -1,6 +1,6 @@
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
-import { Container } from "react-bootstrap";
+import { Container, Row } from "react-bootstrap";
 import { FaBars } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
@@ -34,7 +34,7 @@ function Header({ menu }) {
     <>
       <header className={cx("header")}>
         <Container fluid="md">
-          <div className={cx("desktop-screen")}>
+          <Row className={cx("desktop-screen")}>
             <div className={cx("logo")}>
               <Button wrapper to="/">
                 <Logo className={cx("logo")} title="Trang chủ" />
@@ -70,7 +70,7 @@ function Header({ menu }) {
             </Slider>
             <Search />
             <Avatar />
-          </div>
+          </Row>
         </Container>
       </header>
       <ToggleableSubNavbar menu={MOBILE_NAV_MENU} />

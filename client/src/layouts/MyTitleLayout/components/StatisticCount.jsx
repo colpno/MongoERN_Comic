@@ -14,8 +14,8 @@ import IncomePopup from "./IncomePopup";
 
 const cx = classNames.bind(styles);
 
-// INFO: 10K likes = 1M vnd
-// INFO: 1 like = 100 vnd
+// INFO: 10K likes = 100K vnd
+// INFO: 1 like = 10 vnd
 function StatisticCount() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
@@ -34,8 +34,16 @@ function StatisticCount() {
   };
 
   useEffect(() => {
+    const params = {
+      user_id: user._id,
+      _embed: JSON.stringify([
+        { collection: "approved_status_id", fields: "-_id code" },
+        { collection: "status_id", fields: "-_id code" },
+      ]),
+    };
+
     titleService
-      .getAll({ user_id: user._id })
+      .getAll(params)
       .then((response) => {
         setTitles(response.data);
         dispatch(setMyTitles(response.data));
@@ -56,46 +64,50 @@ function StatisticCount() {
   return (
     <Container className={cx("statistic-count")}>
       <Row>
-        <Col className={cx("statistic-count__col")}>
-          <BookLine className={cx("statistic-count__total-title__icon")} />
-          <p className={cx("statistic-count__total-title__label")}>Tổng số truyện</p>
-          <strong className={cx("statistic-count__total-title__number")}>
-            {roundNumByUnit(stat.totalTitles)}
-          </strong>
-        </Col>
-        <Col className={cx("statistic-count__col")}>
-          <EyeLine className={cx("statistic-count__view__icon")} />
-          <p className={cx("statistic-count__view__label")}>Lượt xem</p>
-          <strong className={cx("statistic-count__view__number")}>
-            {roundNumByUnit(stat.views)}
-          </strong>
-        </Col>
-        <Col className={cx("statistic-count__col")}>
-          <ThumbUpLine className={cx("statistic-count__view__icon")} />
-          <p className={cx("statistic-count__like__label")}>Lượt thích</p>
-          <strong className={cx("statistic-count__like__number")}>
-            {roundNumByUnit(stat.likes)}
-          </strong>
-        </Col>
-        <Col className={cx("statistic-count__col")}>
-          <ChatLine className={cx("statistic-count__comment__icon")} />
-          <p className={cx("statistic-count__comment__label")}>Lượt bình luận</p>
-          <strong className={cx("statistic-count__comment__number")}>
-            {roundNumByUnit(stat.comments)}
-          </strong>
-        </Col>
-        <Col className={cx("statistic-count__col")}>
-          <DollarLine className={cx("statistic-count__income__icon")} />
-          <div className={cx("statistic-count__label-container")}>
-            <p className={cx("statistic-count__income__label")}>Thu nhập (VNĐ)</p>
-            <BsQuestionCircle
-              className={cx("statistic-count__income__question-icon")}
-              onClick={handleIncomeExplainClick}
-            />
+        <Col>
+          <div className={cx("statistic-count__group")}>
+            <Col className={cx("statistic-count__col")}>
+              <BookLine className={cx("statistic-count__total-title__icon")} />
+              <p className={cx("statistic-count__total-title__label")}>Tổng số truyện</p>
+              <strong className={cx("statistic-count__total-title__number")}>
+                {roundNumByUnit(stat.totalTitles)}
+              </strong>
+            </Col>
+            <Col className={cx("statistic-count__col")}>
+              <EyeLine className={cx("statistic-count__view__icon")} />
+              <p className={cx("statistic-count__view__label")}>Lượt xem</p>
+              <strong className={cx("statistic-count__view__number")}>
+                {roundNumByUnit(stat.views)}
+              </strong>
+            </Col>
+            <Col className={cx("statistic-count__col")}>
+              <ThumbUpLine className={cx("statistic-count__view__icon")} />
+              <p className={cx("statistic-count__like__label")}>Lượt thích</p>
+              <strong className={cx("statistic-count__like__number")}>
+                {roundNumByUnit(stat.likes)}
+              </strong>
+            </Col>
+            <Col className={cx("statistic-count__col")}>
+              <ChatLine className={cx("statistic-count__comment__icon")} />
+              <p className={cx("statistic-count__comment__label")}>Lượt bình luận</p>
+              <strong className={cx("statistic-count__comment__number")}>
+                {roundNumByUnit(stat.comments)}
+              </strong>
+            </Col>
+            <Col className={cx("statistic-count__col")}>
+              <DollarLine className={cx("statistic-count__income__icon")} />
+              <div className={cx("statistic-count__label-container")}>
+                <p className={cx("statistic-count__income__label")}>Thu nhập (VNĐ)</p>
+                <BsQuestionCircle
+                  className={cx("statistic-count__income__question-icon")}
+                  onClick={handleIncomeExplainClick}
+                />
+              </div>
+              <strong className={cx("statistic-count__income__number", "active")}>
+                {separateNumberDigit(user.income)}
+              </strong>
+            </Col>
           </div>
-          <strong className={cx("statistic-count__income__number", "active")}>
-            {separateNumberDigit(user.income)}
-          </strong>
         </Col>
       </Row>
       <Popup popup={popup} setPopup={setPopup} />

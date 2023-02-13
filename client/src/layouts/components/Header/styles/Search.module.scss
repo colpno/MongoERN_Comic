@@ -1,8 +1,7 @@
 @use "assets/styles/variables" as var;
 
 .search {
-  width: 300px;
-  min-width: 150px;
+  width: calc(14vw + 140px);
   height: 100%;
   display: flex;
   align-items: center;
@@ -16,8 +15,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: inset 0px 4px 0 1px rgb(0 0 0 / 0.04),
-      inset 0 2px 1px 0 rgb(0 0 0 / 0.08), inset 0 -2px 0 1px rgb(0 0 0 / 0.02);
+    box-shadow: inset 0px 4px 0 1px rgb(0 0 0 / 0.04), inset 0 2px 1px 0 rgb(0 0 0 / 0.08),
+      inset 0 -2px 0 1px rgb(0 0 0 / 0.02);
 
     position: relative;
 
@@ -54,8 +53,10 @@
 }
 
 .search-extend {
-  width: 3rem;
-  height: 80%;
+  $size: 32px;
+  width: $size;
+  min-width: $size;
+  height: $size;
   border-radius: 25px;
   background-color: var.$primary;
   margin-left: 4px;
