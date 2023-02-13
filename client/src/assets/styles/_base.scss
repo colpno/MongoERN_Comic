@@ -28,6 +28,10 @@ img {
   opacity: 0.5;
 }
 
+.bold {
+  font-weight: 500;
+}
+
 :where(.line-clamp) {
   @include mixins.singleLineClamp();
 }
