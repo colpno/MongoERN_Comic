@@ -25,7 +25,8 @@ import { BsQuestionCircle } from "react-icons/bs";
 import classNames from "classnames/bind";
 
 import { Popup } from "features";
-import styles from "./Table.module.scss";
+import TablePopup from "./components/TablePopup";
+import styles from "./styles/Table.module.scss";
 
 const cx = classNames.bind(styles);
 
@@ -41,21 +42,6 @@ function CustomFooter() {
     </GridFooterContainer>
   );
 }
-
-const guidePopupContent = () => {
-  return (
-    <Box width="100%">
-      <div className={cx("guide-wrapper")}>
-        <span className={cx("key")}>shift + lăn chuột giữa</span>
-        <span className={cx("guide")}>Cuộn ngang</span>
-      </div>
-      <div className={cx("guide-wrapper")}>
-        <span className={cx("key")}>ctrl + nhấn chuột trái</span>
-        <span className={cx("guide")}>Hủy dòng được chọn</span>
-      </div>
-    </Box>
-  );
-};
 
 function CustomToolBar({ rowsPerPage, setPopup }) {
   const apiRef = useGridApiContext();
@@ -100,12 +86,13 @@ function Table({
   disableColumnFilter,
   disableDensitySelector,
   disableColumnMenu,
+  handleCellCommit,
 }) {
   const [rowsPerPage, setRowsPerPage] = useState(rowsPerPageOptions[0]);
   const [popup, setPopup] = useState({
     trigger: false,
     title: "Các thao tác sẵn có",
-    content: guidePopupContent(),
+    content: <TablePopup />,
   });
 
   const theme = createTheme(
@@ -150,6 +137,7 @@ function Table({
           pagination
           getRowId={(row) => row._id}
           getRowHeight={() => rowHeight}
+          onCellEditCommit={handleCellCommit}
         />
       </ThemeProvider>
       <Popup popup={popup} setPopup={setPopup} />
@@ -238,6 +226,7 @@ Table.propTypes = {
   disableColumnFilter: PropTypes.bool,
   disableDensitySelector: PropTypes.bool,
   disableColumnMenu: PropTypes.bool,
+  handleCellCommit: PropTypes.func,
 };
 
 Table.defaultProps = {
@@ -250,6 +239,7 @@ Table.defaultProps = {
   disableColumnFilter: false,
   disableDensitySelector: false,
   disableColumnMenu: false,
+  handleCellCommit: () => {},
 };
 
 CustomToolBar.propTypes = {

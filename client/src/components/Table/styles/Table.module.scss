@@ -35,28 +35,3 @@
   color: #999;
   cursor: pointer;
 }
-
-.key {
-  padding: 5px;
-  display: inline-block;
-  white-space: nowrap;
-  margin: 0 auto 0 1px;
-  font-size: 13px;
-  line-height: 10px;
-  color: #1a2027;
-  vertical-align: middle;
-  background-color: #f3f6f9;
-  border: 1px solid #cdd2d7;
-  border-radius: 5px;
-  box-shadow: inset 0 -1px 0 #cdd2d7;
-}
-
-.guide {
-  // margin-left: 2rem;
-  width: 50%;
-}
-
-.guide-wrapper {
-  margin-bottom: 0.5rem;
-  display: flex;
-}
