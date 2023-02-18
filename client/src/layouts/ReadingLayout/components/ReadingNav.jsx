@@ -1,23 +1,16 @@
-import { Button } from "components";
 import PropTypes from "prop-types";
 import { memo } from "react";
-import {
-  IoChevronBackCircleOutline,
-  IoChevronForwardCircleOutline,
-} from "react-icons/io5";
+import { IoChevronBackCircleOutline, IoChevronForwardCircleOutline } from "react-icons/io5";
+
+import { Button } from "components";
 
 function ReadingNav({ cx, chapter, totalChapter, titleId }) {
   return (
     <div className={cx("reading-header__nav")}>
       <Button
         text
-        to={`/comic/title/${titleId}/${
-          chapter.order > 1 ? chapter.order - 1 : totalChapter
-        }`}
-        className={cx(
-          "reading-header__nav__left",
-          chapter.order <= 1 ? "disabled" : ""
-        )}
+        to={`/comic/title/${titleId}/${chapter.order > 1 ? chapter.order - 1 : totalChapter}`}
+        className={cx("reading-header__nav__left", chapter.order <= 1 ? "disabled" : "")}
       >
         <IoChevronBackCircleOutline />
       </Button>

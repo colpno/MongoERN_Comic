@@ -8,11 +8,7 @@ function AvatarDropdownList({ cx, isLoggingIn, menu, logoutClick }) {
     <Scrollbar yAxis className={cx("dropdown")}>
       <AvatarDropdownGroup cx={cx} menu={menu.slice(0, menu.length - 1)} />
       {isLoggingIn && (
-        <AvatarDropdownGroup
-          cx={cx}
-          menu={menu.slice(menu.length - 1)}
-          onClick={logoutClick}
-        />
+        <AvatarDropdownGroup cx={cx} menu={menu.slice(menu.length - 1)} onClick={logoutClick} />
       )}
     </Scrollbar>
   );

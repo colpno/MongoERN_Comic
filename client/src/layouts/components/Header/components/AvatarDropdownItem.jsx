@@ -5,12 +5,7 @@ import { Button } from "components";
 
 function AvatarDropdownItem({ children, cx, path, icon, onClick }) {
   return (
-    <Button
-      wrapper
-      to={path}
-      onClick={onClick}
-      className={cx("dropdown__group__link")}
-    >
+    <Button wrapper to={path} onClick={onClick} className={cx("dropdown__group__link")}>
       <span className={cx("icon-box")}>{icon}</span>
       <div className={cx("text-box")}>{children}</div>
       <span className={cx("icon-box")}>

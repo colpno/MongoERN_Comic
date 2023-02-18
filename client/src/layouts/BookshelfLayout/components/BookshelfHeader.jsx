@@ -37,10 +37,7 @@ function BookshelfHeader() {
                 <Button
                   wrapper
                   to={item.href}
-                  className={cx(
-                    "label",
-                    pathName.includes(item.href) ? "active" : ""
-                  )}
+                  className={cx("label", pathName.includes(item.href) ? "active" : "")}
                 >
                   {item.label}
                 </Button>

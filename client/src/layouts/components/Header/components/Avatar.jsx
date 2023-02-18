@@ -3,8 +3,7 @@ import { useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
 import { useSelector } from "react-redux";
 
-import { Image } from "components";
-import { Button } from "components";
+import { Button, Image } from "components";
 import { useClickOutSide, useLogout } from "hooks";
 import styles from "../styles/Avatar.module.scss";
 import getAvatarMenu from "../utils/getAvatarMenu";
@@ -39,12 +38,7 @@ function Avatar() {
       </Button>
 
       {showMenu && (
-        <AvatarDropdownList
-          cx={cx}
-          isLoggingIn={isLoggingIn}
-          menu={menu}
-          logoutClick={logout}
-        />
+        <AvatarDropdownList cx={cx} isLoggingIn={isLoggingIn} menu={menu} logoutClick={logout} />
       )}
     </div>
   );

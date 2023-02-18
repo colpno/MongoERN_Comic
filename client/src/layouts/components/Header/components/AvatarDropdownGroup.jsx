@@ -11,13 +11,7 @@ function AvatarDropdownGroup({ cx, menu, onClick }) {
             const { path, label, icon } = item;
 
             return (
-              <AvatarDropdownItem
-                cx={cx}
-                path={path}
-                icon={icon}
-                onClick={onClick}
-                key={index2}
-              >
+              <AvatarDropdownItem cx={cx} path={path} icon={icon} onClick={onClick} key={index2}>
                 <span className={cx("label")}>{label}</span>
               </AvatarDropdownItem>
             );

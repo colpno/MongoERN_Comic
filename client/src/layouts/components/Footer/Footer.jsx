@@ -51,9 +51,7 @@ function Footer() {
             <ImFacebook2 />
           </Link>
         </div>
-        <p className={cx("footer__copyright")}>
-          Copyright. All rights reserved.
-        </p>
+        <p className={cx("footer__copyright")}>Copyright. All rights reserved.</p>
       </div>
       <BackToTop />
     </footer>
