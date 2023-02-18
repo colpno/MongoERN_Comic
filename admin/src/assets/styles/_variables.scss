@@ -17,38 +17,34 @@
 
 // Shade the color if the weight is positive, else tint it
 @function shift-color($color, $weight) {
-  @return if(
-    $weight > 0,
-    shade-color($color, $weight),
-    tint-color($color, -$weight)
-  );
+  @return if($weight > 0, shade-color($color, $weight), tint-color($color, -$weight));
 }
 // scss-docs-end color-functions
 // @import "~bootstrap/scss/functions";
 
 // Override bootstrap variables
 $white: #fff;
-$gray-100: #f8f9fa;
-$gray-200: #e9ecef;
-$gray-300: #dee2e6;
-$gray-400: #ced4da;
-$gray-500: #adb5bd;
-$gray-600: #6c757d;
-$gray-700: #495057;
-$gray-800: #343a40;
-$gray-900: #212529;
+$grey-100: #f8f9fa;
+$grey-200: #e9ecef;
+$grey-300: #dee2e6;
+$grey-400: #ced4da;
+$grey-500: #adb5bd;
+$grey-600: #6c757d;
+$grey-700: #495057;
+$grey-800: #343a40;
+$grey-900: #212529;
 $black: #000;
 
-// $grays: (
-//   "100": $gray-100,
-//   "200": $gray-200,
-//   "300": $gray-300,
-//   "400": $gray-400,
-//   "500": $gray-500,
-//   "600": $gray-600,
-//   "700": $gray-700,
-//   "800": $gray-800,
-//   "900": $gray-900,
+// $greys: (
+//   "100": $grey-100,
+//   "200": $grey-200,
+//   "300": $grey-300,
+//   "400": $grey-400,
+//   "500": $grey-500,
+//   "600": $grey-600,
+//   "700": $grey-700,
+//   "800": $grey-800,
+//   "900": $grey-900,
 // );
 
 $blue: #0d6efd;
@@ -290,13 +286,13 @@ $cyan-900: shade-color($cyan, 80%);
 $primary: hsl(0, 100%, 48%);
 $primary-dark: rgb(204, 0, 0);
 $primary-admin: #fa5973;
-$secondary: $gray-600;
+$secondary: $grey-600;
 $success: $green;
 $info: $cyan;
 $warning: $yellow;
 $danger: $red;
-$light: $gray-100;
-$dark: $gray-900;
+$light: $grey-100;
+$dark: $grey-900;
 
 // $theme-colors: (
 //   "primary": $primary,
@@ -314,13 +310,13 @@ $sidebar-width: 300px;
 $min-sidebar-width: 105px;
 $bgc-admin: #f1f6f9;
 $clr-green: hsl(151, 81%, 46%);
-$clr-gray: #636363;
-$clr-gray-faded: #eaeaea;
+$clr-grey: #636363;
+$clr-grey-faded: #eaeaea;
 $clr-white: #fff;
 $clr-black: #2b2b2b;
 
-$border-gray: #e1e1e1;
-$border-gray-dark: #d9d9d9;
+$border-grey: #e1e1e1;
+$border-grey-dark: #d9d9d9;
 
 $txt-white: #fff;
 $txt-black: #020202;

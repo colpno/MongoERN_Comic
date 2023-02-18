@@ -1,0 +1,51 @@
+@use "assets/styles/variables" as var;
+@use "assets/styles/mixins";
+
+.title {
+  font-weight: 500;
+
+  &-wrapper {
+    @include mixins.singleLineClamp();
+
+    display: flex;
+    align-items: center;
+  }
+}
+
+.box-img {
+  $size: 80px;
+  width: $size;
+  height: $size;
+  border: 1px solid var.$grey-400;
+  border-radius: 1rem;
+  margin-right: 1rem;
+  overflow: hidden;
+  user-select: none;
+
+  display: flex;
+  flex-shrink: 0;
+}
+
+.timestamp {
+  color: #888;
+}
+
+.icon {
+  $size: 18px;
+  width: $size;
+  height: $size;
+  margin-left: 6px;
+}
+
+.number-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.comment-icon {
+  color: #92cbd7;
+}
+
+.view-icon {
+  color: #928925;
+}

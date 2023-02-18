@@ -5,7 +5,7 @@ import { AiFillCloseCircle } from "react-icons/ai";
 import { IoSearchOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 
-import { setSearchText } from "libs/redux/slices/globalSlice";
+import { setSearchText } from "libs/redux/slices/global.slice";
 import styles from "./Search.module.scss";
 
 const cx = classNames.bind(styles);

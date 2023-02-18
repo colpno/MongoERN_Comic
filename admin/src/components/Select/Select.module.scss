@@ -7,7 +7,7 @@
 
 .select {
   height: var.$field-height;
-  border: 1px solid var.$gray-400;
+  border: 1px solid var.$grey-400;
   padding-right: 4px !important;
   padding: var.$field-padding;
   display: flex;
@@ -46,7 +46,7 @@
   border: 0;
 
   &:not(:last-child) {
-    border-bottom: 1px solid var.$border-gray-dark;
+    border-bottom: 1px solid var.$border-grey-dark;
   }
 
   + .option {

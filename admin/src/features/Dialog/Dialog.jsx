@@ -5,18 +5,18 @@ import styles from "./Dialog.module.scss";
 
 const cx = classNames.bind(styles);
 
-function Dialog({ children, onClickOutside }) {
+function Dialog({ children, handleClickOutside }) {
   return (
     <div className={cx("dialog")}>
       {children}
-      <div className={cx("background")} onClick={onClickOutside} />
+      <div className={cx("background")} onClick={handleClickOutside} />
     </div>
   );
 }
 
 Dialog.propTypes = {
   children: PropTypes.node.isRequired,
-  onClickOutside: PropTypes.func.isRequired,
+  handleClickOutside: PropTypes.func.isRequired,
 };
 
 export default Dialog;

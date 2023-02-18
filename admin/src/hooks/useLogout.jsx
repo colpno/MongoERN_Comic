@@ -1,20 +1,21 @@
-import authApi from "api/authApi";
-import { logout } from "libs/redux/slices/userSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+
+import { logout } from "libs/redux/slices/user.slice";
+import { authService } from "services";
 
 function useLogout(redirectTo) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    try {
-      await authApi.logout();
-      dispatch(logout());
-      navigate(redirectTo);
-    } catch (error) {
-      throw new Error(error);
-    }
+    authService
+      .logout()
+      .then(() => {
+        dispatch(logout());
+        navigate(redirectTo);
+      })
+      .catch((error) => console.error(error));
   };
 
   return { logout: handleLogout };

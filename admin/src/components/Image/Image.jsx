@@ -6,13 +6,13 @@ import styles from "./Image.module.scss";
 
 const cx = classNames.bind(styles);
 
-function Image({ src, alt, className, cn, width, height }) {
+function Image({ src, alt, handleError, className, cn, width, height }) {
   return (
     <div
       className={cx("image-wrapper", className)}
       style={{ width: width !== 0 && width, height: height !== 0 && height }}
     >
-      <img src={src} alt={alt} className={(cx("image"), cn("image"))} />
+      <img src={src} alt={alt} onError={handleError} className={(cx("image"), cn("image"))} />
     </div>
   );
 }
@@ -20,6 +20,7 @@ function Image({ src, alt, className, cn, width, height }) {
 Image.propTypes = {
   src: PropTypes.string.isRequired,
   alt: PropTypes.string.isRequired,
+  handleError: PropTypes.func,
   className: PropTypes.string,
   cn: PropTypes.func,
   width: PropTypes.number,
@@ -31,6 +32,7 @@ Image.defaultProps = {
   height: 0,
   cn: () => {},
   className: "",
+  handleError: () => {},
 };
 
 export default Image;

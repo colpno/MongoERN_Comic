@@ -1,78 +1,17 @@
-/* eslint-disable no-unused-vars */
-import { BiCategoryAlt, BiSpreadsheet } from "react-icons/bi";
-import { BsFilePost } from "react-icons/bs";
-import { FaChartBar, FaUsers } from "react-icons/fa";
-import { MdAdminPanelSettings, MdPayment } from "react-icons/md";
-
-export default function getAdminSideBarMenu() {
-  return [
-    {
-      groupLabel: "Management",
-      subMenu: [
-        {
-          to: `/titles`,
-          icon: BsFilePost,
-          label: "Titles",
-        },
-        {
-          to: `/chapters`,
-          icon: BiSpreadsheet,
-          label: "Chapters",
-        },
-        {
-          to: `/genres`,
-          icon: BiCategoryAlt,
-          label: "Genres",
-        },
-        {
-          to: `/members`,
-          icon: FaUsers,
-          label: "Members",
-        },
-        {
-          to: `/administrators`,
-          icon: MdAdminPanelSettings,
-          label: "Administrators",
-        },
-        // {
-        //   to: `/payment-methods`,
-        //   icon: MdPayment,
-        //   label: "Payment Methods",
-        // },
-      ],
-    },
-    // {
-    //   groupLabel: "Stats",
-    //   subMenu: [
-    //     {
-    //       to: `/income`,
-    //       icon: FaChartBar,
-    //       label: "Income",
-    //     },
-    //     // {
-    //     //   to: `${baseURL}/visit`,
-    //     //   icon: CircleC,
-    //     //   label: "Visits",
-    //     // },
-    //   ],
-    // },
-  ];
-}
-
 export const getMonthArray = () => {
   return [
-    "Tháng 1",
-    "Tháng 2",
-    "Tháng 3",
-    "Tháng 4",
-    "Tháng 5",
-    "Tháng 6",
-    "Tháng 7",
-    "Tháng 8",
-    "Tháng 9",
-    "Tháng 10",
-    "Tháng 11",
-    "Tháng 12",
+    { number: 1, standard: "Tháng 1", short: "T1", long: "Tháng một" },
+    { number: 2, standard: "Tháng 2", short: "T2", long: "Tháng hai" },
+    { number: 3, standard: "Tháng 3", short: "T3", long: "Tháng ba" },
+    { number: 4, standard: "Tháng 4", short: "T4", long: "Tháng bốn" },
+    { number: 5, standard: "Tháng 5", short: "T5", long: "Tháng năm" },
+    { number: 6, standard: "Tháng 6", short: "T6", long: "Tháng sáu" },
+    { number: 7, standard: "Tháng 7", short: "T7", long: "Tháng bảy" },
+    { number: 8, standard: "Tháng 8", short: "T8", long: "Tháng tám" },
+    { number: 9, standard: "Tháng 9", short: "T9", long: "Tháng chín" },
+    { number: 10, standard: "Tháng 10", short: "T10", long: "Tháng mười" },
+    { number: 11, standard: "Tháng 11", short: "T11", long: "Tháng mười một" },
+    { number: 12, standard: "Tháng 12", short: "T12", long: "Tháng mười hai" },
   ];
 };
 

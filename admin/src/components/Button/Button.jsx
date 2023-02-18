@@ -16,12 +16,13 @@ function Button(props) {
     disabled,
     target,
     type,
+    title,
 
     primary,
     secondary,
     outline,
     success,
-    gray,
+    grey,
 
     dark90,
     dark80,
@@ -43,16 +44,20 @@ function Button(props) {
     light20,
     light10,
 
+    marginTop1,
+
     wrapper,
     text,
     small,
     large,
+    fullWidth,
     round,
 
     ...others
   } = props;
   const classes = cx(
     wrapper || "btn",
+    fullWidth && "full-width",
     {
       disabled,
 
@@ -60,7 +65,7 @@ function Button(props) {
       secondary,
       outline,
       success,
-      gray,
+      grey,
 
       dark90,
       dark80,
@@ -82,6 +87,8 @@ function Button(props) {
       light20,
       light10,
 
+      marginTop1,
+
       wrapper,
       text,
       round,
@@ -90,7 +97,7 @@ function Button(props) {
     },
     className
   );
-  const attributes = { onClick, type, ...others };
+  const attributes = { onClick, type, title, ...others };
   attributes.target = target || null;
   attributes.type = type || "button";
 
@@ -121,12 +128,13 @@ Button.propTypes = {
   disabled: PropTypes.bool,
   target: PropTypes.string,
   type: PropTypes.string,
+  title: PropTypes.string,
 
   primary: PropTypes.bool,
   secondary: PropTypes.bool,
   outline: PropTypes.bool,
   success: PropTypes.bool,
-  gray: PropTypes.bool,
+  grey: PropTypes.bool,
 
   dark90: PropTypes.bool,
   dark80: PropTypes.bool,
@@ -148,10 +156,13 @@ Button.propTypes = {
   light20: PropTypes.bool,
   light10: PropTypes.bool,
 
+  marginTop1: PropTypes.bool,
+
   wrapper: PropTypes.bool,
   text: PropTypes.bool,
   small: PropTypes.bool,
   large: PropTypes.bool,
+  fullWidth: PropTypes.bool,
   round: PropTypes.bool,
 };
 
@@ -163,12 +174,13 @@ Button.defaultProps = {
   disabled: false,
   target: "",
   type: "",
+  title: "",
 
   primary: false,
   secondary: false,
   outline: false,
   success: false,
-  gray: false,
+  grey: false,
 
   dark90: false,
   dark80: false,
@@ -190,10 +202,13 @@ Button.defaultProps = {
   light20: false,
   light10: false,
 
+  marginTop1: false,
+
   wrapper: false,
   text: false,
   small: false,
   large: false,
+  fullWidth: false,
   round: false,
 };
 

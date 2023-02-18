@@ -1,0 +1,49 @@
+@use "assets/styles/variables" as var;
+@import "swiper/scss";
+@import "swiper/scss/pagination";
+@import "swiper/scss/navigation";
+@import "swiper/scss/thumbs";
+@import "swiper/scss/autoplay";
+@import "swiper/scss/lazy";
+@import "swiper/scss/scrollbar";
+@import "swiper/scss/parallax";
+@import "swiper/scss/effect-fade";
+@import "swiper/scss/effect-cube";
+@import "swiper/scss/effect-flip";
+@import "swiper/scss/effect-cards";
+@import "swiper/scss/effect-coverflow";
+@import "swiper/scss/effect-creative";
+
+.previous,
+.next {
+  color: inherit !important;
+  margin-top: 0 !important;
+  position: relative !important;
+  padding: 0 20px;
+  height: 100% !important;
+  top: 50%;
+  translate: 0 -50%;
+
+  &::after {
+    font-size: inherit !important;
+  }
+
+  &.disable {
+    opacity: 0.4;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  &:not(.disable)::after {
+    // color: var.$black;
+    font-weight: bold;
+  }
+}
+
+.previous {
+  // left: -0px !important;
+}
+
+.next {
+  // right: -0px !important;
+}

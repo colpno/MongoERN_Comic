@@ -1,0 +1,90 @@
+@use "assets/styles/variables";
+
+.footer {
+  background: variables.$clr-black;
+  padding: 50px 0 20px;
+  height: variables.$footer-height;
+  position: relative;
+
+  & * {
+    color: variables.$txt-white;
+    font-size: 18px;
+  }
+
+  &__nav-menu {
+    & ul {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    & li {
+      padding: 0 20px;
+      &:not(:last-child) {
+        border-right: 2px solid variables.$white;
+      }
+    }
+
+    a:hover {
+      color: variables.$txt-white;
+    }
+  }
+
+  &__logo {
+    text-align: center;
+    .logo {
+      width: 166px;
+    }
+  }
+
+  &__address {
+    text-align: center;
+    * {
+      user-select: auto;
+    }
+  }
+
+  &__contact {
+    display: flex;
+    justify-content: center;
+    & > * {
+      padding: 0 12px;
+      user-select: auto;
+    }
+
+    & > *:not(:last-child) {
+      border-right: 2px solid variables.$white;
+    }
+  }
+
+  &__social-media {
+    margin: 0 20px;
+    text-align: center;
+    & * {
+      font-size: 28px;
+    }
+  }
+
+  &__copyright {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #7c7c7c;
+    background: variables.$clr-black;
+  }
+}
+
+.container {
+  align-items: center;
+  & > * {
+    margin-bottom: 20px;
+    line-height: 1.4;
+  }
+}
+
+.divider {
+  width: 50px;
+  margin: 10px auto;
+  background-color: variables.$white;
+  height: 1px;
+}

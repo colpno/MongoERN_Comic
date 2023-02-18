@@ -1,9 +1,6 @@
 import PropTypes from "prop-types";
-import { memo, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { memo } from "react";
 import ReactSelect from "react-select";
-
-import { setSelectedOption } from "libs/redux/slices/selectFieldSlice";
 
 const customStyles = (height) => {
   return {
@@ -39,155 +36,156 @@ const customStyles = (height) => {
 };
 
 function Select({
-  className,
-  field,
+  name,
+  onBlur,
+  value,
+  setValue,
   options,
-  defaultValue,
-  onChange,
-  multi,
+
+  isFormik,
+  multiple,
   disabled,
   searchable,
   autoFocus,
   clearable,
+  maxSelectedOptions,
+
   height,
-  limitSelected,
+  className,
 }) {
-  const dispatch = useDispatch();
-  const [value, setValue] = useState({
-    value: options[0].value,
-    label: options[0].label,
-  });
   const styles = customStyles(height);
 
-  const handleChange = (selected) => {
-    if (multi && selected.length <= limitSelected) {
-      setValue(selected);
-      onChange(selected);
-      return;
-    }
-    if (!multi) {
-      setValue(selected);
-      onChange(selected);
-    }
+  const handleChange = (option) => {
+    // name prop only for formik
+    isFormik ? setValue(name, option) : setValue(option);
   };
 
-  useEffect(() => {
-    dispatch(setSelectedOption(value));
-  }, [value.value]);
+  const limitSelectedValues = () => {
+    if (multiple && maxSelectedOptions > 0) return value.length >= maxSelectedOptions;
+    return false;
+  };
 
   return (
     <ReactSelect
-      className={className}
-      styles={styles}
-      {...field}
       value={value}
       onChange={handleChange}
-      defaultValue={defaultValue.label ? defaultValue : "Select"}
       options={options}
-      isMulti={multi}
+      styles={styles}
+      onBlur={onBlur}
+      className={className}
+      isMulti={multiple}
       isDisabled={disabled}
       isSearchable={searchable}
       autoFocus={autoFocus}
       isClearable={clearable}
+      isOptionDisabled={limitSelectedValues}
     />
   );
 }
 
 Select.propTypes = {
-  className: PropTypes.string,
-  cn: PropTypes.func,
-  height: PropTypes.number,
-  field: PropTypes.shape({
-    name: PropTypes.string,
-    value: PropTypes.string,
-    onBlur: PropTypes.func,
-    onChange: PropTypes.func,
-  }),
-  onChange: PropTypes.func,
+  value: PropTypes.oneOfType([
+    PropTypes.shape({
+      value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      label: PropTypes.string.isRequired,
+    }).isRequired,
+    PropTypes.arrayOf(
+      PropTypes.shape({
+        value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+        label: PropTypes.string.isRequired,
+      }).isRequired
+    ).isRequired,
+  ]).isRequired,
+  setValue: PropTypes.func.isRequired,
   options: PropTypes.arrayOf(
     PropTypes.shape({
-      value: PropTypes.string,
-      label: PropTypes.string,
+      value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      label: PropTypes.string.isRequired,
     }).isRequired
   ).isRequired,
-  defaultValue: PropTypes.shape({
-    value: PropTypes.string,
-    label: PropTypes.string,
-  }),
-  multi: PropTypes.bool,
+
+  name: PropTypes.string,
+  onBlur: PropTypes.func,
+
+  isFormik: PropTypes.bool,
+  multiple: PropTypes.bool,
   disabled: PropTypes.bool,
-  limitSelected: PropTypes.number,
   searchable: PropTypes.bool,
   autoFocus: PropTypes.bool,
   clearable: PropTypes.bool,
+  maxSelectedOptions: PropTypes.number,
+
+  height: PropTypes.number,
+  className: PropTypes.string,
 };
 
 Select.defaultProps = {
-  height: 45,
-  field: {},
-  onChange: () => {},
-  defaultValue: {},
-  multi: false,
+  name: "",
+  onBlur: () => {},
+
+  isFormik: false,
+  multiple: false,
   disabled: false,
   searchable: false,
   autoFocus: false,
   clearable: false,
-  limitSelected: Number.MAX_SAFE_INTEGER,
+  maxSelectedOptions: 0,
+
+  height: 45,
   className: "",
-  cn: () => {},
 };
 
 export default memo(Select);
 
-/* Custom select */
+/* REMOVE: Custom select
 
-// function Select({ field, options, className, onChange }) {
-// const [value, setValue] = useState({
-//   value: options[0].value,
-//   label: options[0].label,
-// });
-// const [showOptions, setShowOptions] = useState(false);
-// const selectRef = useClickOutSide(showOptions, () => setShowOptions(false));
+ function Select({ field, options, className, onChange }) {
+ const [value, setValue] = useState({
+   value: options[0].value,
+   label: options[0].label,
+ });
+ const [showOptions, setShowOptions] = useState(false);
+ const selectRef = useClickOutSide(showOptions, () => setShowOptions(false));
 
-// const handleSelect = (option) => {
-//   setValue({ value: option.value, label: option.label });
+ const handleSelect = (option) => {
+   setValue({ value: option.value, label: option.label });
 
-//   const fakeEvent = {
-//     target: {
-//       value: option.value,
-//     },
-//   };
+   const fakeEvent = {
+     target: {
+       value: option.value,
+     },
+   };
 
-//   onChange(fakeEvent);
-//   setShowOptions(false);
-// };
+   onChange(fakeEvent);
+   setShowOptions(false);
+ };
 
-// return (
-// <div className={cx("wrapper")} ref={selectRef}>
-//   <Button
-//     wrapper
-//     className={`${cx("select")} ${className}`}
-//     onClick={() => setShowOptions(!showOptions)}
-//   >
-//     {value.label}
-//     <BiChevronDown
-//       className={cx("chevron-down", showOptions ? "active" : "")}
-//     />
-//   </Button>
-//   {showOptions && (
-//     <div className={cx("options")}>
-//       {options.map((option) => (
-//         <Button
-//           wrapper
-//           key={option.value}
-//           className={cx("option")}
-//           onClick={() => handleSelect(option)}
-//         >
-//           {option.label}
-//         </Button>
-//       ))}
-//     </div>
-//   )}
-// </div>
-// );
-// }
+ return (
+ <div className={cx("wrapper")} ref={selectRef}>
+   <Button
+     wrapper
+     className={`${cx("select")} ${className}`}
+     onClick={() => setShowOptions(!showOptions)}
+   >
+     {value.label}
+     <BiChevronDown
+       className={cx("chevron-down", showOptions ? "active" : "")}
+     />
+   </Button>
+   {showOptions && (
+     <div className={cx("options")}>
+       {options.map((option) => (
+         <Button
+           wrapper
+           key={option.value}
+           className={cx("option")}
+           onClick={() => handleSelect(option)}
+         >
+           {option.label}
+         </Button>
+       ))}
+     </div>
+   )}
+ </div>
+ );
+ } */

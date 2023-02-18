@@ -1,0 +1,32 @@
+@use "components/Scrollbar/Scrollbar.module.scss" as scl;
+
+.wrapper {
+  position: relative;
+}
+
+.textarea {
+  padding: 5px 10px 1.8rem;
+  font-size: 1rem;
+  width: 100%;
+  border: 1px solid #ced4da;
+  color: #777;
+  outline: none;
+  border-radius: 4px;
+
+  &:global(.is-invalid) {
+    border-color: red;
+  }
+}
+
+.text-length {
+  @extend .scrollbar;
+
+  position: absolute;
+  bottom: 4px;
+  right: 20px;
+  color: #ccc;
+}
+
+.textarea:global(.is-invalid) + .text-length {
+  bottom: 30px;
+}

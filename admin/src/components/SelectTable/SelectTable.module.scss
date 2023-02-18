@@ -1,0 +1,33 @@
+@use "assets/styles/variables" as var;
+
+.options {
+  border: 1px solid var.$border-grey;
+}
+
+.option {
+  padding: 15px 20px;
+  font-size: 1.1em;
+  display: flex;
+  align-items: center;
+
+  &:not(:first-child) {
+    border-top: 1px solid var.$border-grey;
+  }
+
+  input[type="radio"] {
+    $size: 26px;
+    width: $size;
+    height: $size;
+    margin-right: 10px;
+  }
+
+  .image {
+    margin-left: 15px;
+  }
+}
+
+//   &__step__submit {
+//     margin-top: 20px;
+//     padding-left: 90px;
+//     padding-right: 90px;
+//   }

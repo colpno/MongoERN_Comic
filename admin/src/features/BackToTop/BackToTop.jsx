@@ -30,11 +30,7 @@ function BackToTop({ height }) {
   };
 
   return (
-    <Button
-      text
-      className={cx("back-to-top", showToTop || "disabled")}
-      onClick={backToTop}
-    >
+    <Button text className={cx("back-to-top", showToTop || "disabled")} onClick={backToTop}>
       <BiChevronsUp />
     </Button>
   );

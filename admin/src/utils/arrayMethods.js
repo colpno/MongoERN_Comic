@@ -10,9 +10,9 @@ export function makeUnique(array) {
   return Array.from(new Set(array));
 }
 
-export function sort(array, key, order) {
+export function sortArray(array = [], key = "", order = "asc") {
   switch (order.toLowerCase()) {
-    case "asc":
+    case "asc": {
       return array.sort((a, b) => {
         if (typeof a[key] === typeof 1) {
           return a[key] - b[key];
@@ -22,6 +22,7 @@ export function sort(array, key, order) {
         }
         return -1;
       });
+    }
     case "desc":
       return array.sort((a, b) => {
         if (typeof a[key] === typeof 1) {

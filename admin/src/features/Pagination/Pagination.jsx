@@ -2,9 +2,9 @@ import classNames from "classnames/bind";
 import PropTypes from "prop-types";
 import { memo } from "react";
 
-import Button from "components/Button";
+import { Button } from "components";
 import { createArrayFromTo } from "utils";
-import styles from "./assets/Pagination.module.scss";
+import styles from "./Pagination.module.scss";
 
 const cx = classNames.bind(styles);
 
@@ -14,10 +14,7 @@ function Pagination({ pagination, setPagination }) {
   const LIMIT_NEARBY_PAGES = 2;
 
   let firstPage = page > LIMIT_NEARBY_PAGES ? page - LIMIT_NEARBY_PAGES : 1;
-  let lastPage =
-    page < totalPage - LIMIT_NEARBY_PAGES
-      ? page + LIMIT_NEARBY_PAGES
-      : totalPage;
+  let lastPage = page < totalPage - LIMIT_NEARBY_PAGES ? page + LIMIT_NEARBY_PAGES : totalPage;
   if (page <= LIMIT_NEARBY_PAGES + 2) {
     lastPage += LIMIT_NEARBY_PAGES + 3 - page;
   }
@@ -79,10 +76,7 @@ function Pagination({ pagination, setPagination }) {
             ""
           )}
           {lastPage < totalPage ? (
-            <Button
-              className={cx("page")}
-              onClick={() => handlePageChange(totalPage)}
-            >
+            <Button className={cx("page")} onClick={() => handlePageChange(totalPage)}>
               {totalPage}
             </Button>
           ) : (

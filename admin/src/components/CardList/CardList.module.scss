@@ -1,0 +1,46 @@
+@use "assets/styles/variables";
+@use "assets/styles/mixins";
+@use "components/Scrollbar/Scrollbar.module.scss";
+
+.cards-wrapper {
+  margin-bottom: 12px;
+
+  &__head {
+    margin-bottom: 17px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &__title {
+      @include mixins.singleLineClamp();
+    }
+  }
+
+  &__cards {
+    gap: 40px 0;
+    padding: 0 6px;
+
+    :global([class*="col"]) {
+      padding-left: 6px;
+      padding-right: 6px;
+      // width: calc(180px + 0.375rem * 2);
+      min-width: min-content;
+    }
+    &:not(.wrap) :global([class*="row"]) {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+    }
+
+    :global(.card-figure) {
+      padding-bottom: 1.4rem;
+    }
+  }
+}
+
+.drop-row {
+  flex-wrap: nowrap;
+
+  @extend .scrollbar;
+  @extend .x-axis;
+}

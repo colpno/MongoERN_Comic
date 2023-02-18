@@ -1,4 +1,4 @@
-import TextArea from "components/TextArea/TextArea";
+import { TextArea } from "components";
 import PropTypes from "prop-types";
 import { FormGroup } from "react-bootstrap";
 
@@ -14,29 +14,33 @@ function TextAreaField({
 }) {
   const { name } = field;
   const { touched, errors } = form;
-  // const reactQuillRef = useRef();
+  /* REMOVE:
+   const reactQuillRef = useRef();
 
-  // const checkCharacterCount = (event) => {
-  //   const { unprivilegedEditor } = reactQuillRef.current;
-  //   if (
-  //     unprivilegedEditor.getLength() > maxLength &&
-  //     event.key !== "Backspace"
-  //   ) {
-  //     event.preventDefault();
-  //   }
-  // };
+   const checkCharacterCount = (event) => {
+     const { unprivilegedEditor } = reactQuillRef.current;
+     if (
+       unprivilegedEditor.getLength() > maxLength &&
+       event.key !== "Backspace"
+     ) {
+       event.preventDefault();
+     }
+   };
 
-  // useEffect(() => {
-  //   reactQuillRef.current?.editor.root.setAttribute("spellcheck", "false");
-  // }, []);
+   useEffect(() => {
+     reactQuillRef.current?.editor.root.setAttribute("spellcheck", "false");
+   }, []);
+  */
 
   return (
     <FormGroup className="field">
       <TextArea
-        // passRef={reactQuillRef}
         placeholder={placeholder}
         readOnly={readOnly}
-        // onKeyDown={checkCharacterCount}
+        /* REMOVE
+         passRef={reactQuillRef}
+         onKeyDown={checkCharacterCount}
+        */
         rows={rows}
         maxLength={maxLength}
         touched={touched[name]}
@@ -48,30 +52,32 @@ function TextAreaField({
   );
 }
 
-// function TextAreaField(props) {
-//   const { field, form, placeholder, rows, disabled, maxLength, readOnly } =
-//     props;
-//   const { name, value } = field;
-//   const { touched, errors } = form;
+/* REMOVE
+ function TextAreaField(props) {
+   const { field, form, placeholder, rows, disabled, maxLength, readOnly } =
+     props;
+   const { name, value } = field;
+   const { touched, errors } = form;
 
-//   return (
-//     <FormGroup className="field">
-//       <FormControl
-//         {...field}
-//         as="textarea"
-//         placeholder={placeholder}
-//         readOnly={readOnly}
-//         disabled={disabled}
-//         maxLength={maxLength}
-//         rows={rows}
-//         isInvalid={touched[name] && !!errors[name]}
-//         className="field__textarea"
-//       />
-//       <span className="field__textarea__length">{`${value.length}/${maxLength}`}</span>
-//       <Feedback type="invalid">{errors[name]}</Feedback>
-//     </FormGroup>
-//   );
-// }
+   return (
+     <FormGroup className="field">
+       <FormControl
+         {...field}
+         as="textarea"
+         placeholder={placeholder}
+         readOnly={readOnly}
+         disabled={disabled}
+         maxLength={maxLength}
+         rows={rows}
+         isInvalid={touched[name] && !!errors[name]}
+         className="field__textarea"
+       />
+       <span className="field__textarea__length">{`${value.length}/${maxLength}`}</span>
+       <Feedback type="invalid">{errors[name]}</Feedback>
+     </FormGroup>
+   );
+ }
+*/
 
 TextAreaField.propTypes = {
   field: PropTypes.shape({

@@ -24,8 +24,7 @@
 .active {
   background-color: #f0f7fc;
   border-radius: 1vmax;
-  box-shadow: 0 8px 24px 12px rgb(0 0 0 / 0.02),
-    0 2px 12px 2px rgb(0 0 0 / 0.04);
+  box-shadow: 0 8px 24px 12px rgb(0 0 0 / 0.02), 0 2px 12px 2px rgb(0 0 0 / 0.04);
 
   position: relative;
 }
@@ -51,7 +50,7 @@
   &-label {
     font-size: 1em;
     font-weight: 500;
-    color: var.$gray-700;
+    color: var.$grey-700;
     flex-grow: 1;
 
     display: flex;
@@ -71,7 +70,7 @@
   letter-spacing: 1px;
   text-transform: uppercase;
   font-weight: 500;
-  color: var.$gray-600;
+  color: var.$grey-600;
   padding-left: 1rem;
 }
 

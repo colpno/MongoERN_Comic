@@ -2,13 +2,7 @@ import { Popup } from "features";
 import { AdminLayout } from "layouts";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import {
-  Navigate,
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { adminRoutes } from "routes";
 
 const checkLoggedInCanAccessURL = (url) => {

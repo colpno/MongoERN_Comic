@@ -1,20 +1,18 @@
 /* eslint-disable no-unused-vars */
-import { AdminLayout, LoginLayout, ReadingLayout } from "layouts";
+import { AdminLayout, BlankLayout, LoginLayout, ReadingLayout } from "layouts";
 import {
-  AdminManagement,
-  ChapterManagement,
-  GenreManagement,
+  Admins,
+  Chapters,
+  Genres,
   IncomeStatistic,
-  MemberManagement,
-  PaymentMethodManagement,
-  TitleManagement,
+  Members,
+  PaymentMethods,
+  Titles,
   VisitStatistic,
   Login,
   NotFound,
   LoginOTP,
-  Title,
 } from "pages";
-import Reading from "pages/Reading";
 
 export const adminRoutes = [
   {
@@ -29,42 +27,37 @@ export const adminRoutes = [
   },
   {
     path: "/titles",
-    component: TitleManagement,
+    component: Titles,
     layout: AdminLayout,
   },
-  {
-    path: "/title/:titleId",
-    component: Title,
-    layout: AdminLayout,
-  },
-  {
-    path: "/title/:titleId/:chapterId",
-    component: Reading,
-    layout: ReadingLayout,
-  },
+  // {
+  //   path: "/title/:titleId/:chapterId",
+  //   component: Reading,
+  //   layout: BlankLayout,
+  // },
   {
     path: "/chapters",
-    component: ChapterManagement,
+    component: Chapters,
     layout: AdminLayout,
   },
   {
     path: "/genres",
-    component: GenreManagement,
+    component: Genres,
     layout: AdminLayout,
   },
   {
     path: "/members",
-    component: MemberManagement,
+    component: Members,
     layout: AdminLayout,
   },
   {
     path: "/administrators",
-    component: AdminManagement,
+    component: Admins,
     layout: AdminLayout,
   },
   {
     path: "/payment-methods",
-    component: PaymentMethodManagement,
+    component: PaymentMethods,
     layout: AdminLayout,
   },
   // {

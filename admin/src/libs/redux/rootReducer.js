@@ -1,26 +1,29 @@
 import { combineReducers } from "@reduxjs/toolkit";
-import { authPersistConfig } from "libs/redux-persist/authPersistConfig";
 import { persistReducer } from "redux-persist";
+
+import { authPersistConfig } from "libs/redux-persist";
 import {
-  readingChapterReducer,
-  myTitlesReducer,
+  commentReducer,
+  globalReducer,
+  loginReducer,
   paymentMethodReducer,
+  readingChapterReducer,
   selectFieldReducer,
   statisticCountReducer,
   titleReducer,
   userReducer,
 } from "./slices";
-import globalReducer from "./slices/globalSlice";
 
 const rootReducer = combineReducers({
-  user: persistReducer(authPersistConfig, userReducer),
-  statisticCount: statisticCountReducer,
+  comment: commentReducer,
   global: globalReducer,
-  title: titleReducer,
-  chapter: readingChapterReducer,
+  login: loginReducer,
   paymentMethod: paymentMethodReducer,
-  myTitles: myTitlesReducer,
+  reading: readingChapterReducer,
   selectField: selectFieldReducer,
+  statisticCount: statisticCountReducer,
+  title: titleReducer,
+  user: persistReducer(authPersistConfig, userReducer),
 });
 
 export default rootReducer;

@@ -11,9 +11,9 @@ function CheckBoxGroup(props) {
   return (
     <Row className="field">
       {showError && <Alert variant="danger">{errors[name]}</Alert>}
-      {options.map((option) => {
+      {options.map((option, index) => {
         return (
-          <Col key={option.value} className="field__group" {...col}>
+          <Col key={index} className="field__group" {...col}>
             <CheckBox
               field={field}
               isChecked={field.value.some((val) => val === option.value)}

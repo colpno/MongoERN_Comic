@@ -1,0 +1,55 @@
+@use "assets/styles/variables";
+
+.wrapper {
+  border-bottom: 1px solid #ccc;
+
+  .header {
+    height: calc(variables.$header-height - 15px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &__navbar {
+      text-align: center;
+      max-width: 400px;
+      min-width: 400px;
+    }
+
+    &__navbar__link {
+      font-weight: 600;
+
+      > *.active,
+      > *:not(.active):hover {
+        color: variables.$primary-dark;
+      }
+    }
+
+    &__title {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      margin-right: 5rem;
+    }
+
+    &__title__image {
+      $size: 36px;
+      font-size: $size;
+      width: $size;
+      height: $size;
+      margin-right: 30px;
+    }
+
+    &__title__label {
+      font-size: 1.3em;
+      font-weight: 500;
+      width: max-content;
+    }
+  }
+}
+
+@media (max-width: 996px) {
+  .header__navbar {
+    max-width: 300px !important;
+    min-width: 100px !important;
+  }
+}

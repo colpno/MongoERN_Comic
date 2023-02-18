@@ -9,8 +9,8 @@ function useToast() {
     hideProgressBar: false,
     closeOnClick: true,
     draggable: false,
-    pauseOnHover: false,
-    pauseOnFocusLoss: false,
+    pauseOnHover: true,
+    pauseOnFocusLoss: true,
     progress: undefined,
     rtl: false,
     newestOnTop: true,
@@ -24,15 +24,15 @@ function useToast() {
       "bottom-right" ||
       "bottom-center" ||
       "bottom-left",
-    closeTime = 5000,
+    closeTime = options.autoClose,
     theme = "light",
-    draggable = false,
-    rtl = false,
-    pauseOnHover = false,
-    pauseOnFocusLoss = false,
-    newestOnTop = true,
-    closeOnClick = true,
-    hideProgressBar = false
+    draggable = options.draggable,
+    rtl = options.rtl,
+    pauseOnHover = options.pauseOnHover,
+    pauseOnFocusLoss = options.pauseOnFocusLoss,
+    newestOnTop = options.newestOnTop,
+    closeOnClick = options.closeOnClick,
+    hideProgressBar = options.hideProgressBar
   ) => {
     setOptions((prev) => ({
       ...prev,
@@ -49,10 +49,7 @@ function useToast() {
     }));
   };
 
-  const toastEmitter = (
-    message = "",
-    type = "success" || "error" || "info" || "warning"
-  ) => {
+  const toastEmitter = (message = "", type = "success" || "error" || "info" || "warning") => {
     switch (type) {
       case "success":
         reactToast.success(message, options);

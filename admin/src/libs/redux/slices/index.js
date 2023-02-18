@@ -1,8 +1,9 @@
-export { default as userReducer } from "./userSlice";
-export { default as statisticCountReducer } from "./statisticCountSlice";
-export { default as globalReducer } from "./globalSlice";
-export { default as titleReducer } from "./titleSlice";
-export { default as readingChapterReducer } from "./readingChapterSlice";
-export { default as paymentMethodReducer } from "./paymentMethodSlice";
-export { default as myTitlesReducer } from "./myTitlesSlice";
-export { default as selectFieldReducer } from "./selectFieldSlice";
+export { default as commentReducer } from "./comment.slice";
+export { default as globalReducer } from "./global.slice";
+export { default as loginReducer } from "./login.slice";
+export { default as paymentMethodReducer } from "./paymentMethod.slice";
+export { default as readingChapterReducer } from "./readingChapter.slice";
+export { default as selectFieldReducer } from "./selectField.slice";
+export { default as statisticCountReducer } from "./statisticCount.slice";
+export { default as titleReducer } from "./title.slice";
+export { default as userReducer } from "./user.slice";
