@@ -11,6 +11,7 @@ export { default as genreService } from "./genre.service";
 export { default as objectStatusService } from "./objectStatus.service";
 export { default as paymentMethodService } from "./paymentMethod.service";
 export { default as paypalService } from "./paypal.service";
+export { default as personalNotificationService } from "./personalNotification.service";
 export { default as pointHistoryService } from "./pointHistory.service";
 export { default as readingHistoryService } from "./readingHistory.service";
 export { default as ticketHistoryService } from "./ticketHistory.service";
