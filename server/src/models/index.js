@@ -11,6 +11,7 @@ export { default as Income } from './income.model.js';
 export { default as ObjectStatus } from './objectStatus.model.js';
 export { default as Otp } from './otp.model.js';
 export { default as PaymentMethod } from './paymentMethod.model.js';
+export { default as PersonalNotification } from './personalNotification.model.js';
 export { default as ReadingHistory } from './readingHistory.model.js';
 export { default as Title } from './title.model.js';
 export { default as TitleReport } from './titleReport.model.js';

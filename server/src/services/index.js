@@ -12,6 +12,7 @@ export { default as objectStatusService } from './objectStatus.service.js';
 export { default as otpService } from './otp.service.js';
 export { default as paymentMethodService } from './paymentMethod.service.js';
 export { default as paypalService } from './paypal.service.js';
+export { default as personalNotificationService } from './personalNotification.service.js';
 export { default as readingHistoryService } from './readingHistory.service.js';
 export { default as titleService } from './title.service.js';
 export { default as userService } from './user.service.js';

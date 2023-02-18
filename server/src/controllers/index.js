@@ -10,6 +10,7 @@ export { default as genreController } from './genre.controller.js';
 export { default as objectStatusController } from './objectStatus.controller.js';
 export { default as paymentMethodController } from './paymentMethod.controller.js';
 export { default as paypalController } from './paypal.controller.js';
+export { default as personalNotificationController } from './personalNotification.controller.js';
 export { default as readingHistoryController } from './readingHistory.controller.js';
 export { default as titleController } from './title.controller.js';
 export { default as userController } from './user.controller.js';
