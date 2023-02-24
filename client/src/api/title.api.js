@@ -57,7 +57,7 @@ const titleApi = {
       },
     }),
 
-  delete: (id, setProgress, params = {}) =>
+  delete: (id, params = {}, setProgress = () => {}) =>
     axiosClient.delete(`${url}/delete/${id}`, {
       params,
       withCredentials: true,

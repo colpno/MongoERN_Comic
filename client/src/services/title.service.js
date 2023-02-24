@@ -50,9 +50,9 @@ const titleService = {
       return Promise.reject(error.data);
     }
   },
-  delete: async (id, setProgress = () => {}, params = {}) => {
+  delete: async (id, params = {}, setProgress = () => {}) => {
     try {
-      const response = await titleApi.delete(id, setProgress, params);
+      const response = await titleApi.delete(id, params, setProgress);
       return response;
     } catch (error) {
       return Promise.reject(error.data);

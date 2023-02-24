@@ -7,15 +7,7 @@ const userApi = {
     return axiosClient.get(`${url}/profile`, { withCredentials: true });
   },
 
-  register: (
-    username,
-    password,
-    avatar,
-    email,
-    role,
-    dateOfBirth,
-    setProgress = () => {}
-  ) => {
+  register: (username, password, avatar, email, role, dateOfBirth, setProgress = () => {}) => {
     return axiosClient.post(
       `${url}/register`,
       {
