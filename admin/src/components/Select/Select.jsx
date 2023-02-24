@@ -31,6 +31,7 @@ const customStyles = (height) => {
       ...base,
       width: "max-content",
       minWidth: "100%",
+      zIndex: "5",
     }),
   };
 };
@@ -38,6 +39,7 @@ const customStyles = (height) => {
 function Select({
   name,
   onBlur,
+  onChange,
   value,
   setValue,
   options,
@@ -58,6 +60,7 @@ function Select({
   const handleChange = (option) => {
     // name prop only for formik
     isFormik ? setValue(name, option) : setValue(option);
+    onChange(option);
   };
 
   const limitSelectedValues = () => {
@@ -106,6 +109,7 @@ Select.propTypes = {
 
   name: PropTypes.string,
   onBlur: PropTypes.func,
+  onChange: PropTypes.func,
 
   isFormik: PropTypes.bool,
   multiple: PropTypes.bool,
@@ -122,6 +126,7 @@ Select.propTypes = {
 Select.defaultProps = {
   name: "",
   onBlur: () => {},
+  onChange: () => {},
 
   isFormik: false,
   multiple: false,

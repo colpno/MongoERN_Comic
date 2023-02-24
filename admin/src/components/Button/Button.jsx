@@ -17,6 +17,7 @@ function Button(props) {
     target,
     type,
     title,
+    sx,
 
     primary,
     secondary,
@@ -97,7 +98,7 @@ function Button(props) {
     },
     className
   );
-  const attributes = { onClick, type, title, ...others };
+  const attributes = { onClick, type, title, sx, ...others };
   attributes.target = target || null;
   attributes.type = type || "button";
 
@@ -129,6 +130,7 @@ Button.propTypes = {
   target: PropTypes.string,
   type: PropTypes.string,
   title: PropTypes.string,
+  sx: PropTypes.string,
 
   primary: PropTypes.bool,
   secondary: PropTypes.bool,
@@ -175,6 +177,7 @@ Button.defaultProps = {
   target: "",
   type: "",
   title: "",
+  sx: "",
 
   primary: false,
   secondary: false,
