@@ -31,7 +31,10 @@
     line-height: 1.4;
 
     display: flex;
+    align-items: center;
     justify-content: center;
+
+    @extend .scrollbar;
 
     > * {
       height: 100%;
@@ -40,30 +43,13 @@
 
   &__btn-container {
     padding: 0.9rem 0 1rem;
-    margin-top: 1px;
-    // box-shadow: 0 -2rem transparent, 0 -1.75rem rgb(255 255 255 / 0.15),
-    //   0 -1.5rem rgb(255 255 255 / 0.3), 0 -1rem rgb(255 255 255 / 0.5),
-    //   0 -0.5rem rgb(255 255 255 / 0.7);
+    margin-top: 1rem;
+    border-top: 1px solid var.$grey-300;
+    box-shadow: 0 -3px rgb(0 0 0 /0.04), 0 -16px 5px rgb(0 0 0 / 0.02);
 
     display: flex;
     align-items: center;
     justify-content: center;
-
-    position: relative;
-
-    &::before {
-      $size: 1.8rem;
-
-      height: $size;
-      background: linear-gradient(180deg, transparent, rgb(255 255 255 / 0.65) 60%);
-      border-bottom: 1px solid var.$grey-400;
-
-      content: "";
-      position: absolute;
-      top: -$size;
-      left: 0;
-      right: 0;
-    }
 
     button {
       padding: 10px 60px;
@@ -73,8 +59,8 @@
       font-weight: 700;
     }
   }
-}
 
-.center {
-  text-align: center;
+  &__confirm__btn-close {
+    margin-left: 10px !important;
+  }
 }
