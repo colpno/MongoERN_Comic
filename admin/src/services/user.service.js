@@ -1,9 +1,9 @@
 import userApi from "api/user.api";
 
 const userService = {
-  getOne: async () => {
+  getAll: async (params = {}) => {
     try {
-      const response = await userApi.getOne();
+      const response = await userApi.getAll(params);
       return response;
     } catch (error) {
       return Promise.reject(error.data);
@@ -17,17 +17,17 @@ const userService = {
       return Promise.reject(error.data);
     }
   },
-  update: async (data = {}, setProgress = () => {}) => {
+  update: async (id, data = {}, setProgress = () => {}) => {
     try {
-      const response = await userApi.update(data, setProgress);
+      const response = await userApi.update(id, data, setProgress);
       return response;
     } catch (error) {
       return Promise.reject(error.data);
     }
   },
-  delete: async (setProgress = () => {}) => {
+  delete: async (params, setProgress = () => {}) => {
     try {
-      const response = await userApi.delete(setProgress);
+      const response = await userApi.delete(params, setProgress);
       return response;
     } catch (error) {
       return Promise.reject(error.data);

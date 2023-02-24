@@ -3,19 +3,11 @@ import axiosClient from "./axiosClient";
 const url = "/users";
 
 const userApi = {
-  getOne: () => {
-    return axiosClient.get(`${url}/profile`, { withCredentials: true });
+  getAll: (params = {}) => {
+    return axiosClient.get(url, { params, withCredentials: true });
   },
 
-  register: (
-    username,
-    password,
-    avatar,
-    email,
-    role,
-    dateOfBirth,
-    setProgress = () => {}
-  ) => {
+  register: (username, password, avatar, email, role, dateOfBirth, setProgress = () => {}) => {
     return axiosClient.post(
       `${url}/register`,
       {
@@ -36,8 +28,8 @@ const userApi = {
     );
   },
 
-  update: (data, setProgress) => {
-    return axiosClient.put(`${url}/update`, data, {
+  update: (id, data, setProgress) => {
+    return axiosClient.put(`${url}/update/${id}`, data, {
       withCredentials: true,
       onUploadProgress: (e) => {
         const { loaded, total } = e;
@@ -47,8 +39,9 @@ const userApi = {
     });
   },
 
-  delete: (setProgress) => {
+  delete: (params, setProgress) => {
     return axiosClient.delete(`${url}/delete`, {
+      params,
       withCredentials: true,
       onUploadProgress: (e) => {
         const { loaded, total } = e;
