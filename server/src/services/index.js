@@ -8,6 +8,7 @@ export { default as commentService } from './comment.service.js';
 export { default as favoriteService } from './favorite.service.js';
 export { default as followService } from './follow.service.js';
 export { default as genreService } from './genre.service.js';
+export { default as incomeService } from './income.service.js';
 export { default as objectStatusService } from './objectStatus.service.js';
 export { default as otpService } from './otp.service.js';
 export { default as paymentMethodService } from './paymentMethod.service.js';
