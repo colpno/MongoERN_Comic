@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   searchText: "",
-  toggleHeaderNavBar: false,
+  isHeaderNavBarToggled: false,
+  isSideBarToggled: false,
 };
 
 const globalSlice = createSlice({
@@ -13,13 +14,16 @@ const globalSlice = createSlice({
       state.searchText = action.payload;
     },
     toggleHeaderNavBar: (state, action) => {
-      state.toggleHeaderNavBar = action.payload;
+      state.isHeaderNavBarToggled = action.payload;
+    },
+    toggleSideBar: (state, action) => {
+      state.isSideBarToggled = action.payload;
     },
   },
 });
 
 const { reducer: globalReducer, actions } = globalSlice;
 
-export const { setSearchText, toggleHeaderNavBar } = actions;
+export const { setSearchText, toggleHeaderNavBar, toggleSideBar } = actions;
 
 export default globalReducer;
