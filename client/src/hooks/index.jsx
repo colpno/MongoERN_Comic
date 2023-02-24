@@ -8,6 +8,7 @@ export { default as useLike } from "./useLike";
 export { default as useLogout } from "./useLogout";
 export { default as useMultipleForms } from "./useMultipleForms";
 export { default as usePagination } from "./usePagination";
+export { default as usePopup } from "./usePopup";
 export { default as usePreviewImage } from "./usePreviewImage";
 export { default as useSearch } from "./useSearch";
 export { default as useToast } from "./useToast";
