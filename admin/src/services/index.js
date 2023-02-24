@@ -8,6 +8,7 @@ export { default as commentService } from "./comment.service";
 export { default as favoriteService } from "./favorite.service";
 export { default as followService } from "./follow.service";
 export { default as genreService } from "./genre.service";
+export { default as incomeService } from "./income.service";
 export { default as objectStatusService } from "./objectStatus.service";
 export { default as paymentMethodService } from "./paymentMethod.service";
 export { default as paypalService } from "./paypal.service";
