@@ -6,99 +6,44 @@
   client/node_modules/@mui/x-license-pro/utils/licenseErrorMessageUtils.js
   Table.scss
  */
-import { Box, Pagination } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import {
-  DataGridPro,
-  GridFooterContainer,
-  gridPageCountSelector,
-  GridPagination,
-  GridToolbar,
-  GridToolbarContainer,
-  useGridApiContext,
-  useGridSelector,
-  viVN,
-} from "@mui/x-data-grid-pro";
+import { DataGridPro, viVN } from "@mui/x-data-grid-pro";
 import PropTypes from "prop-types";
-import { useCallback, useState } from "react";
-import { BsQuestionCircle } from "react-icons/bs";
-import classNames from "classnames/bind";
+import { memo, useState } from "react";
 
 import { Popup } from "features";
-import TablePopup from "./components/TablePopup";
-import styles from "./styles/Table.module.scss";
+import { usePopup } from "hooks";
+import { getObjectKeys } from "utils";
+import { CustomFooter, CustomToolBar, TablePopup } from "./components";
+import "./styles/Table.module.scss";
 
-const cx = classNames.bind(styles);
-
-function CustomFooter() {
-  const apiRef = useGridApiContext();
-  const total = useGridSelector(apiRef, gridPageCountSelector);
-
-  const handlePageChange = useCallback((event, value) => apiRef.current.setPage(value - 1), []); // page start from 0
-
-  return (
-    <GridFooterContainer sx={{ justifyContent: "center" }}>
-      <Pagination count={total} onChange={handlePageChange} shape="rounded" siblingCount={3} />
-    </GridFooterContainer>
-  );
-}
-
-function CustomToolBar({ rowsPerPage, setPopup }) {
-  const apiRef = useGridApiContext();
-
-  const handlePageChange = useCallback(
-    ({ target }) => apiRef.current.setPageSize(target.value),
-    []
-  );
-
-  const handleGuideOpen = () => {
-    setPopup((prev) => {
-      return { ...prev, trigger: true };
-    });
-  };
-
-  return (
-    <GridToolbarContainer sx={{ display: "flex", justifyContent: "space-between" }}>
-      <GridToolbar />
-      <Box display="flex" alignItems="center">
-        <GridPagination rowsPerPage={rowsPerPage} onRowsPerPageChange={handlePageChange} />
-        <BsQuestionCircle
-          onClick={handleGuideOpen}
-          className={cx("question-icon")}
-          title="Các thao tác sử dụng bảng"
-        />
-      </Box>
-    </GridToolbarContainer>
-  );
-}
+const theme = createTheme(
+  {},
+  viVN // x-data-grid translations
+);
 
 function Table({
   headers,
   data,
 
+  onMultiDelete,
   height,
   autoHeight,
-
-  initialState,
   rowHeight,
+  initialState,
   rowsPerPageOptions,
   hasToolbar,
   disableColumnFilter,
   disableDensitySelector,
   disableColumnMenu,
-  handleCellCommit,
+  onRowEditCommit,
+  checkboxSelection,
 }) {
   const [rowsPerPage, setRowsPerPage] = useState(rowsPerPageOptions[0]);
-  const [popup, setPopup] = useState({
-    trigger: false,
+  const { popup, triggerPopup } = usePopup({
     title: "Các thao tác sẵn có",
     content: <TablePopup />,
   });
-
-  const theme = createTheme(
-    {},
-    viVN // x-data-grid translations
-  );
 
   const dataGridProps = {
     components: {
@@ -108,7 +53,9 @@ function Table({
     componentsProps: {
       toolbar: {
         rowsPerPage,
-        setPopup,
+        checkboxSelection,
+        triggerPopup,
+        onMultiDelete,
       },
     },
     autoHeight: false,
@@ -119,28 +66,59 @@ function Table({
   if (height) dataGridProps.sx.height = height;
   if (autoHeight) dataGridProps.autoHeight = true;
 
+  const handleRowEditCommit = (a, b, { api }) => {
+    const row = api.getEditRowsModel();
+    const rowIds = getObjectKeys(row);
+
+    const finalData = rowIds.reduce((finalResult, id) => {
+      const keys = getObjectKeys(row[id]);
+      const editedData = keys.reduce(
+        (result, field) => ({
+          ...result,
+          [field]: row[id][field].value,
+        }),
+        {}
+      );
+
+      return [
+        ...finalResult,
+        {
+          _id: id,
+          ...editedData,
+        },
+      ];
+    }, []);
+
+    onRowEditCommit(finalData);
+  };
+
   return (
     <>
       <ThemeProvider theme={theme}>
         <DataGridPro
           {...dataGridProps}
-          autoHeight
+          // Data
           columns={headers}
           rows={data}
-          sx={{ height }}
+          // Height
+          autoHeight
+          checkboxSelection={checkboxSelection}
           disableColumnFilter={disableColumnFilter}
-          disableDensitySelector={disableDensitySelector}
           disableColumnMenu={disableColumnMenu}
+          disableDensitySelector={disableDensitySelector}
+          // Row
+          getRowHeight={() => rowHeight}
+          getRowId={(row) => row._id}
+          editMode="row"
+          onRowEditCommit={handleRowEditCommit}
+          // Page
+          pagination
+          rowsPerPageOptions={rowsPerPageOptions}
           pageSize={rowsPerPage}
           onPageSizeChange={(size) => setRowsPerPage(size)}
-          rowsPerPageOptions={rowsPerPageOptions}
-          pagination
-          getRowId={(row) => row._id}
-          getRowHeight={() => rowHeight}
-          onCellEditCommit={handleCellCommit}
         />
       </ThemeProvider>
-      <Popup popup={popup} setPopup={setPopup} />
+      {popup.isShown && <Popup data={popup} setShow={triggerPopup} width={400} />}
     </>
   );
 }
@@ -194,12 +172,13 @@ Table.propTypes = {
             PropTypes.string.isRequired,
             PropTypes.shape({
               value: PropTypes.string.isRequired,
-              label: PropTypes.string.isRequired,
+              label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
             }).isRequired,
           ]).isRequired
         ),
       ]),
-      getActions: PropTypes.func, // must have if the type is "actions"
+      // must have if the type is "actions"
+      getActions: PropTypes.func,
     }).isRequired
   ).isRequired,
   data: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired,
@@ -214,10 +193,12 @@ Table.propTypes = {
       ).isRequired,
     }),
     pinnedColumns: PropTypes.shape({
+      // GRID_CHECKBOX_SELECTION_COL_DEF.field for checkbox
       left: PropTypes.arrayOf(PropTypes.string.isRequired),
       right: PropTypes.arrayOf(PropTypes.string.isRequired),
     }),
   }),
+  onMultiDelete: PropTypes.func,
   height: PropTypes.number,
   autoHeight: PropTypes.bool,
   rowHeight: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
@@ -226,11 +207,13 @@ Table.propTypes = {
   disableColumnFilter: PropTypes.bool,
   disableDensitySelector: PropTypes.bool,
   disableColumnMenu: PropTypes.bool,
-  handleCellCommit: PropTypes.func,
+  onRowEditCommit: PropTypes.func,
+  checkboxSelection: PropTypes.bool,
 };
 
 Table.defaultProps = {
   initialState: {},
+  onMultiDelete: () => {},
   height: null,
   autoHeight: false,
   rowHeight: "auto",
@@ -239,12 +222,8 @@ Table.defaultProps = {
   disableColumnFilter: false,
   disableDensitySelector: false,
   disableColumnMenu: false,
-  handleCellCommit: () => {},
+  onRowEditCommit: () => {},
+  checkboxSelection: false,
 };
 
-CustomToolBar.propTypes = {
-  rowsPerPage: PropTypes.number.isRequired,
-  setPopup: PropTypes.func.isRequired,
-};
-
-export default Table;
+export default memo(Table);

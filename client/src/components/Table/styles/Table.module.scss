@@ -4,7 +4,7 @@
 :global(.MuiDataGrid-root) {
   :global(.MuiPagination-ul) :global(.Mui-selected) {
     background-color: var.$primary !important;
-    color: #fff;
+    color: var.$white;
     cursor: default;
   }
 
@@ -14,15 +14,13 @@
     }
   }
 
+  :global(.timestamp) {
+    color: #888;
+  }
+
   // Disable license watermark
   div[style="position: absolute; pointer-events: none; color: rgba(130, 130, 130, 0.62); z-index: 100000; width: 100%; text-align: center; bottom: 50%; right: 0px; letter-spacing: 5px; font-size: 24px;"] {
     display: none;
-  }
-}
-
-:global(.MuiDataGrid-toolbarContainer) {
-  > :global(.MuiDataGrid-toolbarContainer) > * {
-    color: var.$primary-dark;
   }
 }
 
