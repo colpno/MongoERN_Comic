@@ -1,34 +1,17 @@
-/* eslint-disable no-unused-vars */
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { ChapterForm, FormWrapper } from "components";
-import { Popup, ProgressCircle } from "features";
+import { ProgressCircle } from "features";
 import { useToast } from "hooks";
-import { updateChapterFormValidation } from "validations/updateChapterForm.validation";
 import { chapterService } from "services";
+import { updateChapterFormValidation } from "validations/updateChapterForm.validation";
 
 function UpdateChapter() {
   const { chapterId } = useParams();
   const { Toast, options: toastOptions, toastEmitter } = useToast();
-  const [popup, setPopup] = useState({
-    trigger: false,
-    title: "Thông báo",
-    content: "",
-  });
   const [progress, setProgress] = useState(0);
   const [chapter, setChapter] = useState({});
-
-  const fetchData = () => {
-    chapterService
-      .getOne(chapterId)
-      .then((response) => setChapter(response.data))
-      .catch((error) => console.error(error));
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   const INITIAL_VALUE = useMemo(
     () =>
@@ -114,6 +97,13 @@ function UpdateChapter() {
     setSubmitting(false);
   };
 
+  useEffect(() => {
+    chapterService
+      .getOne(chapterId)
+      .then((response) => setChapter(response.data))
+      .catch((error) => toastEmitter(error, "error"));
+  }, []);
+
   return (
     <>
       <FormWrapper title="Chỉnh sửa chương">
@@ -126,7 +116,6 @@ function UpdateChapter() {
         )}
       </FormWrapper>
       <ProgressCircle percentage={progress} />
-      <Popup popup={popup} setPopup={setPopup} />
       <Toast {...toastOptions} />
     </>
   );
