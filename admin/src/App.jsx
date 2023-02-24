@@ -1,8 +1,10 @@
-import { Popup } from "features";
-import { AdminLayout } from "layouts";
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
+
+import { Popup } from "features";
+import { usePopup } from "hooks";
+import { AdminLayout } from "layouts";
 import { adminRoutes } from "routes";
 
 const checkLoggedInCanAccessURL = (url) => {
@@ -14,30 +16,21 @@ const checkLoggedInCanAccessURL = (url) => {
 
 function App() {
   const navigate = useNavigate();
-  const [popup, setPopup] = useState({
-    trigger: false,
-    title: "Thông báo",
-    content: "",
-    isClosed: false,
-  });
-  const userState = useSelector((state) => state.user);
-  const { isLoggingIn } = userState;
+  const { popup, setPopup, triggerPopup } = usePopup();
+  const { isLoggingIn } = useSelector((state) => state.user);
   const url = useLocation().pathname;
   const haveAccessed = useMemo(() => checkLoggedInCanAccessURL(url), [url]);
 
   useEffect(() => {
     if (haveAccessed && isLoggingIn) {
-      setPopup((prev) => ({
-        ...prev,
-        trigger: true,
+      setPopup({
+        isShown: true,
+        title: "Thông báo",
         content: "Bạn đã đăng nhập nên không thể truy cập vào trang",
-      }));
+        onConfirm: () => navigate("/titles"),
+      });
     }
   }, []);
-
-  useEffect(() => {
-    popup.isClosed && navigate("/titles");
-  }, [popup.isClosed]);
 
   return (
     <>
@@ -67,7 +60,7 @@ function App() {
         })}
         <Route path="*" element={<Navigate to="/not-found" />} />
       </Routes>
-      <Popup popup={popup} setPopup={setPopup} />
+      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
     </>
   );
 }
