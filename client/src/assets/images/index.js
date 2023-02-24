@@ -1,3 +1,7 @@
+export { default as leftMouse } from "./mouse/left-click.svg";
+export { default as middleMouse } from "./mouse/middle-click.svg";
+export { default as rightMouse } from "./mouse/right-click.svg";
+
 export { default as imageSrcError } from "./bg_frame_275x275.jpg";
 
 export { default as checked } from "./checked.png";
