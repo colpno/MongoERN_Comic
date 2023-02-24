@@ -10,12 +10,7 @@ function ReSend({ isDisabled, handleReSend, countdown }) {
   return (
     <div className={cx("resend-code", "text-muted")}>
       Chưa nhận được?
-      <Button
-        wrapper
-        disabled={isDisabled}
-        className={cx("btn-resend")}
-        onClick={handleReSend}
-      >
+      <Button wrapper disabled={isDisabled} className={cx("btn-resend")} onClick={handleReSend}>
         Gửi lại
       </Button>
       {countdown !== 0 && <div className={cx("countdown")}>{countdown}</div>}
