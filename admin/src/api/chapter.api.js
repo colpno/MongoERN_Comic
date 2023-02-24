@@ -3,16 +3,12 @@ import axiosClient from "./axiosClient";
 const url = "/chapters";
 
 const chapterApi = {
-  getAll: (params, isPrivate = true) => {
-    const fullURL = isPrivate ? `${url}/owned` : url;
-
-    return axiosClient.get(fullURL, { params, withCredentials: isPrivate });
+  getAll: (params) => {
+    return axiosClient.get(url, { params, withCredentials: true });
   },
 
-  getOne: (id, isPrivate = true) => {
-    const fullURL = isPrivate ? `${url}/owned/${id}` : `${url}/${id}`;
-
-    return axiosClient.get(fullURL, { withCredentials: isPrivate });
+  getOne: (id) => {
+    return axiosClient.get(`${url}/${id}`, { withCredentials: true });
   },
 
   add: (titleId, title, cover, contents, order, cost, setProgress = () => {}) => {

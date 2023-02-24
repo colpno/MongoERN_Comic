@@ -1,17 +1,17 @@
 import titleApi from "api/title.api";
 
 const titleService = {
-  getAll: async (params = {}, isPrivate = true) => {
+  getAll: async (params = {}) => {
     try {
-      const response = await titleApi.getAll(params, isPrivate);
+      const response = await titleApi.getAll(params);
       return response;
     } catch (error) {
       return Promise.reject(error.data);
     }
   },
-  getOne: async (id, isPrivate = true) => {
+  getOne: async (id) => {
     try {
-      const response = await titleApi.getOne(id, isPrivate);
+      const response = await titleApi.getOne(id);
       return response;
     } catch (error) {
       return Promise.reject(error.data);

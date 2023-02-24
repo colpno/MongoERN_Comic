@@ -1,17 +1,17 @@
 import chapterApi from "api/chapter.api";
 
 const chapterService = {
-  getAll: async (params = {}, isPrivate = true) => {
+  getAll: async (params = {}) => {
     try {
-      const response = await chapterApi.getAll(params, isPrivate);
+      const response = await chapterApi.getAll(params);
       return response;
     } catch (error) {
       return Promise.reject(error.data);
     }
   },
-  getOne: async (chapterID, isPrivate = true) => {
+  getOne: async (chapterID) => {
     try {
-      const response = await chapterApi.getOne(chapterID, isPrivate);
+      const response = await chapterApi.getOne(chapterID);
       return response;
     } catch (error) {
       return Promise.reject(error.data);
