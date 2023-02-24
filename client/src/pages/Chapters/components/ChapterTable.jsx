@@ -12,7 +12,7 @@ import styles from "../styles/ChaptersTable.module.scss";
 
 const cx = classNames.bind(styles);
 
-const getHeaders = (handleDeleteClick) => [
+const getHeaders = (onDelete) => [
   {
     headerName: "Thứ tự",
     field: "order",
@@ -110,17 +110,13 @@ const getHeaders = (handleDeleteClick) => [
           onClick={() => navigate(`update/${row._id}`)}
           label="Update"
         />,
-        <GridActionsCellItem
-          icon={<BsTrash />}
-          onClick={() => handleDeleteClick(row.title_id, row._id)}
-          label="Delete"
-        />,
+        <GridActionsCellItem icon={<BsTrash />} onClick={() => onDelete(row._id)} label="Delete" />,
       ];
     },
   },
 ];
 
-function ChapterTable({ chapters, setPopup, setDeleteItem }) {
+function ChapterTable({ chapters, onDelete }) {
   const initialState = {
     sorting: {
       sortModel: [{ field: "approved_status_id", sort: "asc" }],
@@ -128,20 +124,7 @@ function ChapterTable({ chapters, setPopup, setDeleteItem }) {
     pinnedColumns: { left: ["title"], right: ["actions"] },
   };
 
-  const handleDeleteClick = (titleId, chapterId) => {
-    setPopup((prev) => {
-      return {
-        ...prev,
-        trigger: true,
-        title: "Xóa chương",
-        content: "Bạn có muốn xóa chương không?",
-        yesno: true,
-      };
-    });
-    setDeleteItem({ id: chapterId, titleId });
-  };
-
-  const headers = useMemo(() => getHeaders(handleDeleteClick), []);
+  const headers = useMemo(() => getHeaders(onDelete), []);
 
   return (
     <Table
@@ -151,14 +134,14 @@ function ChapterTable({ chapters, setPopup, setDeleteItem }) {
       autoHeight
       rowHeight={100}
       initialState={initialState}
+      onMultiDelete={onDelete}
     />
   );
 }
 
 ChapterTable.propTypes = {
   chapters: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired,
-  setDeleteItem: PropTypes.func.isRequired,
-  setPopup: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
 };
 
 export default ChapterTable;

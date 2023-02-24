@@ -1,12 +1,11 @@
 import classNames from "classnames/bind";
-import { useState } from "react";
 import { Container } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 
 import { FormWrapper } from "components";
 import { Popup } from "features";
-import { useToast } from "hooks";
+import { usePopup, useToast } from "hooks";
 import { setLoginInfo } from "libs/redux/slices/login.slice";
 import { authService } from "services";
 import ForgotPasswordForm from "./components/ForgotPasswordForm";
@@ -17,11 +16,7 @@ const cx = classNames.bind(styles);
 function ForgotPassword() {
   const dispatch = useDispatch();
   const { Toast, options, toastEmitter } = useToast();
-  const [popup, setPopup] = useState({
-    trigger: false,
-    title: "Thông báo",
-    content: "",
-  });
+  const [popup, setPopup, triggerPopup] = usePopup();
 
   const INITIAL_VALUES = {
     username: "",
@@ -33,9 +28,7 @@ function ForgotPassword() {
       .matches(/^\w+$/g, "Tên người dùng phải là chữ cái hoặc số")
       .trim()
       .required("Tên đăng nhập không được để trống"),
-    email: Yup.string()
-      .email("Định dạng email không hợp lệ")
-      .required("Email không được để trống"),
+    email: Yup.string().email("Định dạng email không hợp lệ").required("Email không được để trống"),
   });
 
   const handleSubmit = (values) => {
@@ -47,16 +40,13 @@ function ForgotPassword() {
         .then((response) => {
           dispatch(setLoginInfo(response.data));
           setPopup({
-            ...popup,
-            trigger: true,
+            isShown: true,
+            title: "Thông báo",
             content: response.message,
           });
         })
         .catch((error) => {
-          toastEmitter(
-            error.data || error.data.error || error.data.message,
-            "error"
-          );
+          toastEmitter(error.data || error.data.error || error.data.message, "error");
         });
     }
   };
@@ -73,7 +63,7 @@ function ForgotPassword() {
           />
         </FormWrapper>
       </Container>
-      <Popup popup={popup} setPopup={setPopup} />
+      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
       <Toast {...options} />
     </>
   );

@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 
 import { FormWrapper, TitleForm } from "components";
 import { Popup, ProgressCircle } from "features";
-import { useToast } from "hooks";
+import { usePopup, useToast } from "hooks";
 import { updateTitleFormValidation } from "validations/updateTitleForm.validation";
 import { titleService } from "services";
 
@@ -12,11 +12,7 @@ function UpdateTitle() {
   const [progress, setProgress] = useState(0);
   const [title, setTitle] = useState({});
   const { Toast, options: toastOptions, toastEmitter } = useToast();
-  const [popup, setPopup] = useState({
-    trigger: false,
-    title: "Thông báo",
-    content: "Thay đổi thành công",
-  });
+  const [popup, setPopup, triggerPopup] = usePopup();
   const hasData = Object.keys(title).length > 0;
   const INITIAL_VALUE = hasData && {
     title: title.title,
@@ -36,7 +32,7 @@ function UpdateTitle() {
       .then((response) => {
         setTitle(response.data);
       })
-      .catch((error) => console.error(error));
+      .catch((error) => toastEmitter(error, "error"));
   };
 
   const handleUpdate = (values) => {
@@ -69,16 +65,15 @@ function UpdateTitle() {
   };
 
   const handleCancel = () => {
-    setPopup((prev) => ({
-      ...prev,
-      trigger: true,
+    setPopup({
+      isShown: true,
+      title: "Thông báo",
       content: "Bạn có chắc muốn quay lại?",
-    }));
+    });
   };
 
   const handleSubmit = (values, { setSubmitting }) => {
     const changedValues = getChangedValues(values);
-    console.log("file: UpdateTitle.jsx:81 ~ changedValues", changedValues);
     Object.keys(changedValues).length > 0 && handleUpdate(changedValues);
     setSubmitting(false);
   };
@@ -105,7 +100,7 @@ function UpdateTitle() {
         )}
       </FormWrapper>
       <ProgressCircle percentage={progress} />
-      <Popup popup={popup} setPopup={setPopup} />
+      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
       <Toast {...toastOptions} />
     </>
   );

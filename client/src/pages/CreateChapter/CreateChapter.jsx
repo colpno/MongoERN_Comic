@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 
 import { ChapterForm, FormWrapper } from "components";
 import { Popup, ProgressCircle } from "features";
-import { useToast } from "hooks";
+import { usePopup, useToast } from "hooks";
 import { createChapterFormValidation } from "validations";
 import { chapterService } from "services";
 
@@ -12,11 +12,7 @@ function CreateChapter() {
   const [progress, setProgress] = useState(0);
   const { Toast, options: toastOptions, toastEmitter } = useToast();
   const [chapters, setChapters] = useState([]);
-  const [popup, setPopup] = useState({
-    trigger: false,
-    title: "Thông báo",
-    content: "",
-  });
+  const [popup, triggerPopup] = usePopup();
 
   const INITIAL_VALUE = {
     order: `${Number.parseInt(chapters[0]?.order || 0, 10) + 1}`,
@@ -36,7 +32,7 @@ function CreateChapter() {
     chapterService
       .getAll(params)
       .then((response) => setChapters(response.data))
-      .catch((error) => console.error(error));
+      .catch((error) => toastEmitter(error, "error"));
   };
 
   const handleSubmit = (values, { setSubmitting, resetForm }) => {
@@ -72,7 +68,7 @@ function CreateChapter() {
         />
       </FormWrapper>
       <ProgressCircle percentage={progress} />
-      <Popup popup={popup} setPopup={setPopup} />
+      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
       <Toast {...toastOptions} />
     </>
   );

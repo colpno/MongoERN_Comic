@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { HeadTitleMark } from "components";
 import { socket } from "context/socketContext";
 import { Pagination, Popup, ProgressCircle } from "features";
-import { useToast } from "hooks";
+import { usePopup, useToast } from "hooks";
 import { commentService } from "services";
 import { CommentForm, CommentList, RequireSignIn } from "./components";
 import styles from "./styles/Comment.module.scss";
@@ -20,9 +20,9 @@ function Comment() {
   const [paginate, setPaginate] = useState({ page: 1, limit: 15, total: 0 });
   const [progress, setProgress] = useState(0);
   const { toastEmitter } = useToast();
-  const [popup, setPopup] = useState({
-    trigger: false,
-    isConfirm: false,
+  const { popup, setPopup, triggerPopup } = usePopup({
+    isShown: false,
+    type: "confirm",
     title: "Xóa bình luận",
     content: "Bạn có chắc chắn muốn xóa?",
   });
@@ -81,23 +81,21 @@ function Comment() {
   );
 
   const handleDelete = (commentId) => {
-    setPopup((prev) => ({ ...prev, trigger: true, commentId }));
+    setPopup({
+      isShown: true,
+      onConfirm: () => {
+        commentService
+          .update(commentId, { deletedBy: user._id }, setProgress)
+          .then(() => {
+            setProgress(0);
+          })
+          .catch((error) => {
+            setProgress(0);
+            toastEmitter(error, "error");
+          });
+      },
+    });
   };
-
-  useEffect(() => {
-    if (popup.isConfirm) {
-      commentService
-        .update(popup.commentId, { deletedBy: user._id }, setProgress)
-        .then(() => {
-          setProgress(0);
-        })
-        .catch((error) => {
-          setProgress(0);
-          toastEmitter(error, "error");
-        });
-      setPopup((prev) => ({ ...prev, isConfirm: false }));
-    }
-  }, [popup.isConfirm]);
 
   useEffect(() => {
     if (socket) {
@@ -156,7 +154,7 @@ function Comment() {
         <Pagination pagination={paginate} setPagination={setPaginate} />
       </section>
       <ProgressCircle percentage={progress} />
-      <Popup yesno popup={popup} setPopup={setPopup} />
+      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
     </>
   );
 }

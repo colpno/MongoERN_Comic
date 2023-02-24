@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 import { Button } from "components";
 import { Popup } from "features";
-import { useToast } from "hooks";
+import { usePopup, useToast } from "hooks";
 import { setLoginInfo } from "libs/redux/slices/login.slice";
 import { authService } from "services";
 import LoginForm from "./components/LoginForm";
@@ -17,12 +17,7 @@ const cx = classNames.bind(styles);
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [popup, setPopup] = useState({
-    trigger: false,
-    title: "Thông báo",
-    content: "",
-    isClosed: false,
-  });
+  const [popup, setPopup, triggerPopup] = usePopup();
   const { Toast, options: toastOptions, toastEmitter } = useToast();
 
   const handleSubmit = (values, { setSubmitting }) => {
@@ -32,11 +27,12 @@ function Login() {
       .then((response) => {
         dispatch(setLoginInfo(response.data));
 
-        setPopup((prev) => ({
-          ...prev,
-          trigger: true,
+        setPopup({
+          isShown: true,
+          title: "Thông báo",
           content: response.message,
-        }));
+          onCancel: () => navigate("verify"),
+        });
       })
       .catch((error) => {
         toastEmitter(error, "error");
@@ -44,10 +40,6 @@ function Login() {
 
     setSubmitting(false);
   };
-
-  useEffect(() => {
-    popup.isClosed && navigate("verify");
-  }, [popup.isClosed]);
 
   return (
     <>
@@ -69,7 +61,7 @@ function Login() {
           </p>
         </div>
       </div>
-      <Popup popup={popup} setPopup={setPopup} />
+      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
       <Toast {...toastOptions} />
     </>
   );

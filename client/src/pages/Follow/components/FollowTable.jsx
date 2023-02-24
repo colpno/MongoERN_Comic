@@ -58,29 +58,13 @@ const getHeaders = (handleDelete) => [
   },
 ];
 
-function FollowTable({ setDeletedItem, popup, setPopup, follows }) {
-  const handleDelete = (followId) => {
-    setPopup({
-      ...popup,
-      trigger: true,
-      title: "Xóa mục yêu thích",
-      content: "Bạn có muốn xóa yêu thích?",
-    });
-    setDeletedItem(followId);
-  };
-
-  const headers = useMemo(() => getHeaders(handleDelete), []);
+function FollowTable({ follows, onDelete }) {
+  const headers = useMemo(() => getHeaders(onDelete), []);
 
   return <Table headers={headers} data={follows} hasToolbar autoHeight rowHeight={100} />;
 }
 
 FollowTable.propTypes = {
-  popup: PropTypes.shape({
-    trigger: PropTypes.bool.isRequired,
-    title: PropTypes.string.isRequired,
-    content: PropTypes.string.isRequired,
-  }).isRequired,
-  setPopup: PropTypes.func.isRequired,
   follows: PropTypes.arrayOf(
     PropTypes.shape({
       _id: PropTypes.string.isRequired,
@@ -95,7 +79,7 @@ FollowTable.propTypes = {
       }),
     }).isRequired
   ).isRequired,
-  setDeletedItem: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
 };
 
 export default FollowTable;

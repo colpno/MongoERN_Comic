@@ -3,9 +3,8 @@ import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
-import { noFavorite } from "assets/images";
-import { NoData, Popup } from "features";
-import { useDelete, useToast } from "hooks";
+import { Popup } from "features";
+import { usePopup, useToast } from "hooks";
 import { followService } from "services";
 import FollowTable from "./components/FollowTable";
 import styles from "./styles/Follow.module.scss";
@@ -16,9 +15,35 @@ function Follow() {
   const user = useSelector((state) => state.user.user);
   const [follows, setFollows] = useState([]);
   const { Toast, options, toastEmitter } = useToast();
-  const hasData = follows.length > 0;
+  const { popup, setPopup, triggerPopup } = usePopup();
 
-  const fetchData = () => {
+  const handleDelete = (data) => {
+    const ids = data instanceof Map ? Array.from(data.keys()) : data;
+    const params = {
+      _id_in: ids,
+    };
+
+    setPopup({
+      isShown: true,
+      title: "Xóa yêu thích",
+      content: "Bạn có muốn xóa yêu thích?",
+      onConfirm: () => {
+        followService
+          .delete(params)
+          .then(() => {
+            setFollows((prev) =>
+              prev.filter((item) =>
+                Array.isArray(ids) ? !ids.includes(item._id) : ids !== item._id
+              )
+            );
+            toastEmitter("Hủy theo dõi thành công", "success");
+          })
+          .catch((error) => toastEmitter(error, "error"));
+      },
+    });
+  };
+
+  useEffect(() => {
     const params = {
       user_id: user._id,
       _embed: JSON.stringify([{ collection: "title_id", fields: "title cover.source author" }]),
@@ -28,39 +53,14 @@ function Follow() {
       .getAll(params)
       .then((response) => setFollows(response.data))
       .catch((error) => toastEmitter(error, "error"));
-  };
-
-  const { deletedItem, setDeletedItem, popup, setPopup } = useDelete(async () => {
-    followService.delete(deletedItem).then(() => {
-      toastEmitter("Hủy theo dõi thành công", "success");
-      fetchData();
-    });
-  });
-
-  useEffect(() => {
-    fetchData();
   }, []);
 
   return (
     <>
       <Container className={cx("follow")}>
-        {hasData ? (
-          <FollowTable
-            follows={follows}
-            popup={popup}
-            setPopup={setPopup}
-            setDeletedItem={setDeletedItem}
-          />
-        ) : (
-          <NoData image={noFavorite}>
-            <>
-              <h5>Hiện tại chưa có truyện nào được bạn theo dõi!</h5>
-              <small>Vui lòng quay lại sau nhé!</small>
-            </>
-          </NoData>
-        )}
+        <FollowTable follows={follows} onDelete={handleDelete} />
       </Container>
-      <Popup yesno popup={popup} setPopup={setPopup} />
+      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
       <Toast {...options} />
     </>
   );

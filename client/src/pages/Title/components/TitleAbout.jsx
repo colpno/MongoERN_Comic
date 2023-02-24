@@ -24,7 +24,7 @@ function TitleAbout({ user, title, setPopup }) {
   };
 
   const handleClickIcon = (content) => {
-    setPopup({ ...content, trigger: true });
+    setPopup({ ...content, isShown: true });
   };
 
   return (

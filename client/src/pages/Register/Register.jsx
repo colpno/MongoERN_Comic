@@ -1,8 +1,8 @@
 import classNames from "classnames/bind";
-import { useState } from "react";
 
 import { Button } from "components";
 import { Popup } from "features";
+import { usePopup } from "hooks";
 import { userService } from "services";
 import { registerFormValidation } from "validations/registerForm.validation";
 import RegisterForm from "./components/RegisterForm";
@@ -11,23 +11,17 @@ import styles from "./styles/Register.module.scss";
 const cx = classNames.bind(styles);
 
 function Register() {
-  const [popup, setPopup] = useState({
-    trigger: false,
-    title: "",
-    content: "",
-  });
+  const [popup, setPopup, triggerPopup] = usePopup();
 
   const handleSubmit = (values, { setSubmitting }) => {
     const { username, email, password } = values;
-    userService
-      .register({ username, password, email, role: "member" })
-      .then((response) => {
-        setPopup({
-          trigger: true,
-          title: "Thông báo",
-          content: response.message,
-        });
+    userService.register({ username, password, email, role: "member" }).then((response) => {
+      setPopup({
+        isShown: true,
+        title: "Thông báo",
+        content: response.message,
       });
+    });
 
     setSubmitting(false);
   };
@@ -63,9 +57,7 @@ function Register() {
           </p>
         </div>
       </div>
-      <Popup popup={popup} setPopup={setPopup}>
-        {popup.content}
-      </Popup>
+      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
     </>
   );
 }

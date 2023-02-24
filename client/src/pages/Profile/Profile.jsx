@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 
 import { FormWrapper } from "components";
 import { Popup, ProgressCircle } from "features";
-import { useToast } from "hooks";
+import { usePopup, useToast } from "hooks";
 import ProfileForm from "pages/Profile/components/ProfileForm";
 import { userService } from "services";
 import AvatarBox from "./components/AvatarBox";
@@ -14,21 +14,14 @@ function Profile() {
   const [user, setUser] = useState({});
   const [progress, setProgress] = useState(0);
   const { Toast, options, toastEmitter } = useToast();
-  const [popup, setPopup] = useState({
-    trigger: false,
-    isConfirm: false,
-    title: "Hình dại diện",
-    content: "",
-  });
+  const [popup, setPopup, triggerPopup] = usePopup();
 
   const INITIAL_VALUE = user?.username && {
     avatar: user.avatar,
     username: user.username,
     password: user.password,
     email: user.email,
-    dateOfBirth: user.dateOfBirth
-      ? moment(user.dateOfBirth, "DD/MM/YYYY").toString()
-      : "",
+    dateOfBirth: user.dateOfBirth ? moment(user.dateOfBirth, "DD/MM/YYYY").toString() : "",
   };
 
   const fetchData = () => {
@@ -84,10 +77,11 @@ function Profile() {
   };
 
   const handleOpenChooseAvatar = () => {
-    setPopup((prev) => ({
-      ...prev,
-      trigger: true,
-    }));
+    setPopup({
+      isShown: true,
+      title: "Hình dại diện",
+      content: <AvatarBox value={user.avatar} handleOnChange={handleChooseAvatar} />,
+    });
   };
 
   useEffect(() => {
@@ -96,32 +90,18 @@ function Profile() {
 
   return (
     <>
-      {user?.username ? (
-        <>
-          <FormWrapper title="Thông tin cá nhân">
-            <ProfileForm
-              avatar={user.avatar}
-              INITIAL_VALUE={INITIAL_VALUE}
-              handleSubmit={handleSubmit}
-              handleOpenChooseAvatar={handleOpenChooseAvatar}
-            />
-          </FormWrapper>
-          <Popup
-            popup={{
-              ...popup,
-              content: (
-                <AvatarBox
-                  value={user.avatar}
-                  handleOnChange={handleChooseAvatar}
-                />
-              ),
-            }}
-            setPopup={setPopup}
-            height={350}
+      {user.username ? (
+        <FormWrapper title="Thông tin cá nhân">
+          <ProfileForm
+            avatar={user.avatar}
+            INITIAL_VALUE={INITIAL_VALUE}
+            handleSubmit={handleSubmit}
+            handleOpenChooseAvatar={handleOpenChooseAvatar}
           />
-        </>
+        </FormWrapper>
       ) : null}
       <Toast {...options} />
+      {popup.isShown && <Popup data={popup} setShow={triggerPopup} height={350} />}
       <ProgressCircle percentage={progress} />
     </>
   );

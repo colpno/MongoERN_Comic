@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import { FormWrapper, TitleForm } from "components";
 import { Popup, ProgressCircle } from "features";
-import { useToast } from "hooks";
+import { usePopup, useToast } from "hooks";
 import { titleService } from "services";
 import { createTitleFormValidation } from "validations/createTitleForm.validation";
 
@@ -12,12 +12,7 @@ function CreateTitle() {
   const navigate = useNavigate();
   const [progress, setProgress] = useState(0);
   const { Toast, options: toastOptions, toastEmitter } = useToast();
-  const [popup, setPopup] = useState({
-    trigger: false,
-    isConfirm: false,
-    title: "Thông báo",
-    content: "",
-  });
+  const [popup, setPopup, triggerPopup] = usePopup();
 
   const INITIAL_VALUE = {
     title: "",
@@ -32,16 +27,12 @@ function CreateTitle() {
   };
 
   const handleCancel = () => {
-    setPopup((prev) => ({
-      ...prev,
-      trigger: true,
-      content: "Bạn có chắc muốn quay lại?",
-    }));
+    setPopup({
+      isShown: true,
+      title: "Thông báo",
+      content: "Bạn có chắc muốn hủy bỏ?",
+    });
   };
-
-  useEffect(() => {
-    popup.isConfirm && navigate(-1);
-  }, [popup.isConfirm]);
 
   const handleSubmit = (values, { setSubmitting }) => {
     const { title, cover, author, summary, genres, coin, release_day: releaseDay } = values;
@@ -71,7 +62,7 @@ function CreateTitle() {
         />
       </FormWrapper>
       <ProgressCircle percentage={progress} />
-      <Popup yesno popup={popup} setPopup={setPopup} />
+      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
       <Toast {...toastOptions} />
     </>
   );

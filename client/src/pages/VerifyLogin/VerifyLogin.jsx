@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 import { Button } from "components";
 import { Popup } from "features";
-import { useToast } from "hooks";
+import { usePopup, useToast } from "hooks";
 import { setLoginInfo as setLoginInfoStore } from "libs/redux/slices/login.slice";
 import { setUser } from "libs/redux/slices/user.slice";
 import { authService } from "services";
@@ -50,21 +50,13 @@ function VerifyLogin() {
     digit3: "",
     digit4: "",
   });
-  const [popup, setPopup] = useState({
-    trigger: false,
-    title: "Thông báo",
-    content: "",
-    isClosed: false,
-  });
+  const [popup, setPopup, triggerPopup] = usePopup();
 
   const handleSubmit = () => {
     const OTPKeys = Object.keys(OTPValue);
 
     // get the otp of all slots and concat
-    const OTPString = OTPKeys.reduce(
-      (str, key) => `${str}${OTPValue[key]}`,
-      ""
-    );
+    const OTPString = OTPKeys.reduce((str, key) => `${str}${OTPValue[key]}`, "");
 
     // if the all inserted otp don't match total of otp slots
     if (OTPString.length !== OTPKeys.length) {
@@ -207,11 +199,7 @@ function VerifyLogin() {
     }
 
     // if user press key 0 to 9 in numpad
-    if (
-      keyCode >= NUMPAD_0 &&
-      keyCode <= NUMPAD_9 &&
-      target.value.length !== 0
-    ) {
+    if (keyCode >= NUMPAD_0 && keyCode <= NUMPAD_9 && target.value.length !== 0) {
       // get current focus element digit position total of 4 digits
       const digit = currentDigit.getAttribute("data-digit");
 
@@ -232,7 +220,7 @@ function VerifyLogin() {
         dispatch(setLoginInfoStore(response.data));
         toastEmitter(response.message, "success");
       })
-      .catch((error) => console.error(error));
+      .catch((error) => toastEmitter(error, "error"));
 
     setReSend((prev) => ({ ...prev, disable: true }));
   };
@@ -240,9 +228,7 @@ function VerifyLogin() {
   const startExpiredCountdown = () => {
     expiredCountdownRef.current = setInterval(() => {
       // Get difference of expired time and now in milliseconds
-      const expiredTimeInMilliSecond = moment(loginInfo.expiredAt).diff(
-        moment()
-      );
+      const expiredTimeInMilliSecond = moment(loginInfo.expiredAt).diff(moment());
 
       // Format to mm:ss
       const formattedTime = moment(expiredTimeInMilliSecond).format("mm:ss");
@@ -285,11 +271,11 @@ function VerifyLogin() {
       stopExpiredCountdown();
 
       //  show pop up
-      setPopup((prev) => ({
-        ...prev,
-        trigger: true,
+      setPopup({
+        isShown: true,
+        title: "Thông báo",
         content: "Mã OTP đã hết hạn, vui lòng đăng nhập lại.",
-      }));
+      });
     }
   }, [expiredCountdown]);
 
@@ -340,9 +326,7 @@ function VerifyLogin() {
   useEffect(() => {
     const OTPKeys = Object.keys(OTPValue);
 
-    const areAllDigitsNotEmpty = OTPKeys.every(
-      (digit) => OTPValue[digit] !== ""
-    );
+    const areAllDigitsNotEmpty = OTPKeys.every((digit) => OTPValue[digit] !== "");
 
     if (areAllDigitsNotEmpty) {
       handleSubmit();
@@ -353,11 +337,7 @@ function VerifyLogin() {
     <>
       <div className={cx("container-content")}>
         <div className={cx("otp-container")}>
-          <OTPHead
-            cx={cx}
-            expiredCountdown={expiredCountdown}
-            email={loginInfo.email}
-          />
+          <OTPHead cx={cx} expiredCountdown={expiredCountdown} email={loginInfo.email} />
           <OTPInput
             cx={cx}
             handleChangeOTP={handleChangeOTP}
@@ -382,7 +362,7 @@ function VerifyLogin() {
           />
         </div>
       </div>
-      <Popup popup={popup} setPopup={setPopup} />
+      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
       <Toast {...options} />
     </>
   );

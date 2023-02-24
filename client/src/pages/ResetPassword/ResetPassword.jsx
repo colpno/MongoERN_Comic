@@ -1,16 +1,14 @@
 import classNames from "classnames/bind";
-import { useState } from "react";
+import { Container } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import * as Yup from "yup";
 
 import { FormWrapper } from "components";
-import { Popup } from "features";
 import { useToast } from "hooks";
-import { Container } from "react-bootstrap";
 import { authService } from "services";
-import styles from "./ResetPassword.module.scss";
 import ResetPasswordForm from "./components/ResetPasswordForm";
+import styles from "./ResetPassword.module.scss";
 
 const cx = classNames.bind(styles);
 
@@ -18,11 +16,6 @@ function ResetPassword() {
   const loginInfo = useSelector((state) => state.login.info);
   const { token } = useParams();
   const { Toast, options, toastEmitter } = useToast();
-  const [popup, setPopup] = useState({
-    trigger: false,
-    title: "Thông báo",
-    content: "Thay đổi thành công",
-  });
 
   const INITIAL_VALUES = { password: "", confirmPassword: "" };
 
@@ -46,12 +39,8 @@ function ResetPassword() {
     if (password) {
       authService
         .resetPassword(loginInfo.id, password, token)
-        .then((response) => {
-          setPopup({ ...popup, trigger: true, content: response.message });
-        })
-        .catch((error) => {
-          toastEmitter(error, "error");
-        });
+        .then((response) => toastEmitter(response.message))
+        .catch((error) => toastEmitter(error, "error"));
     }
   };
 
@@ -67,7 +56,6 @@ function ResetPassword() {
           />
         </FormWrapper>
       </Container>
-      <Popup popup={popup} setPopup={setPopup} />
       <Toast {...options} />
     </>
   );

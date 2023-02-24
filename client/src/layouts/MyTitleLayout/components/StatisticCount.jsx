@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { roundNumByUnit, separateNumberDigit } from "utils";
 
 import { Popup } from "features";
+import { usePopup } from "hooks";
 import { setMyTitles } from "libs/redux/slices/title.slice";
 import { titleService } from "services";
 import { BookLine, ChatLine, DollarLine, EyeLine, ThumbUpLine } from "../assets/images";
@@ -21,17 +22,11 @@ function StatisticCount() {
   const user = useSelector((state) => state.user.user);
   const [titles, setTitles] = useState([]);
   const [stat, setStat] = useState({ likes: 0, views: 0, totalTitles: 0, comments: 0 });
-  const [popup, setPopup] = useState({
-    trigger: false,
+  const [popup, triggerPopup] = usePopup({
+    isShown: false,
     title: "Thu nhập",
     content: <IncomePopup />,
   });
-
-  const handleIncomeExplainClick = () => {
-    setPopup((prev) => {
-      return { ...prev, trigger: true };
-    });
-  };
 
   useEffect(() => {
     const params = {
@@ -100,7 +95,7 @@ function StatisticCount() {
                 <p className={cx("statistic-count__income__label")}>Thu nhập (VNĐ)</p>
                 <BsQuestionCircle
                   className={cx("statistic-count__income__question-icon")}
-                  onClick={handleIncomeExplainClick}
+                  onClick={() => triggerPopup(true)}
                 />
               </div>
               <strong className={cx("statistic-count__income__number", "active")}>
@@ -110,7 +105,7 @@ function StatisticCount() {
           </div>
         </Col>
       </Row>
-      <Popup popup={popup} setPopup={setPopup} />
+      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
     </Container>
   );
 }

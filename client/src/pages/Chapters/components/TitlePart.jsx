@@ -9,19 +9,7 @@ import styles from "../styles/TitlePart.module.scss";
 
 const cx = classNames.bind(styles);
 
-function TitlePart({ title, setPopup, setDeletedItem }) {
-  const handlePopup = (item) => {
-    setPopup((prev) => {
-      return {
-        ...prev,
-        trigger: true,
-        title: "Xóa truyện",
-        content: "Bạn có muốn xóa truyện?",
-      };
-    });
-    setDeletedItem(item);
-  };
-
+function TitlePart({ title, onDelete }) {
   return (
     <Row className={cx("chapters__title")}>
       <Col>
@@ -45,7 +33,7 @@ function TitlePart({ title, setPopup, setDeletedItem }) {
           outline
           grey
           className={cx("chapters__title-accelerate__button")}
-          onClick={() => handlePopup(title)}
+          onClick={() => onDelete(title._id)}
         >
           <BsTrash />
           Xóa truyện
@@ -63,8 +51,7 @@ TitlePart.propTypes = {
     }).isRequired,
     title: PropTypes.string.isRequired,
   }).isRequired,
-  setPopup: PropTypes.func.isRequired,
-  setDeletedItem: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
 };
 
 export default TitlePart;

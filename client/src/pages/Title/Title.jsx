@@ -8,7 +8,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { TITLE_PAGE_CHAPTERS_PER_PAGE } from "constants/paginate.constant";
 import { socket } from "context/socketContext";
 import { Comment, Loading, NoData, Pagination, Popup, Recommend } from "features";
-import { usePagination, useToast } from "hooks";
+import { usePagination, usePopup, useToast } from "hooks";
 import { setCommentPlace } from "libs/redux/slices/comment.slice";
 import { setGenresOfTitle, setTitle as setStoreTitle } from "libs/redux/slices/title.slice";
 import { setUser } from "libs/redux/slices/user.slice";
@@ -37,11 +37,7 @@ function Title() {
   const [loading, setLoading] = useState(false);
   const hasTitle = Object.keys(title).length > 0;
   const haveChapters = chapters.length > 0;
-  const [popup, setPopup] = useState({
-    trigger: false,
-    title: "",
-    content: "",
-  });
+  const [popup, setPopup, triggerPopup] = usePopup();
   const backgroundImageCSS = hasTitle && {
     backgroundImage: `url(${title.cover.source})`,
     backgroundRepeat: "no-repeat",
@@ -173,7 +169,7 @@ function Title() {
   }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
+    (async () => {
       setLoading(true);
       const chapterApiParams = {
         title_id: titleId,
@@ -209,8 +205,7 @@ function Title() {
         setPurchasedHistories(chapterTransactionResult.data);
       }
       setLoading(false);
-    };
-    fetchData();
+    })();
   }, [titleId, user]);
 
   return (
@@ -261,7 +256,7 @@ function Title() {
           handleClose={handleClosePurchaseBox}
         />
       )}
-      <Popup popup={popup} setPopup={setPopup} />
+      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
       {loading && <Loading />}
       <Toast {...options} />
     </>

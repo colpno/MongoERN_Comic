@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 
 import { GridTable } from "components";
 import { Pagination, Popup } from "features";
-import { usePagination } from "hooks";
+import { usePagination, usePopup } from "hooks";
 import TicketExplainPopup from "pages/Title/components/TicketExplainPopup";
 import { chapterTransactionService } from "services";
 import { sortArray } from "utils/arrayMethods";
@@ -26,11 +26,7 @@ function Inventory() {
     { value: "expiredAt", label: "Ngày hết hạn" },
   ];
   const [filterValue, setFilterValue] = useState(sortOptions[1]);
-  const [popup, setPopup] = useState({
-    trigger: false,
-    title: "",
-    content: "",
-  });
+  const [popup, setPopup, triggerPopup] = usePopup();
 
   const fetchData = () => {
     chapterTransactionService
@@ -54,7 +50,7 @@ function Inventory() {
 
   const handleClickIcon = () => {
     setPopup({
-      trigger: true,
+      isShown: true,
       title: "Vé",
       content: <TicketExplainPopup />,
     });
@@ -140,7 +136,7 @@ function Inventory() {
         </GridTable>
         <Pagination pagination={pagination} setPagination={setPagination} />
       </Container>
-      <Popup popup={popup} setPopup={setPopup} />
+      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
     </>
   );
 }
