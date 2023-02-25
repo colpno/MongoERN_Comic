@@ -2,7 +2,9 @@ import * as Yup from "yup";
 
 export const updateTitleFormValidation = Yup.object({
   title: Yup.string()
+    .trim()
     .max(255, "Giới hạn độ dài của tiêu đề là 255 ký tự.")
+    .matches(/[\w]/, "Chỉ bao gồm chữ cái và số.")
     .required("Truyện cần phải có tiêu đề."),
   status_id: Yup.string().required("Trạng thái truyện không được để trống."),
   summary: Yup.string()
@@ -10,6 +12,7 @@ export const updateTitleFormValidation = Yup.object({
     .required("Truyện cần phải có mô tả."),
   // TODO: titleStatusId: Yup.string().required("Vui lòng chọn trạng thái của truyện."),
   author: Yup.string()
+    .trim()
     .max(255, "Giới hạn độ dài là 255 ký tự.")
     .required("Tác giả không được để trống."),
   genres: Yup.array()
