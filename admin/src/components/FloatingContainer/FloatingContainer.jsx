@@ -8,11 +8,7 @@ const cx = classNames.bind(styles);
 
 function FloatingContainer({ children, className }) {
   return (
-    <div
-      className={`${cx("floating-container")}${className && ` ${className}`}`}
-    >
-      {children}
-    </div>
+    <div className={`${cx("floating-container")}${className && ` ${className}`}`}>{children}</div>
   );
 }
 

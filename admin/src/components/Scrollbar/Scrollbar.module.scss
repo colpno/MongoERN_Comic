@@ -1,6 +1,6 @@
 .scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1);
+  scrollbar-color: rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.15);
   max-height: inherit;
 
   &::-webkit-scrollbar {
@@ -13,7 +13,7 @@
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.15);
     transition-property: all;
     transition-duration: 0.1s;
     transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
