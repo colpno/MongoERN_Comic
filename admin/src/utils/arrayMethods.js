@@ -37,3 +37,9 @@ export function sortArray(array = [], key = "", order = "asc") {
       throw new Error("Order not found");
   }
 }
+
+export function moveArray(array, fromIndex, toIndex) {
+  const temp = array[fromIndex];
+  array.splice(fromIndex, 1);
+  array.splice(toIndex, 0, temp);
+}
