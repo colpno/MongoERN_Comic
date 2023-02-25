@@ -30,14 +30,14 @@ function Popup({ data, setShow, width, center }) {
     <Dialog handleClickOutside={handleClickOutside}>
       <div className={cx("popup")} style={{ width: `${width}px` }}>
         {title && (
-          <div className={cx("popup__head")}>
+          <div className={cx("header")}>
             <span>{title}</span>
           </div>
         )}
-        <Scrollbar yAxis className={cx("popup__content", [center])}>
+        <Scrollbar yAxis className={cx("content", [center])}>
           {content}
         </Scrollbar>
-        <div className={cx("popup__btn-container")}>
+        <div className={cx("button-container")}>
           <PopButton type={type} onConfirm={handleConfirm} onCancel={handleCancel} />
         </div>
       </div>
