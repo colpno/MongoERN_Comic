@@ -1,0 +1,30 @@
+.keyboard {
+  margin: 0 -4px;
+  .num,
+  .remove {
+    color: #000;
+    font-weight: 500;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    border-radius: 20px;
+    padding: 10px 0;
+    width: calc(33.3333% - 8px);
+    margin: 0 4px 8px;
+    text-align: center;
+    background-color: rgba(241, 241, 241, 0.8);
+    cursor: pointer;
+    transition: all 0.2s linear;
+    &:hover,
+    &.active {
+      background-color: rgba(218, 218, 218, 0.8);
+    }
+  }
+
+  .num-n {
+    cursor: default;
+    background-color: transparent;
+
+    &:hover {
+      background-color: transparent;
+    }
+  }
+}

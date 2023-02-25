@@ -1,0 +1,31 @@
+.title {
+  margin-bottom: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  p {
+    font-weight: 500;
+    width: 130px;
+    margin-bottom: 0;
+    text-align: center;
+
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+.text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  margin-bottom: 6px;
+
+  p {
+    color: rgba(61, 61, 61, 0.8);
+  }
+}

@@ -1,0 +1,27 @@
+.btn-verify {
+  width: 100%;
+  border-radius: 10px;
+  margin: 15px 0;
+
+  .icon {
+    margin-left: 0.6rem;
+  }
+}
+
+.container-content {
+  width: 400px;
+  margin: 4rem auto 3rem;
+  padding-top: 2rem;
+}
+
+.otp-container {
+  box-shadow: 0 0 20px 1px #e2e2e2;
+  width: 100%;
+  height: 100%;
+  border-radius: 30px;
+  padding: 30px 35px;
+  background-color: #fff;
+
+  display: flex;
+  flex-direction: column;
+}
