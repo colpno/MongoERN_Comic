@@ -7,16 +7,15 @@ import { Logo } from "assets/images";
 import { Button, Image } from "components";
 import { SideBar } from "features";
 import { useLogout } from "hooks";
-import { toggleSideBar } from "libs/redux/slices/globalSlice";
-import getAdminSideBarMenu from "utils/constants";
+import { toggleSideBar } from "libs/redux/slices/global.slice";
+import { getAdminSideBarMenu } from "utils/constants";
 import styles from "../styles/AdminSideBar.module.scss";
 
 const cx = classNames.bind(styles);
 
 function AdminSideBar() {
   const dispatch = useDispatch();
-  const searchText = useSelector((state) => state.global.searchText);
-  const toggle = useSelector((state) => state.global.toggleSideBar);
+  const toggle = useSelector((state) => state.global.isSideBarToggled);
   const menu = getAdminSideBarMenu();
   const user = useSelector((state) => state.user.user);
   const { logout } = useLogout("/login");
@@ -33,10 +32,7 @@ function AdminSideBar() {
           <Button wrapper to="/titles" className={cx("logo-button")}>
             <Logo className={cx("logo")} />
           </Button>
-          <FaBars
-            className={cx("sidebar--toggle")}
-            onClick={() => setToggleSideBar(!toggle)}
-          />
+          <FaBars className={cx("sidebar--toggle")} onClick={() => setToggleSideBar(!toggle)} />
         </div>
         <div className={cx("menu")}>
           <SideBar menu={menu} defaultTab={menu[0].subMenu[0].tab} />

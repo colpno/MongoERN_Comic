@@ -8,7 +8,7 @@ import styles from "./ToggleableSubNavbar.module.scss";
 const cx = classNames.bind(styles);
 
 function ToggleableSubNavbar({ menu }) {
-  const isToggle = useSelector((state) => state.global.toggleHeaderNavBar);
+  const isToggle = useSelector((state) => state.global.isHeaderNavBarToggled);
 
   return (
     <div className={cx("toggleable-navbar", isToggle ? "active" : null)}>

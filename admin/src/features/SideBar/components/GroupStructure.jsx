@@ -7,20 +7,14 @@ function GroupStructure({ isToggle, group, cx }) {
 
   return (
     <>
-      <p className={cx("group-label", isToggle ? "" : "visible")}>
-        {group.groupLabel}
-      </p>
+      <p className={cx("group-label", isToggle ? "" : "visible")}>{group.groupLabel}</p>
       <ul className={cx("sub-menu")}>
         {group.subMenu.map((tab, index) => {
           const { icon: Icon, to, label } = tab;
 
           return (
             <li className={cx("tab-container")} key={index}>
-              <Button
-                wrapper
-                to={to}
-                className={cx("tab", urlPath.includes(to) && "active")}
-              >
+              <Button wrapper to={to} className={cx("tab", urlPath.includes(to) && "active")}>
                 <Icon className={cx("tab-icon")} />
                 <span className={cx("tab-label", isToggle ? "" : "visible")}>
                   <div className={cx("separator")} />

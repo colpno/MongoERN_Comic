@@ -7,7 +7,7 @@ import styles from "../styles/AdminHeader.module.scss";
 const cx = classNames.bind(styles);
 
 function AdminHeader() {
-  const isSideBarToggle = useSelector((state) => state.global.toggleSideBar);
+  const isSideBarToggle = useSelector((state) => state.global.isSideBarToggled);
 
   return (
     <header className={cx("header", isSideBarToggle ? "sidebar--toggle" : "")}>

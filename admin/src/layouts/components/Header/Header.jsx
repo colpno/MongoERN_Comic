@@ -20,7 +20,7 @@ const cx = classNames.bind(styles);
 function Header({ menu }) {
   const dispatch = useDispatch();
   const url = useLocation().pathname;
-  const isToggleMobileNavBar = useSelector((state) => state.global.toggleHeaderNavBar);
+  const isToggleMobileNavBar = useSelector((state) => state.global.isHeaderNavBarToggled);
 
   if (menu === null) {
     menu = HEADER_MENU;
