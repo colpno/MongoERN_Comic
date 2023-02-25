@@ -1,8 +1,9 @@
-import { Col } from "react-bootstrap";
 import PropTypes from "prop-types";
+import { memo, useMemo } from "react";
+import { Col } from "react-bootstrap";
 
-import AdminCard from "layouts/AdminLayout/components/AdminCard";
 import { topSales } from "assets/images";
+import AdminCard from "layouts/AdminLayout/components/AdminCard";
 import { getChartColors } from "utils/constants";
 
 const cardData = (textData, chartData) => {
@@ -32,7 +33,24 @@ const cardData = (textData, chartData) => {
   };
 };
 
-function TitleManagementCards({ totalTitles, continuing, paused, finished }) {
+function TitleManagementCards({ titles }) {
+  const titleStatuses = useMemo(() => {
+    return titles.reduce(
+      (result, title) => {
+        switch (title.releaseDay) {
+          case "paused":
+            return { ...result, paused: result.paused + 1 };
+          case "finished":
+            return { ...result, finished: result.finished + 1 };
+          default:
+            return { ...result, continuing: result.continuing + 1 };
+        }
+      },
+      { continuing: 0, paused: 0, finished: 0, total: titles.length }
+    );
+  }, [titles]);
+  const { continuing, paused, finished, total: totalTitles } = titleStatuses;
+
   const chartColors = getChartColors().backgroundColors;
   const continuingCardData = cardData(
     {
@@ -95,26 +113,17 @@ function TitleManagementCards({ totalTitles, continuing, paused, finished }) {
         />
       </Col>
       <Col md={4}>
-        <AdminCard
-          rawData={pausedCardData.rawData}
-          chartProps={pausedCardData.chartProps}
-        />
+        <AdminCard rawData={pausedCardData.rawData} chartProps={pausedCardData.chartProps} />
       </Col>
       <Col md={4}>
-        <AdminCard
-          rawData={finishedCardData.rawData}
-          chartProps={finishedCardData.chartProps}
-        />
+        <AdminCard rawData={finishedCardData.rawData} chartProps={finishedCardData.chartProps} />
       </Col>
     </>
   );
 }
 
 TitleManagementCards.propTypes = {
-  totalTitles: PropTypes.number.isRequired,
-  continuing: PropTypes.number.isRequired,
-  paused: PropTypes.number.isRequired,
-  finished: PropTypes.number.isRequired,
+  titles: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired,
 };
 
-export default TitleManagementCards;
+export default memo(TitleManagementCards);

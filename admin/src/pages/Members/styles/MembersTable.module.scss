@@ -1,0 +1,52 @@
+@use "assets/styles/variables" as var;
+
+.avatar {
+  $size: 40px;
+  width: $size;
+  height: $size;
+  margin-right: 1rem;
+}
+
+.username {
+  font-weight: 500;
+}
+
+.coin,
+.point,
+.rent-ticket,
+.buy-ticket {
+  &-wrapper {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.coin,
+.point {
+  &-icon {
+    $size: 20px;
+    width: $size;
+    height: $size;
+    margin-left: 0.3rem;
+    margin-right: 0.8rem;
+  }
+}
+
+.rent-ticket,
+.buy-ticket {
+  &-icon {
+    $size: 28px;
+    width: $size;
+    height: $size;
+    margin-left: 0.3rem;
+  }
+}
+
+.activate-check-icon {
+  color: var.$green-300;
+  font-size: 22px;
+}
+
+.lock-icon {
+  color: var.$primary;
+}

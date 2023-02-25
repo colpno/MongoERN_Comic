@@ -1,15 +1,7 @@
 @use "assets/styles/variables" as var;
-@use "assets/styles/mixins";
 
 .title {
   font-weight: 500;
-
-  &-wrapper {
-    // @include mixins.singleLineClamp();
-
-    display: flex;
-    align-items: center;
-  }
 }
 
 .box-img {
@@ -21,9 +13,12 @@
   margin-right: 1rem;
   overflow: hidden;
   user-select: none;
-
-  display: flex;
   flex-shrink: 0;
+}
+
+.dollar-icon {
+  color: var.$orange;
+  font-size: 20px;
 }
 
 .icon {
@@ -38,18 +33,6 @@
   align-items: center;
 }
 
-.comment-icon {
-  color: #92cbd7;
-}
-
 .view-icon {
   color: #928925;
-}
-
-@media (max-width: 768px) {
-  .box-img {
-    $size: 50px;
-    width: $size;
-    height: $size;
-  }
 }

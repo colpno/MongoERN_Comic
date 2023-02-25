@@ -8,6 +8,7 @@ import { getChartColors } from "utils/constants";
 const cardData = (textData, chartData) => {
   const { icon, label, amount, subLabel } = textData;
   const { labels, datasets } = chartData;
+
   return {
     rawData: {
       icon,
@@ -31,12 +32,7 @@ const cardData = (textData, chartData) => {
   };
 };
 
-function ChapterManagementCards({
-  totalChapters,
-  waiting,
-  accepted,
-  rejected,
-}) {
+function ChapterManagementCards({ totalChapters, waiting, accepted, rejected }) {
   const chartColors = getChartColors().backgroundColors;
   const waitingCardData = cardData(
     {
@@ -93,27 +89,13 @@ function ChapterManagementCards({
   return (
     <>
       <Col xs={12} md={12} lg={6} xl={4}>
-        <AdminCard
-          rawData={waitingCardData.rawData}
-          chartProps={waitingCardData.chartProps}
-        />
+        <AdminCard rawData={waitingCardData.rawData} chartProps={waitingCardData.chartProps} />
       </Col>
       <Col xs={12} md={12} lg={6} xl={4}>
-        <AdminCard
-          rawData={acceptedCardData.rawData}
-          chartProps={acceptedCardData.chartProps}
-        />
+        <AdminCard rawData={acceptedCardData.rawData} chartProps={acceptedCardData.chartProps} />
       </Col>
-      <Col
-        xs={12}
-        md={12}
-        lg={{ span: 8, offset: 2 }}
-        xl={{ span: 4, offset: 0 }}
-      >
-        <AdminCard
-          rawData={rejectedCardData.rawData}
-          chartProps={rejectedCardData.chartProps}
-        />
+      <Col xs={12} md={12} lg={{ span: 8, offset: 2 }} xl={{ span: 4, offset: 0 }}>
+        <AdminCard rawData={rejectedCardData.rawData} chartProps={rejectedCardData.chartProps} />
       </Col>
     </>
   );

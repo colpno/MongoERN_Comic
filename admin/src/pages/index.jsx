@@ -3,7 +3,7 @@ export { default as Chapters } from "./Chapters/Chapters";
 export { default as Genres } from "./Genres/Genres";
 export { default as IncomeStatistic } from "./IncomeStatistic/IncomeStatistic";
 export { default as Login } from "./Login";
-export { default as LoginOTP } from "./LoginOTP/LoginOTP";
+export { default as LoginOTP } from "./VerifyLogin/VerifyLogin";
 export { default as Members } from "./Members/Members";
 export { default as NotFound } from "./NotFound/NotFound";
 export { default as PaymentMethods } from "./PaymentMethods/PaymentMethods";

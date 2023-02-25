@@ -1,36 +1,36 @@
+import moment from "moment";
 import PropTypes from "prop-types";
-import { Col, Row } from "react-bootstrap";
 
-import { GridTable } from "components";
-import { convertToDateString, formatTime } from "utils/convertTime";
+import { Table } from "components";
 
 function RecentPurchasedChapters({ cx, purchasedChapters }) {
-  return (
-    <GridTable border={false}>
-      {purchasedChapters.map((transaction) => {
-        const { id, user, chapter, createdAt } = transaction;
-        const { username } = user;
-        const { name } = chapter;
-        const { day, month, year, hour, minute } = formatTime(createdAt);
+  const initialState = {
+    sorting: {
+      sortModel: [{ field: "createAt", sort: "desc" }],
+    },
+  };
 
-        return (
-          <Row key={id}>
-            <Col>
-              <span>{username}</span>
-            </Col>
-            <Col className={cx("transact-datetime")}>
-              <p>{convertToDateString(day, month, year)}</p>
-              <p>
-                {hour}:{minute}
-              </p>
-            </Col>
-            <Col className={cx("amount")}>
-              <span>{name} </span>
-            </Col>
-          </Row>
-        );
-      })}
-    </GridTable>
+  return (
+    <Table
+      headers={[
+        {
+          field: "user_id.username",
+          headerName: "Người mua",
+        },
+        {
+          field: "createdAt",
+          headerName: "Thời gian giao dịch",
+          renderCell: ({ value }) => (
+            <span className={cx("timestamp")}>{moment(value).format("DD/MM/YYYY hh:mm:ss")}</span>
+          ),
+        },
+      ]}
+      data={purchasedChapters}
+      hasToolbar
+      height={400}
+      rowHeight={100}
+      initialState={initialState}
+    />
   );
 }
 

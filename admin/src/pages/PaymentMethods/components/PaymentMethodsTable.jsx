@@ -2,14 +2,14 @@ import { GridActionsCellItem } from "@mui/x-data-grid-pro";
 import classNames from "classnames/bind";
 import moment from "moment";
 import PropTypes from "prop-types";
-import { HiOutlinePencil } from "react-icons/hi";
+import { FaTrash } from "react-icons/fa";
 
 import { Table } from "components";
 import styles from "../styles/PaymentMethodsTable.module.scss";
 
 const cx = classNames.bind(styles);
 
-function PaymentMethodsTable({ paymentMethods }) {
+function PaymentMethodsTable({ paymentMethods, onDelete, onUpdate }) {
   const initialState = {
     pinnedColumns: { left: ["name"], right: ["actions"] },
   };
@@ -41,22 +41,32 @@ function PaymentMethodsTable({ paymentMethods }) {
         {
           field: "actions",
           type: "actions",
-          getActions: () => {
-            return [<GridActionsCellItem icon={<HiOutlinePencil />} label="Update" />];
-          },
+          getActions: ({ row }) => [
+            <GridActionsCellItem
+              size="large"
+              icon={<FaTrash />}
+              label="Delete"
+              onClick={() => onDelete(row._id)}
+            />,
+          ],
         },
       ]}
       data={paymentMethods}
       hasToolbar
-      autoHeight
+      height={700}
       rowHeight={100}
       initialState={initialState}
+      checkboxSelection
+      onMultiDelete={onDelete}
+      onRowEditCommit={onUpdate}
     />
   );
 }
 
 PaymentMethodsTable.propTypes = {
   paymentMethods: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired,
+  onDelete: PropTypes.func.isRequired,
+  onUpdate: PropTypes.func.isRequired,
 };
 
 export default PaymentMethodsTable;

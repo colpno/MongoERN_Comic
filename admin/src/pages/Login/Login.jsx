@@ -1,11 +1,10 @@
-/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import { Popup } from "features";
 import { useToast } from "hooks";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { login } from "services/auth";
+import { authService } from "services";
 
 import LoginForm from "./components/LoginForm";
 import styles from "./styles/Login.module.scss";
@@ -22,34 +21,30 @@ const checkLoggedInCanAccessURL = (url) => {
 function Login() {
   const navigate = useNavigate();
   const { Toast, options: toastOptions, toastEmitter } = useToast();
-  const [popup, setPopup] = useState({
-    trigger: false,
-    title: "Thông báo",
-    content: "",
-    isClosed: false,
-  });
-  const userState = useSelector((state) => state.user);
-  const { isLoggingIn } = userState;
+  const { popup, setPopup } = useState();
+  const isLoggingIn = useSelector((state) => state.user.isLoggingIn);
   const url = useLocation().pathname;
   const haveAccessed = useMemo(() => checkLoggedInCanAccessURL(url), [url]);
 
   const handleSubmit = (values, { setSubmitting }) => {
     const { username, password } = values;
-    login(username, password)
+
+    authService
+      .login(username, password)
       .then((response) => {
-        setPopup((prev) => ({ ...prev, trigger: true, content: response }));
+        setPopup({
+          isShown: true,
+          title: "Thông báo",
+          content: response.message,
+          onConfirm: () => navigate("/verify"),
+        });
       })
       .catch((error) => {
-        const { data } = error;
-        toastEmitter(data.error || data.message, "error");
+        toastEmitter(error, "error");
       });
 
     setSubmitting(false);
   };
-
-  useEffect(() => {
-    popup.isClosed && navigate("/verify");
-  }, [popup.isClosed]);
 
   return (
     <>

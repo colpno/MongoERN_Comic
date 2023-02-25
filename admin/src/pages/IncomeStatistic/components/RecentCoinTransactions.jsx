@@ -1,37 +1,52 @@
-import { Col, Row } from "react-bootstrap";
+import moment from "moment";
 import PropTypes from "prop-types";
 
-import { GridTable } from "components";
-import { convertToDateString, formatTime } from "utils/convertTime";
-import { CircleC } from "assets/images";
+import { Table } from "components";
 
 function RecentCoinTransactions({ cx, transactions }) {
-  return (
-    <GridTable border={false}>
-      {transactions.map((transaction) => {
-        const { id, user, amount, createdAt } = transaction;
-        const { username } = user;
-        const { day, month, year, hour, minute } = formatTime(createdAt);
+  const initialState = {
+    sorting: {
+      sortModel: [{ field: "createdAt", sort: "desc" }],
+    },
+  };
 
-        return (
-          <Row key={id}>
-            <Col>
-              <span>{username}</span>
-            </Col>
-            <Col className={cx("transact-datetime")}>
-              <p>{convertToDateString(day, month, year)}</p>
-              <p>
-                {hour}:{minute}
-              </p>
-            </Col>
-            <Col className={cx("amount")}>
-              <span>{amount} </span>
-              <CircleC />
-            </Col>
-          </Row>
-        );
-      })}
-    </GridTable>
+  return (
+    <Table
+      headers={[
+        {
+          field: "user_id.username",
+          headerName: "Người mua",
+        },
+        {
+          field: "payment_method",
+          headerName: "Phương thức",
+          headerAlign: "center",
+          align: "center",
+        },
+        {
+          field: "amount",
+          headerName: "Số lượng",
+          headerAlign: "center",
+          align: "center",
+          width: 80,
+        },
+        {
+          field: "createdAt",
+          headerName: "Ngày tạo",
+          width: 140,
+          align: "center",
+          headerAlign: "center",
+          renderCell: ({ value }) => (
+            <span className={cx("timestamp")}>{moment(value).format("DD.MM.YYYY")}</span>
+          ),
+        },
+      ]}
+      data={transactions}
+      hasToolbar
+      height={400}
+      rowHeight={100}
+      initialState={initialState}
+    />
   );
 }
 
