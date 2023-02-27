@@ -7,25 +7,14 @@ const userApi = {
     return axiosClient.get(url, { params, withCredentials: true });
   },
 
-  register: (username, password, avatar, email, role, dateOfBirth, setProgress = () => {}) => {
-    return axiosClient.post(
-      `${url}/register`,
-      {
-        username,
-        password,
-        avatar,
-        email,
-        role,
-        dateOfBirth,
+  register: (data, setProgress = () => {}) => {
+    return axiosClient.post(`${url}/register`, data, {
+      onUploadProgress: (e) => {
+        const { loaded, total } = e;
+        const progress = (loaded / total) * 100;
+        setProgress(progress);
       },
-      {
-        onUploadProgress: (e) => {
-          const { loaded, total } = e;
-          const progress = (loaded / total) * 100;
-          setProgress(progress);
-        },
-      }
-    );
+    });
   },
 
   update: (id, data, setProgress) => {
