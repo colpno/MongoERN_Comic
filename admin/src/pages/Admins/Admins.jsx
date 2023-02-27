@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 
 import { FloatingContainer } from "components";
-import { Loading, Popup } from "features";
-import { usePopup, useToast } from "hooks";
+import { Loading } from "features";
+import { useToast } from "hooks";
 import { userService } from "services";
 import AdminTable from "./components/AdminTable";
 
@@ -11,30 +11,27 @@ function Admins() {
   const [admins, setAdmins] = useState([]);
   const [loading, setLoading] = useState(false);
   const { Toast, options: toastOptions, toastEmitter } = useToast();
-  const { popup, setPopup, triggerPopup } = usePopup({
-    isShown: false,
-    type: "confirm",
-  });
+
+  const handleAdd = (data) => {
+    userService
+      .register(data)
+      .then((response) => {
+        setAdmins((prev) => [response.data, ...prev]);
+        toastEmitter(response.message);
+      })
+      .catch((error) => toastEmitter(error, "error"));
+  };
 
   const handleUpdate = (data) => {
-    const { _id, ...fields } = data[0];
+    const { _id, ...fields } = data;
 
-    setPopup({
-      title: "Cập nhật tài khoản",
-      content: "Bạn có chắc chắn muốn thay đổi không?",
-      isShown: true,
-      onConfirm: () => {
-        userService
-          .update(_id, fields)
-          .then((response) => {
-            setAdmins((prev) =>
-              prev.map((item) => (item._id === _id ? { ...response.data } : item))
-            );
-            toastEmitter(response.message);
-          })
-          .catch((error) => toastEmitter(error, "error"));
-      },
-    });
+    userService
+      .update(_id, fields)
+      .then((response) => {
+        setAdmins((prev) => prev.map((item) => (item._id === _id ? { ...response.data } : item)));
+        toastEmitter(response.message);
+      })
+      .catch((error) => toastEmitter(error, "error"));
   };
 
   const handleDelete = (data) => {
@@ -43,24 +40,15 @@ function Admins() {
       _id_in: ids,
     };
 
-    setPopup({
-      title: "Xóa tài khoản",
-      content: "Bạn có chắc chắn muốn xóa không?",
-      isShown: true,
-      onConfirm: () => {
-        userService
-          .delete(params)
-          .then((response) => {
-            setAdmins((prev) =>
-              prev.filter((item) =>
-                Array.isArray(ids) ? !ids.includes(item._id) : ids !== item._id
-              )
-            );
-            toastEmitter(response.message);
-          })
-          .catch((error) => toastEmitter(error, "error"));
-      },
-    });
+    userService
+      .delete(params)
+      .then((response) => {
+        setAdmins((prev) =>
+          prev.filter((item) => (Array.isArray(ids) ? !ids.includes(item._id) : ids !== item._id))
+        );
+        toastEmitter(response.message);
+      })
+      .catch((error) => toastEmitter(error, "error"));
   };
 
   useEffect(() => {
@@ -89,10 +77,16 @@ function Admins() {
           </Col>
         </Row>
         <FloatingContainer>
-          <AdminTable admins={admins} onDelete={handleDelete} onUpdate={handleUpdate} />
+          {admins.length > 0 && (
+            <AdminTable
+              admins={admins}
+              onDelete={handleDelete}
+              onAdd={handleAdd}
+              onUpdate={handleUpdate}
+            />
+          )}
         </FloatingContainer>
       </Container>
-      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
       <Toast {...toastOptions} />
       {loading && <Loading />}
     </>
