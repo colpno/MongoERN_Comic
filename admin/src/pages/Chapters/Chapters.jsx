@@ -4,9 +4,9 @@ import { Container, Row } from "react-bootstrap";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { FloatingContainer, Select } from "components";
-import { Loading, Popup } from "features";
-import { usePopup, useToast } from "hooks";
-import { approvedStatusService, chapterService, titleService } from "services";
+import { Loading } from "features";
+import { useToast } from "hooks";
+import { approvedStatusService, chapterService, objectStatusService, titleService } from "services";
 import { handlePromiseAllSettled, replaceAll } from "utils";
 import ChapterManagementCards from "./components/ChapterManagementCards";
 import ChapterTable from "./components/ChapterTable";
@@ -30,10 +30,15 @@ const getQueryParams = () => {
     _fields: "code status color",
   };
 
+  const objectStatusParams = {
+    _fields: "code status",
+  };
+
   return {
     titleParams,
     chapterParams,
     approvedStatusParams,
+    objectStatusParams,
   };
 };
 
@@ -44,11 +49,9 @@ function Chapters() {
   const [chapters, setChapters] = useState([]);
   const [titles, setTitles] = useState([]);
   const [approvedStatuses, setApprovedStatuses] = useState([]);
+  const [objectStatuses, setObjectStatuses] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedTitleId, setSelectedTitleId] = useState({ value: "all", label: "Tất cả" });
-  const { popup, setPopup, triggerPopup } = usePopup({
-    type: "confirm",
-  });
 
   const titleSelectOptions = useMemo(() => {
     return [
@@ -90,25 +93,19 @@ function Chapters() {
     );
   }, [chapters]);
 
-  const handleUpdate = (editedInfo) => {
-    const { _id, ...fields } = editedInfo[0];
+  const handleUpdate = (data, setRowIdError) => {
+    const { _id, approved_status_id: approvedStatusId } = data;
 
-    setPopup({
-      title: "Cập nhật tài khoản",
-      content: "Bạn có chắc chắn muốn thay đổi không?",
-      isShown: true,
-      onConfirm: () => {
-        chapterService
-          .update(_id, fields)
-          .then((response) => {
-            setChapters((prev) =>
-              prev.map((item) => (item._id === _id ? { ...response.data } : item))
-            );
-            toastEmitter(response.message);
-          })
-          .catch((error) => toastEmitter(error));
-      },
-    });
+    chapterService
+      .update(_id, { approved_status_id: approvedStatusId })
+      .then((response) => {
+        setChapters((prev) => prev.map((item) => (item._id === _id ? response.data : item)));
+        toastEmitter(response.message);
+      })
+      .catch((error) => {
+        setRowIdError(_id);
+        toastEmitter(error, "error");
+      });
   };
 
   const handleChangeTitle = (selectedValue) => {
@@ -136,18 +133,21 @@ function Chapters() {
   useEffect(() => {
     (async () => {
       setLoading(true);
-      const { approvedStatusParams, chapterParams, titleParams } = getQueryParams();
+      const { approvedStatusParams, objectStatusParams, chapterParams, titleParams } =
+        getQueryParams();
 
       const titlePromise = titleService.getAll(titleParams);
       const approvedStatusPromise = approvedStatusService.getAll(approvedStatusParams);
-      const promises = [titlePromise, approvedStatusPromise];
+      const objectStatusPromise = objectStatusService.getAll(objectStatusParams);
+      const promises = [titlePromise, approvedStatusPromise, objectStatusPromise];
 
       const results = await Promise.allSettled(promises);
       const { fulfilledResults } = handlePromiseAllSettled(results, toastEmitter);
-      const [titleResult, approvedStatusResult] = fulfilledResults;
+      const [titleResult, approvedStatusResult, objectStatusResult] = fulfilledResults;
 
       titleResult && setTitles(titleResult.data);
       approvedStatusResult && setApprovedStatuses(approvedStatusResult.data);
+      objectStatusResult && setObjectStatuses(objectStatusResult.data);
 
       /* 
           Get chapters of title which name from searchParams.
@@ -202,11 +202,11 @@ function Chapters() {
           <ChapterTable
             chapters={chapters}
             approvedStatuses={approvedStatuses}
-            onRowEditCommit={handleUpdate}
+            objectStatuses={objectStatuses}
+            onUpdate={handleUpdate}
           />
         </FloatingContainer>
       </Container>
-      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
       <Toast {...toastOptions} />
       {loading && <Loading />}
     </>

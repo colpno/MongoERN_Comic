@@ -2,7 +2,7 @@ import { GridActionsCellItem, GRID_CHECKBOX_SELECTION_COL_DEF } from "@mui/x-dat
 import classNames from "classnames/bind";
 import moment from "moment";
 import PropTypes from "prop-types";
-import { memo, useMemo } from "react";
+import { memo, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { BsEyeFill } from "react-icons/bs";
 import { FaCommentDots } from "react-icons/fa";
@@ -13,12 +13,27 @@ import { circleC, circleP } from "assets/images";
 import { Button, Table } from "components";
 import { convertTimeLabel } from "constants/time.constant";
 import { roundNumByUnit, replaceAll } from "utils";
-import styles from "../styles/TitlesTable.module.scss";
+import styles from "../styles/TitleTable.module.scss";
 
 const cx = classNames.bind(styles);
 
-const getHeaders = (approvedStatusOptions, approvedStatuses) => {
-  const navigate = useNavigate();
+const getHeaders = (approvedStatusOptions, approvedStatuses, objectStatuses) => {
+  const getObjectStatus = useCallback(
+    (value) => {
+      const objectStatus = objectStatuses.find((status) => status._id === value);
+      return objectStatus;
+    },
+    [objectStatuses]
+  );
+
+  const getApprovedStatus = useCallback(
+    (value) => {
+      const status = approvedStatuses.find((apdStat) => apdStat._id === value);
+      return status;
+    },
+    [approvedStatuses]
+  );
+
   return [
     {
       headerName: "Truyện",
@@ -44,7 +59,10 @@ const getHeaders = (approvedStatusOptions, approvedStatuses) => {
       width: 140,
       headerAlign: "center",
       align: "center",
-      valueGetter: ({ value }) => value.status,
+      valueGetter: ({ value }) => {
+        if (value.status) return value.status;
+        return getObjectStatus(value).status;
+      },
     },
     {
       headerName: "Duyệt",
@@ -57,9 +75,10 @@ const getHeaders = (approvedStatusOptions, approvedStatuses) => {
       editable: true,
       valueGetter: ({ value }) => value._id || value,
       renderCell: ({ value }) => {
-        const status = approvedStatuses.find((apdStat) => apdStat._id === value);
+        const status = getApprovedStatus(value);
         return (
           <span
+            title={status.status}
             style={{
               color: status.color.hex,
               fontWeight: 700,
@@ -193,31 +212,29 @@ const getHeaders = (approvedStatusOptions, approvedStatuses) => {
         <span className={cx("timestamp")}>{moment(value).format("DD.MM.YYYY")}</span>
       ),
     },
-    {
-      field: "actions",
-      type: "actions",
-      width: 80,
-      getActions: ({ row }) => {
-        return [
-          <GridActionsCellItem
-            size="large"
-            title="Xem danh sách chương"
-            icon={<TbList />}
-            label="Show chapters"
-            onClick={() => {
-              const { title } = row;
-              const titleParam = replaceAll(title.toLowerCase(), /\s/, "-");
-              const URLParam = `/chapters?title=${titleParam}`;
-              navigate(URLParam);
-            }}
-          />,
-        ];
-      },
-    },
   ];
 };
 
-function TitlesTable({ titles, approvedStatuses, onRowEditCommit }) {
+const actions = ({ row }) => {
+  const navigate = useNavigate();
+
+  return [
+    <GridActionsCellItem
+      size="large"
+      title="Xem danh sách chương"
+      icon={<TbList />}
+      label="Show chapters"
+      onClick={() => {
+        const { title } = row;
+        const titleParam = replaceAll(title.toLowerCase(), /\s/, "-");
+        const URLParam = `/chapters?title=${titleParam}`;
+        navigate(URLParam);
+      }}
+    />,
+  ];
+};
+
+function TitleTable({ titles, approvedStatuses, objectStatuses, onUpdate }) {
   const initialState = {
     sorting: {
       sortModel: [{ field: "approved_status_id", sort: "asc" }],
@@ -243,7 +260,7 @@ function TitlesTable({ titles, approvedStatuses, onRowEditCommit }) {
     [approvedStatuses]
   );
 
-  const headers = getHeaders(approvedStatusOptions, approvedStatuses);
+  const headers = getHeaders(approvedStatusOptions, approvedStatuses, objectStatuses);
 
   return (
     <Table
@@ -253,12 +270,14 @@ function TitlesTable({ titles, approvedStatuses, onRowEditCommit }) {
       rowHeight={100}
       height={700}
       initialState={initialState}
-      onRowEditCommit={onRowEditCommit}
+      allowEdit
+      onUpdate={onUpdate}
+      customAction={actions}
     />
   );
 }
 
-TitlesTable.propTypes = {
+TitleTable.propTypes = {
   titles: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   approvedStatuses: PropTypes.arrayOf(
     PropTypes.shape({
@@ -266,7 +285,12 @@ TitlesTable.propTypes = {
       status: PropTypes.string.isRequired,
     }).isRequired
   ).isRequired,
-  onRowEditCommit: PropTypes.func.isRequired,
+  objectStatuses: PropTypes.arrayOf(
+    PropTypes.shape({
+      status: PropTypes.string.isRequired,
+    }).isRequired
+  ).isRequired,
+  onUpdate: PropTypes.func.isRequired,
 };
 
-export default memo(TitlesTable);
+export default memo(TitleTable);

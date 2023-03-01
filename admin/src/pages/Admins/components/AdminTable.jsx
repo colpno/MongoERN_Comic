@@ -122,12 +122,11 @@ function AdminTable({ admins, onDelete, onAdd, onUpdate }) {
       initialState={initialState}
       allowAdd
       onAdd={onAdd}
-      initialNewDataFields={initNewDataFields}
+      initialNewRowData={initNewDataFields}
       allowEdit
       onUpdate={onUpdate}
       allowDelete
-      checkboxSelection
-      onMultiDelete={onDelete}
+      onDelete={onDelete}
     />
   );
 }

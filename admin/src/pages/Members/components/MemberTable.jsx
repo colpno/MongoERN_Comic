@@ -7,16 +7,16 @@ import { MdCheck } from "react-icons/md";
 import { BuyTicket, circleC, circleP, RentTicket } from "assets/images";
 import { Table } from "components";
 import { separateNumberDigit } from "utils";
-import styles from "../styles/MembersTable.module.scss";
+import styles from "../styles/MemberTable.module.scss";
 
 const cx = classNames.bind(styles);
 
-function MembersTable({ members, onRowEditCommit }) {
+function MemberTable({ members, onUpdate }) {
   const initialState = {
     sorting: {
       sortModel: [{ field: "createdAt", sort: "desc" }],
     },
-    pinnedColumns: { left: ["username"] },
+    pinnedColumns: { left: ["username"], right: ["actions"] },
   };
 
   return (
@@ -151,14 +151,15 @@ function MembersTable({ members, onRowEditCommit }) {
       height={700}
       rowHeight={100}
       initialState={initialState}
-      onRowEditCommit={onRowEditCommit}
+      allowEdit
+      onUpdate={onUpdate}
     />
   );
 }
 
-MembersTable.propTypes = {
+MemberTable.propTypes = {
   members: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired,
-  onRowEditCommit: PropTypes.func.isRequired,
+  onUpdate: PropTypes.func.isRequired,
 };
 
-export default MembersTable;
+export default MemberTable;

@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 
 import { FloatingContainer } from "components";
-import { Loading, Popup } from "features";
-import { usePopup, useToast } from "hooks";
+import { Loading } from "features";
+import { useToast } from "hooks";
 import { approvedStatusService, objectStatusService, titleService } from "services";
 import { handlePromiseAllSettled } from "utils";
 import {
-  StatTitleStatus,
   StatTitleReleaseDay,
+  StatTitleStatus,
   TitleManagementCards,
-  TitlesTable,
+  TitleTable,
 } from "./components";
 
 const queryParams = {
@@ -19,6 +19,7 @@ const queryParams = {
       { collection: "approved_status_id", fields: "code status color" },
       { collection: "status_id", field: "-_id status" },
     ]),
+    _fields: "-cover.cloud_public_id -__v -_guid",
   },
   approvedStatusParams: {
     _fields: "code status color",
@@ -34,29 +35,20 @@ function Titles() {
   const [approvedStatuses, setApprovedStatuses] = useState([]);
   const [objectStatuses, setObjectStatuses] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { popup, setPopup, triggerPopup } = usePopup({
-    type: "confirm",
-  });
 
-  const handleUpdate = (editedInfo) => {
-    const { _id, ...fields } = editedInfo[0];
+  const handleUpdate = (data, setRowIdError) => {
+    const { _id, approved_status_id: approvedStatusId } = data;
 
-    setPopup({
-      title: "Cập nhật tài khoản",
-      content: "Bạn có chắc chắn muốn thay đổi không?",
-      isShown: true,
-      onConfirm: () => {
-        titleService
-          .update(_id, fields)
-          .then((response) => {
-            setTitles((prev) =>
-              prev.map((item) => (item._id === _id ? { ...response.data } : item))
-            );
-            toastEmitter(response.message);
-          })
-          .catch((error) => toastEmitter(error));
-      },
-    });
+    titleService
+      .update(_id, { approved_status_id: approvedStatusId })
+      .then((response) => {
+        setTitles((prev) => prev.map((item) => (item._id === _id ? { ...response.data } : item)));
+        toastEmitter(response.message);
+      })
+      .catch((error) => {
+        setRowIdError(_id);
+        toastEmitter(error, "error");
+      });
   };
 
   useEffect(() => {
@@ -94,10 +86,11 @@ function Titles() {
         <Row>
           <Col xs={12} lg={8}>
             <FloatingContainer>
-              <TitlesTable
+              <TitleTable
                 titles={titles}
                 approvedStatuses={approvedStatuses}
-                onRowEditCommit={handleUpdate}
+                objectStatuses={objectStatuses}
+                onUpdate={handleUpdate}
               />
             </FloatingContainer>
           </Col>
@@ -123,7 +116,6 @@ function Titles() {
           </Col>
         </Row>
       </Container>
-      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
       <Toast {...toastOptions} />
       {loading && <Loading />}
     </>

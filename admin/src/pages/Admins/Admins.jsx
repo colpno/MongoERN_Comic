@@ -12,17 +12,22 @@ function Admins() {
   const [loading, setLoading] = useState(false);
   const { Toast, options: toastOptions, toastEmitter } = useToast();
 
-  const handleAdd = (data) => {
+  const handleAdd = (data, setRowIdError) => {
+    const { _id, ...fields } = data;
+
     userService
-      .register(data)
+      .register(fields)
       .then((response) => {
         setAdmins((prev) => [response.data, ...prev]);
         toastEmitter(response.message);
       })
-      .catch((error) => toastEmitter(error, "error"));
+      .catch((error) => {
+        setRowIdError(_id);
+        toastEmitter(error, "error");
+      });
   };
 
-  const handleUpdate = (data) => {
+  const handleUpdate = (data, setRowIdError) => {
     const { _id, ...fields } = data;
 
     userService
@@ -31,8 +36,20 @@ function Admins() {
         setAdmins((prev) => prev.map((item) => (item._id === _id ? { ...response.data } : item)));
         toastEmitter(response.message);
       })
-      .catch((error) => toastEmitter(error, "error"));
+      .catch((error) => {
+        setRowIdError(_id);
+        toastEmitter(error, "error");
+      });
   };
+
+  useEffect(() => {
+    const params = { role: "member" };
+
+    userService
+      .getAll(params)
+      .then((response) => setAdmins(response.data))
+      .catch((error) => toastEmitter(error, "error"));
+  }, []);
 
   const handleDelete = (data) => {
     const ids = data instanceof Map ? Array.from(data.keys()) : data;

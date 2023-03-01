@@ -1,13 +1,15 @@
-import { GridActionsCellItem } from "@mui/x-data-grid-pro";
 import moment from "moment";
 import PropTypes from "prop-types";
-import { FaTrash } from "react-icons/fa";
 
 import { Table } from "components";
 
-function GenreTable({ genres, onDelete, onUpdate }) {
+function GenreTable({ genres, onDelete, onUpdate, onAdd }) {
   const initialState = {
     pinnedColumns: { right: ["actions"] },
+  };
+
+  const initialNewRowData = {
+    name: "",
   };
 
   return (
@@ -21,7 +23,11 @@ function GenreTable({ genres, onDelete, onUpdate }) {
           flex: 2,
           minWidth: 200,
           editable: true,
-          renderCell: ({ value }) => <span className="bold">{value}</span>,
+          renderCell: ({ value }) => (
+            <span className="bold" title={value}>
+              {value}
+            </span>
+          ),
         },
         {
           field: "createdAt",
@@ -47,28 +53,19 @@ function GenreTable({ genres, onDelete, onUpdate }) {
             <span className="timestamp">{moment(value).format("DD.MM.YYYY")}</span>
           ),
         },
-        {
-          field: "actions",
-          type: "actions",
-          width: 80,
-          getActions: ({ row }) => [
-            <GridActionsCellItem
-              size="large"
-              icon={<FaTrash />}
-              label="Delete"
-              onClick={() => onDelete(row._id)}
-            />,
-          ],
-        },
       ]}
       data={genres}
       hasToolbar
       height={700}
       rowHeight={100}
-      checkboxSelection
       initialState={initialState}
-      onMultiDelete={onDelete}
-      onRowEditCommit={onUpdate}
+      allowDelete
+      onDelete={onDelete}
+      allowEdit
+      onUpdate={onUpdate}
+      allowAdd
+      onAdd={onAdd}
+      initialNewRowData={initialNewRowData}
     />
   );
 }
@@ -77,6 +74,7 @@ GenreTable.propTypes = {
   genres: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired,
   onDelete: PropTypes.func.isRequired,
   onUpdate: PropTypes.func.isRequired,
+  onAdd: PropTypes.func.isRequired,
 };
 
 export default GenreTable;

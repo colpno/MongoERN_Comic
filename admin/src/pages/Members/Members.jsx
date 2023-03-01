@@ -1,19 +1,18 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useMemo, useState } from "react";
 import { Container, Row } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 
 import { FloatingContainer } from "components";
-import { Popup } from "features";
-import { usePopup, useToast } from "hooks";
+import { useToast } from "hooks";
 import { userService } from "services";
 import MemberManagementCards from "./components/MemberManagementCards";
-import MembersTable from "./components/MembersTable";
+import MemberTable from "./components/MemberTable";
 
 function Members() {
+  const dispatch = useDispatch();
   const [members, setMembers] = useState([]);
   const { Toast, options: toastOptions, toastEmitter } = useToast();
-  const { popup, setPopup, triggerPopup } = usePopup({
-    type: "confirm",
-  });
 
   const stat = useMemo(() => {
     return members.reduce(
@@ -35,29 +34,23 @@ function Members() {
     );
   }, [members]);
 
-  const handleUpdate = (editedInfo) => {
-    const { _id, ...fields } = editedInfo[0];
+  const handleUpdate = (data, setRowIdError) => {
+    const { _id, ...fields } = data;
 
-    setPopup({
-      title: "Cập nhật tài khoản",
-      content: "Bạn có chắc chắn muốn thay đổi không?",
-      isShown: true,
-      onConfirm: () => {
-        userService
-          .update(_id, fields)
-          .then((response) => {
-            userService((prev) => prev.map((item) => (item._id === _id ? response.data : item)));
-            toastEmitter(response.message);
-          })
-          .catch((error) => toastEmitter(error));
-      },
-    });
+    userService
+      .update(_id, fields)
+      .then((response) => {
+        setMembers((prev) => prev.map((item) => (item._id === _id ? response.data : item)));
+        toastEmitter(response.message);
+      })
+      .catch((error) => {
+        setRowIdError(_id);
+        toastEmitter(error, "error");
+      });
   };
 
   useEffect(() => {
-    const params = {
-      role: "member",
-    };
+    const params = { role: "member" };
 
     userService
       .getAll(params)
@@ -80,10 +73,9 @@ function Members() {
           <h4>All Members</h4>
         </Row>
         <FloatingContainer>
-          <MembersTable members={members} onRowEditCommit={handleUpdate} />
+          <MemberTable members={members} onUpdate={handleUpdate} />
         </FloatingContainer>
       </Container>
-      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
       <Toast {...toastOptions} />
     </>
   );

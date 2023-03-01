@@ -1,7 +1,7 @@
 import classNames from "classnames/bind";
 import moment from "moment";
 import PropTypes from "prop-types";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { BsCurrencyDollar, BsEyeFill } from "react-icons/bs";
 import { FcLike } from "react-icons/fc";
 
@@ -11,13 +11,17 @@ import styles from "../styles/ChaptersTable.module.scss";
 
 const cx = classNames.bind(styles);
 
-function ChapterTable({ chapters, approvedStatuses, onRowEditCommit }) {
+function ChapterTable({ chapters, approvedStatuses, objectStatuses, onUpdate }) {
   const initialState = {
     sorting: {
       sortModel: [
         { field: "approved_status_id", sort: "asc" },
         { field: "order", sort: "desc" },
       ],
+    },
+    pinnedColumns: {
+      left: ["title"],
+      right: ["actions"],
     },
   };
 
@@ -36,6 +40,22 @@ function ChapterTable({ chapters, approvedStatuses, onRowEditCommit }) {
           </span>
         ),
       })),
+    [approvedStatuses]
+  );
+
+  const getObjectStatus = useCallback(
+    (value) => {
+      const objectStatus = objectStatuses.find((status) => status._id === value);
+      return objectStatus;
+    },
+    [objectStatuses]
+  );
+
+  const getApprovedStatus = useCallback(
+    (value) => {
+      const status = approvedStatuses.find((apdStat) => apdStat._id === value);
+      return status;
+    },
     [approvedStatuses]
   );
 
@@ -58,10 +78,15 @@ function ChapterTable({ chapters, approvedStatuses, onRowEditCommit }) {
           headerAlign: "center",
           renderCell: ({ row }) => (
             <>
-              <div className={cx("box-img")}>
+              <div className={cx("box-img")} title={row.title}>
                 <img src={row.cover.source} alt={row.title} />
               </div>
-              <Button text to={`/comic/title/${row.title_id}/${row._id}`} className={cx("title")}>
+              <Button
+                text
+                to={`/comic/title/${row.title_id}/${row._id}`}
+                className={cx("title")}
+                title={row.title}
+              >
                 {row.title}
               </Button>
             </>
@@ -73,7 +98,10 @@ function ChapterTable({ chapters, approvedStatuses, onRowEditCommit }) {
           width: 140,
           headerAlign: "center",
           align: "center",
-          valueGetter: ({ value }) => value.status,
+          valueGetter: ({ value }) => {
+            if (value.status) return value.status;
+            return getObjectStatus(value).status;
+          },
         },
         {
           headerName: "Duyệt",
@@ -86,13 +114,10 @@ function ChapterTable({ chapters, approvedStatuses, onRowEditCommit }) {
           editable: true,
           valueGetter: ({ value }) => value._id || value,
           renderCell: ({ value }) => {
-            // console.log("file: ChapterTable.jsx:89 ~ value:", value);
-            // console.log("file: ChapterTable.jsx:91 ~ approvedStatuses:", approvedStatuses);
-            const status = approvedStatuses.find((apdStat) => {
-              return apdStat._id === value;
-            });
+            const status = getApprovedStatus(value);
             return (
               <span
+                title={status.status}
                 style={{
                   color: status.color.hex,
                   fontWeight: 700,
@@ -167,7 +192,8 @@ function ChapterTable({ chapters, approvedStatuses, onRowEditCommit }) {
       height={700}
       rowHeight={100}
       initialState={initialState}
-      onRowEditCommit={onRowEditCommit}
+      allowEdit
+      onUpdate={onUpdate}
     />
   );
 }
@@ -180,7 +206,12 @@ ChapterTable.propTypes = {
       status: PropTypes.string.isRequired,
     }).isRequired
   ).isRequired,
-  onRowEditCommit: PropTypes.func.isRequired,
+  objectStatuses: PropTypes.arrayOf(
+    PropTypes.shape({
+      status: PropTypes.string.isRequired,
+    }).isRequired
+  ).isRequired,
+  onUpdate: PropTypes.func.isRequired,
 };
 
 export default ChapterTable;
