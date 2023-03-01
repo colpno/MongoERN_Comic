@@ -1,0 +1,76 @@
+@use "assets/styles/variables" as var;
+
+.wrapper {
+  border: 1px solid var.$grey-400;
+
+  &:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+}
+
+.title {
+  text-align: center;
+  padding: 4px;
+}
+
+.guide-container {
+  padding: 0.6rem 4px 0.4rem;
+  display: flex;
+  align-items: center;
+
+  &:not(:first-child) {
+    border-top: 1px solid var.$grey-400;
+  }
+}
+
+.guide {
+  margin: 0 auto 0 1px;
+  max-width: 45%;
+  font-size: 13px;
+}
+
+.key {
+  font-size: 13px;
+  color: #1a2027;
+
+  padding: 3px 5px;
+
+  height: fit-content;
+
+  background-color: #f3f6f9;
+  border: 1px solid #cdd2d7;
+  border-radius: 5px;
+  box-shadow: inset 0 -1px 0 #cdd2d7;
+
+  &-separator {
+    margin: 0 4px;
+    font-weight: 300;
+  }
+}
+
+.mouse {
+  $size: 24px;
+  width: min-content;
+  height: $size;
+  padding: 2px;
+}
+
+.explain {
+  padding-left: 1rem;
+  width: 55%;
+  position: relative;
+
+  &::before {
+    position: absolute;
+    content: ":";
+    top: 50%;
+    left: 4px;
+    transform: translateY(-50%);
+    font-weight: 800;
+  }
+}
+
+.sub-explain {
+  color: var.$grey-500;
+  font-size: 0.8em;
+}
