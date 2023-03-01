@@ -33,9 +33,9 @@ const genreService = {
       return Promise.reject(error.data);
     }
   },
-  delete: async (id, setProgress = () => {}) => {
+  delete: async (params, setProgress = () => {}) => {
     try {
-      const response = await genreApi.delete(id, setProgress);
+      const response = await genreApi.delete(params, setProgress);
       return response;
     } catch (error) {
       return Promise.reject(error.data);
