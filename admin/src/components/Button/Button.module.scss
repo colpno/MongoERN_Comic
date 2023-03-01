@@ -2,13 +2,14 @@
 
 .btn {
   background-color: transparent;
-  padding: 9.5px 25px;
+  padding: 6.5px 20px;
   outline: none;
-  border: 1px solid transparent;
-  border-radius: 4px;
   min-width: fit-content;
-  font-size: inherit;
 
+  border: 1px solid transparent;
+  border-radius: 5px;
+
+  font-size: inherit;
   font-weight: 700;
 
   cursor: pointer;
@@ -26,12 +27,19 @@
   border: 1px solid var.$primary-dark;
   background-color: var.$primary;
   color: var.$white;
-  box-shadow: 1px 1px var.$primary-dark;
+  box-shadow: 1px 2px var.$primary-dark;
 
   &:hover {
     background-color: var.$primary;
     color: var.$white;
   }
+}
+
+.secondary {
+  border: 1px solid #008cbb;
+  background-color: var.$secondary;
+  color: var.$white;
+  box-shadow: 1px 2px #008cbb;
 }
 
 .grey {
@@ -60,80 +68,6 @@
   color: var.$clr-green;
 }
 
-// Darken
-.dark90 {
-  filter: brightness(90%);
-}
-
-.dark80 {
-  filter: brightness(80%);
-}
-
-.dark70 {
-  filter: brightness(70%);
-}
-
-.dark60 {
-  filter: brightness(60%);
-}
-
-.dark50 {
-  filter: brightness(50%);
-}
-
-.dark40 {
-  filter: brightness(40%);
-}
-
-.dark30 {
-  filter: brightness(30%);
-}
-
-.dark20 {
-  filter: brightness(20%);
-}
-
-.dark10 {
-  filter: brightness(10%);
-}
-
-// Lighten
-.light90 {
-  filter: brightness(90%);
-}
-
-.light80 {
-  filter: brightness(80%);
-}
-
-.light70 {
-  filter: brightness(70%);
-}
-
-.light60 {
-  filter: brightness(60%);
-}
-
-.light50 {
-  filter: brightness(50%);
-}
-
-.light40 {
-  filter: brightness(40%);
-}
-
-.light30 {
-  filter: brightness(30%);
-}
-
-.light20 {
-  filter: brightness(20%);
-}
-
-.light10 {
-  filter: brightness(10%);
-}
-
 // Size
 .large {
   padding: 11px 70px;
@@ -142,9 +76,9 @@
 }
 
 .small {
-  padding: 6px 20px;
-  border-radius: 8px;
-  font-size: 1rem;
+  padding: 4px 14px;
+  border-radius: 6px;
+  font-size: 0.8rem;
 }
 
 .xsmall {
@@ -191,8 +125,4 @@
 
 .round {
   border-radius: 20vmax !important;
-}
-
-.marginTop1 {
-  margin-top: 1rem;
 }
