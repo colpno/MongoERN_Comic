@@ -40,7 +40,7 @@
 
   &-icon {
     $size: 1.7em;
-    color: rgb(28, 172, 220);
+    color: var.$secondary;
     width: $size;
     height: $size;
 
