@@ -266,7 +266,6 @@ Table.propTypes = {
   disableColumnMenu: PropTypes.bool,
 
   onDelete: PropTypes.func,
-  checkboxSelection: PropTypes.bool,
   allowDelete: PropTypes.bool,
 
   allowEdit: PropTypes.bool,
@@ -293,7 +292,6 @@ Table.defaultProps = {
   disableColumnMenu: false,
 
   onDelete: () => {},
-  checkboxSelection: false,
   allowDelete: false,
 
   allowEdit: false,
