@@ -16,8 +16,9 @@ const personalNotificationApi = {
       },
     }),
 
-  delete: (id) => {
-    return axiosClient.delete(`${url}/delete/${id}`, {
+  delete: (params) => {
+    return axiosClient.delete(`${url}/delete`, {
+      params,
       withCredentials: true,
     });
   },
