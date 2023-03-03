@@ -11,7 +11,7 @@ import styles from "./styles/Register.module.scss";
 const cx = classNames.bind(styles);
 
 function Register() {
-  const [popup, setPopup, triggerPopup] = usePopup();
+  const { popup, setPopup, triggerPopup } = usePopup();
 
   const handleSubmit = (values, { setSubmitting }) => {
     const { username, email, password } = values;

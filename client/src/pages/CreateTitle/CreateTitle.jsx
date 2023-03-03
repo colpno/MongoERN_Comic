@@ -12,7 +12,7 @@ function CreateTitle() {
   const navigate = useNavigate();
   const [progress, setProgress] = useState(0);
   const { Toast, options: toastOptions, toastEmitter } = useToast();
-  const [popup, setPopup, triggerPopup] = usePopup();
+  const { popup, setPopup, triggerPopup } = usePopup();
 
   const INITIAL_VALUE = {
     title: "",

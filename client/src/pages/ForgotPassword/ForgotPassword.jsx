@@ -16,7 +16,7 @@ const cx = classNames.bind(styles);
 function ForgotPassword() {
   const dispatch = useDispatch();
   const { Toast, options, toastEmitter } = useToast();
-  const [popup, setPopup, triggerPopup] = usePopup();
+  const { popup, setPopup, triggerPopup } = usePopup();
 
   const INITIAL_VALUES = {
     username: "",

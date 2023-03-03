@@ -12,7 +12,7 @@ function CreateChapter() {
   const [progress, setProgress] = useState(0);
   const { Toast, options: toastOptions, toastEmitter } = useToast();
   const [chapters, setChapters] = useState([]);
-  const [popup, triggerPopup] = usePopup();
+  const { popup, triggerPopup } = usePopup();
 
   const INITIAL_VALUE = {
     order: `${Number.parseInt(chapters[0]?.order || 0, 10) + 1}`,

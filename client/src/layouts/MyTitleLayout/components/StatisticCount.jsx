@@ -22,7 +22,7 @@ function StatisticCount() {
   const user = useSelector((state) => state.user.user);
   const [titles, setTitles] = useState([]);
   const [stat, setStat] = useState({ likes: 0, views: 0, totalTitles: 0, comments: 0 });
-  const [popup, triggerPopup] = usePopup({
+  const { popup, triggerPopup } = usePopup({
     isShown: false,
     title: "Thu nhập",
     content: <IncomePopup />,

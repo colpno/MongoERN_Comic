@@ -1,6 +1,4 @@
-/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
-import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -17,7 +15,7 @@ const cx = classNames.bind(styles);
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [popup, setPopup, triggerPopup] = usePopup();
+  const { popup, setPopup, triggerPopup } = usePopup();
   const { Toast, options: toastOptions, toastEmitter } = useToast();
 
   const handleSubmit = (values, { setSubmitting }) => {

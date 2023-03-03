@@ -37,7 +37,7 @@ function Title() {
   const [loading, setLoading] = useState(false);
   const hasTitle = Object.keys(title).length > 0;
   const haveChapters = chapters.length > 0;
-  const [popup, setPopup, triggerPopup] = usePopup();
+  const { popup, setPopup, triggerPopup } = usePopup();
   const backgroundImageCSS = hasTitle && {
     backgroundImage: `url(${title.cover.source})`,
     backgroundRepeat: "no-repeat",

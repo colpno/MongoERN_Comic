@@ -14,7 +14,7 @@ function Profile() {
   const [user, setUser] = useState({});
   const [progress, setProgress] = useState(0);
   const { Toast, options, toastEmitter } = useToast();
-  const [popup, setPopup, triggerPopup] = usePopup();
+  const { popup, setPopup, triggerPopup } = usePopup();
 
   const INITIAL_VALUE = user?.username && {
     avatar: user.avatar,

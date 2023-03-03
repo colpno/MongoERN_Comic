@@ -50,7 +50,7 @@ function VerifyLogin() {
     digit3: "",
     digit4: "",
   });
-  const [popup, setPopup, triggerPopup] = usePopup();
+  const { popup, setPopup, triggerPopup } = usePopup();
 
   const handleSubmit = () => {
     const OTPKeys = Object.keys(OTPValue);

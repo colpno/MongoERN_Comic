@@ -12,7 +12,7 @@ function UpdateTitle() {
   const [progress, setProgress] = useState(0);
   const [title, setTitle] = useState({});
   const { Toast, options: toastOptions, toastEmitter } = useToast();
-  const [popup, setPopup, triggerPopup] = usePopup();
+  const { popup, setPopup, triggerPopup } = usePopup();
   const hasData = Object.keys(title).length > 0;
   const INITIAL_VALUE = hasData && {
     title: title.title,
