@@ -25,7 +25,7 @@ function App() {
   const url = useLocation().pathname;
 
   useEffect(() => {
-    if (handlePrivateRouteForGuess(url, isLoggingIn, setPopup)) {
+    if (handlePrivateRouteForGuess(url, isLoggingIn)) {
       setPopup({
         isShown: true,
         title: "Thông báo",
