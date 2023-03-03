@@ -1,10 +1,9 @@
-import { GridActionsCellItem } from "@mui/x-data-grid-pro";
-import { useMemo } from "react";
+import { GridActionsCellItem, GRID_CHECKBOX_SELECTION_COL_DEF } from "@mui/x-data-grid-pro";
 import classNames from "classnames/bind";
 import moment from "moment";
 import PropTypes from "prop-types";
-import { BsTrash } from "react-icons/bs";
-import { HiOutlinePencil } from "react-icons/hi";
+import { useMemo } from "react";
+import { MdEdit } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 
 import { Button, Table } from "components";
@@ -12,11 +11,11 @@ import styles from "../styles/ChaptersTable.module.scss";
 
 const cx = classNames.bind(styles);
 
-const getHeaders = (onDelete) => [
+const getHeaders = () => [
   {
     headerName: "Thứ tự",
     field: "order",
-    width: 60,
+    width: 90,
     headerAlign: "center",
     align: "center",
   },
@@ -98,43 +97,41 @@ const getHeaders = (onDelete) => [
       <span className={cx("timestamp")}>{moment(value).format("DD.MM.YYYY")}</span>
     ),
   },
-  {
-    field: "actions",
-    type: "actions",
-    getActions: ({ row }) => {
-      const navigate = useNavigate();
-
-      return [
-        <GridActionsCellItem
-          icon={<HiOutlinePencil />}
-          onClick={() => navigate(`update/${row._id}`)}
-          label="Update"
-        />,
-        <GridActionsCellItem icon={<BsTrash />} onClick={() => onDelete(row._id)} label="Delete" />,
-      ];
-    },
-  },
 ];
 
 function ChapterTable({ chapters, onDelete }) {
   const initialState = {
     sorting: {
-      sortModel: [{ field: "approved_status_id", sort: "asc" }],
+      sortModel: [{ field: "order", sort: "desc" }],
     },
-    pinnedColumns: { left: ["title"], right: ["actions"] },
+    pinnedColumns: { left: [GRID_CHECKBOX_SELECTION_COL_DEF.field, "title"], right: ["actions"] },
   };
 
-  const headers = useMemo(() => getHeaders(onDelete), []);
+  const headers = useMemo(() => getHeaders(), []);
+
+  const customAction = ({ row }) => {
+    const navigate = useNavigate();
+    return [
+      <GridActionsCellItem
+        icon={<MdEdit />}
+        onClick={() => navigate(`update/${row._id}`)}
+        label="Update"
+        title="Cập nhật"
+      />,
+    ];
+  };
 
   return (
     <Table
       headers={headers}
       data={chapters}
       hasToolbar
-      autoHeight
       rowHeight={100}
+      height={700}
       initialState={initialState}
-      onMultiDelete={onDelete}
+      allowDelete
+      onDelete={onDelete}
+      customAction={customAction}
     />
   );
 }

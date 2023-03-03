@@ -2,7 +2,7 @@ import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 
-import { Loading, NoData } from "features";
+import { Loading } from "features";
 import { useToast } from "hooks";
 import { readingHistoryService } from "services";
 import ReadingHistoryTable from "./components/ReadingHistoryTable";
@@ -40,16 +40,9 @@ function ReadingHistory() {
 
   return (
     <>
-      {histories.length > 0 ? (
-        <Container className={cx("reading-history")}>
-          <ReadingHistoryTable readingHistories={histories} cx={cx} />
-        </Container>
-      ) : (
-        <NoData>
-          <h5>Hiện tại chưa có truyện nào được bạn theo dõi!</h5>
-          <small>Vui lòng quay lại sau nhé!</small>
-        </NoData>
-      )}
+      <Container className={cx("reading-history")}>
+        <ReadingHistoryTable readingHistories={histories} />
+      </Container>
       {loading && <Loading />}
       <Toast {...options} />
     </>

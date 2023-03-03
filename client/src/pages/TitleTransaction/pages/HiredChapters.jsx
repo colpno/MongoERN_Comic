@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-import { Loading, NoData } from "features";
+import { Loading } from "features";
 import { useToast } from "hooks";
 import { chapterTransactionService } from "services";
 import HiredChaptersTable from "./components/HiredChaptersTable";
@@ -41,15 +41,7 @@ function HiredChapters({ cx }) {
 
   return (
     <>
-      {transactions.length > 0 ? (
-        <HiredChaptersTable transactions={transactions} cx={cx} />
-      ) : (
-        <NoData>
-          <h5>Hiện tại chưa có truyện nào được bạn thuê!</h5>
-          <small>Vui lòng quay lại sau nhé!</small>
-        </NoData>
-      )}
-      <div />
+      <HiredChaptersTable transactions={transactions} cx={cx} />
       {loading && <Loading />}
       <Toast {...options} />
     </>

@@ -1,54 +1,61 @@
-import { BuyTicket, RentTicket } from "assets/images";
 import classNames from "classnames/bind";
+import moment from "moment";
 import PropTypes from "prop-types";
-import { Col, Row } from "react-bootstrap";
-import { formatTime } from "utils/convertTime";
+
+import { RentTicket } from "assets/images";
+import { Table } from "components";
 import styles from "../assets/styles/InventoryTable.module.scss";
 
 const cx = classNames.bind(styles);
 
 function InventoryTable({ hiredChapters }) {
-  return (
-    <>
-      {hiredChapters.map((hiredTitle) => {
-        const beginTime = formatTime(hiredTitle.createdAt);
-        const expiredTime = hiredTitle.expiredAt
-          ? formatTime(hiredTitle.expiredAt)
-          : "";
-        const { chapter } = hiredTitle;
+  const initialState = {
+    sorting: {
+      sortModel: [{ field: "createdAt", sort: "desc" }],
+    },
+  };
 
-        return (
-          <Row
-            className={cx("inventory__container__content")}
-            key={hiredTitle._id}
-          >
-            <Col md={6} className={cx("chapter")}>
+  return (
+    <Table
+      headers={[
+        {
+          field: "chapter.title",
+          headerName: "Chương",
+          renderCell: ({ row }) => (
+            <>
               <div className={cx("box-img")}>
-                <img src={chapter.cover.source} alt={chapter.title} />
+                <img src={row.cover.source} alt={row.title} />
               </div>
-              <span className={cx("chapter")}>{chapter.title}</span>
-            </Col>
-            <Col>
-              <span className={cx("chapter")}>
-                {hiredTitle.ticket_id === 1 ? <BuyTicket /> : <RentTicket />}
-                <strong className={cx("separate")}>x</strong>
-                <strong className={cx("rent-quantity")}>1</strong>
-              </span>
-            </Col>
-            <Col className={cx("begin-time")}>
-              {`${beginTime.day}.${beginTime.month}.${beginTime.year}`}
-            </Col>
-            {expiredTime !== "" ? (
-              <Col className={cx("expired-time")}>
-                {`${expiredTime.day}.${expiredTime.month}.${expiredTime.year} ${expiredTime.hour}:${expiredTime.minute}`}
-              </Col>
-            ) : (
-              <Col />
-            )}
-          </Row>
-        );
-      })}
-    </>
+              <span className={cx("chapter")}>{row.title}</span>
+            </>
+          ),
+        },
+        {
+          field: "cost",
+          headerName: "Số lượng",
+          renderCell: ({ value }) => (
+            <>
+              <RentTicket />
+              <strong className={cx("separate")}>x</strong>
+              <strong className={cx("rent-quantity")}>{value}</strong>
+            </>
+          ),
+        },
+        {
+          field: "createdAt",
+          headerName: "Thời gian thuê",
+          renderCell: ({ value }) => moment(value).format("DD.MM.YYYY"),
+        },
+        {
+          field: "expiredAt",
+          headerName: "Hạn đọc",
+          renderCell: ({ value }) => moment(value).format("DD.MM.YYYY hh:mm"),
+        },
+      ]}
+      data={hiredChapters}
+      initialState={initialState}
+      height={700}
+    />
   );
 }
 
@@ -57,13 +64,14 @@ InventoryTable.propTypes = {
     PropTypes.shape({
       createdAt: PropTypes.string.isRequired,
       expiredAt: PropTypes.string.isRequired,
-      id: PropTypes.string.isRequired,
+      _id: PropTypes.string.isRequired,
       chapter: PropTypes.shape({
         cover: PropTypes.shape({
           source: PropTypes.string.isRequired,
         }).isRequired,
         title: PropTypes.string.isRequired,
       }).isRequired,
+      cost: PropTypes.number.isRequired,
     })
   ).isRequired,
 };

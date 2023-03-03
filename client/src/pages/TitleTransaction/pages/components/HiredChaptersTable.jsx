@@ -44,8 +44,22 @@ const getHeaders = (cx) => [
 
 function HiredChaptersTable({ transactions, cx }) {
   const headers = useMemo(() => getHeaders(cx), []);
+  const initialState = {
+    sorting: {
+      sortModel: [{ field: "expiredAt", sort: "asc" }],
+    },
+  };
 
-  return <Table headers={headers} data={transactions} hasToolbar autoHeight rowHeight={100} />;
+  return (
+    <Table
+      headers={headers}
+      data={transactions}
+      hasToolbar
+      height={700}
+      rowHeight={100}
+      initialState={initialState}
+    />
+  );
 }
 
 HiredChaptersTable.propTypes = {

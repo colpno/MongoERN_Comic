@@ -1,16 +1,13 @@
-import { GridActionsCellItem } from "@mui/x-data-grid-pro";
 import classNames from "classnames/bind";
 import moment from "moment";
 import PropTypes from "prop-types";
-import { useMemo } from "react";
-import { IoTrashSharp } from "react-icons/io5";
 
 import { Table } from "components";
 import styles from "../styles/FollowTable.module.scss";
 
 const cx = classNames.bind(styles);
 
-const getHeaders = (handleDelete) => [
+const getHeaders = () => [
   {
     headerName: "Tiêu đề",
     field: "title_id",
@@ -44,24 +41,27 @@ const getHeaders = (handleDelete) => [
     align: "center",
     renderCell: ({ value }) => <span>{moment(value).format("DD.MM.YYYY")}</span>,
   },
-  {
-    field: "actions",
-    type: "actions",
-    width: 60,
-    getActions: ({ row }) => [
-      <GridActionsCellItem
-        icon={<IoTrashSharp />}
-        onClick={() => handleDelete(row._id)}
-        label="Delete"
-      />,
-    ],
-  },
 ];
 
 function FollowTable({ follows, onDelete }) {
-  const headers = useMemo(() => getHeaders(onDelete), []);
+  const initialState = {
+    sorting: {
+      sortModel: [{ field: "updatedAt", sort: "desc" }],
+    },
+  };
 
-  return <Table headers={headers} data={follows} hasToolbar autoHeight rowHeight={100} />;
+  return (
+    <Table
+      headers={getHeaders()}
+      data={follows}
+      hasToolbar
+      height={700}
+      rowHeight={100}
+      allowDelete
+      onDelete={onDelete}
+      initialState={initialState}
+    />
+  );
 }
 
 FollowTable.propTypes = {

@@ -1,0 +1,22 @@
+@use "assets/styles/variables" as var;
+
+.quantity {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 1.3em;
+
+  &.green {
+    color: var.$clr-green;
+  }
+
+  &.red {
+    color: var.$red;
+  }
+}
+
+.icon {
+  $size: 28px;
+  width: $size;
+  height: $size;
+  margin-left: 0.6rem;
+}

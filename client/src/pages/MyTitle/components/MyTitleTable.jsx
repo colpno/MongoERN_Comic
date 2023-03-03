@@ -4,10 +4,10 @@ import moment from "moment";
 import PropTypes from "prop-types";
 import { memo } from "react";
 import { BsEyeFill } from "react-icons/bs";
+import { TiThList } from "react-icons/ti";
 import { FaCommentDots } from "react-icons/fa";
 import { FcLike } from "react-icons/fc";
-import { HiOutlinePencil } from "react-icons/hi";
-import { TbList } from "react-icons/tb";
+import { MdEdit } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 
 import { circleC, circleP } from "assets/images";
@@ -179,26 +179,6 @@ const headers = [
       <span className={cx("timestamp")}>{moment(value).format("DD.MM.YYYY")}</span>
     ),
   },
-  {
-    field: "actions",
-    type: "actions",
-    getActions: ({ row }) => {
-      const navigate = useNavigate();
-
-      return [
-        <GridActionsCellItem
-          icon={<HiOutlinePencil />}
-          onClick={() => navigate(`update/${row._id}`)}
-          label="Update"
-        />,
-        <GridActionsCellItem
-          icon={<TbList />}
-          onClick={() => navigate(row._id)}
-          label="Show chapters"
-        />,
-      ];
-    },
-  },
 ];
 
 function MyTitleTable({ titles }) {
@@ -208,15 +188,33 @@ function MyTitleTable({ titles }) {
     },
     pinnedColumns: { left: ["title"], right: ["actions"] },
   };
+  const customAction = ({ row }) => {
+    const navigate = useNavigate();
+    return [
+      <GridActionsCellItem
+        icon={<MdEdit />}
+        onClick={() => navigate(`update/${row._id}`)}
+        label="Update"
+        title="Cập nhật"
+      />,
+      <GridActionsCellItem
+        icon={<TiThList />}
+        onClick={() => navigate(row._id)}
+        label="Show chapters"
+        title="Danh sách chương và thao tác với truyện"
+      />,
+    ];
+  };
 
   return (
     <Table
       headers={headers}
       data={titles}
       hasToolbar
-      autoHeight
+      height={700}
       rowHeight={100}
       initialState={initialState}
+      customAction={customAction}
     />
   );
 }

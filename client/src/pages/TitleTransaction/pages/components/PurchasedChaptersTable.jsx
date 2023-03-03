@@ -9,7 +9,7 @@ const getHeaders = (cx) => {
   return [
     {
       headerName: "Truyện",
-      field: "title",
+      field: "chapter_id",
       flex: 1,
       valueGetter: ({ row }) => row.title_id.title,
       renderCell: ({ row }) => (
@@ -27,8 +27,7 @@ const getHeaders = (cx) => {
     {
       headerName: "Chi phí",
       field: "cost",
-      maxWidth: 120,
-      minWidth: 100,
+      width: 140,
       headerAlign: "center",
       align: "center",
       renderCell: ({ value }) => (
@@ -41,8 +40,7 @@ const getHeaders = (cx) => {
     {
       headerName: "Thời gian mua",
       field: "createdAt",
-      maxWidth: 300,
-      minWidth: 250,
+      width: 250,
       headerAlign: "center",
       align: "center",
       renderCell: ({ value }) => <span>{moment(value).format("DD.MM.YYYY hh:mm:ss")}</span>,
@@ -52,7 +50,22 @@ const getHeaders = (cx) => {
 
 function PurchasedChaptersTable({ transactions, cx }) {
   const headers = useMemo(() => getHeaders(cx), []);
-  return <Table headers={headers} data={transactions} hasToolbar autoHeight rowHeight={100} />;
+  const initialState = {
+    sorting: {
+      sortModel: [{ field: "createdAt", sort: "desc" }],
+    },
+  };
+
+  return (
+    <Table
+      headers={headers}
+      data={transactions}
+      hasToolbar
+      height={700}
+      rowHeight={100}
+      initialState={initialState}
+    />
+  );
 }
 
 PurchasedChaptersTable.propTypes = {

@@ -3,8 +3,7 @@ import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
-import { Popup } from "features";
-import { usePopup, useToast } from "hooks";
+import { useToast } from "hooks";
 import { followService } from "services";
 import FollowTable from "./components/FollowTable";
 import styles from "./styles/Follow.module.scss";
@@ -15,7 +14,6 @@ function Follow() {
   const user = useSelector((state) => state.user.user);
   const [follows, setFollows] = useState([]);
   const { Toast, options, toastEmitter } = useToast();
-  const { popup, setPopup, triggerPopup } = usePopup();
 
   const handleDelete = (data) => {
     const ids = data instanceof Map ? Array.from(data.keys()) : data;
@@ -23,24 +21,15 @@ function Follow() {
       _id_in: ids,
     };
 
-    setPopup({
-      isShown: true,
-      title: "Xóa yêu thích",
-      content: "Bạn có muốn xóa yêu thích?",
-      onConfirm: () => {
-        followService
-          .delete(params)
-          .then(() => {
-            setFollows((prev) =>
-              prev.filter((item) =>
-                Array.isArray(ids) ? !ids.includes(item._id) : ids !== item._id
-              )
-            );
-            toastEmitter("Hủy theo dõi thành công", "success");
-          })
-          .catch((error) => toastEmitter(error, "error"));
-      },
-    });
+    followService
+      .delete(params)
+      .then(() => {
+        setFollows((prev) =>
+          prev.filter((item) => (Array.isArray(ids) ? !ids.includes(item._id) : ids !== item._id))
+        );
+        toastEmitter("Hủy theo dõi thành công", "success");
+      })
+      .catch((error) => toastEmitter(error, "error"));
   };
 
   useEffect(() => {
@@ -60,7 +49,6 @@ function Follow() {
       <Container className={cx("follow")}>
         <FollowTable follows={follows} onDelete={handleDelete} />
       </Container>
-      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
       <Toast {...options} />
     </>
   );

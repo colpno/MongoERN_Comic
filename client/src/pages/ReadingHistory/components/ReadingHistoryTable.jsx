@@ -11,12 +11,13 @@ const cx = classNames.bind(styles);
 const headers = [
   {
     headerName: "Các nội dung được đọc gần đây nhất",
-    field: "title",
+    field: "title_id",
     flex: 1,
+    minWidth: 300,
     valueGetter: ({ row }) => row.title_id.title,
     renderCell: ({ row }) => (
       <div className={cx("reading-history__container__content__title-info")}>
-        <div className={cx("box-img")}>
+        <div className={cx("box-img")} title={row.title_id.title}>
           <img
             src={row.title_id.cover.source}
             alt={row.title_id.title}
@@ -47,7 +48,22 @@ const headers = [
 ];
 
 function ReadingHistoryTable({ readingHistories }) {
-  return <Table headers={headers} data={readingHistories} hasToolbar autoHeight rowHeight={100} />;
+  const initialTableState = {
+    sorting: {
+      sortModel: [{ field: "updatedAt", sort: "desc" }],
+    },
+  };
+
+  return (
+    <Table
+      headers={headers}
+      data={readingHistories}
+      hasToolbar
+      height={700}
+      rowHeight={100}
+      initialState={initialTableState}
+    />
+  );
 }
 
 ReadingHistoryTable.propTypes = {
