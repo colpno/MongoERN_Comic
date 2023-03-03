@@ -15,7 +15,7 @@ const usePopup = (initialState) => {
     }));
   };
 
-  return { data, setPopup, triggerPopup };
+  return { popup: data, setPopup, triggerPopup };
 };
 
 export default usePopup;
