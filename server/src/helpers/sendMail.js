@@ -13,7 +13,6 @@ export const sendMail = (to, subject, html) => {
 
   transporter.sendMail(mailDetails, (err) => {
     if (err) {
-      console.log('file: sendMail.js:16 ~ err', err);
       throw new Error(err);
     }
   });
