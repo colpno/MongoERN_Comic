@@ -1,3 +1,4 @@
+import handleMongoProjection from '../helpers/handleMongoProjection.js';
 import paginateSort from '../helpers/paginateSort.js';
 import { Title } from '../models/index.js';
 import cloudinaryService from './cloudinary.service.js';
@@ -7,41 +8,41 @@ const cloudOptions = (id, path = '') => ({
   folder: `comic/titles/${id}/${path}`,
 });
 
-const sortGenres = (titles) => {
-  const sorted = titles.map((title) => {
-    const sortedGenres = title.genres.sort();
-    // eslint-disable-next-line no-param-reassign
-    title.genres = sortedGenres;
-    return title;
-  });
-  return sorted;
-};
-
 const titleService = {
   getAll: async (params = {}) => {
-    params._fields = `-__v -_guid -cover.cloud_public_id${
-      params._fields ? ` ${params._fields}` : ''
-    }`;
-    const { _page, _limit, _sort, _order, _fields, _embed, ...others } = params;
+    try {
+      params._fields = handleMongoProjection(params._fields, '-__v -_guid -cover.cloud_public_id');
+      const { _page, _limit, _sort, _order, _fields, _embed, ...others } = params;
 
-    if (_limit || (_sort && _order)) {
-      const response = await paginateSort(params, Title);
-      response.data = sortGenres(response.data);
-      return response;
+      if (_limit || (_sort && _order)) {
+        const response = await paginateSort(params, Title);
+        return response;
+      }
+
+      const response = await Title.find(others).select(_fields).populate(_embed);
+      return { data: response };
+    } catch (error) {
+      throw new Error(error);
     }
-
-    const response = await Title.find(others).select(_fields).populate(_embed);
-    return { data: sortGenres(response) };
   },
   getOne: async (params = {}) => {
-    const response = await Title.findOne(params)
-      .populate('approved_status_id')
-      .populate('status_id');
-    return sortGenres(response);
+    try {
+      params._fields = handleMongoProjection(params._fields, '-__v -_guid -cover.cloud_public_id');
+      const { _fields, _embed, ...others } = params;
+
+      const response = await Title.findOne(others).select(_fields).populate(_embed);
+      return response;
+    } catch (error) {
+      throw new Error(error);
+    }
   },
   random: async (count, params = {}) => {
-    const response = await Title.aggregate([{ $match: params }, { $sample: { size: +count } }]);
-    return response;
+    try {
+      const response = await Title.aggregate([{ $match: params }, { $sample: { size: +count } }]);
+      return response;
+    } catch (error) {
+      throw new Error(error);
+    }
   },
   add: async (
     userId = '',
@@ -56,67 +57,99 @@ const titleService = {
     point = 0,
     guid = ''
   ) => {
-    const model = new Title({
-      user_id: userId,
-      release_day: releaseDay,
-      title,
-      status,
-      cover,
-      author,
-      summary,
-      genres,
-      coin,
-      point,
-      _guid: guid,
-    });
+    try {
+      const model = new Title({
+        user_id: userId,
+        release_day: releaseDay,
+        title,
+        status,
+        cover,
+        author,
+        summary,
+        genres,
+        coin,
+        point,
+        _guid: guid,
+      });
 
-    const response = await model.save();
-    return response;
+      const response = await model.save();
+      return response;
+    } catch (error) {
+      throw new Error(error);
+    }
   },
   update: async (id, data = {}) => {
-    const response = await Title.findOneAndUpdate({ _id: id }, data, { new: true });
-    return response;
+    try {
+      const response = await Title.findOneAndUpdate({ _id: id }, data, { new: true });
+      return response;
+    } catch (error) {
+      throw new Error(error);
+    }
   },
   increaseCommentNum: async (id) => {
-    const response = await Title.findOneAndUpdate(
-      { _id: id },
-      { $inc: { comment_num: 1 } },
-      {
-        new: true,
-        timestamps: false,
-      }
-    );
-    return response;
+    try {
+      const response = await Title.findOneAndUpdate(
+        { _id: id },
+        { $inc: { comment_num: 1 } },
+        {
+          new: true,
+          timestamps: false,
+        }
+      );
+      return response;
+    } catch (error) {
+      throw new Error(error);
+    }
   },
   increaseView: async (id) => {
-    const response = await Title.findOneAndUpdate(
-      { _id: id },
-      { $inc: { view: 1 } },
-      { new: true, timestamps: false }
-    );
-    return response;
+    try {
+      const response = await Title.findOneAndUpdate(
+        { _id: id },
+        { $inc: { view: 1 } },
+        { new: true, timestamps: false }
+      );
+      return response;
+    } catch (error) {
+      throw new Error(error);
+    }
   },
   increaseLike: async (id, value = 1) => {
-    const response = await Title.findOneAndUpdate(
-      { _id: id },
-      { $inc: { like: value } },
-      { new: true, timestamps: false }
-    );
-    return response;
+    try {
+      const response = await Title.findOneAndUpdate(
+        { _id: id },
+        { $inc: { like: value } },
+        { new: true, timestamps: false }
+      );
+      return response;
+    } catch (error) {
+      throw new Error(error);
+    }
   },
   delete: async (id) => {
-    const response = await Title.findOneAndDelete({ _id: id });
-    return response;
+    try {
+      const response = await Title.findOneAndDelete({ _id: id });
+      return response;
+    } catch (error) {
+      throw new Error(error);
+    }
   },
   uploadToCloud: async (cover, titleGuid) => {
-    const finalCover = cover
-      ? await cloudinaryService.upload(cover, cloudOptions(titleGuid, 'cover'))
-      : undefined;
+    try {
+      const finalCover = cover
+        ? await cloudinaryService.upload(cover, cloudOptions(titleGuid, 'cover'))
+        : undefined;
 
-    return finalCover;
+      return finalCover;
+    } catch (error) {
+      throw new Error(error);
+    }
   },
   removeFromCloud: async (publicId) => {
-    await cloudinaryService.remove(publicId);
+    try {
+      await cloudinaryService.remove(publicId);
+    } catch (error) {
+      throw new Error(error);
+    }
   },
 };
 

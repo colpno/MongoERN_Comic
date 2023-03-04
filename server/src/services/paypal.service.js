@@ -100,27 +100,31 @@ const paypalService = {
     return paymentData;
   },
   getPayoutData: (amount = '', receiver = '') => {
-    const payoutData = {
-      sender_batch_header: {
-        sender_batch_id: randomUUID(),
-        email_subject: 'Rút tiền thành công',
-        email_message: 'Cảm ơn bạn đã sử dụng dịch vụ của Comico.',
-      },
-      items: [
-        {
-          amount: {
-            value: Number.parseFloat(amount).toFixed(2).toString(),
-            currency: 'USD',
-          },
-          sender_item_id: randomUUID(),
-          recipient_type: 'EMAIL',
-          note: 'Cảm ơn bạn đã sử dụng dịch vụ của Comico.',
-          receiver,
+    try {
+      const payoutData = {
+        sender_batch_header: {
+          sender_batch_id: randomUUID(),
+          email_subject: 'Rút tiền thành công',
+          email_message: 'Cảm ơn bạn đã sử dụng dịch vụ của Comico.',
         },
-      ],
-    };
+        items: [
+          {
+            amount: {
+              value: Number.parseFloat(amount).toFixed(2).toString(),
+              currency: 'USD',
+            },
+            sender_item_id: randomUUID(),
+            recipient_type: 'EMAIL',
+            note: 'Cảm ơn bạn đã sử dụng dịch vụ của Comico.',
+            receiver,
+          },
+        ],
+      };
 
-    return payoutData;
+      return payoutData;
+    } catch (error) {
+      throw new Error(error);
+    }
   },
 };
 

@@ -1,36 +1,60 @@
+import handleMongoProjection from '../helpers/handleMongoProjection.js';
 import paginateSort from '../helpers/paginateSort.js';
 import { ApprovedStatus } from '../models/index.js';
 
 const approvedStatusService = {
   getAll: async (params = {}) => {
-    params._fields = `-__v${params._fields ? ` ${params._fields}` : ''}`;
-    const { _page, _limit, _sort, _order, _fields, ...others } = params;
+    try {
+      params._fields = handleMongoProjection(params._fields, '-__v');
+      const { _page, _limit, _sort, _order, _fields, ...others } = params;
 
-    if (_limit || (_sort && _order)) {
-      const response = await paginateSort(params, ApprovedStatus);
-      return response;
+      if (_limit || (_sort && _order)) {
+        const response = await paginateSort(params, ApprovedStatus);
+        return response;
+      }
+
+      const response = await ApprovedStatus.find(others).select(_fields);
+      return { data: response };
+    } catch (error) {
+      throw new Error(error);
     }
-
-    const response = await ApprovedStatus.find(others).select(_fields);
-    return { data: response };
   },
   getOne: async (params = {}) => {
-    const response = await ApprovedStatus.findOne(params);
-    return response;
+    try {
+      params._fields = handleMongoProjection(params._fields, '-__v');
+      const { _fields, _embed, ...others } = params;
+
+      const response = await ApprovedStatus.findOne(others).select(_fields).populate(_embed);
+      return response;
+    } catch (error) {
+      throw new Error(error);
+    }
   },
   add: async (status = '') => {
-    const model = new ApprovedStatus({ status });
+    try {
+      const model = new ApprovedStatus({ status });
 
-    const response = await model.save();
-    return response;
+      const response = await model.save();
+      return response;
+    } catch (error) {
+      throw new Error(error);
+    }
   },
   update: async (id, data) => {
-    const response = await ApprovedStatus.findOneAndUpdate({ _id: id }, data, { new: true });
-    return response;
+    try {
+      const response = await ApprovedStatus.findOneAndUpdate({ _id: id }, data, { new: true });
+      return response;
+    } catch (error) {
+      throw new Error(error);
+    }
   },
   delete: async (id) => {
-    const response = await ApprovedStatus.findOneAndDelete({ _id: id });
-    return response;
+    try {
+      const response = await ApprovedStatus.findOneAndDelete({ _id: id });
+      return response;
+    } catch (error) {
+      throw new Error(error);
+    }
   },
 };
 

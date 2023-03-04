@@ -4,9 +4,13 @@ import { sendMail } from '../helpers/sendMail.js';
 
 const authService = {
   hashPassword: (password) => {
-    const salt = bcrypt.genSaltSync(10);
-    const hashedPassword = bcrypt.hashSync(password, salt);
-    return hashedPassword;
+    try {
+      const salt = bcrypt.genSaltSync(10);
+      const hashedPassword = bcrypt.hashSync(password, salt);
+      return hashedPassword;
+    } catch (error) {
+      throw new Error(error);
+    }
   },
   sendResetPasswordLink: (email, expiredTime, link) => {
     try {

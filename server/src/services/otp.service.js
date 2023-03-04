@@ -5,18 +5,26 @@ import { Otp } from '../models/index.js';
 
 const otpService = {
   hashOTP: (otp) => {
-    const salt = bcrypt.genSaltSync(10);
-    const hashedOTP = bcrypt.hashSync(otp, salt);
-    return hashedOTP;
+    try {
+      const salt = bcrypt.genSaltSync(10);
+      const hashedOTP = bcrypt.hashSync(otp, salt);
+      return hashedOTP;
+    } catch (error) {
+      throw new Error(error);
+    }
   },
   generateOTP(length) {
-    let otp = '';
-    for (let i = 0; i < length; i++) {
-      otp += Math.floor(Math.random() * 10).toString();
-    }
-    const hashedOTP = this.hashOTP(otp);
+    try {
+      let otp = '';
+      for (let i = 0; i < length; i++) {
+        otp += Math.floor(Math.random() * 10).toString();
+      }
+      const hashedOTP = this.hashOTP(otp);
 
-    return { otp, hashedOTP };
+      return { otp, hashedOTP };
+    } catch (error) {
+      throw new Error(error);
+    }
   },
   sendViaMail: (email, otp) => {
     try {
@@ -38,33 +46,45 @@ const otpService = {
     }
   },
   getOne: (username, email) => {
-    const response = Otp.findOne({
-      username,
-      email,
-    });
-    return response;
+    try {
+      const response = Otp.findOne({
+        username,
+        email,
+      });
+      return response;
+    } catch (error) {
+      throw new Error(error);
+    }
   },
   async add(username, email, code) {
-    const existedOTP = await Otp.findOne({ username, email });
-    const hashedOTP = this.hashOTP(code);
+    try {
+      const existedOTP = await Otp.findOne({ username, email });
+      const hashedOTP = this.hashOTP(code);
 
-    if (existedOTP) {
-      const response = await Otp.updateOne({ username, email }, { code: hashedOTP });
+      if (existedOTP) {
+        const response = await Otp.updateOne({ username, email }, { code: hashedOTP });
+        return response;
+      }
+
+      const model = new Otp({
+        username,
+        email,
+        code: hashedOTP,
+      });
+
+      const response = await model.save();
       return response;
+    } catch (error) {
+      throw new Error(error);
     }
-
-    const model = new Otp({
-      username,
-      email,
-      code: hashedOTP,
-    });
-
-    const response = await model.save();
-    return response;
   },
   delete: async (username, email) => {
-    const response = await Otp.findOneAndDelete({ username, email });
-    return response;
+    try {
+      const response = await Otp.findOneAndDelete({ username, email });
+      return response;
+    } catch (error) {
+      throw new Error(error);
+    }
   },
 };
 

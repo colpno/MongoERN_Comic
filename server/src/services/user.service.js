@@ -1,32 +1,41 @@
+import handleMongoProjection from '../helpers/handleMongoProjection.js';
 import paginateSort from '../helpers/paginateSort.js';
 import { User } from '../models/index.js';
 
 const userService = {
   getAll: async (params = {}) => {
-    params._fields = `-__v${params._fields ? ` ${params._fields}` : ''}`;
-    const { _page, _limit, _sort, _order, _fields, ...others } = params;
+    try {
+      params._fields = handleMongoProjection(params._fields, '-__v');
+      const { _page, _limit, _sort, _order, _fields, ...others } = params;
 
-    if (_limit || (_sort && _order)) {
-      const response = await paginateSort(params, User);
-      return response;
+      if (_limit || (_sort && _order)) {
+        const response = await paginateSort(params, User);
+        return response;
+      }
+
+      const response = await User.find(others).select(_fields);
+      return { data: response };
+    } catch (error) {
+      throw new Error(error);
     }
-
-    const response = await User.find(others).select(_fields);
-    return { data: response };
   },
   getOne: async (params = {}) => {
     try {
-      const response = await User.findOne(params);
+      params._fields = handleMongoProjection(params._fields, '-__v');
+      const { _fields, _embed, ...others } = params;
+
+      const response = await User.findOne(others).select(_fields).populate(_embed);
       return response;
     } catch (error) {
       throw new Error(error);
     }
   },
-  register: async (username, password, email, role, dateOfBirth) => {
+  register: async (username, password, avatar, email, role, dateOfBirth) => {
     try {
       const model = new User({
         username,
         password,
+        avatar,
         email,
         role,
         data_of_birth: dateOfBirth,
@@ -45,9 +54,9 @@ const userService = {
       throw new Error(error);
     }
   },
-  delete: async (id) => {
+  delete: async (match) => {
     try {
-      const response = await User.findOneAndDelete({ _id: id });
+      const response = await User.deleteMany(match);
       return response;
     } catch (error) {
       throw new Error(error);

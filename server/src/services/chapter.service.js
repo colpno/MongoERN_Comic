@@ -1,3 +1,4 @@
+import handleMongoProjection from '../helpers/handleMongoProjection.js';
 import paginateSort from '../helpers/paginateSort.js';
 import { Chapter, Title } from '../models/index.js';
 import cloudinaryService from './cloudinary.service.js';
@@ -32,22 +33,37 @@ const uploadContents = async (contents, titleGuid, chapterGuid) => {
 
 const chapterService = {
   getAll: async (params = {}) => {
-    params._fields = `-__v -_guid -cover.cloud_public_id${
-      params._fields ? ` ${params._fields}` : ''
-    }`;
-    const { _page, _limit, _sort, _order, _fields, _embed, ...others } = params;
+    try {
+      params._fields = handleMongoProjection(
+        params._fields,
+        '-__v -_guid -cover.cloud_public_id -content.cloud_public_id'
+      );
+      const { _page, _limit, _sort, _fields, _order, _embed, ...others } = params;
 
-    if (_limit || (_sort && _order)) {
-      const response = await paginateSort(params, Chapter);
-      return response;
+      if (_limit || (_sort && _order)) {
+        const response = await paginateSort(params, Chapter);
+        return response;
+      }
+
+      const response = await Chapter.find(others).select(_fields).populate(_embed);
+      return { data: response };
+    } catch (error) {
+      throw new Error(error);
     }
-
-    const response = await Chapter.find(others).select(_fields).populate(_embed);
-    return { data: response };
   },
   getOne: async (params = {}) => {
-    const response = await Chapter.findOne(params);
-    return response;
+    try {
+      params._fields = handleMongoProjection(
+        params._fields,
+        '-__v -_guid -cover.cloud_public_id -content.cloud_public_id'
+      );
+      const { _fields, _embed, ...others } = params;
+
+      const response = await Chapter.findOne(others).select(_fields).populate(_embed);
+      return response;
+    } catch (error) {
+      throw new Error(error);
+    }
   },
   add: async (
     titleId = '',
@@ -58,64 +74,94 @@ const chapterService = {
     cost = false,
     guid = ''
   ) => {
-    const model = new Chapter({
-      title_id: titleId,
-      title,
-      cover,
-      contents,
-      order,
-      cost,
-      _guid: guid,
-    });
+    try {
+      const model = new Chapter({
+        title_id: titleId,
+        title,
+        cover,
+        contents,
+        order,
+        cost,
+        _guid: guid,
+      });
 
-    const response = await model.save();
-    return response;
+      const response = await model.save();
+      return response;
+    } catch (error) {
+      throw new Error(error);
+    }
   },
   update: async (id, data = {}) => {
-    const response = await Chapter.findOneAndUpdate({ _id: id }, data);
-    return response;
+    try {
+      const response = await Chapter.findOneAndUpdate({ _id: id }, data, { new: true });
+      return response;
+    } catch (error) {
+      throw new Error(error);
+    }
   },
   increaseView: async (id, value = 1) => {
-    const response = await Chapter.findOneAndUpdate(
-      { _id: id },
-      { $inc: { view: value } },
-      { new: true, timestamps: false }
-    );
-    return response;
+    try {
+      const response = await Chapter.findOneAndUpdate(
+        { _id: id },
+        { $inc: { view: value } },
+        { new: true, timestamps: false }
+      );
+      return response;
+    } catch (error) {
+      throw new Error(error);
+    }
   },
   increaseLike: async (id, value = 1) => {
-    const response = await Chapter.findOneAndUpdate(
-      { _id: id },
-      { $inc: { like: value } },
-      { new: true, timestamps: false }
-    );
-    return response;
+    try {
+      const response = await Chapter.findOneAndUpdate(
+        { _id: id },
+        { $inc: { like: value } },
+        { new: true, timestamps: false }
+      );
+      return response;
+    } catch (error) {
+      throw new Error(error);
+    }
   },
   delete: async (id) => {
-    const response = await Chapter.findOneAndDelete({ _id: id });
-    return response;
+    try {
+      const response = await Chapter.findOneAndDelete({ _id: id });
+      return response;
+    } catch (error) {
+      throw new Error(error);
+    }
   },
   uploadToCloud: async (cover, contents, titleId, chapterGuid) => {
-    const titleObject = cover || contents ? await Title.findById(titleId) : undefined;
+    try {
+      const titleObject = cover || contents ? await Title.findById(titleId) : undefined;
 
-    const finalCover = cover ? await uploadCover(cover, titleObject._guid, chapterGuid) : undefined;
-
-    const finalContents =
-      contents?.length > 0
-        ? await uploadContents(contents, titleObject._guid, chapterGuid)
+      const finalCover = cover
+        ? await uploadCover(cover, titleObject._guid, chapterGuid)
         : undefined;
 
-    return { finalCover, finalContents };
+      const finalContents =
+        contents?.length > 0
+          ? await uploadContents(contents, titleObject._guid, chapterGuid)
+          : undefined;
+
+      return { finalCover, finalContents };
+    } catch (error) {
+      throw new Error(error);
+    }
   },
   removeFromCloud: async (coverPublicId, contentsPublicId) => {
-    coverPublicId && (await cloudinaryService.remove(coverPublicId));
+    try {
+      coverPublicId && (await cloudinaryService.remove(coverPublicId));
 
-    const promises = contentsPublicId?.map(async (publicId) => {
-      const cloudResponse = await cloudinaryService.remove(publicId);
-      return cloudResponse;
-    });
+      const promises = contentsPublicId?.map(async (publicId) => {
+        const cloudResponse = await cloudinaryService.remove(publicId);
+        return cloudResponse;
+      });
 
-    await Promise.all(promises);
+      await Promise.all(promises);
+    } catch (error) {
+      throw new Error(error);
+    }
   },
 };
 

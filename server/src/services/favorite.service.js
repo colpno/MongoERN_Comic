@@ -1,31 +1,44 @@
+import handleMongoProjection from '../helpers/handleMongoProjection.js';
 import paginateSort from '../helpers/paginateSort.js';
 import { Favorite } from '../models/index.js';
 
 const favoriteService = {
   getAll: async (params = {}) => {
-    params._fields = `-__v${params._fields ? ` ${params._fields}` : ''}`;
-    const { _page, _limit, _sort, _order, _fields, _embed, ...others } = params;
+    try {
+      params._fields = handleMongoProjection(params._fields, '-__v');
+      const { _page, _limit, _sort, _order, _fields, _embed, ...others } = params;
 
-    if (_limit || (_sort && _order)) {
-      const response = await paginateSort(params, Favorite);
-      return response;
+      if (_limit || (_sort && _order)) {
+        const response = await paginateSort(params, Favorite);
+        return response;
+      }
+
+      const response = await Favorite.find(others).select(_fields).populate(_embed);
+      return { data: response };
+    } catch (error) {
+      throw new Error(error);
     }
-
-    const response = await Favorite.find(others).select(_fields).populate(_embed);
-    return { data: response };
   },
   add: async (userId = '', chapterId = '') => {
-    const model = new Favorite({
-      user_id: userId,
-      chapter_id: chapterId,
-    });
+    try {
+      const model = new Favorite({
+        user_id: userId,
+        chapter_id: chapterId,
+      });
 
-    const response = await model.save();
-    return response;
+      const response = await model.save();
+      return response;
+    } catch (error) {
+      throw new Error(error);
+    }
   },
   delete: async (userId, chapterId) => {
-    const response = await Favorite.findOneAndDelete({ user_id: userId, chapter_id: chapterId });
-    return response;
+    try {
+      const response = await Favorite.findOneAndDelete({ user_id: userId, chapter_id: chapterId });
+      return response;
+    } catch (error) {
+      throw new Error(error);
+    }
   },
 };
 
