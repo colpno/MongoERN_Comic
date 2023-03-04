@@ -1,6 +1,5 @@
 import { randomUUID } from 'crypto';
 import createError from 'http-errors';
-import { filterFalsy } from '../helpers/filterFalsy.js';
 
 import transformQueryParams from '../helpers/transformQueryParams.js';
 import { titleService } from '../services/index.js';
@@ -14,7 +13,6 @@ const titleController = {
 
       const params = transformQueryParams(query);
       const response = await titleService.getAll(params);
-      response.data = response.data.filter((title) => title.approved_status_id && title.status_id);
 
       if (response.length === 0 || response.data?.length === 0) {
         return res.status(200).json({
@@ -36,8 +34,8 @@ const titleController = {
       if (req.userInfo) req.params.userId = req.userInfo.id;
 
       const { id, userId } = req.params;
-      const params = { _id: id, user_id: userId };
-      const match = filterFalsy(params);
+      const params = transformQueryParams(req.query);
+      const match = { ...params, _id: id, user_id: userId };
 
       const response = await titleService.getOne(match);
 
@@ -140,6 +138,12 @@ const titleController = {
         point,
         oldCover,
         guid,
+        approved_status_id,
+        status_id,
+        comment_num,
+        like,
+        view,
+        total_chapter,
       } = req.body;
 
       const finalCover = await titleService.uploadToCloud(cover, guid);
@@ -155,6 +159,12 @@ const titleController = {
         genres,
         coin,
         point,
+        approved_status_id,
+        status_id,
+        comment_num,
+        like,
+        view,
+        total_chapter,
       });
 
       if (!response) {
@@ -165,7 +175,7 @@ const titleController = {
 
       return res.status(200).json({
         code: 200,
-        message: 'Truyện đã được cập nhật thành công',
+        message: 'Hoàn tất thay đổi thông tin',
         data: response,
       });
     } catch (error) {

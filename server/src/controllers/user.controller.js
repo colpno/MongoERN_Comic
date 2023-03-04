@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import createError from 'http-errors';
 import jwt from 'jsonwebtoken';
 
@@ -8,6 +9,7 @@ const userController = {
   getAll: async (req, res, next) => {
     try {
       const params = transformQueryParams(req.query);
+
       const response = await userService.getAll(params);
 
       if (response.length === 0 || response.data?.length === 0) {
@@ -28,7 +30,9 @@ const userController = {
   getOne: async (req, res, next) => {
     try {
       const { id } = req.userInfo;
-      const response = await userService.getOne({ _id: id });
+      const params = transformQueryParams(req.query);
+
+      const response = await userService.getOne({ ...params, _id: id });
 
       if (!response) {
         return res.status(200).json({
@@ -75,10 +79,11 @@ const userController = {
       });
 
       const activeAccountLink = `${process.env.CLIENT_URL}/register/verify/${token}`;
-      authService.sendActiveAccountLink(email, TOKEN_EXPIRED_TIME, activeAccountLink);
+      // authService.sendActiveAccountLink(email, TOKEN_EXPIRED_TIME, activeAccountLink);
 
       return res.status(201).json({
         code: 201,
+        data: response,
         message: `Link kích hoạt tài khoản đã được gửi đến ${email}`,
       });
     } catch (error) {
@@ -87,8 +92,9 @@ const userController = {
   },
   update: async (req, res, next) => {
     try {
-      const { id } = req.userInfo;
-      const { username, password, avatar, email, role, dateOfBirth } = req.body;
+      const { id } = req.params;
+      const { username, password, avatar, email, role, dateOfBirth, isBanned, isActivated } =
+        req.body;
 
       const response = await userService.update(id, {
         username,
@@ -97,6 +103,8 @@ const userController = {
         email,
         role,
         dateOfBirth,
+        isBanned,
+        isActivated,
       });
 
       if (!response) {
@@ -106,6 +114,7 @@ const userController = {
       return res.status(200).json({
         code: 200,
         data: response,
+        message: 'Cập nhật thành công',
       });
     } catch (error) {
       return next(error);
@@ -113,9 +122,9 @@ const userController = {
   },
   delete: async (req, res, next) => {
     try {
-      const { id } = req.userInfo;
+      const params = transformQueryParams(req.query);
 
-      const response = await userService.delete(id);
+      const response = await userService.delete(params);
 
       if (!response) {
         return next(createError(400, 'không thể hoàn thành việc xóa tài khoản'));
@@ -124,6 +133,7 @@ const userController = {
       return res.status(200).json({
         code: 200,
         data: response,
+        message: 'Xóa thành công',
       });
     } catch (error) {
       return next(error);

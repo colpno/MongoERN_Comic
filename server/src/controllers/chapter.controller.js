@@ -13,9 +13,6 @@ const chapterController = {
 
       const params = transformQueryParams(query);
       const response = await chapterService.getAll(params);
-      response.data = response.data.filter(
-        (chapter) => chapter.approved_status_id && chapter.status_id
-      );
 
       if (response.length === 0 || response.data?.length === 0) {
         return res.status(200).json({
@@ -34,10 +31,10 @@ const chapterController = {
   },
   getOne: async (req, res, next) => {
     try {
-      const { params } = req;
+      const { id } = req.params;
+      const params = transformQueryParams(req.query);
 
-      const { id } = params;
-      const response = await chapterService.getOne({ _id: id });
+      const response = await chapterService.getOne({ ...params, _id: id });
 
       if (!response) {
         return res.status(200).json({
@@ -94,17 +91,21 @@ const chapterController = {
   update: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const { titleId, title, cover, contents, order, cost, guid } = req.body;
-      const { new: newContents, remove: oldContents } = contents;
+      const { titleId, title, cover, status_id, approved_status_id, contents, order, cost, guid } =
+        req.body;
+      const newContents = contents?.new ? contents.new : undefined;
+      const oldContents = contents?.remove ? contents.remove : undefined;
 
       const { finalCover, finalContents } =
         cover || newContents
           ? await chapterService.uploadToCloud(cover, newContents, titleId, guid)
-          : undefined;
+          : { finalCover: undefined, finalContents: undefined };
 
       const response = await chapterService.update(id, {
         title,
         cover: finalCover,
+        status_id,
+        approved_status_id,
         contents: finalContents,
         order,
         cost,
@@ -122,7 +123,8 @@ const chapterController = {
 
       return res.status(200).json({
         code: 200,
-        message: 'Chương đã được cập nhật thành công',
+        data: response,
+        message: 'Hoàn tất thay đổi thông tin',
       });
     } catch (error) {
       return next(error);
@@ -153,9 +155,9 @@ const chapterController = {
   },
   delete: async (req, res, next) => {
     try {
-      const { id } = req.params;
+      const params = transformQueryParams(req.query);
 
-      const response = await chapterService.delete(id);
+      const response = await chapterService.delete(params);
 
       if (!response) {
         return next(createError(400, 'không thể hoàn thành việc xóa chương'));

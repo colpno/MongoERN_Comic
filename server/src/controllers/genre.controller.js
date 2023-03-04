@@ -6,6 +6,7 @@ const genreController = {
   getAll: async (req, res, next) => {
     try {
       const params = transformQueryParams(req.query);
+
       const response = await genreService.getAll(params);
 
       if (response.length === 0 || response.data?.length === 0) {
@@ -26,7 +27,9 @@ const genreController = {
   getOne: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const response = await genreService.getOne({ _id: id });
+      const params = transformQueryParams(req.query);
+
+      const response = await genreService.getOne({ ...params, _id: id });
 
       if (!response) {
         return res.status(200).json({
@@ -83,6 +86,7 @@ const genreController = {
       return res.status(200).json({
         code: 200,
         data: response,
+        message: 'Hoàn tất thay đổi thông tin',
       });
     } catch (error) {
       return next(error);
@@ -90,9 +94,9 @@ const genreController = {
   },
   delete: async (req, res, next) => {
     try {
-      const { id } = req.params;
+      const params = transformQueryParams(req.query);
 
-      const response = await genreService.delete(id);
+      const response = await genreService.delete(params);
 
       if (!response) {
         return next(createError(400, 'không thể hoàn thành việc xóa thể loại'));

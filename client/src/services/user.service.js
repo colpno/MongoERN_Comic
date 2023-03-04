@@ -1,9 +1,9 @@
 import userApi from "api/user.api";
 
 const userService = {
-  getOne: async () => {
+  getOne: async (params) => {
     try {
-      const response = await userApi.getOne();
+      const response = await userApi.getOne(params);
       return response;
     } catch (error) {
       return Promise.reject(error.data);

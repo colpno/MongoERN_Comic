@@ -9,9 +9,9 @@ const approvedStatusService = {
       return Promise.reject(error.data);
     }
   },
-  getOne: async (approvedStatusID) => {
+  getOne: async (approvedStatusID, params) => {
     try {
-      const response = await approvedStatusApi.getOne(approvedStatusID);
+      const response = await approvedStatusApi.getOne(approvedStatusID, params);
       return response;
     } catch (error) {
       return Promise.reject(error.data);

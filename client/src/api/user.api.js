@@ -3,8 +3,11 @@ import axiosClient from "./axiosClient";
 const url = "/users";
 
 const userApi = {
-  getOne: () => {
-    return axiosClient.get(`${url}/profile`, { withCredentials: true });
+  getOne: (params) => {
+    return axiosClient.get(`${url}/profile`, {
+      params,
+      withCredentials: true,
+    });
   },
 
   register: (username, password, avatar, email, role, dateOfBirth, setProgress = () => {}) => {

@@ -9,10 +9,13 @@ const titleApi = {
     return axiosClient.get(fullURL, { params, withCredentials: isPrivate });
   },
 
-  getOne: (id, isPrivate = true) => {
+  getOne: (id, params, isPrivate = true) => {
     const fullURL = isPrivate ? `${url}/owned/${id}` : `${url}/${id}`;
 
-    return axiosClient.get(fullURL, { withCredentials: isPrivate });
+    return axiosClient.get(fullURL, {
+      params,
+      withCredentials: isPrivate,
+    });
   },
 
   random: (count, params = {}) => {

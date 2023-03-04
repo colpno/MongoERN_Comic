@@ -9,9 +9,9 @@ const genreService = {
       return Promise.reject(error.data);
     }
   },
-  getOne: async (genreID) => {
+  getOne: async (genreID, params) => {
     try {
-      const response = await genreApi.getOne(genreID);
+      const response = await genreApi.getOne(genreID, params);
       return response;
     } catch (error) {
       return Promise.reject(error.data);

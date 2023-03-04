@@ -26,7 +26,9 @@ const approvedStatusController = {
   getOne: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const response = await approvedStatusService.getOne({ _id: id });
+      const params = transformQueryParams(req.query);
+
+      const response = await approvedStatusService.getOne({ ...params, _id: id });
 
       if (!response) {
         return res.status(200).json({

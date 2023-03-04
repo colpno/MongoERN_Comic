@@ -9,9 +9,9 @@ const objectStatusService = {
       return Promise.reject(error.data);
     }
   },
-  getOne: async (objectStatusID) => {
+  getOne: async (objectStatusID, params) => {
     try {
-      const response = await objectStatusApi.getOne(objectStatusID);
+      const response = await objectStatusApi.getOne(objectStatusID, params);
       return response;
     } catch (error) {
       return Promise.reject(error.data);
