@@ -23,7 +23,7 @@ const titleSchema = mongoose.Schema(
       enum: ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN', 'paused', 'finished'],
       require: true,
     },
-    title: { type: String, require: true },
+    title: { type: String, require: true, unique: true },
     cover: {
       source: { type: String, require: true },
       cloud_public_id: { type: String, require: true, unique: true },
