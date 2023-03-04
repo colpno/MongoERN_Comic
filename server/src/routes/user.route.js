@@ -8,6 +8,6 @@ route.get('/', isAdmin, userController.getAll);
 route.get('/profile', isAuthenticated, userController.getOne);
 route.post('/register', userController.register);
 route.put('/update/:id', isAuthenticated, userController.update);
-route.delete('/delete/:id', isAuthenticated, userController.delete);
+route.delete('/delete', isAuthenticated, userController.delete);
 
 export default route;

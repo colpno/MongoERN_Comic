@@ -8,6 +8,6 @@ route.get('/', genreController.getAll);
 route.get('/:id', genreController.getOne);
 route.post('/create', isAdmin, genreController.add);
 route.put('/update/:id', isAdmin, genreController.update);
-route.delete('/delete/:id', isAdmin, genreController.delete);
+route.delete('/delete', isAdmin, genreController.delete);
 
 export default route;

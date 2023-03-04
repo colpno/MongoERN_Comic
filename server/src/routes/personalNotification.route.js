@@ -7,6 +7,6 @@ const route = express.Router();
 route.get('/', isAuthenticated, personalNotificationController.getAll);
 route.post('/create', isAdmin, personalNotificationController.add);
 route.put('/update/:id', isAuthenticated, personalNotificationController.update);
-route.delete('/delete/:id', isAuthenticated, personalNotificationController.delete);
+route.delete('/delete', isAuthenticated, personalNotificationController.delete);
 
 export default route;
