@@ -9,8 +9,9 @@ const titleService = {
       return Promise.reject(error.data);
     }
   },
-  getOne: async (id, params, isPrivate = true) => {
+  getOne: async (params, isPrivate = true) => {
     try {
+      const { _id: id } = params;
       const response = await titleApi.getOne(id, params, isPrivate);
       return response;
     } catch (error) {

@@ -29,7 +29,7 @@ function ReadingHeader() {
 
   const fetchData = () => {
     titleService
-      .getOne(titleId, false)
+      .getOne({ _id: titleId }, false)
       .then((response) => setTitle(response.data))
       .catch((error) => console.error(error));
   };
