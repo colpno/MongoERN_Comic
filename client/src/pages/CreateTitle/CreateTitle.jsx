@@ -1,6 +1,4 @@
-/* eslint-disable no-unused-vars */
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 import { FormWrapper, TitleForm } from "components";
 import { Popup, ProgressCircle } from "features";
@@ -9,7 +7,6 @@ import { titleService } from "services";
 import { createTitleFormValidation } from "validations/createTitleForm.validation";
 
 function CreateTitle() {
-  const navigate = useNavigate();
   const [progress, setProgress] = useState(0);
   const { Toast, options: toastOptions, toastEmitter } = useToast();
   const { popup, setPopup, triggerPopup } = usePopup();
@@ -59,6 +56,7 @@ function CreateTitle() {
           handleCancel={handleCancel}
           initialValues={INITIAL_VALUE}
           validationSchema={createTitleFormValidation}
+          toastEmitter={toastEmitter}
         />
       </FormWrapper>
       <ProgressCircle percentage={progress} />
