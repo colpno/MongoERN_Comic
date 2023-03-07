@@ -9,8 +9,9 @@ const cx = classNames.bind(styles);
 
 const getHeaders = () => [
   {
-    headerName: "Tiêu đề",
     field: "title_id",
+    headerName: "Tiêu đề",
+    headerAlign: "center",
     flex: 2,
     valueGetter: ({ row }) => row.title_id._id,
     renderCell: ({ row }) => {
@@ -32,8 +33,8 @@ const getHeaders = () => [
     },
   },
   {
-    headerName: "Cập nhật lần cuối",
-    field: "updatedAt",
+    field: "createdAt",
+    headerName: "Thời gian thêm",
     maxWidth: 300,
     minWidth: 140,
     flex: 1,
@@ -46,7 +47,7 @@ const getHeaders = () => [
 function FollowTable({ follows, onDelete }) {
   const initialState = {
     sorting: {
-      sortModel: [{ field: "updatedAt", sort: "desc" }],
+      sortModel: [{ field: "createdAt", sort: "desc" }],
     },
   };
 
@@ -68,7 +69,7 @@ FollowTable.propTypes = {
   follows: PropTypes.arrayOf(
     PropTypes.shape({
       _id: PropTypes.string.isRequired,
-      updatedAt: PropTypes.string.isRequired,
+      createdAt: PropTypes.string.isRequired,
       title_id: PropTypes.shape({
         _id: PropTypes.string.isRequired,
         cover: PropTypes.shape({
