@@ -10,6 +10,7 @@ import {
   readingChapterReducer,
   selectFieldReducer,
   statisticCountReducer,
+  themeReducer,
   titleReducer,
   userReducer,
 } from "./slices";
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   reading: readingChapterReducer,
   selectField: selectFieldReducer,
   statisticCount: statisticCountReducer,
+  theme: themeReducer,
   title: titleReducer,
   user: persistReducer(authPersistConfig, userReducer),
 });

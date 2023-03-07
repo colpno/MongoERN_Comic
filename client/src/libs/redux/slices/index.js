@@ -5,5 +5,6 @@ export { default as paymentMethodReducer } from "./paymentMethod.slice";
 export { default as readingChapterReducer } from "./readingChapter.slice";
 export { default as selectFieldReducer } from "./selectField.slice";
 export { default as statisticCountReducer } from "./statisticCount.slice";
+export { default as themeReducer } from "./theme.slice";
 export { default as titleReducer } from "./title.slice";
 export { default as userReducer } from "./user.slice";
