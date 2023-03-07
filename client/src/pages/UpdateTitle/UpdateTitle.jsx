@@ -26,15 +26,6 @@ function UpdateTitle() {
     // TODO largeCover: title.cover.source,
   };
 
-  const fetchData = () => {
-    titleService
-      .getOne(titleId)
-      .then((response) => {
-        setTitle(response.data);
-      })
-      .catch((error) => toastEmitter(error, "error"));
-  };
-
   const handleUpdate = (values) => {
     const data = { ...values, guid: title._guid };
     if (values.cover) data.oldCover = title.cover;
@@ -79,7 +70,16 @@ function UpdateTitle() {
   };
 
   useEffect(() => {
-    fetchData();
+    const params = {
+      _fields: "title status_id genres summary author coin release_day cover",
+    };
+
+    titleService
+      .getOne(titleId, params)
+      .then((response) => {
+        setTitle(response.data);
+      })
+      .catch((error) => toastEmitter(error, "error"));
   }, []);
 
   return (

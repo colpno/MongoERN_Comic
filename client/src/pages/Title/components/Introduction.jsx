@@ -1,36 +1,38 @@
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
-import { Fragment, memo, useEffect, useMemo, useState } from "react";
+import { Fragment, memo } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { AiFillCopy, AiFillEye, AiFillHeart, AiFillStar } from "react-icons/ai";
 
 import { Button } from "components";
-import { genreService } from "services";
 import { roundNumByUnit } from "utils";
 import styles from "../styles/Introduction.module.scss";
 
 const cx = classNames.bind(styles);
 
-function Introduction({ title, firstChapter, setPopup, handleFollow }) {
-  const [genreArray, setGenreArray] = useState([]);
-
-  const genres = useMemo(() => {
+function Introduction({ title, genres, firstChapter, setPopup, handleFollow }) {
+  const sortGenres = () => {
     const genreLength = title.genres.length - 1;
+    const sortedGenres = [...title.genres].sort();
 
-    return title.genres.map((genre, index) => {
-      const genreObj = genreArray.find((genr) => genr.name === genre);
-      const redirect = genreObj ? `/content-list/${genreObj._id}` : null;
+    return (
+      <>
+        {sortedGenres.map((genre, index) => {
+          const genreObj = genres.find((genr) => genr.name === genre);
+          const redirect = genreObj ? `/content-list/${genreObj._id}` : null;
 
-      return (
-        <Fragment key={index}>
-          <Button to={redirect} wrapper className={cx("genre")}>
-            {genre}
-          </Button>
-          {index !== genreLength ? ", " : null}
-        </Fragment>
-      );
-    });
-  }, [title, genreArray]);
+          return (
+            <Fragment key={index}>
+              <Button to={redirect} wrapper className={cx("genre")}>
+                {genre}
+              </Button>
+              {index !== genreLength ? ", " : null}
+            </Fragment>
+          );
+        })}
+      </>
+    );
+  };
 
   const handlePopupContent = () => {
     setPopup({
@@ -43,13 +45,6 @@ function Introduction({ title, firstChapter, setPopup, handleFollow }) {
       ),
     });
   };
-
-  useEffect(() => {
-    genreService
-      .getAll({ name_in: title.genres })
-      .then((response) => setGenreArray(response.data))
-      .catch((error) => console.error(error));
-  }, [title]);
 
   return (
     <Container fluid="md" className={cx("introduction")}>
@@ -71,7 +66,7 @@ function Introduction({ title, firstChapter, setPopup, handleFollow }) {
           </div>
           <div className={cx("introduction__info__detail")}>
             <small className={cx("author")}>{title.author}</small>
-            <small className={cx("genres")}>{genres}</small>
+            <small className={cx("genres")}>{sortGenres()}</small>
             <small className={cx("summary")}>
               {title.summary.slice(0, title.summary.slice(0, 135).lastIndexOf(" "))}
               {title.summary.length >= 135 && (
@@ -116,6 +111,11 @@ Introduction.propTypes = {
     summary: PropTypes.string.isRequired,
     _id: PropTypes.string.isRequired,
   }).isRequired,
+  genres: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+    })
+  ).isRequired,
   handleFollow: PropTypes.func.isRequired,
   firstChapter: PropTypes.string.isRequired,
 };

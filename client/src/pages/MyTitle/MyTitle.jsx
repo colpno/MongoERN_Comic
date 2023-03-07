@@ -13,15 +13,6 @@ import styles from "./styles/MyTitle.module.scss";
 
 const cx = classNames.bind(styles);
 
-function BtnCreate() {
-  return (
-    <Button primary to="create" className={cx("my-title__header__create")}>
-      <AiOutlinePlus />
-      Thêm truyện
-    </Button>
-  );
-}
-
 function MyTitle() {
   const user = useSelector((state) => state.user.user);
   const [titles, setTitles] = useState([]);
@@ -50,7 +41,10 @@ function MyTitle() {
             <MyTitleHeader cx={cx} totalTitle={titles.length} />
           </Col>
           <Col xs={6} className="right">
-            <BtnCreate />
+            <Button primary to="create" className={cx("my-title__header__create")}>
+              <AiOutlinePlus />
+              Thêm truyện
+            </Button>
           </Col>
         </Row>
         <Row>

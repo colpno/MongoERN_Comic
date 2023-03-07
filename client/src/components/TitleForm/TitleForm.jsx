@@ -47,20 +47,17 @@ function TitleForm({
   useEffect(() => {
     const fetchData = async () => {
       const genresParams = { _fields: "-_id name" };
-      const statusParams = { _fields: "code status" };
+      const statusParams = { _fields: "status" };
 
       const genrePromise = genreService.getAll(genresParams);
       const statusPromise = objectStatusService.getAll(statusParams);
 
       const results = await Promise.allSettled([genrePromise, statusPromise]);
-      const { fulfilledResults, rejectedResults } = handlePromiseAllSettled(results);
+      const { fulfilledResults } = handlePromiseAllSettled(results, toastEmitter);
       const [genreResult, statusResult] = fulfilledResults;
 
-      if (rejectedResults.length > 0) {
-        rejectedResults.forEach((result) => toastEmitter(result, "error"));
-      }
-      setGenres(genreResult.data);
-      setStatuses(statusResult.data);
+      genreResult && setGenres(genreResult.data);
+      statusResult && setStatuses(statusResult.data);
     };
     fetchData();
   }, []);
