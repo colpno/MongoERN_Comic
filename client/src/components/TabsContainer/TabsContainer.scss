@@ -16,13 +16,13 @@
       margin-left: 15px;
 
       &:hover {
-        color: variables.$primary-dark;
+        color: var(--primary-600);
       }
     }
 
     &.active {
-      color: variables.$primary-dark;
-      border: 1px solid variables.$primary-dark;
+      color: var(--primary-600);
+      border: 1px solid var(--primary-600);
     }
   }
 }

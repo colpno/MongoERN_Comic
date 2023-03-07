@@ -30,7 +30,7 @@
   box-shadow: 0 1px 6px 1px rgb(0 0 0 / 0.2);
   border-radius: 4px;
   width: max-content;
-  background-color: var.$white;
+  background-color: var(--background-color);
 
   display: flex;
   justify-content: flex-start;
@@ -54,6 +54,6 @@
   }
 
   &:hover {
-    color: var.$primary-dark;
+    color: var(--primary-600);
   }
 }

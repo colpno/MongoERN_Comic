@@ -64,7 +64,7 @@ small {
 }
 
 mark {
-  color: variables.$primary;
+  color: var(--primary);
   background-color: transparent;
   padding: 0;
 }

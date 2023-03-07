@@ -10,7 +10,7 @@
   display: flex;
   align-items: center;
   padding: 10px;
-  background: variables.$white;
+  background: var(--background-color);
   height: 100%;
   border: 1px solid variables.$border-grey-dark;
 
@@ -24,7 +24,7 @@
   .icon-bookmark {
     font-size: 0.9rem;
     font-weight: 700;
-    color: variables.$txt-white;
+    color: variables.$white;
     width: 25px;
     height: 30px;
     background: variables.$clr-grey;

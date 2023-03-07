@@ -77,11 +77,11 @@
 
     &__redirect {
       margin-right: 15px;
-      color: variables.$primary;
+      color: var(--primary);
       text-decoration: underline;
 
       &:hover {
-        color: variables.$primary;
+        color: var(--primary);
       }
     }
 

@@ -59,7 +59,7 @@
   }
 
   &:nth-child(1) :global(.icon-bookmark) {
-    background-color: variables.$primary;
+    background-color: var(--primary);
   }
 
   &:nth-child(2) :global(.icon-bookmark) {

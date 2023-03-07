@@ -20,7 +20,7 @@
 
       > *.active,
       > *:not(.active):hover {
-        color: variables.$primary-dark;
+        color: var(--primary-600);
       }
     }
 

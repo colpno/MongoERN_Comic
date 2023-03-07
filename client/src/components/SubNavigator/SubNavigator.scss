@@ -18,7 +18,7 @@
 
   .navigator {
     font-weight: 600;
-    background-color: var.$white;
+    background-color: var(--background-color);
 
     .swiper-button-prev,
     .swiper-button-next {
@@ -36,15 +36,15 @@
     &__link {
       &:not(.active):hover {
         .navigator__label {
-          color: var.$primary;
+          color: var(--primary);
         }
       }
 
       &.active {
-        border-bottom: 3px solid var.$primary;
+        border-bottom: 3px solid var(--primary);
 
         .navigator__label {
-          color: var.$primary;
+          color: var(--primary);
         }
       }
     }

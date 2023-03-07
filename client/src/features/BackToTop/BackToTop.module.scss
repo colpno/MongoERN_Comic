@@ -4,7 +4,7 @@
   $size: 60px;
   $position: 40px;
 
-  background: var.$primary;
+  background: var(--primary);
   height: $size;
   width: $size;
   outline: none;

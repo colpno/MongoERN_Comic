@@ -1,7 +1,7 @@
 @use "assets/styles/variables" as var;
 
 .dropdown {
-  background: var.$white;
+  background: var(--background-color);
   color: var.$black;
   width: 350px;
   max-height: calc(60vh - var.$header-height);
@@ -14,8 +14,6 @@
   right: 0;
   overflow: hidden;
 
-  &__group {
-  }
   &__group:not(:last-child) {
     border-bottom: 1px solid #d7d7d7;
   }

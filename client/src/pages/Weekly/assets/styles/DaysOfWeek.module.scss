@@ -27,7 +27,7 @@
 
   &.active,
   &:not(.active):hover {
-    background-color: var.$primary;
+    background-color: var(--primary);
     color: var.$txt-white;
     transition: 0.3s ease-in-out;
   }

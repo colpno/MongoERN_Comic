@@ -13,7 +13,7 @@ img {
 
 .like,
 .view {
-  color: variables.$primary;
+  color: var(--primary);
   display: flex;
   align-items: center;
 

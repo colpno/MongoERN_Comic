@@ -8,7 +8,7 @@
 }
 
 .btn-resend {
-  color: var.$primary;
+  color: var(--primary);
   margin-left: 0.4rem;
   cursor: pointer;
   font-weight: 500;

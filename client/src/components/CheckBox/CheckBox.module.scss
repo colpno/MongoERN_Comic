@@ -34,11 +34,11 @@ $checkboxSize: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: variables.$white;
+  background-color: var(--background-color);
   border: 1px solid variables.$grey-500;
 
   .check-mark {
-    color: variables.$white;
+    color: var(--secondary-font-color);
     width: calc($checkboxSize - 40%);
     height: calc($checkboxSize - 40%);
     opacity: 0;
@@ -47,7 +47,7 @@ $checkboxSize: 20px;
 
 .checkbox:checked {
   + .custom-checkbox {
-    background-color: variables.$primary;
+    background-color: var(--primary);
     border: none;
 
     > .check-mark {

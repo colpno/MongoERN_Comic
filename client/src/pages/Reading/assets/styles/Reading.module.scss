@@ -14,8 +14,7 @@
   &__content {
     width: 690px;
     min-height: calc(100vh - var.$header-height - var.$footer-height);
-    box-shadow: 0 96px 68px rgb(0 0 0 / 0.04),
-      0 12px 48px 12px rgb(0 0 0 / 0.05);
+    box-shadow: 0 96px 68px rgb(0 0 0 / 0.04), 0 12px 48px 12px rgb(0 0 0 / 0.05);
   }
 
   &__controls {
@@ -62,11 +61,11 @@
 
       &.like {
         .icon {
-          color: var.$primary;
+          color: var(--primary);
         }
 
         .text {
-          color: var.$primary;
+          color: var(--primary);
         }
       }
     }

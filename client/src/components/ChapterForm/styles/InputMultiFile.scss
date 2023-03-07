@@ -44,7 +44,7 @@
 
   &__custom__label--primary {
     font-weight: 500;
-    color: variables.$primary-dark;
+    color: var(--primary-600);
     text-decoration: underline;
     margin-bottom: 5px;
   }

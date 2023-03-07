@@ -1,8 +1,8 @@
 @use "assets/styles/variables" as var;
 
 .header {
-  background: var.$primary;
-  color: var.$txt-white;
+  background: var(--primary);
+  color: var(--secondary-font-color);
   height: var.$header-height;
   position: fixed;
   top: 0;

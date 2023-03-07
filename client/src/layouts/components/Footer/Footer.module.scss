@@ -1,13 +1,13 @@
 @use "assets/styles/variables";
 
 .footer {
-  background: variables.$clr-black;
+  background: variables.$black;
   padding: 50px 0 20px;
   height: variables.$footer-height;
   position: relative;
 
   & * {
-    color: variables.$txt-white;
+    color: var(--secondary-font-color);
     font-size: 18px;
   }
 
@@ -21,12 +21,12 @@
     & li {
       padding: 0 20px;
       &:not(:last-child) {
-        border-right: 2px solid variables.$white;
+        border-right: 2px solid var(--secondary-font-color);
       }
     }
 
     a:hover {
-      color: variables.$txt-white;
+      color: var(--secondary-font-color);
     }
   }
 

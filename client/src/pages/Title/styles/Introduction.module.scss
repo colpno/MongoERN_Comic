@@ -76,7 +76,7 @@
 .summary .more {
   font-weight: 700;
   font-size: 0.95em;
-  color: variables.$primary;
+  color: var(--primary);
 }
 
 .popup-summary {

@@ -27,7 +27,7 @@
         position: absolute;
         content: "";
         left: 0;
-        border: 4px solid variables.$primary;
+        border: 4px solid var(--primary);
         border-radius: 50%;
       }
 

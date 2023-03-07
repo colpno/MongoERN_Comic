@@ -27,7 +27,7 @@
   color: inherit;
 
   &.current {
-    background-color: variables.$primary;
+    background-color: var(--primary);
     color: #fff;
     cursor: default;
   }
