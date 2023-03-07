@@ -13,7 +13,7 @@ import styles from "./styles/Comment.module.scss";
 const cx = classNames.bind(styles);
 
 function Comment() {
-  const { comment_at: commentAt } = useSelector((state) => state.comment);
+  const commentAt = useSelector((state) => state.comment.comment_at);
   const { user, isLoggingIn } = useSelector((state) => state.user);
   const [comments, setComments] = useState([]);
   const [rootComments, setRootComments] = useState([]);
