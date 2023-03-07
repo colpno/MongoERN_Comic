@@ -18,12 +18,9 @@ const titleApi = {
     });
   },
 
-  random: (count, params = {}) => {
+  random: (params = {}) => {
     return axiosClient.get(`${url}/random`, {
-      params: {
-        ...params,
-        count,
-      },
+      params,
     });
   },
 

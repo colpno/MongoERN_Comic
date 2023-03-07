@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import { memo, useEffect, useMemo, useState } from "react";
 import { Container } from "react-bootstrap";
@@ -24,8 +25,13 @@ function Recommend() {
   };
 
   useEffect(() => {
+    const params = {
+      genres_all: genresOfTitle,
+      _limit: 18,
+    };
+
     titleService
-      .random(18, { genres_all: genresOfTitle })
+      .random(params)
       .then((response) => {
         const filtered = response.data.filter((title) => title._id !== titleId);
         setTitles(filtered);
