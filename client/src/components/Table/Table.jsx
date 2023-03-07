@@ -7,14 +7,13 @@
   Table.scss
  */
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { DataGridPro, viVN } from "@mui/x-data-grid-pro";
+import { DataGridPro, GridRowModes, viVN } from "@mui/x-data-grid-pro";
 import PropTypes from "prop-types";
-import { memo, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 
 import { Popup } from "features";
 import { usePopup } from "hooks";
-import { getObjectKeys } from "utils";
-import { CustomFooter, CustomToolBar, TablePopup } from "./components";
+import { TableActions, TableFooter, TableToolBar } from "./components";
 import "./styles/Table.module.scss";
 
 const theme = createTheme(
@@ -26,71 +25,121 @@ function Table({
   headers,
   data,
 
-  onMultiDelete,
   height,
   autoHeight,
   rowHeight,
+
+  customAction,
+
   initialState,
   rowsPerPageOptions,
   hasToolbar,
+
   disableColumnFilter,
   disableDensitySelector,
   disableColumnMenu,
-  onRowEditCommit,
-  checkboxSelection,
+
+  allowDelete,
+  onDelete,
+
+  allowEdit,
+  onUpdate,
+
+  allowAdd,
+  onAdd,
+  initialNewRowData,
 }) {
-  const [rowsPerPage, setRowsPerPage] = useState(rowsPerPageOptions[0]);
-  const { popup, triggerPopup } = usePopup({
-    title: "Các thao tác sẵn có",
-    content: <TablePopup />,
-  });
+  const [rows, setRows] = useState(data);
+  const [rowModesModel, setRowModesModel] = useState({});
+  const [rowsPerPage, setRowsPerPage] = useState(rowsPerPageOptions[2]);
+  const { popup, setPopup, triggerPopup } = usePopup();
+  const [rowIdError, setRowIdError] = useState("");
 
   const dataGridProps = {
     components: {
-      Footer: CustomFooter,
+      Footer: TableFooter,
     },
     initialState,
     componentsProps: {
       toolbar: {
         rowsPerPage,
-        checkboxSelection,
-        triggerPopup,
-        onMultiDelete,
+        setPopup,
       },
     },
     autoHeight: false,
     sx: {},
   };
 
-  if (hasToolbar) dataGridProps.components.Toolbar = CustomToolBar;
+  if (hasToolbar) {
+    dataGridProps.components.Toolbar = TableToolBar;
+
+    if (allowAdd) {
+      dataGridProps.componentsProps.toolbar = {
+        ...dataGridProps.componentsProps.toolbar,
+        enableAdd: allowAdd,
+        initialNewRowData,
+        setRows,
+        setRowModesModel,
+      };
+    }
+
+    if (allowDelete) {
+      dataGridProps.componentsProps.toolbar = {
+        ...dataGridProps.componentsProps.toolbar,
+        enableDelete: allowDelete,
+        onDelete,
+      };
+    }
+  }
   if (height) dataGridProps.sx.height = height;
   if (autoHeight) dataGridProps.autoHeight = true;
 
-  const handleRowEditCommit = (a, b, { api }) => {
-    const row = api.getEditRowsModel();
-    const rowIds = getObjectKeys(row);
+  const preventDefaultRowEdit = useCallback((params, event) => {
+    event.defaultMuiPrevented = true;
+  }, []);
 
-    const finalData = rowIds.reduce((finalResult, id) => {
-      const keys = getObjectKeys(row[id]);
-      const editedData = keys.reduce(
-        (result, field) => ({
-          ...result,
-          [field]: row[id][field].value,
-        }),
-        {}
-      );
+  const processRowUpdate = useCallback((newRow) => {
+    newRow.isNew ? onAdd(newRow, setRowIdError) : onUpdate(newRow, setRowIdError);
+    return newRow;
+  }, []);
 
-      return [
-        ...finalResult,
-        {
-          _id: id,
-          ...editedData,
-        },
-      ];
-    }, []);
+  useEffect(() => {
+    !!rowIdError &&
+      setRowModesModel((prev) => ({
+        ...prev,
+        [rowIdError]: { mode: GridRowModes.Edit },
+      }));
+  }, [rowIdError]);
 
-    onRowEditCommit(finalData);
-  };
+  if (allowEdit || allowDelete || customAction) {
+    headers.push({
+      field: "actions",
+      type: "actions",
+      width: 100,
+      getActions: (params) => {
+        const { id } = params;
+        const Component = (
+          <TableActions
+            id={id}
+            enableDelete={allowDelete}
+            onDelete={onDelete}
+            enableEdit={allowEdit}
+            setRows={setRows}
+            setRowModesModel={setRowModesModel}
+            setPopup={setPopup}
+            onAdd={onAdd}
+            onUpdate={onUpdate}
+          />
+        );
+
+        return customAction ? [...customAction(params), Component] : [Component];
+      },
+    });
+  }
+
+  useEffect(() => {
+    setRows(data);
+  }, [data]);
 
   return (
     <>
@@ -99,23 +148,30 @@ function Table({
           {...dataGridProps}
           // Data
           columns={headers}
-          rows={data}
+          rows={rows}
           // Height
-          autoHeight
-          checkboxSelection={checkboxSelection}
+          autoHeight={autoHeight}
           disableColumnFilter={disableColumnFilter}
           disableColumnMenu={disableColumnMenu}
           disableDensitySelector={disableDensitySelector}
           // Row
           getRowHeight={() => rowHeight}
           getRowId={(row) => row._id}
+          // Edit row
           editMode="row"
-          onRowEditCommit={handleRowEditCommit}
+          rowModesModel={rowModesModel}
+          onRowModesModelChange={(newModel) => setRowModesModel(newModel)}
+          onRowEditStart={preventDefaultRowEdit}
+          onRowEditStop={preventDefaultRowEdit}
+          processRowUpdate={processRowUpdate}
           // Page
           pagination
           rowsPerPageOptions={rowsPerPageOptions}
           pageSize={rowsPerPage}
           onPageSizeChange={(size) => setRowsPerPage(size)}
+          // Others
+          checkboxSelection={allowDelete}
+          experimentalFeatures={{ newEditingApi: true }}
         />
       </ThemeProvider>
       {popup.isShown && <Popup data={popup} setShow={triggerPopup} width={400} />}
@@ -198,32 +254,54 @@ Table.propTypes = {
       right: PropTypes.arrayOf(PropTypes.string.isRequired),
     }),
   }),
-  onMultiDelete: PropTypes.func,
+  rowsPerPageOptions: PropTypes.arrayOf(PropTypes.number.isRequired),
+  hasToolbar: PropTypes.bool,
+
   height: PropTypes.number,
   autoHeight: PropTypes.bool,
   rowHeight: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  rowsPerPageOptions: PropTypes.arrayOf(PropTypes.number.isRequired),
-  hasToolbar: PropTypes.bool,
+
   disableColumnFilter: PropTypes.bool,
   disableDensitySelector: PropTypes.bool,
   disableColumnMenu: PropTypes.bool,
-  onRowEditCommit: PropTypes.func,
-  checkboxSelection: PropTypes.bool,
+
+  onDelete: PropTypes.func,
+  allowDelete: PropTypes.bool,
+
+  allowEdit: PropTypes.bool,
+  onUpdate: PropTypes.func,
+
+  allowAdd: PropTypes.bool,
+  onAdd: PropTypes.func,
+  initialNewRowData: PropTypes.shape({}),
+
+  customAction: PropTypes.func,
 };
 
 Table.defaultProps = {
   initialState: {},
-  onMultiDelete: () => {},
+  rowsPerPageOptions: [5, 10, 25, 50, 100],
+  hasToolbar: true,
+
   height: null,
   autoHeight: false,
-  rowHeight: "auto",
-  rowsPerPageOptions: [25, 50, 100],
-  hasToolbar: true,
+  rowHeight: 100,
+
   disableColumnFilter: false,
   disableDensitySelector: false,
   disableColumnMenu: false,
-  onRowEditCommit: () => {},
-  checkboxSelection: false,
+
+  onDelete: () => {},
+  allowDelete: false,
+
+  allowEdit: false,
+  onUpdate: () => {},
+
+  allowAdd: false,
+  onAdd: () => {},
+  initialNewRowData: {},
+
+  customAction: null,
 };
 
 export default memo(Table);

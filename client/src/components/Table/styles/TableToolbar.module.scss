@@ -1,0 +1,40 @@
+@use "assets/styles/variables" as var;
+@use "components/Scrollbar/Scrollbar.module.scss";
+
+.upper-container {
+  :global(.MuiDataGrid-toolbarContainer) > * {
+    color: var(--primary-600);
+  }
+}
+
+.delete-button,
+.add-button {
+  letter-spacing: 1.2px;
+  font-weight: 500;
+
+  display: flex;
+  align-items: center;
+}
+
+.delete-button {
+  gap: 0.2rem;
+}
+
+.add-button {
+  gap: 0.1rem;
+
+  > .icon {
+    font-size: 1.8em;
+  }
+}
+
+.icon {
+  font-size: 1.2em;
+}
+
+.question-icon {
+  margin: 0 0.7rem;
+  font-size: 1.5em;
+  color: #999;
+  cursor: pointer;
+}

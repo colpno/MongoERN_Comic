@@ -3,15 +3,30 @@
 
 :global(.MuiDataGrid-root) {
   :global(.MuiPagination-ul) :global(.Mui-selected) {
-    background-color: var.$primary !important;
-    color: var.$white;
+    background-color: var(--primary) !important;
+    color: var(--primary-font-color);
     cursor: default;
   }
 
   :global(.MuiDataGrid-toolbarContainer) {
+    display: block !important;
+
     :global(.MuiPaginationItem-page) {
       display: none !important;
     }
+
+    :global(.MuiBox-root) {
+      margin-bottom: 5px;
+    }
+  }
+
+  :global(.MuiTablePagination-root) {
+    @extend .scrollbar;
+  }
+
+  :global(.container) {
+    width: unset;
+    max-width: unset;
   }
 
   :global(.timestamp) {
@@ -22,14 +37,14 @@
   div[style="position: absolute; pointer-events: none; color: rgba(130, 130, 130, 0.62); z-index: 100000; width: 100%; text-align: center; bottom: 50%; right: 0px; letter-spacing: 5px; font-size: 24px;"] {
     display: none;
   }
+
+  :global(.MuiDataGrid-actionsCell) {
+    svg {
+      font-size: 1.4rem;
+    }
+  }
 }
 
 :global(.MuiDataGrid-virtualScroller) {
   @extend .scrollbar;
-}
-
-.question-icon {
-  font-size: 20px;
-  color: #999;
-  cursor: pointer;
 }

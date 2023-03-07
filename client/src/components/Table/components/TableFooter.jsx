@@ -7,7 +7,7 @@ import {
 } from "@mui/x-data-grid-pro";
 import { useCallback } from "react";
 
-function CustomFooter() {
+function TableFooter() {
   const apiRef = useGridApiContext();
   const total = useGridSelector(apiRef, gridPageCountSelector);
 
@@ -20,4 +20,4 @@ function CustomFooter() {
   );
 }
 
-export default CustomFooter;
+export default TableFooter;
