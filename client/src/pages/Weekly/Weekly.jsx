@@ -66,10 +66,6 @@ function Weekly() {
   };
 
   useEffect(() => {
-    fetchTitles(dayFilter);
-  }, []);
-
-  useEffect(() => {
     fetchTitles(dayFilter, true);
   }, [pagination.page]);
 
