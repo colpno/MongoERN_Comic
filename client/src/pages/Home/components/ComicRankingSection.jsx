@@ -15,7 +15,7 @@ function ComicRankingSection({ top5 }) {
       <Container className={cx("container", "ranking")}>
         <header className={cx("head")}>
           <h3 className={cx("title")}>Ranking</h3>
-          <Button text to="/comic/ranking">
+          <Button text to="/comic/ranking" className={cx("btn--more")}>
             Xem them
           </Button>
         </header>

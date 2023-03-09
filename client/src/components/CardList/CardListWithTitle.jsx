@@ -24,7 +24,7 @@ function CardListWithTitle({
         <header className={cx("cards-wrapper__head")}>
           <h3 className={cx("cards-wrapper__head__title")}>{data.name}</h3>
           {data._id ? (
-            <Button text to={`/content-list/${data._id}`}>
+            <Button text to={`/content-list/${data._id}`} className={cx("btn--more")}>
               Xem thêm
             </Button>
           ) : null}

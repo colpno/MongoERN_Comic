@@ -16,6 +16,7 @@
   border-right: 0;
   border-radius: 0;
   position: relative;
+  color: var(--primary-font-color);
 
   + .day {
     margin-left: 0;
@@ -28,8 +29,8 @@
   &.active,
   &:not(.active):hover {
     background-color: var(--primary);
-    color: var.$txt-white;
     transition: 0.3s ease-in-out;
+    color: var(--secondary-font-color);
   }
 
   &.today {

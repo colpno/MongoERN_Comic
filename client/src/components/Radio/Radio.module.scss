@@ -9,6 +9,7 @@
 
 .text {
   @include mixins.singleLineClamp();
+  color: var(--primary-font-color);
 }
 
 .radio {
@@ -37,7 +38,7 @@
 }
 
 .radio:checked + .custom-radio {
-  border: 1px solid var(--primary);
+  border: 1px solid var.$grey-500;
 
   &::before {
     position: absolute;
@@ -48,6 +49,6 @@
     width: 70%;
     height: 70%;
     border-radius: 100%;
-    background-color: red;
+    background-color: var(--primary);
   }
 }

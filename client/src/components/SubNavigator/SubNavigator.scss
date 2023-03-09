@@ -50,3 +50,9 @@
     }
   }
 }
+
+[data-theme="dark"] {
+  .sub-navbar .navigator__link {
+    font-weight: 500;
+  }
+}

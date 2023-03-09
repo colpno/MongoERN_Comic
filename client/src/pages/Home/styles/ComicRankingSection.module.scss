@@ -1,3 +1,5 @@
+@use "assets/styles/variables" as var;
+
 .ranking__wrapper {
   background-color: #f2f2f2;
   margin-top: 0;
@@ -8,6 +10,7 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 20px;
+    color: var(--primary-font-color);
   }
 
   .top5-wrapper {
@@ -44,4 +47,12 @@
       display: none;
     }
   }
+}
+
+.btn--more {
+  color: var(--primary-font-color);
+}
+
+[data-theme="dark"] .ranking__wrapper {
+  background-color: var(--primary-800);
 }

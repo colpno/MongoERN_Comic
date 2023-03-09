@@ -12,6 +12,7 @@ $checkboxSize: 20px;
 
 .text {
   @include mixins.singleLineClamp();
+  color: var(--primary-font-color);
 }
 
 .checkbox {

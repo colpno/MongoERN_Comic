@@ -14,6 +14,7 @@
 
     &__title {
       @include mixins.singleLineClamp();
+      color: var(--primary-font-color);
     }
   }
 
@@ -43,4 +44,8 @@
 
   @extend .scrollbar;
   @extend .x-axis;
+}
+
+.btn--more {
+  color: var(--primary-font-color);
 }
