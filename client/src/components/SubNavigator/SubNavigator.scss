@@ -31,6 +31,7 @@
       align-items: center;
       justify-content: center;
       height: calc(var.$header-height - 10px);
+      font-weight: 500;
     }
 
     &__link {
@@ -52,7 +53,7 @@
 }
 
 [data-theme="dark"] {
-  .sub-navbar .navigator__link {
-    font-weight: 500;
+  .sub-navbar .navigator__label {
+    color: var.$white;
   }
 }
