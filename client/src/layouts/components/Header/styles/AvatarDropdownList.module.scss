@@ -1,17 +1,6 @@
 @use "assets/styles/variables";
 
 .dropdown {
-  width: 300px;
-  max-height: calc(90vh - variables.$header-height);
-  border: 1px solid variables.$border-grey-dark;
-  border-radius: 0 0 10px 10px;
-  box-shadow: 0 24px 48px 4px rgb(0 0 0 / 0.02), 0 12px 24px 2px rgb(0 0 0 / 0.08);
-  background: var(--background-color);
-
-  position: absolute;
-  top: variables.$header-height;
-  right: 0;
-
   &__group {
     &:first-child {
       .dropdown__group__link {

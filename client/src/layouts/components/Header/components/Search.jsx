@@ -4,7 +4,7 @@ import { AiFillCloseCircle } from "react-icons/ai";
 import { IoSearchOutline } from "react-icons/io5";
 import { MdOutlineOpenInNew } from "react-icons/md";
 
-import { Button } from "components";
+import { Button, Popper } from "components";
 import { useClickOutSide, useDebounce, useSearch } from "hooks";
 import { titleService } from "services";
 import styles from "../styles/Search.module.scss";
@@ -42,36 +42,44 @@ function Search() {
   }, [searchText]);
 
   useEffect(() => {
-    if (!searchValue.trim()) {
+    if (searchValue.trim().length === 0) {
       setSearchResult([]);
     }
   }, [searchValue]);
 
   return (
-    <div className={cx("search")} ref={searchRef}>
-      <div className={cx("wrapper")}>
-        <Button wrapper to="/search" className={cx("search-extend")} title="Tìm kiếm nâng cao">
-          <MdOutlineOpenInNew className={cx("icon")} />
-        </Button>
-        <input
-          type="text"
-          placeholder="Tìm tên truyện, tên tác giả"
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-          onFocus={() => setShowResult(true)}
-        />
-        {searchValue && (
-          <AiFillCloseCircle
-            className={cx("search__wrapper__field__clear-btn")}
-            onClick={() => handleClear()}
-          />
-        )}
-        <IoSearchOutline className={cx("search__icon")} />
-      </div>
-      {showResult && searchResult.length > 0 && (
-        <SearchDropdownList cx={cx} searchResult={searchResult} />
-      )}
-    </div>
+    <Popper
+      width="400px"
+      maxHeight="50vh"
+      position="center"
+      placeholder={
+        <div className={cx("search")} ref={searchRef}>
+          <div className={cx("wrapper")}>
+            <Button
+              wrapper
+              to="/search"
+              className={cx("advanced-search-btn")}
+              title="Tìm kiếm nâng cao"
+            >
+              <MdOutlineOpenInNew className={cx("icon")} />
+            </Button>
+            <input
+              type="text"
+              placeholder="Tìm tên truyện, tên tác giả"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              onFocus={() => setShowResult(true)}
+            />
+            {searchValue.length > 0 && (
+              <AiFillCloseCircle className={cx("clear-btn")} onClick={() => handleClear()} />
+            )}
+            <IoSearchOutline className={cx("search-icon")} />
+          </div>
+        </div>
+      }
+      content={<SearchDropdownList cx={cx} searchResult={searchResult} />}
+      contentVisible={searchValue.length > 0 && searchText.length > 0}
+    />
   );
 }
 
