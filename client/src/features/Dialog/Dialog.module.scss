@@ -1,12 +1,18 @@
-.background {
+.dialog {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   position: fixed;
-  content: "";
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
+  z-index: 20;
+}
+
+.background {
   width: 100vw;
   height: 100vh;
   background-color: rgb(0 0 0 / 0.8);
-  z-index: 20;
 }
