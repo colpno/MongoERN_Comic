@@ -1,7 +1,7 @@
 import { combineReducers } from "@reduxjs/toolkit";
 import { persistReducer } from "redux-persist";
 
-import { authPersistConfig } from "libs/redux-persist";
+import { authPersistConfig, themePersistConfig } from "libs/redux-persist";
 import {
   commentReducer,
   globalReducer,
@@ -23,7 +23,7 @@ const rootReducer = combineReducers({
   reading: readingChapterReducer,
   selectField: selectFieldReducer,
   statisticCount: statisticCountReducer,
-  theme: themeReducer,
+  theme: persistReducer(themePersistConfig, themeReducer),
   title: titleReducer,
   user: persistReducer(authPersistConfig, userReducer),
 });
