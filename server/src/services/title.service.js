@@ -36,9 +36,11 @@ const titleService = {
       throw new Error(error);
     }
   },
-  random: async (count, params = {}) => {
+  random: async (params = {}) => {
     try {
-      const response = await Title.aggregate([{ $match: params }, { $sample: { size: +count } }]);
+      const { _limit, ...others } = params;
+
+      const response = await Title.aggregate([{ $match: others }, { $sample: { size: +_limit } }]);
       return response;
     } catch (error) {
       throw new Error(error);
