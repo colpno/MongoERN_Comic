@@ -2,7 +2,6 @@ import classNames from "classnames/bind";
 import PropTypes from "prop-types";
 
 import { noSearchResult } from "assets/images";
-import { Scrollbar } from "components";
 import { NoData } from "features";
 import styles from "../styles/SearchDropdownList.module.scss";
 import SearchDropdownGroup from "./SearchDropdownGroup";
@@ -14,17 +13,13 @@ function SearchDropdownList({ searchResult }) {
     <>
       {searchResult.length > 0 ? (
         <div className={cx("dropdown")}>
-          <Scrollbar yAxis>
-            <SearchDropdownGroup cx={cx} searchResult={searchResult} />
-          </Scrollbar>
+          <SearchDropdownGroup cx={cx} searchResult={searchResult} />
         </div>
       ) : (
         <div className={cx("dropdown")}>
-          <Scrollbar>
-            <NoData image={noSearchResult} className={cx("no-data")}>
-              <h6>Không có kết quả nào phù hợp!</h6>
-            </NoData>
-          </Scrollbar>
+          <NoData image={noSearchResult} className={cx("no-data")}>
+            <h6>Không có kết quả nào phù hợp!</h6>
+          </NoData>
         </div>
       )}
       {}
