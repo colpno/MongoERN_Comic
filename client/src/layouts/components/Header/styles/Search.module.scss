@@ -33,13 +33,13 @@
       opacity: 0.55;
     }
 
-    &__clear-btn {
+    .clear-btn {
       font-size: 24px;
       color: #aaa;
       margin-right: 8px;
     }
 
-    .search__icon {
+    .search-icon {
       font-size: 30px;
       color: var(--primary);
       margin-right: 16px;
@@ -52,7 +52,7 @@
   margin: 60px 0;
 }
 
-.search-extend {
+.advanced-search-btn {
   $size: 32px;
   width: $size;
   min-width: $size;
