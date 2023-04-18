@@ -12,6 +12,7 @@ export { default as HeadTitleMark } from "./HeadTitleMark/HeadTitleMark";
 export { default as Image } from "./Image/Image";
 export { default as Input } from "./Input/Input";
 export { default as InputImage } from "./InputImage/InputImage";
+export { default as Popper } from "./Popper/Popper";
 export { default as QuillArea } from "./QuillArea/QuillArea";
 export { default as Radio } from "./Radio/Radio";
 export { default as Scrollbar } from "./Scrollbar/Scrollbar";

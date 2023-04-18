@@ -1,0 +1,68 @@
+@use "assets/styles/variables";
+
+.popper-wrapper {
+  width: fit-content;
+
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholder {
+  cursor: pointer;
+}
+
+.popper {
+  border: 1px solid variables.$grey-300;
+  border-radius: 0 0 10px 10px;
+
+  box-shadow: 0 24px 48px 4px rgb(0 0 0 / 0.02), 0 12px 24px 2px rgb(0 0 0 / 0.08);
+  background: var(--background-color);
+
+  overflow: hidden;
+
+  position: absolute;
+  top: 100%;
+
+  &.right {
+    right: 0;
+  }
+
+  &.left {
+    left: 0;
+  }
+
+  &.right,
+  &.left {
+    animation: fadeInSide 0.3s ease;
+  }
+
+  &.center {
+    left: 50%;
+    translate: -50%;
+    animation: fadeInCenter 0.3s ease;
+  }
+}
+
+@keyframes fadeInSide {
+  from {
+    opacity: 0;
+    width: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInCenter {
+  from {
+    opacity: 0;
+    height: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
