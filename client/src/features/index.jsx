@@ -2,6 +2,7 @@ export { default as BackToTop } from "./BackToTop/BackToTop";
 export { default as BannerSlider } from "./BannerSlider/BannerSlider";
 export { default as BarChart } from "./BarChart/BarChart";
 export { default as Comment } from "./Comment/Comment";
+export { default as DarkModeToggle } from "./DarkModeToggle/DarkModeToggle";
 export { default as Dialog } from "./Dialog/Dialog";
 export { default as DoughnutChart } from "./DoughnutChart/DoughnutChart";
 export { default as LineChart } from "./LineChart/LineChart";
