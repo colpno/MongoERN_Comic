@@ -1,5 +1,5 @@
 import classNames from "classnames/bind";
-import { useEffect, useState } from "react";
+import { useEffect, useReducer } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
@@ -7,6 +7,7 @@ import { Logo } from "assets/images";
 import { Button } from "components";
 import { useToast } from "hooks";
 import { setFavorite } from "libs/redux/slices/readingChapter.slice";
+import { changeTheme } from "libs/redux/slices/theme.slice";
 import { favoriteService, titleService } from "services";
 import { isEmpty } from "utils";
 import styles from "../assets/styles/ReadingHeader.module.scss";
@@ -18,24 +19,24 @@ const cx = classNames.bind(styles);
 function ReadingHeader() {
   const dispatch = useDispatch();
   const { titleId } = useParams();
-  const [darkTheme, setDarkTheme] = useState(false);
-  const [isLike, setIsLike] = useState(false);
   const { toastEmitter } = useToast();
-  const [controls, setControls] = useState({ isLiked: false });
-  const [title, setTitle] = useState({});
-  const chapter = useSelector((state) => state.reading.chapter);
-  const user = useSelector((state) => state.user.user);
-  const favorite = useSelector((state) => state.reading.favorite);
+  const {
+    reading: { chapter, favorite },
+    user: { user },
+    theme: { theme: isDarkMode },
+  } = useSelector((state) => state);
+  const [state, updateState] = useReducer((prev, next) => ({ ...prev, ...next }), {
+    isLike: false,
+    controls: { isLiked: false },
+    title: {},
+  });
 
-  const fetchData = () => {
-    titleService
-      .getOne({ _id: titleId }, false)
-      .then((response) => setTitle(response.data))
-      .catch((error) => console.error(error));
+  const activeLike = (isActivated) => {
+    updateState({ controls: { ...state.controls, isLiked: isActivated } });
   };
 
   const handleChangeTheme = () => {
-    setDarkTheme(!darkTheme);
+    dispatch(changeTheme(!isDarkMode));
   };
 
   const handleLikeClick = () => {
@@ -44,23 +45,23 @@ function ReadingHeader() {
       return;
     }
 
-    if (!controls.isLiked) {
+    if (!state.controls.isLiked) {
       favoriteService
         .add(user._id, chapter._id)
         .then((response) => {
           toastEmitter(response.message, "success");
-          setControls((prev) => ({ ...prev, isLiked: true }));
+          activeLike(true);
           dispatch(setFavorite(response.data));
         })
         .catch((error) => {
           toastEmitter(error, "error");
         });
     }
-    if (controls.isLiked) {
+    if (state.controls.isLiked) {
       favoriteService
         .delete(user._id, chapter._id)
         .then(() => {
-          setControls((prev) => ({ ...prev, isLiked: false }));
+          activeLike(false);
           dispatch(setFavorite({}));
         })
         .catch((error) => {
@@ -70,41 +71,44 @@ function ReadingHeader() {
   };
 
   useEffect(() => {
-    fetchData();
+    titleService
+      .getOne({ _id: titleId }, false)
+      .then((response) => updateState({ title: response.data }))
+      .catch((error) => toastEmitter(error, "error"));
   }, []);
 
   useEffect(() => {
     if (favorite.user_id === user._id) {
-      setIsLike(true);
+      activeLike(true);
     }
     if (Object.keys(favorite).length === 0) {
-      setIsLike(false);
+      activeLike(false);
     }
   }, [favorite]);
 
   return (
     <>
-      {Object.keys(chapter).length > 0 && Object.keys(title).length > 0 && (
+      {Object.keys(chapter).length > 0 && Object.keys(state.title).length > 0 && (
         <header className={cx("reading-header")}>
           <Button wrapper to="/" className={cx("reading-header__logo")}>
             <Logo className={cx("logo")} />
           </Button>
           <div className={cx("reading-header__title")}>
-            <Button text to={`/comic/title/${title._id}`} title={title.title}>
-              {title.title}
+            <Button text to={`/comic/title/${state.title._id}`} title={state.title.title}>
+              {state.title.title}
             </Button>
           </div>
           <ReadingNav
             cx={cx}
             chapter={chapter}
-            totalChapter={title.total_chapter}
+            totalChapter={state.title.total_chapter}
             titleId={titleId}
           />
           <ReadingTools
             cx={cx}
-            darkTheme={darkTheme}
+            isDarkMode={state.isDarkMode}
             handleChangeTheme={handleChangeTheme}
-            isLike={isLike}
+            isLike={state.isLike}
             handleLike={handleLikeClick}
           />
         </header>
