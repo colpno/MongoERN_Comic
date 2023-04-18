@@ -1,11 +1,19 @@
 import PropTypes from "prop-types";
+import classNames from "classnames/bind";
 
 import { Scrollbar } from "components";
+import { DarkModeToggle } from "features";
 import AvatarDropdownGroup from "./AvatarDropdownGroup";
+import styles from "../styles/AvatarDropdownList.module.scss";
 
-function AvatarDropdownList({ cx, isLoggingIn, menu, logoutClick }) {
+const cx = classNames.bind(styles);
+
+function AvatarDropdownList({ isLoggingIn, menu, logoutClick }) {
   return (
     <Scrollbar yAxis className={cx("dropdown")}>
+      <div className={cx("dark-mode-wrapper")}>
+        <DarkModeToggle />
+      </div>
       <AvatarDropdownGroup cx={cx} menu={menu.slice(0, menu.length - 1)} />
       {isLoggingIn && (
         <AvatarDropdownGroup cx={cx} menu={menu.slice(menu.length - 1)} onClick={logoutClick} />
@@ -15,7 +23,6 @@ function AvatarDropdownList({ cx, isLoggingIn, menu, logoutClick }) {
 }
 
 AvatarDropdownList.propTypes = {
-  cx: PropTypes.func.isRequired,
   isLoggingIn: PropTypes.bool.isRequired,
   menu: PropTypes.arrayOf(
     PropTypes.arrayOf(
