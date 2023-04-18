@@ -31,11 +31,11 @@ const titleController = {
   },
   getOne: async (req, res, next) => {
     try {
-      if (req.userInfo) req.params.userId = req.userInfo.id;
+      if (req.userInfo) req.params.user_id = req.userInfo?.id;
 
-      const { id, userId } = req.params;
+      const { id } = req.params;
       const params = transformQueryParams(req.query);
-      const match = { ...params, _id: id, user_id: userId };
+      const match = { ...params, _id: id };
 
       const response = await titleService.getOne(match);
 
@@ -51,18 +51,14 @@ const titleController = {
         data: response,
       });
     } catch (error) {
-      return next();
+      return next(error);
     }
   },
   random: async (req, res, next) => {
     try {
-      const { count, ...others } = req.query;
-      others.approved_status_id = '63a6fb6216ee77053d6feb93';
-      others.status = 'vis';
+      const params = transformQueryParams(req.query);
 
-      const params = transformQueryParams(others);
-
-      const titles = await titleService.random(count, params);
+      const titles = await titleService.random(params);
 
       if (titles.length === 0) {
         return res.status(200).json({
