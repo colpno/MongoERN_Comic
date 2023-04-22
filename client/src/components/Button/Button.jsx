@@ -7,34 +7,33 @@ import styles from "./Button.module.scss";
 
 const cx = classNames.bind(styles);
 
-function Button(props) {
-  const {
-    children,
+function Button({
+  children,
 
-    to,
-    href,
-    className,
-    onClick,
-    disabled,
-    target,
-    type,
-    title,
-    sx,
+  to,
+  href,
+  className,
+  onClick,
+  disabled,
+  target,
+  type,
+  title,
+  sx,
 
-    primary,
-    secondary,
-    outline,
-    success,
-    grey,
+  primary,
+  secondary,
+  outline,
+  success,
+  grey,
 
-    wrapper,
-    text,
-    xsmall,
-    small,
-    large,
-    fullWidth,
-    round,
-  } = props;
+  wrapper,
+  text,
+  xsmall,
+  small,
+  large,
+  fullWidth,
+  round,
+}) {
   const classes = cx(
     wrapper || "btn",
     fullWidth && "full-width",
@@ -56,6 +55,7 @@ function Button(props) {
     },
     className
   );
+
   const attributes = {
     onClick,
     target: target || null,
@@ -65,13 +65,18 @@ function Button(props) {
   };
 
   let Component = "button";
-  if (to) {
-    Component = Link;
-    attributes.to = to;
-  }
-  if (href) {
-    Component = "a";
-    attributes.href = href;
+
+  switch (true) {
+    case Boolean(to):
+      Component = Link;
+      attributes.to = to;
+      break;
+    case Boolean(href):
+      Component = "a";
+      attributes.href = href;
+      break;
+    default:
+      break;
   }
 
   return (
