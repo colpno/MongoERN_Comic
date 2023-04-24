@@ -6,7 +6,9 @@ import "../styles/RankingFigures.scss";
 function RankingFigure({ data, rank, showSummary }) {
   return (
     <figure className="ranking-figure">
-      <span className="icon-bookmark">{rank}</span>
+      <span className="icon-bookmark" data-rank={rank}>
+        {rank}
+      </span>
       <CardFigure
         to={`/comic/title/${data._id}`}
         data={data}
