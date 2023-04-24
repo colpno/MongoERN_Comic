@@ -51,7 +51,7 @@ function Search() {
     <Popper
       width="400px"
       maxHeight="50vh"
-      position="center"
+      position="bottom-center"
       placeholder={
         <div className={cx("search")} ref={searchRef}>
           <div className={cx("wrapper")}>

@@ -24,6 +24,7 @@ function Avatar() {
     <div className={cx("avatar-wrapper")} ref={avatarRef}>
       <Popper
         width="300px"
+        position="bottom-right"
         placeholder={
           <Button
             text
