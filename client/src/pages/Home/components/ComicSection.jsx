@@ -1,9 +1,10 @@
 import classNames from "classnames/bind";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Container, Row } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 
 import { CardListWithTitle } from "components";
+import { useToast } from "hooks";
 import { setTop5Titles } from "libs/redux/slices/title.slice";
 import { genreService, titleService } from "services";
 import { sortArray } from "utils/arrayMethods";
@@ -16,15 +17,14 @@ function ComicSection() {
   const dispatch = useDispatch();
   const [genres, setGenres] = useState([]);
   const [titles, setTitles] = useState({ top5: [], approvedTitles: [] });
-  const [titlesByGenre, setTitlesByGenre] = useState([]);
+  const { toastEmitter } = useToast();
 
-  useEffect(() => {
-    const genreLength = genres.length;
-    const data = genres.map((genre, genreIndex) => {
+  const titlesByGenre = useMemo(() => {
+    return genres.map((genre, genreIndex) => {
       let count = 0;
-      const limit = genreIndex !== genreLength - 1 ? 6 : 3;
+      const limit = genreIndex !== genres.length - 1 ? 6 : 3;
       const temp = [];
-      const titleLength = titles.approvedTitles.length;
+      const titleLength = titles.approvedTitles?.length || 0;
 
       for (let i = 0; i < titleLength; i++) {
         const title = titles.approvedTitles[i];
@@ -43,42 +43,63 @@ function ComicSection() {
         titles: temp,
       };
     });
-
-    setTitlesByGenre(data);
   }, [titles.approvedTitles, genres]);
 
-  useEffect(() => {
+  const fetchData = async () => {
     const genresQueryParams = {
       _sort: "_id",
       _order: "asc",
       _limit: 4,
     };
 
-    genreService
-      .getAll(genresQueryParams)
-      .then((genresResult) => {
-        const allGenres = genresResult.data.map((genre) => genre.name);
-        const titlesQueryParams = {
-          genres_in: allGenres,
-          _embed: JSON.stringify([
-            { collection: "approved_status_id", fields: "-_id code", match: { code: "apd" } },
-            { collection: "status_id", fields: "-_id code", match: { code: "vis" } },
-          ]),
-        };
+    try {
+      const genresResult = await genreService.getAll(genresQueryParams);
+      const allGenreNames = genresResult.data.map((genre) => genre.name);
 
-        titleService.getAll(titlesQueryParams, false).then((titleResult) => {
-          const top5 = sortArray(titleResult.data, "like", "desc").slice(0, 5);
+      const titlesQueryParams = {
+        genres_in: allGenreNames,
+        _embed: JSON.stringify([
+          { collection: "approved_status_id", fields: "-_id code", match: { code: "apd" } },
+          { collection: "status_id", fields: "-_id code", match: { code: "vis" } },
+        ]),
+      };
 
-          setTitles({ top5, approvedTitles: titleResult.data });
-          setGenres(genresResult.data);
-        });
-      })
-      .catch((error) => console.error(error));
+      const titleResult = await titleService.getAll(titlesQueryParams, false);
+      const top5 = sortArray(titleResult.data, "like", "desc").slice(0, 5);
+
+      setTitles({ top5, approvedTitles: titleResult.data });
+      setGenres(genresResult.data);
+    } catch (error) {
+      toastEmitter(error, "error");
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
   useEffect(() => {
     titles.top5.length > 0 && dispatch(setTop5Titles(titles.top5));
   }, [titles.top5]);
+
+  const handleScroll = useCallback(() => {
+    const rows = document.querySelectorAll(".comiccc");
+    rows[0].style.opacity = `${1 - +window.scrollY / 700}`;
+    rows[0].style.scale = `${1 - +window.scrollY / 5000}`;
+    rows[1].style.transform = `translateY(${(+window.scrollY / 300) * -100}px)`;
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("scroll", () => {
+      handleScroll();
+    });
+
+    return () => {
+      window.removeEventListener("scroll", () => {
+        handleScroll();
+      });
+    };
+  }, [handleScroll]);
 
   return (
     <>
@@ -99,7 +120,7 @@ function ComicSection() {
                     };
 
               return (
-                <Row key={genre._id} className={cx("comic", `comic-${index + 1}`)}>
+                <Row key={genre._id} className={`${cx("comic", `comic-${index + 1}`)} comiccc`}>
                   <section>
                     <CardListWithTitle col={responsive} data={titlesByGenre[index]} />
                   </section>
