@@ -24,25 +24,93 @@
   overflow: hidden;
 
   position: absolute;
-  top: 100%;
 
-  &.right {
-    right: 0;
+  &.bottom {
+    &-right,
+    &-left,
+    &-center {
+      top: 100%;
+    }
+
+    &-right,
+    &-left {
+      animation: fadeInSide 0.3s ease;
+    }
+
+    &-right {
+      right: 0;
+    }
+
+    &-left {
+      left: 0;
+    }
+
+    &-center {
+      left: 50%;
+      translate: -50%;
+      animation: fadeInCenter 0.3s ease;
+    }
   }
 
-  &.left {
-    left: 0;
+  &.top {
+    &-right,
+    &-left,
+    &-center {
+      bottom: 100%;
+    }
+
+    &-right,
+    &-left {
+      animation: fadeInSide 0.3s ease;
+    }
+
+    &-right {
+      right: 0;
+    }
+
+    &-left {
+      left: 0;
+    }
+
+    &-center {
+      left: 50%;
+      translate: -50%;
+      animation: fadeInCenter 0.3s ease;
+    }
   }
 
-  &.right,
-  &.left {
-    animation: fadeInSide 0.3s ease;
+  &.up {
+    &-right,
+    &-left {
+      bottom: 0;
+      border-radius: 10px;
+      animation: fadeInSide 0.3s ease;
+    }
+
+    &-right {
+      left: 100%;
+    }
+
+    &-left {
+      right: 100%;
+    }
   }
 
-  &.center {
-    left: 50%;
-    translate: -50%;
-    animation: fadeInCenter 0.3s ease;
+  &.down {
+    &-right,
+    &-left {
+      top: 0;
+      border-radius: 10px;
+      animation: fadeInSide 0.3s ease;
+    }
+
+    &-right {
+      left: 100%;
+    }
+
+    &-left {
+      right: 100%;
+    }
   }
 }
 

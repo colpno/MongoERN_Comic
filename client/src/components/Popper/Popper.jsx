@@ -33,14 +33,24 @@ Popper.propTypes = {
   width: PropTypes.string,
   height: PropTypes.string,
   maxHeight: PropTypes.string,
-  position: PropTypes.oneOf(["left", "right", "center"]),
+  position: PropTypes.oneOf([
+    "top-left",
+    "top-right",
+    "top-center",
+    "bottom-left",
+    "bottom-right",
+    "bottom-center",
+    "up-right",
+    "up-left",
+    "down-right",
+    "down-left",
+  ]).isRequired,
 };
 
 Popper.defaultProps = {
   width: "400px",
   height: "0",
   maxHeight: "80vh",
-  position: "right",
 };
 
 export default Popper;
