@@ -1,3 +1,63 @@
+import { BiCategoryAlt, BiSpreadsheet } from "react-icons/bi";
+import { BsFilePost } from "react-icons/bs";
+import { FaUsers } from "react-icons/fa";
+import { MdAdminPanelSettings } from "react-icons/md";
+
+export function getAdminSideBarMenu() {
+  return [
+    {
+      groupLabel: "Management",
+      subMenu: [
+        {
+          to: `/titles`,
+          icon: BsFilePost,
+          label: "Titles",
+        },
+        {
+          to: `/chapters`,
+          icon: BiSpreadsheet,
+          label: "Chapters",
+        },
+        {
+          to: `/genres`,
+          icon: BiCategoryAlt,
+          label: "Genres",
+        },
+        {
+          to: `/members`,
+          icon: FaUsers,
+          label: "Members",
+        },
+        {
+          to: `/administrators`,
+          icon: MdAdminPanelSettings,
+          label: "Administrators",
+        },
+        // {
+        //   to: `/payment-methods`,
+        //   icon: MdPayment,
+        //   label: "Payment Methods",
+        // },
+      ],
+    },
+    // {
+    //   groupLabel: "Stats",
+    //   subMenu: [
+    //     {
+    //       to: `/income`,
+    //       icon: FaChartBar,
+    //       label: "Income",
+    //     },
+    //     // {
+    //     //   to: `${baseURL}/visit`,
+    //     //   icon: CircleC,
+    //     //   label: "Visits",
+    //     // },
+    //   ],
+    // },
+  ];
+}
+
 export const getMonthArray = () => {
   return [
     { number: 1, standard: "Tháng 1", short: "T1", long: "Tháng một" },
