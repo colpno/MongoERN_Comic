@@ -16,7 +16,7 @@ import {
 
 export const adminRoutes = [
   {
-    path: "/login",
+    path: "/",
     component: Login,
     layout: LoginLayout,
   },
