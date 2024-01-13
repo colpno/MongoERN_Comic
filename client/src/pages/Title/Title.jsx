@@ -198,21 +198,14 @@ function Title() {
       const titleParams = {
         _id: titleId,
         _embed: JSON.stringify([
-          { collection: "approved_status_id", fields: "-_id code" },
-          { collection: "status_id", fields: "-_id code" },
+          { collection: "approved_status_id", fields: "-_id code", match: { code: "apd" } },
+          { collection: "status_id", fields: "-_id code", match: { code: "vis" } },
         ]),
       };
 
       titleService
         .getOne(titleParams, false)
         .then(async (titleResult) => {
-          if (
-            titleResult.data.approved_status_id.code !== "apd" ||
-            titleResult.data.status_id.code !== "vis"
-          ) {
-            navigate("/not-found");
-          }
-
           const genreParams = {
             name_in: titleResult.data.genres,
             _fields: "name",
@@ -249,9 +242,9 @@ function Title() {
             loading: false,
           });
         })
-        .catch((error) => {
+        .catch(() => {
           updateState({ loading: false });
-          toastEmitter(error, "error");
+          navigate("/not-found");
         });
     })();
   }, [titleId, user]);
