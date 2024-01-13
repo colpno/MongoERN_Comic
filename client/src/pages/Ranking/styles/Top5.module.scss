@@ -59,36 +59,6 @@
   }
 }
 
-.top {
-  opacity: 0;
-  transition: all 1s ease;
-
-  &-1 {
-    transform: translateX(-200px);
-  }
-
-  &-2 {
-    transform: translateX(200px);
-  }
-
-  &-3,
-  &-4,
-  &-5 {
-    transform: translateY(100px);
-  }
-
-  &.active.top {
-    &-1,
-    &-2,
-    &-3,
-    &-4,
-    &-5 {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
-}
-
 @media (max-width: 992px) {
   .top {
     &-1,

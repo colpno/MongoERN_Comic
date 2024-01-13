@@ -1,5 +1,6 @@
 import classNames from "classnames/bind";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { Slide } from "react-awesome-reveal";
 import { Container, Row } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 
@@ -83,11 +84,11 @@ function ComicSection() {
   }, [titles.top5]);
 
   const handleScroll = useCallback(() => {
-    const rows = document.querySelectorAll(".comiccc");
+    const rows = document.querySelectorAll(".comic-animation");
     if (rows.length > 0) {
       rows[0].style.opacity = `${1 - +window.scrollY / 700}`;
       rows[0].style.scale = `${1 - +window.scrollY / 5000}`;
-      rows[1].style.transform = `translateY(${(+window.scrollY / 300) * -100}px)`;
+      rows[1].style.transform = `translateY(${(+window.scrollY / 300) * -50}px)`;
     }
   }, []);
 
@@ -122,10 +123,10 @@ function ComicSection() {
                     };
 
               return (
-                <Row key={genre._id} className={`${cx("comic", `comic-${index + 1}`)} comiccc`}>
-                  <section>
+                <Row key={genre._id} className={`${cx("comic", `comic-${index + 1}`)}`}>
+                  <Slide direction="up" triggerOnce>
                     <CardListWithTitle col={responsive} data={titlesByGenre[index]} />
-                  </section>
+                  </Slide>
                 </Row>
               );
             })}
