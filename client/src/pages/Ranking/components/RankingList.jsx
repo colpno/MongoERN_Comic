@@ -1,9 +1,9 @@
-import React from "react";
 import PropTypes from "prop-types";
 import { Col, Row } from "react-bootstrap";
 
-import RankingFigure from "./RankingFigure";
+import { Slide } from "react-awesome-reveal";
 import "../styles/RankingList.scss";
+import RankingFigure from "./RankingFigure";
 
 function RankingList({ col, titles, startRank }) {
   return (
@@ -11,7 +11,9 @@ function RankingList({ col, titles, startRank }) {
       {titles.map((title, index) => {
         return (
           <Col {...col} key={title._id} className="ranking-card__wrapper">
-            <RankingFigure rank={startRank + index} data={title} />
+            <Slide direction="up" triggerOnce>
+              <RankingFigure rank={startRank + index} data={title} />
+            </Slide>
           </Col>
         );
       })}

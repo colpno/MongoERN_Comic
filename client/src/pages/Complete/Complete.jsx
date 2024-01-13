@@ -4,6 +4,7 @@ import { Container } from "react-bootstrap";
 
 import { CardList } from "components";
 import { NoData } from "features";
+import { Slide } from "react-awesome-reveal";
 import { titleService } from "services";
 import styles from "./Complete.module.scss";
 
@@ -35,12 +36,14 @@ function Complete() {
   return (
     <Container className={cx("complete-page")}>
       {titles.length > 0 ? (
-        <CardList
-          wrap
-          data={titles}
-          col={{ xs: 6, sm: 4, md: 20 }}
-          classN={{ boxImg: cx("box-img") }}
-        />
+        <Slide direction="up" triggerOnce>
+          <CardList
+            wrap
+            data={titles}
+            col={{ xs: 6, sm: 4, md: 20 }}
+            classN={{ boxImg: cx("box-img") }}
+          />
+        </Slide>
       ) : (
         <NoData>
           <h5>Không có dữ liệu để hiển thị</h5>
