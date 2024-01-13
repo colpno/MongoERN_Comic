@@ -8,6 +8,7 @@ export { default as favoriteController } from './favorite.controller.js';
 export { default as followController } from './follow.controller.js';
 export { default as genreController } from './genre.controller.js';
 export { default as incomeController } from './income.controller.js';
+export { default as notificationController } from './notification.controller.js';
 export { default as objectStatusController } from './objectStatus.controller.js';
 export { default as paymentMethodController } from './paymentMethod.controller.js';
 export { default as paypalController } from './paypal.controller.js';

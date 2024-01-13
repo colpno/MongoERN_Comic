@@ -12,6 +12,7 @@ import favoriteRoute from './favorite.route.js';
 import followRoute from './follow.route.js';
 import genreRoute from './genre.route.js';
 import incomeRoute from './income.route.js';
+import notificationRoute from './notification.route.js';
 import objectStatusRoute from './objectStatus.route.js';
 import paymentMethodRoute from './paymentMethod.route.js';
 import paypalRoute from './paypal.route.js';
@@ -47,5 +48,6 @@ routes.use(`${BASE_URL}/title-reports`, titleReportRoute);
 routes.use(`${BASE_URL}/vnpay`, vnpayRoute);
 routes.use(`${BASE_URL}/paypal`, paypalRoute);
 routes.use(`${BASE_URL}/users`, userRoute);
+routes.use(`${BASE_URL}/notifications`, notificationRoute);
 
 export default routes;
