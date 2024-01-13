@@ -15,8 +15,7 @@ function TicketHistory() {
   const HISTORIES_PER_PAGE = 30;
   const { guid: userId } = useSelector((state) => state.user.user);
   const [histories, setHistories] = useState([]);
-  const { pagination, setPagination, setPaginationTotal } =
-    usePagination(HISTORIES_PER_PAGE);
+  const { pagination, setPagination, setPaginationTotal } = usePagination(HISTORIES_PER_PAGE);
   const hasData = histories.length > 0;
 
   const fetchData = () => {

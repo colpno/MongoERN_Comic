@@ -28,22 +28,14 @@ function RegisterForm({ handleSubmit, initialValue, validationSchema }) {
               letterCount
             />
             <FormLabel name="email" label="Email" required />
-            <FastField
-              name="email"
-              component={InputField}
-              placeholder="Viết địa chỉ email..."
-            />
+            <FastField name="email" component={InputField} placeholder="Viết địa chỉ email..." />
             <FormLabel name="password" label="Mật khẩu" required />
             <ul className={cx("un-ordered-list")}>
               <li className={cx("lower-case")}>Tối thiểu 1 ký tự chữ thường</li>
               <li className={cx("upper-case")}>Tối thiểu 1 ký tự chữ hoa</li>
               <li className={cx("number-character")}>Tối thiểu 1 ký tự số</li>
-              <li className={cx("special-character")}>
-                Tối thiểu 1 ký tự đặc biết
-              </li>
-              <li className={cx("minmax-character")}>
-                Tối thiểu 8 ký tự, tối đa 20 ký tự
-              </li>
+              <li className={cx("special-character")}>Tối thiểu 1 ký tự đặc biết</li>
+              <li className={cx("minmax-character")}>Tối thiểu 8 ký tự, tối đa 20 ký tự</li>
             </ul>
             <FastField
               name="password"
@@ -53,11 +45,7 @@ function RegisterForm({ handleSubmit, initialValue, validationSchema }) {
               maxLength={20}
               letterCount
             />
-            <FormLabel
-              name="confirmPassword"
-              label="Nhập lại mật khẩu"
-              required
-            />
+            <FormLabel name="confirmPassword" label="Nhập lại mật khẩu" required />
             <FastField
               name="confirmPassword"
               component={InputField}

@@ -27,10 +27,7 @@ function ReadMore({ expandHeight, children }) {
 
   return (
     <div className={cx("read-more")} ref={contentRef}>
-      <div
-        className={cx("content")}
-        style={{ maxHeight: expand.contentHeight }}
-      >
+      <div className={cx("content")} style={{ maxHeight: expand.contentHeight }}>
         {children}
       </div>
       {expand.isExpand ? null : (

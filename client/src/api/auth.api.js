@@ -8,11 +8,7 @@ const authApi = {
   },
 
   login: (username, password) => {
-    return axiosClient.post(
-      `${url}/login`,
-      { username, password },
-      { withCredentials: true }
-    );
+    return axiosClient.post(`${url}/login`, { username, password }, { withCredentials: true });
   },
 
   verifyLogin: (id, username, email, otp) => {

@@ -84,11 +84,7 @@ export function convertToDateString(day, month, year, separator = "/") {
   return `${day}${separator}${month}${separator}${year}`;
 }
 
-export function convertToDateTimeString(
-  timeString,
-  daySeparator = ".",
-  timeSeparator = ":"
-) {
+export function convertToDateTimeString(timeString, daySeparator = ".", timeSeparator = ":") {
   const { day, month, year, hour, minute } = formatTime(timeString);
   return `${day}${daySeparator}${month}${daySeparator}${year} ${hour}${timeSeparator}${minute}`;
 }

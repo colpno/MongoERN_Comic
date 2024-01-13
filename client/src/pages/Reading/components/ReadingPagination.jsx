@@ -43,10 +43,7 @@ function ReadingPagination({ chapters }) {
                 <Button
                   wrapper
                   to={`/comic/title/${titleId}/${chapter._id}`}
-                  className={cx(
-                    "slide-wrapper",
-                    chapterId === chapter._id ? "active" : ""
-                  )}
+                  className={cx("slide-wrapper", chapterId === chapter._id ? "active" : "")}
                 >
                   <div className={cx("box-img")}>
                     <img src={chapter.cover.source} alt={chapter.title} />

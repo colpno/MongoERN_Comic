@@ -6,12 +6,7 @@ import styles from "./Scrollbar.module.scss";
 const cx = classNames.bind(styles);
 
 function Scrollbar({ children, className, xAxis, yAxis }) {
-  const classes = cx(
-    "scrollbar",
-    xAxis && "x-axis",
-    yAxis && "y-axis",
-    className
-  );
+  const classes = cx("scrollbar", xAxis && "x-axis", yAxis && "y-axis", className);
 
   return <div className={classes}>{children}</div>;
 }

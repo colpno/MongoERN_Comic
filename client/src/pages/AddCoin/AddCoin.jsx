@@ -7,7 +7,7 @@ import { Radio } from "components";
 import { NoData } from "features";
 import { paymentMethodService } from "services";
 import styles from "./AddCoin.module.scss";
-import { PayPalForm, VNPayForm } from "./components";
+import { PayPalForm } from "./components";
 
 const cx = classNames.bind(styles);
 
@@ -22,8 +22,6 @@ function EmptyForm() {
 
 function Form({ form }) {
   switch (form.toLowerCase()) {
-    case "vnpay":
-      return <VNPayForm />;
     case "paypal":
       return <PayPalForm />;
     default:

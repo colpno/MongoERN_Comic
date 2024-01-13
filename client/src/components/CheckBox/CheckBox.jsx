@@ -37,10 +37,8 @@ CheckBox.propTypes = {
   isChecked: PropTypes.bool,
   value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   disabled: PropTypes.bool,
-  children: PropTypes.oneOfType([
-    PropTypes.string.isRequired,
-    PropTypes.node.isRequired,
-  ]).isRequired,
+  children: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.node.isRequired])
+    .isRequired,
 };
 
 CheckBox.defaultProps = {

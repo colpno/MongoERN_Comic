@@ -5,12 +5,7 @@ import { InputField, FormLabel } from "libs/formik";
 import { Button } from "components";
 import { FaChevronRight } from "react-icons/fa";
 
-function ResetPasswordForm({
-  INITIAL_VALUES,
-  VALIDATION_SCHEMA,
-  cx,
-  handleSubmit,
-}) {
+function ResetPasswordForm({ INITIAL_VALUES, VALIDATION_SCHEMA, cx, handleSubmit }) {
   return (
     <Formik
       initialValues={INITIAL_VALUES}
@@ -29,11 +24,7 @@ function ResetPasswordForm({
               autoFocus
             />
 
-            <FormLabel
-              name="confirmPassword"
-              label="Nhập lại mật khẩu mới"
-              required
-            />
+            <FormLabel name="confirmPassword" label="Nhập lại mật khẩu mới" required />
             <FastField
               name="confirmPassword"
               component={InputField}

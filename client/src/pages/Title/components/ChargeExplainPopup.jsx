@@ -27,13 +27,13 @@ function ChargeExplainPopup() {
         </p>
         <p>
           <BsFillLightningFill />
-          Sau khi sử dụng, thanh tiến trình sẽ mất hiệu lực và bắt đầu sạc lại
-          từ đầu. Thanh tiến trình chỉ được sạc lại sau khi bạn đã sử dụng.
+          Sau khi sử dụng, thanh tiến trình sẽ mất hiệu lực và bắt đầu sạc lại từ đầu. Thanh tiến
+          trình chỉ được sạc lại sau khi bạn đã sử dụng.
         </p>
         <p>
           <BsFillLightningFill />
-          Bạn có thể theo dõi thời gian sạc lại thanh tiến trình và tiếp tục
-          chọn chương để đọc miễn phí sau khi thanh đầy lại.
+          Bạn có thể theo dõi thời gian sạc lại thanh tiến trình và tiếp tục chọn chương để đọc miễn
+          phí sau khi thanh đầy lại.
         </p>
       </div>
     </div>

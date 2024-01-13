@@ -42,10 +42,8 @@ function LoginLayout({ children }) {
 }
 
 LoginLayout.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.string.isRequired,
-    PropTypes.node.isRequired,
-  ]).isRequired,
+  children: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.node.isRequired])
+    .isRequired,
 };
 
 export default LoginLayout;

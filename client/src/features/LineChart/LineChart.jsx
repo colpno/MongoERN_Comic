@@ -43,10 +43,7 @@ LineChart.propTypes = {
     PropTypes.shape({
       label: PropTypes.string.isRequired,
       data: PropTypes.arrayOf(
-        PropTypes.oneOfType([
-          PropTypes.number.isRequired,
-          PropTypes.string.isRequired,
-        ]).isRequired
+        PropTypes.oneOfType([PropTypes.number.isRequired, PropTypes.string.isRequired]).isRequired
       ),
       backgroundColor: PropTypes.oneOfType([
         PropTypes.string.isRequired,

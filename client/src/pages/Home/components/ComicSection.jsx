@@ -84,9 +84,11 @@ function ComicSection() {
 
   const handleScroll = useCallback(() => {
     const rows = document.querySelectorAll(".comiccc");
-    rows[0].style.opacity = `${1 - +window.scrollY / 700}`;
-    rows[0].style.scale = `${1 - +window.scrollY / 5000}`;
-    rows[1].style.transform = `translateY(${(+window.scrollY / 300) * -100}px)`;
+    if (rows.length > 0) {
+      rows[0].style.opacity = `${1 - +window.scrollY / 700}`;
+      rows[0].style.scale = `${1 - +window.scrollY / 5000}`;
+      rows[1].style.transform = `translateY(${(+window.scrollY / 300) * -100}px)`;
+    }
   }, []);
 
   useEffect(() => {

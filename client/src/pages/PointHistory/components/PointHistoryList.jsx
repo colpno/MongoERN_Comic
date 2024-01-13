@@ -9,14 +9,7 @@ function PointHistoryList({ histories }) {
         const { guid, payMethod, amount, createdAt } = pointHistory;
         const { label } = payMethod;
 
-        return (
-          <PointHistoryItem
-            key={guid}
-            label={label}
-            createdAt={createdAt}
-            amount={amount}
-          />
-        );
+        return <PointHistoryItem key={guid} label={label} createdAt={createdAt} amount={amount} />;
       })}
     </>
   );

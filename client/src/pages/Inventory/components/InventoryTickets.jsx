@@ -8,10 +8,7 @@ function InventoryTickets({ cx, handleClickIcon, user }) {
     <Col className={cx("inventory__general__tickets")}>
       <span className={cx("title")}>
         Tổng số vé:
-        <AiOutlineQuestionCircle
-          className={cx("question-icon")}
-          onClick={handleClickIcon}
-        />
+        <AiOutlineQuestionCircle className={cx("question-icon")} onClick={handleClickIcon} />
       </span>
       <div className={cx("tickets")}>
         <span className={cx("ticket")}>

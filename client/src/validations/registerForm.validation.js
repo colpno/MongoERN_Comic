@@ -16,7 +16,5 @@ export const registerFormValidation = Yup.object({
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password")], "Mật khẩu Không trùng khớp")
     .required("Nhập lại mật khẩu để chắc chắn bạn nhập đúng mật khẩu"),
-  email: Yup.string()
-    .email("Định dạng mail không hợp lệ")
-    .required("Email không được để trống"),
+  email: Yup.string().email("Định dạng mail không hợp lệ").required("Email không được để trống"),
 });

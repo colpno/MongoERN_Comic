@@ -5,12 +5,7 @@ import { FaChevronRight } from "react-icons/fa";
 import { Button } from "components";
 import { InputField, FormLabel } from "libs/formik";
 
-function ForgotPasswordForm({
-  INITIAL_VALUES,
-  VALIDATION_SCHEMA,
-  handleSubmit,
-  cx,
-}) {
+function ForgotPasswordForm({ INITIAL_VALUES, VALIDATION_SCHEMA, handleSubmit, cx }) {
   return (
     <Formik
       initialValues={INITIAL_VALUES}
@@ -29,11 +24,7 @@ function ForgotPasswordForm({
             />
 
             <FormLabel name="email" label="Email" required />
-            <FastField
-              name="email"
-              component={InputField}
-              placeholder="Nhập email..."
-            />
+            <FastField name="email" component={InputField} placeholder="Nhập email..." />
 
             <Button
               primary

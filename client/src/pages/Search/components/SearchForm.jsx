@@ -5,14 +5,7 @@ import PropTypes from "prop-types";
 import { Button } from "components";
 import { CheckBoxGroup, InputField, RadioGroup } from "libs/formik";
 
-function SearchForm({
-  initialValues,
-  handleSubmit,
-  cx,
-  genreOptions,
-  sortOptions,
-  orderOption,
-}) {
+function SearchForm({ initialValues, handleSubmit, cx, genreOptions, sortOptions, orderOption }) {
   return (
     <Formik initialValues={initialValues} onSubmit={handleSubmit}>
       {() => {
@@ -42,11 +35,7 @@ function SearchForm({
                 Tên tác giả:
               </Col>
               <Col md={10}>
-                <FastField
-                  name="author"
-                  component={InputField}
-                  placeholder="Nhập tên tác giả..."
-                />
+                <FastField name="author" component={InputField} placeholder="Nhập tên tác giả..." />
               </Col>
             </Row>
             <Row>

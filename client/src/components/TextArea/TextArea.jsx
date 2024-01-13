@@ -35,9 +35,7 @@ function TextArea({
         className={cx("textarea")}
         maxLength={maxLength}
       />
-      <span
-        className={cx("text-length")}
-      >{`${value.length}/${maxLength}`}</span>
+      <span className={cx("text-length")}>{`${value.length}/${maxLength}`}</span>
       <Feedback type="invalid">{error}</Feedback>
     </div>
   );

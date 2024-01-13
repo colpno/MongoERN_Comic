@@ -4,8 +4,7 @@ export const conveniences = [
   {
     icon: topSales,
     mainText: "Đăng ký tích điểm và nhân ưu đãi",
-    subText:
-      "Nhanh chóng, tiện lợi và an toàn. Đăng ký liền tay, rinh ngay quyền lợi.",
+    subText: "Nhanh chóng, tiện lợi và an toàn. Đăng ký liền tay, rinh ngay quyền lợi.",
   },
   {
     icon: wallet,

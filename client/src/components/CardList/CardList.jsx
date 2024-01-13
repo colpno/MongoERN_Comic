@@ -19,10 +19,7 @@ function CardList({
 
   dropRow,
 }) {
-  const classes = `${cx(
-    "cards-wrapper__cards",
-    dropRow ? "drop-row" : null
-  )} row`;
+  const classes = `${cx("cards-wrapper__cards", dropRow ? "drop-row" : null)} row`;
 
   return (
     <Row className={classes}>

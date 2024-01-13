@@ -7,9 +7,7 @@ export const profileFormValidation = Yup.object({
     .matches(/^[a-zA-Z0-9]+$/g, "Tên người dùng phải là chữ cái hoặc số")
     .max(20, "Độ dài tối đa là 20 ký tự")
     .required("Tên hiển thị không được để trống"),
-  email: Yup.string()
-    .email("Định dạng mail không hợp lệ")
-    .required("Email không được để trống"),
+  email: Yup.string().email("Định dạng mail không hợp lệ").required("Email không được để trống"),
   dateOfBirth: Yup.date()
     .transform((value, originalValue) =>
       value ? moment(originalValue, "DD/MM/YYYY").toDate() : value

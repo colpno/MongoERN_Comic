@@ -30,10 +30,8 @@ Radio.propTypes = {
   }).isRequired,
   disabled: PropTypes.bool,
   value: PropTypes.string.isRequired,
-  children: PropTypes.oneOfType([
-    PropTypes.string.isRequired,
-    PropTypes.node.isRequired,
-  ]).isRequired,
+  children: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.node.isRequired])
+    .isRequired,
 };
 
 Radio.defaultProps = {

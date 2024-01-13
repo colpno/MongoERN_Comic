@@ -98,10 +98,7 @@ function AvatarBox({ value, handleOnChange }) {
   return (
     <div className={cx("avatars-container")}>
       {avatars.map((avatar, index) => {
-        const alt = avatar.slice(
-          avatar.lastIndexOf("/") + 1,
-          avatar.indexOf(".")
-        );
+        const alt = avatar.slice(avatar.lastIndexOf("/") + 1, avatar.indexOf("."));
 
         return (
           <Col sm={20} key={index}>

@@ -19,10 +19,7 @@ function TicketExplainPopup() {
           <RentTicket />
         </div>
         <div className={cx("box-text")}>
-          <p>
-            Vé thuê được sử dụng để thuê chương, được chia thành 3 loại khác
-            nhau:
-          </p>
+          <p>Vé thuê được sử dụng để thuê chương, được chia thành 3 loại khác nhau:</p>
           <ul>
             <li>- Dành cho một truyện nhất định.</li>
             <li>- Dành cho một số truyện nhất định.</li>
@@ -33,8 +30,7 @@ function TicketExplainPopup() {
       <div className={cx("attention-wrapper")}>
         <p className={cx("attention")}>Lưu ý:</p>
         <small className={cx("box-text")}>
-          - Vé được ưu tiên sử dụng trước Coin và Point, mỗi vé chỉ mở được 1
-          chương.
+          - Vé được ưu tiên sử dụng trước Coin và Point, mỗi vé chỉ mở được 1 chương.
         </small>
       </div>
     </div>

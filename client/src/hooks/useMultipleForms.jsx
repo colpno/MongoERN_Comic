@@ -14,9 +14,7 @@ function useMultipleForms(forms = []) {
   };
 
   const goto = (step) => {
-    currentFormIndex >= FIRST_INDEX &&
-      currentFormIndex <= lastIndex &&
-      setCurrentFormIndex(step);
+    currentFormIndex >= FIRST_INDEX && currentFormIndex <= lastIndex && setCurrentFormIndex(step);
   };
 
   return {
