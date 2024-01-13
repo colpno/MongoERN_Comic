@@ -1,7 +1,7 @@
 const HEADER_MENU = [
   { href: "/comic/weekly", label: "Comic" },
-  { href: "/novel", label: "Novel" },
-  { href: "/anime", label: "Anime" },
+  // { href: "/novel", label: "Novel" },
+  // { href: "/anime", label: "Anime" },
 ];
 
 const MY_TITLE_MENU = [
