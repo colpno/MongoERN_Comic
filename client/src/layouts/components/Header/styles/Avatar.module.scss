@@ -9,6 +9,11 @@
   align-items: center;
   justify-content: center;
   position: relative;
+
+  & .grey {
+    color: #aaa !important;
+    fill: #aaa;
+  }
 }
 
 .avatar {
