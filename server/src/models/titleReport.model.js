@@ -10,7 +10,7 @@ import {
 
 const titleReportSchema = mongoose.Schema(
   {
-    title_id: { type: mongoose.Types.ObjectId, ref: 'title' },
+    title_id: { type: mongoose.Types.ObjectId, ref: 'titles' },
     like: { type: Number, min: 0, default: 0 },
     view: { type: Number, min: 0, default: 0 },
     month: {
@@ -37,6 +37,6 @@ titleReportSchema.pre(/^find/, function (next) {
   next();
 });
 
-const TitleReport = mongoose.model('title_report', titleReportSchema);
+const TitleReport = mongoose.model('title_reports', titleReportSchema);
 
 export default TitleReport;

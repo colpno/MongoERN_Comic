@@ -10,7 +10,7 @@ import {
 
 const chapterReportSchema = mongoose.Schema(
   {
-    chapter_id: { type: mongoose.Types.ObjectId, ref: 'chapter' },
+    chapter_id: { type: mongoose.Types.ObjectId, ref: 'chapters' },
     like: { type: Number, min: 0, default: 0 },
     view: { type: Number, min: 0, default: 0 },
     month: {
@@ -37,6 +37,6 @@ chapterReportSchema.pre(/^find/, function (next) {
   next();
 });
 
-const ChapterReport = mongoose.model('chapter_report', chapterReportSchema);
+const ChapterReport = mongoose.model('chapter_reports', chapterReportSchema);
 
 export default ChapterReport;

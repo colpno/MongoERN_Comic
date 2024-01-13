@@ -2,9 +2,9 @@ import mongoose from 'mongoose';
 
 const chapterTransactionSchema = mongoose.Schema(
   {
-    user_id: { type: mongoose.Types.ObjectId, ref: 'user', require: true },
-    title_id: { type: mongoose.Types.ObjectId, ref: 'title', require: true },
-    chapter_id: { type: mongoose.Types.ObjectId, ref: 'chapter', require: true },
+    user_id: { type: mongoose.Types.ObjectId, ref: 'users', require: true },
+    title_id: { type: mongoose.Types.ObjectId, ref: 'titles', require: true },
+    chapter_id: { type: mongoose.Types.ObjectId, ref: 'chapters', require: true },
     expiredAt: { type: Date },
     method: {
       type: String,
@@ -24,6 +24,6 @@ chapterTransactionSchema.pre(/^find/, function (next) {
   next();
 });
 
-const ChapterTransaction = mongoose.model('chapter_transaction', chapterTransactionSchema);
+const ChapterTransaction = mongoose.model('chapter_transactions', chapterTransactionSchema);
 
 export default ChapterTransaction;

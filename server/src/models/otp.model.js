@@ -9,6 +9,6 @@ const otpSchema = mongoose.Schema(
   { timestamps: true }
 );
 
-const OTP = mongoose.model('otp', otpSchema);
+const OTP = mongoose.model('otps', otpSchema);
 
 export default OTP;

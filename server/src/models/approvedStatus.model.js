@@ -17,6 +17,6 @@ const approvedStatusSchema = mongoose.Schema(
   { timestamps: true }
 );
 
-const ApprovedStatus = mongoose.model('approved_status', approvedStatusSchema);
+const ApprovedStatus = mongoose.model('approved_statuses', approvedStatusSchema);
 
 export default ApprovedStatus;

@@ -2,9 +2,9 @@ import mongoose from 'mongoose';
 
 const readingHistorySchema = mongoose.Schema(
   {
-    user_id: { type: mongoose.Types.ObjectId, ref: 'user', require: true },
-    title_id: { type: mongoose.Types.ObjectId, ref: 'title', require: true },
-    chapter_id: { type: mongoose.Types.ObjectId, ref: 'chapter', require: true },
+    user_id: { type: mongoose.Types.ObjectId, ref: 'users', require: true },
+    title_id: { type: mongoose.Types.ObjectId, ref: 'titles', require: true },
+    chapter_id: { type: mongoose.Types.ObjectId, ref: 'chapters', require: true },
   },
   { timestamps: true }
 );
@@ -17,6 +17,6 @@ readingHistorySchema.pre(/^find/, function (next) {
   next();
 });
 
-const ReadingHistory = mongoose.model('reading_history', readingHistorySchema);
+const ReadingHistory = mongoose.model('reading_histories', readingHistorySchema);
 
 export default ReadingHistory;

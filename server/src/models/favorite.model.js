@@ -2,8 +2,8 @@ import mongoose from 'mongoose';
 
 const favoriteSchema = mongoose.Schema(
   {
-    user_id: { type: mongoose.Types.ObjectId, ref: 'user', require: true },
-    chapter_id: { type: mongoose.Types.ObjectId, ref: 'chapter', require: true },
+    user_id: { type: mongoose.Types.ObjectId, ref: 'users', require: true },
+    chapter_id: { type: mongoose.Types.ObjectId, ref: 'chapters', require: true },
   },
   { timestamps: true }
 );
@@ -15,6 +15,6 @@ favoriteSchema.pre(/^find/, function (next) {
   next();
 });
 
-const Favorite = mongoose.model('favorite', favoriteSchema);
+const Favorite = mongoose.model('favorites', favoriteSchema);
 
 export default Favorite;

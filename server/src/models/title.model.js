@@ -7,15 +7,15 @@ import TitleReport from './titleReport.model.js';
 
 const titleSchema = mongoose.Schema(
   {
-    user_id: { type: mongoose.Types.ObjectId, ref: 'user', require: true },
+    user_id: { type: mongoose.Types.ObjectId, ref: 'users', require: true },
     approved_status_id: {
       type: mongoose.Types.ObjectId,
-      ref: 'approved_status',
-      default: '63b5978d7d56b429568608c5',
+      ref: 'approved_statuses',
+      default: '63a6fb6216ee77053d6feb91',
     },
     status_id: {
       type: mongoose.Types.ObjectId,
-      ref: 'object_status',
+      ref: 'object_statuses',
       require: true,
     },
     release_day: {
@@ -59,6 +59,6 @@ titleSchema.pre(/^find/, function (next) {
   next();
 });
 
-const Title = mongoose.model('title', titleSchema);
+const Title = mongoose.model('titles', titleSchema);
 
 export default Title;

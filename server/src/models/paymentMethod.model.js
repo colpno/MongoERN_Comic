@@ -7,6 +7,6 @@ const paymentMethodSchema = mongoose.Schema(
   { timestamps: true }
 );
 
-const PaymentMethod = mongoose.model('payment_method', paymentMethodSchema);
+const PaymentMethod = mongoose.model('payment_methods', paymentMethodSchema);
 
 export default PaymentMethod;

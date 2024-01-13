@@ -2,8 +2,8 @@ import mongoose from 'mongoose';
 
 const followSchema = mongoose.Schema(
   {
-    user_id: { type: mongoose.Types.ObjectId, ref: 'user', require: true },
-    title_id: { type: mongoose.Types.ObjectId, ref: 'title', require: true },
+    user_id: { type: mongoose.Types.ObjectId, ref: 'users', require: true },
+    title_id: { type: mongoose.Types.ObjectId, ref: 'titles', require: true },
   },
   { timestamps: true }
 );
@@ -15,6 +15,6 @@ followSchema.pre(/^find/, function (next) {
   next();
 });
 
-const Follow = mongoose.model('follow', followSchema);
+const Follow = mongoose.model('follows', followSchema);
 
 export default Follow;

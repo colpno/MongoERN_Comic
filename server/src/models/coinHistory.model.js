@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const coinHistorySchema = mongoose.Schema(
   {
-    user_id: { type: mongoose.Types.ObjectId, ref: 'user', require: true },
+    user_id: { type: mongoose.Types.ObjectId, ref: 'users', require: true },
     payment_method: { type: String, require: true },
     amount: { type: Number, require: true },
   },
@@ -15,6 +15,6 @@ coinHistorySchema.pre(/^find/, function (next) {
   next();
 });
 
-const CoinHistory = mongoose.model('coin_history', coinHistorySchema);
+const CoinHistory = mongoose.model('coin_histories', coinHistorySchema);
 
 export default CoinHistory;

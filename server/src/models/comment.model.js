@@ -3,7 +3,7 @@ import { allowCommentPlaceList } from '../validations/commentAt.validation.js';
 
 const commentSchema = mongoose.Schema(
   {
-    author: { type: mongoose.Types.ObjectId, ref: 'user', require: true },
+    author: { type: mongoose.Types.ObjectId, ref: 'users', require: true },
     comment_at: {
       type: String,
       require: true,
@@ -14,7 +14,7 @@ const commentSchema = mongoose.Schema(
     slug: { type: String, require: true },
     parent_slug: { type: String, require: true, default: '' },
     full_slug: { type: String, require: true },
-    deletedBy: { type: mongoose.Types.ObjectId, ref: 'user', default: null },
+    deletedBy: { type: mongoose.Types.ObjectId, ref: 'users', default: null },
   },
   { timestamps: true }
 );
@@ -33,6 +33,6 @@ commentSchema.pre(/^find/, function (next) {
   next();
 });
 
-const Comment = mongoose.model('comment', commentSchema);
+const Comment = mongoose.model('comments', commentSchema);
 
 export default Comment;

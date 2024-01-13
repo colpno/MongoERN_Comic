@@ -8,6 +8,6 @@ const objectStatusSchema = mongoose.Schema(
   { timestamps: true }
 );
 
-const ObjectStatus = mongoose.model('object_status', objectStatusSchema);
+const ObjectStatus = mongoose.model('object_statuses', objectStatusSchema);
 
 export default ObjectStatus;

@@ -8,15 +8,15 @@ import ReadingHistory from './readingHistory.model.js';
 
 const chapterSchema = mongoose.Schema(
   {
-    title_id: { type: mongoose.Types.ObjectId, ref: 'title', require: true },
+    title_id: { type: mongoose.Types.ObjectId, ref: 'titles', require: true },
     approved_status_id: {
       type: mongoose.Types.ObjectId,
-      ref: 'approved_status',
+      ref: 'approved_statuses',
       default: '63b5978d7d56b429568608c5',
     },
     status_id: {
       type: mongoose.Types.ObjectId,
-      ref: 'object_status',
+      ref: 'object_statuses',
       require: true,
     },
     title: { type: String, require: true },
@@ -59,6 +59,6 @@ chapterSchema.pre(/^find/, function (next) {
   next();
 });
 
-const Chapter = mongoose.model('chapter', chapterSchema);
+const Chapter = mongoose.model('chapters', chapterSchema);
 
 export default Chapter;

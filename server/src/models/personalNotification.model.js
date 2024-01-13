@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const personalNotificationSchema = mongoose.Schema(
   {
-    user_id: { type: mongoose.Types.ObjectId, ref: 'user', require: true },
+    user_id: { type: mongoose.Types.ObjectId, ref: 'users', require: true },
     text: { type: String, require: true },
     read_at: { type: Date, default: null },
   },
@@ -15,6 +15,6 @@ personalNotificationSchema.pre(/^find/, function (next) {
   next();
 });
 
-const PersonalNotification = mongoose.model('personal_notification', personalNotificationSchema);
+const PersonalNotification = mongoose.model('personal_notifications', personalNotificationSchema);
 
 export default PersonalNotification;
