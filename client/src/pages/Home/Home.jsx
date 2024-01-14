@@ -1,6 +1,5 @@
 import classNames from "classnames/bind";
 import { useMemo } from "react";
-import { Container } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
 import { BannerSlider } from "features";
@@ -27,22 +26,8 @@ function Home() {
     <main className={cx("home")}>
       <BannerSlider images={banners} />
       <div className={cx("separator")} />
-      <ComicSection />
       <Notification />
-      <div className={cx("separator")} />
-      <Container>
-        <h1 className={cx("title")}>Novels</h1>
-        <section className={cx("novel-action")} />
-        <section className={cx("novel-horror")} />
-        <section className={cx("novel-ranking")} />
-      </Container>
-      <div className={cx("separator")} />
-      <Container>
-        <h1 className={cx("title")}>Anime</h1>
-        <section className={cx("anime-action")} />
-        <section className={cx("anime-horror")} />
-        <section className={cx("anime-ranking")} />
-      </Container>
+      <ComicSection />
       <Toast {...options} />
     </main>
   );
