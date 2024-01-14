@@ -9,12 +9,7 @@ function InputField(props) {
 
   return (
     <FormGroup className="field">
-      <Input
-        {...field}
-        {...others}
-        error={errors[name]}
-        touched={touched[name]}
-      />
+      <Input {...field} {...others} error={errors[name]} touched={touched[name]} />
     </FormGroup>
   );
 }

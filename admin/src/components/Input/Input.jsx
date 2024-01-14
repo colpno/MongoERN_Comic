@@ -31,11 +31,7 @@ function Input({
     <div className={cx("wrapper")}>
       <FormControl
         className={cx("input", className)}
-        style={
-          letterCount
-            ? { paddingRight: "100px", width, height }
-            : { width, height }
-        }
+        style={letterCount ? { paddingRight: "100px", width, height } : { width, height }}
         type={type}
         placeholder={placeholder}
         maxLength={maxLength}
@@ -49,9 +45,7 @@ function Input({
         onBlur={onBlur}
       />
       {letterCount && maxLength !== 0 && (
-        <span
-          className={cx("letter-counter")}
-        >{`${value.length}/${maxLength}`}</span>
+        <span className={cx("letter-counter")}>{`${value.length}/${maxLength}`}</span>
       )}
       <Feedback type="invalid">{error}</Feedback>
     </div>

@@ -15,9 +15,7 @@ function FormLabel({ name, label, subLabel, required }) {
               - {lb}
             </p>
           ))
-        : subLabel && (
-            <span className={cx("field__label__sub-label")}> ({subLabel})</span>
-          )}
+        : subLabel && <span className={cx("field__label__sub-label")}> ({subLabel})</span>}
     </label>
   );
 }

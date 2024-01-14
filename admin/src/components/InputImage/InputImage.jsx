@@ -52,9 +52,7 @@ function InputImage({
 
       <span className="input-file-wrapper__custom">
         <FiUpload className="input-file-wrapper__custom__icon" />
-        <p className="input-file-wrapper__custom_label">
-          Kéo thả ảnh vào đây hoặc
-        </p>
+        <p className="input-file-wrapper__custom_label">Kéo thả ảnh vào đây hoặc</p>
         <p className="input-file-wrapper__custom__label--primary">Chọn ảnh</p>
         <p className="input-file-wrapper__custom__requirement">
           JPG/PNG {imageSize.width}
@@ -70,10 +68,7 @@ function InputImage({
         />
       )}
       {removable && imagePreview?.preview && (
-        <IoCloseCircle
-          className={cx("close-icon")}
-          onClick={handleRemoveImage}
-        />
+        <IoCloseCircle className={cx("close-icon")} onClick={handleRemoveImage} />
       )}
     </div>
   );

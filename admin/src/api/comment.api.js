@@ -19,18 +19,14 @@ const commentApi = {
   },
 
   update: (id, data, setProgress) => {
-    return axiosClient.put(
-      `${url}/update${data.view ? "/view" : ""}/${id}`,
-      data,
-      {
-        withCredentials: true,
-        onUploadProgress: (e) => {
-          const { loaded, total } = e;
-          const percentage = (loaded / total) * 100;
-          setProgress(percentage);
-        },
-      }
-    );
+    return axiosClient.put(`${url}/update${data.view ? "/view" : ""}/${id}`, data, {
+      withCredentials: true,
+      onUploadProgress: (e) => {
+        const { loaded, total } = e;
+        const percentage = (loaded / total) * 100;
+        setProgress(percentage);
+      },
+    });
   },
 };
 

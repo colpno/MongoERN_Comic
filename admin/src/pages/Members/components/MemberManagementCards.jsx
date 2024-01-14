@@ -31,12 +31,7 @@ const cardData = (textData, chartData) => {
   };
 };
 
-function MemberManagementCards({
-  totalCoin,
-  totalIncome,
-  highestCoin,
-  highestIncome,
-}) {
+function MemberManagementCards({ totalCoin, totalIncome, highestCoin, highestIncome }) {
   const chartColors = getChartColors().backgroundColors;
 
   const continuingCardData = cardData(
@@ -83,10 +78,7 @@ function MemberManagementCards({
         />
       </Col>
       <Col md={6}>
-        <AdminCard
-          rawData={pausedCardData.rawData}
-          chartProps={pausedCardData.chartProps}
-        />
+        <AdminCard rawData={pausedCardData.rawData} chartProps={pausedCardData.chartProps} />
       </Col>
     </>
   );

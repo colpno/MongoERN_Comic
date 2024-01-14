@@ -1,7 +1,7 @@
 import classNames from "classnames/bind";
 import { Popup } from "features";
-import { useToast } from "hooks";
-import { useMemo, useState } from "react";
+import { usePopup, useToast } from "hooks";
+import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { authService } from "services";
@@ -12,7 +12,7 @@ import styles from "./styles/Login.module.scss";
 const cx = classNames.bind(styles);
 
 const checkLoggedInCanAccessURL = (url) => {
-  const array = ["login", "verify"];
+  const array = ["/", "verify"];
 
   const haveAccessed = array.some((pathName) => url.includes(pathName));
   return haveAccessed;
@@ -21,7 +21,7 @@ const checkLoggedInCanAccessURL = (url) => {
 function Login() {
   const navigate = useNavigate();
   const { Toast, options: toastOptions, toastEmitter } = useToast();
-  const { popup, setPopup } = useState();
+  const { popup, setPopup } = usePopup({ isShown: false, content: "Nothing" });
   const isLoggingIn = useSelector((state) => state.user.isLoggingIn);
   const url = useLocation().pathname;
   const haveAccessed = useMemo(() => checkLoggedInCanAccessURL(url), [url]);
@@ -55,7 +55,9 @@ function Login() {
             <LoginForm handleSubmit={handleSubmit} />
           </div>
         ))}
-      <Popup popup={popup} setPopup={setPopup} />
+      {popup.isShown && (
+        <Popup data={popup} setShow={() => setPopup((prev) => ({ ...prev, isShown: false }))} />
+      )}
       <Toast {...toastOptions} />
     </>
   );
