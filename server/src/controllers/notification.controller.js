@@ -23,6 +23,29 @@ const notificationController = {
       return next(error);
     }
   },
+  getOne: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const params = transformQueryParams(req.query);
+      const match = { ...params, _id: id };
+
+      const response = await notificationService.getOne(match);
+
+      if (!response) {
+        return res.status(200).json({
+          code: 200,
+          data: {},
+        });
+      }
+
+      return res.status(200).json({
+        code: 200,
+        data: response,
+      });
+    } catch (error) {
+      return next(error);
+    }
+  },
   add: async (req, res, next) => {
     try {
       const { cover, title, subTitle, content } = req.body;

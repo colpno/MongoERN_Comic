@@ -20,6 +20,22 @@ const notificationService = {
       throw new Error(error);
     }
   },
+  getOne: async (params = {}) => {
+    try {
+      params._fields = handleMongoProjection(params._fields, '-__v');
+      const { _page, _limit, _sort, _order, _fields, _embed, ...others } = params;
+
+      if (_limit || (_sort && _order)) {
+        const response = await paginateSort(params, Notification);
+        return response;
+      }
+
+      const response = await Notification.findOne(others).select(_fields).populate(_embed);
+      return { data: response };
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
   add: async (cover, title, subTitle, content) => {
     try {
       const model = new Notification({
