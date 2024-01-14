@@ -1,6 +1,5 @@
 import classNames from "classnames/bind";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Slide } from "react-awesome-reveal";
 import { Container, Row } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 
@@ -107,9 +106,6 @@ function ComicSection() {
   return (
     <>
       <Container>
-        <Row>
-          <h1 className={cx("title", "line-clamp")}>Comic</h1>
-        </Row>
         {titlesByGenre.length > 0 && (
           <>
             {titlesByGenre.map((genre, index) => {
@@ -124,9 +120,9 @@ function ComicSection() {
 
               return (
                 <Row key={genre._id} className={`${cx("comic", `comic-${index + 1}`)}`}>
-                  <Slide direction="up" triggerOnce>
+                  <section>
                     <CardListWithTitle col={responsive} data={titlesByGenre[index]} />
-                  </Slide>
+                  </section>
                 </Row>
               );
             })}

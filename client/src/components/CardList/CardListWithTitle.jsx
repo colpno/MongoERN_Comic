@@ -1,4 +1,5 @@
 import classNames from "classnames/bind";
+import { Slide } from "react-awesome-reveal";
 import PropTypes from "prop-types";
 import { memo } from "react";
 
@@ -30,15 +31,17 @@ function CardListWithTitle({
           ) : null}
         </header>
       </HeadTitleMark>
-      <CardList
-        col={col}
-        data={data.titles}
-        showTotalChapter={showTotalChapter}
-        showSummary={showSummary}
-        showAuthor={showAuthor}
-        showLike={showLike}
-        showView={showView}
-      />
+      <Slide direction="up" triggerOnce>
+        <CardList
+          col={col}
+          data={data.titles}
+          showTotalChapter={showTotalChapter}
+          showSummary={showSummary}
+          showAuthor={showAuthor}
+          showLike={showLike}
+          showView={showView}
+        />
+      </Slide>
     </div>
   );
 }
