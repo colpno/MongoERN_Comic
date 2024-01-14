@@ -30,7 +30,7 @@ const notificationController = {
       const response = await notificationService.add(cover, title, subTitle, content);
 
       if (!response) {
-        return next(createError(400, 'Không thể hoàn thành việc tạo theo dõi'));
+        return next(createError(400, 'Không thể hoàn thành việc tạo thông báo'));
       }
 
       return res.status(201).json({
@@ -53,7 +53,7 @@ const notificationController = {
       );
 
       if (!response) {
-        return next(createError(400, 'Không thể hoàn thành việc tạo theo dõi'));
+        return next(createError(400, 'Không thể hoàn thành việc thay đổi thông báo'));
       }
 
       return res.status(201).json({
