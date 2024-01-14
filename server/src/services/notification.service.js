@@ -1,6 +1,7 @@
 import handleMongoProjection from '../helpers/handleMongoProjection.js';
 import paginateSort from '../helpers/paginateSort.js';
 import { Notification } from '../models/index.js';
+import cloudinaryService from './cloudinary.service.js';
 
 const notificationService = {
   getAll: async (params = {}) => {
@@ -22,13 +23,29 @@ const notificationService = {
   add: async (cover, title, subTitle, content) => {
     try {
       const model = new Notification({
-        cover,
+        cover: {
+          source: cover,
+          cloud_public_id: null,
+        },
         title,
         subTitle,
         content,
       });
 
-      const response = await model.save();
+      const createResponse = await model.save();
+      const { _id, __v, createdAt, updatedAt, ...incompleteData } = createResponse.toObject();
+
+      const cloudResponse = await notificationService.uploadToCloud(cover, _id);
+
+      const completeData = {
+        ...incompleteData,
+        cover: cloudResponse,
+      };
+
+      const response = await Notification.findOneAndUpdate({ _id }, completeData, {
+        new: true,
+      });
+
       return response;
     } catch (error) {
       throw new Error(error);
@@ -36,9 +53,17 @@ const notificationService = {
   },
   update: async (match, data) => {
     try {
+      if (data.cover) {
+        await notificationService.removeFromCloud(match._id);
+        const cloudResponse = await notificationService.uploadToCloud(data.cover, match._id);
+
+        data.cover = cloudResponse;
+      }
+
       const response = await Notification.findOneAndUpdate(match, data, {
         new: true,
       });
+
       return response;
     } catch (error) {
       throw new Error(error);
@@ -47,7 +72,31 @@ const notificationService = {
   delete: async (id) => {
     try {
       const response = await Notification.findByIdAndDelete(id);
+
+      await notificationService.removeFromCloud(id);
+
       return response;
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+  uploadToCloud: async (cover, notificationID) => {
+    try {
+      const cloudOptions = {
+        upload_preset: process.env.CLOUDINARY_NOTIFICATION_UPLOAD_PRESET,
+        folder: `comic/notifications/${notificationID}/cover`,
+      };
+
+      const finalCover = cover ? await cloudinaryService.upload(cover, cloudOptions) : undefined;
+
+      return finalCover;
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+  removeFromCloud: async (notificationID) => {
+    try {
+      await cloudinaryService.removeFolder(`comic/notifications/${notificationID}`);
     } catch (error) {
       throw new Error(error);
     }
