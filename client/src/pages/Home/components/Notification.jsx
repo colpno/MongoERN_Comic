@@ -1,44 +1,55 @@
-/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
-import { AiOutlineClockCircle } from "react-icons/ai";
+import { memo } from "react";
 
-import { Button } from "components";
-import { formatTime } from "utils/convertTime";
+import { useGetAllNotificationsQuery } from "api/notification.api.js";
+import { Button, HeadTitleMark } from "components";
+import { AiOutlineClockCircle } from "react-icons/ai";
+import { formatTime } from "utils/convertTime.js";
 import styles from "../styles/Notification.module.scss";
 
 const cx = classNames.bind(styles);
 
-export default function Notification() {
-  // const notices = NoticeArray().slice(0, 3);
+function Notification() {
+  const params = {
+    _sort: "updatedAt",
+    _order: -1,
+    _limit: 5,
+  };
+  const { data: notifications } = useGetAllNotificationsQuery(params);
 
   return (
     <section className={cx("notification")}>
       <div className={cx("container")}>
-        <header className={cx("head")}>
-          <h3 className={cx("title")}>Thong bao</h3>
-          <Button text to="/notice-list">
-            Xem them
-          </Button>
-        </header>
+        <HeadTitleMark>
+          <header className={cx("head")}>
+            <h3 className={cx("title")}>Thông báo</h3>
+            <Button text to="/notice-list">
+              Xem thêm
+            </Button>
+          </header>
+        </HeadTitleMark>
         <ul>
-          {/* {notices.map((notice) => {
-            const timeObj = formatTime(notice.createdAt);
-            return (
-              <li key={notice._id}>
-                <Button wrapper to="/notice/1">
-                  <span className={cx("title")}>{notice.title}</span>
-                  <span>
-                    <AiOutlineClockCircle />
-                    <span
-                      className={cx("date")}
-                    >{`${timeObj.day}.${timeObj.month}.${timeObj.year}`}</span>
-                  </span>
-                </Button>
-              </li>
-            );
-          })} */}
+          {notifications?.length > 0 &&
+            notifications.map((notification) => {
+              const timeObj = formatTime(notification.createdAt);
+              return (
+                <li key={notification._id}>
+                  <Button wrapper to={`/notice/${notification._id}`}>
+                    <span className={cx("title")}>{notification.title}</span>
+                    <span>
+                      <AiOutlineClockCircle />
+                      <span
+                        className={cx("date")}
+                      >{`${timeObj.day}.${timeObj.month}.${timeObj.year}`}</span>
+                    </span>
+                  </Button>
+                </li>
+              );
+            })}
         </ul>
       </div>
     </section>
   );
 }
+
+export default memo(Notification);
