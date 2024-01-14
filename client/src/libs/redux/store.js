@@ -10,6 +10,7 @@ import {
   REHYDRATE,
 } from "redux-persist";
 
+import comicApi from "api/comicApi";
 import { rootPersistConfig } from "libs/redux-persist";
 import rootReducer from "./rootReducer";
 
@@ -18,7 +19,7 @@ const handleMiddleware = (getDefaultMiddleware) => {
     serializableCheck: {
       ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
     },
-  });
+  }).concat(comicApi.middleware);
 };
 
 const persistedReducer = persistReducer(rootPersistConfig, rootReducer);

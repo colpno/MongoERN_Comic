@@ -1,6 +1,7 @@
 import { combineReducers } from "@reduxjs/toolkit";
 import { persistReducer } from "redux-persist";
 
+import comicApi from "api/comicApi";
 import { authPersistConfig, themePersistConfig } from "libs/redux-persist";
 import {
   commentReducer,
@@ -16,6 +17,7 @@ import {
 } from "./slices";
 
 const rootReducer = combineReducers({
+  [comicApi.reducerPath]: comicApi.reducer,
   comment: commentReducer,
   global: globalReducer,
   login: loginReducer,
