@@ -10,7 +10,7 @@ import { FaTicketAlt } from "react-icons/fa";
 import { ImBooks, ImQuill } from "react-icons/im";
 import { IoGiftSharp, IoLockClosed } from "react-icons/io5";
 
-import { CircleC, CircleP } from "assets/images";
+import { CircleC, CircleP, robotHead1 } from "assets/images";
 
 function getAvatarMenu(cx, user, isLoggingIn) {
   const menu = [
@@ -18,7 +18,16 @@ function getAvatarMenu(cx, user, isLoggingIn) {
       {
         path: isLoggingIn ? "/profile/update" : "/login",
         label: <span className={cx("user-name")}>{user.username}</span>,
-        icon: <img src={user.avatar} alt="User avatar" />,
+        icon: (
+          <img
+            src={user.avatar}
+            alt="User avatar"
+            onError={({ currentTarget }) => {
+              currentTarget.onerror = null;
+              currentTarget.src = robotHead1;
+            }}
+          />
+        ),
       },
       {
         path: "/coin/add",

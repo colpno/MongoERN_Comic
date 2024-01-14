@@ -4,6 +4,7 @@ import { useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
 import { useSelector } from "react-redux";
 
+import { robotHead1 } from "assets/images/index.js";
 import { Button, Image, Popper } from "components";
 import { useClickOutSide, useLogout } from "hooks";
 import styles from "../styles/Avatar.module.scss";
@@ -37,6 +38,10 @@ function Avatar() {
               className={cx("avatar__icon")}
               width={40}
               height={40}
+              handleError={({ currentTarget }) => {
+                currentTarget.onerror = null;
+                currentTarget.src = robotHead1;
+              }}
             />
             <span className={cx("avatar__name")}>{user.username}</span>
             <BiChevronDown className={cx("avatar__chevron-icon")} />
