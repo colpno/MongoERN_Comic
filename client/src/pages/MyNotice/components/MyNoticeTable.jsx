@@ -45,17 +45,17 @@ function MyNoticeTable({ notifications, onDelete, onRead }) {
         <GridActionsCellItem
           size="medium"
           icon={<MdMarkEmailRead />}
-          onClick={() => onRead(row._id)}
+          onClick={() => onRead(row)}
           label="Mark as unread"
-          title="Đã đọc"
+          title="Đánh dầu chưa đọc"
         />
       ) : (
         <GridActionsCellItem
           size="medium"
           icon={<MdMarkEmailUnread />}
-          onClick={() => onRead(row._id)}
+          onClick={() => onRead(row)}
           label="Mark as read"
-          title="Chưa đọc"
+          title="Đánh dầu đã đọc"
         />
       ),
     ];

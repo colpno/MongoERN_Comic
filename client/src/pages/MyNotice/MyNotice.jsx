@@ -19,7 +19,8 @@ function MyNotice() {
   const [progress, setProgress] = useState(0);
   const { Toast, options, toastEmitter } = useToast();
 
-  const handleRead = useCallback(({ row }) => {
+  const handleRead = useCallback((row) => {
+    console.log("row:", row);
     const now = moment().toISOString();
     const data = { read_at: row.read_at ? null : now };
 
