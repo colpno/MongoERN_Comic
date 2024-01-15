@@ -14,7 +14,7 @@ const otpSender = async (id, username, email) => {
 
   await otpService.add(username, email, otp);
 
-  // otpService.sendViaMail(email, otp);
+  otpService.sendViaMail(email, otp);
 
   const expiredAt = moment().add(TOKEN_EXPIRED_TIME, 'm').toISOString();
 
@@ -85,13 +85,22 @@ const authController = {
       const TOKEN_EXPIRED_TIME = 15;
 
       const user = (await userService.getAll({ username })).data[0];
+
       if (!user) return next(createError(404, 'Sai tên đăng nhập'));
+
+      if (user.isBanned) {
+        return res.status(403).json({
+          status: 403,
+          message:
+            'Bạn đã bị cấm sử dụng dịch vụ của chúng tôi. Nếu có vấn đề nào, vui lòng liên hệ help@mail.domain',
+        });
+      }
 
       if (!user.isActivated) {
         return res.status(403).json({
           status: 403,
           message:
-            'Bạn đã bị cấm sử dụng dịch vụ của chúng tôi. Nếu có vấn đề nào, vui lòng liên hệ help@mail.domain',
+            'Tài khoản chưa được kích hoạt. Vui lòng kích hoạt tài khoản trước khi đăng nhập.',
         });
       }
 
