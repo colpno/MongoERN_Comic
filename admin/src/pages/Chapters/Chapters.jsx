@@ -31,7 +31,7 @@ const getQueryParams = () => {
   };
 
   const objectStatusParams = {
-    _fields: "code status",
+    _fields: "code status color",
   };
 
   return {
