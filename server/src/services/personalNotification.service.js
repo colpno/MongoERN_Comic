@@ -42,9 +42,9 @@ const personalNotificationService = {
       throw new Error(error);
     }
   },
-  delete: async (id) => {
+  delete: async (filter) => {
     try {
-      const response = await PersonalNotification.findByIdAndDelete(id);
+      const response = await PersonalNotification.deleteMany(filter);
       return response;
     } catch (error) {
       throw new Error(error);

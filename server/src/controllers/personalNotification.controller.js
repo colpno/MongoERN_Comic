@@ -25,10 +25,9 @@ const personalNotificationController = {
   },
   add: async (req, res, next) => {
     try {
-      const { id: userId } = req.userInfo;
-      const { text } = req.body;
+      const { user_id, text } = req.body;
 
-      const response = await personalNotificationService.add(userId, text);
+      const response = await personalNotificationService.add(user_id, text);
 
       if (!response) {
         return next(createError(400, 'Không thể hoàn thành việc tạo theo dõi'));
