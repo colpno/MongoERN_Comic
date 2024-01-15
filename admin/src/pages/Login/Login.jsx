@@ -21,7 +21,7 @@ const checkLoggedInCanAccessURL = (url) => {
 function Login() {
   const navigate = useNavigate();
   const { Toast, options: toastOptions, toastEmitter } = useToast();
-  const { popup, setPopup } = usePopup({ isShown: false, content: "Nothing" });
+  const { popup, setPopup, triggerPopup } = usePopup({ isShown: false, content: "Nothing" });
   const isLoggingIn = useSelector((state) => state.user.isLoggingIn);
   const url = useLocation().pathname;
   const haveAccessed = useMemo(() => checkLoggedInCanAccessURL(url), [url]);
@@ -36,7 +36,7 @@ function Login() {
           isShown: true,
           title: "Thông báo",
           content: response.message,
-          onConfirm: () => navigate("/verify"),
+          onCancel: () => navigate("/verify"),
         });
       })
       .catch((error) => {
@@ -55,9 +55,7 @@ function Login() {
             <LoginForm handleSubmit={handleSubmit} />
           </div>
         ))}
-      {popup.isShown && (
-        <Popup data={popup} setShow={() => setPopup((prev) => ({ ...prev, isShown: false }))} />
-      )}
+      {popup.isShown && <Popup data={popup} setShow={() => triggerPopup(false)} />}
       <Toast {...toastOptions} />
     </>
   );
