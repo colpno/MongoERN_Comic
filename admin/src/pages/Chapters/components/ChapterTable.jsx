@@ -63,14 +63,14 @@ function ChapterTable({ chapters, approvedStatuses, objectStatuses, onUpdate }) 
     <Table
       headers={[
         {
-          headerName: "#",
+          headerName: "Chương",
           field: "order",
           width: 60,
           headerAlign: "center",
           align: "center",
         },
         {
-          headerName: "Chương",
+          headerName: "Tên",
           field: "title",
           maxWidth: 350,
           minWidth: 150,
@@ -98,9 +98,20 @@ function ChapterTable({ chapters, approvedStatuses, objectStatuses, onUpdate }) 
           width: 140,
           headerAlign: "center",
           align: "center",
-          valueGetter: ({ value }) => {
-            if (value.status) return value.status;
-            return getObjectStatus(value).status;
+          valueGetter: ({ value }) => value._id || value,
+          renderCell: ({ value }) => {
+            const { status, color } = getObjectStatus(value);
+            return (
+              <span
+                title={status}
+                style={{
+                  color: color.hex,
+                  fontWeight: 700,
+                }}
+              >
+                {status}
+              </span>
+            );
           },
         },
         {
