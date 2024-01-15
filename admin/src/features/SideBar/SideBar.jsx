@@ -1,6 +1,7 @@
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
+import { memo } from "react";
 
 import GroupStructure from "./components/GroupStructure";
 import NonGroupStructure from "./components/NonGroupStructure";
@@ -52,4 +53,4 @@ SideBar.propTypes = {
   ).isRequired,
 };
 
-export default SideBar;
+export default memo(SideBar);
