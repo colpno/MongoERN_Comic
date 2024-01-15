@@ -1,6 +1,7 @@
+import { AiFillNotification } from "react-icons/ai";
 import { BiCategoryAlt, BiSpreadsheet } from "react-icons/bi";
 import { BsFilePost } from "react-icons/bs";
-import { FaUsers } from "react-icons/fa";
+import { FaBell, FaUsers } from "react-icons/fa";
 import { MdAdminPanelSettings } from "react-icons/md";
 
 export function getAdminSideBarMenu() {
@@ -32,6 +33,16 @@ export function getAdminSideBarMenu() {
           to: `/administrators`,
           icon: MdAdminPanelSettings,
           label: "Administrators",
+        },
+        {
+          to: `/notifications`,
+          icon: AiFillNotification,
+          label: "Notifications",
+        },
+        {
+          to: `/personal-notifications`,
+          icon: FaBell,
+          label: "Personal Notifications",
         },
         // {
         //   to: `/payment-methods`,

@@ -1,17 +1,15 @@
-/* eslint-disable no-unused-vars */
-import { AdminLayout, BlankLayout, LoginLayout, ReadingLayout } from "layouts";
+import { AdminLayout, LoginLayout } from "layouts";
 import {
   Admins,
   Chapters,
   Genres,
-  IncomeStatistic,
-  Members,
-  PaymentMethods,
-  Titles,
-  VisitStatistic,
   Login,
-  NotFound,
   LoginOTP,
+  Members,
+  NotFound,
+  Titles,
+  Notifications,
+  PersonalNotifications,
 } from "pages";
 
 export const adminRoutes = [
@@ -56,10 +54,20 @@ export const adminRoutes = [
     layout: AdminLayout,
   },
   {
-    path: "/payment-methods",
-    component: PaymentMethods,
+    path: "/notifications",
+    component: Notifications,
     layout: AdminLayout,
   },
+  {
+    path: "/personal-notifications",
+    component: PersonalNotifications,
+    layout: AdminLayout,
+  },
+  // {
+  //   path: "/payment-methods",
+  //   component: PaymentMethods,
+  //   layout: AdminLayout,
+  // },
   // {
   //   path: "/income",
   //   component: IncomeStatistic,

@@ -1,0 +1,13 @@
+@use "assets/styles/variables";
+@use "assets/styles/mixins";
+
+.box-img {
+  $size: 80px;
+  width: $size;
+  height: $size;
+}
+
+.created-time,
+.updated-time {
+  color: #888;
+}

@@ -9,6 +9,14 @@ const personalNotificationService = {
       return Promise.reject(error.data);
     }
   },
+  add: async (notification, setProgress = () => {}) => {
+    try {
+      const response = await personalNotificationApi.add(notification, setProgress);
+      return response;
+    } catch (error) {
+      return Promise.reject(error.data);
+    }
+  },
   update: async (id, data = {}, params = {}, setProgress = () => {}) => {
     try {
       const response = await personalNotificationApi.update(id, data, params, setProgress);
@@ -17,9 +25,9 @@ const personalNotificationService = {
       return Promise.reject(error.data);
     }
   },
-  delete: async (id) => {
+  delete: async (params) => {
     try {
-      const response = await personalNotificationApi.delete(id);
+      const response = await personalNotificationApi.delete(params);
       return response;
     } catch (error) {
       return Promise.reject(error.data);

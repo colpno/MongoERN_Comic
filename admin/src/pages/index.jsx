@@ -9,3 +9,5 @@ export { default as NotFound } from "./NotFound/NotFound";
 export { default as PaymentMethods } from "./PaymentMethods/PaymentMethods";
 export { default as Titles } from "./Titles/Titles";
 export { default as VisitStatistic } from "./VisitStatistic/VisitStatistic";
+export { default as Notifications } from "./Notifications/Notifications";
+export { default as PersonalNotifications } from "./PersonalNotifications/PersonalNotifications";
