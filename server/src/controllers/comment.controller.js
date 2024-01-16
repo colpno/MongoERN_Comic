@@ -40,7 +40,7 @@ const commentController = {
       let slug = '';
       let fullSlug = '';
       if (parentSlug) {
-        const parent = await commentService.getOne({ slug: parentSlug });
+        const parent = (await commentService.getAll({ slug: parentSlug })).data[0];
 
         slug = `${parent.slug}/`;
         fullSlug = `${parent.full_slug}/`;
