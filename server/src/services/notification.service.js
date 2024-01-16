@@ -85,11 +85,16 @@ const notificationService = {
       throw new Error(error);
     }
   },
-  delete: async (id) => {
+  delete: async (filter) => {
     try {
-      const response = await Notification.findByIdAndDelete(id);
+      const response = await Notification.deleteMany(filter);
 
-      await notificationService.removeFromCloud(id);
+      if (filter._id?.$in?.length > 0) {
+        // eslint-disable-next-line no-restricted-syntax
+        for await (const id of filter._id.$in) {
+          notificationService.removeFromCloud(id);
+        }
+      }
 
       return response;
     } catch (error) {

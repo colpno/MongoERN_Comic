@@ -50,9 +50,9 @@ const chapterService = {
       throw new Error(error);
     }
   },
-  delete: async (id) => {
+  delete: async (filter) => {
     try {
-      const response = await Genre.findOneAndDelete({ _id: id });
+      const response = await Genre.deleteMany(filter);
       return response;
     } catch (error) {
       throw new Error(error);

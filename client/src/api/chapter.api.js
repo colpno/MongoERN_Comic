@@ -44,8 +44,9 @@ const chapterApi = {
     });
   },
 
-  delete: (id, setProgress) => {
-    return axiosClient.delete(`${url}/delete/${id}`, {
+  delete: (params, setProgress) => {
+    return axiosClient.delete(`${url}/delete`, {
+      params,
       withCredentials: true,
       onUploadProgress: (e) => {
         const { loaded, total } = e;

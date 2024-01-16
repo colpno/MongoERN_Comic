@@ -123,9 +123,9 @@ const chapterService = {
       throw new Error(error);
     }
   },
-  delete: async (id) => {
+  delete: async (filter) => {
     try {
-      const response = await Chapter.findOneAndDelete({ _id: id });
+      const response = await Chapter.deleteMany(filter);
       return response;
     } catch (error) {
       throw new Error(error);

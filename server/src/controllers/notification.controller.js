@@ -90,9 +90,9 @@ const notificationController = {
   },
   delete: async (req, res, next) => {
     try {
-      const { id } = req.query;
+      const params = transformQueryParams(req.query);
 
-      const response = await notificationService.delete(id);
+      const response = await notificationService.delete(params);
 
       if (!response) {
         return next(createError(400, 'không thể hoàn thành việc xóa'));

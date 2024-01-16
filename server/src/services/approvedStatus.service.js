@@ -48,9 +48,9 @@ const approvedStatusService = {
       throw new Error(error);
     }
   },
-  delete: async (id) => {
+  delete: async (filter) => {
     try {
-      const response = await ApprovedStatus.findOneAndDelete({ _id: id });
+      const response = await ApprovedStatus.deleteMany(filter);
       return response;
     } catch (error) {
       throw new Error(error);
