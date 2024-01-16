@@ -54,10 +54,9 @@ const followController = {
   },
   delete: async (req, res, next) => {
     try {
-      const { id: userId } = req.userInfo;
-      const { titleId } = req.query;
+      const params = transformQueryParams(req.query);
 
-      const response = await followService.delete(userId, titleId);
+      const response = await followService.delete(params);
 
       if (!response) {
         return next(createError(400, 'không thể hoàn thành việc xóa theo dõi'));

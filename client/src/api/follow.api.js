@@ -9,9 +9,7 @@ const followApi = {
     return axiosClient.post(`${url}/create`, { titleId }, { withCredentials: true });
   },
 
-  delete: (titleId) => {
-    const params = { titleId };
-
+  delete: (params) => {
     return axiosClient.delete(`${url}/delete`, {
       params,
       withCredentials: true,

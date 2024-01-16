@@ -32,9 +32,9 @@ const followService = {
       throw new Error(error);
     }
   },
-  delete: async (userId, titleId) => {
+  delete: async (filter) => {
     try {
-      const response = await Follow.findOneAndDelete({ userId, titleId });
+      const response = await Follow.deleteMany(filter);
       return response;
     } catch (error) {
       throw new Error(error);
