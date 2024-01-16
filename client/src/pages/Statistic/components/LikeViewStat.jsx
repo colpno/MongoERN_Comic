@@ -53,12 +53,12 @@ function LikeViewStat({ setLoading, toastEmitter }) {
       .getAll(params)
       .then((response) => {
         setChapters(response.data);
-        setLoading(false);
       })
       .catch((error) => {
         toastEmitter(error, "error");
-        setLoading(false);
       });
+
+    setLoading(false);
   };
 
   // fetch all chapters of selected chapter
@@ -82,20 +82,20 @@ function LikeViewStat({ setLoading, toastEmitter }) {
         .getAll(params)
         .then((response) => {
           setChapterReports(response.data);
-          setLoading(false);
         })
         .catch((error) => {
           toastEmitter(error, "error");
-          setLoading(false);
         });
+
+      setLoading(false);
     }
   }, [selectedChapter, reportYear.chapter]);
 
   // fetch all reports of selected title
   useEffect(() => {
-    setLoading(true);
-
     if (selectedTitle?.value) {
+      setLoading(true);
+
       const params = {
         title_id: selectedTitle.value,
         year: reportYear.chapter.value,
@@ -105,12 +105,12 @@ function LikeViewStat({ setLoading, toastEmitter }) {
         .getAll(params)
         .then((response) => {
           setTitleReports(response.data);
-          setLoading(false);
         })
         .catch((error) => {
           toastEmitter(error, "error");
-          setLoading(false);
         });
+
+      setLoading(false);
     }
   }, [selectedTitle, reportYear.title]);
 
