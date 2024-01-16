@@ -41,7 +41,7 @@ const convertToMongoQueryOperator = (suffix, value) => {
       Input example: "field"_in: ["value", ...]
     */
     case '_in':
-      return { $in: value };
+      return { $in: Array.isArray(value) ? value : [value] };
 
     /*
       Not in array.
