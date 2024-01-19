@@ -37,7 +37,7 @@ export const publicRoutes = [
     layout: LoginLayout,
   },
   {
-    path: "/register/verify",
+    path: "/register/verify/:token",
     component: VerifyAccount,
     layout: BlankLayout,
   },
