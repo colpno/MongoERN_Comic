@@ -1,24 +1,34 @@
 import classNames from "classnames/bind";
 import { FastField, Form, Formik } from "formik";
 import PropTypes from "prop-types";
-import { memo, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import { Alert } from "react-bootstrap";
 import { IoCloseCircle } from "react-icons/io5";
 
-import { Image, InputImage, Button } from "components";
+import { Button, Image, InputImage } from "components";
 import { FormLabel, InputField, RadioGroup } from "libs/formik";
-import styles from "./styles/ChapterForm.module.scss";
+import objectStatusService from "services/objectStatus.service.js";
 import InputMultiFile from "./components/InputMultiFile";
+import styles from "./styles/ChapterForm.module.scss";
 
 const cx = classNames.bind(styles);
 
 function ChapterForm({ initialValues, validationSchema, handleSubmit }) {
   const [blobs, setBlobs] = useState(initialValues.contents ? [...initialValues.contents] : []);
+  const [statuses, setStatuses] = useState([]);
 
   const costOptions = [
     { value: "false", label: "Miễn phí" },
     { value: "true", label: "Trả phí" },
   ];
+
+  const statusOptions = useMemo(
+    () =>
+      statuses.map((status) => {
+        return { value: status._id, label: status.status };
+      }),
+    [statuses]
+  );
 
   const handleCloseIconClick = (values, index, setFieldValue) => {
     const blobTemp = [...blobs];
@@ -29,6 +39,17 @@ function ChapterForm({ initialValues, validationSchema, handleSubmit }) {
     dataTemp.splice(index, 1);
     setFieldValue("contents", dataTemp);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const statusParams = { _fields: "status code" };
+
+      const statusResult = await objectStatusService.getAll(statusParams);
+
+      statusResult && setStatuses(statusResult.data);
+    };
+    fetchData();
+  }, []);
 
   return (
     <Formik
@@ -43,7 +64,7 @@ function ChapterForm({ initialValues, validationSchema, handleSubmit }) {
             <FormLabel name="order" label="Thứ tự chương" />
             <FastField name="order" component={InputField} disabled />
 
-            <FormLabel name="title" label="Tiêu đề chương" required />
+            <FormLabel name="title" label="Tiêu đề chương" />
             <FastField
               name="title"
               component={InputField}
@@ -52,6 +73,18 @@ function ChapterForm({ initialValues, validationSchema, handleSubmit }) {
               letterCount
               autoFocus
             />
+
+            {statusOptions.length > 0 && (
+              <>
+                <FormLabel name="status_id" label="Trạng thái" />
+                <FastField
+                  name="status_id"
+                  component={RadioGroup}
+                  options={statusOptions}
+                  col={{ xs: 6 }}
+                />
+              </>
+            )}
 
             {costOptions.length > 0 && (
               <>
