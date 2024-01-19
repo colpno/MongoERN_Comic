@@ -88,7 +88,12 @@ function Weekly() {
       />
       {titles.length > 0 ? (
         <Container className="cards-content">
-          <CardList wrap data={titles.slice(0, limit)} col={{ xs: 6, sm: 4, md: 20 }} />
+          <CardList
+            wrap
+            data={titles.slice(0, limit)}
+            col={{ xs: 6, sm: 4, md: 20 }}
+            dropRow={false}
+          />
           <div ref={setLastElement} />
         </Container>
       ) : (

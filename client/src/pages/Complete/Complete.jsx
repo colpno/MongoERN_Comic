@@ -42,6 +42,7 @@ function Complete() {
             data={titles}
             col={{ xs: 6, sm: 4, md: 20 }}
             classN={{ boxImg: cx("box-img") }}
+            dropRow={false}
           />
         </Slide>
       ) : (

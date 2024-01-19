@@ -146,7 +146,7 @@ function Search() {
         </Col>
       </Row>
       {titles.length > 0 ? (
-        <CardList wrap data={titles} col={{ md: 2 }} totalChapter />
+        <CardList wrap data={titles} col={{ md: 2 }} totalChapter dropRow={false} />
       ) : (
         <NoData>
           <h6>Không có truyện nào phù hợp với bộ lọc!</h6>
