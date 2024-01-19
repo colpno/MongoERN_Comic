@@ -39,6 +39,10 @@ function ContentList() {
             {
               genres_in: genreResponse.data.name,
               _limit: CONTENT_LIST_TITLES_PER_PAGE,
+              _embed: JSON.stringify([
+                { collection: "approved_status_id", fields: "-_id code", match: { code: "apd" } },
+                { collection: "status_id", fields: "-_id code", match: { code: "vis" } },
+              ]),
             },
             false
           )
@@ -55,7 +59,7 @@ function ContentList() {
     <>
       <Container className={cx("content-list-page")}>
         {!!data.name && data.titles.length > 0 ? (
-          <CardListWithTitle data={data} col={{ xs: 6, sm: 3, lg: 2 }} />
+          <CardListWithTitle data={data} col={{ xs: 6, sm: 3, lg: 2 }} dropRow={false} />
         ) : null}
         <div ref={setLastElementRef} />
       </Container>
