@@ -1,8 +1,10 @@
 import classNames from "classnames/bind";
 
+import { robotHead1 } from "assets/images/index";
 import { Button } from "components";
-import { Popup } from "features";
-import { usePopup } from "hooks";
+import { Popup, ProgressCircle } from "features";
+import { usePopup, useToast } from "hooks";
+import { useState } from "react";
 import { userService } from "services";
 import { registerFormValidation } from "validations/registerForm.validation";
 import RegisterForm from "./components/RegisterForm";
@@ -12,17 +14,25 @@ const cx = classNames.bind(styles);
 
 function Register() {
   const { popup, setPopup, triggerPopup } = usePopup();
+  const { Toast, options: toastOptions, toastEmitter } = useToast();
+  const [progress, setProgress] = useState(0);
 
   const handleSubmit = (values, { setSubmitting }) => {
     const { username, email, password } = values;
-    userService.register({ username, password, email, role: "member" }).then((response) => {
-      setPopup({
-        isShown: true,
-        title: "Thông báo",
-        content: response.message,
+    userService
+      .register({ username, password, email, role: "member", avatar: robotHead1 })
+      .then((response) => {
+        setPopup({
+          isShown: true,
+          title: "Thông báo",
+          content: response.message,
+        });
+      })
+      .catch((error) => {
+        toastEmitter(error, "error");
       });
-    });
 
+    setProgress(0);
     setSubmitting(false);
   };
 
@@ -58,6 +68,8 @@ function Register() {
         </div>
       </div>
       {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
+      <ProgressCircle percentage={progress} />
+      <Toast {...toastOptions} />
     </>
   );
 }
