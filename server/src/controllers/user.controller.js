@@ -84,11 +84,10 @@ const userController = {
   },
   update: async (req, res, next) => {
     try {
-      const { id } = req.params;
-      const { username, password, avatar, email, role, dateOfBirth, isBanned, isActivated } =
-        req.body;
+      const { userInfo, body } = req;
+      const { username, password, avatar, email, role, dateOfBirth, isBanned, isActivated } = body;
 
-      const response = await userService.update(id, {
+      const response = await userService.update(userInfo.id, {
         username,
         password,
         avatar,
