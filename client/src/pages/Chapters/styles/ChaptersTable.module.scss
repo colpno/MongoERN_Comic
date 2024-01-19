@@ -9,6 +9,7 @@
   $size: 80px;
   width: $size;
   height: $size;
+  min-width: $size;
   border: 1px solid var.$grey-400;
   border-radius: 1rem;
   margin-right: 1rem;
