@@ -18,6 +18,7 @@ const titleService = {
 
       if (_limit || (_sort && _order)) {
         const response = await paginateSort(params, Title);
+        response.data = removeNullPopulate(response.data, _embed);
         return response;
       }
 
