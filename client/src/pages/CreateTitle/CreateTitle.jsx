@@ -32,10 +32,8 @@ function CreateTitle() {
   };
 
   const handleSubmit = (values, { setSubmitting }) => {
-    const { title, cover, author, summary, genres, coin, release_day: releaseDay } = values;
-
     titleService
-      .add(title, cover, author, summary, genres, coin, releaseDay, setProgress)
+      .add(values, setProgress)
       .then((response) => {
         toastEmitter(response.message, "success");
         setProgress(0);
