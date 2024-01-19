@@ -22,54 +22,65 @@ function Top5({ titles }) {
   return (
     <div className={cx("top5-wrapper")}>
       <Row className={cx("top-5-list")}>
-        <Col md={12} lg={6} className={cx("top", `top-1`)}>
-          <Slide triggerOnce>
-            <RankingFigure
-              data={top2[0]}
-              rank={1}
-              classN={{
-                bookmark: cx("icon-bookmark"),
-                boxImg: cx("box-img"),
-                content: cx("figure__content"),
-              }}
-              showSummary
-            />
-          </Slide>
-        </Col>
-        <Col md={12} lg={6} className={cx("top", `top-2`)}>
-          <Slide direction="right" triggerOnce>
-            <RankingFigure
-              data={top2[1]}
-              rank={2}
-              classN={{
-                bookmark: cx("icon-bookmark"),
-                boxImg: cx("box-img"),
-                content: cx("figure__content"),
-              }}
-              showSummary
-            />
-          </Slide>
-        </Col>
-        <Col md={{ span: 8, offset: 2 }} lg={{ span: 4, offset: 0 }} className={cx("top", `top-3`)}>
-          <Slide direction="up" triggerOnce>
-            <RankingFigure
-              data={top3}
-              rank={3}
-              classN={{
-                bookmark: cx("icon-bookmark"),
-              }}
-            />
-          </Slide>
-        </Col>
-        {top5.map((top, index) => {
-          return (
-            <Col sm={12} md={6} lg={4} key={index + 4} className={cx("top", `top-${index + 4}`)}>
-              <Slide direction="up" triggerOnce>
-                <RankingFigure data={top} rank={index + 4} />
-              </Slide>
-            </Col>
-          );
-        })}
+        {top2[0] && (
+          <Col md={12} lg={6} className={cx("top", `top-1`)}>
+            <Slide triggerOnce>
+              <RankingFigure
+                data={top2[0]}
+                rank={1}
+                classN={{
+                  bookmark: cx("icon-bookmark"),
+                  boxImg: cx("box-img"),
+                  content: cx("figure__content"),
+                }}
+                showSummary
+              />
+            </Slide>
+          </Col>
+        )}
+        {top2[1] && (
+          <Col md={12} lg={6} className={cx("top", `top-2`)}>
+            <Slide direction="right" triggerOnce>
+              <RankingFigure
+                data={top2[1]}
+                rank={2}
+                classN={{
+                  bookmark: cx("icon-bookmark"),
+                  boxImg: cx("box-img"),
+                  content: cx("figure__content"),
+                }}
+                showSummary
+              />
+            </Slide>
+          </Col>
+        )}
+        {top3 && (
+          <Col
+            md={{ span: 8, offset: 2 }}
+            lg={{ span: 4, offset: 0 }}
+            className={cx("top", `top-3`)}
+          >
+            <Slide direction="up" triggerOnce>
+              <RankingFigure
+                data={top3}
+                rank={3}
+                classN={{
+                  bookmark: cx("icon-bookmark"),
+                }}
+              />
+            </Slide>
+          </Col>
+        )}
+        {top5.length > 0 &&
+          top5.map((top, index) => {
+            return (
+              <Col sm={12} md={6} lg={4} key={index + 4} className={cx("top", `top-${index + 4}`)}>
+                <Slide direction="up" triggerOnce>
+                  <RankingFigure data={top} rank={index + 4} />
+                </Slide>
+              </Col>
+            );
+          })}
       </Row>
     </div>
   );
