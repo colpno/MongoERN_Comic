@@ -17,6 +17,7 @@ function CardListWithTitle({
   showLike,
   showView,
   wrap,
+  dropRow,
 }) {
   return (
     <div className={cx(`cards-wrapper`, wrap ? "wrap" : "")}>
@@ -38,6 +39,7 @@ function CardListWithTitle({
         showAuthor={showAuthor}
         showLike={showLike}
         showView={showView}
+        dropRow={dropRow}
       />
     </div>
   );
@@ -62,6 +64,7 @@ CardListWithTitle.propTypes = {
   showLike: PropTypes.bool,
   showView: PropTypes.bool,
   wrap: PropTypes.bool,
+  dropRow: PropTypes.bool,
 };
 
 CardListWithTitle.defaultProps = {
@@ -72,6 +75,7 @@ CardListWithTitle.defaultProps = {
   showLike: true,
   showView: true,
   wrap: false,
+  dropRow: true,
 };
 
 export default memo(CardListWithTitle);
