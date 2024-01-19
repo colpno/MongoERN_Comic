@@ -53,7 +53,7 @@ const chapterController = {
   },
   add: async (req, res, next) => {
     try {
-      const { titleId, title, cover, contents, order, cost } = req.body;
+      const { titleId, title, cover, contents, order, cost, status_id } = req.body;
 
       const guid = randomUUID();
 
@@ -71,7 +71,8 @@ const chapterController = {
         finalContents,
         order,
         cost,
-        guid
+        guid,
+        status_id
       );
 
       if (!response) {
