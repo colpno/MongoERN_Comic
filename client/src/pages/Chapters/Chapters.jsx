@@ -88,14 +88,11 @@ function Chapters() {
 
   useEffect(() => {
     titleService
-      .getOne(titleId)
+      .getOne({ _id: titleId })
       .then(async (titleResult) => {
         const chapterParams = {
           title_id: titleId,
-          _embed: JSON.stringify([
-            { collection: "status_id", fields: "-_id status" },
-            { collection: "approved_status_id", fields: "-_id status color" },
-          ]),
+          _embed: JSON.stringify([{ collection: "status_id", fields: "-_id status" }]),
           _fields: "-__v -_guid -cover.cloud_public_id -contents.cloud_public_id",
         };
 
