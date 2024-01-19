@@ -35,8 +35,8 @@ function Profile() {
     userService
       .update(data, setProgress)
       .then((response) => {
-        dispatch(setUser({ ...user, ...data, ...response.data }));
         toastEmitter("Đổi thông tin cá nhân thành công", "success");
+        dispatch(setUser({ ...user, ...data, ...response.data }));
         setProgress(0);
       })
       .catch((error) => {
