@@ -6,12 +6,7 @@ import { Loading } from "features";
 import { useToast } from "hooks";
 import { approvedStatusService, objectStatusService, titleService } from "services";
 import { handlePromiseAllSettled } from "utils";
-import {
-  StatTitleReleaseDay,
-  StatTitleStatus,
-  TitleManagementCards,
-  TitleTable,
-} from "./components";
+import { StatTitleApproval, StatTitleStatus, TitleManagementCards, TitleTable } from "./components";
 
 const queryParams = {
   titleParams: {
@@ -99,7 +94,7 @@ function Titles() {
               <Col>
                 {titles.length > 0 && (
                   <FloatingContainer>
-                    <StatTitleStatus titles={titles} statuses={objectStatuses} />
+                    <StatTitleApproval titles={titles} approvedStatuses={approvedStatuses} />
                   </FloatingContainer>
                 )}
               </Col>
@@ -108,11 +103,20 @@ function Titles() {
               <Col>
                 {titles.length > 0 && (
                   <FloatingContainer>
-                    <StatTitleReleaseDay titles={titles} />
+                    <StatTitleStatus titles={titles} statuses={objectStatuses} />
                   </FloatingContainer>
                 )}
               </Col>
             </Row>
+            {/* <Row>
+              <Col>
+                {titles.length > 0 && (
+                  <FloatingContainer>
+                    <StatTitleReleaseDay titles={titles} />
+                  </FloatingContainer>
+                )}
+              </Col>
+            </Row> */}
           </Col>
         </Row>
       </Container>
