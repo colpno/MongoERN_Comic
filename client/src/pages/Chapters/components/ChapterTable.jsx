@@ -22,8 +22,7 @@ const getHeaders = () => [
   {
     headerName: "Chương",
     field: "title",
-    width: 350,
-    minWidth: 350,
+    maxWidth: 350,
     headerAlign: "center",
     renderCell: ({ row }) => (
       <>
@@ -43,17 +42,6 @@ const getHeaders = () => [
     headerAlign: "center",
     align: "center",
     valueGetter: ({ value }) => value.status,
-  },
-  {
-    headerName: "Duyệt",
-    field: "approved_status_id",
-    width: 140,
-    headerAlign: "center",
-    align: "center",
-    valueGetter: ({ value }) => value.status,
-    renderCell: ({ row, value }) => (
-      <span style={{ color: row.approved_status_id.color.hex, fontWeight: 700 }}>{value}</span>
-    ),
   },
   {
     headerName: "Trả phí",
