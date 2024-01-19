@@ -35,7 +35,7 @@ function TitleForm({
   const statusOptions = useMemo(
     () =>
       statuses.map((status) => {
-        return { value: status._id, label: status.status };
+        return { value: status.code, label: status.status };
       }),
     [statuses]
   );
@@ -47,7 +47,7 @@ function TitleForm({
   useEffect(() => {
     const fetchData = async () => {
       const genresParams = { _fields: "-_id name" };
-      const statusParams = { _fields: "status" };
+      const statusParams = { _fields: "status code" };
 
       const genrePromise = genreService.getAll(genresParams);
       const statusPromise = objectStatusService.getAll(statusParams);
