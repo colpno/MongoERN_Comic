@@ -1,7 +1,9 @@
+import { removeNullPopulate } from '../helpers/afterQuery.js';
 import handleMongoProjection from '../helpers/handleMongoProjection.js';
 import paginateSort from '../helpers/paginateSort.js';
 import { Title } from '../models/index.js';
 import cloudinaryService from './cloudinary.service.js';
+import objectStatusService from './objectStatus.service.js';
 
 const cloudOptions = (id, path = '') => ({
   upload_preset: process.env.CLOUDINARY_TITLE_UPLOAD_PRESET,
@@ -20,7 +22,8 @@ const titleService = {
       }
 
       const response = await Title.find(others).select(_fields).populate(_embed);
-      return { data: response };
+      const result = removeNullPopulate(response, _embed);
+      return { data: result };
     } catch (error) {
       throw new Error(error);
     }
@@ -48,9 +51,9 @@ const titleService = {
   },
   add: async (
     userId = '',
-    releaseDay = '',
+    release_day = '',
     title = '',
-    status = '',
+    status_id = '',
     cover = {},
     author = '',
     summary = '',
@@ -60,11 +63,13 @@ const titleService = {
     guid = ''
   ) => {
     try {
+      const visibilityStatus = await objectStatusService.getOne({ code: status_id });
+
       const model = new Title({
         user_id: userId,
-        release_day: releaseDay,
+        release_day,
         title,
-        status,
+        status_id: visibilityStatus._id,
         cover,
         author,
         summary,

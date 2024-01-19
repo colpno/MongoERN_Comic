@@ -79,7 +79,8 @@ const titleController = {
   add: async (req, res, next) => {
     try {
       const { id: userId } = req.userInfo;
-      const { releaseDay, title, status, cover, author, summary, genres, coin, point } = req.body;
+      const { release_day, title, status_id, cover, author, summary, genres, coin, point } =
+        req.body;
 
       const duplicated = (await titleService.getAll({ title })).data;
 
@@ -93,9 +94,9 @@ const titleController = {
 
       const response = await titleService.add(
         userId,
-        releaseDay,
+        release_day,
         title,
-        status,
+        status_id,
         finalCover,
         author,
         summary,
