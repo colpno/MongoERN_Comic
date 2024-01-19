@@ -30,7 +30,7 @@ const userService = {
       throw new Error(error);
     }
   },
-  register: async (username, password, avatar, email, role, dateOfBirth) => {
+  register: async (username, password, avatar, email, role) => {
     try {
       const model = new User({
         username,
@@ -38,7 +38,6 @@ const userService = {
         avatar,
         email,
         role,
-        data_of_birth: dateOfBirth,
       });
       const response = await model.save();
       return response;
