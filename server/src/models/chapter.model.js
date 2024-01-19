@@ -9,17 +9,12 @@ import ReadingHistory from './readingHistory.model.js';
 const chapterSchema = mongoose.Schema(
   {
     title_id: { type: mongoose.Types.ObjectId, ref: 'titles', require: true },
-    approved_status_id: {
-      type: mongoose.Types.ObjectId,
-      ref: 'approved_statuses',
-      default: '63b5978d7d56b429568608c5',
-    },
     status_id: {
       type: mongoose.Types.ObjectId,
       ref: 'object_statuses',
       require: true,
     },
-    title: { type: String, require: true },
+    title: { type: String },
     cover: {
       source: { type: String, require: true },
       cloud_public_id: { type: String, require: true },
