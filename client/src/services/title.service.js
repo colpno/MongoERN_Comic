@@ -26,18 +26,9 @@ const titleService = {
       return Promise.reject(error.data);
     }
   },
-  add: async (title, cover, author, summary, genres, coin, releaseDay, setProgress = () => {}) => {
+  add: async (data, setProgress = () => {}) => {
     try {
-      const response = await titleApi.add(
-        title,
-        cover,
-        author,
-        summary,
-        genres,
-        coin,
-        releaseDay,
-        setProgress
-      );
+      const response = await titleApi.add(data, setProgress);
       return response;
     } catch (error) {
       return Promise.reject(error.data);

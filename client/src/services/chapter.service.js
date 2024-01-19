@@ -17,17 +17,9 @@ const chapterService = {
       return Promise.reject(error.data);
     }
   },
-  add: async (titleId, title, cover, contents, order, cost, setProgress = () => {}) => {
+  add: async (data, setProgress = () => {}) => {
     try {
-      const response = await chapterApi.add(
-        titleId,
-        title,
-        cover,
-        contents,
-        order,
-        cost,
-        setProgress
-      );
+      const response = await chapterApi.add(data, setProgress);
       return response;
     } catch (error) {
       return Promise.reject(error.data);

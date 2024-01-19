@@ -24,27 +24,15 @@ const titleApi = {
     });
   },
 
-  add: (title, cover, author, summary, genres, coin, releaseDay, setProgress = () => {}) => {
-    return axiosClient.post(
-      `${url}/create`,
-      {
-        title,
-        cover,
-        author,
-        summary,
-        genres,
-        coin,
-        releaseDay,
+  add: (data, setProgress = () => {}) => {
+    return axiosClient.post(`${url}/create`, data, {
+      withCredentials: true,
+      onUploadProgress: (e) => {
+        const { loaded, total } = e;
+        const percentage = (loaded / total) * 100;
+        setProgress(percentage);
       },
-      {
-        withCredentials: true,
-        onUploadProgress: (e) => {
-          const { loaded, total } = e;
-          const percentage = (loaded / total) * 100;
-          setProgress(percentage);
-        },
-      }
-    );
+    });
   },
 
   update: (id, data, setProgress) =>
