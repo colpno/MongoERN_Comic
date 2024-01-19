@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import PropTypes from "prop-types";
 import { AiOutlineLogout } from "react-icons/ai";
 import {
@@ -51,11 +52,11 @@ function getAvatarMenu(cx, user, isLoggingIn) {
       },
     ],
     [
-      {
-        path: "/redeem",
-        label: <span>Thẻ quà tặng</span>,
-        icon: <IoGiftSharp className={cx(isLoggingIn ? "" : "grey")} />,
-      },
+      // {
+      //   path: "/redeem",
+      //   label: <span>Thẻ quà tặng</span>,
+      //   icon: <IoGiftSharp className={cx(isLoggingIn ? "" : "grey")} />,
+      // },
       {
         path: "/inventory",
         label: <span>Hộp vé</span>,
