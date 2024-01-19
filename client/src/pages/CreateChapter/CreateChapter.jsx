@@ -17,6 +17,7 @@ function CreateChapter() {
   const INITIAL_VALUE = {
     order: `${Number.parseInt(chapters[0]?.order || 0, 10) + 1}`,
     title: "",
+    status_id: "",
     cost: "false",
     cover: "",
     contents: [],
@@ -36,10 +37,13 @@ function CreateChapter() {
   };
 
   const handleSubmit = (values, { setSubmitting, resetForm }) => {
-    const { title, cover, contents, order, cost } = values;
+    const params = {
+      ...values,
+      titleId,
+    };
 
     chapterService
-      .add(titleId, title, cover, contents, order, cost, setProgress)
+      .add(params, setProgress)
       .then(() => {
         toastEmitter("Truyện đã được thêm thành công", "success");
         setProgress(0);
