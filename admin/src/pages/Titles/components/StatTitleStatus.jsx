@@ -1,26 +1,23 @@
 import PropTypes from "prop-types";
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 
 import { PieChart } from "features";
 import { getChartColors } from "utils/constants";
 
 function StatTitleStatus({ titles, statuses }) {
-  const status = useMemo(
-    () =>
-      statuses.reduce(
-        (result, stt) => {
-          result.status.push(stt.status);
-          result.code.push(stt.code);
-          return result;
-        },
-        {
-          status: [],
-          code: [],
-        }
-      ),
-    [statuses]
+  const status = statuses.reduce(
+    (result, stt) => {
+      result.status.push(stt.status);
+      result.code.push(stt.code);
+      return result;
+    },
+    {
+      status: [],
+      code: [],
+    }
   );
-  const initData = useMemo(() => Array(status.length).fill(0), []);
+
+  const initData = Array(statuses.length).fill(0);
 
   const chartData = useMemo(() => {
     return titles.reduce(
@@ -40,7 +37,7 @@ function StatTitleStatus({ titles, statuses }) {
         ],
       }
     );
-  }, []);
+  }, [titles]);
 
   return <PieChart data={chartData} />;
 }
@@ -50,4 +47,4 @@ StatTitleStatus.propTypes = {
   statuses: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired,
 };
 
-export default StatTitleStatus;
+export default memo(StatTitleStatus);
