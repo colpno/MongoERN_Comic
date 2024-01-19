@@ -1,7 +1,7 @@
 import classNames from "classnames/bind";
 import { Popup } from "features";
 import { usePopup, useToast } from "hooks";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { authService } from "services";
@@ -45,6 +45,10 @@ function Login() {
 
     setSubmitting(false);
   };
+
+  useEffect(() => {
+    if (isLoggingIn) navigate("/titles");
+  }, [isLoggingIn]);
 
   return (
     <>
