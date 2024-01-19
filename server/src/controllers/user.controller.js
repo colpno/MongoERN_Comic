@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import createError from 'http-errors';
 import jwt from 'jsonwebtoken';
 
@@ -51,7 +50,7 @@ const userController = {
   },
   register: async (req, res, next) => {
     try {
-      const { username, password, avatar, email, role, dateOfBirth } = req.body;
+      const { username, password, avatar, email, role } = req.body;
 
       const duplicated = (await userService.getAll({ username })).data;
 
@@ -59,14 +58,7 @@ const userController = {
         return next(createError(409, 'Đã tồn tại tên tài khoản, vui lòng thay đổi'));
       }
 
-      const response = await userService.register(
-        username,
-        password,
-        avatar,
-        email,
-        role,
-        dateOfBirth
-      );
+      const response = await userService.register(username, password, avatar, email, role);
 
       if (!response) {
         return next(createError(400, 'Không thể hoàn thành việc tạo tài khoản'));
@@ -74,12 +66,12 @@ const userController = {
 
       const TOKEN_EXPIRED_TIME = 15;
       const payload = { id: response._id };
-      const token = jwt.sign(payload, process.env.FORGOT_PASSWORD_TOKEN_KEY, {
+      const token = jwt.sign(payload, process.env.REGISTER_TOKEN_KEY, {
         expiresIn: `${TOKEN_EXPIRED_TIME}m`,
       });
 
       const activeAccountLink = `${process.env.CLIENT_URL}/register/verify/${token}`;
-      // authService.sendActiveAccountLink(email, TOKEN_EXPIRED_TIME, activeAccountLink);
+      authService.sendActiveAccountLink(email, TOKEN_EXPIRED_TIME, activeAccountLink);
 
       return res.status(201).json({
         code: 201,
