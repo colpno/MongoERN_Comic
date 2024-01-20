@@ -22,7 +22,6 @@ function InputImage({
   height,
   ...attributes
 }) {
-  console.log("form:", form);
   const { accept, multiple, disabled } = attributes;
   const { onBlur, name, value } = field;
   const inputRef = useRef();
