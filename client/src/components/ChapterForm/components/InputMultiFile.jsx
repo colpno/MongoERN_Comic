@@ -28,11 +28,11 @@ function InputMultiFile({
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = () => {
-        data.push(reader.result);
+        data.unshift(reader.result);
       };
 
       const blob = URL.createObjectURL(file);
-      newBlobs.push(blob);
+      newBlobs.unshift(blob);
     }
 
     setFieldValue(field.name, data);
