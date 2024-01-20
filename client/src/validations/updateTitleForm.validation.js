@@ -4,8 +4,7 @@ export const updateTitleFormValidation = Yup.object({
   title: Yup.string()
     .trim()
     .max(255, "Giới hạn độ dài của tiêu đề là 255 ký tự.")
-    .matches(/[\w]/, "Chỉ bao gồm chữ cái và số.")
-    .required("Truyện cần phải có tiêu đề."),
+    .matches(/[\w]/, "Chỉ bao gồm chữ cái và số."),
   status_id: Yup.string().required("Trạng thái truyện không được để trống."),
   summary: Yup.string()
     .max(1000, "Giới hạn độ dài của mô tả là 1000 ký tự.")
