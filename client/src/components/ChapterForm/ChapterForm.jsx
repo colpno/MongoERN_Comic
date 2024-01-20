@@ -1,11 +1,14 @@
+import { SortableContext } from "@dnd-kit/sortable";
 import classNames from "classnames/bind";
 import { FastField, Form, Formik } from "formik";
 import PropTypes from "prop-types";
-import { memo, useEffect, useMemo, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { Alert } from "react-bootstrap";
 import { IoCloseCircle } from "react-icons/io5";
 
-import { Button, Image, InputImage } from "components";
+import { DndContext, closestCenter } from "@dnd-kit/core";
+import { Button, DnDSortable, Image, InputImage } from "components";
+import { useDragAndDrop } from "hooks/index.jsx";
 import { FormLabel, InputField, RadioGroup } from "libs/formik";
 import objectStatusService from "services/objectStatus.service.js";
 import InputMultiFile from "./components/InputMultiFile";
@@ -16,6 +19,7 @@ const cx = classNames.bind(styles);
 function ChapterForm({ initialValues, validationSchema, handleSubmit }) {
   const [blobs, setBlobs] = useState(initialValues.contents ? [...initialValues.contents] : []);
   const [statuses, setStatuses] = useState([]);
+  const formikRef = useRef();
 
   const costOptions = [
     { value: "false", label: "Miễn phí" },
@@ -29,6 +33,25 @@ function ChapterForm({ initialValues, validationSchema, handleSubmit }) {
       }),
     [statuses]
   );
+
+  const handleDragAndDrop = (draggedItem, droppedItem) => {
+    if (formikRef) {
+      const mutableBlobs = [...blobs];
+      const draggedItemIndex = mutableBlobs.findIndex((blob) => blob === draggedItem.id);
+      const droppedItemIndex = mutableBlobs.findIndex((blob) => blob === droppedItem.id);
+
+      if (draggedItemIndex !== -1 && droppedItemIndex !== -1) {
+        [mutableBlobs[draggedItemIndex], mutableBlobs[droppedItemIndex]] = [
+          mutableBlobs[droppedItemIndex],
+          mutableBlobs[draggedItemIndex],
+        ];
+        setBlobs(mutableBlobs);
+        formikRef.current.setFieldValue("contents", mutableBlobs);
+      }
+    }
+  };
+
+  const { handleDragEnd, sensors, strategy } = useDragAndDrop(handleDragAndDrop, "swap");
 
   const handleCloseIconClick = (values, index, setFieldValue) => {
     const blobTemp = [...blobs];
@@ -53,6 +76,7 @@ function ChapterForm({ initialValues, validationSchema, handleSubmit }) {
 
   return (
     <Formik
+      innerRef={formikRef}
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
@@ -126,22 +150,32 @@ function ChapterForm({ initialValues, validationSchema, handleSubmit }) {
               />
             </div>
             <div className={cx("contents-holder")}>
-              {blobs.map((blob, index) => {
-                return (
-                  <div className={cx("content-wrapper")} key={index}>
-                    <Image
-                      src={blob}
-                      alt={`Image ${index + 1}`}
-                      key={index}
-                      className={cx("image-content")}
-                    />
-                    <IoCloseCircle
-                      className={cx("close-icon")}
-                      onClick={() => handleCloseIconClick(values, index, setFieldValue)}
-                    />
-                  </div>
-                );
-              })}
+              <DndContext
+                collisionDetection={closestCenter}
+                onDragEnd={handleDragEnd}
+                sensors={sensors}
+              >
+                <SortableContext items={blobs.map((blob) => blob)} strategy={strategy}>
+                  {blobs.map((blob, index) => {
+                    return (
+                      <DnDSortable id={blob} key={blob}>
+                        <div className={cx("content-wrapper")}>
+                          <Image
+                            src={blob}
+                            alt={`Image ${index + 1}`}
+                            key={index}
+                            className={cx("image-content")}
+                          />
+                          <IoCloseCircle
+                            className={cx("close-icon")}
+                            onClick={() => handleCloseIconClick(values, index, setFieldValue)}
+                          />
+                        </div>
+                      </DnDSortable>
+                    );
+                  })}
+                </SortableContext>
+              </DndContext>
             </div>
 
             {/* TODO <FormLabel name="authorNote" label="Lời nhắn của tác giả" />

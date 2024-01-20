@@ -21,11 +21,6 @@ axiosClient.interceptors.response.use(
   },
   (error) => {
     const { response } = error;
-    const { status } = response;
-
-    if (status === 403) {
-      window.location.href = "/not-found";
-    }
     return Promise.reject(response);
   }
 );

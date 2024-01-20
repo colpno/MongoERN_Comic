@@ -24,3 +24,4 @@ export { default as TabsContainer } from "./TabsContainer/TabsContainer";
 export { default as TextArea } from "./TextArea/TextArea";
 export { default as TitleForm } from "./TitleForm/TitleForm";
 export { default as ToggleableSubNavbar } from "./ToggleableSubNavbar/ToggleableSubNavbar";
+export { default as DnDSortable } from "./DnDSortable.jsx";
