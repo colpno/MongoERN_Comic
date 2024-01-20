@@ -258,7 +258,7 @@ function Title() {
             <Introduction
               title={state.title}
               genres={state.genres}
-              firstChapter={state.chapters.length > 0 ? state.chapters[0]._id : "#"}
+              firstChapter={state.chapters.length > 0 ? state.chapters[0]._id : undefined}
               setPopup={setPopup}
               handleFollow={handleFollow}
             />

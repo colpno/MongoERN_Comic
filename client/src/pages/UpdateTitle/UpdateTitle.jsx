@@ -17,7 +17,7 @@ function UpdateTitle() {
   const INITIAL_VALUE = hasData && {
     title: title.title,
     summary: title.summary,
-    status_id: title.status_id,
+    status_id: title.status_id.code,
     release_day: title.release_day,
     genres: title.genres,
     author: title.author,
@@ -71,11 +71,13 @@ function UpdateTitle() {
 
   useEffect(() => {
     const params = {
+      _id: titleId,
       _fields: "title status_id genres summary author coin release_day cover",
+      _embed: JSON.stringify([{ collection: "status_id", fields: "-_id code" }]),
     };
 
     titleService
-      .getOne(titleId, params)
+      .getOne(params)
       .then((response) => {
         setTitle(response.data);
       })

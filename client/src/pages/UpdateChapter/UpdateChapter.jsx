@@ -18,6 +18,7 @@ function UpdateChapter() {
       Object.keys(chapter).length > 0
         ? {
             title: chapter.title,
+            status_id: chapter.status_id._id,
             cost: `${chapter.cost}`,
             order: `${chapter.order}`,
             cover: chapter.cover.source,
@@ -97,7 +98,9 @@ function UpdateChapter() {
 
   useEffect(() => {
     chapterService
-      .getOne(chapterId)
+      .getOne(chapterId, {
+        _embed: JSON.stringify([{ collection: "status_id", fields: "_id" }]),
+      })
       .then((response) => setChapter(response.data))
       .catch((error) => toastEmitter(error, "error"));
   }, []);

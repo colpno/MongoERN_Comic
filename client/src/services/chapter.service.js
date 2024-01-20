@@ -9,9 +9,9 @@ const chapterService = {
       return Promise.reject(error.data);
     }
   },
-  getOne: async (chapterID, isPrivate = true) => {
+  getOne: async (chapterID, params, isPrivate = true) => {
     try {
-      const response = await chapterApi.getOne(chapterID, isPrivate);
+      const response = await chapterApi.getOne(chapterID, params, isPrivate);
       return response;
     } catch (error) {
       return Promise.reject(error.data);
