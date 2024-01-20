@@ -68,7 +68,7 @@
   &__copyright {
     text-align: center;
     margin-top: 30px;
-    padding-top: 20px;
+    padding: 12px;
     border-top: 1px solid #7c7c7c;
     background: variables.$clr-black;
   }
@@ -76,7 +76,7 @@
 
 .container {
   align-items: center;
-  & > * {
+  & > *:not(:last-child) {
     margin-bottom: 20px;
     line-height: 1.4;
   }
