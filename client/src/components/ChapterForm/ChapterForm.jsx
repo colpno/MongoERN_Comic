@@ -76,7 +76,7 @@ function ChapterForm({ initialValues, validationSchema, handleSubmit }) {
 
             {statusOptions.length > 0 && (
               <>
-                <FormLabel name="status_id" label="Trạng thái" />
+                <FormLabel name="status_id" label="Trạng thái" required />
                 <FastField
                   name="status_id"
                   component={RadioGroup}
