@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import PropTypes from "prop-types";
 import { AiFillApple, AiFillHeart, AiFillStar } from "react-icons/ai";
 import { FaShareAlt } from "react-icons/fa";
@@ -35,12 +36,12 @@ function ReadingControls({ cx, titleId, chapterId }) {
           <AiFillStar className={cx("icon")} />
           <span className={cx("text")}>Theo dõi</span>
         </Button>
-        <Button className={cx("reading-page__controls__controls__group__control")}>
+        {/* <Button className={cx("reading-page__controls__controls__group__control")}>
           <FaShareAlt />
           <span>Chia sẻ</span>
-        </Button>
+        </Button> */}
       </div>
-      <p className={cx("reading-page__text")}>
+      {/* <p className={cx("reading-page__text")}>
         Tất cả nội dung có thể được đọc thông qua ứng dụng ComicVN trên CH Play hoặc App store
       </p>
       <div className={cx("reading-page__download-app")}>
@@ -52,7 +53,7 @@ function ReadingControls({ cx, titleId, chapterId }) {
           <AiFillApple />
           <span>App Store</span>
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 }
