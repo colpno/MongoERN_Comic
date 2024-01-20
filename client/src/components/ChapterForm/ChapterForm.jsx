@@ -79,7 +79,13 @@ function ChapterForm({ initialValues, validationSchema, handleSubmit }) {
       innerRef={formikRef}
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={handleSubmit}
+      onSubmit={(values, { setSubmitting, resetForm }) => {
+        setSubmitting(false);
+        handleSubmit(values, () => {
+          resetForm();
+          setBlobs([]);
+        });
+      }}
       enableReinitialize
     >
       {({ values, setFieldValue, errors }) => {

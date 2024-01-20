@@ -4,6 +4,7 @@ import { IoCloseCircle } from "react-icons/io5";
 
 import classNames from "classnames/bind";
 import { usePreviewImage } from "hooks";
+import { useRef } from "react";
 import styles from "./InputImage.scss";
 
 const cx = classNames.bind(styles);
@@ -21,8 +22,10 @@ function InputImage({
   height,
   ...attributes
 }) {
+  console.log("form:", form);
   const { accept, multiple, disabled } = attributes;
   const { onBlur, name, value } = field;
+  const inputRef = useRef();
   const { imagePreview, setImagePreview, handleImageChange } = usePreviewImage(
     {
       preview: value || null,
@@ -48,6 +51,7 @@ function InputImage({
         multiple={multiple}
         disabled={disabled}
         className="input-file-wrapper__input"
+        ref={inputRef}
       />
 
       <span className="input-file-wrapper__custom">

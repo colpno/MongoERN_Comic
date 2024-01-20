@@ -77,7 +77,7 @@ function UpdateChapter() {
     return changedValues;
   };
 
-  const handleSubmit = (values, { setSubmitting }) => {
+  const handleSubmit = (values) => {
     const changedValues = getChangedValues(values);
     changedValues.titleId = chapter.title_id;
 
@@ -93,8 +93,6 @@ function UpdateChapter() {
           setProgress(0);
         });
     }
-
-    setSubmitting(false);
   };
 
   useEffect(() => {

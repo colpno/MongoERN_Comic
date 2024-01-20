@@ -1,7 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 function usePreviewImage(initialState, fileSize, setFieldValue, fieldName) {
-  const [imagePreview, setImagePreview] = useState(initialState);
+  let imagePreview = initialState;
+
+  const setImagePreview = (newState) => {
+    imagePreview = newState;
+  };
 
   const handleImageChange = (e) => {
     const file = e.currentTarget.files[0];

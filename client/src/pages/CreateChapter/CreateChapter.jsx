@@ -36,7 +36,7 @@ function CreateChapter() {
       .catch((error) => toastEmitter(error, "error"));
   };
 
-  const handleSubmit = (values, { setSubmitting, resetForm }) => {
+  const handleSubmit = (values, resetForm) => {
     const params = {
       ...values,
       titleId,
@@ -54,8 +54,6 @@ function CreateChapter() {
         toastEmitter(error, "error");
         setProgress(0);
       });
-
-    setSubmitting(false);
   };
 
   useEffect(() => {
