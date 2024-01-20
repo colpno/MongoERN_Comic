@@ -44,14 +44,14 @@ function LikeViewStat({ setLoading, toastEmitter }) {
     setLoading(true);
 
     params._embed = JSON.stringify([
-      { collection: "approved_status_id", fields: "-_id code", match: { code: "apd" } },
       { collection: "status_id", fields: "-_id code", match: { code: "vis" } },
     ]);
-    params._fields = "title";
+    params._fields = "order";
 
     chapterService
       .getAll(params)
       .then((response) => {
+        console.log("response:", response);
         setChapters(response.data);
       })
       .catch((error) => {
@@ -143,7 +143,7 @@ function LikeViewStat({ setLoading, toastEmitter }) {
           ...options,
           {
             value: chapter._id,
-            label: chapter.title,
+            label: `Chương ${chapter.order}`,
           },
         ];
       }, []);
