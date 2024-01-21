@@ -37,9 +37,9 @@ const chapterService = {
       throw new Error(error);
     }
   },
-  delete: async (id) => {
+  delete: async (filter) => {
     try {
-      const response = await PaymentMethod.findOneAndDelete({ _id: id });
+      const response = await PaymentMethod.deleteMany(filter);
       return response;
     } catch (error) {
       throw new Error(error);

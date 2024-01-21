@@ -9,25 +9,25 @@ const paymentMethodService = {
       return Promise.reject(error.data);
     }
   },
-  add: async (method, setProgress = () => {}) => {
+  add: async (data, setProgress = () => {}) => {
     try {
-      const response = await paymentMethodApi.add(method, setProgress);
+      const response = await paymentMethodApi.add(data, setProgress);
       return response;
     } catch (error) {
       return Promise.reject(error.data);
     }
   },
-  update: async (id, method, setProgress = () => {}) => {
+  update: async (id, data, setProgress = () => {}) => {
     try {
-      const response = await paymentMethodApi.update(id, method, setProgress);
+      const response = await paymentMethodApi.update(id, data, setProgress);
       return response;
     } catch (error) {
       return Promise.reject(error.data);
     }
   },
-  delete: async (id, setProgress = () => {}) => {
+  delete: async (params, setProgress = () => {}) => {
     try {
-      const response = await paymentMethodApi.delete(id, setProgress);
+      const response = await paymentMethodApi.delete(params, setProgress);
       return response;
     } catch (error) {
       return Promise.reject(error.data);

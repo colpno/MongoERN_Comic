@@ -1,4 +1,4 @@
-import { GridActionsCellItem } from "@mui/x-data-grid-pro";
+import { GRID_CHECKBOX_SELECTION_COL_DEF, GridActionsCellItem } from "@mui/x-data-grid-pro";
 import classNames from "classnames/bind";
 import moment from "moment";
 import PropTypes from "prop-types";
@@ -9,15 +9,28 @@ import styles from "../styles/PaymentMethodsTable.module.scss";
 
 const cx = classNames.bind(styles);
 
-function PaymentMethodsTable({ paymentMethods, onDelete, onUpdate }) {
+function PaymentMethodsTable({ paymentMethods, onDelete, onUpdate, onAdd }) {
   const initialState = {
-    pinnedColumns: { left: ["name"], right: ["actions"] },
+    pinnedColumns: { left: [GRID_CHECKBOX_SELECTION_COL_DEF.field, "name"], right: ["actions"] },
   };
 
   return (
     <Table
       headers={[
-        { field: "name", headerName: "Phương thức" },
+        {
+          field: "name",
+          headerName: "Phương thức",
+          align: "left",
+          headerAlign: "center",
+          flex: 2,
+          minWidth: 200,
+          editable: true,
+          renderCell: ({ value }) => (
+            <span className="bold" title={value}>
+              {value}
+            </span>
+          ),
+        },
         {
           field: "createdAt",
           headerName: "Ngày tạo",
@@ -59,6 +72,12 @@ function PaymentMethodsTable({ paymentMethods, onDelete, onUpdate }) {
       checkboxSelection
       onMultiDelete={onDelete}
       onRowEditCommit={onUpdate}
+      allowAdd
+      allowDelete
+      allowEdit
+      onDelete={onDelete}
+      onUpdate={onUpdate}
+      onAdd={onAdd}
     />
   );
 }
@@ -67,6 +86,7 @@ PaymentMethodsTable.propTypes = {
   paymentMethods: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired,
   onDelete: PropTypes.func.isRequired,
   onUpdate: PropTypes.func.isRequired,
+  onAdd: PropTypes.func.isRequired,
 };
 
 export default PaymentMethodsTable;

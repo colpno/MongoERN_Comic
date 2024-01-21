@@ -7,6 +7,6 @@ const route = express.Router();
 route.get('/', paymentMethodController.getAll);
 route.post('/create', isAdmin, paymentMethodController.add);
 route.put('/update/:id', isAdmin, paymentMethodController.update);
-route.delete('/delete/:id', isAdmin, paymentMethodController.delete);
+route.delete('/delete', isAdmin, paymentMethodController.delete);
 
 export default route;
