@@ -81,7 +81,7 @@ const authController = {
   },
   async login(req, res, next) {
     try {
-      const { username, password } = req.body;
+      const { username, password, security_token } = req.body;
       const TOKEN_EXPIRED_TIME = 15;
 
       const user = (await userService.getAll({ username })).data[0];
@@ -104,7 +104,12 @@ const authController = {
         });
       }
 
-      const { _id, email, password: userPassword } = user;
+      const { _id, email, password: userPassword, role } = user;
+
+      const isAdminRequest = await bcrypt.compare(process.env.MANAGER_TOKEN_KEY, security_token);
+      if (isAdminRequest && role !== 'administrator') {
+        return next(createError(409, 'Bạn không có quyền để truy cập'));
+      }
 
       const samePassword = bcrypt.compareSync(password, userPassword);
       if (!samePassword) return next(createError(401, 'Mật khẩu không chính xác'));
@@ -189,23 +194,21 @@ const authController = {
       const resetPasswordLink = `${process.env.CLIENT_URL}/reset-password/${token}`;
       console.log(resetPasswordLink);
 
-      // authService.sendResetPasswordLink(email, TOKEN_EXPIRED_TIME, resetPasswordLink);
+      authService.sendResetPasswordLink(email, TOKEN_EXPIRED_TIME, resetPasswordLink);
 
       const expiredAt = moment().add(TOKEN_EXPIRED_TIME, 'm').toISOString();
 
-      return (
-        res
-          // .cookie('forgotPasswordToken', token, {
-          //   httpOnly: true,
-          //   maxAge: TOKEN_EXPIRED_TIME * 60 * 1000,
-          // })
-          .status(200)
-          .json({
-            code: 200,
-            data: { id: user.id, username, email, expiredAt },
-            message: `Link thay đổi mật khẩu đã được gửi đến ${email}`,
-          })
-      );
+      return res
+        .cookie('forgotPasswordToken', token, {
+          httpOnly: true,
+          maxAge: TOKEN_EXPIRED_TIME * 60 * 1000,
+        })
+        .status(200)
+        .json({
+          code: 200,
+          data: { id: user.id, username, email, expiredAt },
+          message: `Link thay đổi mật khẩu đã được gửi đến ${email}`,
+        });
     } catch (error) {
       return next(createError(500, error));
     }

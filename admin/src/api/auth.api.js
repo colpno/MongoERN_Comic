@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs";
 import axiosClient from "./axiosClient";
 
 const url = "/auth";
@@ -7,8 +8,16 @@ const authApi = {
     return axiosClient.put(`${url}/register/verify/${token}`);
   },
 
-  login: (username, password) => {
-    return axiosClient.post(`${url}/login`, { username, password }, { withCredentials: true });
+  login: async (username, password) => {
+    const saltRounds = 10;
+    const myPlaintext = process.env.REACT_APP_LOGIN_TOKEN;
+    const hash = await bcrypt.hash(myPlaintext, saltRounds);
+
+    return axiosClient.post(
+      `${url}/login`,
+      { username, password, security_token: hash },
+      { withCredentials: true }
+    );
   },
 
   verifyLogin: (id, username, email, otp) => {
