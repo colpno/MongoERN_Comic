@@ -10,6 +10,7 @@ import {
   Titles,
   Notifications,
   PersonalNotifications,
+  PaymentMethods,
 } from "pages";
 
 export const adminRoutes = [
@@ -63,11 +64,11 @@ export const adminRoutes = [
     component: PersonalNotifications,
     layout: AdminLayout,
   },
-  // {
-  //   path: "/payment-methods",
-  //   component: PaymentMethods,
-  //   layout: AdminLayout,
-  // },
+  {
+    path: "/payment-methods",
+    component: PaymentMethods,
+    layout: AdminLayout,
+  },
   // {
   //   path: "/income",
   //   component: IncomeStatistic,
