@@ -18,7 +18,7 @@ function AdminSideBar() {
   const toggle = useSelector((state) => state.global.isSideBarToggled);
   const menu = getAdminSideBarMenu();
   const user = useSelector((state) => state.user.user);
-  const { logout } = useLogout("/login");
+  const { logout } = useLogout("/");
 
   const setToggleSideBar = (isToggle) => {
     dispatch(toggleSideBar(isToggle));
