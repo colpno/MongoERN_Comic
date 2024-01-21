@@ -33,6 +33,7 @@ function Button({
   large,
   fullWidth,
   round,
+  style,
 }) {
   const classes = cx(
     wrapper || "btn",
@@ -62,6 +63,7 @@ function Button({
     type: type || "button",
     title: title || null,
     sx: sx || null,
+    style: style || null,
   };
 
   let Component = "button";
@@ -112,6 +114,7 @@ Button.propTypes = {
   large: PropTypes.bool,
   fullWidth: PropTypes.bool,
   round: PropTypes.bool,
+  style: PropTypes.shape({}),
 };
 
 Button.defaultProps = {
@@ -138,6 +141,7 @@ Button.defaultProps = {
   large: false,
   fullWidth: false,
   round: false,
+  style: {},
 };
 
 export default memo(Button);

@@ -41,7 +41,7 @@ function PayPalForm() {
               <FormLabel name="price" label="Chọn mức giá" required />
               <FastField name="price" component={SelectField} options={coinOptions} />
 
-              <Button primary large type="submit" marginTop1>
+              <Button primary large type="submit" style={{ marginTop: "2rem" }}>
                 Xác nhận
               </Button>
             </Form>

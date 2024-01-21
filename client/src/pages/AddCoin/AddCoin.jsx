@@ -90,15 +90,13 @@ function AddCoin() {
         </div>
       </Row>
       <Row className={cx("add-coin__step")}>
-        <div className={cx("add-coin__step__title")}>{choseMethod.label}</div>
         <Form form={choseMethod.label} />
       </Row>
       <div className={cx("add-coin__step")}>
         <div className={cx("note")}>
           <p className={cx("note__title")}>GHI CHÚ</p>
           <p className={cx("note__content")}>
-            Coin được nạp vào hệ thống sẽ được sử dụng trên tất cả các nền tảng bao gồm Website /
-            Android / iOS.
+            Coin được nạp vào hệ thống sẽ được sử dụng trên tất cả các nền tảng bao gồm Website.
             <br />
             Coin sẽ được sử dụng để mua Chương truyện.
             <br />
