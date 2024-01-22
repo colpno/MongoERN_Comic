@@ -106,9 +106,11 @@ const authController = {
 
       const { _id, email, password: userPassword, role } = user;
 
-      const isAdminRequest = await bcrypt.compare(process.env.MANAGER_TOKEN_KEY, security_token);
-      if (isAdminRequest && role !== 'administrator') {
-        return next(createError(409, 'Bạn không có quyền để truy cập'));
+      if (security_token) {
+        const isAdminRequest = await bcrypt.compare(process.env.MANAGER_TOKEN_KEY, security_token);
+        if (isAdminRequest && role !== 'administrator') {
+          return next(createError(409, 'Bạn không có quyền để truy cập'));
+        }
       }
 
       const samePassword = bcrypt.compareSync(password, userPassword);
