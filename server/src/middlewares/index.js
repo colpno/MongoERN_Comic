@@ -7,10 +7,11 @@ import corsMiddleWare from './cors.middleware.js';
 
 config();
 
-// origin: [CLIENT_URL, 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html'],
 const app = express();
 const { CLIENT_URL, ADMIN_URL } = process.env;
-const corsURL = { origin: [CLIENT_URL, ADMIN_URL] };
+const corsURL = {
+  origin: [CLIENT_URL, ADMIN_URL],
+};
 
 app.use(express.json({ limit: '10mb' }));
 app.use(cookieParser());
