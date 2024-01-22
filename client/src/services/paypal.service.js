@@ -1,6 +1,22 @@
 import paypalApi from "api/paypal.api";
 
 const paypalService = {
+  order: async (data = []) => {
+    try {
+      const response = await paypalApi.order(data);
+      return response;
+    } catch (error) {
+      return Promise.reject(error.data);
+    }
+  },
+  capture: async (orderID) => {
+    try {
+      const response = await paypalApi.capture(orderID);
+      return response;
+    } catch (error) {
+      return Promise.reject(error.data);
+    }
+  },
   payment: async (data = []) => {
     try {
       const response = await paypalApi.payment(data);

@@ -22,6 +22,7 @@ function EmptyForm() {
 
 function Form({ form }) {
   switch (form.toLowerCase()) {
+    // case "vnpay": return <VNPayForm />;
     case "paypal":
       return <PayPalForm />;
     default:

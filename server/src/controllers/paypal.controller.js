@@ -1,34 +1,41 @@
-import { convertMoneyToCoin } from '../helpers/convertCurrency.js';
-import { coinHistoryService, paypalService, userService } from '../services/index.js';
+import axios from 'axios';
+import 'dotenv/config';
 
 const prepareData = (data = []) => {
   const initialValues = {
     items: [],
     amount: {
-      currency: 'USD',
-      total: '0.00',
+      currency_code: 'USD',
+      value: '0.00',
     },
     description: '',
   };
 
   const { items, amount, description } = data.reduce((object, item) => {
     const { name, price, quantity, description: desc } = item;
-    const total = Number.parseFloat(object.amount.total) + price * quantity;
+    const value = Number.parseFloat(object.amount.value) + price * quantity;
 
     return {
       items: [
         ...object.items,
         {
           name,
-          sku: name,
-          price,
-          currency: 'USD',
           quantity,
+          unit_amount: {
+            currency_code: 'USD',
+            value,
+          },
         },
       ],
       amount: {
         ...object.amount,
-        total: total.toFixed(2).toString(),
+        value: value.toFixed(2).toString(),
+        breakdown: {
+          item_total: {
+            value: value.toFixed(2).toString(),
+            currency_code: 'USD',
+          },
+        },
       },
       description: desc,
     };
@@ -36,98 +43,96 @@ const prepareData = (data = []) => {
   return { items, amount, description };
 };
 
-const paypalController = {
-  payment: async (req, res, next) => {
-    try {
-      const { data } = req.body;
+const { PAYPAL_CLIENT_ID, PAYPAL_SECRET } = process.env;
+const base = 'https://api-m.sandbox.paypal.com';
 
-      if (Array.isArray(data) && data.length > 0) {
-        const { items, amount, description } = prepareData(data);
-        const paymentData = paypalService.getPaymentData(items, amount, description);
-
-        const getResponse = (response) => {
-          res.status(201).json({
-            code: 201,
-            link: response.href,
-          });
-        };
-
-        paypalService.createPayment(paymentData, getResponse);
-      } else {
-        res.status(400).json({
-          code: 400,
-          message: 'Không đủ dữ liệu đầu vào',
-        });
-      }
-    } catch (error) {
-      next(error);
+const generateAccessToken = async () => {
+  try {
+    if (!PAYPAL_CLIENT_ID || !PAYPAL_SECRET) {
+      throw new Error('MISSING_API_CREDENTIALS');
     }
-  },
-  payout: async (req, res, next) => {
-    try {
-      const {
-        data: { amount, receiver },
-      } = req.body;
-
-      const payoutData = paypalService.getPayoutData(amount, receiver);
-
-      const getResponse = (response) => {
-        res.status(201).json({
-          code: 201,
-          link: response.href,
-        });
-      };
-
-      await paypalService.createPayout(payoutData, getResponse);
-    } catch (error) {
-      next(error);
-    }
-  },
-  success: async (req, res, next) => {
-    try {
-      const { id: userId } = req.userInfo;
-      const { paymentId } = req.query;
-      const payerId = { payer_id: req.query.PayerID };
-
-      if (paymentId && userId && payerId) {
-        const getResponse = async (response) => {
-          let product = '';
-          const docs = response.data.transactions[0].item_list.items.map((item) => {
-            product = item.name;
-
-            return {
-              user_id: userId,
-              payment_method: 'PayPal',
-              amount: convertMoneyToCoin(item.price),
-            };
-          });
-
-          if (product === 'coin') {
-            await coinHistoryService.addMany(docs);
-
-            const coins = docs.reduce((coin, doc) => coin + doc.amount, 0);
-            const user = await userService.update(userId, { $inc: { coin: coins } });
-
-            res.status(response.code).json({ ...response, user });
-          }
-        };
-
-        paypalService.success(paymentId, payerId, getResponse);
-      } else {
-        res.status(400).json({
-          code: 400,
-          message: 'Không đủ dữ liệu đầu vào',
-        });
-      }
-    } catch (error) {
-      next(error);
-    }
-  },
-  cancel: async (req, res) => {
-    res.status(201).json({
-      code: 500,
-      message: 'payment cancel',
+    const auth = Buffer.from(`${PAYPAL_CLIENT_ID}:${PAYPAL_SECRET}`).toString('base64');
+    const response = await axios(`${base}/v1/oauth2/token`, {
+      method: 'post',
+      data: 'grant_type=client_credentials',
+      headers: {
+        Authorization: `Basic ${auth}`,
+      },
     });
+
+    return response.data.access_token;
+  } catch (error) {
+    console.error('Failed to generate Access Token:', error);
+  }
+};
+
+async function handleResponse(response) {
+  try {
+    const jsonResponse = response;
+    return {
+      jsonResponse,
+      httpStatusCode: response.status,
+    };
+  } catch (err) {
+    const errorMessage = response;
+    throw new Error(errorMessage);
+  }
+}
+
+const createOrder = async (data) => {
+  const accessToken = await generateAccessToken();
+  const url = `${base}/v2/checkout/orders`;
+  const payload = {
+    intent: 'CAPTURE',
+    purchase_units: [prepareData(JSON.parse(data))],
+  };
+
+  const response = await axios(url, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    },
+    method: 'post',
+    data: JSON.stringify(payload),
+  });
+
+  return handleResponse(response.data);
+};
+
+const captureOrder = async (orderID) => {
+  const accessToken = await generateAccessToken();
+  const url = `${base}/v2/checkout/orders/${orderID}/capture`;
+
+  const response = await axios(url, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  return handleResponse(response.data);
+};
+
+const paypalController = {
+  order: async (req, res) => {
+    try {
+      const { jsonResponse } = await createOrder(req.body.data);
+      res.status(201).json(jsonResponse);
+    } catch (error) {
+      console.error('Failed to create order:', error);
+      res.status(500).json({ error: 'Failed to create order.' });
+    }
+  },
+  capture: async (req, res) => {
+    try {
+      const { orderID } = req.body;
+      const { jsonResponse } = await captureOrder(orderID);
+      res.status(200).json(jsonResponse);
+    } catch (error) {
+      console.error('Failed to create order:', error);
+      res.status(500).json({ error: 'Failed to capture order.' });
+    }
   },
 };
 

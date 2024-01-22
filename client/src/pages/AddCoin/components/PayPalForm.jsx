@@ -1,54 +1,71 @@
-import { FastField, Form, Formik } from "formik";
-import { useState } from "react";
-
-import { Button } from "components";
+import { PayPalButtons } from "@paypal/react-paypal-js";
+import { Select } from "components/index.jsx";
 import { coinOptions } from "constants/controlOptions.constant";
-import { Loading } from "features";
-import { FormLabel, SelectField } from "libs/formik";
-import { paypalService } from "services";
+import { useUpdateUser } from "hooks/index.jsx";
+import { FormLabel } from "libs/formik";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import paypalService from "services/paypal.service.js";
+import transactionService from "services/transaction.service.js";
 
 function PayPalForm() {
-  const [loading, setLoading] = useState(false);
-  const init = {
-    price: coinOptions[0],
+  const [price, setPrice] = useState(coinOptions[0]);
+  const { updateClientUser } = useUpdateUser();
+  const user = useSelector((state) => state.user.user);
+
+  const createOrder = async () => {
+    const data = {
+      name: "coin",
+      price: price.value,
+      quantity: 1,
+      description: "Purchase coin",
+    };
+    const response = await paypalService.order(JSON.stringify([data]));
+    return response.id;
   };
 
-  const handleSubmit = (values, { setSubmitting }) => {
-    const price = values?.price?.value;
-    setLoading(false);
+  const onApprove = async ({ orderID }) => {
+    const transactionResponse = await paypalService.capture(orderID);
 
-    if (price) {
-      const data = [{ name: "coin", price, quantity: 1, description: "Purchase coin" }];
+    if (transactionResponse.status === "COMPLETED") {
+      try {
+        const coin = Number.parseInt(price.label.split(" ")[0], 10);
 
-      paypalService
-        .payment(data)
-        .then((response) => {
-          setLoading(false);
-          window.open(response.link, "_blank");
-        })
-        .catch((err) => console.error(err));
+        const data = {
+          method: "paypal",
+          unit: "coin",
+          amount: coin,
+        };
+
+        transactionService
+          .add(data)
+          .then((response) => {
+            console.log("response:", response);
+            updateClientUser({ coin: user.coin + coin });
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } catch (error) {
+        console.error(error);
+      }
     }
 
-    setSubmitting(false);
+    return transactionResponse;
   };
 
   return (
     <>
-      <Formik initialValues={init} onSubmit={handleSubmit}>
-        {() => {
-          return (
-            <Form>
-              <FormLabel name="price" label="Chọn mức giá" required />
-              <FastField name="price" component={SelectField} options={coinOptions} />
+      <FormLabel name="price" label="Chọn mức giá" required />
+      <Select value={price} setValue={setPrice} options={coinOptions} />
 
-              <Button primary large type="submit" style={{ marginTop: "2rem" }}>
-                Xác nhận
-              </Button>
-            </Form>
-          );
-        }}
-      </Formik>
-      {loading && <Loading />}
+      <div style={{ zIndex: 0, width: "2rem", marginTop: "2rem" }}>
+        <PayPalButtons
+          forceReRender={[price]}
+          createOrder={() => createOrder()}
+          onApprove={(data, actions) => onApprove(data, actions)}
+        />
+      </div>
     </>
   );
 }

@@ -83,8 +83,8 @@ const paypalService = {
         payment_method: 'paypal',
       },
       redirect_urls: {
-        return_url: `${process.env.CLIENT_URL}/paypal/success`,
-        cancel_url: `${process.env.CLIENT_URL}/paypal/cancel`,
+        return_url: `${process.env.CLIENT_URL}/transaction/success`,
+        cancel_url: `${process.env.CLIENT_URL}/transaction/cancel`,
       },
       transactions: [
         {

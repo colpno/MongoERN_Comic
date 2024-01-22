@@ -2,7 +2,35 @@ import axiosClient from "./axiosClient";
 
 const url = "/paypal";
 
-const vnpayApi = {
+const paypalApi = {
+  order: (data = [], setProgress = () => {}) => {
+    return axiosClient.post(
+      `${url}/order`,
+      { data },
+      {
+        withCredentials: true,
+        onUploadProgress: (e) => {
+          const { loaded, total } = e;
+          const percentage = (loaded / total) * 100;
+          setProgress(percentage);
+        },
+      }
+    );
+  },
+  capture: (orderID, setProgress = () => {}) => {
+    return axiosClient.post(
+      `${url}/capture`,
+      { orderID },
+      {
+        withCredentials: true,
+        onUploadProgress: (e) => {
+          const { loaded, total } = e;
+          const percentage = (loaded / total) * 100;
+          setProgress(percentage);
+        },
+      }
+    );
+  },
   payment: (data = [], setProgress = () => {}) => {
     return axiosClient.post(
       `${url}/payment`,
@@ -43,4 +71,4 @@ const vnpayApi = {
   },
 };
 
-export default vnpayApi;
+export default paypalApi;
