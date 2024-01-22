@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 
 import { useToast } from "hooks";
-import { coinHistoryService } from "services";
+import { transactionService } from "services";
 import CoinHistoryTable from "./components/CoinHistoryTable";
 import styles from "./styles/CoinHistory.module.scss";
 
@@ -14,7 +14,7 @@ function CoinHistory() {
   const { Toast, options, toastEmitter } = useToast();
 
   useEffect(() => {
-    coinHistoryService
+    transactionService
       .getAll()
       .then((response) => {
         setHistories(response.data);
