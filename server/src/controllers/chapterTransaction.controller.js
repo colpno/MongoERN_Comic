@@ -3,7 +3,7 @@ import { convertPurchaseTransactionToMoney } from '../helpers/convertCurrency.js
 import transformQueryParams from '../helpers/transformQueryParams.js';
 import {
   chapterTransactionService,
-  coinHistoryService,
+  transactionService,
   titleService,
   userService,
 } from '../services/index.js';
@@ -69,7 +69,7 @@ const chapterTransactionController = {
         let user;
         if (method === 'coin') {
           user = await userService.update(userId, { $inc: { coin: -cost } });
-          await coinHistoryService.add(userId, 'Mua chương', -cost);
+          await transactionService.add(userId, 'Mua chương', -cost);
 
           // increase title owner income
           const title = await titleService.getOne({ _id: titleId });

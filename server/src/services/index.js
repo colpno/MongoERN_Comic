@@ -3,7 +3,7 @@ export { default as authService } from './auth.service.js';
 export { default as chapterService } from './chapter.service.js';
 export { default as chapterTransactionService } from './chapterTransaction.service.js';
 export { default as cloudinaryService } from './cloudinary.service.js';
-export { default as coinHistoryService } from './coinHistory.service.js';
+export { default as transactionService } from './transaction.service.js';
 export { default as commentService } from './comment.service.js';
 export { default as favoriteService } from './favorite.service.js';
 export { default as followService } from './follow.service.js';

@@ -2,7 +2,7 @@ export { default as ApprovedStatus } from './approvedStatus.model.js';
 export { default as Chapter } from './chapter.model.js';
 export { default as ChapterReport } from './chapterReport.model.js';
 export { default as ChapterTransaction } from './chapterTransaction.model.js';
-export { default as CoinHistory } from './coinHistory.model.js';
+export { default as Transaction } from './transaction.model.js';
 export { default as Comment } from './comment.model.js';
 export { default as Favorite } from './favorite.model.js';
 export { default as Follow } from './follow.model.js';

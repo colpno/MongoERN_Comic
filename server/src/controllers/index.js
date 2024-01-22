@@ -2,7 +2,7 @@ export { default as approvedStatusController } from './approvedStatus.controller
 export { default as authController } from './auth.controller.js';
 export { default as chapterController } from './chapter.controller.js';
 export { default as chapterTransactionController } from './chapterTransaction.controller.js';
-export { default as coinHistoryController } from './coinHistory.controller.js';
+export { default as transactionController } from './transaction.controller.js';
 export { default as commentController } from './comment.controller.js';
 export { default as favoriteController } from './favorite.controller.js';
 export { default as followController } from './follow.controller.js';

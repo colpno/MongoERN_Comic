@@ -1,20 +1,25 @@
 import mongoose from 'mongoose';
 
-const coinHistorySchema = mongoose.Schema(
+const transactionSchema = mongoose.Schema(
   {
     user_id: { type: mongoose.Types.ObjectId, ref: 'users', require: true },
     method: { type: String, require: true },
+    unit: {
+      type: String,
+      enum: ['coin', 'point'],
+      require: true,
+    },
     amount: { type: Number, require: true },
   },
   { timestamps: true }
 );
 
-coinHistorySchema.pre(/^find/, function (next) {
+transactionSchema.pre(/^find/, function (next) {
   this.user_id = mongoose.Types.ObjectId(this.user_id);
 
   next();
 });
 
-const CoinHistory = mongoose.model('transactions', coinHistorySchema);
+const Transaction = mongoose.model('transactions', transactionSchema);
 
-export default CoinHistory;
+export default Transaction;
