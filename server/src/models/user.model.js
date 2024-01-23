@@ -3,12 +3,12 @@ import moment from 'moment';
 import mongoose from 'mongoose';
 
 import ChapterTransaction from './chapterTransaction.model.js';
-import CoinHistory from './coinHistory.model.js';
 import Favorite from './favorite.model.js';
 import Follow from './follow.model.js';
 import Income from './income.model.js';
 import ReadingHistory from './readingHistory.model.js';
 import Title from './title.model.js';
+import Transaction from './transaction.model.js';
 
 const userSchema = mongoose.Schema(
   {
@@ -48,7 +48,7 @@ userSchema.pre('save', function (next) {
 
 userSchema.pre('remove', function (next) {
   ChapterTransaction.remove({ user_id: this._id }).exec();
-  CoinHistory.remove({ user_id: this._id }).exec();
+  Transaction.remove({ user_id: this._id }).exec();
   Favorite.remove({ user_id: this._id }).exec();
   Follow.remove({ user_id: this._id }).exec();
   Income.remove({ user_id: this._id }).exec();
