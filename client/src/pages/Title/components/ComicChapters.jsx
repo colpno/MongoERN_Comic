@@ -13,9 +13,71 @@ import styles from "../styles/ComicChapters.module.scss";
 
 const cx = classNames.bind(styles);
 
+function PriceButton({ isOwned, isFree, title }) {
+  const isUsePoint = title.point > 0;
+  // const isUseCharge = title.chargeTime > 0;
+
+  if (isOwned) {
+    return (
+      <Button
+        outline
+        success
+        className={cx("chapters__content__chapter__price__free")}
+        element="div"
+      >
+        Đã sở hữu
+      </Button>
+    );
+  }
+
+  if (isFree) {
+    return (
+      <Button
+        outline
+        success
+        className={cx("chapters__content__chapter__price__free")}
+        element="div"
+      >
+        Miễn phí
+      </Button>
+    );
+  }
+
+  return (
+    <>
+      {/* {isUseCharge && (
+        <>
+          <Button outline success className={cx("chapters__content__chapter__price__charge")}>
+            <div className={cx("charge__icon")}>
+              <ChargeIcon className={cx("charge-icon")} />
+              <span className={cx("charge__icon__label")}>{title.chargeTime}</span>
+            </div>
+            Mien phi
+          </Button>
+          <div className={cx("divider")} />
+        </>
+      )} */}
+      {isUsePoint && (
+        <>
+          <div className={cx("chapters__content__chapter__price__point")}>
+            <span>{title.point}</span>
+            <CircleP />
+          </div>
+          <div className={cx("divider")} />
+        </>
+      )}
+      <div className={cx("chapters__content__chapter__price__coin")}>
+        <span>{title.coin}</span>
+        <CircleC />
+      </div>
+    </>
+  );
+}
+
 function ComicChapters({
   title,
   chapters,
+  user,
   purchasedHistories,
   isDESCSorting,
   handleSorting,
@@ -43,16 +105,16 @@ function ComicChapters({
           <div className={cx("chapters__content")}>
             {chapters.map((chapter) => {
               const { day, month, year } = formatTime(chapter.createdAt);
-              const isPurchased = findPurchasedChapter(chapter._id);
-              const canRead = !chapter.cost || isPurchased;
-              const cannotRead = !canRead;
+              const isOwned = findPurchasedChapter(chapter._id) || title.user_id === user._id;
+              const isFree = !chapter.cost;
+              const canRead = isOwned || isFree;
 
               return (
                 <Button
                   wrapper
                   to={canRead ? chapter._id : ""}
                   className={cx("chapters__content__chapter")}
-                  onClick={() => cannotRead && handleOpenPurchaseBox(chapter)}
+                  onClick={() => !canRead && handleOpenPurchaseBox(chapter)}
                   key={chapter._id}
                 >
                   <div className={cx("chapters__content__chapter__box-img")}>
@@ -75,46 +137,7 @@ function ComicChapters({
                     </small>
                   </div>
                   <div className={cx("chapters__content__chapter__price")}>
-                    {canRead && (
-                      <Button
-                        outline
-                        success
-                        className={cx("chapters__content__chapter__price__free")}
-                      >
-                        Miễn phí
-                      </Button>
-                    )}
-                    {/* TODO: {title.chargeTime !== 0 && (
-                      <Button
-                        outline
-                        success
-                        className={cx(
-                          "chapters__content__chapter__price__charge"
-                        )}
-                      >
-                        <div className={cx("charge__icon")}>
-                          <ChargeIcon className={cx("charge-icon")} />
-                          <span className={cx("charge__icon__label")}>
-                            {title.chargeTime}
-                          </span>
-                        </div>
-                        Mien phi
-                      </Button>
-                      <div className={cx("divider")} />
-                    )} */}
-                    {cannotRead && (
-                      <>
-                        <div className={cx("chapters__content__chapter__price__point")}>
-                          <span>{title.point}</span>
-                          <CircleP />
-                        </div>
-                        <div className={cx("divider")} />
-                        <div className={cx("chapters__content__chapter__price__coin")}>
-                          <span>{title.coin}</span>
-                          <CircleC />
-                        </div>
-                      </>
-                    )}
+                    <PriceButton isOwned={isOwned} isFree={isFree} title={title} />
                   </div>
                 </Button>
               );
@@ -135,10 +158,11 @@ function ComicChapters({
 ComicChapters.propTypes = {
   title: PropTypes.shape({
     _id: PropTypes.string.isRequired,
+    user_id: PropTypes.string.isRequired,
     total_chapter: PropTypes.number.isRequired,
     coin: PropTypes.number.isRequired,
     point: PropTypes.number.isRequired,
-    // TODO: chargeTime: PropTypes.number.isRequired,
+    // chargeTime: PropTypes.number.isRequired,
   }).isRequired,
 
   chapters: PropTypes.arrayOf(
@@ -153,6 +177,10 @@ ComicChapters.propTypes = {
       like: PropTypes.number.isRequired,
     }).isRequired
   ).isRequired,
+
+  user: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+  }).isRequired,
 
   purchasedHistories: PropTypes.arrayOf(
     PropTypes.shape({
@@ -170,6 +198,19 @@ ComicChapters.propTypes = {
 
 ComicChapters.defaultProps = {
   purchasedHistories: [],
+};
+
+PriceButton.propTypes = {
+  isOwned: PropTypes.bool.isRequired,
+  isFree: PropTypes.bool.isRequired,
+  title: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    user_id: PropTypes.string.isRequired,
+    total_chapter: PropTypes.number.isRequired,
+    coin: PropTypes.number.isRequired,
+    point: PropTypes.number.isRequired,
+    // chargeTime: PropTypes.number.isRequired,
+  }).isRequired,
 };
 
 export default memo(ComicChapters);
