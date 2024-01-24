@@ -39,8 +39,7 @@ function PayPalForm() {
 
         transactionService
           .add(data)
-          .then((response) => {
-            console.log("response:", response);
+          .then(() => {
             updateClientUser({ coin: user.coin + coin });
           })
           .catch((error) => {
