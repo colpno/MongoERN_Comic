@@ -30,7 +30,7 @@ function Title() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { titleId } = useParams();
-  const user = useSelector((state) => state.user.user);
+  const { user, isLoggingIn } = useSelector((state) => state.user);
   const { pagination, setPagination, setPaginationTotal } = usePagination(
     TITLE_PAGE_CHAPTERS_PER_PAGE
   );
@@ -58,13 +58,13 @@ function Title() {
     left: "0",
     right: "0",
   };
-  const paymentChoices = useMemo(
-    () => [
-      { amount: state.title.coin, icon: circleC, method: "coin" },
-      { amount: state.title.point, icon: circleP, method: "point" },
-    ],
-    [state.title]
-  );
+  const paymentChoices = useMemo(() => {
+    const choices = [{ amount: state.title.coin, icon: circleC, method: "coin" }];
+    if (state.title.point !== 0) {
+      choices.push({ amount: state.title.point, icon: circleP, method: "point" });
+    }
+    return choices;
+  }, [state.title]);
 
   const checkCanPurchase = (method, amount) => {
     switch (method.toLowerCase()) {
@@ -81,11 +81,16 @@ function Title() {
     }
   };
 
-  const handlePurchase = ({ icon, ...others }, chapter) => {
-    const { amount, method } = others;
+  const handlePurchase = (payment, chapter) => {
+    const { amount, method } = payment;
     const { _id: chapterId } = chapter;
 
-    if (!!amount && !!method && !!chapterId && checkCanPurchase(method, amount)) {
+    if (!isLoggingIn) {
+      toastEmitter("Bạn cần phải đăng nhập để thực thiện chức năng", "error");
+      return;
+    }
+
+    if (checkCanPurchase(method, amount)) {
       updateState({ loading: true });
 
       const rentList = ["rent ticket"];
@@ -107,6 +112,8 @@ function Title() {
           toastEmitter(error, "error");
           updateState({ loading: false });
         });
+    } else {
+      toastEmitter("Không đủ để thực hiện chức năng", "error");
     }
   };
 
