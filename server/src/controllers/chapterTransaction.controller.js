@@ -36,8 +36,9 @@ const chapterTransactionController = {
     try {
       const { id: userId } = req.userInfo;
       const { titleId, chapterId, expiredAt, method, cost } = req.body;
+      const amount = Number.parseInt(cost, 10);
 
-      if (titleId && chapterId && method && cost) {
+      if (titleId && chapterId && method && amount) {
         const duplicated = (
           await chapterTransactionService.getAll({
             user_id: userId,
@@ -58,7 +59,7 @@ const chapterTransactionController = {
           chapterId,
           expiredAt,
           method,
-          cost
+          amount
         );
 
         if (!response) {
@@ -68,15 +69,15 @@ const chapterTransactionController = {
         // minus user currency
         let user;
         if (method === 'coin') {
-          user = await userService.update(userId, { $inc: { coin: -cost } });
-          await transactionService.add(userId, 'Mua chương', -cost);
+          user = await userService.update(userId, { $inc: { coin: -amount } });
+          await transactionService.add(userId, 'Mua chương', 'chapter', -amount);
 
           // increase title owner income
           const title = await titleService.getOne({ _id: titleId });
-          await userService.increaseIncome(title.userId, convertPurchaseTransactionToMoney(cost));
+          await userService.increaseIncome(title.userId, convertPurchaseTransactionToMoney(amount));
         }
         if (method === 'point') {
-          user = await userService.update(userId, { $inc: { point: -cost } });
+          user = await userService.update(userId, { $inc: { point: -amount } });
         }
         if (method === 'rent ticket') {
           user = await userService.update(userId, { $inc: { ticket_for_renting: -1 } });
