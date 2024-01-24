@@ -6,7 +6,7 @@ const transactionSchema = mongoose.Schema(
     method: { type: String, require: true },
     unit: {
       type: String,
-      enum: ['coin', 'point'],
+      enum: ['coin', 'point', 'chapter'],
       require: true,
     },
     amount: { type: Number, require: true },
