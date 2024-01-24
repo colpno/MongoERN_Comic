@@ -185,9 +185,7 @@ ComicChapters.propTypes = {
   purchasedHistories: PropTypes.arrayOf(
     PropTypes.shape({
       _id: PropTypes.string.isRequired,
-      chapter_id: PropTypes.shape({
-        _id: PropTypes.string.isRequired,
-      }).isRequired,
+      chapter_id: PropTypes.string.isRequired,
     }).isRequired
   ),
 

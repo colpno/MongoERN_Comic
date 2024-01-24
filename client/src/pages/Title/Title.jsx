@@ -221,7 +221,7 @@ function Title() {
           const genresPromise = genreService.getAll(genreParams);
           const chapterTransactionPromise = chapterTransactionService.getAll(
             chapterTranParams,
-            false
+            !!user._id
           );
           const promises = [chaptersPromise, genresPromise, chapterTransactionPromise];
 
