@@ -34,6 +34,7 @@ function Button({
   fullWidth,
   round,
   style,
+  element,
 }) {
   const classes = cx(
     wrapper || "btn",
@@ -66,7 +67,7 @@ function Button({
     style: style || null,
   };
 
-  let Component = "button";
+  let Component = element;
 
   switch (true) {
     case Boolean(to):
@@ -115,6 +116,7 @@ Button.propTypes = {
   fullWidth: PropTypes.bool,
   round: PropTypes.bool,
   style: PropTypes.shape({}),
+  element: PropTypes.string,
 };
 
 Button.defaultProps = {
@@ -142,6 +144,7 @@ Button.defaultProps = {
   fullWidth: false,
   round: false,
   style: {},
+  element: "button",
 };
 
 export default memo(Button);
