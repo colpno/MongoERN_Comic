@@ -2,18 +2,19 @@ import classNames from "classnames/bind";
 import { FastField, Form, Formik } from "formik";
 import PropTypes from "prop-types";
 
-import { Image, Button } from "components";
-import { InputField, FormLabel } from "libs/formik";
+import { Button, Image } from "components";
+import { FormLabel, InputField } from "libs/formik";
+import { memo } from "react";
 import { profileFormValidation } from "validations/profileForm.validation";
 import styles from "../styles/ProfileForm.module.scss";
 
 const cx = classNames.bind(styles);
 
-function ProfileForm({ avatar, INITIAL_VALUE, handleSubmit, handleOpenChooseAvatar }) {
+function ProfileForm({ initialValues, handleSubmit, handleOpenChooseAvatar }) {
   return (
     <Formik
       enableReinitialize
-      initialValues={INITIAL_VALUE}
+      initialValues={initialValues}
       validationSchema={profileFormValidation}
       onSubmit={handleSubmit}
     >
@@ -21,7 +22,13 @@ function ProfileForm({ avatar, INITIAL_VALUE, handleSubmit, handleOpenChooseAvat
         return (
           <Form>
             <div className={cx("avatar-container")}>
-              <Image src={avatar} alt="avatar" width={150} height={150} className={cx("avatar")} />
+              <Image
+                src={initialValues.avatar}
+                alt="avatar"
+                width={150}
+                height={150}
+                className={cx("avatar")}
+              />
               <Button grey dark80 small onClick={handleOpenChooseAvatar}>
                 Đổi ảnh đại diện
               </Button>
@@ -33,9 +40,6 @@ function ProfileForm({ avatar, INITIAL_VALUE, handleSubmit, handleOpenChooseAvat
               component={InputField}
               placeholder="Viết tên người dùng..."
             />
-
-            <FormLabel name="password" label="Mật khẩu" required />
-            <FastField name="password" component={InputField} placeholder="Viết mật khẩu..." />
 
             <FormLabel name="email" label="Địa chỉ email" required />
             <FastField name="email" component={InputField} placeholder="Viết địa chỉ email..." />
@@ -56,8 +60,7 @@ function ProfileForm({ avatar, INITIAL_VALUE, handleSubmit, handleOpenChooseAvat
 }
 
 ProfileForm.propTypes = {
-  avatar: PropTypes.string.isRequired,
-  INITIAL_VALUE: PropTypes.shape({
+  initialValues: PropTypes.shape({
     avatar: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
     dateOfBirth: PropTypes.string.isRequired,
@@ -67,4 +70,4 @@ ProfileForm.propTypes = {
   handleOpenChooseAvatar: PropTypes.func.isRequired,
 };
 
-export default ProfileForm;
+export default memo(ProfileForm);

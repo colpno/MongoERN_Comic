@@ -1,100 +1,50 @@
 import moment from "moment";
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 
 import { FormWrapper } from "components";
-import { Popup, ProgressCircle } from "features";
-import { usePopup, useToast } from "hooks";
+import { Popup } from "features";
+import { usePopup, useToast, useUpdateUser } from "hooks";
 import ProfileForm from "pages/Profile/components/ProfileForm";
-import { userService } from "services";
 import AvatarBox from "./components/AvatarBox";
 
 function Profile() {
-  const dispatch = useDispatch();
-  const [user, setUser] = useState({});
-  const [progress, setProgress] = useState(0);
-  const { Toast, options, toastEmitter } = useToast();
+  const user = useSelector((state) => state.user.user);
+  const { Toast, options } = useToast();
   const { popup, setPopup, triggerPopup } = usePopup();
-
-  const INITIAL_VALUE = user?.username && {
+  const { updateUser } = useUpdateUser();
+  const [initialValues, setInitialValues] = useState({
     avatar: user.avatar,
     username: user.username,
     password: user.password,
     email: user.email,
-    dateOfBirth: user.dateOfBirth ? moment(user.dateOfBirth, "DD/MM/YYYY").toString() : "",
-  };
-
-  const fetchData = () => {
-    userService
-      .getOne()
-      .then((response) => setUser(response.data))
-      .catch((error) => console.error(error));
-  };
-
-  const handleUpdateUser = (data) => {
-    userService
-      .update(data, setProgress)
-      .then((response) => {
-        toastEmitter("Đổi thông tin cá nhân thành công", "success");
-        dispatch(setUser({ ...user, ...data, ...response.data }));
-        setProgress(0);
-      })
-      .catch((error) => {
-        toastEmitter(error, "error");
-        setProgress(0);
-      });
-  };
-
-  const getChangedValues = (values) => {
-    const newData = {
-      ...values,
-      dateOfBirth: moment(values.dateOfBirth, "YYYY-MM-DD hh:mm:ss").toString(),
-    };
-    const valueKeys = Object.keys(newData);
-
-    const changedValues = valueKeys.reduce((obj, key) => {
-      if (JSON.stringify(values[key]) !== JSON.stringify(INITIAL_VALUE[key])) {
-        return { ...obj, [key]: values[key] };
-      }
-      return obj;
-    }, {});
-
-    return changedValues;
-  };
+    dateOfBirth: user?.dateOfBirth ? moment(user.dateOfBirth, "DD/MM/YYYY").toString() : "",
+  });
 
   const handleSubmit = (values, { setSubmitting }) => {
-    values.avatar = user.avatar;
-    const changedValues = getChangedValues(values);
-
-    Object.keys(changedValues).length > 0 && handleUpdateUser(changedValues);
-
+    updateUser(values);
     setSubmitting(false);
   };
 
   const handleChooseAvatar = (e) => {
     const val = e.target.value;
-    setUser((prev) => ({ ...prev, avatar: val }));
+    setInitialValues((prev) => ({ ...prev, avatar: val }));
   };
 
   const handleOpenChooseAvatar = () => {
     setPopup({
       isShown: true,
       title: "Hình dại diện",
-      content: <AvatarBox value={user.avatar} handleOnChange={handleChooseAvatar} />,
+      content: <AvatarBox value={initialValues.avatar} handleOnChange={handleChooseAvatar} />,
     });
   };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   return (
     <>
       {user.username ? (
         <FormWrapper title="Thông tin cá nhân">
           <ProfileForm
-            avatar={user.avatar}
-            INITIAL_VALUE={INITIAL_VALUE}
+            initialValues={initialValues}
             handleSubmit={handleSubmit}
             handleOpenChooseAvatar={handleOpenChooseAvatar}
           />
@@ -102,7 +52,6 @@ function Profile() {
       ) : null}
       <Toast {...options} />
       {popup.isShown && <Popup data={popup} setShow={triggerPopup} height={350} />}
-      <ProgressCircle percentage={progress} />
     </>
   );
 }
