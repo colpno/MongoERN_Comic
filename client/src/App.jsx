@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { Popup } from "features";
+import { Loading, Popup } from "features";
 import RouteHandler from "routes/RouteHandler";
 import { usePopup } from "hooks";
 
@@ -22,6 +22,7 @@ function App() {
   const navigate = useNavigate();
   const { popup, setPopup, triggerPopup } = usePopup();
   const isLoggingIn = useSelector((state) => state.user.isLoggingIn);
+  const { isLoading } = useSelector((state) => state.common);
   const theme = useSelector((state) => state.theme.theme);
   const url = useLocation().pathname;
 
@@ -40,6 +41,7 @@ function App() {
     <div data-theme={theme}>
       <RouteHandler isLoggingIn={isLoggingIn} />
       {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
+      {isLoading && <Loading />}
     </div>
   );
 }
