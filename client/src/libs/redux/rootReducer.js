@@ -5,6 +5,7 @@ import comicApi from "api/comicApi";
 import { authPersistConfig, themePersistConfig } from "libs/redux-persist";
 import {
   commentReducer,
+  commonReducer,
   globalReducer,
   loginReducer,
   paymentMethodReducer,
@@ -28,6 +29,7 @@ const rootReducer = combineReducers({
   theme: persistReducer(themePersistConfig, themeReducer),
   title: titleReducer,
   user: persistReducer(authPersistConfig, userReducer),
+  common: commonReducer,
 });
 
 export default rootReducer;
