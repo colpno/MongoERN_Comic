@@ -21,6 +21,8 @@
 
     &__container {
       position: relative;
+      display: flex;
+      align-items: center;
 
       .slide-wrapper {
         width: 100%;
@@ -73,6 +75,10 @@
   }
 }
 
+.lock-icon {
+  transform: translateY(-2px);
+}
+
 .box-img {
   border-radius: 4px;
   margin-bottom: 5px;
@@ -82,6 +88,7 @@
   img {
     border-radius: 4px;
     aspect-ratio: 1.25 / 1;
+    object-fit: cover;
   }
 }
 
