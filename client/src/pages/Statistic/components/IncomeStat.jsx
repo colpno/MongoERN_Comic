@@ -12,7 +12,7 @@ import styles from "../styles/Statistic.module.scss";
 const cx = classNames.bind(styles);
 
 // eslint-disable-next-line no-unused-vars
-function IncomeStat({ setLoading, toastEmitter }) {
+function IncomeStat({ toastEmitter }) {
   // INFO: Data variables
 
   const yearOptions = getYearOptions();
@@ -68,7 +68,6 @@ function IncomeStat({ setLoading, toastEmitter }) {
 }
 
 IncomeStat.propTypes = {
-  setLoading: PropTypes.func.isRequired,
   toastEmitter: PropTypes.func.isRequired,
 };
 

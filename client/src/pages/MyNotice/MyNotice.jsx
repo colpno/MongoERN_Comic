@@ -2,30 +2,30 @@ import classNames from "classnames/bind";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import { Loading, ProgressCircle } from "features";
 import { useToast } from "hooks";
+import { setLoading } from "libs/redux/slices/common.slice.js";
 import { personalNotificationService } from "services";
-import MyNoticeTable from "./components/MyNoticeTable";
 import styles from "./MyNotice.module.scss";
+import MyNoticeTable from "./components/MyNoticeTable";
 
 const cx = classNames.bind(styles);
 
 function MyNotice() {
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const [notifications, setNotifications] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [progress, setProgress] = useState(0);
   const { Toast, options, toastEmitter } = useToast();
 
   const handleRead = useCallback((row) => {
-    console.log("row:", row);
+    dispatch(setLoading(true));
+
     const now = moment().toISOString();
     const data = { read_at: row.read_at ? null : now };
 
     personalNotificationService
-      .update(row._id, data, setProgress)
+      .update(row._id, data)
       .then((response) => {
         const { data: newNotice } = response;
         setNotifications((prev) => {
@@ -35,10 +35,12 @@ function MyNotice() {
         });
       })
       .catch((error) => toastEmitter(error, "error"));
+
+    dispatch(setLoading(false));
   }, []);
 
   const handleDelete = (data) => {
-    setLoading(true);
+    dispatch(setLoading(true));
     const ids = data instanceof Map ? Array.from(data.keys()) : data;
     const params = {
       _id_in: ids,
@@ -52,11 +54,12 @@ function MyNotice() {
       .catch((error) => {
         toastEmitter(error, "error");
       });
-    setLoading(false);
+
+    dispatch(setLoading(false));
   };
 
   useEffect(() => {
-    setLoading(true);
+    dispatch(setLoading(true));
     const params = {
       user_id: user._id,
       _fields: "-user_id",
@@ -66,12 +69,12 @@ function MyNotice() {
       .getAll(params)
       .then((response) => {
         setNotifications(response.data);
-        setLoading(false);
       })
       .catch((error) => {
-        setLoading(false);
         toastEmitter(error, "error");
       });
+
+    dispatch(setLoading(false));
   }, []);
 
   return (
@@ -88,8 +91,6 @@ function MyNotice() {
         </Row>
       </Container>
       <Toast {...options} />
-      {loading && <Loading />}
-      <ProgressCircle percentage={progress} />
     </>
   );
 }

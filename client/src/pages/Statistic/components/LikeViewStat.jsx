@@ -3,9 +3,10 @@ import moment from "moment";
 import PropTypes from "prop-types";
 import { useEffect, useMemo, useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { NoData } from "features";
+import { setLoading } from "libs/redux/slices/common.slice.js";
 import { chapterReportService, chapterService, titleReportService } from "services";
 import { sortArray } from "utils/arrayMethods";
 import { getChartColors, getMonthArray } from "utils/constants";
@@ -16,7 +17,8 @@ import TitleStatistic from "./TitleStatistic";
 
 const cx = classNames.bind(styles);
 
-function LikeViewStat({ setLoading, toastEmitter }) {
+function LikeViewStat({ toastEmitter }) {
+  const dispatch = useDispatch();
   // INFO: Data variables
 
   const yearOptions = getYearOptions();
@@ -41,7 +43,7 @@ function LikeViewStat({ setLoading, toastEmitter }) {
   const [chapterReports, setChapterReports] = useState([]);
 
   const fetchChapters = (params) => {
-    setLoading(true);
+    dispatch(setLoading(true));
 
     params._embed = JSON.stringify([
       { collection: "status_id", fields: "-_id code", match: { code: "vis" } },
@@ -58,7 +60,7 @@ function LikeViewStat({ setLoading, toastEmitter }) {
         toastEmitter(error, "error");
       });
 
-    setLoading(false);
+    dispatch(setLoading(false));
   };
 
   // fetch all chapters of selected chapter
@@ -71,7 +73,7 @@ function LikeViewStat({ setLoading, toastEmitter }) {
   // fetch all reports of selected chapter
   useEffect(() => {
     if (selectedChapter?.value) {
-      setLoading(true);
+      dispatch(setLoading(true));
 
       const params = {
         chapter_id: selectedChapter.value,
@@ -87,14 +89,14 @@ function LikeViewStat({ setLoading, toastEmitter }) {
           toastEmitter(error, "error");
         });
 
-      setLoading(false);
+      dispatch(setLoading(false));
     }
   }, [selectedChapter, reportYear.chapter]);
 
   // fetch all reports of selected title
   useEffect(() => {
     if (selectedTitle?.value) {
-      setLoading(true);
+      dispatch(setLoading(true));
 
       const params = {
         title_id: selectedTitle.value,
@@ -110,7 +112,7 @@ function LikeViewStat({ setLoading, toastEmitter }) {
           toastEmitter(error, "error");
         });
 
-      setLoading(false);
+      dispatch(setLoading(false));
     }
   }, [selectedTitle, reportYear.title]);
 
@@ -323,7 +325,6 @@ function LikeViewStat({ setLoading, toastEmitter }) {
 }
 
 LikeViewStat.propTypes = {
-  setLoading: PropTypes.func.isRequired,
   toastEmitter: PropTypes.func.isRequired,
 };
 

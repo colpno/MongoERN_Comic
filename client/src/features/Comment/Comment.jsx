@@ -1,11 +1,12 @@
 import classNames from "classnames/bind";
 import { useCallback, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { HeadTitleMark } from "components";
 import { socket } from "context/socketContext";
-import { Pagination, Popup, ProgressCircle } from "features";
+import { Pagination, Popup } from "features";
 import { usePopup, useToast } from "hooks";
+import { setLoading } from "libs/redux/slices/common.slice.js";
 import { commentService } from "services";
 import { CommentForm, CommentList, RequireSignIn } from "./components";
 import styles from "./styles/Comment.module.scss";
@@ -13,12 +14,12 @@ import styles from "./styles/Comment.module.scss";
 const cx = classNames.bind(styles);
 
 function Comment() {
+  const dispatch = useDispatch();
   const commentAt = useSelector((state) => state.comment.comment_at);
   const { user, isLoggingIn } = useSelector((state) => state.user);
   const [comments, setComments] = useState([]);
   const [rootComments, setRootComments] = useState([]);
   const [paginate, setPaginate] = useState({ page: 1, limit: 15, total: 0 });
-  const [progress, setProgress] = useState(0);
   const { toastEmitter } = useToast();
   const { popup, setPopup, triggerPopup } = usePopup({
     isShown: false,
@@ -46,6 +47,7 @@ function Comment() {
 
   const handleSubmit = (values, { setSubmitting, resetForm }) => {
     const { text, slug } = values;
+    dispatch(setLoading(true));
 
     if (text && commentAt) {
       const data = {
@@ -56,17 +58,16 @@ function Comment() {
       };
 
       commentService
-        .add(data, setProgress)
+        .add(data)
         .then(() => {
           resetForm();
-          setProgress(0);
         })
         .catch((error) => {
           toastEmitter(error, "error");
-          setProgress(0);
         });
     }
 
+    dispatch(setLoading(false));
     setSubmitting(false);
   };
 
@@ -81,20 +82,21 @@ function Comment() {
   );
 
   const handleDelete = (commentId) => {
+    dispatch(setLoading(true));
+
     setPopup({
       isShown: true,
       onConfirm: () => {
         commentService
-          .update(commentId, { deletedBy: user._id }, setProgress)
-          .then(() => {
-            setProgress(0);
-          })
+          .update(commentId, { deletedBy: user._id })
+          .then(() => {})
           .catch((error) => {
-            setProgress(0);
             toastEmitter(error, "error");
           });
       },
     });
+
+    dispatch(setLoading(false));
   };
 
   useEffect(() => {
@@ -153,7 +155,6 @@ function Comment() {
         />
         <Pagination pagination={paginate} setPagination={setPaginate} />
       </section>
-      <ProgressCircle percentage={progress} />
       {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
     </>
   );

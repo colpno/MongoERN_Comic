@@ -2,8 +2,9 @@ import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 
-import { Loading } from "features";
 import { useToast } from "hooks";
+import { setLoading } from "libs/redux/slices/common.slice.js";
+import { useDispatch } from "react-redux";
 import { readingHistoryService } from "services";
 import ReadingHistoryTable from "./components/ReadingHistoryTable";
 import styles from "./styles/ReadingHistory.module.scss";
@@ -11,12 +12,12 @@ import styles from "./styles/ReadingHistory.module.scss";
 const cx = classNames.bind(styles);
 
 function ReadingHistory() {
-  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
   const [histories, setHistories] = useState([]);
   const { Toast, options, toastEmitter } = useToast();
 
   useEffect(() => {
-    setLoading(true);
+    dispatch(setLoading(true));
 
     const params = {
       _embed: JSON.stringify([
@@ -30,12 +31,12 @@ function ReadingHistory() {
       .getAll(params)
       .then((response) => {
         setHistories(response.data);
-        setLoading(false);
       })
       .catch((error) => {
         toastEmitter(error, "error");
-        setLoading(false);
       });
+
+    dispatch(setLoading(false));
   }, []);
 
   return (
@@ -43,7 +44,6 @@ function ReadingHistory() {
       <Container className={cx("reading-history")}>
         <ReadingHistoryTable readingHistories={histories} />
       </Container>
-      {loading && <Loading />}
       <Toast {...options} />
     </>
   );

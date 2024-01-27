@@ -1,20 +1,20 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import { Loading } from "features";
 import { useToast } from "hooks";
+import { setLoading } from "libs/redux/slices/common.slice.js";
 import { chapterTransactionService } from "services";
 import PurchasedChaptersTable from "./components/PurchasedChaptersTable";
 
 function PurchasedChapters({ cx }) {
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
-  const [loading, setLoading] = useState(false);
   const [transactions, setTransactions] = useState([]);
   const { Toast, options, toastEmitter } = useToast();
 
   useEffect(() => {
-    setLoading(true);
+    dispatch(setLoading(true));
 
     const params = {
       user_id: user._id,
@@ -33,18 +33,17 @@ function PurchasedChapters({ cx }) {
         );
 
         setTransactions(purchasedChapters);
-        setLoading(false);
       })
       .catch((error) => {
         toastEmitter(error, "error");
-        setLoading(false);
       });
+
+    dispatch(setLoading(false));
   }, []);
 
   return (
     <>
       <PurchasedChaptersTable transactions={transactions} cx={cx} />
-      {loading && <Loading />}
       <Toast {...options} />
     </>
   );

@@ -7,9 +7,10 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { TITLE_PAGE_CHAPTERS_PER_PAGE } from "constants/paginate.constant";
 import { socket } from "context/socketContext";
-import { Comment, Loading, NoData, Pagination, Popup, Recommend } from "features";
+import { Comment, NoData, Pagination, Popup, Recommend } from "features";
 import { usePagination, usePopup, useToast } from "hooks";
 import { setCommentPlace } from "libs/redux/slices/comment.slice";
+import { setLoading } from "libs/redux/slices/common.slice.js";
 import { setGenresOfTitle, setTitle as setStoreTitle } from "libs/redux/slices/title.slice";
 import { setUser } from "libs/redux/slices/user.slice";
 import {
@@ -42,7 +43,6 @@ function Title() {
     purchasedHistories: [],
     purchaseBoxInfo: { isToggle: false, chapter: {} },
     isDESCSort: false,
-    loading: false,
   });
   const hasTitle = Object.keys(state.title).length > 0;
   const haveChapters = state.chapters.length > 0;
@@ -91,7 +91,7 @@ function Title() {
     }
 
     if (checkCanPurchase(method, amount)) {
-      updateState({ loading: true });
+      dispatch(setLoading(true));
 
       const rentList = ["rent ticket"];
       const expiredAt = rentList.includes(method)
@@ -105,13 +105,13 @@ function Title() {
           toastEmitter(response.message, "success");
           updateState({
             purchasedHistories: [...state.purchasedHistories, response.data.transaction],
-            loading: false,
           });
         })
         .catch((error) => {
           toastEmitter(error, "error");
-          updateState({ loading: false });
         });
+
+      dispatch(setLoading(false));
     } else {
       toastEmitter("Không đủ để thực hiện chức năng", "error");
     }
@@ -130,9 +130,8 @@ function Title() {
   };
 
   const fetchChapters = () => {
-    updateState({
-      loading: true,
-    });
+    dispatch(setLoading(true));
+
     const chapterApiParams = {
       title_id: titleId,
       _sort: "order",
@@ -147,15 +146,13 @@ function Title() {
         setPaginationTotal(response.paginate.total);
         updateState({
           chapters: response.data,
-          loading: false,
         });
       })
       .catch((error) => {
         toastEmitter(error, "error");
-        updateState({
-          loading: false,
-        });
       });
+
+    dispatch(setLoading(false));
   };
 
   const handleSorting = () => {
@@ -190,7 +187,8 @@ function Title() {
 
   useEffect(() => {
     (() => {
-      updateState({ loading: true });
+      dispatch(setLoading(true));
+
       const chapterApiParams = {
         title_id: titleId,
         _sort: "order",
@@ -246,13 +244,13 @@ function Title() {
           }
           updateState({
             ...resultData,
-            loading: false,
           });
         })
         .catch(() => {
-          updateState({ loading: false });
           navigate("/not-found");
         });
+
+      dispatch(setLoading(false));
     })();
   }, [titleId, user]);
 
@@ -306,7 +304,6 @@ function Title() {
         />
       )}
       {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
-      {state.loading && <Loading />}
       <Toast {...options} />
     </>
   );

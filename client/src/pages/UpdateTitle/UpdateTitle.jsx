@@ -2,14 +2,16 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { FormWrapper, TitleForm } from "components";
-import { Popup, ProgressCircle } from "features";
+import { Popup } from "features";
 import { usePopup, useToast } from "hooks";
-import { updateTitleFormValidation } from "validations/updateTitleForm.validation";
+import { setLoading } from "libs/redux/slices/common.slice.js";
+import { useDispatch } from "react-redux";
 import { titleService } from "services";
+import { updateTitleFormValidation } from "validations/updateTitleForm.validation";
 
 function UpdateTitle() {
+  const dispatch = useDispatch();
   const { titleId } = useParams();
-  const [progress, setProgress] = useState(0);
   const [title, setTitle] = useState({});
   const { Toast, options: toastOptions, toastEmitter } = useToast();
   const { popup, setPopup, triggerPopup } = usePopup();
@@ -27,19 +29,21 @@ function UpdateTitle() {
   };
 
   const handleUpdate = (values) => {
+    dispatch(setLoading(true));
+
     const data = { ...values, guid: title._guid };
     if (values.cover) data.oldCover = title.cover;
 
     titleService
-      .update(titleId, data, setProgress)
+      .update(titleId, data)
       .then((response) => {
         toastEmitter(response.message, "success");
-        setProgress(0);
       })
       .catch((error) => {
         toastEmitter(error, "error");
-        setProgress(0);
       });
+
+    dispatch(setLoading(false));
   };
 
   const getChangedValues = (values) => {
@@ -101,7 +105,6 @@ function UpdateTitle() {
           />
         )}
       </FormWrapper>
-      <ProgressCircle percentage={progress} />
       {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
       <Toast {...toastOptions} />
     </>

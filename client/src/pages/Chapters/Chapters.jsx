@@ -5,8 +5,10 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { Button } from "components";
-import { Popup, ProgressCircle } from "features";
+import { Popup } from "features";
 import { usePopup, useToast } from "hooks";
+import { setLoading } from "libs/redux/slices/common.slice.js";
+import { useDispatch } from "react-redux";
 import { chapterService, titleService } from "services";
 import ChapterTable from "./components/ChapterTable";
 import TitlePart from "./components/TitlePart";
@@ -24,9 +26,9 @@ function BtnCreate() {
 }
 
 function Chapters() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { titleId } = useParams();
-  const [progress, setProgress] = useState(0);
   const { Toast, options: toastOptions, toastEmitter } = useToast();
   const [title, setTitle] = useState({});
   const [chapters, setChapters] = useState([]);
@@ -43,16 +45,18 @@ function Chapters() {
     }
 
     const handleDelete = () => {
+      dispatch(setLoading(true));
+
       titleService
-        .delete(id, {}, setProgress)
+        .delete(id, {})
         .then(() => {
-          setProgress(0);
           navigate(-1);
         })
         .catch((error) => {
           toastEmitter(error, "error");
-          setProgress(0);
         });
+
+      dispatch(setLoading(false));
     };
 
     setPopup({
@@ -65,25 +69,26 @@ function Chapters() {
   };
 
   const handleDeleteChapter = (data, setRowErrorId) => {
+    dispatch(setLoading(true));
     const ids = data instanceof Map ? Array.from(data.keys()) : data;
     const params = {
       _id_in: ids,
     };
 
     chapterService
-      .delete(params, setProgress)
+      .delete(params)
       .then((response) => {
         setChapters((prev) =>
           prev.filter((item) => (Array.isArray(ids) ? !ids.includes(item._id) : ids !== item._id))
         );
         toastEmitter(response.message);
-        setProgress(0);
       })
       .catch((error) => {
         setRowErrorId(ids);
         toastEmitter(error, "error");
-        setProgress(0);
       });
+
+    dispatch(setLoading(false));
   };
 
   useEffect(() => {
@@ -127,7 +132,6 @@ function Chapters() {
         </Row>
         <ChapterTable chapters={chapters} onDelete={handleDeleteChapter} />
       </Container>
-      <ProgressCircle percentage={progress} />
       {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
       <Toast {...toastOptions} />
     </>

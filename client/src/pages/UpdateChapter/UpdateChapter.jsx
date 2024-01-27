@@ -2,15 +2,16 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { ChapterForm, FormWrapper } from "components";
-import { ProgressCircle } from "features";
 import { useToast } from "hooks";
+import { setLoading } from "libs/redux/slices/common.slice.js";
+import { useDispatch } from "react-redux";
 import { chapterService } from "services";
 import { updateChapterFormValidation } from "validations/updateChapterForm.validation";
 
 function UpdateChapter() {
+  const dispatch = useDispatch();
   const { chapterId } = useParams();
   const { Toast, options: toastOptions, toastEmitter } = useToast();
-  const [progress, setProgress] = useState(0);
   const [chapter, setChapter] = useState({});
 
   const INITIAL_VALUE = useMemo(
@@ -79,21 +80,23 @@ function UpdateChapter() {
   };
 
   const handleSubmit = (values) => {
+    dispatch(setLoading(true));
+
     const changedValues = getChangedValues(values);
     changedValues.titleId = chapter.title_id;
 
     if (Object.keys(changedValues).length > 1) {
       chapterService
-        .update(chapterId, changedValues, setProgress)
+        .update(chapterId, changedValues)
         .then((response) => {
           toastEmitter(response.message, "success");
-          setProgress(0);
         })
         .catch((error) => {
           toastEmitter(error, "error");
-          setProgress(0);
         });
     }
+
+    dispatch(setLoading(false));
   };
 
   useEffect(() => {
@@ -116,7 +119,6 @@ function UpdateChapter() {
           />
         )}
       </FormWrapper>
-      <ProgressCircle percentage={progress} />
       <Toast {...toastOptions} />
     </>
   );

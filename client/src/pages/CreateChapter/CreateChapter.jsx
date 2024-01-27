@@ -2,14 +2,16 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { ChapterForm, FormWrapper } from "components";
-import { Popup, ProgressCircle } from "features";
+import { Popup } from "features";
 import { usePopup, useToast } from "hooks";
-import { createChapterFormValidation } from "validations";
+import { setLoading } from "libs/redux/slices/common.slice.js";
+import { useDispatch } from "react-redux";
 import { chapterService } from "services";
+import { createChapterFormValidation } from "validations";
 
 function CreateChapter() {
+  const dispatch = useDispatch();
   const { titleId } = useParams();
-  const [progress, setProgress] = useState(0);
   const { Toast, options: toastOptions, toastEmitter } = useToast();
   const [chapters, setChapters] = useState([]);
   const { popup, triggerPopup } = usePopup();
@@ -37,23 +39,25 @@ function CreateChapter() {
   };
 
   const handleSubmit = (values, resetForm) => {
+    dispatch(setLoading(true));
+
     const params = {
       ...values,
       titleId,
     };
 
     chapterService
-      .add(params, setProgress)
+      .add(params)
       .then(() => {
         toastEmitter("Truyện đã được thêm thành công", "success");
-        setProgress(0);
         fetchData();
         resetForm();
       })
       .catch((error) => {
         toastEmitter(error, "error");
-        setProgress(0);
       });
+
+    dispatch(setLoading(false));
   };
 
   useEffect(() => {
@@ -69,7 +73,6 @@ function CreateChapter() {
           handleSubmit={handleSubmit}
         />
       </FormWrapper>
-      <ProgressCircle percentage={progress} />
       {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
       <Toast {...toastOptions} />
     </>

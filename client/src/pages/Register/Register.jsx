@@ -2,9 +2,10 @@ import classNames from "classnames/bind";
 
 import { robotHead1 } from "assets/images/index";
 import { Button } from "components";
-import { Popup, ProgressCircle } from "features";
+import { Popup } from "features";
 import { usePopup, useToast } from "hooks";
-import { useState } from "react";
+import { setLoading } from "libs/redux/slices/common.slice.js";
+import { useDispatch } from "react-redux";
 import { userService } from "services";
 import { registerFormValidation } from "validations/registerForm.validation";
 import RegisterForm from "./components/RegisterForm";
@@ -13,11 +14,13 @@ import styles from "./styles/Register.module.scss";
 const cx = classNames.bind(styles);
 
 function Register() {
+  const dispatch = useDispatch();
   const { popup, setPopup, triggerPopup } = usePopup();
   const { Toast, options: toastOptions, toastEmitter } = useToast();
-  const [progress, setProgress] = useState(0);
 
   const handleSubmit = (values, { setSubmitting }) => {
+    dispatch(setLoading(false));
+
     const { username, email, password } = values;
     userService
       .register({ username, password, email, role: "member", avatar: robotHead1 })
@@ -32,7 +35,7 @@ function Register() {
         toastEmitter(error, "error");
       });
 
-    setProgress(0);
+    dispatch(setLoading(false));
     setSubmitting(false);
   };
 
@@ -68,7 +71,6 @@ function Register() {
         </div>
       </div>
       {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
-      <ProgressCircle percentage={progress} />
       <Toast {...toastOptions} />
     </>
   );

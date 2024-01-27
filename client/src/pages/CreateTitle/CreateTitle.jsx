@@ -1,13 +1,13 @@
-import { useState } from "react";
-
 import { FormWrapper, TitleForm } from "components";
-import { Popup, ProgressCircle } from "features";
+import { Popup } from "features";
 import { usePopup, useToast } from "hooks";
+import { setLoading } from "libs/redux/slices/common.slice.js";
+import { useDispatch } from "react-redux";
 import { titleService } from "services";
 import { createTitleFormValidation } from "validations/createTitleForm.validation";
 
 function CreateTitle() {
-  const [progress, setProgress] = useState(0);
+  const dispatch = useDispatch();
   const { Toast, options: toastOptions, toastEmitter } = useToast();
   const { popup, setPopup, triggerPopup } = usePopup();
 
@@ -32,17 +32,18 @@ function CreateTitle() {
   };
 
   const handleSubmit = (values, { setSubmitting }) => {
+    dispatch(setLoading(true));
+
     titleService
-      .add(values, setProgress)
+      .add(values)
       .then((response) => {
         toastEmitter(response.message, "success");
-        setProgress(0);
       })
       .catch((error) => {
         toastEmitter(error, "error");
-        setProgress(0);
       });
 
+    dispatch(setLoading(false));
     setSubmitting(false);
   };
 
@@ -57,7 +58,6 @@ function CreateTitle() {
           toastEmitter={toastEmitter}
         />
       </FormWrapper>
-      <ProgressCircle percentage={progress} />
       {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
       <Toast {...toastOptions} />
     </>
