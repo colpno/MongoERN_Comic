@@ -20,11 +20,10 @@ function ReadingHeader() {
   const dispatch = useDispatch();
   const { titleId } = useParams();
   const { toastEmitter } = useToast();
-  const {
-    reading: { chapter, favorite },
-    user: { user },
-    theme: { theme: isDarkMode },
-  } = useSelector((state) => state);
+  const theme = useSelector((state) => state.theme.theme);
+  const isDarkMode = theme === "dark";
+  const user = useSelector((state) => state.user.user);
+  const { chapter, favorite } = useSelector((state) => state.reading);
   const [state, updateState] = useReducer((prev, next) => ({ ...prev, ...next }), {
     isLike: false,
     controls: { isLiked: false },
