@@ -2,9 +2,9 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { Loading, Popup } from "features";
-import RouteHandler from "routes/RouteHandler";
+import { Loading, Popup, Toast } from "features";
 import { usePopup } from "hooks";
+import RouteHandler from "routes/RouteHandler";
 
 const handlePrivateRouteForGuess = (url, isLoggingIn) => {
   const array = ["login", "register", "reset-password", "forgot-password"];
@@ -42,6 +42,7 @@ function App() {
       <RouteHandler isLoggingIn={isLoggingIn} />
       {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
       {isLoading && <Loading />}
+      <Toast />
     </div>
   );
 }

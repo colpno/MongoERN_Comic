@@ -14,3 +14,4 @@ export { default as ProgressCircle } from "./ProgressCircle/ProgressCircle";
 export { default as Recommend } from "./Recommend/Recommend";
 export { default as Search } from "./Search/Search";
 export { default as Slider } from "./Slider/Slider";
+export { default as Toast } from "./Toast";
