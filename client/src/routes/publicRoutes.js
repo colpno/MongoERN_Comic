@@ -73,7 +73,7 @@ export const publicRoutes = [
     component: Title,
   },
   {
-    path: "/comic/title/:titleId/:chapterId",
+    path: "/comic/title/:titleId/:page",
     component: Reading,
     layout: ReadingLayout,
   },

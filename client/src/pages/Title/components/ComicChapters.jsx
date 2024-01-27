@@ -112,7 +112,7 @@ function ComicChapters({
               return (
                 <Button
                   wrapper
-                  to={canRead ? chapter._id : ""}
+                  to={canRead ? `${chapter.order}` : ""}
                   className={cx("chapters__content__chapter")}
                   onClick={() => !canRead && handleOpenPurchaseBox(chapter)}
                   key={chapter._id}
