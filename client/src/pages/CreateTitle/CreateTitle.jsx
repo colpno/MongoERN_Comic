@@ -25,7 +25,7 @@ function CreateTitle() {
 
   const handleCancel = () => {
     setPopup({
-      isShown: true,
+      isTriggered: true,
       title: "Thông báo",
       content: "Bạn có chắc muốn hủy bỏ?",
     });
@@ -58,7 +58,7 @@ function CreateTitle() {
           toastEmitter={toastEmitter}
         />
       </FormWrapper>
-      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
+      <Popup data={popup} trigger={triggerPopup} />
       <Toast {...toastOptions} />
     </>
   );

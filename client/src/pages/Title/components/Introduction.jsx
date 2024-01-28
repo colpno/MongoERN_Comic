@@ -36,7 +36,7 @@ function Introduction({ title, genres, firstChapter, setPopup, handleFollow }) {
 
   const handlePopupContent = () => {
     setPopup({
-      isShown: true,
+      isTriggered: true,
       title: "Mô tả",
       content: (
         <div className={cx("popup-summary")}>

@@ -20,27 +20,26 @@ const handlePrivateRouteForGuess = (url, isLoggingIn) => {
 
 function App() {
   const navigate = useNavigate();
-  const { popup, setPopup, triggerPopup } = usePopup();
   const isLoggingIn = useSelector((state) => state.user.isLoggingIn);
   const { isLoading } = useSelector((state) => state.common);
   const theme = useSelector((state) => state.theme.theme);
   const url = useLocation().pathname;
+  const { popup, triggerPopup } = usePopup({
+    title: "Thông báo",
+    content: "Bạn đã đăng nhập nên không thể truy cập vào trang",
+    onConfirm: () => navigate("/"),
+  });
 
   useEffect(() => {
     if (handlePrivateRouteForGuess(url, isLoggingIn)) {
-      setPopup({
-        isShown: true,
-        title: "Thông báo",
-        content: "Bạn đã đăng nhập nên không thể truy cập vào trang",
-        onConfirm: () => navigate("/"),
-      });
+      triggerPopup(true);
     }
   }, [url]);
 
   return (
     <div data-theme={theme}>
       <RouteHandler isLoggingIn={isLoggingIn} />
-      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
+      <Popup data={popup} trigger={triggerPopup} />
       {isLoading && <Loading />}
       <Toast />
     </div>

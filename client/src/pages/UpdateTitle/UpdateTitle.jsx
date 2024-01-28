@@ -61,7 +61,7 @@ function UpdateTitle() {
 
   const handleCancel = () => {
     setPopup({
-      isShown: true,
+      isTriggered: true,
       title: "Thông báo",
       content: "Bạn có chắc muốn quay lại?",
     });
@@ -105,7 +105,7 @@ function UpdateTitle() {
           />
         )}
       </FormWrapper>
-      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
+      <Popup data={popup} trigger={triggerPopup} />
       <Toast {...toastOptions} />
     </>
   );

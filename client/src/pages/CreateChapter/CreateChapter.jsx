@@ -73,7 +73,7 @@ function CreateChapter() {
           handleSubmit={handleSubmit}
         />
       </FormWrapper>
-      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
+      <Popup data={popup} trigger={triggerPopup} />
       <Toast {...toastOptions} />
     </>
   );

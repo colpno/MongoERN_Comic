@@ -303,7 +303,7 @@ function Title() {
           handleClose={handleClosePurchaseBox}
         />
       )}
-      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
+      <Popup data={popup} trigger={triggerPopup} />
       <Toast {...options} />
     </>
   );

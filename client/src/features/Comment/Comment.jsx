@@ -21,12 +21,7 @@ function Comment() {
   const [rootComments, setRootComments] = useState([]);
   const [paginate, setPaginate] = useState({ page: 1, limit: 15, total: 0 });
   const { toastEmitter } = useToast();
-  const { popup, setPopup, triggerPopup } = usePopup({
-    isShown: false,
-    type: "confirm",
-    title: "Xóa bình luận",
-    content: "Bạn có chắc chắn muốn xóa?",
-  });
+  const { popup, setPopup, triggerPopup } = usePopup();
   const initialFormValues = { text: "" };
 
   const fetchComments = () => {
@@ -85,7 +80,10 @@ function Comment() {
     dispatch(setLoading(true));
 
     setPopup({
-      isShown: true,
+      isTriggered: true,
+      variation: "confirm",
+      title: "Xóa bình luận",
+      content: "Bạn có chắc chắn muốn xóa?",
       onConfirm: () => {
         commentService
           .update(commentId, { deletedBy: user._id })
@@ -155,7 +153,7 @@ function Comment() {
         />
         <Pagination pagination={paginate} setPagination={setPaginate} />
       </section>
-      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
+      <Popup data={popup} trigger={triggerPopup} />
     </>
   );
 }

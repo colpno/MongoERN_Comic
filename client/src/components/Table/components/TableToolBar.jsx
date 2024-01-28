@@ -38,7 +38,7 @@ function TableToolBar({
 
   const openTableGuide = () => {
     setPopup({
-      isShown: true,
+      isTriggered: true,
       title: "Các thao tác sẵn có",
       content: <TableGuide />,
       type: "normal",

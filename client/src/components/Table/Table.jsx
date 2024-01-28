@@ -174,7 +174,7 @@ function Table({
           experimentalFeatures={{ newEditingApi: true }}
         />
       </ThemeProvider>
-      {popup.isShown && <Popup data={popup} setShow={triggerPopup} width={400} />}
+      <Popup data={popup} trigger={triggerPopup} />
     </>
   );
 }

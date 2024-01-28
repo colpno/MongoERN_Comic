@@ -23,7 +23,7 @@ function StatisticCount() {
   const [titles, setTitles] = useState([]);
   const [stat, setStat] = useState({ likes: 0, views: 0, totalTitles: 0, comments: 0 });
   const { popup, triggerPopup } = usePopup({
-    isShown: false,
+    isTriggered: false,
     title: "Thu nhập",
     content: <IncomePopup />,
   });
@@ -105,7 +105,7 @@ function StatisticCount() {
           </div>
         </Col>
       </Row>
-      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
+      <Popup data={popup} trigger={triggerPopup} />
     </Container>
   );
 }

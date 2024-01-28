@@ -33,7 +33,7 @@ function Profile() {
 
   const handleOpenChooseAvatar = () => {
     setPopup({
-      isShown: true,
+      isTriggered: true,
       title: "Hình dại diện",
       content: <AvatarBox value={initialValues.avatar} handleOnChange={handleChooseAvatar} />,
     });
@@ -51,7 +51,7 @@ function Profile() {
         </FormWrapper>
       ) : null}
       <Toast {...options} />
-      {popup.isShown && <Popup data={popup} setShow={triggerPopup} height={350} />}
+      <Popup data={popup} trigger={triggerPopup} sx={{ height: "350px" }} />
     </>
   );
 }

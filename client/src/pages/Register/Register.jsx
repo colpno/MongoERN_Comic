@@ -26,7 +26,7 @@ function Register() {
       .register({ username, password, email, role: "member", avatar: robotHead1 })
       .then((response) => {
         setPopup({
-          isShown: true,
+          isTriggered: true,
           title: "Thông báo",
           content: response.message,
         });
@@ -70,7 +70,7 @@ function Register() {
           </p>
         </div>
       </div>
-      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
+      <Popup data={popup} trigger={triggerPopup} />
       <Toast {...toastOptions} />
     </>
   );

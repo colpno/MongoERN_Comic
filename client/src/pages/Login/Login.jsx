@@ -26,7 +26,7 @@ function Login() {
         dispatch(setLoginInfo(response.data));
 
         setPopup({
-          isShown: true,
+          isTriggered: true,
           title: "Thông báo",
           content: response.message,
           onCancel: () => navigate("verify"),
@@ -59,7 +59,7 @@ function Login() {
           </p>
         </div>
       </div>
-      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
+      <Popup data={popup} trigger={triggerPopup} />
       <Toast {...toastOptions} />
     </>
   );

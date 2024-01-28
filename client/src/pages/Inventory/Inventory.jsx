@@ -22,7 +22,7 @@ function Inventory() {
 
   const handleClickIcon = () => {
     setPopup({
-      isShown: true,
+      isTriggered: true,
       title: "Vé",
       content: <TicketExplainPopup />,
     });
@@ -71,7 +71,7 @@ function Inventory() {
           </Col>
         </Row>
       </Container>
-      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
+      <Popup data={popup} trigger={triggerPopup} />
       <Toast {...options} />
     </>
   );

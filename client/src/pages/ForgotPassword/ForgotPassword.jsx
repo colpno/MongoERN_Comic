@@ -40,7 +40,7 @@ function ForgotPassword() {
         .then((response) => {
           dispatch(setLoginInfo(response.data));
           setPopup({
-            isShown: true,
+            isTriggered: true,
             title: "Thông báo",
             content: response.message,
           });
@@ -63,7 +63,7 @@ function ForgotPassword() {
           />
         </FormWrapper>
       </Container>
-      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
+      <Popup data={popup} trigger={triggerPopup} />
       <Toast {...options} />
     </>
   );

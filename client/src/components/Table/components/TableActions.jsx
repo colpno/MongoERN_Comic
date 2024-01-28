@@ -49,7 +49,7 @@ function TableActions({
     );
 
     setPopup({
-      isShown: true,
+      isTriggered: true,
       title: "Xác nhận lưu",
       content: popupContent,
       type: "confirm",
@@ -61,7 +61,7 @@ function TableActions({
 
   const handleDelete = (_id) => () => {
     setPopup({
-      isShown: true,
+      isTriggered: true,
       title: "Xác nhận xóa",
       content: <p>Bạn có chắc chắn muốn xóa không?</p>,
       type: "confirm",

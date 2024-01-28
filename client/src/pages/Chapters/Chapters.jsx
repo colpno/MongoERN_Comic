@@ -37,7 +37,7 @@ function Chapters() {
   const handleDeleteTitle = (id) => {
     if (chapters.length > 0) {
       setPopup({
-        isShown: true,
+        isTriggered: true,
         title: "Thông báo",
         content: "Không thể xóa vì chương vẫn còn tồn tại.",
       });
@@ -62,8 +62,8 @@ function Chapters() {
     setPopup({
       title: "Xóa truyện",
       content: "Bạn có muốn xóa truyện?",
-      type: "confirm",
-      isShown: true,
+      variation: "confirm",
+      isTriggered: true,
       onConfirm: handleDelete,
     });
   };
@@ -132,7 +132,7 @@ function Chapters() {
         </Row>
         <ChapterTable chapters={chapters} onDelete={handleDeleteChapter} />
       </Container>
-      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
+      <Popup data={popup} trigger={triggerPopup} />
       <Toast {...toastOptions} />
     </>
   );

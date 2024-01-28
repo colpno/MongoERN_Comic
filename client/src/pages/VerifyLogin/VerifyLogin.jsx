@@ -272,7 +272,7 @@ function VerifyLogin() {
 
       //  show pop up
       setPopup({
-        isShown: true,
+        isTriggered: true,
         title: "Thông báo",
         content: "Mã OTP đã hết hạn, vui lòng đăng nhập lại.",
       });
@@ -362,7 +362,7 @@ function VerifyLogin() {
           />
         </div>
       </div>
-      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
+      <Popup data={popup} trigger={triggerPopup} />
       <Toast {...options} />
     </>
   );
