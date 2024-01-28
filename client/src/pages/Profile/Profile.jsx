@@ -4,13 +4,12 @@ import { useSelector } from "react-redux";
 
 import { FormWrapper } from "components";
 import { Popup } from "features";
-import { usePopup, useToast, useUpdateUser } from "hooks";
+import { usePopup, useUpdateUser } from "hooks";
 import ProfileForm from "pages/Profile/components/ProfileForm";
 import AvatarBox from "./components/AvatarBox";
 
 function Profile() {
   const user = useSelector((state) => state.user.user);
-  const { Toast, options } = useToast();
   const { popup, setPopup, triggerPopup } = usePopup();
   const { updateUser } = useUpdateUser();
   const [initialValues, setInitialValues] = useState({
@@ -50,7 +49,6 @@ function Profile() {
           />
         </FormWrapper>
       ) : null}
-      <Toast {...options} />
       <Popup data={popup} trigger={triggerPopup} sx={{ height: "350px" }} />
     </>
   );

@@ -18,4 +18,3 @@ export { default as ticketHistoryService } from "./ticketHistory.service";
 export { default as titleService } from "./title.service";
 export { default as titleReportService } from "./titleReport.service";
 export { default as userService } from "./user.service";
-export { default as vnpayService } from "./vnpay.service";
