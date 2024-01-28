@@ -1,6 +1,6 @@
 import { FormWrapper, TitleForm } from "components";
 import { Popup } from "features";
-import { usePopup, useToast } from "hooks";
+import { usePopup } from "hooks";
 import { setLoading } from "libs/redux/slices/common.slice.js";
 import { useDispatch } from "react-redux";
 import { titleService } from "services";
@@ -8,7 +8,6 @@ import { createTitleFormValidation } from "validations/createTitleForm.validatio
 
 function CreateTitle() {
   const dispatch = useDispatch();
-  const { Toast, options: toastOptions, toastEmitter } = useToast();
   const { popup, setPopup, triggerPopup } = usePopup();
 
   const INITIAL_VALUE = {
@@ -34,14 +33,7 @@ function CreateTitle() {
   const handleSubmit = (values, { setSubmitting }) => {
     dispatch(setLoading(true));
 
-    titleService
-      .add(values)
-      .then((response) => {
-        toastEmitter(response.message, "success");
-      })
-      .catch((error) => {
-        toastEmitter(error, "error");
-      });
+    titleService.add(values);
 
     dispatch(setLoading(false));
     setSubmitting(false);
@@ -55,11 +47,9 @@ function CreateTitle() {
           handleCancel={handleCancel}
           initialValues={INITIAL_VALUE}
           validationSchema={createTitleFormValidation}
-          toastEmitter={toastEmitter}
         />
       </FormWrapper>
       <Popup data={popup} trigger={triggerPopup} />
-      <Toast {...toastOptions} />
     </>
   );
 }

@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import { Recommend } from "features";
-import { useToast } from "hooks";
 import {
   setChapter as setChapterStore,
   setChapters as setChaptersStore,
@@ -22,7 +21,6 @@ function Reading() {
   const [chapter, setChapter] = useState({});
   const [chapters, setChapters] = useState([]);
   const [boughtChapter, setBoughtChapter] = useState([]);
-  const { Toast, options, toastEmitter } = useToast();
   // TODO: loading
 
   useEffect(() => {
@@ -51,8 +49,8 @@ function Reading() {
       !!user._id
     );
 
-    Promise.all([chapterPromise, chaptersPromise, chapterTransactionPromise])
-      .then(([chapterResponse, chaptersResponse, chapterTransactionResult]) => {
+    Promise.all([chapterPromise, chaptersPromise, chapterTransactionPromise]).then(
+      ([chapterResponse, chaptersResponse, chapterTransactionResult]) => {
         setChapter(chapterResponse.data[0]);
         setChapters(chaptersResponse.data);
         dispatch(setChapterStore(chapterResponse.data[0]));
@@ -61,8 +59,8 @@ function Reading() {
         setBoughtChapter(
           chapterTransactionResult.data.map((transaction) => transaction.chapter_id)
         );
-      })
-      .catch((error) => toastEmitter(error, "error"));
+      }
+    );
   }, [page]);
 
   useEffect(() => {
@@ -80,17 +78,14 @@ function Reading() {
   }, [chapter]);
 
   return (
-    <>
-      <div className={cx("reading-page")}>
-        {chapter?.contents?.length > 0 && <ReadingComics cx={cx} images={chapter.contents} />}
-        {chapter?._id && <ReadingControls cx={cx} titleId={titleId} chapterId={chapter._id} />}
-        {chapters.length > 0 && (
-          <ReadingPagination chapters={chapters} boughtChapter={boughtChapter} />
-        )}
-        <Recommend />
-      </div>
-      <Toast {...options} />
-    </>
+    <div className={cx("reading-page")}>
+      {chapter?.contents?.length > 0 && <ReadingComics cx={cx} images={chapter.contents} />}
+      {chapter?._id && <ReadingControls cx={cx} titleId={titleId} chapterId={chapter._id} />}
+      {chapters.length > 0 && (
+        <ReadingPagination chapters={chapters} boughtChapter={boughtChapter} />
+      )}
+      <Recommend />
+    </div>
   );
 }
 

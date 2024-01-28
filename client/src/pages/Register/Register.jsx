@@ -3,7 +3,7 @@ import classNames from "classnames/bind";
 import { robotHead1 } from "assets/images/index";
 import { Button } from "components";
 import { Popup } from "features";
-import { usePopup, useToast } from "hooks";
+import { usePopup } from "hooks";
 import { setLoading } from "libs/redux/slices/common.slice.js";
 import { useDispatch } from "react-redux";
 import { userService } from "services";
@@ -16,7 +16,6 @@ const cx = classNames.bind(styles);
 function Register() {
   const dispatch = useDispatch();
   const { popup, setPopup, triggerPopup } = usePopup();
-  const { Toast, options: toastOptions, toastEmitter } = useToast();
 
   const handleSubmit = (values, { setSubmitting }) => {
     dispatch(setLoading(false));
@@ -30,9 +29,6 @@ function Register() {
           title: "Thông báo",
           content: response.message,
         });
-      })
-      .catch((error) => {
-        toastEmitter(error, "error");
       });
 
     dispatch(setLoading(false));
@@ -71,7 +67,6 @@ function Register() {
         </div>
       </div>
       <Popup data={popup} trigger={triggerPopup} />
-      <Toast {...toastOptions} />
     </>
   );
 }

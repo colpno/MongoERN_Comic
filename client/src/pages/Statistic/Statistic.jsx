@@ -4,7 +4,6 @@ import { Container } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
 
 import { TabsContainer } from "components";
-import { useToast } from "hooks";
 import IncomeStat from "./components/IncomeStat";
 import LikeViewStat from "./components/LikeViewStat";
 import styles from "./styles/Statistic.module.scss";
@@ -12,7 +11,6 @@ import styles from "./styles/Statistic.module.scss";
 const cx = classNames.bind(styles);
 
 function Statistic() {
-  const { Toast, options, toastEmitter } = useToast();
   const [searchParams] = useSearchParams();
   let queryTab = searchParams.get("tab") || "";
   const menu = [
@@ -25,14 +23,11 @@ function Statistic() {
   });
 
   return (
-    <>
-      <Container className={cx("wrapper")}>
-        <TabsContainer menu={menu} />
-        {queryTab.includes(menu[0].tab) && <LikeViewStat toastEmitter={toastEmitter} />}
-        {queryTab.includes(menu[1].tab) && <IncomeStat toastEmitter={toastEmitter} />}
-      </Container>
-      <Toast {...options} />
-    </>
+    <Container className={cx("wrapper")}>
+      <TabsContainer menu={menu} />
+      {queryTab.includes(menu[0].tab) && <LikeViewStat />}
+      {queryTab.includes(menu[1].tab) && <IncomeStat />}
+    </Container>
   );
 }
 

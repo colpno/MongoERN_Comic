@@ -1,6 +1,5 @@
 import classNames from "classnames/bind";
 import moment from "moment";
-import PropTypes from "prop-types";
 import { useEffect, useMemo, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,7 +16,7 @@ import TitleStatistic from "./TitleStatistic";
 
 const cx = classNames.bind(styles);
 
-function LikeViewStat({ toastEmitter }) {
+function LikeViewStat() {
   const dispatch = useDispatch();
   // INFO: Data variables
 
@@ -50,15 +49,10 @@ function LikeViewStat({ toastEmitter }) {
     ]);
     params._fields = "order";
 
-    chapterService
-      .getAll(params)
-      .then((response) => {
-        console.log("response:", response);
-        setChapters(response.data);
-      })
-      .catch((error) => {
-        toastEmitter(error, "error");
-      });
+    chapterService.getAll(params).then((response) => {
+      console.log("response:", response);
+      setChapters(response.data);
+    });
 
     dispatch(setLoading(false));
   };
@@ -80,14 +74,9 @@ function LikeViewStat({ toastEmitter }) {
         year: reportYear.chapter.value,
       };
 
-      chapterReportService
-        .getAll(params)
-        .then((response) => {
-          setChapterReports(response.data);
-        })
-        .catch((error) => {
-          toastEmitter(error, "error");
-        });
+      chapterReportService.getAll(params).then((response) => {
+        setChapterReports(response.data);
+      });
 
       dispatch(setLoading(false));
     }
@@ -103,14 +92,9 @@ function LikeViewStat({ toastEmitter }) {
         year: reportYear.chapter.value,
       };
 
-      titleReportService
-        .getAll(params)
-        .then((response) => {
-          setTitleReports(response.data);
-        })
-        .catch((error) => {
-          toastEmitter(error, "error");
-        });
+      titleReportService.getAll(params).then((response) => {
+        setTitleReports(response.data);
+      });
 
       dispatch(setLoading(false));
     }
@@ -324,8 +308,6 @@ function LikeViewStat({ toastEmitter }) {
   );
 }
 
-LikeViewStat.propTypes = {
-  toastEmitter: PropTypes.func.isRequired,
-};
+LikeViewStat.propTypes = {};
 
 export default LikeViewStat;

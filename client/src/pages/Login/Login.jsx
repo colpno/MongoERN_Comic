@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import { Button } from "components";
 import { Popup } from "features";
-import { usePopup, useToast } from "hooks";
+import { usePopup } from "hooks";
 import { setLoginInfo } from "libs/redux/slices/login.slice";
 import { authService } from "services";
 import LoginForm from "./components/LoginForm";
@@ -16,25 +16,19 @@ function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { popup, setPopup, triggerPopup } = usePopup();
-  const { Toast, options: toastOptions, toastEmitter } = useToast();
 
   const handleSubmit = (values, { setSubmitting }) => {
     const { username, password } = values;
-    authService
-      .login(username, password)
-      .then((response) => {
-        dispatch(setLoginInfo(response.data));
+    authService.login(username, password).then((response) => {
+      dispatch(setLoginInfo(response.data));
 
-        setPopup({
-          isTriggered: true,
-          title: "Thông báo",
-          content: response.message,
-          onCancel: () => navigate("verify"),
-        });
-      })
-      .catch((error) => {
-        toastEmitter(error, "error");
+      setPopup({
+        isTriggered: true,
+        title: "Thông báo",
+        content: response.message,
+        onCancel: () => navigate("verify"),
       });
+    });
 
     setSubmitting(false);
   };
@@ -60,7 +54,6 @@ function Login() {
         </div>
       </div>
       <Popup data={popup} trigger={triggerPopup} />
-      <Toast {...toastOptions} />
     </>
   );
 }

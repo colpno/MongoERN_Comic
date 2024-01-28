@@ -8,9 +8,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { TITLE_PAGE_CHAPTERS_PER_PAGE } from "constants/paginate.constant";
 import { socket } from "context/socketContext";
 import { Comment, NoData, Pagination, Popup, Recommend } from "features";
-import { usePagination, usePopup, useToast } from "hooks";
+import { usePagination, usePopup } from "hooks";
 import { setCommentPlace } from "libs/redux/slices/comment.slice";
-import { setLoading } from "libs/redux/slices/common.slice.js";
+import { setLoading, setToast } from "libs/redux/slices/common.slice.js";
 import { setGenresOfTitle, setTitle as setStoreTitle } from "libs/redux/slices/title.slice";
 import { setUser } from "libs/redux/slices/user.slice";
 import {
@@ -35,7 +35,6 @@ function Title() {
   const { pagination, setPagination, setPaginationTotal } = usePagination(
     TITLE_PAGE_CHAPTERS_PER_PAGE
   );
-  const { Toast, options, toastEmitter } = useToast();
   const [state, updateState] = useReducer((prev, next) => ({ ...prev, ...next }), {
     title: {},
     chapters: [],
@@ -86,7 +85,7 @@ function Title() {
     const { _id: chapterId } = chapter;
 
     if (!isLoggingIn) {
-      toastEmitter("Bạn cần phải đăng nhập để thực thiện chức năng", "error");
+      dispatch(setToast("Bạn cần phải đăng nhập để thực thiện chức năng", "error"));
       return;
     }
 
@@ -102,18 +101,14 @@ function Title() {
         .add(titleId, chapterId, method, amount, expiredAt)
         .then((response) => {
           dispatch(setUser(response.data.user));
-          toastEmitter(response.message, "success");
           updateState({
             purchasedHistories: [...state.purchasedHistories, response.data.transaction],
           });
-        })
-        .catch((error) => {
-          toastEmitter(error, "error");
         });
 
       dispatch(setLoading(false));
     } else {
-      toastEmitter("Không đủ để thực hiện chức năng", "error");
+      dispatch(setToast("Không đủ để thực hiện chức năng", "error"));
     }
   };
 
@@ -140,17 +135,12 @@ function Title() {
       _limit: pagination.limit,
     };
 
-    chapterService
-      .getAll(chapterApiParams, false)
-      .then((response) => {
-        setPaginationTotal(response.paginate.total);
-        updateState({
-          chapters: response.data,
-        });
-      })
-      .catch((error) => {
-        toastEmitter(error, "error");
+    chapterService.getAll(chapterApiParams, false).then((response) => {
+      setPaginationTotal(response.paginate.total);
+      updateState({
+        chapters: response.data,
       });
+    });
 
     dispatch(setLoading(false));
   };
@@ -163,14 +153,7 @@ function Title() {
   };
 
   const handleFollow = (titleID) => {
-    followService
-      .add(titleID)
-      .then(() => {
-        toastEmitter(`Bạn đã theo dõi truyện ${state.title.title}`, "success");
-      })
-      .catch((error) => {
-        toastEmitter(error, "error");
-      });
+    followService.add(titleID);
   };
 
   useEffect(() => {}, [state.title]);
@@ -224,7 +207,7 @@ function Title() {
           const promises = [chaptersPromise, genresPromise, chapterTransactionPromise];
 
           const results = await Promise.allSettled(promises);
-          const { fulfilledResults } = handlePromiseAllSettled(results, toastEmitter);
+          const { fulfilledResults } = handlePromiseAllSettled(results);
           const [chaptersResult, genresResult, chapterTransactionResult] = fulfilledResults;
 
           const resultData = {
@@ -304,7 +287,6 @@ function Title() {
         />
       )}
       <Popup data={popup} trigger={triggerPopup} />
-      <Toast {...options} />
     </>
   );
 }

@@ -1,4 +1,4 @@
-export default function handlePromiseAllSettled(promiseResult = [], showErrorFunction = null) {
+export default function handlePromiseAllSettled(promiseResult = []) {
   const fulfilledResults = [];
   const rejectedResults = [];
 
@@ -9,13 +9,6 @@ export default function handlePromiseAllSettled(promiseResult = [], showErrorFun
       fulfilledResults.push(result.value);
     } else {
       rejectedResults.push(result.reason);
-    }
-  }
-
-  if (typeof showErrorFunction === "function") {
-    for (let i = 0; i < rejectedResults.length; i++) {
-      const result = rejectedResults[i];
-      showErrorFunction(result, "error");
     }
   }
 

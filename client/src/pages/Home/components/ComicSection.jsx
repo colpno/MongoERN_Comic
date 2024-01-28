@@ -1,11 +1,10 @@
 import classNames from "classnames/bind";
-import { Slide } from "react-awesome-reveal";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { Slide } from "react-awesome-reveal";
 import { Container, Row } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 
 import { CardListWithTitle } from "components";
-import { useToast } from "hooks";
 import { setTop5Titles } from "libs/redux/slices/title.slice";
 import { genreService, titleService } from "services";
 import { sortArray } from "utils/arrayMethods";
@@ -18,7 +17,6 @@ function ComicSection() {
   const dispatch = useDispatch();
   const [genres, setGenres] = useState([]);
   const [titles, setTitles] = useState({ top5: [], approvedTitles: [] });
-  const { toastEmitter } = useToast();
 
   const titlesByGenre = useMemo(() => {
     return genres.map((genre, genreIndex) => {
@@ -53,26 +51,22 @@ function ComicSection() {
       _limit: 4,
     };
 
-    try {
-      const genresResult = await genreService.getAll(genresQueryParams);
-      const allGenreNames = genresResult.data.map((genre) => genre.name);
+    const genresResult = await genreService.getAll(genresQueryParams);
+    const allGenreNames = genresResult.data.map((genre) => genre.name);
 
-      const titlesQueryParams = {
-        genres_in: allGenreNames,
-        _embed: JSON.stringify([
-          { collection: "approved_status_id", fields: "-_id code", match: { code: "apd" } },
-          { collection: "status_id", fields: "-_id code", match: { code: "vis" } },
-        ]),
-      };
+    const titlesQueryParams = {
+      genres_in: allGenreNames,
+      _embed: JSON.stringify([
+        { collection: "approved_status_id", fields: "-_id code", match: { code: "apd" } },
+        { collection: "status_id", fields: "-_id code", match: { code: "vis" } },
+      ]),
+    };
 
-      const titleResult = await titleService.getAll(titlesQueryParams, false);
-      const top5 = sortArray(titleResult.data, "like", "desc").slice(0, 5);
+    const titleResult = await titleService.getAll(titlesQueryParams, false);
+    const top5 = sortArray(titleResult.data, "like", "desc").slice(0, 5);
 
-      setTitles({ top5, approvedTitles: titleResult.data });
-      setGenres(genresResult.data);
-    } catch (error) {
-      toastEmitter(error, "error");
-    }
+    setTitles({ top5, approvedTitles: titleResult.data });
+    setGenres(genresResult.data);
   };
 
   useEffect(() => {

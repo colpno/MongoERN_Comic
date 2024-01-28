@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { HeadTitleMark } from "components";
 import { socket } from "context/socketContext";
 import { Pagination, Popup } from "features";
-import { usePopup, useToast } from "hooks";
+import { usePopup } from "hooks";
 import { setLoading } from "libs/redux/slices/common.slice.js";
 import { commentService } from "services";
 import { CommentForm, CommentList, RequireSignIn } from "./components";
@@ -20,7 +20,6 @@ function Comment() {
   const [comments, setComments] = useState([]);
   const [rootComments, setRootComments] = useState([]);
   const [paginate, setPaginate] = useState({ page: 1, limit: 15, total: 0 });
-  const { toastEmitter } = useToast();
   const { popup, setPopup, triggerPopup } = usePopup();
   const initialFormValues = { text: "" };
 
@@ -34,10 +33,7 @@ function Comment() {
       _fields: "author text slug parent_slug comment_replies_num createdAt deletedBy",
     };
 
-    commentService
-      .getAll(params)
-      .then((response) => setComments(response.data))
-      .catch((error) => toastEmitter(error, "error"));
+    commentService.getAll(params).then((response) => setComments(response.data));
   };
 
   const handleSubmit = (values, { setSubmitting, resetForm }) => {
@@ -52,14 +48,9 @@ function Comment() {
         parentSlug: slug,
       };
 
-      commentService
-        .add(data)
-        .then(() => {
-          resetForm();
-        })
-        .catch((error) => {
-          toastEmitter(error, "error");
-        });
+      commentService.add(data).then(() => {
+        resetForm();
+      });
     }
 
     dispatch(setLoading(false));
@@ -85,12 +76,7 @@ function Comment() {
       title: "Xóa bình luận",
       content: "Bạn có chắc chắn muốn xóa?",
       onConfirm: () => {
-        commentService
-          .update(commentId, { deletedBy: user._id })
-          .then(() => {})
-          .catch((error) => {
-            toastEmitter(error, "error");
-          });
+        commentService.update(commentId, { deletedBy: user._id }).then(() => {});
       },
     });
 

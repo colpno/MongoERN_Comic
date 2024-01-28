@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { ChapterForm, FormWrapper } from "components";
-import { useToast } from "hooks";
 import { setLoading } from "libs/redux/slices/common.slice.js";
 import { useDispatch } from "react-redux";
 import { chapterService } from "services";
@@ -11,7 +10,6 @@ import { updateChapterFormValidation } from "validations/updateChapterForm.valid
 function UpdateChapter() {
   const dispatch = useDispatch();
   const { chapterId } = useParams();
-  const { Toast, options: toastOptions, toastEmitter } = useToast();
   const [chapter, setChapter] = useState({});
 
   const INITIAL_VALUE = useMemo(
@@ -86,14 +84,7 @@ function UpdateChapter() {
     changedValues.titleId = chapter.title_id;
 
     if (Object.keys(changedValues).length > 1) {
-      chapterService
-        .update(chapterId, changedValues)
-        .then((response) => {
-          toastEmitter(response.message, "success");
-        })
-        .catch((error) => {
-          toastEmitter(error, "error");
-        });
+      chapterService.update(chapterId, changedValues);
     }
 
     dispatch(setLoading(false));
@@ -104,23 +95,19 @@ function UpdateChapter() {
       .getOne(chapterId, {
         _embed: JSON.stringify([{ collection: "status_id", fields: "_id" }]),
       })
-      .then((response) => setChapter(response.data))
-      .catch((error) => toastEmitter(error, "error"));
+      .then((response) => setChapter(response.data));
   }, []);
 
   return (
-    <>
-      <FormWrapper title="Chỉnh sửa chương">
-        {Object.keys(chapter).length && (
-          <ChapterForm
-            handleSubmit={handleSubmit}
-            initialValues={INITIAL_VALUE}
-            validationSchema={updateChapterFormValidation}
-          />
-        )}
-      </FormWrapper>
-      <Toast {...toastOptions} />
-    </>
+    <FormWrapper title="Chỉnh sửa chương">
+      {Object.keys(chapter).length && (
+        <ChapterForm
+          handleSubmit={handleSubmit}
+          initialValues={INITIAL_VALUE}
+          validationSchema={updateChapterFormValidation}
+        />
+      )}
+    </FormWrapper>
   );
 }
 

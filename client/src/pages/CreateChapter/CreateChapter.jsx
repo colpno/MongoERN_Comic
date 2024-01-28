@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 
 import { ChapterForm, FormWrapper } from "components";
 import { Popup } from "features";
-import { usePopup, useToast } from "hooks";
+import { usePopup } from "hooks";
 import { setLoading } from "libs/redux/slices/common.slice.js";
 import { useDispatch } from "react-redux";
 import { chapterService } from "services";
@@ -12,7 +12,6 @@ import { createChapterFormValidation } from "validations";
 function CreateChapter() {
   const dispatch = useDispatch();
   const { titleId } = useParams();
-  const { Toast, options: toastOptions, toastEmitter } = useToast();
   const [chapters, setChapters] = useState([]);
   const { popup, triggerPopup } = usePopup();
 
@@ -32,10 +31,7 @@ function CreateChapter() {
       _order: "desc",
       _limit: 1,
     };
-    chapterService
-      .getAll(params)
-      .then((response) => setChapters(response.data))
-      .catch((error) => toastEmitter(error, "error"));
+    chapterService.getAll(params).then((response) => setChapters(response.data));
   };
 
   const handleSubmit = (values, resetForm) => {
@@ -46,16 +42,10 @@ function CreateChapter() {
       titleId,
     };
 
-    chapterService
-      .add(params)
-      .then(() => {
-        toastEmitter("Truyện đã được thêm thành công", "success");
-        fetchData();
-        resetForm();
-      })
-      .catch((error) => {
-        toastEmitter(error, "error");
-      });
+    chapterService.add(params).then(() => {
+      fetchData();
+      resetForm();
+    });
 
     dispatch(setLoading(false));
   };
@@ -74,7 +64,6 @@ function CreateChapter() {
         />
       </FormWrapper>
       <Popup data={popup} trigger={triggerPopup} />
-      <Toast {...toastOptions} />
     </>
   );
 }

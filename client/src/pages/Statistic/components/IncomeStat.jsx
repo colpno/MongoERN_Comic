@@ -1,18 +1,16 @@
 import classNames from "classnames/bind";
 import moment from "moment";
-import PropTypes from "prop-types";
 import { useMemo, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 
 import { getChartColors, getMonthArray } from "utils/constants";
 import getYearOptions from "utils/getYearOptions";
-import IncomeChart from "./IncomeChart";
 import styles from "../styles/Statistic.module.scss";
+import IncomeChart from "./IncomeChart";
 
 const cx = classNames.bind(styles);
 
-// eslint-disable-next-line no-unused-vars
-function IncomeStat({ toastEmitter }) {
+function IncomeStat() {
   // INFO: Data variables
 
   const yearOptions = getYearOptions();
@@ -67,8 +65,6 @@ function IncomeStat({ toastEmitter }) {
   );
 }
 
-IncomeStat.propTypes = {
-  toastEmitter: PropTypes.func.isRequired,
-};
+IncomeStat.propTypes = {};
 
 export default IncomeStat;

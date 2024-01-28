@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 
 import { Logo } from "assets/images";
 import { Button } from "components";
-import { useToast } from "hooks";
+import { setToast } from "libs/redux/slices/common.slice.js";
 import { setFavorite } from "libs/redux/slices/readingChapter.slice";
 import { changeTheme } from "libs/redux/slices/theme.slice";
 import { favoriteService, titleService } from "services";
@@ -19,7 +19,6 @@ const cx = classNames.bind(styles);
 function ReadingHeader() {
   const dispatch = useDispatch();
   const { titleId } = useParams();
-  const { toastEmitter } = useToast();
   const theme = useSelector((state) => state.theme.theme);
   const isDarkMode = theme === "dark";
   const user = useSelector((state) => state.user.user);
@@ -40,40 +39,28 @@ function ReadingHeader() {
 
   const handleLikeClick = () => {
     if (isEmpty(user._id)) {
-      toastEmitter("Bạn cần phải đăng nhập để thích truyện", "error");
+      dispatch(setToast("Bạn cần phải đăng nhập để thích truyện", "error"));
       return;
     }
 
     if (!state.controls.isLiked) {
-      favoriteService
-        .add(user._id, chapter._id)
-        .then((response) => {
-          toastEmitter(response.message, "success");
-          activeLike(true);
-          dispatch(setFavorite(response.data));
-        })
-        .catch((error) => {
-          toastEmitter(error, "error");
-        });
+      favoriteService.add(user._id, chapter._id).then((response) => {
+        activeLike(true);
+        dispatch(setFavorite(response.data));
+      });
     }
     if (state.controls.isLiked) {
-      favoriteService
-        .delete(user._id, chapter._id)
-        .then(() => {
-          activeLike(false);
-          dispatch(setFavorite({}));
-        })
-        .catch((error) => {
-          toastEmitter(error, "error");
-        });
+      favoriteService.delete(user._id, chapter._id).then(() => {
+        activeLike(false);
+        dispatch(setFavorite({}));
+      });
     }
   };
 
   useEffect(() => {
     titleService
       .getOne({ _id: titleId }, false)
-      .then((response) => updateState({ title: response.data }))
-      .catch((error) => toastEmitter(error, "error"));
+      .then((response) => updateState({ title: response.data }));
   }, []);
 
   useEffect(() => {

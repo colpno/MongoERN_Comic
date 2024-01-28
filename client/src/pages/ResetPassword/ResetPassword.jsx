@@ -5,17 +5,15 @@ import { useParams } from "react-router-dom";
 import * as Yup from "yup";
 
 import { FormWrapper } from "components";
-import { useToast } from "hooks";
 import { authService } from "services";
-import ResetPasswordForm from "./components/ResetPasswordForm";
 import styles from "./ResetPassword.module.scss";
+import ResetPasswordForm from "./components/ResetPasswordForm";
 
 const cx = classNames.bind(styles);
 
 function ResetPassword() {
   const loginInfo = useSelector((state) => state.login.info);
   const { token } = useParams();
-  const { Toast, options, toastEmitter } = useToast();
 
   const INITIAL_VALUES = { password: "", confirmPassword: "" };
 
@@ -37,27 +35,21 @@ function ResetPassword() {
     const { password } = values;
 
     if (password) {
-      authService
-        .resetPassword(loginInfo.id, password, token)
-        .then((response) => toastEmitter(response.message))
-        .catch((error) => toastEmitter(error, "error"));
+      authService.resetPassword(loginInfo.id, password, token);
     }
   };
 
   return (
-    <>
-      <Container>
-        <FormWrapper title="Quên mật khẩu" cx={cx}>
-          <ResetPasswordForm
-            cx={cx}
-            handleSubmit={handleSubmit}
-            INITIAL_VALUES={INITIAL_VALUES}
-            VALIDATION_SCHEMA={VALIDATION_SCHEMA}
-          />
-        </FormWrapper>
-      </Container>
-      <Toast {...options} />
-    </>
+    <Container>
+      <FormWrapper title="Quên mật khẩu" cx={cx}>
+        <ResetPasswordForm
+          cx={cx}
+          handleSubmit={handleSubmit}
+          INITIAL_VALUES={INITIAL_VALUES}
+          VALIDATION_SCHEMA={VALIDATION_SCHEMA}
+        />
+      </FormWrapper>
+    </Container>
   );
 }
 

@@ -2,7 +2,6 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { useToast } from "hooks";
 import { setLoading } from "libs/redux/slices/common.slice.js";
 import { chapterTransactionService } from "services";
 import HiredChaptersTable from "./components/HiredChaptersTable";
@@ -11,7 +10,6 @@ function HiredChapters({ cx }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const [transactions, setTransactions] = useState([]);
-  const { Toast, options, toastEmitter } = useToast();
 
   useEffect(() => {
     dispatch(setLoading(true));
@@ -25,26 +23,16 @@ function HiredChapters({ cx }) {
       _fields: "-__v -user_id",
     };
 
-    chapterTransactionService
-      .getAll(params)
-      .then((response) => {
-        const hiredChapters = response.data.filter((hiredChapter) => hiredChapter.expiredAt);
+    chapterTransactionService.getAll(params).then((response) => {
+      const hiredChapters = response.data.filter((hiredChapter) => hiredChapter.expiredAt);
 
-        setTransactions(hiredChapters);
-      })
-      .catch((error) => {
-        toastEmitter(error, "error");
-      });
+      setTransactions(hiredChapters);
+    });
 
     dispatch(setLoading(false));
   }, []);
 
-  return (
-    <>
-      <HiredChaptersTable transactions={transactions} cx={cx} />
-      <Toast {...options} />
-    </>
-  );
+  return <HiredChaptersTable transactions={transactions} cx={cx} />;
 }
 
 HiredChapters.propTypes = {

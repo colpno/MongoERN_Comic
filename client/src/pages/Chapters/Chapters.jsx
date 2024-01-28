@@ -6,7 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { Button } from "components";
 import { Popup } from "features";
-import { usePopup, useToast } from "hooks";
+import { usePopup } from "hooks";
 import { setLoading } from "libs/redux/slices/common.slice.js";
 import { useDispatch } from "react-redux";
 import { chapterService, titleService } from "services";
@@ -29,7 +29,6 @@ function Chapters() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { titleId } = useParams();
-  const { Toast, options: toastOptions, toastEmitter } = useToast();
   const [title, setTitle] = useState({});
   const [chapters, setChapters] = useState([]);
   const { popup, setPopup, triggerPopup } = usePopup();
@@ -47,14 +46,9 @@ function Chapters() {
     const handleDelete = () => {
       dispatch(setLoading(true));
 
-      titleService
-        .delete(id, {})
-        .then(() => {
-          navigate(-1);
-        })
-        .catch((error) => {
-          toastEmitter(error, "error");
-        });
+      titleService.delete(id, {}).then(() => {
+        navigate(-1);
+      });
 
       dispatch(setLoading(false));
     };
@@ -77,39 +71,31 @@ function Chapters() {
 
     chapterService
       .delete(params)
-      .then((response) => {
+      .then(() => {
         setChapters((prev) =>
           prev.filter((item) => (Array.isArray(ids) ? !ids.includes(item._id) : ids !== item._id))
         );
-        toastEmitter(response.message);
       })
-      .catch((error) => {
+      .catch(() => {
         setRowErrorId(ids);
-        toastEmitter(error, "error");
       });
 
     dispatch(setLoading(false));
   };
 
   useEffect(() => {
-    titleService
-      .getOne({ _id: titleId })
-      .then(async (titleResult) => {
-        const chapterParams = {
-          title_id: titleId,
-          _embed: JSON.stringify([{ collection: "status_id", fields: "-_id status" }]),
-          _fields: "-__v -_guid -cover.cloud_public_id -contents.cloud_public_id",
-        };
+    titleService.getOne({ _id: titleId }).then(async (titleResult) => {
+      const chapterParams = {
+        title_id: titleId,
+        _embed: JSON.stringify([{ collection: "status_id", fields: "-_id status" }]),
+        _fields: "-__v -_guid -cover.cloud_public_id -contents.cloud_public_id",
+      };
 
-        chapterService
-          .getAll(chapterParams)
-          .then((chapterResult) => {
-            titleResult && setTitle(titleResult.data);
-            chapterResult && setChapters(chapterResult.data);
-          })
-          .catch((error) => toastEmitter(error, "error"));
-      })
-      .catch((error) => toastEmitter(error, "error"));
+      chapterService.getAll(chapterParams).then((chapterResult) => {
+        titleResult && setTitle(titleResult.data);
+        chapterResult && setChapters(chapterResult.data);
+      });
+    });
   }, []);
 
   return (
@@ -133,7 +119,6 @@ function Chapters() {
         <ChapterTable chapters={chapters} onDelete={handleDeleteChapter} />
       </Container>
       <Popup data={popup} trigger={triggerPopup} />
-      <Toast {...toastOptions} />
     </>
   );
 }

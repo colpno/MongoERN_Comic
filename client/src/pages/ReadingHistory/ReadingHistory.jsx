@@ -2,7 +2,6 @@ import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 
-import { useToast } from "hooks";
 import { setLoading } from "libs/redux/slices/common.slice.js";
 import { useDispatch } from "react-redux";
 import { readingHistoryService } from "services";
@@ -14,7 +13,6 @@ const cx = classNames.bind(styles);
 function ReadingHistory() {
   const dispatch = useDispatch();
   const [histories, setHistories] = useState([]);
-  const { Toast, options, toastEmitter } = useToast();
 
   useEffect(() => {
     dispatch(setLoading(true));
@@ -27,25 +25,17 @@ function ReadingHistory() {
       _fields: "-user_id -__v",
     };
 
-    readingHistoryService
-      .getAll(params)
-      .then((response) => {
-        setHistories(response.data);
-      })
-      .catch((error) => {
-        toastEmitter(error, "error");
-      });
+    readingHistoryService.getAll(params).then((response) => {
+      setHistories(response.data);
+    });
 
     dispatch(setLoading(false));
   }, []);
 
   return (
-    <>
-      <Container className={cx("reading-history")}>
-        <ReadingHistoryTable readingHistories={histories} />
-      </Container>
-      <Toast {...options} />
-    </>
+    <Container className={cx("reading-history")}>
+      <ReadingHistoryTable readingHistories={histories} />
+    </Container>
   );
 }
 

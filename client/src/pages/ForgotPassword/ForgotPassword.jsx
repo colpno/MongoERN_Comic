@@ -5,17 +5,16 @@ import * as Yup from "yup";
 
 import { FormWrapper } from "components";
 import { Popup } from "features";
-import { usePopup, useToast } from "hooks";
+import { usePopup } from "hooks";
 import { setLoginInfo } from "libs/redux/slices/login.slice";
 import { authService } from "services";
-import ForgotPasswordForm from "./components/ForgotPasswordForm";
 import styles from "./ForgotPassword.module.scss";
+import ForgotPasswordForm from "./components/ForgotPasswordForm";
 
 const cx = classNames.bind(styles);
 
 function ForgotPassword() {
   const dispatch = useDispatch();
-  const { Toast, options, toastEmitter } = useToast();
   const { popup, setPopup, triggerPopup } = usePopup();
 
   const INITIAL_VALUES = {
@@ -35,19 +34,14 @@ function ForgotPassword() {
     const { username, email } = values;
 
     if (username && email) {
-      authService
-        .forgotPassword(username, email)
-        .then((response) => {
-          dispatch(setLoginInfo(response.data));
-          setPopup({
-            isTriggered: true,
-            title: "Thông báo",
-            content: response.message,
-          });
-        })
-        .catch((error) => {
-          toastEmitter(error.data || error.data.error || error.data.message, "error");
+      authService.forgotPassword(username, email).then((response) => {
+        dispatch(setLoginInfo(response.data));
+        setPopup({
+          isTriggered: true,
+          title: "Thông báo",
+          content: response.message,
         });
+      });
     }
   };
 
@@ -64,7 +58,6 @@ function ForgotPassword() {
         </FormWrapper>
       </Container>
       <Popup data={popup} trigger={triggerPopup} />
-      <Toast {...options} />
     </>
   );
 }

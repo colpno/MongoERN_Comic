@@ -4,7 +4,6 @@ import { useCallback, useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 
-import { useToast } from "hooks";
 import { setLoading } from "libs/redux/slices/common.slice.js";
 import { personalNotificationService } from "services";
 import styles from "./MyNotice.module.scss";
@@ -16,7 +15,6 @@ function MyNotice() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const [notifications, setNotifications] = useState([]);
-  const { Toast, options, toastEmitter } = useToast();
 
   const handleRead = useCallback((row) => {
     dispatch(setLoading(true));
@@ -24,17 +22,14 @@ function MyNotice() {
     const now = moment().toISOString();
     const data = { read_at: row.read_at ? null : now };
 
-    personalNotificationService
-      .update(row._id, data)
-      .then((response) => {
-        const { data: newNotice } = response;
-        setNotifications((prev) => {
-          return prev.map((notification) => {
-            return notification._id === newNotice._id ? newNotice : notification;
-          });
+    personalNotificationService.update(row._id, data).then((response) => {
+      const { data: newNotice } = response;
+      setNotifications((prev) => {
+        return prev.map((notification) => {
+          return notification._id === newNotice._id ? newNotice : notification;
         });
-      })
-      .catch((error) => toastEmitter(error, "error"));
+      });
+    });
 
     dispatch(setLoading(false));
   }, []);
@@ -46,14 +41,7 @@ function MyNotice() {
       _id_in: ids,
     };
 
-    personalNotificationService
-      .delete(params)
-      .then(() => {
-        toastEmitter("Xóa thông báo thành công", "succes");
-      })
-      .catch((error) => {
-        toastEmitter(error, "error");
-      });
+    personalNotificationService.delete(params);
 
     dispatch(setLoading(false));
   };
@@ -65,33 +53,25 @@ function MyNotice() {
       _fields: "-user_id",
     };
 
-    personalNotificationService
-      .getAll(params)
-      .then((response) => {
-        setNotifications(response.data);
-      })
-      .catch((error) => {
-        toastEmitter(error, "error");
-      });
+    personalNotificationService.getAll(params).then((response) => {
+      setNotifications(response.data);
+    });
 
     dispatch(setLoading(false));
   }, []);
 
   return (
-    <>
-      <Container className={cx("notification")}>
-        <Row>
-          <Col>
-            <MyNoticeTable
-              notifications={notifications}
-              onRead={handleRead}
-              onDelete={handleDelete}
-            />
-          </Col>
-        </Row>
-      </Container>
-      <Toast {...options} />
-    </>
+    <Container className={cx("notification")}>
+      <Row>
+        <Col>
+          <MyNoticeTable
+            notifications={notifications}
+            onRead={handleRead}
+            onDelete={handleDelete}
+          />
+        </Col>
+      </Row>
+    </Container>
   );
 }
 

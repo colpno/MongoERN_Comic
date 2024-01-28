@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
-import { useToast } from "hooks";
 import { followService } from "services";
 import FollowTable from "./components/FollowTable";
 import styles from "./styles/Follow.module.scss";
@@ -13,7 +12,6 @@ const cx = classNames.bind(styles);
 function Follow() {
   const user = useSelector((state) => state.user.user);
   const [follows, setFollows] = useState([]);
-  const { Toast, options, toastEmitter } = useToast();
 
   const handleDelete = (data) => {
     const ids = data instanceof Map ? Array.from(data.keys()) : data;
@@ -21,15 +19,11 @@ function Follow() {
       _id_in: ids,
     };
 
-    followService
-      .delete(params)
-      .then(() => {
-        setFollows((prev) =>
-          prev.filter((item) => (Array.isArray(ids) ? !ids.includes(item._id) : ids !== item._id))
-        );
-        toastEmitter("Hủy theo dõi thành công", "success");
-      })
-      .catch((error) => toastEmitter(error, "error"));
+    followService.delete(params).then(() => {
+      setFollows((prev) =>
+        prev.filter((item) => (Array.isArray(ids) ? !ids.includes(item._id) : ids !== item._id))
+      );
+    });
   };
 
   useEffect(() => {
@@ -38,19 +32,13 @@ function Follow() {
       _embed: JSON.stringify([{ collection: "title_id", fields: "title cover.source author" }]),
       _fields: "-user_id -__v",
     };
-    followService
-      .getAll(params)
-      .then((response) => setFollows(response.data))
-      .catch((error) => toastEmitter(error, "error"));
+    followService.getAll(params).then((response) => setFollows(response.data));
   }, []);
 
   return (
-    <>
-      <Container className={cx("follow")}>
-        <FollowTable follows={follows} onDelete={handleDelete} />
-      </Container>
-      <Toast {...options} />
-    </>
+    <Container className={cx("follow")}>
+      <FollowTable follows={follows} onDelete={handleDelete} />
+    </Container>
   );
 }
 

@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 
 import { Button } from "components";
 import { Popup } from "features";
-import { usePopup, useToast } from "hooks";
+import { usePopup } from "hooks";
 import TicketExplainPopup from "pages/Title/components/TicketExplainPopup";
 import { chapterTransactionService } from "services";
 import { ReactComponent as TicketLogo } from "./assets/images/ticket.svg";
@@ -18,7 +18,6 @@ function Inventory() {
   const user = useSelector((state) => state.user.user);
   const [chapters, setChapters] = useState([]);
   const { popup, setPopup, triggerPopup } = usePopup();
-  const { Toast, options, toastEmitter } = useToast();
 
   const handleClickIcon = () => {
     setPopup({
@@ -41,8 +40,7 @@ function Inventory() {
         // setChapters(allData);
         // setPaginationTotal(allData.length);
         setChapters([]);
-      })
-      .catch((error) => toastEmitter(error, "error"));
+      });
   }, []);
 
   return (
@@ -72,7 +70,6 @@ function Inventory() {
         </Row>
       </Container>
       <Popup data={popup} trigger={triggerPopup} />
-      <Toast {...options} />
     </>
   );
 }

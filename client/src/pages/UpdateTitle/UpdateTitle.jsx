@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 
 import { FormWrapper, TitleForm } from "components";
 import { Popup } from "features";
-import { usePopup, useToast } from "hooks";
+import { usePopup } from "hooks";
 import { setLoading } from "libs/redux/slices/common.slice.js";
 import { useDispatch } from "react-redux";
 import { titleService } from "services";
@@ -13,7 +13,6 @@ function UpdateTitle() {
   const dispatch = useDispatch();
   const { titleId } = useParams();
   const [title, setTitle] = useState({});
-  const { Toast, options: toastOptions, toastEmitter } = useToast();
   const { popup, setPopup, triggerPopup } = usePopup();
   const hasData = Object.keys(title).length > 0;
   const INITIAL_VALUE = hasData && {
@@ -34,14 +33,7 @@ function UpdateTitle() {
     const data = { ...values, guid: title._guid };
     if (values.cover) data.oldCover = title.cover;
 
-    titleService
-      .update(titleId, data)
-      .then((response) => {
-        toastEmitter(response.message, "success");
-      })
-      .catch((error) => {
-        toastEmitter(error, "error");
-      });
+    titleService.update(titleId, data);
 
     dispatch(setLoading(false));
   };
@@ -80,12 +72,9 @@ function UpdateTitle() {
       _embed: JSON.stringify([{ collection: "status_id", fields: "-_id code" }]),
     };
 
-    titleService
-      .getOne(params)
-      .then((response) => {
-        setTitle(response.data);
-      })
-      .catch((error) => toastEmitter(error, "error"));
+    titleService.getOne(params).then((response) => {
+      setTitle(response.data);
+    });
   }, []);
 
   return (
@@ -101,12 +90,10 @@ function UpdateTitle() {
               largeCover: title.cover.source,
             }}
             validationSchema={updateTitleFormValidation}
-            toastEmitter={toastEmitter}
           />
         )}
       </FormWrapper>
       <Popup data={popup} trigger={triggerPopup} />
-      <Toast {...toastOptions} />
     </>
   );
 }

@@ -8,7 +8,8 @@ import { useNavigate } from "react-router-dom";
 
 import { Button } from "components";
 import { Popup } from "features";
-import { usePopup, useToast } from "hooks";
+import { usePopup } from "hooks";
+import { setToast } from "libs/redux/slices/common.slice.js";
 import { setLoginInfo as setLoginInfoStore } from "libs/redux/slices/login.slice";
 import { setUser } from "libs/redux/slices/user.slice";
 import { authService } from "services";
@@ -25,8 +26,6 @@ function VerifyLogin() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const { Toast, options, toastEmitter } = useToast();
 
   const reSendCountdownRef = useRef(null);
   const expiredCountdownRef = useRef(null);
@@ -60,26 +59,21 @@ function VerifyLogin() {
 
     // if the all inserted otp don't match total of otp slots
     if (OTPString.length !== OTPKeys.length) {
-      toastEmitter("Mã OTP không hợp lệ", "error");
+      dispatch(setToast("Mã OTP không hợp lệ", "error"));
       return;
     }
 
     const { id, username, email } = loginInfo;
 
     if (!!id && !!username && !!email) {
-      authService
-        .verifyLogin(id, username, email, OTPString)
-        .then((response) => {
-          // save user's account info to redux
-          dispatch(setUser(response.data));
+      authService.verifyLogin(id, username, email, OTPString).then((response) => {
+        // save user's account info to redux
+        dispatch(setUser(response.data));
 
-          toastEmitter("Đăng nhập thành công", "success");
-
-          setTimeout(() => {
-            navigate("/");
-          }, 1000);
-        })
-        .catch((error) => toastEmitter(error, "error"));
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
+      });
     }
   };
 
@@ -153,7 +147,7 @@ function VerifyLogin() {
     // check if value user insert is number
     const match = value.match(/^(\s*|\d+)$/);
     if (!match) {
-      toastEmitter("Mã OTP phải là số", "error");
+      dispatch(setToast("Mã OTP phải là số", "error"));
       return;
     }
 
@@ -214,13 +208,9 @@ function VerifyLogin() {
   const handleReSend = () => {
     const { id, username, email } = loginInfo;
 
-    authService
-      .sendOTP(id, username, email)
-      .then((response) => {
-        dispatch(setLoginInfoStore(response.data));
-        toastEmitter(response.message, "success");
-      })
-      .catch((error) => toastEmitter(error, "error"));
+    authService.sendOTP(id, username, email).then((response) => {
+      dispatch(setLoginInfoStore(response.data));
+    });
 
     setReSend((prev) => ({ ...prev, disable: true }));
   };
@@ -363,7 +353,6 @@ function VerifyLogin() {
         </div>
       </div>
       <Popup data={popup} trigger={triggerPopup} />
-      <Toast {...options} />
     </>
   );
 }

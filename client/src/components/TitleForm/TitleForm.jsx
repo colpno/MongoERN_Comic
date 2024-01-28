@@ -12,14 +12,7 @@ import styles from "./TitleForm.module.scss";
 
 const cx = classNames.bind(styles);
 
-function TitleForm({
-  initialValues,
-  validationSchema,
-  handleCancel,
-  handleSubmit,
-  imageBlob,
-  toastEmitter,
-}) {
+function TitleForm({ initialValues, validationSchema, handleCancel, handleSubmit, imageBlob }) {
   const [genres, setGenres] = useState([]);
   const [statuses, setStatuses] = useState([]);
   const releaseDayOptions = getReleaseDayOptions();
@@ -53,7 +46,7 @@ function TitleForm({
       const statusPromise = objectStatusService.getAll(statusParams);
 
       const results = await Promise.allSettled([genrePromise, statusPromise]);
-      const { fulfilledResults } = handlePromiseAllSettled(results, toastEmitter);
+      const { fulfilledResults } = handlePromiseAllSettled(results);
       const [genreResult, statusResult] = fulfilledResults;
 
       genreResult && setGenres(genreResult.data);
@@ -208,7 +201,6 @@ TitleForm.propTypes = {
     cover: PropTypes.string,
     largeCover: PropTypes.string,
   }),
-  toastEmitter: PropTypes.func.isRequired,
 };
 
 TitleForm.defaultProps = {
