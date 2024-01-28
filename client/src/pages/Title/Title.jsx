@@ -85,7 +85,9 @@ function Title() {
     const { _id: chapterId } = chapter;
 
     if (!isLoggingIn) {
-      dispatch(setToast("Bạn cần phải đăng nhập để thực thiện chức năng", "error"));
+      dispatch(
+        setToast({ message: "Bạn cần phải đăng nhập để thực thiện chức năng", mode: "error" })
+      );
       return;
     }
 
@@ -108,7 +110,7 @@ function Title() {
 
       dispatch(setLoading(false));
     } else {
-      dispatch(setToast("Không đủ để thực hiện chức năng", "error"));
+      dispatch(setToast({ message: "Không đủ để thực hiện chức năng", mode: "error" }));
     }
   };
 

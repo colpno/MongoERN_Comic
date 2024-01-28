@@ -39,7 +39,7 @@ function ReadingHeader() {
 
   const handleLikeClick = () => {
     if (isEmpty(user._id)) {
-      dispatch(setToast("Bạn cần phải đăng nhập để thích truyện", "error"));
+      dispatch(setToast({ message: "Bạn cần phải đăng nhập để thích truyện", mode: "error" }));
       return;
     }
 

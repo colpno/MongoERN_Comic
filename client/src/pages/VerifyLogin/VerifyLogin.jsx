@@ -59,7 +59,7 @@ function VerifyLogin() {
 
     // if the all inserted otp don't match total of otp slots
     if (OTPString.length !== OTPKeys.length) {
-      dispatch(setToast("Mã OTP không hợp lệ", "error"));
+      dispatch(setToast({ message: "Mã OTP không hợp lệ", mode: "error" }));
       return;
     }
 
@@ -147,7 +147,7 @@ function VerifyLogin() {
     // check if value user insert is number
     const match = value.match(/^(\s*|\d+)$/);
     if (!match) {
-      dispatch(setToast("Mã OTP phải là số", "error"));
+      dispatch(setToast({ message: "Mã OTP phải là số", mode: "error" }));
       return;
     }
 

@@ -24,7 +24,7 @@ function usePreviewImage(initialState, fileSize, setFieldValue, fieldName) {
         file.preview = URL.createObjectURL(file);
         setImagePreview(file);
       } else {
-        dispatch(setToast("Hình ảnh phải từ 2MB trở xuống"));
+        dispatch(setToast({ message: "Hình ảnh phải từ 2MB trở xuống", mode: "info" }));
       }
     }
   };
