@@ -25,8 +25,7 @@ function Complete() {
         },
         false
       )
-      .then((response) => setTitles(response.data))
-      .catch((error) => console.error(error));
+      .then((response) => setTitles(response.data));
   };
 
   useEffect(() => {

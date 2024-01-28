@@ -10,14 +10,9 @@ function useUpdateUser() {
   };
 
   const updateUser = (newData) => {
-    userService
-      .update(newData)
-      .then((response) => {
-        updateClientUser(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    userService.update(newData).then((response) => {
+      updateClientUser(response.data);
+    });
   };
 
   return { updateUser, updateClientUser };

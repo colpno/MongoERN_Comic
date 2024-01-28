@@ -17,12 +17,9 @@ function Success() {
   const queryLocation = location.search;
   useEffect(() => {
     async function fetchSession() {
-      paypalService
-        .get(queryLocation)
-        .then((response) => {
-          dispatch(setUser(response.user));
-        })
-        .catch((error) => console.error(error));
+      paypalService.get(queryLocation).then((response) => {
+        dispatch(setUser(response.user));
+      });
     }
     queryLocation.length > 0 && fetchSession();
   }, [queryLocation]);

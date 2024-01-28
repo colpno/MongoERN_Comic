@@ -37,13 +37,10 @@ function StatisticCount() {
       ]),
     };
 
-    titleService
-      .getAll(params)
-      .then((response) => {
-        setTitles(response.data);
-        dispatch(setMyTitles(response.data));
-      })
-      .catch((error) => console.error(error));
+    titleService.getAll(params).then((response) => {
+      setTitles(response.data);
+      dispatch(setMyTitles(response.data));
+    });
   }, []);
 
   useEffect(() => {

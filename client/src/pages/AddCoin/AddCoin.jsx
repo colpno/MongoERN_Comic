@@ -60,10 +60,7 @@ function AddCoin() {
   };
 
   useEffect(() => {
-    paymentMethodService
-      .getAll()
-      .then((response) => setPayMethods(response.data))
-      .catch((error) => console.error(error));
+    paymentMethodService.getAll().then((response) => setPayMethods(response.data));
   }, []);
 
   return (

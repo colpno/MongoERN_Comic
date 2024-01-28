@@ -31,13 +31,10 @@ function Search() {
         _or: JSON.stringify([{ title_like: searchText }, { author_like: searchText }]),
       };
 
-      titleService
-        .getAll(params, false)
-        .then((response) => {
-          const searched = useSearch(response.data, searchValue, ["title", "author"]);
-          setSearchResult(searched);
-        })
-        .catch((error) => console.error(error));
+      titleService.getAll(params, false).then((response) => {
+        const searched = useSearch(response.data, searchValue, ["title", "author"]);
+        setSearchResult(searched);
+      });
     }
   }, [searchText]);
 

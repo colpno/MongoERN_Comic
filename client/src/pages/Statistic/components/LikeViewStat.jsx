@@ -50,7 +50,6 @@ function LikeViewStat() {
     params._fields = "order";
 
     chapterService.getAll(params).then((response) => {
-      console.log("response:", response);
       setChapters(response.data);
     });
 

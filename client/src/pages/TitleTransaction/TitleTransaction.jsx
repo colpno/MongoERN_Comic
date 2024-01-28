@@ -22,10 +22,7 @@ function TitleTransaction() {
   ];
 
   const fetchData = () => {
-    titleService
-      .getAll()
-      .then((response) => setTitles(response.data))
-      .catch((error) => console.error(error));
+    titleService.getAll().then((response) => setTitles(response.data));
   };
 
   useEffect(() => {

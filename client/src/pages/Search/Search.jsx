@@ -59,13 +59,10 @@ function Search() {
   ];
 
   const fetchData = (params = {}) => {
-    titleService
-      .getAll(params, false)
-      .then((titleResponse) => {
-        setTitles(titleResponse.data);
-        setPaginationTotal(titleResponse.paginate.total);
-      })
-      .catch((error) => console.error(error));
+    titleService.getAll(params, false).then((titleResponse) => {
+      setTitles(titleResponse.data);
+      setPaginationTotal(titleResponse.paginate.total);
+    });
   };
 
   const checkChange = (values) => {
@@ -116,13 +113,11 @@ function Search() {
     const genrePromise = genreService.getAll();
     const titlePromise = titleService.getAll(titleParams, false);
 
-    Promise.all([titlePromise, genrePromise])
-      .then(([titleResponse, genreResponse]) => {
-        setGenreArray(genreResponse.data);
-        setTitles(titleResponse.data);
-        setPaginationTotal(titleResponse.paginate.total);
-      })
-      .catch((error) => console.error(error));
+    Promise.all([titlePromise, genrePromise]).then(([titleResponse, genreResponse]) => {
+      setGenreArray(genreResponse.data);
+      setTitles(titleResponse.data);
+      setPaginationTotal(titleResponse.paginate.total);
+    });
   }, []);
 
   useEffect(() => {

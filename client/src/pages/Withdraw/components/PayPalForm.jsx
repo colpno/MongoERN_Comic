@@ -12,13 +12,9 @@ function PayPalForm() {
       receiver: "sb-4iedz24663946@personal.example.com",
     };
 
-    paypalService
-      .payout(data)
-      .then(() => {
-        // console.log(response);
-        // window.open(response.link, "_blank");
-      })
-      .catch((error) => console.error(error));
+    paypalService.payout(data).then(() => {
+      // window.open(response.link, "_blank");
+    });
 
     setSubmitting(false);
   };

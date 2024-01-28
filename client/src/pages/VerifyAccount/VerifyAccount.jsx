@@ -13,13 +13,10 @@ function VerifyAccount() {
 
   useEffect(() => {
     if (token) {
-      authService
-        .verifyRegister(token)
-        .then((response) => {
-          alert(response.message);
-          navigate("/login");
-        })
-        .catch((error) => console.error(error));
+      authService.verifyRegister(token).then((response) => {
+        alert(response.message);
+        navigate("/login");
+      });
     } else {
       navigate("/");
     }

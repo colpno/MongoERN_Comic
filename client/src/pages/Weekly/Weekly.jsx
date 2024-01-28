@@ -55,8 +55,7 @@ function Weekly() {
         } else {
           setTitles((prev) => [...prev, ...response.data]);
         }
-      })
-      .catch((error) => console.error(error));
+      });
   };
 
   const handleDayClick = (day) => {

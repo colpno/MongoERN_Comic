@@ -26,13 +26,10 @@ function PointHistory() {
       _page: pagination.page,
       _limit: pagination.limit,
     };
-    pointHistoryService
-      .getAll(params)
-      .then((response) => {
-        setHistories(response.data);
-        setPaginationTotal(response.paginate.total);
-      })
-      .catch((error) => console.error(error));
+    pointHistoryService.getAll(params).then((response) => {
+      setHistories(response.data);
+      setPaginationTotal(response.paginate.total);
+    });
   };
 
   useEffect(() => {

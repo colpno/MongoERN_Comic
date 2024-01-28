@@ -30,13 +30,10 @@ function Recommend() {
       _limit: 18,
     };
 
-    titleService
-      .random(params)
-      .then((response) => {
-        const filtered = response.data.filter((title) => title._id !== titleId);
-        setTitles(filtered);
-      })
-      .catch((error) => console.error(error));
+    titleService.random(params).then((response) => {
+      const filtered = response.data.filter((title) => title._id !== titleId);
+      setTitles(filtered);
+    });
   }, [genresOfTitle]);
 
   return (

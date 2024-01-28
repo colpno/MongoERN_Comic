@@ -9,13 +9,10 @@ function useLogout(redirectTo) {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    authService
-      .logout()
-      .then(() => {
-        dispatch(logout());
-        navigate(redirectTo);
-      })
-      .catch((error) => console.error(error));
+    authService.logout().then(() => {
+      dispatch(logout());
+      navigate(redirectTo);
+    });
   };
 
   return { logout: handleLogout };

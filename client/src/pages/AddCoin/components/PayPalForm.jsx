@@ -28,26 +28,17 @@ function PayPalForm() {
     const transactionResponse = await paypalService.capture(orderID);
 
     if (transactionResponse.status === "COMPLETED") {
-      try {
-        const coin = Number.parseInt(price.label.split(" ")[0], 10);
+      const coin = Number.parseInt(price.label.split(" ")[0], 10);
 
-        const data = {
-          method: "paypal",
-          unit: "coin",
-          amount: coin,
-        };
+      const data = {
+        method: "paypal",
+        unit: "coin",
+        amount: coin,
+      };
 
-        transactionService
-          .add(data)
-          .then(() => {
-            updateClientUser({ coin: user.coin + coin });
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      } catch (error) {
-        console.error(error);
-      }
+      transactionService.add(data).then(() => {
+        updateClientUser({ coin: user.coin + coin });
+      });
     }
 
     return transactionResponse;
