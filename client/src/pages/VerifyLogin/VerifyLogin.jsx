@@ -8,8 +8,8 @@ import { useNavigate } from "react-router-dom";
 
 import { Button } from "components";
 import { Popup } from "features";
+import { emitToast } from "features/Toast.jsx";
 import { usePopup } from "hooks";
-import { setToast } from "libs/redux/slices/common.slice.js";
 import { setLoginInfo as setLoginInfoStore } from "libs/redux/slices/login.slice";
 import { setUser } from "libs/redux/slices/user.slice";
 import { authService } from "services";
@@ -59,7 +59,7 @@ function VerifyLogin() {
 
     // if the all inserted otp don't match total of otp slots
     if (OTPString.length !== OTPKeys.length) {
-      dispatch(setToast({ message: "Mã OTP không hợp lệ", mode: "error" }));
+      emitToast("Mã OTP không hợp lệ", "error");
       return;
     }
 
@@ -147,7 +147,7 @@ function VerifyLogin() {
     // check if value user insert is number
     const match = value.match(/^(\s*|\d+)$/);
     if (!match) {
-      dispatch(setToast({ message: "Mã OTP phải là số", mode: "error" }));
+      emitToast("Mã OTP phải là số", "error");
       return;
     }
 

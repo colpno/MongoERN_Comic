@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 
 import { Logo } from "assets/images";
 import { Button } from "components";
-import { setToast } from "libs/redux/slices/common.slice.js";
+import { emitToast } from "features/Toast.jsx";
 import { setFavorite } from "libs/redux/slices/readingChapter.slice";
 import { changeTheme } from "libs/redux/slices/theme.slice";
 import { favoriteService, titleService } from "services";
@@ -39,7 +39,7 @@ function ReadingHeader() {
 
   const handleLikeClick = () => {
     if (isEmpty(user._id)) {
-      dispatch(setToast({ message: "Bạn cần phải đăng nhập để thích truyện", mode: "error" }));
+      emitToast("Bạn cần phải đăng nhập để thích truyện", "error");
       return;
     }
 
