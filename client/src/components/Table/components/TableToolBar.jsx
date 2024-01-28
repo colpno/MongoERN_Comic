@@ -41,7 +41,7 @@ function TableToolBar({
       isTriggered: true,
       title: "Các thao tác sẵn có",
       content: <TableGuide />,
-      type: "normal",
+      variation: "normal",
     });
   };
 

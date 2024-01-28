@@ -37,7 +37,7 @@ function TableBottomToolBar({
         isTriggered: true,
         title: "Xác nhận xóa",
         content: <p>Bạn có chắc chắn muốn xóa không?</p>,
-        type: "confirm",
+        variation: "confirm",
         onConfirm: () => {
           onDelete(rows);
         },
@@ -46,7 +46,7 @@ function TableBottomToolBar({
       setPopup({
         isTriggered: true,
         title: "Thông báo",
-        type: "normal",
+        variation: "normal",
         content:
           "Chưa có dữ liệu nào được chọn. Vui lòng chọn ít nhất 1 khi sử dụng chức năng này.",
       });

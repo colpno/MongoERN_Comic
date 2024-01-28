@@ -1,6 +1,6 @@
-/* eslint-disable no-unused-vars */
 import { GridActionsCellItem, GridRowModes, useGridApiContext } from "@mui/x-data-grid-pro";
 import PropTypes from "prop-types";
+import { useId } from "react";
 import { MdCancel, MdDelete, MdEdit, MdSave } from "react-icons/md";
 
 function TableActions({
@@ -11,8 +11,6 @@ function TableActions({
   setRows,
   setRowModesModel,
   setPopup,
-  onAdd,
-  onUpdate,
 }) {
   const apiRef = useGridApiContext();
   const rowMode = apiRef.current.getRowMode(id);
@@ -52,7 +50,7 @@ function TableActions({
       isTriggered: true,
       title: "Xác nhận lưu",
       content: popupContent,
-      type: "confirm",
+      variation: "confirm",
       onConfirm: () => {
         setRowModesModel((prev) => ({ ...prev, [_id]: { mode: GridRowModes.View } }));
       },
@@ -64,7 +62,7 @@ function TableActions({
       isTriggered: true,
       title: "Xác nhận xóa",
       content: <p>Bạn có chắc chắn muốn xóa không?</p>,
-      type: "confirm",
+      variation: "confirm",
       onConfirm: () => {
         onDelete(_id);
       },
@@ -105,6 +103,7 @@ function TableActions({
     );
   }
 
+  const uuid = useId();
   if (enableDelete) {
     Components.push(
       <GridActionsCellItem
@@ -113,7 +112,7 @@ function TableActions({
         label="Delete"
         title="Xóa"
         onClick={handleDelete(id)}
-        key={`${id}4`}
+        key={uuid}
       />
     );
   }
