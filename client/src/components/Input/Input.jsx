@@ -59,7 +59,7 @@ Input.propTypes = {
   height: PropTypes.string,
 
   name: PropTypes.string,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   onBlur: PropTypes.func,
   onChange: PropTypes.func.isRequired,
 
