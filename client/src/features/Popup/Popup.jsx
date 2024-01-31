@@ -72,7 +72,11 @@ function Popup(props) {
           {content}
         </Scrollbar>
         <div className={cx("btn-container")}>
-          <ButtonGroup variation={variation} onConfirm={handleConfirm} onCancel={handleCancel} />
+          <ButtonGroup
+            variation={variation || data.variation}
+            onConfirm={handleConfirm}
+            onCancel={handleCancel}
+          />
         </div>
       </div>
     </Dialog>
@@ -89,7 +93,7 @@ Popup.propTypes = {
     onCancel: PropTypes.func,
   }).isRequired,
   trigger: PropTypes.func.isRequired,
-  variation: PropTypes.oneOf(["confirm", "normal"]),
+  variation: PropTypes.oneOf(["confirm", "normal", undefined]),
   onConfirm: PropTypes.func,
   onCancel: PropTypes.func,
   sx: PropTypes.shape({}),
@@ -97,7 +101,7 @@ Popup.propTypes = {
 };
 
 Popup.defaultProps = {
-  variation: "normal",
+  variation: undefined,
   onConfirm: () => {},
   onCancel: () => {},
   sx: {
