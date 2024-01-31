@@ -19,18 +19,10 @@ const authService = {
       <div>
         <p>Hạn sử dụng link là <strong>${expiredTime} phút</strong>.</p>
       </div>
-      <div style="padding: 1.5rem; backgroundColor: #ededed; margin-top: 3rem">
+      <div style="margin-top:1.5rem;display:flex;justify-content: center;padding: 0.4rem 0;">
         <a
           href=${link}
-          style="
-            color: #ffffff;
-            backgroundColor: #2d63c8;
-            fontSize: 19px;
-            border: 1px solid #2d63c8;
-            borderRadius: 4px;
-            padding: 15px 50px;
-            cursor: pointer
-          "
+          style="color:#ffffff;background-color:#2d63c8;font-size:16px;border-radius:8px;padding:1rem 1.5rem;text-decoration: none;box-shadow: 1px 2px #082354;"
         >
           Thay đổi mật khẩu
         </a>
@@ -49,18 +41,10 @@ const authService = {
       <div>
         <p>Hạn sử dụng link là <strong>${expiredTime} phút</strong>.</p>
       </div>
-      <div style="padding: 1.5rem; backgroundColor: #ededed; margin-top: 3rem">
+      <div style="margin-top:1.5rem;display:flex;justify-content: center;padding: 0.4rem 0;">
         <a
           href=${link}
-          style="
-            color: #ffffff;
-            backgroundColor: #2d63c8;
-            fontSize: 19px;
-            border: 1px solid #2d63c8;
-            borderRadius: 4px;
-            padding: 15px 50px;
-            cursor: pointer
-          "
+          style="color:#ffffff;background-color:#2d63c8;font-size:16px;border-radius:8px;padding:1rem 1.5rem;text-decoration: none;box-shadow: 1px 2px #082354;"
         >
           Xác thực tài khoản
         </a>
