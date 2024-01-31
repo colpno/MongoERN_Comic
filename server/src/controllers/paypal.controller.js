@@ -1,137 +1,61 @@
-import axios from 'axios';
 import 'dotenv/config';
-
-const prepareData = (data = []) => {
-  const initialValues = {
-    items: [],
-    amount: {
-      currency_code: 'USD',
-      value: '0.00',
-    },
-    description: '',
-  };
-
-  const { items, amount, description } = data.reduce((object, item) => {
-    const { name, price, quantity, description: desc } = item;
-    const value = Number.parseFloat(object.amount.value) + price * quantity;
-
-    return {
-      items: [
-        ...object.items,
-        {
-          name,
-          quantity,
-          unit_amount: {
-            currency_code: 'USD',
-            value,
-          },
-        },
-      ],
-      amount: {
-        ...object.amount,
-        value: value.toFixed(2).toString(),
-        breakdown: {
-          item_total: {
-            value: value.toFixed(2).toString(),
-            currency_code: 'USD',
-          },
-        },
-      },
-      description: desc,
-    };
-  }, initialValues);
-  return { items, amount, description };
-};
-
-const { PAYPAL_CLIENT_ID, PAYPAL_SECRET } = process.env;
-const base = 'https://api-m.sandbox.paypal.com';
-
-const generateAccessToken = async () => {
-  try {
-    if (!PAYPAL_CLIENT_ID || !PAYPAL_SECRET) {
-      throw new Error('MISSING_API_CREDENTIALS');
-    }
-    const auth = Buffer.from(`${PAYPAL_CLIENT_ID}:${PAYPAL_SECRET}`).toString('base64');
-    const response = await axios(`${base}/v1/oauth2/token`, {
-      method: 'post',
-      data: 'grant_type=client_credentials',
-      headers: {
-        Authorization: `Basic ${auth}`,
-      },
-    });
-
-    return response.data.access_token;
-  } catch (error) {
-    console.error('Failed to generate Access Token:', error);
-  }
-};
-
-async function handleResponse(response) {
-  try {
-    const jsonResponse = response;
-    return {
-      jsonResponse,
-      httpStatusCode: response.status,
-    };
-  } catch (err) {
-    const errorMessage = response;
-    throw new Error(errorMessage);
-  }
-}
-
-const createOrder = async (data) => {
-  const accessToken = await generateAccessToken();
-  const url = `${base}/v2/checkout/orders`;
-  const payload = {
-    intent: 'CAPTURE',
-    purchase_units: [prepareData(JSON.parse(data))],
-  };
-
-  const response = await axios(url, {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`,
-    },
-    method: 'post',
-    data: JSON.stringify(payload),
-  });
-
-  return handleResponse(response.data);
-};
-
-const captureOrder = async (orderID) => {
-  const accessToken = await generateAccessToken();
-  const url = `${base}/v2/checkout/orders/${orderID}/capture`;
-
-  const response = await axios(url, {
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-
-  return handleResponse(response.data);
-};
+import { paypalService, userService } from '../services/index.js';
 
 const paypalController = {
-  order: async (req, res) => {
+  order: async (req, res, next) => {
     try {
-      const { jsonResponse } = await createOrder(req.body.data);
-      res.status(201).json(jsonResponse);
+      const { data } = req.body;
+
+      const response = await paypalService.order(data);
+
+      res.status(201).json(response);
     } catch (error) {
-      console.error('Failed to create order:', error);
-      res.status(500).json({ error: 'Failed to create order.' });
+      next(error);
     }
   },
-  capture: async (req, res) => {
+  capture: async (req, res, next) => {
     try {
       const { orderID } = req.body;
-      const { jsonResponse } = await captureOrder(orderID);
-      res.status(200).json(jsonResponse);
+
+      const response = await paypalService.capture(orderID);
+
+      res.status(200).json(response);
     } catch (error) {
-      console.error('Failed to create order:', error);
-      res.status(500).json({ error: 'Failed to capture order.' });
+      next(error);
+    }
+  },
+  payout: async (req, res, next) => {
+    try {
+      const { amount, receiverEmail } = req.body;
+      const { id: userId } = req.userInfo;
+
+      const response = await paypalService.payout(amount, receiverEmail);
+      const { batch_status = 'DENIED' } = response.data.batch_header;
+
+      let returnedMessage = '';
+      if (batch_status === 'SUCCESS') {
+        returnedMessage =
+          'Bạn đã rút tiền thành công. Cảm ơn bạn vì đã sử dụng dịch vụ của chúng tôi!';
+      }
+
+      if (batch_status === 'PENDING') {
+        returnedMessage =
+          'Bạn đã rút tiền thành công. Nhưng có thể vì tài khoản chưa được kích hoạt nên giao dịch đang ở trạng thái chờ.';
+      }
+
+      if (returnedMessage) {
+        await userService.update(userId, { $inc: { income: -Number.parseInt(amount, 10) } });
+
+        return res.status(200).json({
+          code: 200,
+          message: returnedMessage,
+        });
+      }
+
+      console.log(response);
+      throw new Error('Có vấn đề trong giao dịch. Xin vui lòng liên hệ help@mail.domain');
+    } catch (error) {
+      next(error);
     }
   },
 };

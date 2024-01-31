@@ -12,10 +12,6 @@ function Withdraw() {
 
   const options = [
     {
-      value: "vnpay",
-      label: "VNPay",
-    },
-    {
       value: "paypal",
       label: "PayPal",
     },

@@ -1,3 +1,4 @@
+import { emitToast } from "features/Toast.jsx";
 import comicApi from "./comicApi.js";
 
 const BASE_URL = "/paypal";
@@ -22,7 +23,20 @@ const extendedApi = comicApi.injectEndpoints({
         withCredentials: true,
       }),
     }),
+    payoutPayPal: build.mutation({
+      query: ({ amount, receiverEmail }) => ({
+        method: "POST",
+        url: `${BASE_URL}/payout`,
+        data: { amount, receiverEmail },
+        withCredentials: true,
+      }),
+      transformResponse: (response) => {
+        emitToast(response.message);
+        return response;
+      },
+    }),
   }),
 });
 
-export const { useCapturePayPalMutation, useOrderPayPalMutation } = extendedApi;
+export const { useCapturePayPalMutation, useOrderPayPalMutation, usePayoutPayPalMutation } =
+  extendedApi;

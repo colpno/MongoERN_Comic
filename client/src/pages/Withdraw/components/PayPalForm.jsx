@@ -1,30 +1,28 @@
 import { FastField, Form, Formik } from "formik";
-import React from "react";
 
 import { Button } from "components";
-import { InputField } from "libs/formik";
-import { paypalService } from "services";
+import { usePayoutPayPal } from "hooks/index.jsx";
+import { FormLabel, InputField } from "libs/formik";
 
 function PayPalForm() {
+  const { payout } = usePayoutPayPal();
+
   const handleSubmit = (values, { setSubmitting }) => {
-    const data = {
-      amount: "10.00",
-      receiver: "sb-4iedz24663946@personal.example.com",
-    };
-
-    paypalService.payout(data).then(() => {
-      // window.open(response.link, "_blank");
-    });
-
+    const { receiver, amount } = values;
+    payout(receiver, amount);
     setSubmitting(false);
   };
 
   return (
-    <Formik initialValues={{ amount: "" }} onSubmit={handleSubmit}>
+    <Formik initialValues={{ receiver: "", amount: "" }} onSubmit={handleSubmit}>
       {() => {
         return (
           <Form>
-            <FastField name="amount" component={InputField} />
+            <FormLabel name="price" label="PayPal Email" required />
+            <FastField name="receiver" component={InputField} />
+
+            <FormLabel name="price" label="Số tiền ($ - Dollar)" required />
+            <FastField name="amount" type="number" component={InputField} />
 
             <Button primary type="submit">
               Rút tiền

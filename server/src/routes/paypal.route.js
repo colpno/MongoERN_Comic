@@ -6,5 +6,6 @@ const route = express.Router();
 
 route.post('/order', isAuthenticated, paypalController.order);
 route.post('/capture', isAuthenticated, paypalController.capture);
+route.post('/payout', isAuthenticated, paypalController.payout);
 
 export default route;
