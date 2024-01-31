@@ -3,7 +3,7 @@ import { ToastContainer, toast as reactToast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 
 export const options = {
-  position: "top-right",
+  position: "bottom-left",
   autoClose: 5000,
   hideProgressBar: false,
   closeOnClick: true,
