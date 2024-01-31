@@ -3,6 +3,7 @@ const { useState } = require("react");
 const usePopup = (initialState) => {
   const [data, setData] = useState({
     isTriggered: false,
+    variation: "normal",
     ...initialState,
   });
 
