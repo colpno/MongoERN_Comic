@@ -1,24 +1,18 @@
-/* eslint-disable no-unused-vars */
 import PropTypes from "prop-types";
 import { memo } from "react";
-import { FaShareAlt } from "react-icons/fa";
 import { ImHeart } from "react-icons/im";
-import { MdFitScreen } from "react-icons/md";
-import { useParams } from "react-router-dom";
 
 import { DarkModeToggle } from "features";
-import { useLike } from "hooks";
 
-function ReadingTools({ cx }) {
-  const { chapterId } = useParams();
-  const { isLike, handleLike } = useLike(chapterId);
+function ReadingTools({ cx, onToggleFavorite, controls }) {
+  const { isFavored } = controls;
 
   return (
     <div className={cx("reading-header__tools")}>
       <DarkModeToggle />
       <ImHeart
-        className={cx("reading-header__tools__like", isLike ? "active" : "")}
-        onClick={handleLike}
+        className={cx("reading-header__tools__like", isFavored ? "active" : "")}
+        onClick={onToggleFavorite}
       />
       {/* <FaShareAlt className={cx("reading-header__tools__share")} />
       <MdFitScreen className={cx("reading-header__tools__fullscreen")} /> */}
@@ -28,6 +22,10 @@ function ReadingTools({ cx }) {
 
 ReadingTools.propTypes = {
   cx: PropTypes.func.isRequired,
+  onToggleFavorite: PropTypes.func.isRequired,
+  controls: PropTypes.shape({
+    isFavored: PropTypes.bool.isRequired,
+  }).isRequired,
 };
 
 export default memo(ReadingTools);

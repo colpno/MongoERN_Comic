@@ -12,17 +12,26 @@ const getHeaders = (cx) => {
       field: "chapter_id",
       flex: 1,
       valueGetter: ({ row }) => row.title_id.title,
-      renderCell: ({ row }) => (
-        <div className={cx("transaction__container__content")}>
-          <div className={cx("box-img")}>
-            <img src={row.title_id.cover.source} alt={row.title_id.title} />
+      renderCell: ({ row }) => {
+        const { title_id: titleID, chapter_id: chapterID } = row;
+        const { cover, title: comicTitle } = titleID;
+        const { order, title: chapterTitle } = chapterID;
+
+        return (
+          <div className={cx("transaction__container__content")}>
+            <div className={cx("box-img")}>
+              <img src={cover.source} alt={comicTitle} />
+            </div>
+            <div>
+              <p className={cx("title")}>{comicTitle}</p>
+              <p className={cx("chapter")}>
+                Chương {order}
+                {chapterTitle ? `: ${chapterTitle}` : ""}
+              </p>
+            </div>
           </div>
-          <div>
-            <p className={cx("title")}>{row.title_id.title}</p>
-            <p className={cx("chapter")}>{row.chapter_id.title}</p>
-          </div>
-        </div>
-      ),
+        );
+      },
     },
     {
       headerName: "Chi phí",
