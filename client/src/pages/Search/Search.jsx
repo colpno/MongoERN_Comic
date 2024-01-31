@@ -5,8 +5,7 @@ import { Col, Container, Row } from "react-bootstrap";
 import { CardList, FormWrapper } from "components";
 import { SEARCH_PAGE_TITLES_PER_PAGE } from "constants/paginate.constant";
 import { NoData, Pagination } from "features";
-import { usePagination } from "hooks";
-import { genreService, titleService } from "services";
+import { useGetGenres, useLazyGetTitles, usePagination } from "hooks";
 import { isEmpty } from "utils";
 import SearchForm from "./components/SearchForm";
 import styles from "./styles/Search.module.scss";
@@ -14,7 +13,8 @@ import styles from "./styles/Search.module.scss";
 const cx = classNames.bind(styles);
 
 function Search() {
-  const [genreArray, setGenreArray] = useState([]);
+  const { data: genres = [] } = useGetGenres();
+  const { get: getTitles } = useLazyGetTitles();
   const [titles, setTitles] = useState([]);
   const { pagination, setPagination, setPaginationTotal } = usePagination(
     SEARCH_PAGE_TITLES_PER_PAGE
@@ -35,16 +35,14 @@ function Search() {
       { collection: "status_id", fields: "-_id code", match: { code: "vis" } },
     ]),
   });
-
   const genreOptions = useMemo(
     () =>
-      genreArray.map((genre) => ({
+      genres.map((genre) => ({
         value: genre.name,
         label: genre.name,
       })),
-    [genreArray]
+    [genres]
   );
-
   const sortOptions = [
     { value: "updatedAt", label: "Ngày cập nhật" },
     { value: "title", label: "Tên truyện" },
@@ -52,17 +50,15 @@ function Search() {
     { value: "like", label: "Lượt thích" },
     { value: "view", label: "Lượt xem" },
   ];
-
   const orderOption = [
     { value: "asc", label: "Tăng dần" },
     { value: "desc", label: "Giảm dần" },
   ];
 
-  const fetchData = (params = {}) => {
-    titleService.getAll(params, false).then((titleResponse) => {
-      setTitles(titleResponse.data);
-      setPaginationTotal(titleResponse.paginate.total);
-    });
+  const fetchData = async (params = {}) => {
+    const response = await getTitles({ params, isPrivate: false }).unwrap();
+    setTitles(response.data);
+    setPaginationTotal(response.pagination.total);
   };
 
   const checkChange = (values) => {
@@ -87,7 +83,7 @@ function Search() {
     const { checkedValues, isValid } = checkChange(values);
 
     if (isValid) {
-      const { sort, order, genres, author, ...otherValues } = checkedValues;
+      const { sort, order, genres: submittedGenres, author, ...otherValues } = checkedValues;
       const params = {
         ...otherValues,
         author_like: author,
@@ -98,7 +94,7 @@ function Search() {
       };
 
       if (checkedValues.genres) {
-        params.genres_all = genres;
+        params.genres_all = submittedGenres;
       }
 
       fetchData(params);
@@ -108,17 +104,6 @@ function Search() {
 
     setSubmitting(false);
   };
-
-  useEffect(() => {
-    const genrePromise = genreService.getAll();
-    const titlePromise = titleService.getAll(titleParams, false);
-
-    Promise.all([titlePromise, genrePromise]).then(([titleResponse, genreResponse]) => {
-      setGenreArray(genreResponse.data);
-      setTitles(titleResponse.data);
-      setPaginationTotal(titleResponse.paginate.total);
-    });
-  }, []);
 
   useEffect(() => {
     fetchData(titleParams);

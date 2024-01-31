@@ -1,18 +1,17 @@
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { FormWrapper, TitleForm } from "components";
 import { Popup } from "features";
-import { usePopup } from "hooks";
-import { setLoading } from "libs/redux/slices/common.slice.js";
-import { useDispatch } from "react-redux";
-import { titleService } from "services";
+import { useGetTitle, usePopup, useUpdateTitle } from "hooks";
 import { updateTitleFormValidation } from "validations/updateTitleForm.validation";
 
 function UpdateTitle() {
-  const dispatch = useDispatch();
   const { titleId } = useParams();
-  const [title, setTitle] = useState({});
+  const { data: title = {} } = useGetTitle({
+    _id: titleId,
+    _fields: "title status_id genres summary author coin release_day cover",
+    _embed: JSON.stringify([{ collection: "status_id", fields: "-_id code" }]),
+  });
   const { popup, setPopup, triggerPopup } = usePopup();
   const hasData = Object.keys(title).length > 0;
   const INITIAL_VALUE = hasData && {
@@ -24,18 +23,14 @@ function UpdateTitle() {
     author: title.author,
     coin: `${title.coin}`,
     cover: title.cover.source,
-    // TODO largeCover: title.cover.source,
   };
 
   const handleUpdate = (values) => {
-    dispatch(setLoading(true));
-
     const data = { ...values, guid: title._guid };
     if (values.cover) data.oldCover = title.cover;
 
-    titleService.update(titleId, data);
-
-    dispatch(setLoading(false));
+    const { update: updateTitle } = useUpdateTitle();
+    updateTitle({ id: titleId, data });
   };
 
   const getChangedValues = (values) => {
@@ -64,18 +59,6 @@ function UpdateTitle() {
     Object.keys(changedValues).length > 0 && handleUpdate(changedValues);
     setSubmitting(false);
   };
-
-  useEffect(() => {
-    const params = {
-      _id: titleId,
-      _fields: "title status_id genres summary author coin release_day cover",
-      _embed: JSON.stringify([{ collection: "status_id", fields: "-_id code" }]),
-    };
-
-    titleService.getOne(params).then((response) => {
-      setTitle(response.data);
-    });
-  }, []);
 
   return (
     <>

@@ -1,11 +1,11 @@
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Container, Row } from "react-bootstrap";
 
 import { Radio } from "components";
 import { NoData } from "features";
-import { paymentMethodService } from "services";
+import { useGetPaymentMethods } from "hooks/index.jsx";
 import styles from "./AddCoin.module.scss";
 import { PayPalForm } from "./components";
 
@@ -35,7 +35,7 @@ function AddCoin() {
     value: "",
     label: "",
   });
-  const [payMethods, setPayMethods] = useState([]);
+  const { data: payMethods = [] } = useGetPaymentMethods();
 
   const options = useMemo(
     () =>
@@ -58,10 +58,6 @@ function AddCoin() {
       value,
     });
   };
-
-  useEffect(() => {
-    paymentMethodService.getAll().then((response) => setPayMethods(response.data));
-  }, []);
 
   return (
     <Container className={cx("add-coin")}>

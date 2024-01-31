@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
@@ -5,9 +6,8 @@ import { useSelector } from "react-redux";
 
 import { Button } from "components";
 import { Popup } from "features";
-import { usePopup } from "hooks";
+import { useGetChapterTransactions, usePopup } from "hooks";
 import TicketExplainPopup from "pages/Title/components/TicketExplainPopup";
-import { chapterTransactionService } from "services";
 import { ReactComponent as TicketLogo } from "./assets/images/ticket.svg";
 import styles from "./assets/styles/Inventory.module.scss";
 import { InventoryTable, InventoryTickets } from "./components";
@@ -18,6 +18,7 @@ function Inventory() {
   const user = useSelector((state) => state.user.user);
   const [chapters, setChapters] = useState([]);
   const { popup, setPopup, triggerPopup } = usePopup();
+  const { data: chapterTransactions = [] } = useGetChapterTransactions({ user_id: user._id });
 
   const handleClickIcon = () => {
     setPopup({
@@ -28,19 +29,12 @@ function Inventory() {
   };
 
   useEffect(() => {
-    const params = { user_id: user._id };
+    // TODO const { purchasedChapters, hiredChapters } = response;
 
-    chapterTransactionService
-      .getAll(params)
-      // .then((response) => {
-      .then(() => {
-        // TODO const { purchasedChapters, hiredChapters } = response;
-
-        // const allData = [...hiredChapters.data, purchasedChapters.data];
-        // setChapters(allData);
-        // setPaginationTotal(allData.length);
-        setChapters([]);
-      });
+    // const allData = [...hiredChapters.data, purchasedChapters.data];
+    // setChapters(allData);
+    // setPaginationTotal(allData.length);
+    setChapters([]);
   }, []);
 
   return (

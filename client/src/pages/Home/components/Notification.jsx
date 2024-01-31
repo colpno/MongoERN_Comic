@@ -1,8 +1,8 @@
 import classNames from "classnames/bind";
 import { memo } from "react";
 
-import { useGetAllNotificationsQuery } from "api/notification.api.js";
 import { Button, HeadTitleMark } from "components";
+import { useGetNotifications } from "hooks/index.jsx";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { formatTime } from "utils/convertTime.js";
 import styles from "../styles/Notification.module.scss";
@@ -10,12 +10,11 @@ import styles from "../styles/Notification.module.scss";
 const cx = classNames.bind(styles);
 
 function Notification() {
-  const params = {
+  const { data: notifications = {} } = useGetNotifications({
     _sort: "updatedAt",
     _order: -1,
     _limit: 5,
-  };
-  const { data: notifications } = useGetAllNotificationsQuery(params);
+  });
 
   return (
     <section className={cx("notification")}>
@@ -29,8 +28,8 @@ function Notification() {
           </header>
         </HeadTitleMark>
         <ul>
-          {notifications?.length > 0 &&
-            notifications.map((notification) => {
+          {notifications.data?.length > 0 &&
+            notifications.data.map((notification) => {
               const timeObj = formatTime(notification.createdAt);
               return (
                 <li key={notification._id}>

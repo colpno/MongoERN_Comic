@@ -1,15 +1,10 @@
 import { FormWrapper, TitleForm } from "components";
 import { Popup } from "features";
-import { usePopup } from "hooks";
-import { setLoading } from "libs/redux/slices/common.slice.js";
-import { useDispatch } from "react-redux";
-import { titleService } from "services";
+import { useAddTitle, usePopup } from "hooks";
 import { createTitleFormValidation } from "validations/createTitleForm.validation";
 
 function CreateTitle() {
-  const dispatch = useDispatch();
   const { popup, setPopup, triggerPopup } = usePopup();
-
   const INITIAL_VALUE = {
     title: "",
     status_id: "",
@@ -31,11 +26,8 @@ function CreateTitle() {
   };
 
   const handleSubmit = (values, { setSubmitting }) => {
-    dispatch(setLoading(true));
-
-    titleService.add(values);
-
-    dispatch(setLoading(false));
+    const { add } = useAddTitle();
+    add(values);
     setSubmitting(false);
   };
 

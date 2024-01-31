@@ -1,25 +1,18 @@
 import classNames from "classnames/bind";
-import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 
-import { transactionService } from "services";
+import { useGetTransactions } from "hooks/index.jsx";
 import CoinHistoryTable from "./components/CoinHistoryTable";
 import styles from "./styles/CoinHistory.module.scss";
 
 const cx = classNames.bind(styles);
 
 function CoinHistory() {
-  const [histories, setHistories] = useState([]);
-
-  useEffect(() => {
-    transactionService.getAll().then((response) => {
-      setHistories(response.data);
-    });
-  }, []);
+  const { data: transactions = [] } = useGetTransactions();
 
   return (
     <Container className={cx("coin-history")}>
-      <CoinHistoryTable histories={histories} />
+      <CoinHistoryTable histories={transactions} />
     </Container>
   );
 }

@@ -2,15 +2,15 @@ import classNames from "classnames/bind";
 import { memo } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 
-import { useGetAllNotificationsQuery } from "api/notification.api.js";
 import { Button } from "components";
+import { useGetNotifications } from "hooks/index.jsx";
 import NoticeFigure from "./components/NoticeFigure";
 import styles from "./styles/NoticeList.module.scss";
 
 const cx = classNames.bind(styles);
 
 function NoticeList() {
-  const { data: notifications } = useGetAllNotificationsQuery({
+  const { data: notifications = [] } = useGetNotifications({
     _sort: "updatedAt",
     _order: -1,
   });

@@ -1,15 +1,11 @@
 import classNames from "classnames/bind";
-import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { Button } from "components";
 import { Popup } from "features";
-import { usePopup } from "hooks";
-import { setLoading } from "libs/redux/slices/common.slice.js";
-import { useDispatch } from "react-redux";
-import { chapterService, titleService } from "services";
+import { useDeleteChapter, useDeleteTitle, useGetChapters, useGetTitle, usePopup } from "hooks";
 import ChapterTable from "./components/ChapterTable";
 import TitlePart from "./components/TitlePart";
 import styles from "./styles/Chapters.module.scss";
@@ -26,12 +22,17 @@ function BtnCreate() {
 }
 
 function Chapters() {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { titleId } = useParams();
-  const [title, setTitle] = useState({});
-  const [chapters, setChapters] = useState([]);
   const { popup, setPopup, triggerPopup } = usePopup();
+  const { del: deleteTitle } = useDeleteTitle();
+  const { del: deleteChapter } = useDeleteChapter();
+  const { data: title = [] } = useGetTitle({ _id: titleId });
+  const { data: chapters = [] } = useGetChapters({
+    title_id: titleId,
+    _embed: JSON.stringify([{ collection: "status_id", fields: "-_id status" }]),
+    _fields: "-__v -_guid -cover.cloud_public_id -contents.cloud_public_id",
+  });
 
   const handleDeleteTitle = (id) => {
     if (chapters.length > 0) {
@@ -43,60 +44,27 @@ function Chapters() {
       return;
     }
 
-    const handleDelete = () => {
-      dispatch(setLoading(true));
-
-      titleService.delete(id, {}).then(() => {
-        navigate(-1);
-      });
-
-      dispatch(setLoading(false));
-    };
-
     setPopup({
       title: "Xóa truyện",
       content: "Bạn có muốn xóa truyện?",
       variation: "confirm",
       isTriggered: true,
-      onConfirm: handleDelete,
+      onConfirm: () => {
+        deleteTitle({ id }).then(() => navigate(-1));
+      },
     });
   };
 
   const handleDeleteChapter = (data, setRowErrorId) => {
-    dispatch(setLoading(true));
     const ids = data instanceof Map ? Array.from(data.keys()) : data;
     const params = {
       _id_in: ids,
     };
 
-    chapterService
-      .delete(params)
-      .then(() => {
-        setChapters((prev) =>
-          prev.filter((item) => (Array.isArray(ids) ? !ids.includes(item._id) : ids !== item._id))
-        );
-      })
-      .catch(() => {
-        setRowErrorId(ids);
-      });
-
-    dispatch(setLoading(false));
-  };
-
-  useEffect(() => {
-    titleService.getOne({ _id: titleId }).then(async (titleResult) => {
-      const chapterParams = {
-        title_id: titleId,
-        _embed: JSON.stringify([{ collection: "status_id", fields: "-_id status" }]),
-        _fields: "-__v -_guid -cover.cloud_public_id -contents.cloud_public_id",
-      };
-
-      chapterService.getAll(chapterParams).then((chapterResult) => {
-        titleResult && setTitle(titleResult.data);
-        chapterResult && setChapters(chapterResult.data);
-      });
+    deleteChapter(params).catch(() => {
+      setRowErrorId(ids);
     });
-  }, []);
+  };
 
   return (
     <>

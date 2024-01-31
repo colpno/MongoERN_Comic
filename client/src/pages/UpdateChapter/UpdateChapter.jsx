@@ -1,16 +1,19 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useParams } from "react-router-dom";
 
 import { ChapterForm, FormWrapper } from "components";
-import { setLoading } from "libs/redux/slices/common.slice.js";
-import { useDispatch } from "react-redux";
-import { chapterService } from "services";
+import { useGetChapter, useUpdateChapter } from "hooks/index.jsx";
 import { updateChapterFormValidation } from "validations/updateChapterForm.validation";
 
 function UpdateChapter() {
-  const dispatch = useDispatch();
   const { chapterId } = useParams();
-  const [chapter, setChapter] = useState({});
+  const { update: updateChapter } = useUpdateChapter();
+  const { data: chapter = [] } = useGetChapter({
+    chapterId,
+    params: {
+      _embed: JSON.stringify([{ collection: "status_id", fields: "_id" }]),
+    },
+  });
 
   const INITIAL_VALUE = useMemo(
     () =>
@@ -78,25 +81,13 @@ function UpdateChapter() {
   };
 
   const handleSubmit = (values) => {
-    dispatch(setLoading(true));
-
     const changedValues = getChangedValues(values);
     changedValues.titleId = chapter.title_id;
 
     if (Object.keys(changedValues).length > 1) {
-      chapterService.update(chapterId, changedValues);
+      updateChapter({ id: chapterId, data: changedValues });
     }
-
-    dispatch(setLoading(false));
   };
-
-  useEffect(() => {
-    chapterService
-      .getOne(chapterId, {
-        _embed: JSON.stringify([{ collection: "status_id", fields: "_id" }]),
-      })
-      .then((response) => setChapter(response.data));
-  }, []);
 
   return (
     <FormWrapper title="Chỉnh sửa chương">

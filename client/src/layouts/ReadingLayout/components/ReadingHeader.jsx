@@ -1,15 +1,11 @@
 import classNames from "classnames/bind";
-import { useEffect, useReducer } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import { Logo } from "assets/images";
 import { Button } from "components";
-import { emitToast } from "features/Toast.jsx";
-import { setFavorite } from "libs/redux/slices/readingChapter.slice";
-import { changeTheme } from "libs/redux/slices/theme.slice";
-import { favoriteService, titleService } from "services";
-import { isEmpty } from "utils";
+import { useGetTitle, useToggleFavorite } from "hooks/index.jsx";
 import styles from "../assets/styles/ReadingHeader.module.scss";
 import ReadingNav from "./ReadingNav";
 import ReadingTools from "./ReadingTools";
@@ -17,86 +13,56 @@ import ReadingTools from "./ReadingTools";
 const cx = classNames.bind(styles);
 
 function ReadingHeader() {
-  const dispatch = useDispatch();
   const { titleId } = useParams();
-  const theme = useSelector((state) => state.theme.theme);
-  const isDarkMode = theme === "dark";
   const user = useSelector((state) => state.user.user);
   const { chapter, favorite } = useSelector((state) => state.reading);
-  const [state, updateState] = useReducer((prev, next) => ({ ...prev, ...next }), {
-    isLike: false,
-    controls: { isLiked: false },
-    title: {},
-  });
+  const { data: title = [] } = useGetTitle({ params: { _id: titleId }, isPrivate: false });
+  const { handleToggle, isFavored } = useToggleFavorite(chapter._id);
+  const [controls, setControls] = useState({ isFavored });
 
   const activeLike = (isActivated) => {
-    updateState({ controls: { ...state.controls, isLiked: isActivated } });
-  };
-
-  const handleChangeTheme = () => {
-    dispatch(changeTheme(!isDarkMode));
-  };
-
-  const handleLikeClick = () => {
-    if (isEmpty(user._id)) {
-      emitToast("Bạn cần phải đăng nhập để thích truyện", "error");
-      return;
-    }
-
-    if (!state.controls.isLiked) {
-      favoriteService.add(user._id, chapter._id).then((response) => {
-        activeLike(true);
-        dispatch(setFavorite(response.data));
-      });
-    }
-    if (state.controls.isLiked) {
-      favoriteService.delete(user._id, chapter._id).then(() => {
-        activeLike(false);
-        dispatch(setFavorite({}));
-      });
-    }
+    setControls((prev) => ({ ...prev, isFavored: isActivated }));
   };
 
   useEffect(() => {
-    titleService
-      .getOne({ _id: titleId }, false)
-      .then((response) => updateState({ title: response.data }));
+    if (!isFavored) {
+      activeLike(true);
+    }
+    if (isFavored) {
+      activeLike(false);
+    }
   }, []);
 
   useEffect(() => {
-    if (favorite.user_id === user._id) {
-      activeLike(true);
-    }
-    if (Object.keys(favorite).length === 0) {
-      activeLike(false);
+    if (favorite) {
+      if (favorite.user_id === user._id) {
+        activeLike(true);
+      }
+      if (Object.keys(favorite).length === 0) {
+        activeLike(false);
+      }
     }
   }, [favorite]);
 
   return (
     <>
-      {Object.keys(chapter).length > 0 && Object.keys(state.title).length > 0 && (
+      {Object.keys(chapter).length > 0 && Object.keys(title).length > 0 && (
         <header className={cx("reading-header")}>
           <Button wrapper to="/" className={cx("reading-header__logo")}>
             <Logo className={cx("logo")} />
           </Button>
           <div className={cx("reading-header__title")}>
-            <Button text to={`/comic/title/${state.title._id}`} title={state.title.title}>
-              {state.title.title}
+            <Button text to={`/comic/title/${title._id}`} title={title.title}>
+              {title.title}
             </Button>
           </div>
           <ReadingNav
             cx={cx}
             chapter={chapter}
-            totalChapter={state.title.total_chapter}
+            totalChapter={title.total_chapter}
             titleId={titleId}
           />
-          <ReadingTools
-            cx={cx}
-            isDarkMode={state.isDarkMode}
-            handleChangeTheme={handleChangeTheme}
-            isLike={state.isLike}
-            handleLike={handleLikeClick}
-          />
+          <ReadingTools cx={cx} onToggleFavorite={handleToggle} controls={controls} />
         </header>
       )}
       {}

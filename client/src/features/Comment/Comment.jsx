@@ -1,44 +1,35 @@
 import classNames from "classnames/bind";
 import { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import { HeadTitleMark } from "components";
-import { socket } from "context/socketContext";
 import { Pagination, Popup } from "features";
-import { usePopup } from "hooks";
-import { setLoading } from "libs/redux/slices/common.slice.js";
-import { commentService } from "services";
+import { useAddComment, useGetComments, usePopup, useUpdateComment } from "hooks";
 import { CommentForm, CommentList, RequireSignIn } from "./components";
 import styles from "./styles/Comment.module.scss";
 
 const cx = classNames.bind(styles);
 
 function Comment() {
-  const dispatch = useDispatch();
   const commentAt = useSelector((state) => state.comment.comment_at);
   const { user, isLoggingIn } = useSelector((state) => state.user);
-  const [comments, setComments] = useState([]);
   const [rootComments, setRootComments] = useState([]);
   const [paginate, setPaginate] = useState({ page: 1, limit: 15, total: 0 });
   const { popup, setPopup, triggerPopup } = usePopup();
   const initialFormValues = { text: "" };
-
-  const fetchComments = () => {
-    const params = {
-      comment_at: commentAt,
-      _embed: JSON.stringify([
-        { collection: "author", fields: "avatar username" },
-        { collection: "deletedBy", fields: "username" },
-      ]),
-      _fields: "author text slug parent_slug comment_replies_num createdAt deletedBy",
-    };
-
-    commentService.getAll(params).then((response) => setComments(response.data));
-  };
+  const { data: comments = [] } = useGetComments({
+    comment_at: commentAt,
+    _embed: JSON.stringify([
+      { collection: "author", fields: "avatar username" },
+      { collection: "deletedBy", fields: "username" },
+    ]),
+    _fields: "author text slug parent_slug comment_replies_num createdAt deletedBy",
+  });
+  const { add } = useAddComment();
+  const { update } = useUpdateComment();
 
   const handleSubmit = (values, { setSubmitting, resetForm }) => {
     const { text, slug } = values;
-    dispatch(setLoading(true));
 
     if (text && commentAt) {
       const data = {
@@ -47,13 +38,11 @@ function Comment() {
         text,
         parentSlug: slug,
       };
-
-      commentService.add(data).then(() => {
+      add(data).then(() => {
         resetForm();
       });
     }
 
-    dispatch(setLoading(false));
     setSubmitting(false);
   };
 
@@ -68,39 +57,35 @@ function Comment() {
   );
 
   const handleDelete = (commentId) => {
-    dispatch(setLoading(true));
-
     setPopup({
       isTriggered: true,
       variation: "confirm",
       title: "Xóa bình luận",
       content: "Bạn có chắc chắn muốn xóa?",
       onConfirm: () => {
-        commentService.update(commentId, { deletedBy: user._id }).then(() => {});
+        update(commentId, { deletedBy: user._id });
       },
     });
-
-    dispatch(setLoading(false));
   };
 
-  useEffect(() => {
-    if (socket) {
-      socket.on("send-comment", (comment) => {
-        setComments((prev) => [comment, ...prev]);
-      });
-      socket.on("delete-comment", (comment) => {
-        setComments((prev) => {
-          const newComments = prev.map((oldComment) => {
-            if (oldComment._id === comment._id) {
-              return comment;
-            }
-            return oldComment;
-          });
-          return newComments;
-        });
-      });
-    }
-  }, [socket]);
+  // useEffect(() => {
+  //   if (socket) {
+  //     socket.on("send-comment", (comment) => {
+  //       setComments((prev) => [comment, ...prev]);
+  //     });
+  //     socket.on("delete-comment", (comment) => {
+  //       setComments((prev) => {
+  //         const newComments = prev.map((oldComment) => {
+  //           if (oldComment._id === comment._id) {
+  //             return comment;
+  //           }
+  //           return oldComment;
+  //         });
+  //         return newComments;
+  //       });
+  //     });
+  //   }
+  // }, [socket]);
 
   useEffect(() => {
     const root = comments.filter((comment) => {
@@ -113,12 +98,6 @@ function Comment() {
     setPaginate((prev) => ({ ...prev, total: root.length }));
     setRootComments(paginated);
   }, [comments, paginate.page]);
-
-  useEffect(() => {
-    if (commentAt) {
-      fetchComments();
-    }
-  }, [commentAt]);
 
   return (
     <>

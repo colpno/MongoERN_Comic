@@ -6,9 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { roundNumByUnit, separateNumberDigit } from "utils";
 
 import { Popup } from "features";
-import { usePopup } from "hooks";
+import { useGetTitles, usePopup } from "hooks";
 import { setMyTitles } from "libs/redux/slices/title.slice";
-import { titleService } from "services";
 import { BookLine, ChatLine, DollarLine, EyeLine, ThumbUpLine } from "../assets/images";
 import styles from "../assets/styles/StatisticCount.module.scss";
 import IncomePopup from "./IncomePopup";
@@ -20,28 +19,23 @@ const cx = classNames.bind(styles);
 function StatisticCount() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
-  const [titles, setTitles] = useState([]);
   const [stat, setStat] = useState({ likes: 0, views: 0, totalTitles: 0, comments: 0 });
   const { popup, triggerPopup } = usePopup({
     isTriggered: false,
     title: "Thu nhập",
     content: <IncomePopup />,
   });
+  const { data: titles = [], isSuccess } = useGetTitles({
+    user_id: user._id,
+    _embed: JSON.stringify([
+      { collection: "approved_status_id", fields: "-_id code" },
+      { collection: "status_id", fields: "-_id code" },
+    ]),
+  });
 
   useEffect(() => {
-    const params = {
-      user_id: user._id,
-      _embed: JSON.stringify([
-        { collection: "approved_status_id", fields: "-_id code" },
-        { collection: "status_id", fields: "-_id code" },
-      ]),
-    };
-
-    titleService.getAll(params).then((response) => {
-      setTitles(response.data);
-      dispatch(setMyTitles(response.data));
-    });
-  }, []);
+    if (isSuccess) dispatch(setMyTitles(titles));
+  }, [isSuccess]);
 
   useEffect(() => {
     if (titles.length > 0) {

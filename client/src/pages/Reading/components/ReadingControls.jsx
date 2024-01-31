@@ -1,15 +1,12 @@
-/* eslint-disable no-unused-vars */
 import PropTypes from "prop-types";
-import { AiFillApple, AiFillHeart, AiFillStar } from "react-icons/ai";
-import { FaShareAlt } from "react-icons/fa";
+import { AiFillHeart, AiFillStar } from "react-icons/ai";
 
 import { Button } from "components";
-import { useFollow, useLike } from "hooks";
-import GGPlay from "../assets/images/icons8-google-play-48.png";
+import { useToggleFavorite, useToggleFollow } from "hooks/index.jsx";
 
 function ReadingControls({ cx, titleId, chapterId }) {
-  const { handleLike, isLike } = useLike(chapterId);
-  const { handleFollow, isFollowed } = useFollow(titleId);
+  const { handleToggle: handleToggleFavorite, isFavored } = useToggleFavorite(chapterId);
+  const { handleToggle: handleToggleFollow, isFollowed } = useToggleFollow(titleId);
 
   return (
     <div className={cx("reading-page__controls")}>
@@ -18,9 +15,9 @@ function ReadingControls({ cx, titleId, chapterId }) {
           className={cx(
             "reading-page__controls__controls__group__control",
             "like",
-            isLike ? "active" : ""
+            isFavored ? "active" : ""
           )}
-          onClick={handleLike}
+          onClick={handleToggleFavorite}
         >
           <AiFillHeart className={cx("icon")} />
           <span className={cx("text")}>Yêu thích</span>
@@ -31,7 +28,7 @@ function ReadingControls({ cx, titleId, chapterId }) {
             "follow",
             isFollowed ? "active" : ""
           )}
-          onClick={handleFollow}
+          onClick={handleToggleFollow}
         >
           <AiFillStar className={cx("icon")} />
           <span className={cx("text")}>Theo dõi</span>

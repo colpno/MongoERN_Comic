@@ -2,15 +2,14 @@ import { SortableContext } from "@dnd-kit/sortable";
 import classNames from "classnames/bind";
 import { FastField, Form, Formik } from "formik";
 import PropTypes from "prop-types";
-import { memo, useEffect, useMemo, useRef, useState } from "react";
+import { memo, useMemo, useRef, useState } from "react";
 import { Alert } from "react-bootstrap";
 import { IoCloseCircle } from "react-icons/io5";
 
 import { DndContext, closestCenter } from "@dnd-kit/core";
 import { Button, DnDSortable, Image, InputImage } from "components";
-import { useDragAndDrop } from "hooks/index.jsx";
+import { useDragAndDrop, useGetObjectStatuses } from "hooks/index.jsx";
 import { FormLabel, InputField, RadioGroup } from "libs/formik";
-import objectStatusService from "services/objectStatus.service.js";
 import InputMultiFile from "./components/InputMultiFile";
 import styles from "./styles/ChapterForm.module.scss";
 
@@ -18,7 +17,7 @@ const cx = classNames.bind(styles);
 
 function ChapterForm({ initialValues, validationSchema, handleSubmit }) {
   const [blobs, setBlobs] = useState(initialValues.contents ? [...initialValues.contents] : []);
-  const [statuses, setStatuses] = useState([]);
+  const { data: statuses = [] } = useGetObjectStatuses({ _fields: "status code" });
   const formikRef = useRef();
 
   const costOptions = [
@@ -62,17 +61,6 @@ function ChapterForm({ initialValues, validationSchema, handleSubmit }) {
     dataTemp.splice(index, 1);
     setFieldValue("contents", dataTemp);
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const statusParams = { _fields: "status code" };
-
-      const statusResult = await objectStatusService.getAll(statusParams);
-
-      statusResult && setStatuses(statusResult.data);
-    };
-    fetchData();
-  }, []);
 
   return (
     <Formik

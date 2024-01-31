@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import { useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
@@ -6,7 +5,7 @@ import { useSelector } from "react-redux";
 
 import { robotHead1 } from "assets/images/index.js";
 import { Button, Image, Popper } from "components";
-import { useClickOutSide, useLogout } from "hooks";
+import { useClickOutSide, useLazyLogout } from "hooks";
 import styles from "../styles/Avatar.module.scss";
 import getAvatarMenu from "../utils/getAvatarMenu";
 import AvatarDropdownList from "./AvatarDropdownList";
@@ -14,7 +13,7 @@ import AvatarDropdownList from "./AvatarDropdownList";
 const cx = classNames.bind(styles);
 
 function Avatar() {
-  const { logout } = useLogout("/");
+  const { logout } = useLazyLogout();
   const [showMenu, setShowMenu] = useState(false);
   const avatarRef = useClickOutSide(showMenu, () => setShowMenu(false));
   const user = useSelector((state) => state.user.user);
@@ -48,7 +47,13 @@ function Avatar() {
           </Button>
         }
         content={
-          <AvatarDropdownList cx={cx} isLoggingIn={isLoggingIn} menu={menu} logoutClick={logout} />
+          <AvatarDropdownList
+            cx={cx}
+            isLoggingIn={isLoggingIn}
+            menu={menu}
+            logoutClick={logout}
+            setShowDropDown={setShowMenu}
+          />
         }
         contentVisible={showMenu}
       />

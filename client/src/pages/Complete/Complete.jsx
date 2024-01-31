@@ -1,40 +1,30 @@
 import classNames from "classnames/bind";
-import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 
 import { CardList } from "components";
 import { NoData } from "features";
+import { useGetTitles } from "hooks/index.jsx";
 import { Slide } from "react-awesome-reveal";
-import { titleService } from "services";
 import styles from "./Complete.module.scss";
 
 const cx = classNames.bind(styles);
 
 function Complete() {
-  const [titles, setTitles] = useState([]);
-
-  const fetchData = () => {
-    titleService
-      .getAll(
-        {
-          release_day: "finished",
-          _embed: JSON.stringify([
-            { collection: "approved_status_id", fields: "-_id code", match: { code: "apd" } },
-            { collection: "status_id", fields: "-_id code", match: { code: "vis" } },
-          ]),
-        },
-        false
-      )
-      .then((response) => setTitles(response.data));
+  const params = {
+    params: {
+      release_day: "finished",
+      _embed: JSON.stringify([
+        { collection: "approved_status_id", fields: "-_id code", match: { code: "apd" } },
+        { collection: "status_id", fields: "-_id code", match: { code: "vis" } },
+      ]),
+    },
+    isPrivate: false,
   };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const { data: titles = [] } = useGetTitles(params, false);
 
   return (
     <Container className={cx("complete-page")}>
-      {titles.length > 0 ? (
+      {titles?.length > 0 ? (
         <Slide direction="up" triggerOnce>
           <CardList
             wrap

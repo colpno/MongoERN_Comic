@@ -1,41 +1,32 @@
 import classNames from "classnames/bind";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Container } from "react-bootstrap";
 
-import { titleService } from "services";
-import styles from "./styles/Ranking.module.scss";
+import { useGetTitles } from "hooks/index.jsx";
 import RankingList from "./components/RankingList";
 import Top5 from "./components/Top5";
+import styles from "./styles/Ranking.module.scss";
 
 const cx = classNames.bind(styles);
 
 function Ranking() {
-  const [titles, setTitles] = useState([]);
-  const topFiveTitles = useMemo(() => titles?.slice(0, 5), [titles]);
-  const restRankTitles = useMemo(() => titles?.slice(5), [titles]);
-  const hasData = titles.length > 0;
+  const { data: titles = {} } = useGetTitles(
+    {
+      _sort: "like",
+      _order: 1,
+      _limit: 50,
+      _page: 1,
+      _embed: JSON.stringify([
+        { collection: "approved_status_id", fields: "-_id code", match: { code: "apd" } },
+        { collection: "status_id", fields: "-_id code", match: { code: "vis" } },
+      ]),
+    },
+    false
+  );
 
-  const fetchData = () => {
-    titleService
-      .getAll(
-        {
-          _sort: "like",
-          _order: "asc",
-          _limit: 50,
-          _page: 1,
-          _embed: JSON.stringify([
-            { collection: "approved_status_id", fields: "-_id code", match: { code: "apd" } },
-            { collection: "status_id", fields: "-_id code", match: { code: "vis" } },
-          ]),
-        },
-        false
-      )
-      .then((response) => setTitles(response.data));
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const topFiveTitles = useMemo(() => titles.data?.slice(0, 5), [titles]);
+  const restRankTitles = useMemo(() => titles.data?.slice(5), [titles]);
+  const hasData = titles.data?.length > 0;
 
   return (
     <>

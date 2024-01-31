@@ -3,10 +3,7 @@ import classNames from "classnames/bind";
 import { robotHead1 } from "assets/images/index";
 import { Button } from "components";
 import { Popup } from "features";
-import { usePopup } from "hooks";
-import { setLoading } from "libs/redux/slices/common.slice.js";
-import { useDispatch } from "react-redux";
-import { userService } from "services";
+import { usePopup, useRegisterUser } from "hooks";
 import { registerFormValidation } from "validations/registerForm.validation";
 import RegisterForm from "./components/RegisterForm";
 import styles from "./styles/Register.module.scss";
@@ -14,24 +11,25 @@ import styles from "./styles/Register.module.scss";
 const cx = classNames.bind(styles);
 
 function Register() {
-  const dispatch = useDispatch();
   const { popup, setPopup, triggerPopup } = usePopup();
+  const { register: registerUser } = useRegisterUser();
 
-  const handleSubmit = (values, { setSubmitting }) => {
-    dispatch(setLoading(false));
-
+  const handleSubmit = async (values, { setSubmitting }) => {
     const { username, email, password } = values;
-    userService
-      .register({ username, password, email, role: "member", avatar: robotHead1 })
-      .then((response) => {
-        setPopup({
-          isTriggered: true,
-          title: "Thông báo",
-          content: response.message,
-        });
-      });
+    const response = await registerUser({
+      username,
+      password,
+      email,
+      role: "member",
+      avatar: robotHead1,
+    }).unwrap();
 
-    dispatch(setLoading(false));
+    setPopup({
+      isTriggered: true,
+      title: "Thông báo",
+      content: response.message,
+    });
+
     setSubmitting(false);
   };
 

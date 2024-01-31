@@ -4,9 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import { CardList } from "components";
 import { DAYS_OF_WEEK } from "constants/time.constant";
 import { BannerSlider, NoData } from "features";
-import { useInfinitePagination } from "hooks";
+import { useInfinitePagination, useLazyGetTitles } from "hooks";
 import { Container } from "react-bootstrap";
-import { titleService } from "services";
 import Calendar from "./assets/images/icons8-new-year-calendar-24.png";
 import styles from "./assets/styles/Weekly.module.scss";
 import DaysOfWeek from "./components/DaysOfWeek";
@@ -17,6 +16,7 @@ function Weekly() {
   const TITLES_PER_PAGE = 15;
   const today = new Date().getDay();
   const [titles, setTitles] = useState([]);
+  const { get: getTitles } = useLazyGetTitles();
   const { pagination, setPaginationTotal, setLastElement } = useInfinitePagination(TITLES_PER_PAGE);
   const [limit, setLimit] = useState(TITLES_PER_PAGE);
 
@@ -34,28 +34,22 @@ function Weekly() {
     [titles]
   );
 
-  const fetchTitles = (selectedDay, isNextPage = false) => {
-    titleService
-      .getAll(
-        {
-          release_day: selectedDay,
-          _page: pagination.page,
-          _limit: pagination.limit,
-          _embed: JSON.stringify([
-            { collection: "approved_status_id", fields: "-_id code", match: { code: "apd" } },
-            { collection: "status_id", fields: "-_id code", match: { code: "vis" } },
-          ]),
-        },
-        false
-      )
-      .then((response) => {
-        if (!isNextPage) {
-          setTitles(response.data);
-          setPaginationTotal(response.paginate.total);
-        } else {
-          setTitles((prev) => [...prev, ...response.data]);
-        }
-      });
+  const fetchTitles = async (selectedDay, isNextPage = false) => {
+    const response = await getTitles({
+      params: {
+        release_day: selectedDay,
+        _page: pagination.page,
+        _limit: pagination.limit,
+        _embed: JSON.stringify([
+          { collection: "approved_status_id", fields: "-_id code", match: { code: "apd" } },
+          { collection: "status_id", fields: "-_id code", match: { code: "vis" } },
+        ]),
+      },
+      isPrivate: false,
+    }).unwrap();
+
+    setTitles(response.data);
+    if (!isNextPage) setPaginationTotal(response.pagination.total);
   };
 
   const handleDayClick = (day) => {

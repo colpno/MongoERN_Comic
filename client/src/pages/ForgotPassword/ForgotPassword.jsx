@@ -1,21 +1,18 @@
 import classNames from "classnames/bind";
 import { Container } from "react-bootstrap";
-import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 
 import { FormWrapper } from "components";
 import { Popup } from "features";
-import { usePopup } from "hooks";
-import { setLoginInfo } from "libs/redux/slices/login.slice";
-import { authService } from "services";
+import { useForgotPassword, usePopup } from "hooks";
 import styles from "./ForgotPassword.module.scss";
 import ForgotPasswordForm from "./components/ForgotPasswordForm";
 
 const cx = classNames.bind(styles);
 
 function ForgotPassword() {
-  const dispatch = useDispatch();
   const { popup, setPopup, triggerPopup } = usePopup();
+  const { forgotPassword } = useForgotPassword();
 
   const INITIAL_VALUES = {
     username: "",
@@ -30,17 +27,16 @@ function ForgotPassword() {
     email: Yup.string().email("Định dạng email không hợp lệ").required("Email không được để trống"),
   });
 
-  const handleSubmit = (values) => {
+  const handleSubmit = async (values) => {
     const { username, email } = values;
 
     if (username && email) {
-      authService.forgotPassword(username, email).then((response) => {
-        dispatch(setLoginInfo(response.data));
-        setPopup({
-          isTriggered: true,
-          title: "Thông báo",
-          content: response.message,
-        });
+      const response = await forgotPassword({ username, email }).unwrap();
+
+      setPopup({
+        isTriggered: true,
+        title: "Thông báo",
+        content: response.message,
       });
     }
   };

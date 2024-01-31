@@ -5,8 +5,7 @@ import { IoSearchOutline } from "react-icons/io5";
 import { MdOutlineOpenInNew } from "react-icons/md";
 
 import { Button, Popper } from "components";
-import { useClickOutSide, useDebounce, useSearch } from "hooks";
-import { titleService } from "services";
+import { useClickOutSide, useDebounce, useLazyGetTitles, useSearch } from "hooks";
 import styles from "../styles/Search.module.scss";
 import SearchDropdownList from "./SearchDropdownList";
 
@@ -17,8 +16,8 @@ function Search() {
   const [searchResult, setSearchResult] = useState([]);
   const [showResult, setShowResult] = useState(true);
   const searchText = useDebounce(searchValue, 500);
-
   const searchRef = useClickOutSide(showResult, () => showResult && setShowResult(false));
+  const { get: getTitles } = useLazyGetTitles();
 
   const handleClear = () => {
     setSearchValue("");
@@ -26,16 +25,17 @@ function Search() {
   };
 
   useEffect(() => {
-    if (searchText.length > 0) {
-      const params = {
-        _or: JSON.stringify([{ title_like: searchText }, { author_like: searchText }]),
-      };
+    (async () => {
+      if (searchText.length > 0) {
+        const params = {
+          _or: JSON.stringify([{ title_like: searchText }, { author_like: searchText }]),
+        };
 
-      titleService.getAll(params, false).then((response) => {
-        const searched = useSearch(response.data, searchValue, ["title", "author"]);
+        const response = await getTitles({ params, isPrivate: false }).unwrap();
+        const searched = useSearch(response, searchValue, ["title", "author"]);
         setSearchResult(searched);
-      });
-    }
+      }
+    })();
   }, [searchText]);
 
   useEffect(() => {

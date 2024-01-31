@@ -1,26 +1,26 @@
 import classNames from "classnames/bind";
+import { TITLE_PAGE_CHAPTERS_PER_PAGE } from "constants/paginate.constant";
+import { socket } from "context/socketContext";
+import { Comment, NoData, Pagination, Popup, Recommend } from "features";
+import { emitToast } from "features/Toast.jsx";
+import {
+  useAddChapterTransaction,
+  useAddFollow,
+  useLazyGetChapterTransactions,
+  useLazyGetChapters,
+  useLazyGetGenres,
+  useLazyGetTitle,
+  usePagination,
+  usePopup,
+} from "hooks";
+import { setCommentPlace } from "libs/redux/slices/comment.slice";
+import { setGenresOfTitle, setTitle as setStoreTitle } from "libs/redux/slices/title.slice";
+import { setUser } from "libs/redux/slices/user.slice";
 import moment from "moment";
 import { useEffect, useMemo, useReducer } from "react";
 import { Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-
-import { TITLE_PAGE_CHAPTERS_PER_PAGE } from "constants/paginate.constant";
-import { socket } from "context/socketContext";
-import { Comment, NoData, Pagination, Popup, Recommend } from "features";
-import { usePagination, usePopup } from "hooks";
-import { setCommentPlace } from "libs/redux/slices/comment.slice";
-import { setLoading, setToast } from "libs/redux/slices/common.slice.js";
-import { setGenresOfTitle, setTitle as setStoreTitle } from "libs/redux/slices/title.slice";
-import { setUser } from "libs/redux/slices/user.slice";
-import {
-  chapterService,
-  chapterTransactionService,
-  followService,
-  genreService,
-  titleService,
-} from "services";
-import { handlePromiseAllSettled } from "utils";
 import { circleC, circleP } from "../../assets/images";
 import { ComicChapters, Introduction, PurchaseBox, TitleAbout } from "./components";
 import styles from "./styles/Title.module.scss";
@@ -32,6 +32,12 @@ function Title() {
   const navigate = useNavigate();
   const { titleId } = useParams();
   const { user, isLoggingIn } = useSelector((state) => state.user);
+  const { addFollow } = useAddFollow();
+  const { get: getChapters } = useLazyGetChapters();
+  const { get: getGenres } = useLazyGetGenres();
+  const { get: getTitle } = useLazyGetTitle();
+  const { get: getChapterTransactions } = useLazyGetChapterTransactions();
+  const { add: addChapterTransaction } = useAddChapterTransaction();
   const { pagination, setPagination, setPaginationTotal } = usePagination(
     TITLE_PAGE_CHAPTERS_PER_PAGE
   );
@@ -47,7 +53,7 @@ function Title() {
   const haveChapters = state.chapters.length > 0;
   const { popup, setPopup, triggerPopup } = usePopup();
   const backgroundImageCSS = hasTitle && {
-    backgroundImage: `url(${state.title.cover.source})`,
+    backgroundImage: `url(${state.title.cover?.source})`,
     backgroundRepeat: "no-repeat",
     backgroundSize: "100% 360px",
     filter: "blur(4px)",
@@ -80,37 +86,33 @@ function Title() {
     }
   };
 
-  const handlePurchase = (payment, chapter) => {
+  const handlePurchase = async (payment, chapter) => {
     const { amount, method } = payment;
     const { _id: chapterId } = chapter;
 
     if (!isLoggingIn) {
-      dispatch(
-        setToast({ message: "Bạn cần phải đăng nhập để thực thiện chức năng", mode: "error" })
-      );
+      emitToast("Bạn cần phải đăng nhập để thực thiện chức năng", "error");
       return;
     }
 
     if (checkCanPurchase(method, amount)) {
-      dispatch(setLoading(true));
-
       const rentList = ["rent ticket"];
-      const expiredAt = rentList.includes(method)
-        ? moment().add(5, "days").toISOString()
-        : undefined;
+      const expiredAt = rentList.includes(method) ? moment().add(5, "days").toISOString() : null;
 
-      chapterTransactionService
-        .add(titleId, chapterId, method, amount, expiredAt)
-        .then((response) => {
-          dispatch(setUser(response.data.user));
-          updateState({
-            purchasedHistories: [...state.purchasedHistories, response.data.transaction],
-          });
-        });
+      const response = await addChapterTransaction({
+        titleId,
+        chapterId,
+        method,
+        amount,
+        expiredAt,
+      }).unwrap();
 
-      dispatch(setLoading(false));
+      dispatch(setUser(response.data.user));
+      updateState({
+        purchasedHistories: [...state.purchasedHistories, response.data.transaction],
+      });
     } else {
-      dispatch(setToast({ message: "Không đủ để thực hiện chức năng", mode: "error" }));
+      emitToast("Không đủ để thực hiện chức năng", "error");
     }
   };
 
@@ -126,9 +128,7 @@ function Title() {
     });
   };
 
-  const fetchChapters = () => {
-    dispatch(setLoading(true));
-
+  const fetchChapters = async () => {
     const chapterApiParams = {
       title_id: titleId,
       _sort: "order",
@@ -137,14 +137,9 @@ function Title() {
       _limit: pagination.limit,
     };
 
-    chapterService.getAll(chapterApiParams, false).then((response) => {
-      setPaginationTotal(response.paginate.total);
-      updateState({
-        chapters: response.data,
-      });
-    });
-
-    dispatch(setLoading(false));
+    const response = await getChapters({ params: chapterApiParams, isPrivate: false }).unwrap();
+    setPaginationTotal(response.pagination.total);
+    updateState({ chapters: response.data });
   };
 
   const handleSorting = () => {
@@ -155,10 +150,8 @@ function Title() {
   };
 
   const handleFollow = (titleID) => {
-    followService.add(titleID);
+    addFollow(titleID);
   };
-
-  useEffect(() => {}, [state.title]);
 
   useEffect(() => {
     if (socket) {
@@ -171,9 +164,7 @@ function Title() {
   }, []);
 
   useEffect(() => {
-    (() => {
-      dispatch(setLoading(true));
-
+    (async () => {
       const chapterApiParams = {
         title_id: titleId,
         _sort: "order",
@@ -192,50 +183,41 @@ function Title() {
           { collection: "status_id", fields: "-_id code", match: { code: "vis" } },
         ]),
       };
+      const result = {};
 
-      titleService
-        .getOne(titleParams, false)
-        .then(async (titleResult) => {
-          const genreParams = {
-            name_in: titleResult.data.genres,
-            _fields: "name",
-          };
-          const chaptersPromise = chapterService.getAll(chapterApiParams, false);
-          const genresPromise = genreService.getAll(genreParams);
-          const chapterTransactionPromise = chapterTransactionService.getAll(
-            chapterTranParams,
-            !!user._id
-          );
-          const promises = [chaptersPromise, genresPromise, chapterTransactionPromise];
+      try {
+        const getTitleResponse = await getTitle({ params: titleParams, isPrivate: false }).unwrap();
 
-          const results = await Promise.allSettled(promises);
-          const { fulfilledResults } = handlePromiseAllSettled(results);
-          const [chaptersResult, genresResult, chapterTransactionResult] = fulfilledResults;
+        const genreParams = {
+          name_in: getTitleResponse.genres,
+          _fields: "name",
+        };
 
-          const resultData = {
-            title: titleResult.data,
-          };
-          dispatch(setGenresOfTitle(titleResult.data.genres));
-          dispatch(setStoreTitle(titleResult.data));
-          if (genresResult) {
-            resultData.genres = genresResult.data;
-          }
-          if (chaptersResult) {
-            resultData.chapters = chaptersResult.data;
-            setPaginationTotal(chaptersResult.paginate.total);
-          }
-          if (chapterTransactionResult) {
-            resultData.purchasedHistories = chapterTransactionResult.data;
-          }
-          updateState({
-            ...resultData,
-          });
-        })
-        .catch(() => {
-          navigate("/not-found");
-        });
+        result.title = getTitleResponse;
+        result.genres = (await getGenres(genreParams).unwrap()) || [];
 
-      dispatch(setLoading(false));
+        dispatch(setGenresOfTitle(getTitleResponse.genres));
+        dispatch(setStoreTitle(getTitleResponse));
+      } catch (error) {
+        navigate("/not-found");
+      }
+
+      const getChaptersResponse = await getChapters({
+        params: chapterApiParams,
+        isPrivate: false,
+      }).unwrap();
+
+      const getChapterTransactionResponse = await getChapterTransactions({
+        params: chapterTranParams,
+        isPrivate: !!user._id,
+      }).unwrap();
+
+      setPaginationTotal(getChaptersResponse.pagination.total);
+      updateState({
+        ...result,
+        chapters: getChaptersResponse.data,
+        purchasedHistories: getChapterTransactionResponse,
+      });
     })();
   }, [titleId, user]);
 

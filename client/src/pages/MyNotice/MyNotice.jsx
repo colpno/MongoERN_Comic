@@ -1,64 +1,38 @@
 import classNames from "classnames/bind";
 import moment from "moment";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 import { Col, Container, Row } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
-import { setLoading } from "libs/redux/slices/common.slice.js";
-import { personalNotificationService } from "services";
+import {
+  useDeletePersonalNotification,
+  useGetPersonalNotifications,
+  useUpdatePersonalNotification,
+} from "hooks/index.jsx";
 import styles from "./MyNotice.module.scss";
 import MyNoticeTable from "./components/MyNoticeTable";
 
 const cx = classNames.bind(styles);
 
 function MyNotice() {
-  const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
-  const [notifications, setNotifications] = useState([]);
+  const { update } = useUpdatePersonalNotification();
+  const { del } = useDeletePersonalNotification();
+  const { data: notifications = [] } = useGetPersonalNotifications({
+    user_id: user._id,
+    _fields: "-user_id",
+  });
 
   const handleRead = useCallback((row) => {
-    dispatch(setLoading(true));
-
     const now = moment().toISOString();
     const data = { read_at: row.read_at ? null : now };
-
-    personalNotificationService.update(row._id, data).then((response) => {
-      const { data: newNotice } = response;
-      setNotifications((prev) => {
-        return prev.map((notification) => {
-          return notification._id === newNotice._id ? newNotice : notification;
-        });
-      });
-    });
-
-    dispatch(setLoading(false));
+    update({ id: row._id, data });
   }, []);
 
   const handleDelete = (data) => {
-    dispatch(setLoading(true));
     const ids = data instanceof Map ? Array.from(data.keys()) : data;
-    const params = {
-      _id_in: ids,
-    };
-
-    personalNotificationService.delete(params);
-
-    dispatch(setLoading(false));
+    del({ _id_in: ids });
   };
-
-  useEffect(() => {
-    dispatch(setLoading(true));
-    const params = {
-      user_id: user._id,
-      _fields: "-user_id",
-    };
-
-    personalNotificationService.getAll(params).then((response) => {
-      setNotifications(response.data);
-    });
-
-    dispatch(setLoading(false));
-  }, []);
 
   return (
     <Container className={cx("notification")}>

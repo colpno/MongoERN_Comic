@@ -1,33 +1,29 @@
 import classNames from "classnames/bind";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { Button } from "components";
 import { Popup } from "features";
-import { usePopup } from "hooks";
-import { setLoginInfo } from "libs/redux/slices/login.slice";
-import { authService } from "services";
+import { useLogin, usePopup } from "hooks";
 import LoginForm from "./components/LoginForm";
 import styles from "./styles/Login.module.scss";
 
 const cx = classNames.bind(styles);
 
 function Login() {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { popup, setPopup, triggerPopup } = usePopup();
+  const { login } = useLogin();
 
-  const handleSubmit = (values, { setSubmitting }) => {
+  const handleSubmit = async (values, { setSubmitting }) => {
     const { username, password } = values;
-    authService.login(username, password).then((response) => {
-      dispatch(setLoginInfo(response.data));
 
-      setPopup({
-        isTriggered: true,
-        title: "Thông báo",
-        content: response.message,
-        onCancel: () => navigate("verify"),
-      });
+    const response = await login({ username, password }).unwrap();
+
+    setPopup({
+      isTriggered: true,
+      title: "Thông báo",
+      content: response.message,
+      onCancel: () => navigate("verify"),
     });
 
     setSubmitting(false);

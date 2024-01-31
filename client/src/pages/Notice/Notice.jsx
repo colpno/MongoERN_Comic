@@ -1,6 +1,6 @@
-import { useGetNotificationQuery } from "api/notification.api.js";
 import classNames from "classnames/bind";
 import DOMPurify from "dompurify";
+import { useGetNotification } from "hooks/index.jsx";
 import { memo } from "react";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { useParams } from "react-router-dom";
@@ -11,11 +11,9 @@ const cx = classNames.bind(styles);
 
 function Notice() {
   const { noticeId } = useParams();
-  const { data: notification } = useGetNotificationQuery(noticeId);
+  const { data: notification } = useGetNotification(noticeId);
 
-  if (!notification) {
-    return <div />;
-  }
+  if (!notification) return <div />;
 
   const postedTime = formatTime(notification.createdAt);
 

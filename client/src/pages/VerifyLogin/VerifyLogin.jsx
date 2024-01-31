@@ -1,18 +1,14 @@
 import classNames from "classnames/bind";
-import Cookies from "js-cookie";
 import moment from "moment";
 import { useEffect, useRef, useState } from "react";
 import { BsBoxArrowInRight } from "react-icons/bs";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { Button } from "components";
 import { Popup } from "features";
 import { emitToast } from "features/Toast.jsx";
-import { usePopup } from "hooks";
-import { setLoginInfo as setLoginInfoStore } from "libs/redux/slices/login.slice";
-import { setUser } from "libs/redux/slices/user.slice";
-import { authService } from "services";
+import { usePopup, useSendOTP, useVerifyLogin } from "hooks";
+import Cookies from "js-cookie";
 import Numpad from "./components/Numpad";
 import OTPHead from "./components/OTPHead";
 import OTPInput from "./components/OTPInput";
@@ -24,7 +20,6 @@ const cx = classNames.bind(styles);
 function VerifyLogin() {
   const RE_SEND_TIME = 5;
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const reSendCountdownRef = useRef(null);
@@ -50,6 +45,8 @@ function VerifyLogin() {
     digit4: "",
   });
   const { popup, setPopup, triggerPopup } = usePopup();
+  const { verifyLogin } = useVerifyLogin();
+  const { sendOTP } = useSendOTP();
 
   const handleSubmit = () => {
     const OTPKeys = Object.keys(OTPValue);
@@ -63,17 +60,10 @@ function VerifyLogin() {
       return;
     }
 
-    const { id, username, email } = loginInfo;
+    const { id, username, email, oid } = loginInfo;
 
     if (!!id && !!username && !!email) {
-      authService.verifyLogin(id, username, email, OTPString).then((response) => {
-        // save user's account info to redux
-        dispatch(setUser(response.data));
-
-        setTimeout(() => {
-          navigate("/");
-        }, 1000);
-      });
+      verifyLogin({ id, username, email, otp: OTPString, oid });
     }
   };
 
@@ -208,9 +198,7 @@ function VerifyLogin() {
   const handleReSend = () => {
     const { id, username, email } = loginInfo;
 
-    authService.sendOTP(id, username, email).then((response) => {
-      dispatch(setLoginInfoStore(response.data));
-    });
+    sendOTP({ id, username, email });
 
     setReSend((prev) => ({ ...prev, disable: true }));
   };

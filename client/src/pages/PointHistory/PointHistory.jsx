@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 import { Container, Row } from "react-bootstrap";
@@ -5,7 +6,6 @@ import { useSelector } from "react-redux";
 
 import { NoData, Pagination } from "features";
 import { usePagination } from "hooks";
-import { pointHistoryService } from "services";
 import styles from "./styles/PointHistory.module.scss";
 import PointHistoryList from "./components/PointHistoryList";
 
@@ -26,10 +26,10 @@ function PointHistory() {
       _page: pagination.page,
       _limit: pagination.limit,
     };
-    pointHistoryService.getAll(params).then((response) => {
-      setHistories(response.data);
-      setPaginationTotal(response.paginate.total);
-    });
+    // pointHistoryService.getAll(params).then((response) => {
+    //   setHistories(response.data);
+    //   setPaginationTotal(response.pagination.total);
+    // });
   };
 
   useEffect(() => {

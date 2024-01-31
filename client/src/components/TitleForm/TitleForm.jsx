@@ -1,20 +1,20 @@
 import classNames from "classnames/bind";
 import { FastField, Form, Formik } from "formik";
 import PropTypes from "prop-types";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Alert } from "react-bootstrap";
 
-import { InputImage, Button } from "components";
-import { CheckBoxGroup, InputField, RadioGroup, TextAreaField, FormLabel } from "libs/formik";
-import { genreService, objectStatusService } from "services";
-import { getReleaseDayOptions, handlePromiseAllSettled } from "utils";
+import { Button, InputImage } from "components";
+import { useGetGenres, useGetObjectStatuses } from "hooks/index.jsx";
+import { CheckBoxGroup, FormLabel, InputField, RadioGroup, TextAreaField } from "libs/formik";
+import { getReleaseDayOptions } from "utils";
 import styles from "./TitleForm.module.scss";
 
 const cx = classNames.bind(styles);
 
 function TitleForm({ initialValues, validationSchema, handleCancel, handleSubmit, imageBlob }) {
-  const [genres, setGenres] = useState([]);
-  const [statuses, setStatuses] = useState([]);
+  const { data: genres = [] } = useGetGenres({ _fields: "-_id name" });
+  const { data: statuses = [] } = useGetObjectStatuses({ _fields: "status code" });
   const releaseDayOptions = getReleaseDayOptions();
 
   const genreOptions = useMemo(
@@ -36,24 +36,6 @@ function TitleForm({ initialValues, validationSchema, handleCancel, handleSubmit
   const handleRemove = (value) => {
     console.log(value);
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const genresParams = { _fields: "-_id name" };
-      const statusParams = { _fields: "status code" };
-
-      const genrePromise = genreService.getAll(genresParams);
-      const statusPromise = objectStatusService.getAll(statusParams);
-
-      const results = await Promise.allSettled([genrePromise, statusPromise]);
-      const { fulfilledResults } = handlePromiseAllSettled(results);
-      const [genreResult, statusResult] = fulfilledResults;
-
-      genreResult && setGenres(genreResult.data);
-      statusResult && setStatuses(statusResult.data);
-    };
-    fetchData();
-  }, []);
 
   return (
     <Formik

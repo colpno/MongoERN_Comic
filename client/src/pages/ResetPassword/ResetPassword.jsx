@@ -1,19 +1,25 @@
 import classNames from "classnames/bind";
 import { Container } from "react-bootstrap";
-import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import * as Yup from "yup";
 
 import { FormWrapper } from "components";
-import { authService } from "services";
+import { emitToast } from "features/Toast.jsx";
+import { useResetPassword } from "hooks/index.jsx";
+import { memo } from "react";
 import styles from "./ResetPassword.module.scss";
 import ResetPasswordForm from "./components/ResetPasswordForm";
 
 const cx = classNames.bind(styles);
 
 function ResetPassword() {
-  const loginInfo = useSelector((state) => state.login.info);
   const { token } = useParams();
+  const { resetPassword } = useResetPassword();
+
+  if (!token) {
+    emitToast("Không thể thực hiện hành động này, vui lòng thực hiện bước trước đó!", "error");
+    return <div />;
+  }
 
   const INITIAL_VALUES = { password: "", confirmPassword: "" };
 
@@ -35,7 +41,7 @@ function ResetPassword() {
     const { password } = values;
 
     if (password) {
-      authService.resetPassword(loginInfo.id, password, token);
+      resetPassword({ password, token });
     }
   };
 
@@ -53,4 +59,4 @@ function ResetPassword() {
   );
 }
 
-export default ResetPassword;
+export default memo(ResetPassword);
