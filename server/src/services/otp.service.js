@@ -45,12 +45,9 @@ const otpService = {
       throw new Error(error);
     }
   },
-  getOne: (username, email) => {
+  getOne: (filter) => {
     try {
-      const response = Otp.findOne({
-        username,
-        email,
-      });
+      const response = Otp.findOne(filter);
       return response;
     } catch (error) {
       throw new Error(error);
