@@ -13,7 +13,8 @@ function Ranking() {
   const { data: titles = {} } = useGetTitles(
     {
       _sort: {
-        like: 1,
+        like: -1,
+        view: -1,
       },
       _limit: 50,
       _page: 1,
