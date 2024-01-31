@@ -149,7 +149,7 @@ const authController = {
         return next(createError(400, 'Bạn chưa thực hiện đầy đủ các bước đăng nhập'));
       }
 
-      const otp = await otpService.getOne({ oid });
+      const otp = await otpService.getOne({ _id: oid });
       if (!otp) return next(createError(401, 'Mã OTP không chính xác'));
 
       const sameOTP = bcrypt.compareSync(userOTP, otp.code);
