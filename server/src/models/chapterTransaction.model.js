@@ -5,7 +5,7 @@ const chapterTransactionSchema = mongoose.Schema(
     user_id: { type: mongoose.Types.ObjectId, ref: 'users', require: true },
     title_id: { type: mongoose.Types.ObjectId, ref: 'titles', require: true },
     chapter_id: { type: mongoose.Types.ObjectId, ref: 'chapters', require: true },
-    expiredAt: { type: Date },
+    expiredAt: { type: [Date, null] },
     method: {
       type: String,
       enum: ['coin', 'point', 'rent ticket', 'purchase ticket'],
