@@ -44,8 +44,9 @@ function Reading() {
     getChapters({
       params: {
         title_id: titleId,
-        _sort: "order",
-        _order: "asc",
+        _sort: {
+          order: 1,
+        },
       },
       isPrivate: false,
     });

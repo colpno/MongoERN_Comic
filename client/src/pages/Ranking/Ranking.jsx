@@ -12,8 +12,9 @@ const cx = classNames.bind(styles);
 function Ranking() {
   const { data: titles = {} } = useGetTitles(
     {
-      _sort: "like",
-      _order: 1,
+      _sort: {
+        like: 1,
+      },
       _limit: 50,
       _page: 1,
       _embed: JSON.stringify([

@@ -15,15 +15,18 @@ const cx = classNames.bind(styles);
 function ComicSection() {
   const dispatch = useDispatch();
   const { data: genres = {} } = useGetGenres({
-    _sort: "_id",
-    _order: "asc",
+    _sort: {
+      _id: 1,
+    },
     _limit: 4,
   });
   const allGenreNames = genres.data?.map((genre) => genre.name);
   const titlesQueryParams = {
     genres_in: allGenreNames,
-    _sort: "like",
-    _order: "desc",
+    _sort: {
+      like: -1,
+      view: -1,
+    },
     _embed: JSON.stringify([
       { collection: "approved_status_id", fields: "-_id code", match: { code: "apd" } },
       { collection: "status_id", fields: "-_id code", match: { code: "vis" } },

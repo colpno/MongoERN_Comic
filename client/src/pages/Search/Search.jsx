@@ -26,8 +26,9 @@ function Search() {
     order: "desc",
   });
   const [titleParams, setTitleParams] = useState({
-    _sort: initialValues.sort,
-    _order: initialValues.order,
+    _sort: {
+      [initialValues.sort]: initialValues.order,
+    },
     _page: pagination.page,
     _limit: pagination.limit,
     _embed: JSON.stringify([
@@ -89,8 +90,9 @@ function Search() {
         author_like: author,
         _limit: pagination.limit,
         _page: 1,
-        _sort: sort,
-        _order: order,
+        _sort: {
+          [sort]: order,
+        },
       };
 
       if (checkedValues.genres) {

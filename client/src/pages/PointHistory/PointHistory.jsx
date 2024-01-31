@@ -21,8 +21,9 @@ function PointHistory() {
   const fetchData = () => {
     const params = {
       userId,
-      _sort: "createdAt",
-      _order: "desc",
+      _sort: {
+        createdAt: -1,
+      },
       _page: pagination.page,
       _limit: pagination.limit,
     };

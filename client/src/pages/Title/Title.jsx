@@ -131,8 +131,9 @@ function Title() {
   const fetchChapters = async () => {
     const chapterApiParams = {
       title_id: titleId,
-      _sort: "order",
-      _order: state.isDESCSort ? "asc" : "desc",
+      _sort: {
+        order: state.isDESCSort ? 1 : -1,
+      },
       _page: pagination.page,
       _limit: pagination.limit,
     };
@@ -167,8 +168,9 @@ function Title() {
     (async () => {
       const chapterApiParams = {
         title_id: titleId,
-        _sort: "order",
-        _order: "asc",
+        _sort: {
+          order: 1,
+        },
         _page: pagination.page,
         _limit: pagination.limit,
       };

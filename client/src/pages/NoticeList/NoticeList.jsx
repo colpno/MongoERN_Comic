@@ -11,8 +11,9 @@ const cx = classNames.bind(styles);
 
 function NoticeList() {
   const { data: notifications = [] } = useGetNotifications({
-    _sort: "updatedAt",
-    _order: -1,
+    _sort: {
+      updatedAt: -1,
+    },
   });
 
   return (

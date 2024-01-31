@@ -11,8 +11,9 @@ function CreateChapter() {
   const { add } = useAddChapter();
   const { data: chapters = {} } = useGetChapters({
     title_id: titleId,
-    _sort: "order",
-    _order: "desc",
+    _sort: {
+      order: -1,
+    },
     _limit: 1,
   });
   const INITIAL_VALUE = {
