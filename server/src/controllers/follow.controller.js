@@ -65,6 +65,7 @@ const followController = {
       return res.status(200).json({
         code: 200,
         data: response,
+        message: 'Xóa theo dõi thành công',
       });
     } catch (error) {
       return next(error);
