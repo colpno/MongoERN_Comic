@@ -57,11 +57,11 @@ function getAvatarMenu(cx, user, isLoggingIn) {
       //   label: <span>Thẻ quà tặng</span>,
       //   icon: <IoGiftSharp className={cx(isLoggingIn ? "" : "grey")} />,
       // },
-      {
-        path: "/inventory",
-        label: <span>Hộp vé</span>,
-        icon: <FaTicketAlt className={cx(isLoggingIn ? "" : "grey")} />,
-      },
+      // {
+      //   path: "/inventory",
+      //   label: <span>Hộp vé</span>,
+      //   icon: <FaTicketAlt className={cx(isLoggingIn ? "" : "grey")} />,
+      // },
       {
         path: "/bookshelf/follow",
         label: <span>Tủ sách</span>,

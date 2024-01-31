@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 import { Container, Row } from "react-bootstrap";
@@ -5,7 +6,7 @@ import { useSelector } from "react-redux";
 
 import { NoData, Pagination } from "features";
 import { usePagination } from "hooks";
-import { ticketHistoryService } from "services";
+// import { ticketHistoryService } from "services";
 import styles from "./styles/TicketHistory.module.scss";
 import TicketHistoryList from "./components/TicketHistoryList";
 
@@ -25,10 +26,10 @@ function TicketHistory() {
       _page: pagination.page,
       _limit: pagination.limit,
     };
-    ticketHistoryService.getAll(params).then((response) => {
-      setHistories(response.data);
-      setPaginationTotal(response.paginate.total);
-    });
+    // ticketHistoryService.getAll(params).then((response) => {
+    //   setHistories(response.data);
+    //   setPaginationTotal(response.pagination.total);
+    // });
   };
 
   useEffect(() => {
