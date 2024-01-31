@@ -12,7 +12,7 @@ import styles from "../assets/styles/ReadingPagination.module.scss";
 
 const cx = classNames.bind(styles);
 
-function ReadingPagination({ chapters, boughtChapter }) {
+function ReadingPagination({ chapters, boughtChapter, user }) {
   const { titleId, page } = useParams();
 
   return (
@@ -39,12 +39,14 @@ function ReadingPagination({ chapters, boughtChapter }) {
         >
           {chapters.map((chapter) => {
             const isBought = boughtChapter.some((bought) => bought._id === chapter._id);
+            const isOwner = user._id === chapter.user_id;
+            const canRead = isBought || isOwner;
 
             return (
               <SwiperSlide key={chapter._id}>
                 <Button
                   wrapper
-                  to={isBought ? `/comic/title/${titleId}/${chapter.order}` : undefined}
+                  to={canRead ? `/comic/title/${titleId}/${chapter.order}` : undefined}
                   className={cx("slide-wrapper", page === `${chapter.order}` ? "active" : "")}
                 >
                   <div className={cx("box-img")}>
@@ -54,7 +56,7 @@ function ReadingPagination({ chapters, boughtChapter }) {
                     />
                   </div>
                   <span className={cx("content")}>
-                    {!isBought && <IoIosLock className={cx("lock-icon")} />}
+                    {!canRead && <IoIosLock className={cx("lock-icon")} />}
                     {`Chương ${chapter.order}${chapter.title ? `: ${chapter.title}` : ""}`}
                   </span>
                 </Button>
@@ -76,6 +78,7 @@ ReadingPagination.propTypes = {
         source: PropTypes.string.isRequired,
       }).isRequired,
       title: PropTypes.string.isRequired,
+      user_id: PropTypes.string.isRequired,
     }).isRequired
   ).isRequired,
 
@@ -84,6 +87,10 @@ ReadingPagination.propTypes = {
       _id: PropTypes.string.isRequired,
     }).isRequired
   ).isRequired,
+
+  user: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default memo(ReadingPagination);
