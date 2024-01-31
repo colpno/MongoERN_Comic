@@ -1,9 +1,7 @@
-import { setToast } from "libs/redux/slices/common.slice.js";
+import { emitToast } from "features/Toast.jsx";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 
 function usePreviewImage(initialState, fileSize, setFieldValue, fieldName) {
-  const dispatch = useDispatch();
   let imagePreview = initialState;
 
   const setImagePreview = (newState) => {
@@ -24,7 +22,7 @@ function usePreviewImage(initialState, fileSize, setFieldValue, fieldName) {
         file.preview = URL.createObjectURL(file);
         setImagePreview(file);
       } else {
-        dispatch(setToast({ message: "Hình ảnh phải từ 2MB trở xuống", mode: "info" }));
+        emitToast("Hình ảnh phải từ 2MB trở xuống", "info");
       }
     }
   };
