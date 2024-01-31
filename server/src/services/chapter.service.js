@@ -73,7 +73,8 @@ const chapterService = {
     order = 1,
     cost = false,
     guid = '',
-    status_id = ''
+    status_id = '',
+    user_id = ''
   ) => {
     try {
       const model = new Chapter({
@@ -85,6 +86,7 @@ const chapterService = {
         cost,
         _guid: guid,
         status_id,
+        user_id,
       });
 
       const response = await model.save();
