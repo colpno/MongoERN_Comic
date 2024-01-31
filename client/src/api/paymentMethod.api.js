@@ -1,9 +1,21 @@
-import axiosClient from "./axiosClient";
+import comicApi from "./comicApi.js";
 
-const url = "/payment-methods";
+const BASE_URL = "/payment-methods";
 
-const paymentMethodApi = {
-  getAll: (params) => axiosClient.get(url, { params }),
-};
+const extendedApi = comicApi.injectEndpoints({
+  endpoints: (build) => ({
+    getPaymentMethods: build.query({
+      query: (params) => ({
+        url: BASE_URL,
+        method: "GET",
+        params,
+      }),
+      transformResponse: (response) => {
+        if (response.pagination) return response;
+        return response.data;
+      },
+    }),
+  }),
+});
 
-export default paymentMethodApi;
+export const { useGetPaymentMethodsQuery, useLazyGetPaymentMethodsQuery } = extendedApi;

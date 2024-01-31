@@ -1,11 +1,36 @@
-import axiosClient from "./axiosClient";
+import comicApi from "./comicApi.js";
 
-const url = "/object-statuses";
+const BASE_URL = "/object-statuses";
 
-const approvedStatusApi = {
-  getAll: (params) => axiosClient.get(url, { params }),
+const extendedApi = comicApi.injectEndpoints({
+  endpoints: (build) => ({
+    getObjectStatuses: build.query({
+      query: (params) => ({
+        url: BASE_URL,
+        method: "GET",
+        params,
+      }),
+      transformResponse: (response) => {
+        if (response.pagination) return response;
+        return response.data;
+      },
+    }),
+    getObjectStatus: build.query({
+      query: ({ id, params }) => ({
+        url: `${BASE_URL}/${id}`,
+        method: "GET",
+        params,
+      }),
+      transformResponse: (response) => {
+        return response.data;
+      },
+    }),
+  }),
+});
 
-  getOne: (id, params) => axiosClient.get(`${url}/${id}`, { params }),
-};
-
-export default approvedStatusApi;
+export const {
+  useGetObjectStatusQuery,
+  useGetObjectStatusesQuery,
+  useLazyGetObjectStatusQuery,
+  useLazyGetObjectStatusesQuery,
+} = extendedApi;

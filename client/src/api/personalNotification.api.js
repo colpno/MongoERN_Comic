@@ -1,27 +1,58 @@
-import axiosClient from "./axiosClient";
+import { emitToast } from "features/Toast.jsx";
+import comicApi from "./comicApi.js";
 
-const url = "/personal-notifications";
+const BASE_URL = "/personal-notifications";
 
-const personalNotificationApi = {
-  getAll: (params) => axiosClient.get(url, { params, withCredentials: true }),
-
-  update: (id, data, params = {}, setProgress = () => {}) =>
-    axiosClient.put(`${url}/update/${id}`, data, {
-      params,
-      withCredentials: true,
-      onUploadProgress: (e) => {
-        const { loaded, total } = e;
-        const percentage = (loaded / total) * 100;
-        setProgress(percentage);
+const extendedApi = comicApi.injectEndpoints({
+  endpoints: (build) => ({
+    getPersonalNotifications: build.query({
+      query: (params) => ({
+        url: BASE_URL,
+        method: "GET",
+        params,
+        withCredentials: true,
+      }),
+      transformResponse: (response) => {
+        if (response.pagination) return response;
+        return response.data;
       },
+      providesTags: ["Personal Notification"],
     }),
+    updatePersonalNotification: build.mutation({
+      query: ({ id, data, params = {} }) => ({
+        url: `${BASE_URL}/update/${id}`,
+        method: "PUT",
+        data,
+        params,
+        withCredentials: true,
+      }),
+      transformResponse: (response) => {
+        const { message, data } = response;
+        emitToast(message, "success");
+        return data;
+      },
+      invalidatesTags: ["Personal Notification"],
+    }),
+    deletePersonalNotification: build.mutation({
+      query: (params) => ({
+        url: `${BASE_URL}/delete`,
+        method: "DELETE",
+        params,
+        withCredentials: true,
+      }),
+      transformResponse: (response) => {
+        const { message, data } = response;
+        emitToast(message, "success");
+        return data;
+      },
+      invalidatesTags: ["Personal Notification"],
+    }),
+  }),
+});
 
-  delete: (params) => {
-    return axiosClient.delete(`${url}/delete`, {
-      params,
-      withCredentials: true,
-    });
-  },
-};
-
-export default personalNotificationApi;
+export const {
+  useDeletePersonalNotificationMutation,
+  useGetPersonalNotificationsQuery,
+  useUpdatePersonalNotificationMutation,
+  useLazyGetPersonalNotificationsQuery,
+} = extendedApi;

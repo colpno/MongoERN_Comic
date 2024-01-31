@@ -1,18 +1,39 @@
-import axiosClient from "./axiosClient";
+import { emitToast } from "features/Toast.jsx";
+import comicApi from "./comicApi.js";
 
-const url = "/transactions";
+const BASE_URL = "/transactions";
 
-const transactionApi = {
-  getAll: (params) => axiosClient.get(url, { params, withCredentials: true }),
-  add: (data, setProgress = () => {}) =>
-    axiosClient.post(`${url}/create`, data, {
-      withCredentials: true,
-      onUploadProgress: (e) => {
-        const { loaded, total } = e;
-        const percentage = (loaded / total) * 100;
-        setProgress(percentage);
+const extendedApi = comicApi.injectEndpoints({
+  endpoints: (build) => ({
+    getTransactions: build.query({
+      query: (params) => ({
+        method: "GET",
+        url: BASE_URL,
+        params,
+        withCredentials: true,
+      }),
+      transformResponse: (response) => {
+        if (response.pagination) return response;
+        return response.data;
       },
+      providesTags: ["Transaction"],
     }),
-};
+    addTransaction: build.mutation({
+      query: (data) => ({
+        method: "POST",
+        url: `${BASE_URL}/create`,
+        data,
+        withCredentials: true,
+      }),
+      transformResponse: (response) => {
+        const { message, data } = response;
+        emitToast(message, "success");
+        return data;
+      },
+      invalidatesTags: ["Transaction", "User"],
+    }),
+  }),
+});
 
-export default transactionApi;
+export const { useAddTransactionMutation, useGetTransactionsQuery, useLazyGetTransactionsQuery } =
+  extendedApi;

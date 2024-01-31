@@ -1,60 +1,100 @@
-import axiosClient from "./axiosClient";
+import { emitToast } from "features/Toast.jsx";
+import comicApi from "./comicApi.js";
 
-const url = "/titles";
+const BASE_URL = "/titles";
 
-const titleApi = {
-  getAll: (params = {}, isPrivate = true) => {
-    const fullURL = isPrivate ? `${url}/owned` : url;
-
-    return axiosClient.get(fullURL, { params, withCredentials: isPrivate });
-  },
-
-  getOne: (id, params, isPrivate = true) => {
-    const fullURL = isPrivate ? `${url}/owned/${id}` : `${url}/${id}`;
-
-    return axiosClient.get(fullURL, {
-      params,
-      withCredentials: isPrivate,
-    });
-  },
-
-  random: (params = {}) => {
-    return axiosClient.get(`${url}/random`, {
-      params,
-    });
-  },
-
-  add: (data, setProgress = () => {}) => {
-    return axiosClient.post(`${url}/create`, data, {
-      withCredentials: true,
-      onUploadProgress: (e) => {
-        const { loaded, total } = e;
-        const percentage = (loaded / total) * 100;
-        setProgress(percentage);
+const extendedApi = comicApi.injectEndpoints({
+  endpoints: (build) => ({
+    getTitles: build.query({
+      query: ({ params = {}, isPrivate = true }) => ({
+        url: isPrivate ? `${BASE_URL}/owned` : BASE_URL,
+        method: "GET",
+        params,
+        withCredentials: isPrivate,
+      }),
+      transformResponse: (response) => {
+        if (response.pagination) return response;
+        return response.data;
       },
-    });
-  },
-
-  update: (id, data, setProgress) =>
-    axiosClient.put(`${url}/update/${id}`, data, {
-      withCredentials: true,
-      onUploadProgress: (e) => {
-        const { loaded, total } = e;
-        const percentage = (loaded / total) * 100;
-        setProgress(percentage);
+      providesTags: ["Title"],
+    }),
+    getTitle: build.query({
+      query: ({ params, isPrivate = true }) => {
+        const id = params._id;
+        return {
+          url: isPrivate ? `${BASE_URL}/owned/${id}` : `${BASE_URL}/${id}`,
+          method: "GET",
+          params,
+          withCredentials: isPrivate,
+        };
+      },
+      transformResponse: (response) => {
+        return response.data;
       },
     }),
-
-  delete: (id, params = {}, setProgress = () => {}) =>
-    axiosClient.delete(`${url}/delete/${id}`, {
-      params,
-      withCredentials: true,
-      onUploadProgress: (e) => {
-        const { loaded, total } = e;
-        const percentage = Math.floor((loaded / total) * 100);
-        setProgress(percentage);
+    randomTitles: build.query({
+      query: (params = {}) => ({
+        method: "GET",
+        url: `${BASE_URL}/random`,
+        params,
+      }),
+      transformResponse: (response) => {
+        return response;
       },
     }),
-};
+    addTitle: build.mutation({
+      query: (data) => ({
+        method: "POST",
+        url: `${BASE_URL}/create`,
+        data,
+        withCredentials: true,
+      }),
+      transformResponse: (response) => {
+        const { message, data } = response;
+        emitToast(message, "success");
+        return data;
+      },
+      invalidatesTags: ["Title"],
+    }),
+    updateTitle: build.mutation({
+      query: ({ id, data }) => ({
+        method: "PUT",
+        url: `${BASE_URL}/update/${id}`,
+        data,
+        withCredentials: true,
+      }),
+      transformResponse: (response) => {
+        const { message, data } = response;
+        emitToast(message, "success");
+        return data;
+      },
+      invalidatesTags: ["Title"],
+    }),
+    deleteTitle: build.mutation({
+      query: ({ id, params = {} }) => ({
+        method: "DELETE",
+        url: `${BASE_URL}/delete/${id}`,
+        params,
+        withCredentials: true,
+      }),
+      transformResponse: (response) => {
+        const { message, data } = response;
+        emitToast(message, "success");
+        return data;
+      },
+      invalidatesTags: ["Title"],
+    }),
+  }),
+});
 
-export default titleApi;
+export const {
+  useAddTitleMutation,
+  useDeleteTitleMutation,
+  useGetTitleQuery,
+  useGetTitlesQuery,
+  useLazyGetTitlesQuery,
+  useRandomTitlesQuery,
+  useUpdateTitleMutation,
+  useLazyGetTitleQuery,
+  useLazyRandomTitlesQuery,
+} = extendedApi;

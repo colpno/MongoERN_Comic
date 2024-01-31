@@ -1,51 +1,91 @@
-import axiosClient from "./axiosClient";
+import { emitToast } from "features/Toast.jsx";
+import comicApi from "./comicApi.js";
 
-const url = "/auth";
+const BASE_URL = "/auth";
 
-const authApi = {
-  verifyRegister: (token) => {
-    return axiosClient.put(`${url}/register/verify/${token}`);
-  },
+const extendedApi = comicApi.injectEndpoints({
+  endpoints: (build) => ({
+    login: build.mutation({
+      query: ({ username, password }) => ({
+        method: "POST",
+        url: `${BASE_URL}/login`,
+        data: { username, password },
+        withCredentials: true,
+      }),
+    }),
+    logout: build.query({
+      query: () => ({
+        method: "GET",
+        url: `${BASE_URL}/logout`,
+        withCredentials: true,
+      }),
+      transformResponse: (response) => {
+        emitToast(response.message, "success");
+        return response;
+      },
+    }),
+    verifyRegister: build.mutation({
+      query: (token) => ({
+        method: "PUT",
+        url: `${BASE_URL}/register/verify/${token}`,
+      }),
+      transformResponse: (response) => {
+        emitToast(response.message, "success");
+        return response;
+      },
+    }),
+    verifyLogin: build.mutation({
+      query: ({ id, username, email, otp }) => ({
+        method: "POST",
+        url: `${BASE_URL}/login/verify`,
+        data: { id, username, email, otp },
+        withCredentials: true,
+      }),
+      transformResponse: (response) => {
+        const { message, data } = response;
+        emitToast(message, "success");
+        return data;
+      },
+    }),
+    forgotPassword: build.mutation({
+      query: ({ username, email }) => ({
+        method: "POST",
+        url: `${BASE_URL}/forgot-password`,
+        data: { username, email },
+        withCredentials: true,
+      }),
+    }),
+    resetPassword: build.mutation({
+      query: ({ password, token }) => ({
+        method: "PUT",
+        url: `${BASE_URL}/reset-password/${token}`,
+        data: { password },
+        withCredentials: true,
+      }),
+      transformResponse: (response) => {
+        emitToast(response.message, "success");
+        return response;
+      },
+    }),
+    sendOTP: build.mutation({
+      query: ({ id, username, email }) => ({
+        method: "POST",
+        url: `${BASE_URL}/login/verify/re-send`,
+        data: { id, username, email },
+        withCredentials: true,
+      }),
+    }),
+  }),
+});
 
-  login: (username, password) => {
-    return axiosClient.post(`${url}/login`, { username, password }, { withCredentials: true });
-  },
-
-  verifyLogin: (id, username, email, otp) => {
-    return axiosClient.post(
-      `${url}/login/verify`,
-      { id, username, email, otp },
-      { withCredentials: true }
-    );
-  },
-
-  reSendOTP: (id, username, email) => {
-    return axiosClient.post(
-      `${url}/login/verify/re-send`,
-      { id, username, email },
-      { withCredentials: true }
-    );
-  },
-
-  logout: () => {
-    return axiosClient.get(`${url}/logout`, { withCredentials: true });
-  },
-
-  forgot: (username, email) => {
-    return axiosClient.post(
-      `${url}/forgot-password`,
-      { username, email },
-      { withCredentials: true }
-    );
-  },
-
-  reset: (userId, password, token) => {
-    return axiosClient.put(
-      `${url}/reset-password/${token}`,
-      { userId, password },
-      { withCredentials: true }
-    );
-  },
-};
-
-export default authApi;
+export const {
+  useForgotPasswordMutation,
+  useLazyLogoutQuery,
+  useLoginMutation,
+  useLogoutQuery,
+  usePrefetch,
+  useResetPasswordMutation,
+  useSendOTPMutation,
+  useVerifyLoginMutation,
+  useVerifyRegisterMutation,
+} = extendedApi;

@@ -1,56 +1,85 @@
-import axiosClient from "./axiosClient";
+import { emitToast } from "features/Toast.jsx";
+import comicApi from "./comicApi.js";
 
-const url = "/chapters";
+const BASE_URL = "/chapters";
 
-const chapterApi = {
-  getAll: (params, isPrivate = true) => {
-    const fullURL = isPrivate ? `${url}/owned` : url;
-
-    return axiosClient.get(fullURL, { params, withCredentials: isPrivate });
-  },
-
-  getOne: (id, params, isPrivate = true) => {
-    const fullURL = isPrivate ? `${url}/owned/${id}` : `${url}/${id}`;
-
-    return axiosClient.get(fullURL, {
-      params,
-      withCredentials: isPrivate,
-    });
-  },
-
-  add: (data, setProgress = () => {}) => {
-    return axiosClient.post(`${url}/create`, data, {
-      withCredentials: true,
-      onUploadProgress: (e) => {
-        const { loaded, total } = e;
-        const percentage = (loaded / total) * 100;
-        setProgress(percentage);
+const extendedApi = comicApi.injectEndpoints({
+  endpoints: (build) => ({
+    getChapters: build.query({
+      query: ({ params, isPrivate = true }) => ({
+        url: isPrivate ? `${BASE_URL}/owned` : BASE_URL,
+        method: "GET",
+        params,
+        withCredentials: isPrivate,
+      }),
+      transformResponse: (response) => {
+        if (response.pagination) return response;
+        return response.data;
       },
-    });
-  },
-
-  update: (id, data, setProgress) => {
-    return axiosClient.put(`${url}/update${data.view ? "/view" : ""}/${id}`, data, {
-      withCredentials: true,
-      onUploadProgress: (e) => {
-        const { loaded, total } = e;
-        const percentage = (loaded / total) * 100;
-        setProgress(percentage);
+      providesTags: ["Chapter"],
+    }),
+    getChapter: build.query({
+      query: ({ id, params, isPrivate = true }) => ({
+        url: isPrivate ? `${BASE_URL}/owned/${id}` : `${BASE_URL}/${id}`,
+        method: "GET",
+        params,
+        withCredentials: isPrivate,
+      }),
+      transformResponse: (response) => {
+        return response.data;
       },
-    });
-  },
-
-  delete: (params, setProgress) => {
-    return axiosClient.delete(`${url}/delete`, {
-      params,
-      withCredentials: true,
-      onUploadProgress: (e) => {
-        const { loaded, total } = e;
-        const percentage = (loaded / total) * 100;
-        setProgress(percentage);
+    }),
+    addChapter: build.mutation({
+      query: (data) => ({
+        url: `${BASE_URL}/create`,
+        method: "POST",
+        data,
+        withCredentials: true,
+      }),
+      transformResponse: (response) => {
+        const { message, data } = response;
+        emitToast(message, "success");
+        return data;
       },
-    });
-  },
-};
+      invalidatesTags: ["Chapter", "Title"],
+    }),
+    updateChapter: build.mutation({
+      query: ({ id, data }) => ({
+        url: `${BASE_URL}/update${data.view ? "/view" : ""}/${id}`,
+        method: "PUT",
+        data,
+        withCredentials: true,
+      }),
+      transformResponse: (response) => {
+        const { message, data } = response;
+        emitToast(message, "success");
+        return data;
+      },
+      invalidatesTags: ["Chapter", "Title"],
+    }),
+    deleteChapter: build.mutation({
+      query: (params) => ({
+        url: `${BASE_URL}/delete`,
+        method: "DELETE",
+        params,
+        withCredentials: true,
+      }),
+      transformResponse: (response) => {
+        const { message, data } = response;
+        emitToast(message, "success");
+        return data;
+      },
+      invalidatesTags: ["Chapter", "Title"],
+    }),
+  }),
+});
 
-export default chapterApi;
+export const {
+  useAddChapterMutation,
+  useDeleteChapterMutation,
+  useGetChapterQuery,
+  useGetChaptersQuery,
+  useLazyGetChapterQuery,
+  useLazyGetChaptersQuery,
+  useUpdateChapterMutation,
+} = extendedApi;

@@ -1,46 +1,49 @@
-import axiosClient from "./axiosClient";
+import { emitToast } from "features/Toast.jsx";
+import comicApi from "./comicApi.js";
 
-const url = "/users";
+const BASE_URL = "/users";
 
-const userApi = {
-  getOne: (params) => {
-    return axiosClient.get(`${url}/profile`, {
-      params,
-      withCredentials: true,
-    });
-  },
-
-  register: (data, setProgress = () => {}) => {
-    return axiosClient.post(`${url}/register`, data, {
-      onUploadProgress: (e) => {
-        const { loaded, total } = e;
-        const progress = (loaded / total) * 100;
-        setProgress(progress);
+const extendedApi = comicApi.injectEndpoints({
+  endpoints: (build) => ({
+    getUser: build.query({
+      query: (params) => ({
+        method: "GET",
+        url: `${BASE_URL}/profile`,
+        params,
+        withCredentials: true,
+      }),
+      transformResponse: (response) => {
+        return response;
       },
-    });
-  },
-
-  update: (data, setProgress) => {
-    return axiosClient.put(`${url}/update`, data, {
-      withCredentials: true,
-      onUploadProgress: (e) => {
-        const { loaded, total } = e;
-        const progress = (loaded / total) * 100;
-        setProgress(progress);
+      providesTags: ["User"],
+    }),
+    registerUser: build.mutation({
+      query: (data) => ({
+        method: "POST",
+        url: `${BASE_URL}/register`,
+        data,
+      }),
+    }),
+    updateUser: build.mutation({
+      query: (data) => ({
+        method: "PUT",
+        url: `${BASE_URL}/update`,
+        data,
+        withCredentials: true,
+      }),
+      transformResponse: (response) => {
+        const { message, data } = response;
+        emitToast(message, "success");
+        return data;
       },
-    });
-  },
+      invalidatesTags: ["User"],
+    }),
+  }),
+});
 
-  delete: (setProgress) => {
-    return axiosClient.delete(`${url}/delete`, {
-      withCredentials: true,
-      onUploadProgress: (e) => {
-        const { loaded, total } = e;
-        const progress = (loaded / total) * 100;
-        setProgress(progress);
-      },
-    });
-  },
-};
-
-export default userApi;
+export const {
+  useGetUserQuery,
+  useRegisterUserMutation,
+  useUpdateUserMutation,
+  useLazyGetUserQuery,
+} = extendedApi;

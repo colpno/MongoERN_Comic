@@ -1,11 +1,32 @@
-import axiosClient from "./axiosClient";
+import comicApi from "./comicApi.js";
 
-const url = "/genres";
+const BASE_URL = "/genres";
 
-const genreApi = {
-  getAll: (params) => axiosClient.get(url, { params }),
+const extendedApi = comicApi.injectEndpoints({
+  endpoints: (build) => ({
+    getGenres: build.query({
+      query: (params) => ({
+        url: BASE_URL,
+        method: "GET",
+        params,
+      }),
+      transformResponse: (response) => {
+        if (response.pagination) return response;
+        return response.data;
+      },
+    }),
+    getGenre: build.query({
+      query: ({ id, params }) => ({
+        url: `${BASE_URL}/${id}`,
+        method: "GET",
+        params,
+      }),
+      transformResponse: (response) => {
+        return response.data;
+      },
+    }),
+  }),
+});
 
-  getOne: (id, params) => axiosClient.get(`${url}/${id}`, { params }),
-};
-
-export default genreApi;
+export const { useGetGenreQuery, useGetGenresQuery, useLazyGetGenreQuery, useLazyGetGenresQuery } =
+  extendedApi;

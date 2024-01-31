@@ -1,22 +1,36 @@
 import comicApi from "./comicApi";
 
-const url = "/notifications";
+const BASE_URL = "/notifications";
 
 const extendedApi = comicApi.injectEndpoints({
   endpoints: (build) => ({
-    getAllNotifications: build.query({
+    getNotifications: build.query({
       query: (params) => ({
-        url,
+        url: BASE_URL,
+        method: "GET",
         params,
       }),
+      transformResponse: (response) => {
+        if (response.pagination) return response;
+        return response.data;
+      },
     }),
     getNotification: build.query({
-      query: (id, params) => ({
-        url: `${url}/${id}`,
+      query: ({ id, params }) => ({
+        url: `${BASE_URL}/${id}`,
+        method: "GET",
         params,
       }),
+      transformResponse: (response) => {
+        return response.data;
+      },
     }),
   }),
 });
 
-export const { useGetAllNotificationsQuery, useGetNotificationQuery } = extendedApi;
+export const {
+  useGetNotificationsQuery,
+  useGetNotificationQuery,
+  useLazyGetNotificationQuery,
+  useLazyGetNotificationsQuery,
+} = extendedApi;

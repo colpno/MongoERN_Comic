@@ -1,11 +1,22 @@
-import axiosClient from "./axiosClient";
+import comicApi from "./comicApi.js";
 
-const url = "/chapter-reports";
+const BASE_URL = "/chapter-reports";
 
-const chapterReportApi = {
-  getAll: (params = {}) => {
-    return axiosClient.get(url, { params, withCredentials: true });
-  },
-};
+const extendedApi = comicApi.injectEndpoints({
+  endpoints: (build) => ({
+    getChapterReports: build.query({
+      query: (params = {}) => ({
+        url: BASE_URL,
+        method: "GET",
+        params,
+        withCredentials: true,
+      }),
+      transformResponse: (response) => {
+        if (response.pagination) return response;
+        return response.data;
+      },
+    }),
+  }),
+});
 
-export default chapterReportApi;
+export const { useGetChapterReportsQuery, useLazyGetChapterReportsQuery } = extendedApi;

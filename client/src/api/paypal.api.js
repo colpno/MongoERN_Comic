@@ -1,74 +1,28 @@
-import axiosClient from "./axiosClient";
+import comicApi from "./comicApi.js";
 
-const url = "/paypal";
+const BASE_URL = "/paypal";
 
-const paypalApi = {
-  order: (data = [], setProgress = () => {}) => {
-    return axiosClient.post(
-      `${url}/order`,
-      { data },
-      {
-        withCredentials: true,
-        onUploadProgress: (e) => {
-          const { loaded, total } = e;
-          const percentage = (loaded / total) * 100;
-          setProgress(percentage);
+const extendedApi = comicApi.injectEndpoints({
+  endpoints: (build) => ({
+    orderPayPal: build.mutation({
+      query: (data = "") => ({
+        method: "POST",
+        url: `${BASE_URL}/order`,
+        data: {
+          data,
         },
-      }
-    );
-  },
-  capture: (orderID, setProgress = () => {}) => {
-    return axiosClient.post(
-      `${url}/capture`,
-      { orderID },
-      {
         withCredentials: true,
-        onUploadProgress: (e) => {
-          const { loaded, total } = e;
-          const percentage = (loaded / total) * 100;
-          setProgress(percentage);
-        },
-      }
-    );
-  },
-  payment: (data = [], setProgress = () => {}) => {
-    return axiosClient.post(
-      `${url}/payment`,
-      { data },
-      {
+      }),
+    }),
+    capturePayPal: build.mutation({
+      query: (orderID) => ({
+        method: "POST",
+        url: `${BASE_URL}/capture`,
+        data: { orderID },
         withCredentials: true,
-        onUploadProgress: (e) => {
-          const { loaded, total } = e;
-          const percentage = (loaded / total) * 100;
-          setProgress(percentage);
-        },
-      }
-    );
-  },
-  payout: (data = [], setProgress = () => {}) => {
-    return axiosClient.post(
-      `${url}/payout`,
-      { data },
-      {
-        withCredentials: true,
-        onUploadProgress: (e) => {
-          const { loaded, total } = e;
-          const percentage = (loaded / total) * 100;
-          setProgress(percentage);
-        },
-      }
-    );
-  },
-  get: (data, setProgress = () => {}) => {
-    return axiosClient.get(`${url}/success${data}`, {
-      withCredentials: true,
-      onUploadProgress: (e) => {
-        const { loaded, total } = e;
-        const percentage = (loaded / total) * 100;
-        setProgress(percentage);
-      },
-    });
-  },
-};
+      }),
+    }),
+  }),
+});
 
-export default paypalApi;
+export const { useCapturePayPalMutation, useOrderPayPalMutation } = extendedApi;
