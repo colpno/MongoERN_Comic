@@ -14,6 +14,11 @@ const chapterSchema = mongoose.Schema(
       ref: 'object_statuses',
       require: true,
     },
+    user_id: {
+      type: mongoose.Types.ObjectId,
+      ref: 'users',
+      require: true,
+    },
     title: { type: String },
     cover: {
       source: { type: String, require: true },
