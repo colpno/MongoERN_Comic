@@ -35,10 +35,10 @@ const extendedApi = comicApi.injectEndpoints({
       },
     }),
     verifyLogin: build.mutation({
-      query: ({ id, username, email, otp }) => ({
+      query: ({ id, username, email, otp, oid }) => ({
         method: "POST",
         url: `${BASE_URL}/login/verify`,
-        data: { id, username, email, otp },
+        data: { id, username, email, otp, oid },
         withCredentials: true,
       }),
       transformResponse: (response) => {
