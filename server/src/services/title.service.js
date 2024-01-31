@@ -14,9 +14,9 @@ const titleService = {
   getAll: async (params = {}) => {
     try {
       params._fields = handleMongoProjection(params._fields, '-__v -_guid -cover.cloud_public_id');
-      const { _page, _limit, _sort, _order, _fields, _embed, ...others } = params;
+      const { _page, _limit, _sort, _fields, _embed, ...others } = params;
 
-      if (_limit || (_sort && _order)) {
+      if (_limit || _sort) {
         const response = await paginateSort(params, Title);
         response.data = removeNullPopulate(response.data, _embed);
         return response;

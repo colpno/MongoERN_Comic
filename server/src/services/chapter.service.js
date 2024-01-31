@@ -40,7 +40,7 @@ const chapterService = {
       );
       const { _page, _limit, _sort, _fields, _order, _embed, ...others } = params;
 
-      if (_limit || (_sort && _order)) {
+      if (_limit || _sort) {
         const response = await paginateSort(params, Chapter);
         return response;
       }

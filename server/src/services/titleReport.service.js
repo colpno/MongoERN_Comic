@@ -8,9 +8,9 @@ const titleReportService = {
   getAll: async (params = {}) => {
     try {
       params._fields = handleMongoProjection(params._fields, '-__v');
-      const { _page, _limit, _sort, _order, _fields, _embed, ...others } = params;
+      const { _page, _limit, _sort, _fields, _embed, ...others } = params;
 
-      if (_limit || (_sort && _order)) {
+      if (_limit || _sort) {
         const response = await paginateSort(params, TitleReport);
         return response;
       }
