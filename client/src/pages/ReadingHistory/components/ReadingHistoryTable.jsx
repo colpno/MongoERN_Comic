@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { BiBookmark } from "react-icons/bi";
 
 import { Table } from "components";
+import { isEmpty } from "utils/isEmpty.js";
 import styles from "../styles/ReadingHistoryTable.module.scss";
 
 const cx = classNames.bind(styles);
@@ -15,26 +16,29 @@ const headers = [
     flex: 1,
     minWidth: 300,
     valueGetter: ({ row }) => row.title_id.title,
-    renderCell: ({ row }) => (
-      <div className={cx("reading-history__container__content__title-info")}>
-        <div className={cx("box-img")} title={row.title_id.title}>
-          <img
-            src={row.title_id.cover.source}
-            alt={row.title_id.title}
-            className={cx("cover-image")}
-          />
+    renderCell: ({ row }) => {
+      const { title_id: titleID, chapter_id: chapterID } = row;
+      const { title: comicTitle, cover } = titleID;
+      const { title: chapterTitle, order } = chapterID;
+
+      return (
+        <div className={cx("reading-history__container__content__title-info")}>
+          <div className={cx("box-img")} title={comicTitle}>
+            <img src={cover.source} alt={comicTitle} className={cx("cover-image")} />
+          </div>
+          <div>
+            <p className={cx("title")} title={comicTitle}>
+              {comicTitle}
+            </p>
+            <p className={cx("chapter-number")} title={chapterTitle}>
+              <BiBookmark className={cx("bookmark-icon")} />
+              Chương {order}
+              {!isEmpty(chapterTitle) ? `: ${chapterTitle}` : ""}
+            </p>
+          </div>
         </div>
-        <div>
-          <p className={cx("title")} title={row.title_id.title}>
-            {row.title_id.title}
-          </p>
-          <p className={cx("chapter-number")} title={row.chapter_id.title}>
-            <BiBookmark className={cx("bookmark-icon")} />
-            Chương: {row.chapter_id.title}
-          </p>
-        </div>
-      </div>
-    ),
+      );
+    },
   },
   {
     headerName: "Ngày đọc",
