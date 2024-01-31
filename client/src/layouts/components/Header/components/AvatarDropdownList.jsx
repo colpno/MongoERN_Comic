@@ -8,15 +8,24 @@ import styles from "../styles/AvatarDropdownList.module.scss";
 
 const cx = classNames.bind(styles);
 
-function AvatarDropdownList({ isLoggingIn, menu, logoutClick }) {
+function AvatarDropdownList({ isLoggingIn, menu, logoutClick, setShowDropDown }) {
   return (
     <Scrollbar yAxis className={cx("dropdown")}>
       <div className={cx("dark-mode-wrapper")}>
         <DarkModeToggle />
       </div>
-      <AvatarDropdownGroup cx={cx} menu={menu.slice(0, menu.length - 1)} />
+      <AvatarDropdownGroup
+        cx={cx}
+        menu={menu.slice(0, menu.length - 1)}
+        setShowDropDown={setShowDropDown}
+      />
       {isLoggingIn && (
-        <AvatarDropdownGroup cx={cx} menu={menu.slice(menu.length - 1)} onClick={logoutClick} />
+        <AvatarDropdownGroup
+          cx={cx}
+          menu={menu.slice(menu.length - 1)}
+          onClick={logoutClick}
+          setShowDropDown={setShowDropDown}
+        />
       )}
     </Scrollbar>
   );
@@ -34,6 +43,7 @@ AvatarDropdownList.propTypes = {
     ).isRequired
   ).isRequired,
   logoutClick: PropTypes.func.isRequired,
+  setShowDropDown: PropTypes.func.isRequired,
 };
 
 export default AvatarDropdownList;

@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 
 import AvatarDropdownItem from "./AvatarDropdownItem";
 
-function AvatarDropdownGroup({ cx, menu, onClick }) {
+function AvatarDropdownGroup({ cx, menu, onClick, setShowDropDown }) {
   return (
     <>
       {menu.map((group, index1) => (
@@ -11,7 +11,14 @@ function AvatarDropdownGroup({ cx, menu, onClick }) {
             const { path, label, icon } = item;
 
             return (
-              <AvatarDropdownItem cx={cx} path={path} icon={icon} onClick={onClick} key={index2}>
+              <AvatarDropdownItem
+                cx={cx}
+                path={path}
+                icon={icon}
+                onClick={onClick}
+                key={index2}
+                setShowDropDown={setShowDropDown}
+              >
                 <span className={cx("label")}>{label}</span>
               </AvatarDropdownItem>
             );
@@ -35,6 +42,7 @@ AvatarDropdownGroup.propTypes = {
     ).isRequired
   ).isRequired,
   onClick: PropTypes.func,
+  setShowDropDown: PropTypes.func.isRequired,
 };
 
 AvatarDropdownGroup.defaultProps = {
