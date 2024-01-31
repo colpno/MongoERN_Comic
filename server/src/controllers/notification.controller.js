@@ -39,8 +39,8 @@ const notificationController = {
       }
 
       return res.status(200).json({
+        ...response,
         code: 200,
-        data: response,
       });
     } catch (error) {
       return next(error);
