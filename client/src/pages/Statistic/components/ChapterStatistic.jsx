@@ -1,108 +1,120 @@
+import { NoData } from "features/index.jsx";
+import { useLazyGetChapterReports, useLazyGetChapters } from "hooks/index.jsx";
+import moment from "moment";
 import PropTypes from "prop-types";
-import { Col, Row } from "react-bootstrap";
+import { useEffect, useMemo, useState } from "react";
+import { getMonthArray } from "utils/constants.js";
+import getYearOptions from "utils/getYearOptions.js";
+import ChapterStatisticCharts from "./ChapterStatisticCharts.jsx";
+import ChapterStatisticSelectors from "./ChapterStatisticSelectors.jsx";
 
-import { Select } from "components";
-import { LineChart } from "features";
+function ChapterStatistic({ selectedTitle }) {
+  const yearOptions = getYearOptions();
+  const months = getMonthArray();
+  const currentMonth = useMemo(() => moment().month() + 1, []);
+  const arrayOfZero = useMemo(() => new Array(months.length).fill(0), []);
+  const [selectedChapter, setSelectedChapter] = useState();
+  const [selectedYear, setSelectedYear] = useState(yearOptions[0]);
+  const { get: getChapters, data: chapters = [] } = useLazyGetChapters();
+  const { get: getChapterReports, data: chapterReports = [] } = useLazyGetChapterReports();
+  const [chartData, setChartData] = useState({
+    likes: [...arrayOfZero],
+    views: [...arrayOfZero],
+  });
+  const chartLabels = useMemo(
+    () =>
+      months.map((month) => {
+        return month.number === currentMonth
+          ? `Tháng hiện tại (${currentMonth})`
+          : `Tháng ${month.number}`;
+      }),
+    [months, currentMonth]
+  );
+  const chapterOptions = useMemo(() => {
+    return chapters.length > 0
+      ? chapters.reduce(
+          (options, chapter) => [
+            ...options,
+            {
+              value: chapter._id,
+              label: `Chương ${chapter.order}`,
+            },
+          ],
+          []
+        )
+      : [];
+  }, [chapters]);
+  const hasData = chapterOptions.length > 0;
 
-function ChapterStatistic({
-  cx,
+  const fetchChapters = (params) => {
+    params._fields = "order";
+    params._embed = JSON.stringify([
+      { collection: "status_id", fields: "-_id code", match: { code: "vis" } },
+    ]);
 
-  chapterSelectOptions,
-  selectedChapter,
-  changeChapter,
+    getChapters({ params });
+  };
 
-  yearOptions,
-  changeYear,
-  selectedYear,
+  useEffect(() => {
+    if (selectedTitle?.value) fetchChapters({ title_id: selectedTitle.value });
+  }, [selectedTitle.value]);
 
-  chartData,
-  chartLabels,
-  backgroundColors,
-  borderColors,
-}) {
+  useEffect(() => {
+    if (selectedChapter?.value) {
+      getChapterReports({
+        chapter_id: selectedChapter.value,
+        year: selectedYear.value,
+      });
+    }
+  }, [selectedChapter, selectedYear]);
+
+  useEffect(() => {
+    const newChartData = chapterReports.reduce(
+      (previousChartData, { like, view, month }) => {
+        const currentChartData = { ...previousChartData };
+
+        currentChartData.likes[month - 1] += like;
+        currentChartData.views[month - 1] += view;
+
+        return currentChartData;
+      },
+      {
+        likes: [...arrayOfZero],
+        views: [...arrayOfZero],
+      }
+    );
+
+    setChartData(newChartData);
+  }, [chapterReports]);
+
+  if (!hasData) {
+    return (
+      <NoData>
+        <h5>Truyện không có chương nào để thống kê</h5>
+      </NoData>
+    );
+  }
+
   return (
     <>
-      <div className={cx("selector-container")}>
-        <h4>Chương:</h4>
-        <Select
-          className={cx("select")}
-          options={chapterSelectOptions}
-          value={selectedChapter}
-          setValue={changeChapter}
-          searchable
-          height={30}
-        />
-        <Select
-          className={cx("select")}
-          options={yearOptions}
-          value={selectedYear}
-          setValue={changeYear}
-          searchable
-          height={30}
-        />
-      </div>
-      <Row>
-        <Col xs={12} md={6}>
-          <LineChart
-            beginAtZero
-            labels={chartLabels}
-            datasets={[
-              {
-                label: "Lượt xem",
-                data: chartData.views,
-                backgroundColor: backgroundColors[6],
-                borderColor: borderColors[6],
-              },
-            ]}
-          />
-        </Col>
-        <Col xs={12} md={6}>
-          <LineChart
-            beginAtZero
-            labels={chartLabels}
-            datasets={[
-              {
-                label: "Lượt thích",
-                data: chartData.likes,
-                backgroundColor: backgroundColors[7],
-                borderColor: borderColors[7],
-              },
-            ]}
-          />
-        </Col>
-      </Row>
+      <ChapterStatisticSelectors
+        chapterOptions={chapterOptions}
+        yearOptions={yearOptions}
+        selectedChapter={selectedChapter}
+        selectedYear={selectedYear}
+        onChangeChapter={setSelectedChapter}
+        onChangeYear={setSelectedYear}
+      />
+      <ChapterStatisticCharts chartLabels={chartLabels} chartData={chartData} />
     </>
   );
 }
 
 ChapterStatistic.propTypes = {
-  cx: PropTypes.func.isRequired,
-
-  chapterSelectOptions: PropTypes.arrayOf(
-    PropTypes.shape({
-      value: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
-    }).isRequired
-  ).isRequired,
-  selectedChapter: PropTypes.shape({}).isRequired,
-  changeChapter: PropTypes.func.isRequired,
-
-  yearOptions: PropTypes.arrayOf(
-    PropTypes.shape({
-      value: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
-    }).isRequired
-  ).isRequired,
-  changeYear: PropTypes.func.isRequired,
-  selectedYear: PropTypes.shape({}).isRequired,
-
-  chartData: PropTypes.shape({
-    views: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
-    likes: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
+  selectedTitle: PropTypes.shape({
+    value: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
   }).isRequired,
-  chartLabels: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-  backgroundColors: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-  borderColors: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
 };
 
 export default ChapterStatistic;
