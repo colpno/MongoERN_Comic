@@ -3,7 +3,7 @@ import { rectSortingStrategy, rectSwappingStrategy } from "@dnd-kit/sortable";
 
 import { moveItemInArray } from "utils/moveItemInArray.js";
 
-export const useDragAndDrop = (handleDragAndDrop, droppedItem, mode) => {
+function useDragAndDrop(handleDragAndDrop, droppedItem, mode) {
   const strategy = mode === "insert" ? rectSortingStrategy : rectSwappingStrategy;
 
   const handleDragEnd = (event) => {
@@ -28,4 +28,6 @@ export const useDragAndDrop = (handleDragAndDrop, droppedItem, mode) => {
     handleDragEnd,
     moveItemInArray,
   };
-};
+}
+
+export default useDragAndDrop;
