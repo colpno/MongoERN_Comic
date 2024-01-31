@@ -25,8 +25,8 @@ function Statistic() {
   return (
     <Container className={cx("wrapper")}>
       <TabsContainer menu={menu} />
-      {queryTab.includes(menu[0].tab) && <LikeViewStat />}
-      {queryTab.includes(menu[1].tab) && <IncomeStat />}
+      {queryTab === menu[0].tab && <LikeViewStat />}
+      {queryTab === menu[1].tab && <IncomeStat />}
     </Container>
   );
 }
