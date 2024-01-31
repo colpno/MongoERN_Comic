@@ -122,11 +122,20 @@ const sliceKey = (key) => {
   return { startOfSuffixIndex, suffix, field };
 };
 
+const convertNullValue = (value) => {
+  if (value === 'null') return null;
+  if (Array.isArray(value)) {
+    return value.map((val) => (val === 'null' ? null : val));
+  }
+
+  return value;
+};
+
 function transformQueryParams(queries = {}) {
   const queryKeys = Object.keys(queries);
 
   const transformedQuery = queryKeys.reduce((result, queryKey) => {
-    const queryValue = queries[queryKey];
+    const queryValue = convertNullValue(queries[queryKey]);
     let newResult = {
       ...result,
     };
