@@ -1,7 +1,10 @@
+import dotenv from 'dotenv';
 import handleMongoProjection from '../helpers/handleMongoProjection.js';
 import paginateSort from '../helpers/paginateSort.js';
 import { Income } from '../models/index.js';
-import { MIN_MONTH, MAX_YEAR } from '../validations/index.js';
+import { MAX_YEAR, MIN_MONTH } from '../validations/index.js';
+
+dotenv.config();
 
 const incomeService = {
   getAll: async (params = {}) => {
@@ -28,18 +31,11 @@ const incomeService = {
       throw new Error(error);
     }
   },
-  add: async (
-    userId = '',
-    purchasedChapterIncome = 0,
-    paymentIncome = 0,
-    month = MIN_MONTH,
-    year = MAX_YEAR
-  ) => {
+  add: async (userId = '', month = MIN_MONTH, year = MAX_YEAR, purchasedChapterIncome = 0) => {
     try {
       const model = new Income({
         user_id: userId,
         purchased_chapter_income: purchasedChapterIncome,
-        payment_income: paymentIncome,
         month,
         year,
       });
@@ -50,11 +46,11 @@ const incomeService = {
       throw new Error(error);
     }
   },
-  update: async (userId, month, year, data = 'purchasedChapter' || 'payment', value = 0) => {
+  update: async (userId, month, year, data = 'purchased_chapter_income', value = 0) => {
     try {
       const response = await Income.findOneAndUpdate(
         { user_id: userId, month, year },
-        { $inc: { [data]: value } },
+        { $inc: { [data]: value, total_income: value } },
         { new: true }
       );
 
@@ -62,6 +58,13 @@ const incomeService = {
     } catch (error) {
       throw new Error(error);
     }
+  },
+  make: (dollar) => {
+    const { SELLER_COMMISSION_RATE } = process.env;
+
+    const sellerReceive = (dollar * Number.parseFloat(SELLER_COMMISSION_RATE)).toFixed(2);
+
+    return sellerReceive;
   },
 };
 
