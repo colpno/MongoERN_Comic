@@ -1,7 +1,7 @@
 import classNames from "classnames/bind";
 import { Select } from "components";
 import PropTypes from "prop-types";
-import styles from "../styles/Statistic.module.scss";
+import styles from "../../styles/Statistic.module.scss";
 
 export const cx = classNames.bind(styles);
 

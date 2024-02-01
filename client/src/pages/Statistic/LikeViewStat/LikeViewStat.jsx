@@ -3,8 +3,8 @@ import { Col, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
 import { sortArray } from "utils/arrayMethods";
-import ChapterStatistic from "./ChapterStatistic";
-import TitleStatistic from "./TitleStatistic";
+import ChapterStatistic from "./components/ChapterStatistic";
+import TitleStatistic from "./components/TitleStatistic";
 
 function LikeViewStat() {
   const myTitles = useSelector((state) => state.title.myTitles);

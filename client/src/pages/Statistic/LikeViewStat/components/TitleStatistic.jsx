@@ -7,7 +7,7 @@ import moment from "moment";
 import { memo, useEffect, useMemo, useState } from "react";
 import { getMonthArray } from "utils/constants.js";
 import getYearOptions from "utils/getYearOptions.js";
-import styles from "../styles/Statistic.module.scss";
+import styles from "../../styles/Statistic.module.scss";
 import TitleStatisticChart from "./TitleStatisticChart";
 import TitleStatisticSelectors from "./TitleStatisticSelectors";
 
