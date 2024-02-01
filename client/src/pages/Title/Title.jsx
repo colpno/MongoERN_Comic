@@ -107,9 +107,9 @@ function Title() {
         expiredAt,
       }).unwrap();
 
-      dispatch(setUser(response.data.user));
+      dispatch(setUser(response.user));
       updateState({
-        purchasedHistories: [...state.purchasedHistories, response.data.transaction],
+        purchasedHistories: [...state.purchasedHistories, response.transaction],
       });
     } else {
       emitToast("Không đủ để thực hiện chức năng", "error");
@@ -208,17 +208,19 @@ function Title() {
         isPrivate: false,
       }).unwrap();
 
-      if (user._id) chapterTranParams.user_id = user._id;
-      const getChapterTransactionResponse = await getChapterTransactions({
-        params: chapterTranParams,
-        isPrivate: !!user._id,
-      }).unwrap();
+      if (user._id) {
+        chapterTranParams.user_id = user._id;
+        const getChapterTransactionResponse = await getChapterTransactions({
+          params: chapterTranParams,
+          isPrivate: !!user._id,
+        }).unwrap();
+        result.purchasedHistories = getChapterTransactionResponse;
+      }
 
       setPaginationTotal(getChaptersResponse.pagination.total);
       updateState({
         ...result,
         chapters: getChaptersResponse.data,
-        purchasedHistories: getChapterTransactionResponse,
       });
     })();
   }, [titleId, user]);
