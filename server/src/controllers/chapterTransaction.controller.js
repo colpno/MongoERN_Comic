@@ -61,6 +61,14 @@ const chapterTransactionController = {
         const currentMonth = moment().month();
         const currentYear = moment().year();
 
+        if (!user.paypal_email) {
+          return res.status(404).json({
+            code: 404,
+            message:
+              'Bạn cần phải cập nhật thông tin paypal (tại Profile) với chúng tôi để có thể rút tiền',
+          });
+        }
+
         let response;
         if (method === 'coin') {
           if (user.coin - coin < 0) {
@@ -71,12 +79,12 @@ const chapterTransactionController = {
             });
           }
 
-          user = await userService.update(userId, { $inc: { coin: -coin } });
-
           const paypalResponse = await paypalService.payout(
             sellerIncomeInDollar,
             user.paypal_email
           );
+
+          user = await userService.update(userId, { $inc: { coin: -coin } });
 
           // eslint-disable-next-line no-unsafe-optional-chaining
           const { batch_status = '' } = paypalResponse?.data?.batch_header;

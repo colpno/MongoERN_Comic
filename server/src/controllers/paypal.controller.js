@@ -30,10 +30,11 @@ const paypalController = {
       const { id: userId } = req.userInfo;
 
       const user = await userService.getOne({ _id: userId });
-      if (!user) {
+      if (!user.paypal_email) {
         return res.status(404).json({
           code: 404,
-          message: 'Bạn cần phải đăng ký paypal với chúng tôi để có thể rút tiền',
+          message:
+            'Bạn cần phải cập nhật thông tin paypal (tại Profile) với chúng tôi để có thể rút tiền',
         });
       }
 
