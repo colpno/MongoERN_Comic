@@ -63,7 +63,7 @@ const chapterTransactionController = {
 
         let response;
         if (method === 'coin') {
-          if (user.coin - coin <= 0) {
+          if (user.coin - coin < 0) {
             return res.status(400).json({
               code: 400,
               message:
