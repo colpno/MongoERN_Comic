@@ -26,10 +26,18 @@ const paypalController = {
   },
   payout: async (req, res, next) => {
     try {
-      const { amount, receiverEmail } = req.body;
+      const { amount } = req.body;
       const { id: userId } = req.userInfo;
 
-      const response = await paypalService.payout(amount, receiverEmail);
+      const user = await userService.getOne({ _id: userId });
+      if (!user) {
+        return res.status(404).json({
+          code: 404,
+          message: 'Bạn cần phải đăng ký paypal với chúng tôi để có thể rút tiền',
+        });
+      }
+
+      const response = await paypalService.payout(amount, user.paypalEmail);
       const { batch_status = 'DENIED' } = response.data.batch_header;
 
       let returnedMessage = '';
