@@ -13,7 +13,6 @@ const incomeSchema = mongoose.Schema(
     user_id: { type: mongoose.Types.ObjectId, ref: 'users', require: true },
     total_income: { type: Number, min: 0, default: 0 },
     purchased_chapter_income: { type: Number, min: 0, default: 0 },
-    payment_income: { type: Number, min: 0, default: 0 },
     month: {
       type: Number,
       min: MIN_MONTH,
@@ -31,6 +30,13 @@ const incomeSchema = mongoose.Schema(
   },
   { timestamps: true }
 );
+
+incomeSchema.pre('save', function (next) {
+  this.total_income = this.purchased_chapter_income;
+  this.purchased_chapter_income = Number.parseFloat(this.purchased_chapter_income).toFixed(2);
+
+  next();
+});
 
 incomeSchema.pre(/^find/, function (next) {
   this.user_id = mongoose.Types.ObjectId(this.user_id);
