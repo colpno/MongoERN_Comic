@@ -1,7 +1,10 @@
 import bcrypt from 'bcryptjs';
+import dotenv from 'dotenv';
 
 import { sendMail } from '../helpers/sendMail.js';
 import { Otp } from '../models/index.js';
+
+dotenv.config();
 
 const otpService = {
   hashOTP: (otp) => {
@@ -28,9 +31,11 @@ const otpService = {
   },
   sendViaMail: (email, otp) => {
     try {
+      const { CLIENT_URL } = process.env;
       const subject = 'Mã xác thực';
       const html = `
       <div style="backgroundColor: #ededed">
+        <p>Đây là <a href="${CLIENT_URL}/login/verify">link</a> để bạn nhập mã (nếu bạn không được đưa đến trang nhập mã).</p>
         <span>Mã xác thực của bạn là: </span>
         <strong style="fontSize: 19px; letterSpacing: 1px;">
           ${otp}
