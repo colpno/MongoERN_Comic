@@ -10,6 +10,13 @@ export const isAuthenticated = (req, res, next) => {
   const { accessToken } = req.cookies;
 
   if (!accessToken) {
+    if (req.method === 'GET' && Object.keys(req.body).length <= 0) {
+      return res.json({
+        code: 200,
+        data: [],
+      });
+    }
+
     return next(createError(401, 'Cần đăng nhập để sử dụng chức năng này'));
   }
 
@@ -26,6 +33,13 @@ export const isAdmin = (req, res, next) => {
   const { accessToken } = req.cookies;
 
   if (!accessToken) {
+    if (req.method === 'GET' && Object.keys(req.body).length <= 0) {
+      return res.json({
+        code: 200,
+        data: [],
+      });
+    }
+
     return next(createError(401, 'Cần đăng nhập để sử dụng chức năng này'));
   }
 
