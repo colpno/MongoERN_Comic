@@ -17,19 +17,27 @@ function ChapterStatistic({ selectedTitle }) {
   const [selectedYear, setSelectedYear] = useState(yearOptions[0]);
   const { get: getChapters, data: chapters = [] } = useLazyGetChapters();
   const { get: getChapterReports, data: chapterReports = [] } = useLazyGetChapterReports();
-  const [chartData, setChartData] = useState({
-    likes: [...arrayOfZero],
-    views: [...arrayOfZero],
-  });
-  const chartLabels = useMemo(
-    () =>
-      months.map((month) => {
-        return month.number === currentMonth
-          ? `Tháng hiện tại (${currentMonth})`
-          : `Tháng ${month.number}`;
-      }),
-    [months, currentMonth]
-  );
+  const chartData = useMemo(() => {
+    return chapterReports.reduce(
+      (previousChartData, { like, view, month }) => {
+        const currentChartData = { ...previousChartData };
+
+        currentChartData.likes[month - 1] += like;
+        currentChartData.views[month - 1] += view;
+
+        return currentChartData;
+      },
+      {
+        likes: [...arrayOfZero],
+        views: [...arrayOfZero],
+      }
+    );
+  }, [chapterReports]);
+  const chartLabels = useMemo(() => {
+    return months.map((month) =>
+      month.number === currentMonth ? `Tháng hiện tại (${currentMonth})` : `Tháng ${month.number}`
+    );
+  }, [months, currentMonth]);
   const chapterOptions = useMemo(() => {
     return chapters.length > 0
       ? chapters.reduce(
@@ -56,8 +64,12 @@ function ChapterStatistic({ selectedTitle }) {
   };
 
   useEffect(() => {
+    if (!selectedChapter) setSelectedChapter(chapterOptions[0]);
+  }, [chapterOptions]);
+
+  useEffect(() => {
     if (selectedTitle?.value) fetchChapters({ title_id: selectedTitle.value });
-  }, [selectedTitle.value]);
+  }, [selectedTitle]);
 
   useEffect(() => {
     if (selectedChapter?.value) {
@@ -67,25 +79,6 @@ function ChapterStatistic({ selectedTitle }) {
       });
     }
   }, [selectedChapter, selectedYear]);
-
-  useEffect(() => {
-    const newChartData = chapterReports.reduce(
-      (previousChartData, { like, view, month }) => {
-        const currentChartData = { ...previousChartData };
-
-        currentChartData.likes[month - 1] += like;
-        currentChartData.views[month - 1] += view;
-
-        return currentChartData;
-      },
-      {
-        likes: [...arrayOfZero],
-        views: [...arrayOfZero],
-      }
-    );
-
-    setChartData(newChartData);
-  }, [chapterReports]);
 
   if (!hasData) {
     return (

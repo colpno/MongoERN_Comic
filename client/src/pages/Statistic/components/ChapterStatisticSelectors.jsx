@@ -52,13 +52,17 @@ ChapterStatisticSelectors.propTypes = {
   selectedChapter: PropTypes.shape({
     value: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
-  }).isRequired,
+  }),
   selectedYear: PropTypes.shape({
     value: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
   }).isRequired,
   onChangeChapter: PropTypes.func.isRequired,
   onChangeYear: PropTypes.func.isRequired,
+};
+
+ChapterStatisticSelectors.defaultProps = {
+  selectedChapter: { value: "", label: "" },
 };
 
 export default ChapterStatisticSelectors;
