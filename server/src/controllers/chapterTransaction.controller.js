@@ -1,10 +1,13 @@
 import createError from 'http-errors';
-import { convertPurchaseTransactionToMoney } from '../helpers/convertCurrency.js';
+import moment from 'moment';
+import { coinToDollar } from '../helpers/convertCurrency.js';
 import transformQueryParams from '../helpers/transformQueryParams.js';
 import {
   chapterTransactionService,
-  transactionService,
+  incomeService,
+  paypalService,
   titleService,
+  transactionService,
   userService,
 } from '../services/index.js';
 
@@ -36,9 +39,9 @@ const chapterTransactionController = {
     try {
       const { id: userId } = req.userInfo;
       const { titleId, chapterId, expiredAt, method, cost } = req.body;
-      const amount = Number.parseInt(cost, 10);
+      const coin = Number.parseInt(cost, 10);
 
-      if (titleId && chapterId && method && amount) {
+      if (titleId && chapterId && method && coin) {
         const duplicated = (
           await chapterTransactionService.getAll({
             user_id: userId,
@@ -52,32 +55,71 @@ const chapterTransactionController = {
           return next(createError(409, 'Đã tồn tại giao dịch'));
         }
 
-        // save to mongo
-        const response = await chapterTransactionService.add(
-          userId,
-          titleId,
-          chapterId,
-          expiredAt,
-          method,
-          amount
-        );
+        let user = await userService.getOne({ _id: userId });
+        const sellerIncomeInDollar = incomeService.make(coinToDollar(coin));
+        const title = await titleService.getOne({ _id: titleId });
+        const currentMonth = moment().month();
+        const currentYear = moment().year();
 
-        if (!response) {
-          return next(createError(400, 'Không thể hoàn thành việc tạo giao dịch'));
-        }
-
-        // minus user currency
-        let user;
+        let response;
         if (method === 'coin') {
-          user = await userService.update(userId, { $inc: { coin: -amount } });
-          await transactionService.add(userId, 'Mua chương', 'chapter', -amount);
+          if (user.coin - coin <= 0) {
+            return res.status(400).json({
+              code: 400,
+              message:
+                'Số coin hiện tại bạn sở hữu không đủ. Vui lòng nạp thêm để có thể sử dụng chức năng này.',
+            });
+          }
 
-          // increase title owner income
-          const title = await titleService.getOne({ _id: titleId });
-          await userService.increaseIncome(title.userId, convertPurchaseTransactionToMoney(amount));
+          user = await userService.update(userId, { $inc: { coin: -coin } });
+
+          const paypalResponse = await paypalService.payout(
+            sellerIncomeInDollar,
+            user.paypal_email
+          );
+
+          // eslint-disable-next-line no-unsafe-optional-chaining
+          const { batch_status = '' } = paypalResponse?.data?.batch_header;
+          if (batch_status === 'SUCCESS' || batch_status === 'PENDING') {
+            await userService.increaseIncome(title.user_id, sellerIncomeInDollar);
+
+            // save to mongo
+            response = await chapterTransactionService.add(
+              userId,
+              titleId,
+              chapterId,
+              expiredAt,
+              method,
+              coin
+            );
+
+            if (!response) {
+              return next(createError(400, 'Không thể hoàn thành việc tạo giao dịch'));
+            }
+
+            await transactionService.add(userId, 'Mua chương', 'chapter', -coin);
+
+            const incomeStat = await incomeService.getOne(title.user_id, currentMonth, currentYear);
+            if (incomeStat) {
+              await incomeService.update(
+                title.user_id,
+                currentMonth,
+                currentYear,
+                'purchased_chapter_income',
+                sellerIncomeInDollar
+              );
+            } else {
+              await incomeService.add(
+                title.user_id,
+                currentMonth,
+                currentYear,
+                sellerIncomeInDollar
+              );
+            }
+          }
         }
         if (method === 'point') {
-          user = await userService.update(userId, { $inc: { point: -amount } });
+          user = await userService.update(userId, { $inc: { point: -coin } });
         }
         if (method === 'rent ticket') {
           user = await userService.update(userId, { $inc: { ticket_for_renting: -1 } });

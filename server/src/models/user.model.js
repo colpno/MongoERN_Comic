@@ -29,6 +29,7 @@ const userSchema = mongoose.Schema(
     },
     isActivated: { type: Boolean, default: false },
     isBanned: { type: Boolean, default: false },
+    paypal_email: { type: String, require: true },
   },
   { timestamps: true }
 );

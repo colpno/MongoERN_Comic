@@ -68,3 +68,12 @@ export function convertPurchaseTransactionToMoney(coin) {
   const vnd = dollar * CURRENCY_RATIO_TO_VND;
   return vnd;
 }
+
+// 10 coins = $1
+const COIN_DOLLAR_RATE = 1 / 10;
+
+// COIN TO DOLLAR
+export function coinToDollar(coin) {
+  const dollar = Number.parseInt(coin, 10) * COIN_DOLLAR_RATE;
+  return dollar;
+}
