@@ -1,9 +1,6 @@
-import dotenv from 'dotenv';
 import { randomUUID } from 'crypto';
 import axios from 'axios';
 import { PAYPAL_CLIENT_ID, PAYPAL_SECRET, PAYPAL_URL } from '../config/paypal.config.js';
-
-dotenv.config();
 
 async function handleResponse(response) {
   try {
@@ -124,7 +121,7 @@ const paypalService = {
     items: [
       {
         amount: {
-          value: Number.parseFloat(amount).toFixed(2).toString(),
+          value: Number.parseFloat(amount).toFixed(2),
           currency: 'USD',
         },
         sender_item_id: randomUUID(),
