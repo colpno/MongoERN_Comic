@@ -8,37 +8,6 @@
     margin: 3rem 0;
   }
 
-  &__step__title {
-    font-weight: 500;
-    margin-bottom: 10px;
-  }
-
-  &__step__methods {
-    border: 1px solid variables.$border-grey;
-  }
-
-  &__step__methods__method {
-    padding: 15px 20px;
-    font-size: 1.1em;
-    display: flex;
-    align-items: center;
-
-    &:not(:first-child) {
-      border-top: 1px solid variables.$border-grey;
-    }
-
-    input[type="radio"] {
-      $size: 26px;
-      width: $size;
-      height: $size;
-      margin-right: 10px;
-    }
-
-    .image {
-      margin-left: 15px;
-    }
-  }
-
   &__step__submit {
     margin-top: 20px;
     padding-left: 90px;

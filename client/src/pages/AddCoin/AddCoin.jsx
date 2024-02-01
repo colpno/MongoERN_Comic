@@ -1,15 +1,14 @@
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Container, Row } from "react-bootstrap";
 
-import { Radio } from "components";
+import { PaymentOptions } from "components/index.jsx";
 import { NoData } from "features";
-import { useGetPaymentMethods } from "hooks/index.jsx";
 import styles from "./AddCoin.module.scss";
 import { PayPalForm } from "./components";
 
-const cx = classNames.bind(styles);
+export const cx = classNames.bind(styles);
 
 function EmptyForm() {
   return (
@@ -31,61 +30,13 @@ function Form({ form }) {
 }
 
 function AddCoin() {
-  const [choseMethod, setChoseMethod] = useState({
+  const [selectedMethod, setSelectedMethod] = useState({
     value: "",
     label: "",
   });
-  const { data: payMethods = [] } = useGetPaymentMethods();
-
-  const options = useMemo(
-    () =>
-      payMethods.map((payMethod) => {
-        return {
-          value: payMethod.name,
-          label: payMethod.name,
-        };
-      }),
-    [payMethods]
-  );
-
-  const handleMethodChange = (e) => {
-    const { value } = e.target;
-    const option = options.find((method) => {
-      return method.value === value;
-    });
-    setChoseMethod({
-      ...option,
-      value,
-    });
-  };
 
   return (
     <Container className={cx("add-coin")}>
-      <Row className={cx("add-coin__step")}>
-        <p className={cx("add-coin__step__title")}>Chọn phương thức thanh toán</p>
-        <div className={cx("add-coin__step__methods")}>
-          {options.map((method) => {
-            return (
-              <div className={cx("add-coin__step__methods__method")} key={method.value}>
-                <Radio
-                  field={{
-                    name: "payMethod",
-                    onChange: handleMethodChange,
-                    value: choseMethod.value,
-                  }}
-                  value={method.value}
-                >
-                  <span>{method.label}</span>
-                  {!!method.subLabel && <span className={cx("sub-label")}>{method.subLabel}</span>}
-                </Radio>
-              </div>
-            );
-          })}
-        </div>
-      </Row>
-      <Row className={cx("add-coin__step")}>
-        <Form form={choseMethod.label} />
-      </Row>
       <div className={cx("add-coin__step")}>
         <div className={cx("note")}>
           <p className={cx("note__title")}>GHI CHÚ</p>
@@ -101,6 +52,12 @@ function AddCoin() {
           </p>
         </div>
       </div>
+      <Row>
+        <PaymentOptions selectedPayment={selectedMethod} setSelectedPayment={setSelectedMethod} />
+      </Row>
+      <Row>
+        <Form form={selectedMethod.value} />
+      </Row>
     </Container>
   );
 }

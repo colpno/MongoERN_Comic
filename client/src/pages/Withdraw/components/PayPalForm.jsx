@@ -14,17 +14,14 @@ function PayPalForm() {
   };
 
   return (
-    <Formik initialValues={{ receiver: "", amount: "" }} onSubmit={handleSubmit}>
+    <Formik initialValues={{ amount: "" }} onSubmit={handleSubmit}>
       {() => {
         return (
           <Form>
-            <FormLabel name="price" label="PayPal Email" required />
-            <FastField name="receiver" component={InputField} />
-
             <FormLabel name="price" label="Số tiền ($ - Dollar)" required />
             <FastField name="amount" type="number" component={InputField} />
 
-            <Button primary type="submit">
+            <Button primary type="submit" style={{ margin: "2rem 0 4rem" }}>
               Rút tiền
             </Button>
           </Form>
