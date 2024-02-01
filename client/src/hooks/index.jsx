@@ -88,3 +88,5 @@ export { default as useUpdateUser } from "./user/useUpdateUser";
 export { default as useOrderPayPal } from "./paypal/useOrderPayPal";
 export { default as useCapturePayPal } from "./paypal/useCapturePayPal";
 export { default as usePayoutPayPal } from "./paypal/usePayoutPayPal";
+
+export { default as useLazyGetIncomeReports } from "./income/useLazyGetIncomeReports";
