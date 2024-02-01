@@ -74,13 +74,13 @@ function Title() {
   const checkCanPurchase = (method, amount) => {
     switch (method.toLowerCase()) {
       case "coin":
-        return user.coin > amount;
+        return user.coin >= amount;
       case "point":
-        return user.point > amount;
+        return user.point >= amount;
       case "rent ticket":
-        return user.ticket_for_renting > amount;
+        return user.ticket_for_renting >= amount;
       case "purchase ticket":
-        return user.ticket_for_buying > amount;
+        return user.ticket_for_buying >= amount;
       default:
         return false;
     }
