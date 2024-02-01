@@ -1,5 +1,5 @@
 import classNames from "classnames/bind";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { Slide } from "react-awesome-reveal";
 import { Container, Row } from "react-bootstrap";
 import { useDispatch } from "react-redux";
@@ -21,32 +21,45 @@ function ComicSection() {
     _limit: 4,
   });
   const allGenreNames = genres.data?.map((genre) => genre.name);
-  const titlesQueryParams = {
-    genres_in: allGenreNames,
-    _sort: {
-      like: -1,
-      view: -1,
+  const { data: titles = [] } = useGetTitles(
+    {
+      genres_in: allGenreNames,
+      _embed: JSON.stringify([
+        { collection: "approved_status_id", fields: "-_id code", match: { code: "apd" } },
+        { collection: "status_id", fields: "-_id code", match: { code: "vis" } },
+      ]),
     },
-    _embed: JSON.stringify([
-      { collection: "approved_status_id", fields: "-_id code", match: { code: "apd" } },
-      { collection: "status_id", fields: "-_id code", match: { code: "vis" } },
-    ]),
-  };
-  const { data: titles = [] } = useGetTitles(titlesQueryParams, false);
-  const [top5, setTop5] = useState([]);
+    false
+  );
+  const { data: top5 = [] } = useGetTitles(
+    {
+      _sort: {
+        like: -1,
+        view: -1,
+      },
+      _embed: JSON.stringify([
+        { collection: "approved_status_id", fields: "-_id code", match: { code: "apd" } },
+        { collection: "status_id", fields: "-_id code", match: { code: "vis" } },
+      ]),
+    },
+    false
+  );
 
   const titlesByGenre = useMemo(() => {
+    const checkIdList = [];
+
     return genres.data?.map((genre, genreIndex) => {
       let count = 0;
       const limit = genreIndex !== genres.data.length - 1 ? 6 : 3;
-      const temp = [];
+      const result = [];
       const titleLength = titles?.length || 0;
 
       for (let i = 0; i < titleLength; i++) {
         const title = titles[i];
 
-        if (title.genres.includes(genre.name)) {
-          temp.push(title);
+        if (title.genres.includes(genre.name) && !checkIdList.includes(title._id)) {
+          result.push(title);
+          checkIdList.push(title._id);
 
           count += 1;
           if (count >= limit) break;
@@ -56,39 +69,16 @@ function ComicSection() {
       return {
         _id: genre._id,
         name: genre.name,
-        titles: temp,
+        titles: result,
       };
     });
   }, [titles, genres]);
 
   useEffect(() => {
-    if (titles.length > 0) {
-      const top5Titles = titles.slice(0, 5);
-      setTop5(top5Titles);
-      dispatch(setTop5Titles(top5Titles));
+    if (top5.length > 0) {
+      dispatch(setTop5Titles(top5));
     }
-  }, [titles]);
-
-  const handleScroll = useCallback(() => {
-    const rows = document.querySelectorAll(".comic-animation");
-    if (rows.length > 0) {
-      rows[0].style.opacity = `${1 - +window.scrollY / 700}`;
-      rows[0].style.scale = `${1 - +window.scrollY / 5000}`;
-      rows[1].style.transform = `translateY(${(+window.scrollY / 300) * -50}px)`;
-    }
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener("scroll", () => {
-      handleScroll();
-    });
-
-    return () => {
-      window.removeEventListener("scroll", () => {
-        handleScroll();
-      });
-    };
-  }, [handleScroll]);
+  }, [top5]);
 
   return (
     <>
