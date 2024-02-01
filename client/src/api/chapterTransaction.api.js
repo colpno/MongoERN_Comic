@@ -10,11 +10,11 @@ export default chapterTransactionApi;
 const extendedApi = comicApi.injectEndpoints({
   endpoints: (build) => ({
     getChapterTransactions: build.query({
-      query: (params) => ({
+      query: ({ params, isPrivate }) => ({
         url: BASE_URL,
         method: "GET",
         params,
-        withCredentials: true,
+        withCredentials: isPrivate,
       }),
       transformResponse: (response) => {
         if (response.pagination) return response;
