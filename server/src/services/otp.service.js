@@ -59,7 +59,11 @@ const otpService = {
       const hashedOTP = this.hashOTP(code);
 
       if (existedOTP) {
-        const response = await Otp.updateOne({ username, email }, { code: hashedOTP });
+        const response = await Otp.findOneAndUpdate(
+          { username, email },
+          { code: hashedOTP },
+          { new: true }
+        );
         return response;
       }
 
