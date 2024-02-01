@@ -84,7 +84,7 @@ function ComicChapters({
   handleOpenPurchaseBox,
 }) {
   const findPurchasedChapter = (chapterId) => {
-    const isPurchased = purchasedHistories.some((history) => history.chapter_id._id === chapterId);
+    const isPurchased = purchasedHistories.some((history) => history.chapter_id === chapterId);
     return isPurchased;
   };
 
@@ -185,7 +185,6 @@ ComicChapters.propTypes = {
   purchasedHistories: PropTypes.arrayOf(
     PropTypes.shape({
       _id: PropTypes.string.isRequired,
-      chapter_id: PropTypes.string.isRequired,
     }).isRequired
   ),
 

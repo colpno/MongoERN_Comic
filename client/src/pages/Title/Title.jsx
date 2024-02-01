@@ -103,7 +103,7 @@ function Title() {
         titleId,
         chapterId,
         method,
-        amount,
+        cost: amount,
         expiredAt,
       }).unwrap();
 
@@ -176,7 +176,6 @@ function Title() {
       };
       const chapterTranParams = {
         title_id: titleId,
-        _embed: JSON.stringify([{ collection: "chapter_id", fields: "_id" }]),
       };
       const titleParams = {
         _id: titleId,
@@ -209,6 +208,7 @@ function Title() {
         isPrivate: false,
       }).unwrap();
 
+      if (user._id) chapterTranParams.user_id = user._id;
       const getChapterTransactionResponse = await getChapterTransactions({
         params: chapterTranParams,
         isPrivate: !!user._id,
