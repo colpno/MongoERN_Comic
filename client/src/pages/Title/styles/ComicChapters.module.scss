@@ -41,9 +41,10 @@
       }
 
       &__box-img {
-        min-width: 198px;
+        width: 198px;
         height: 147px;
         border-right: 1px solid #ddd;
+        padding: 8px 0;
 
         > * {
           object-fit: cover;
