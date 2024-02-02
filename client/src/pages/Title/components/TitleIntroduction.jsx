@@ -1,12 +1,12 @@
 import classNames from "classnames/bind";
-import { memo } from "react";
-import { Col, Row } from "react-bootstrap";
-import { AiFillCopy, AiFillEye, AiFillHeart, AiFillStar } from "react-icons/ai";
-
 import { Button } from "components";
 import { NoData } from "features/index.jsx";
 import { useToggleFollow } from "hooks/index.jsx";
+import { memo } from "react";
+import { Col, Row } from "react-bootstrap";
+import { AiFillCopy, AiFillEye, AiFillHeart, AiFillStar } from "react-icons/ai";
 import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import { roundNumByUnit } from "utils";
 import styles from "../styles/Introduction.module.scss";
 import TitleIntroductionGenres from "./TitleIntroductionGenres.jsx";
@@ -17,8 +17,9 @@ const cx = classNames.bind(styles);
 const FIRST_CHAPTER = "1";
 
 function TitleIntroduction() {
+  const { titleId } = useParams();
   const title = useSelector((state) => state.title.title);
-  const { handleToggle: handleToggleFollow, isFollowed } = useToggleFollow();
+  const { handleToggle: handleToggleFollow, isFollowed } = useToggleFollow(titleId);
   const hasChapter = title?.total_chapter !== 0;
 
   if (!title) {
