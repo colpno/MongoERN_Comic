@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import { Container } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
@@ -20,7 +21,7 @@ function TitleTransaction() {
       href: "?tab=purchased-titles",
       Component: PurchasedChapters,
     },
-    { label: "Đã thuê", tab: "hired-titles", href: "?tab=hired-titles", Component: HiredChapters },
+    // { label: "Đã thuê", tab: "hired-titles", href: "?tab=hired-titles", Component: HiredChapters },
   ];
   const Component = useMemo(
     () => menu.find((item) => item.tab === queryTab)?.Component,
