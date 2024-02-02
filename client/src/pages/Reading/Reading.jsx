@@ -15,6 +15,7 @@ import {
   setChapters as setChaptersStore,
 } from "libs/redux/slices/readingChapter.slice";
 import styles from "pages/Reading/assets/styles/Reading.module.scss";
+import { Container } from "react-bootstrap";
 import { ReadingComics, ReadingControls, ReadingPagination } from "./components";
 
 const cx = classNames.bind(styles);
@@ -88,7 +89,9 @@ function Reading() {
       {chapters.length > 0 && (
         <ReadingPagination chapters={chapters} boughtChapter={boughtChapter} user={user} />
       )}
-      <Recommend />
+      <Container>
+        <Recommend />
+      </Container>
     </div>
   );
 }
