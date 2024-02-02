@@ -13,7 +13,7 @@ const extendedApi = comicApi.injectEndpoints({
         withCredentials: true,
       }),
       transformResponse: (response) => {
-        return response;
+        return response.data;
       },
       providesTags: ["User"],
     }),

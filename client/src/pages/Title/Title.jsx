@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import { TITLE_PAGE_CHAPTERS_PER_PAGE } from "constants/paginate.constant";
 import { socket } from "context/socketContext";
@@ -6,6 +7,7 @@ import { emitToast } from "features/Toast.jsx";
 import {
   useAddChapterTransaction,
   useAddFollow,
+  useCheckUseService,
   useLazyGetChapterTransactions,
   useLazyGetChapters,
   useLazyGetGenres,
@@ -70,20 +72,29 @@ function Title() {
     }
     return choices;
   }, [state.title]);
+  const { handleLazyCheck } = useCheckUseService();
 
   const checkCanPurchase = (method, amount) => {
+    let isOK = false;
     switch (method.toLowerCase()) {
       case "coin":
-        return user.coin >= amount;
+        isOK = user.coin >= amount;
+        break;
       case "point":
-        return user.point >= amount;
+        isOK = user.point >= amount;
+        break;
       case "rent ticket":
-        return user.ticket_for_renting >= amount;
+        isOK = user.ticket_for_renting >= amount;
+        break;
       case "purchase ticket":
-        return user.ticket_for_buying >= amount;
+        isOK = user.ticket_for_buying >= amount;
+        break;
       default:
-        return false;
+        isOK = false;
+        break;
     }
+    !isOK && emitToast("Không đủ để thực hiện chức năng", "error");
+    return isOK;
   };
 
   const handlePurchase = async (payment, chapter) => {
@@ -95,7 +106,9 @@ function Title() {
       return;
     }
 
-    if (checkCanPurchase(method, amount)) {
+    const isPassed = await handleLazyCheck();
+
+    if (checkCanPurchase(method, amount) && isPassed) {
       const rentList = ["rent ticket"];
       const expiredAt = rentList.includes(method) ? moment().add(5, "days").toISOString() : null;
 
@@ -111,8 +124,6 @@ function Title() {
       updateState({
         purchasedHistories: [...state.purchasedHistories, response.transaction],
       });
-    } else {
-      emitToast("Không đủ để thực hiện chức năng", "error");
     }
   };
 
