@@ -19,7 +19,7 @@ function useCheckUseService(isUseLazy = false) {
     const { paypal_email: paypalEmail } = user;
     if (!paypalEmail) {
       emitToast(
-        "Bạn cần phải cập nhật thông tin về PayPal tại Profile để có thể sử dụng dịch vụ.",
+        "Bạn cần phải cập nhật thông tin về PayPal tại trang thông tin cá nhân để có thể sử dụng dịch vụ.",
         "info"
       );
       return false;

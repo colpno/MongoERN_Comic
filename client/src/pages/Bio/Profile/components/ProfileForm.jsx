@@ -54,11 +54,14 @@ function ProfileForm({ initialValues, handleSubmit, handleOpenChooseAvatar }) {
             <FormLabel name="dateOfBirth" label="Ngày sinh" />
             <FastField name="dateOfBirth" component={InputField} placeholder="dd/mm/yyyy" />
 
-            <Button primary type="submit" className={cx("form__submit")}>
+            <Button
+              primary
+              type="submit"
+              className={cx("form__submit")}
+              style={{ marginTop: "3rem" }}
+            >
               Thay đổi
             </Button>
-
-            {/* REMOVE: <pre>{JSON.stringify(formikProps.values, null, 4)}</pre> */}
           </Form>
         );
       }}
