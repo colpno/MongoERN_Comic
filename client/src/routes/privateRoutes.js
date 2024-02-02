@@ -1,6 +1,7 @@
-import { BookshelfLayout, HistoryLayout, MyTitleLayout } from "layouts";
+import { BioLayout, BookshelfLayout, HistoryLayout, MyTitleLayout } from "layouts";
 import {
   AddCoin,
+  ChangePassword,
   Chapters,
   CoinHistory,
   CreateChapter,
@@ -21,7 +22,8 @@ import {
 } from "pages";
 
 export const privateRoutes = [
-  { path: "/profile/update", component: Profile },
+  { path: "/profile/update", component: Profile, layout: BioLayout },
+  { path: "/profile/update/password", component: ChangePassword, layout: BioLayout },
   { path: "/coin/add", component: AddCoin, layout: HistoryLayout },
   { path: "/withdraw", component: Withdraw, layout: HistoryLayout },
   {
