@@ -1,131 +1,63 @@
 import classNames from "classnames/bind";
-import { Col } from "react-bootstrap";
 import PropTypes from "prop-types";
+import { Col } from "react-bootstrap";
 
-import {
-  cat1,
-  cat10,
-  cat2,
-  cat3,
-  cat4,
-  cat5,
-  cat6,
-  cat7,
-  cat8,
-  cat9,
-  monster1,
-  monster10,
-  monster2,
-  monster3,
-  monster4,
-  monster5,
-  monster6,
-  monster7,
-  monster8,
-  monster9,
-  robot1,
-  robot10,
-  robot2,
-  robot3,
-  robot4,
-  robot5,
-  robot6,
-  robot7,
-  robot8,
-  robot9,
-  robotHead1,
-  robotHead10,
-  robotHead2,
-  robotHead3,
-  robotHead4,
-  robotHead5,
-  robotHead6,
-  robotHead7,
-  robotHead8,
-  robotHead9,
-} from "assets/images";
-import { Image } from "components";
+import { Button, Image, Scrollbar } from "components";
+import { Dialog } from "features/index.jsx";
+import { avatars } from "utils/constants.js";
 import styles from "../styles/AvatarBox.module.scss";
 
 const cx = classNames.bind(styles);
 
-function AvatarBox({ value, handleOnChange }) {
-  const avatars = [
-    robot1,
-    robot2,
-    robot3,
-    robot4,
-    robot5,
-    robot6,
-    robot7,
-    robot8,
-    robot9,
-    robot10,
+function AvatarBox({ value, handleOnChange, trigger }) {
+  const handleClose = () => {
+    trigger(false);
+  };
 
-    robotHead1,
-    robotHead2,
-    robotHead3,
-    robotHead4,
-    robotHead5,
-    robotHead6,
-    robotHead7,
-    robotHead8,
-    robotHead9,
-    robotHead10,
-
-    monster1,
-    monster2,
-    monster3,
-    monster4,
-    monster5,
-    monster6,
-    monster7,
-    monster8,
-    monster9,
-    monster10,
-
-    cat1,
-    cat2,
-    cat3,
-    cat4,
-    cat5,
-    cat6,
-    cat7,
-    cat8,
-    cat9,
-    cat10,
-  ];
   return (
-    <div className={cx("avatars-container")}>
-      {avatars.map((avatar, index) => {
-        const alt = avatar.slice(avatar.lastIndexOf("/") + 1, avatar.indexOf("."));
+    <Dialog handleClickOutside={handleClose}>
+      <div className={cx("avatars-container")}>
+        <div className={cx("title")}>
+          <h6>Hộp ảnh đại diện</h6>
+        </div>
+        <Scrollbar yAxis className={cx("content")}>
+          {avatars.map((avatar, index) => {
+            const alt = avatar.slice(avatar.lastIndexOf("/") + 1, avatar.indexOf("."));
 
-        return (
-          <Col sm={20} key={index}>
-            <input
-              name="avatar"
-              onChange={handleOnChange}
-              type="radio"
-              value={avatar}
-              className={cx("radio")}
-            />
-            <Image
-              src={avatar}
-              alt={`Avatar ${alt}`}
-              width={70}
-              height={70}
-              className={cx("avatar", value === avatar ? "active" : "")}
-            />
-          </Col>
-        );
-      })}
-    </div>
+            return (
+              <Col sm={20} key={index}>
+                <input
+                  name="avatar"
+                  onChange={handleOnChange}
+                  type="radio"
+                  value={avatar}
+                  className={cx("radio")}
+                />
+                <Image
+                  src={avatar}
+                  alt={`Avatar ${alt}`}
+                  width={70}
+                  height={70}
+                  className={cx("avatar", value === avatar ? "active" : "")}
+                />
+              </Col>
+            );
+          })}
+        </Scrollbar>
+        <div className={cx("button-group")}>
+          <Button primary onClick={handleClose}>
+            Đóng
+          </Button>
+        </div>
+      </div>
+    </Dialog>
   );
 }
 
 AvatarBox.propTypes = {
   handleOnChange: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired,
+  trigger: PropTypes.func.isRequired,
 };
 
 export default AvatarBox;

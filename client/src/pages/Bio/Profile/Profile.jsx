@@ -3,14 +3,12 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 
 import { FormWrapper } from "components";
-import { Popup } from "features";
-import { usePopup, useUpdateUser } from "hooks";
+import { useUpdateUser } from "hooks";
 import ProfileForm from "pages/Bio/Profile/components/ProfileForm";
 import AvatarBox from "./components/AvatarBox";
 
 function Profile() {
   const user = useSelector((state) => state.user.user);
-  const { popup, setPopup, triggerPopup } = usePopup();
   const { updateUser } = useUpdateUser();
   const [initialValues, setInitialValues] = useState({
     avatar: user.avatar,
@@ -19,6 +17,7 @@ function Profile() {
     paypalEmail: user.paypal_email,
     dateOfBirth: user?.dateOfBirth ? moment(user.dateOfBirth, "DD/MM/YYYY").toString() : "",
   });
+  const [isAvatarBoxOpened, setIsAvatarBoxOpened] = useState(false);
 
   const handleSubmit = (values, { setSubmitting }) => {
     updateUser(values);
@@ -31,11 +30,7 @@ function Profile() {
   };
 
   const handleOpenChooseAvatar = () => {
-    setPopup({
-      isTriggered: true,
-      title: "Hình dại diện",
-      content: <AvatarBox value={initialValues.avatar} handleOnChange={handleChooseAvatar} />,
-    });
+    setIsAvatarBoxOpened(true);
   };
 
   return (
@@ -49,7 +44,13 @@ function Profile() {
           />
         </FormWrapper>
       ) : null}
-      <Popup data={popup} trigger={triggerPopup} sx={{ height: "350px" }} />
+      {isAvatarBoxOpened && (
+        <AvatarBox
+          value={initialValues.avatar}
+          handleOnChange={handleChooseAvatar}
+          trigger={setIsAvatarBoxOpened}
+        />
+      )}
     </>
   );
 }
