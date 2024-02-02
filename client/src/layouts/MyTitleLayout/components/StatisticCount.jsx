@@ -14,8 +14,6 @@ import IncomePopup from "./IncomePopup";
 
 const cx = classNames.bind(styles);
 
-// INFO: 10K likes = 100K vnd
-// INFO: 1 like = 10 vnd
 function StatisticCount() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
@@ -83,7 +81,7 @@ function StatisticCount() {
             <Col className={cx("statistic-count__col")}>
               <DollarLine className={cx("statistic-count__income__icon")} />
               <div className={cx("statistic-count__label-container")}>
-                <p className={cx("statistic-count__income__label")}>Thu nhập (VNĐ)</p>
+                <p className={cx("statistic-count__income__label")}>Thu nhập ($ - Dollar)</p>
                 <BsQuestionCircle
                   className={cx("statistic-count__income__question-icon")}
                   onClick={() => triggerPopup(true)}
