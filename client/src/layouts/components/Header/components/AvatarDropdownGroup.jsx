@@ -35,7 +35,7 @@ AvatarDropdownGroup.propTypes = {
   menu: PropTypes.arrayOf(
     PropTypes.arrayOf(
       PropTypes.shape({
-        path: PropTypes.string.isRequired,
+        path: PropTypes.string,
         label: PropTypes.node.isRequired,
         icon: PropTypes.node.isRequired,
       }).isRequired

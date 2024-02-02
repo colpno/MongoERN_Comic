@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { BiChevronRight } from "react-icons/bi";
 
 import { Button } from "components";
+import { emitToast } from "features/Toast.jsx";
 
 function AvatarDropdownItem({ children, cx, path, icon, onClick, setShowDropDown }) {
   return (
@@ -9,7 +10,8 @@ function AvatarDropdownItem({ children, cx, path, icon, onClick, setShowDropDown
       wrapper
       to={path}
       onClick={() => {
-        setShowDropDown(false);
+        if (path) setShowDropDown(false);
+        else emitToast("Cần phải đăng nhập để có thể thực hiện chức năng", "info");
         onClick();
       }}
       className={cx("dropdown__group__link")}

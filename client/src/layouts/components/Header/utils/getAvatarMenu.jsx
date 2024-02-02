@@ -31,7 +31,7 @@ function getAvatarMenu(cx, user, isLoggingIn) {
         ),
       },
       {
-        path: "/coin/add",
+        path: isLoggingIn ? "/coin/add" : undefined,
         label: (
           <>
             <p className={cx("coin-label")}>Coin</p>
@@ -41,7 +41,7 @@ function getAvatarMenu(cx, user, isLoggingIn) {
         icon: <CircleC className={cx(isLoggingIn ? "" : "grey")} />,
       },
       {
-        path: "/coin/add",
+        path: isLoggingIn ? "/coin/add" : undefined,
         label: (
           <>
             <p className={cx("point-label")}>Point</p>
@@ -53,22 +53,22 @@ function getAvatarMenu(cx, user, isLoggingIn) {
     ],
     [
       // {
-      //   path: "/redeem",
+      //   path: isLoggingIn ? "/redeem" : undefined,
       //   label: <span>Thẻ quà tặng</span>,
       //   icon: <IoGiftSharp className={cx(isLoggingIn ? "" : "grey")} />,
       // },
       // {
-      //   path: "/inventory",
+      //   path: isLoggingIn ? "/inventory" : undefined,
       //   label: <span>Hộp vé</span>,
       //   icon: <FaTicketAlt className={cx(isLoggingIn ? "" : "grey")} />,
       // },
       {
-        path: "/bookshelf/follow",
+        path: isLoggingIn ? "/bookshelf/follow" : undefined,
         label: <span>Tủ sách</span>,
         icon: <ImBooks className={cx(isLoggingIn ? "" : "grey")} />,
       },
       {
-        path: "/my-title",
+        path: isLoggingIn ? "/my-title" : undefined,
         label: <span>Truyện của tôi</span>,
         icon: <ImQuill className={cx(isLoggingIn ? "" : "grey")} />,
       },
