@@ -6,3 +6,4 @@ export { default as MyTitleLayout } from "./MyTitleLayout/MyTitleLayout";
 export { default as ReadingLayout } from "./ReadingLayout/ReadingLayout";
 export { default as LoginLayout } from "./LoginLayout/LoginLayout";
 export { default as BlankLayout } from "./BlankLayout/BlankLayout";
+export { default as BioLayout } from "./BioLayout";
