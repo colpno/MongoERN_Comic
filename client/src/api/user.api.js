@@ -15,6 +15,7 @@ const extendedApi = comicApi.injectEndpoints({
       transformResponse: (response) => {
         return response.data;
       },
+      keepUnusedDataFor: 60,
       providesTags: ["User"],
     }),
     registerUser: build.mutation({
