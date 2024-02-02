@@ -1,10 +1,13 @@
-import PropTypes from "prop-types";
+import classNames from "classnames/bind";
 import { useSelector } from "react-redux";
 
 import { useGetChapterTransactions } from "hooks/index.jsx";
 import HiredChaptersTable from "./components/HiredChaptersTable";
+import styles from "../styles/TitleTransaction.module.scss";
 
-function HiredChapters({ cx }) {
+const cx = classNames.bind(styles);
+
+function HiredChapters() {
   const user = useSelector((state) => state.user.user);
   const { data: transactions = [] } = useGetChapterTransactions({
     user_id: user._id,
@@ -18,9 +21,5 @@ function HiredChapters({ cx }) {
 
   return <HiredChaptersTable transactions={transactions} cx={cx} />;
 }
-
-HiredChapters.propTypes = {
-  cx: PropTypes.func.isRequired,
-};
 
 export default HiredChapters;
