@@ -26,7 +26,9 @@ function TitleChapterListItem({ user, title, chapter, checkIsPurchased, onOpenPu
         <img src={chapter.cover.source} alt={chapter.title} />
       </div>
       <div className={cx("chapters__content__chapter__info")}>
-        <h4 className={cx("title")}>{chapter.title}</h4>
+        <h4 className={cx("title")}>{`Chương ${chapter.order}${
+          chapter.title ? `: ${chapter.title}` : ""
+        }`}</h4>
         <div className={cx("popular-numbers")}>
           <div className={`like ${cx("like")}`}>
             <AiFillHeart />

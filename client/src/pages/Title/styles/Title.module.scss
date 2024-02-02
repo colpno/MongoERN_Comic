@@ -1,13 +1,29 @@
 @use "assets/styles/variables";
 
-$section-padding: 20px;
+$section-padding: 30px;
 
 svg {
   font-size: 20px;
 }
 
-.title-page {
+.container {
   background: variables.$clr-grey-faded;
+  padding-bottom: 6rem;
+}
+
+.content {
+  > div,
+  > section {
+    background: #fff;
+    margin-bottom: $section-padding;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.title-page {
   padding-bottom: 20px;
   padding-top: 55px;
   // background-color: transparent;

@@ -1,7 +1,6 @@
-/* eslint-disable no-unused-vars */
 import classNames from "classnames/bind";
 import { memo } from "react";
-import { Col, Container, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import { AiFillCopy, AiFillEye, AiFillHeart, AiFillStar } from "react-icons/ai";
 
 import { Button } from "components";
@@ -31,7 +30,7 @@ function TitleIntroduction() {
   }
 
   return (
-    <Container fluid="md" className={cx("introduction")}>
+    <div className={cx("introduction")}>
       <Row>
         <Col md={12} lg={5} className={cx("box-img")}>
           <img src={title.cover.source} alt={title.title} />
@@ -71,7 +70,7 @@ function TitleIntroduction() {
           </div>
         </Col>
       </Row>
-    </Container>
+    </div>
   );
 }
 
