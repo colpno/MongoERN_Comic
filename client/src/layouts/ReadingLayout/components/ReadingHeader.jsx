@@ -62,7 +62,13 @@ function ReadingHeader() {
             totalChapter={title.total_chapter}
             titleId={titleId}
           />
-          <ReadingTools cx={cx} onToggleFavorite={handleToggle} controls={controls} />
+          <ReadingTools
+            cx={cx}
+            onToggleFavorite={handleToggle}
+            controls={controls}
+            chapter={chapter}
+            user={user}
+          />
         </header>
       )}
       {}

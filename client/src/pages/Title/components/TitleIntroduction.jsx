@@ -19,6 +19,7 @@ const FIRST_CHAPTER = "1";
 function TitleIntroduction() {
   const { titleId } = useParams();
   const title = useSelector((state) => state.title.title);
+  const user = useSelector((state) => state.user.user);
   const { handleToggle: handleToggleFollow, isFollowed } = useToggleFollow(titleId);
   const hasChapter = title?.total_chapter !== 0;
 
@@ -58,10 +59,12 @@ function TitleIntroduction() {
             </small>
           </div>
           <div className={cx("button-container")}>
-            <Button outline large onClick={() => handleToggleFollow(title._id)}>
-              <AiFillStar />
-              {isFollowed ? "Hủy theo dõi" : "Theo dõi"}
-            </Button>
+            {title.user_id !== user._id && (
+              <Button outline large onClick={() => handleToggleFollow(title._id)}>
+                <AiFillStar />
+                {isFollowed ? "Hủy theo dõi" : "Theo dõi"}
+              </Button>
+            )}
             {hasChapter && (
               <Button to={FIRST_CHAPTER} primary large>
                 <AiFillCopy />

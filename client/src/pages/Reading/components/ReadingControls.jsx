@@ -4,35 +4,39 @@ import { AiFillHeart, AiFillStar } from "react-icons/ai";
 import { Button } from "components";
 import { useToggleFavorite, useToggleFollow } from "hooks/index.jsx";
 
-function ReadingControls({ cx, titleId, chapterId }) {
+function ReadingControls({ cx, titleId, chapterId, chapter, user }) {
   const { handleToggle: handleToggleFavorite, isFavored } = useToggleFavorite(chapterId);
   const { handleToggle: handleToggleFollow, isFollowed } = useToggleFollow(titleId);
 
   return (
     <div className={cx("reading-page__controls")}>
       <div className={cx("reading-page__controls__group")}>
-        <Button
-          className={cx(
-            "reading-page__controls__controls__group__control",
-            "like",
-            isFavored ? "active" : ""
-          )}
-          onClick={handleToggleFavorite}
-        >
-          <AiFillHeart className={cx("icon")} />
-          <span className={cx("text")}>Yêu thích</span>
-        </Button>
-        <Button
-          className={cx(
-            "reading-page__controls__controls__group__control",
-            "follow",
-            isFollowed ? "active" : ""
-          )}
-          onClick={handleToggleFollow}
-        >
-          <AiFillStar className={cx("icon")} />
-          <span className={cx("text")}>Theo dõi</span>
-        </Button>
+        {chapter.user_id !== user._id && (
+          <>
+            <Button
+              className={cx(
+                "reading-page__controls__controls__group__control",
+                "like",
+                isFavored ? "active" : ""
+              )}
+              onClick={handleToggleFavorite}
+            >
+              <AiFillHeart className={cx("icon")} />
+              <span className={cx("text")}>Yêu thích</span>
+            </Button>
+            <Button
+              className={cx(
+                "reading-page__controls__controls__group__control",
+                "follow",
+                isFollowed ? "active" : ""
+              )}
+              onClick={handleToggleFollow}
+            >
+              <AiFillStar className={cx("icon")} />
+              <span className={cx("text")}>Theo dõi</span>
+            </Button>
+          </>
+        )}
         {/* <Button className={cx("reading-page__controls__controls__group__control")}>
           <FaShareAlt />
           <span>Chia sẻ</span>
@@ -59,6 +63,12 @@ ReadingControls.propTypes = {
   cx: PropTypes.func.isRequired,
   titleId: PropTypes.string.isRequired,
   chapterId: PropTypes.string.isRequired,
+  chapter: PropTypes.shape({
+    user_id: PropTypes.string.isRequired,
+  }).isRequired,
+  user: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default ReadingControls;

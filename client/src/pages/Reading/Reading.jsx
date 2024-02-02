@@ -85,7 +85,15 @@ function Reading() {
   return (
     <div className={cx("reading-page")}>
       {chapter.contents?.length > 0 && <ReadingComics cx={cx} images={chapter.contents} />}
-      {chapter._id && <ReadingControls cx={cx} titleId={titleId} chapterId={chapter._id} />}
+      {chapter._id && (
+        <ReadingControls
+          cx={cx}
+          titleId={titleId}
+          chapterId={chapter._id}
+          chapter={chapter}
+          user={user}
+        />
+      )}
       {chapters.length > 0 && (
         <ReadingPagination chapters={chapters} boughtChapter={boughtChapter} user={user} />
       )}
