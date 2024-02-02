@@ -39,7 +39,7 @@ const extendedApi = comicApi.injectEndpoints({
         params,
       }),
       transformResponse: (response) => {
-        return response;
+        return response.data;
       },
     }),
     addTitle: build.mutation({
