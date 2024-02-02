@@ -53,4 +53,16 @@
     font-size: 1.3em;
     line-height: 1;
   }
+
+  &__account {
+    padding: 0 10px 10px 0;
+
+    &-balance {
+      display: flex;
+
+      & .wrapper__title {
+        margin-right: 10px;
+      }
+    }
+  }
 }

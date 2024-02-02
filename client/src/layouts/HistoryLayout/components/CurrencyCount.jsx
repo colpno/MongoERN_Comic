@@ -17,7 +17,10 @@ function CurrencyCount() {
           <p className={cx("wrapper__account")}>
             Tài khoản: <span className={cx("wrapper__account__name")}>{user.username}</span>
           </p>
-          <h4 className={cx("wrapper__title")}>Số dư hiện tại</h4>
+          <div className={cx("wrapper__account-balance")}>
+            <h4 className={cx("wrapper__title")}>Số dư hiện tại:</h4>
+            <h4 className={cx("wrapper__content")}>${user.income}</h4>
+          </div>
         </Col>
         <Col>
           <p className={cx("wrapper__label")}>Tổng số Coin</p>
