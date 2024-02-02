@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { FormWrapper } from "components";
 import { Popup } from "features";
 import { usePopup, useUpdateUser } from "hooks";
-import ProfileForm from "pages/Profile/components/ProfileForm";
+import ProfileForm from "pages/Bio/Profile/components/ProfileForm";
 import AvatarBox from "./components/AvatarBox";
 
 function Profile() {
