@@ -6,15 +6,20 @@ import { setLoading } from "libs/redux/slices/common.slice.js";
 function useGetFollows(params) {
   const dispatch = useDispatch();
   const response = useGetFollowsQuery(params);
-  const { isLoading } = response;
+  const { isFetching, data } = response;
+
+  if (data?.pagination) {
+    response.pagination = data.pagination;
+    response.data = data.data;
+  }
 
   useEffect(() => {
-    if (isLoading) {
+    if (isFetching) {
       dispatch(setLoading(true));
     } else {
       dispatch(setLoading(false));
     }
-  }, [isLoading]);
+  }, [isFetching]);
 
   return response;
 }

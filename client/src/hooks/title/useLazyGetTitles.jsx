@@ -6,7 +6,12 @@ import { useDispatch } from "react-redux";
 function useLazyGetTitles() {
   const dispatch = useDispatch();
   const [get, response] = useLazyGetTitlesQuery();
-  const { isFetching } = response;
+  const { isFetching, data } = response;
+
+  if (data?.pagination) {
+    response.pagination = data.pagination;
+    response.data = data.data;
+  }
 
   useEffect(() => {
     if (isFetching) {

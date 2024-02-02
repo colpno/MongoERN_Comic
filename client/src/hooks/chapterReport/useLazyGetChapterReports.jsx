@@ -6,15 +6,20 @@ import { useDispatch } from "react-redux";
 function useGetChapterReports(params) {
   const dispatch = useDispatch();
   const [get, response] = useLazyGetChapterReportsQuery(params);
-  const { isLoading } = response;
+  const { isFetching, data } = response;
+
+  if (data?.pagination) {
+    response.pagination = data.pagination;
+    response.data = data.data;
+  }
 
   useEffect(() => {
-    if (isLoading) {
+    if (isFetching) {
       dispatch(setLoading(true));
     } else {
       dispatch(setLoading(false));
     }
-  }, [isLoading]);
+  }, [isFetching]);
 
   return { get, ...response };
 }

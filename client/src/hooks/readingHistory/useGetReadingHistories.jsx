@@ -6,15 +6,20 @@ import { useDispatch } from "react-redux";
 function useGetReadingHistories(params) {
   const dispatch = useDispatch();
   const response = useGetReadingHistoriesQuery(params);
-  const { isLoading } = response;
+  const { isFetching, data } = response;
+
+  if (data?.pagination) {
+    response.pagination = data.pagination;
+    response.data = data.data;
+  }
 
   useEffect(() => {
-    if (isLoading) {
+    if (isFetching) {
       dispatch(setLoading(true));
     } else {
       dispatch(setLoading(false));
     }
-  }, [isLoading]);
+  }, [isFetching]);
 
   return response;
 }

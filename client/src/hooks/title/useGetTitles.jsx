@@ -6,7 +6,12 @@ import { useDispatch } from "react-redux";
 function useGetTitles(params, isPrivate = true) {
   const dispatch = useDispatch();
   const response = useGetTitlesQuery({ params, isPrivate });
-  const { isFetching } = response;
+  const { isFetching, data } = response;
+
+  if (data?.pagination) {
+    response.pagination = data.pagination;
+    response.data = data.data;
+  }
 
   useEffect(() => {
     if (isFetching) {

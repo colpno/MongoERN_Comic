@@ -10,7 +10,7 @@ import styles from "../styles/Notification.module.scss";
 const cx = classNames.bind(styles);
 
 function Notification() {
-  const { data: notifications = {} } = useGetNotifications({
+  const { data: notifications = [] } = useGetNotifications({
     _sort: {
       updatedAt: -1,
     },
@@ -29,8 +29,8 @@ function Notification() {
           </header>
         </HeadTitleMark>
         <ul>
-          {notifications.data?.length > 0 &&
-            notifications.data.map((notification) => {
+          {notifications.length > 0 &&
+            notifications.map((notification) => {
               const timeObj = formatTime(notification.createdAt);
               return (
                 <li key={notification._id}>

@@ -15,7 +15,7 @@ function Recommend() {
   const { titleId } = useParams();
   const [isExpand, setIsExpand] = useState(false);
   const genresOfTitle = useSelector((state) => state.title.genresOfTitle);
-  const { data: { data: titles } = { data: [] } } = useRandomTitles({
+  const { data: titles = [] } = useRandomTitles({
     _id_ne: titleId,
     genres_in: genresOfTitle,
     _limit: 18,

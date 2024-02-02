@@ -14,13 +14,13 @@ const cx = classNames.bind(styles);
 
 function ComicSection() {
   const dispatch = useDispatch();
-  const { data: genres = {} } = useGetGenres({
+  const { data: genres = [] } = useGetGenres({
     _sort: {
       _id: 1,
     },
     _limit: 4,
   });
-  const allGenreNames = genres.data?.map((genre) => genre.name);
+  const allGenreNames = genres.map((genre) => genre.name);
   const { data: titles = [] } = useGetTitles(
     {
       genres_in: allGenreNames,
@@ -44,13 +44,12 @@ function ComicSection() {
     },
     false
   );
-
   const titlesByGenre = useMemo(() => {
     const checkIdList = [];
 
-    return genres.data?.map((genre, genreIndex) => {
+    return genres.map((genre, genreIndex) => {
       let count = 0;
-      const limit = genreIndex !== genres.data.length - 1 ? 6 : 3;
+      const limit = genreIndex !== genres.length - 1 ? 6 : 3;
       const result = [];
       const titleLength = titles?.length || 0;
 

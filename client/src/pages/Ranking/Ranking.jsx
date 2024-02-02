@@ -10,7 +10,7 @@ import styles from "./styles/Ranking.module.scss";
 const cx = classNames.bind(styles);
 
 function Ranking() {
-  const { data: titles = {} } = useGetTitles(
+  const { data: titles = [] } = useGetTitles(
     {
       _sort: {
         like: -1,
@@ -26,9 +26,9 @@ function Ranking() {
     false
   );
 
-  const topFiveTitles = useMemo(() => titles.data?.slice(0, 5), [titles]);
-  const restRankTitles = useMemo(() => titles.data?.slice(5), [titles]);
-  const hasData = titles.data?.length > 0;
+  const topFiveTitles = useMemo(() => titles.slice(0, 5), [titles]);
+  const restRankTitles = useMemo(() => titles.slice(5), [titles]);
+  const hasData = titles.length > 0;
 
   return (
     <>
