@@ -15,8 +15,8 @@ function Profile() {
   const [initialValues, setInitialValues] = useState({
     avatar: user.avatar,
     username: user.username,
-    password: user.password,
     email: user.email,
+    paypalEmail: user.paypal_email,
     dateOfBirth: user?.dateOfBirth ? moment(user.dateOfBirth, "DD/MM/YYYY").toString() : "",
   });
 

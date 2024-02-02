@@ -44,6 +44,13 @@ function ProfileForm({ initialValues, handleSubmit, handleOpenChooseAvatar }) {
             <FormLabel name="email" label="Địa chỉ email" required />
             <FastField name="email" component={InputField} placeholder="Viết địa chỉ email..." />
 
+            <FormLabel name="paypalEmail" label="PayPal Email" />
+            <FastField
+              name="paypalEmail"
+              component={InputField}
+              placeholder="Viết địa chỉ email..."
+            />
+
             <FormLabel name="dateOfBirth" label="Ngày sinh" />
             <FastField name="dateOfBirth" component={InputField} placeholder="dd/mm/yyyy" />
 
