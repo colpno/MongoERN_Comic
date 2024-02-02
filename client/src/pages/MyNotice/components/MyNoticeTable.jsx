@@ -1,7 +1,7 @@
 import { GridActionsCellItem } from "@mui/x-data-grid-pro";
 import moment from "moment";
 import PropTypes from "prop-types";
-import { MdMarkEmailRead, MdMarkEmailUnread } from "react-icons/md";
+import { MdMarkEmailUnread } from "react-icons/md";
 
 import { Table } from "components";
 
@@ -40,25 +40,17 @@ function MyNoticeTable({ notifications, onDelete, onRead }) {
   };
 
   const readAction = ({ row }) => {
-    return [
-      row.read_at ? (
-        <GridActionsCellItem
-          size="medium"
-          icon={<MdMarkEmailRead />}
-          onClick={() => onRead(row)}
-          label="Mark as unread"
-          title="Đánh dầu chưa đọc"
-        />
-      ) : (
-        <GridActionsCellItem
-          size="medium"
-          icon={<MdMarkEmailUnread />}
-          onClick={() => onRead(row)}
-          label="Mark as read"
-          title="Đánh dầu đã đọc"
-        />
-      ),
-    ];
+    return !row.read_at
+      ? [
+          <GridActionsCellItem
+            size="medium"
+            icon={<MdMarkEmailUnread />}
+            onClick={() => onRead(row)}
+            label="Mark as read"
+            title="Đánh dầu đã đọc"
+          />,
+        ]
+      : [];
   };
 
   return (

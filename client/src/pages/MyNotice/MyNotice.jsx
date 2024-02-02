@@ -24,9 +24,11 @@ function MyNotice() {
   });
 
   const handleRead = useCallback((row) => {
-    const now = moment().toISOString();
-    const data = { read_at: row.read_at ? null : now };
-    update({ id: row._id, data });
+    if (!row.read_at) {
+      const now = moment().toISOString();
+      const data = { read_at: row.read_at ? null : now };
+      update({ id: row._id, data });
+    }
   }, []);
 
   const handleDelete = (data) => {
