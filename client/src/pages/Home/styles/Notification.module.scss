@@ -1,5 +1,11 @@
 @use "assets/styles/variables";
 
+.notice {
+  &:hover {
+    background-color: #ffdfdf;
+  }
+}
+
 .notification {
   .head {
     display: flex;

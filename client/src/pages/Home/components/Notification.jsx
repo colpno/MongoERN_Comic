@@ -34,7 +34,7 @@ function Notification() {
               const timeObj = formatTime(notification.createdAt);
               return (
                 <li key={notification._id}>
-                  <Button wrapper to={`/notice/${notification._id}`}>
+                  <Button wrapper to={`/notice/${notification._id}`} className={cx("notice")}>
                     <span className={cx("title")}>{notification.title}</span>
                     <span>
                       <AiOutlineClockCircle />
