@@ -4,6 +4,7 @@ import { robotHead1 } from "assets/images/index";
 import { Button } from "components";
 import { Popup } from "features";
 import { usePopup, useRegisterUser } from "hooks";
+import { hash } from "utils/hash.js";
 import { registerFormValidation } from "validations/registerForm.validation";
 import RegisterForm from "./components/RegisterForm";
 import styles from "./styles/Register.module.scss";
@@ -15,22 +16,26 @@ function Register() {
   const { register: registerUser } = useRegisterUser();
 
   const handleSubmit = async (values, { setSubmitting }) => {
-    const { username, email, password } = values;
-    const response = await registerUser({
-      username,
-      password,
-      email,
-      role: "member",
-      avatar: robotHead1,
-    }).unwrap();
-
-    setPopup({
-      isTriggered: true,
-      title: "Thông báo",
-      content: response.message,
-    });
-
     setSubmitting(false);
+    const { username, email, password, confirmPassword } = values;
+
+    if (password === confirmPassword) {
+      const hashedPassword = hash(password);
+
+      const response = await registerUser({
+        username,
+        password: hashedPassword,
+        email,
+        role: "member",
+        avatar: robotHead1,
+      }).unwrap();
+
+      setPopup({
+        isTriggered: true,
+        title: "Thông báo",
+        content: response.message,
+      });
+    }
   };
 
   const INITIAL_VALUE = {

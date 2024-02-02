@@ -1,4 +1,3 @@
-import bcrypt from 'bcryptjs';
 import moment from 'moment';
 import mongoose from 'mongoose';
 
@@ -35,10 +34,6 @@ const userSchema = mongoose.Schema(
 );
 
 userSchema.pre('save', function (next) {
-  const salt = bcrypt.genSaltSync(10);
-  const hashedPassword = bcrypt.hashSync(this.password, salt);
-  this.password = hashedPassword;
-
   if (this.date_of_birth) {
     const birthDay = moment(this.date_of_birth).toISOString();
     this.date_of_birth = birthDay;
