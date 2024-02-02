@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  title: {},
+  title: undefined,
   titles: [],
   myTitles: [],
   top5: [],
@@ -9,7 +9,7 @@ const initialState = {
 };
 
 const titleSlice = createSlice({
-  name: "titles",
+  name: "title",
   initialState,
   reducers: {
     setTitle: (state, action) => {

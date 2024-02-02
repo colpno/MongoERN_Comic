@@ -1,17 +1,33 @@
+/* eslint-disable no-unused-vars */
+// TODO: import ChargeBar from "./ChargeBar";
 import classNames from "classnames/bind";
-import { memo } from "react";
 import PropTypes from "prop-types";
+import { memo } from "react";
 import { AiOutlineInfoCircle, AiOutlineQuestionCircle } from "react-icons/ai";
+import { useSelector } from "react-redux";
 
 import { BuyTicket, ChargeIcon, RentTicket } from "assets/images";
+import { NoData, Popup } from "features/index.jsx";
+import { usePopup } from "hooks/index.jsx";
 import styles from "../styles/TitleAbout.module.scss";
-// TODO: import ChargeBar from "./ChargeBar";
 import ChargeExplainPopup from "./ChargeExplainPopup";
 import TicketExplainPopup from "./TicketExplainPopup";
 
 const cx = classNames.bind(styles);
 
-function TitleAbout({ user, title, setPopup }) {
+function TitleAbout() {
+  const user = useSelector((state) => state.user.user);
+  const title = useSelector((state) => state.title.title);
+  const { popup, setPopup, triggerPopup } = usePopup();
+
+  if (!title) {
+    return (
+      <NoData>
+        <h6>Không có truyện nào để hiển thị!</h6>
+      </NoData>
+    );
+  }
+
   const status = (sta) => {
     switch (sta) {
       case "finished":
@@ -42,7 +58,7 @@ function TitleAbout({ user, title, setPopup }) {
           </>
         )}
       </div>
-      <div className={cx("title-page__about__ticket-info", "side-info")}>
+      {/* <div className={cx("title-page__about__ticket-info", "side-info")}>
         <span className={cx("title")}>
           Vé đang có:
           <AiOutlineQuestionCircle
@@ -69,17 +85,17 @@ function TitleAbout({ user, title, setPopup }) {
             <BuyTicket />
           </span>
         </div>
-      </div>
-      <div className={cx("title-page__about__charge", "side-info")}>
+      </div> */}
+      {/* <div className={cx("title-page__about__charge", "side-info")}>
         <div className={cx("charge-info")}>
           <div className={cx("charge__icon")}>
             <ChargeIcon />
-            <span className={cx("charge__icon__label")}>{/* TODO: {title.chargeTime} */}6</span>
+            <span className={cx("charge__icon__label")}>{title.chargeTime}6</span>
           </div>
           <span>
             {`Đọc miễn phí 1 chương như có "Vé thuê" khi sạc đủ`}
             <span className={cx("charge-time")}>
-              {/* TODO: {title.chargeTime} */}
+              {title.chargeTime}
               6h
             </span>
             <AiOutlineQuestionCircle
@@ -93,28 +109,19 @@ function TitleAbout({ user, title, setPopup }) {
             />
           </span>
         </div>
-        {/* TODO: <ChargeBar user={user} title={title} /> */}
-      </div>
-      <div className={cx("title-page__about__notifications", "side-info")}>
+        <ChargeBar user={user} title={title} />
+      </div> */}
+      {/* <div className={cx("title-page__about__notifications", "side-info")}>
         <div className={cx("title-page__about__notifications__notification")}>
           <AiOutlineInfoCircle className={cx("icon-info")} />
           <span>7 chuong moi nhat chi ap dung Coin hoac Ve mua</span>
         </div>
-      </div>
+      </div> */}
+      <Popup data={popup} trigger={triggerPopup} />
     </section>
   );
 }
 
-TitleAbout.propTypes = {
-  setPopup: PropTypes.func.isRequired,
-  title: PropTypes.shape({
-    release_day: PropTypes.string.isRequired,
-    // TODO: chargeTime: PropTypes.number.isRequired,
-  }).isRequired,
-  user: PropTypes.shape({
-    ticket_for_renting: PropTypes.number.isRequired,
-    ticket_for_buying: PropTypes.number.isRequired,
-  }).isRequired,
-};
+TitleAbout.propTypes = {};
 
 export default memo(TitleAbout);

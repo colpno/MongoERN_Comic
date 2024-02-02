@@ -1,14 +1,63 @@
 import classNames from "classnames/bind";
-import PropTypes from "prop-types";
-import { AiFillCloseCircle } from "react-icons/ai";
-
 import { Button } from "components";
 import { Dialog } from "features";
+import { emitToast } from "features/Toast.jsx";
+import { useCheckUseService } from "hooks/index.jsx";
+import moment from "moment";
+import PropTypes from "prop-types";
+import { memo } from "react";
+import { AiFillCloseCircle } from "react-icons/ai";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import styles from "../styles/PurchaseBox.module.scss";
 
 const cx = classNames.bind(styles);
 
-function PurchaseBox({ chapter, payments, handleSubmit, handleClose }) {
+function PurchaseBox({ purchase, chapter, payments, handleClose }) {
+  const { titleId } = useParams();
+  const { user, isLoggingIn } = useSelector((state) => state.user);
+  const { handleLazyCheck } = useCheckUseService(true);
+
+  const checkEnoughUnit = (method, amount) => {
+    let isOK = false;
+    switch (method.toLowerCase()) {
+      case "coin":
+        isOK = user.coin >= amount;
+        break;
+      case "point":
+        isOK = user.point >= amount;
+        break;
+      case "rent ticket":
+        isOK = user.ticket_for_renting >= amount;
+        break;
+      case "purchase ticket":
+        isOK = user.ticket_for_buying >= amount;
+        break;
+      default:
+        isOK = false;
+        break;
+    }
+    !isOK && emitToast("Không đủ để thực hiện chức năng", "error");
+    return isOK;
+  };
+
+  const handleClick = async (payment) => {
+    const { amount, method } = payment;
+    const { _id: chapterId } = chapter;
+    if (!isLoggingIn) {
+      emitToast("Bạn cần phải đăng nhập để thực thiện chức năng", "error");
+      return;
+    }
+
+    const isPassed = await handleLazyCheck();
+    if (checkEnoughUnit(method, amount) && isPassed) {
+      const rentList = ["rent ticket"];
+      const expiredAt = rentList.includes(method) ? moment().add(5, "days").toISOString() : null;
+
+      await purchase({ titleId, chapterId, method, cost: amount, expiredAt }).unwrap();
+    }
+  };
+
   return (
     <Dialog handleClickOutside={handleClose}>
       <div className={cx("purchase-box")}>
@@ -27,7 +76,7 @@ function PurchaseBox({ chapter, payments, handleSubmit, handleClose }) {
                 primary
                 className={cx("button")}
                 key={index}
-                onClick={() => handleSubmit(payment, chapter)}
+                onClick={() => handleClick(payment, chapter)}
               >
                 <span>{payment.amount}</span>
                 <img src={payment.icon} alt="payment icon" />
@@ -42,6 +91,7 @@ function PurchaseBox({ chapter, payments, handleSubmit, handleClose }) {
 
 PurchaseBox.propTypes = {
   chapter: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
     cover: PropTypes.shape({
       source: PropTypes.string.isRequired,
     }).isRequired,
@@ -54,8 +104,8 @@ PurchaseBox.propTypes = {
       icon: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.string]).isRequired,
     }).isRequired
   ).isRequired,
-  handleSubmit: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
+  purchase: PropTypes.func.isRequired,
 };
 
-export default PurchaseBox;
+export default memo(PurchaseBox);
