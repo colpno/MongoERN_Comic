@@ -42,10 +42,8 @@ function ChangePasswordForm({ initialValues, handleSubmit }) {
 
 ChangePasswordForm.propTypes = {
   initialValues: PropTypes.shape({
-    avatar: PropTypes.string.isRequired,
-    username: PropTypes.string.isRequired,
-    dateOfBirth: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
+    password: PropTypes.string.isRequired,
+    rePassword: PropTypes.string.isRequired,
   }).isRequired,
   handleSubmit: PropTypes.func.isRequired,
 };
