@@ -1,6 +1,5 @@
 import classNames from "classnames/bind";
 import { memo, useMemo, useState } from "react";
-import { Container } from "react-bootstrap";
 import { AiFillCaretDown } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -30,7 +29,7 @@ function Recommend() {
   return (
     <>
       {titles.length > 0 ? (
-        <Container fluid="md" className={cx("recommend")}>
+        <div className={cx("recommend")}>
           <div className={cx("head")}>
             <h4 className={cx("title")}>Đề xuất</h4>
             <Button text className={cx("more")} onClick={showMoreCards}>
@@ -40,7 +39,7 @@ function Recommend() {
           </div>
           <CardList wrap col={{ xs: 6, sm: 3, xl: 2 }} data={foldList} />
           {isExpand && <CardList wrap col={{ xs: 6, sm: 3, xl: 2 }} data={unFoldList} />}
-        </Container>
+        </div>
       ) : null}
       {}
     </>

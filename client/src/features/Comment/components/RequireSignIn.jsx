@@ -17,7 +17,7 @@ function RequireSignIn() {
       <Button text to="/register" className={cx("link")}>
         tạo tài khoản
       </Button>{" "}
-      để bình luận hoặc trả lời.
+      để bình luận hoặc trả lời bình luận.
     </p>
   );
 }

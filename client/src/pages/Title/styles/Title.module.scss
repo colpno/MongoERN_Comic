@@ -16,6 +16,7 @@ svg {
   > section {
     background: #fff;
     margin-bottom: $section-padding;
+    padding: $section-padding;
 
     &:last-child {
       margin-bottom: 0;
