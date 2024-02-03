@@ -1,43 +1,21 @@
-import axiosClient from "./axiosClient";
+import comicApi from "./comicApi";
 
-const url = "/notifications";
+const BASE_URL = "/notifications";
 
-const notificationApi = {
-  getAll: (params) => axiosClient.get(url, { params }),
-
-  add: (data, setProgress = () => {}) => {
-    return axiosClient.post(`${url}/create`, data, {
-      withCredentials: true,
-      onUploadProgress: (e) => {
-        const { loaded, total } = e;
-        const percentage = (loaded / total) * 100;
-        setProgress(percentage);
+const extendedApi = comicApi.injectEndpoints({
+  endpoints: (build) => ({
+    getNotifications: build.query({
+      query: (params) => ({
+        url: BASE_URL,
+        method: "GET",
+        params,
+      }),
+      transformResponse: (response) => {
+        if (response.pagination) return response;
+        return response.data;
       },
-    });
-  },
+    }),
+  }),
+});
 
-  update: (id, data, setProgress = () => {}) => {
-    return axiosClient.put(`${url}/update/${id}`, data, {
-      withCredentials: true,
-      onUploadProgress: (e) => {
-        const { loaded, total } = e;
-        const percentage = (loaded / total) * 100;
-        setProgress(percentage);
-      },
-    });
-  },
-
-  delete: (params, setProgress = () => {}) => {
-    return axiosClient.delete(`${url}/delete`, {
-      params,
-      withCredentials: true,
-      onUploadProgress: (e) => {
-        const { loaded, total } = e;
-        const percentage = (loaded / total) * 100;
-        setProgress(percentage);
-      },
-    });
-  },
-};
-
-export default notificationApi;
+export const { useGetNotificationsQuery, useLazyGetNotificationsQuery } = extendedApi;

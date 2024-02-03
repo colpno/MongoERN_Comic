@@ -1,7 +1,12 @@
-import { useEffect, useState } from "react";
+import { emitToast } from "features/Toast";
+import { useEffect } from "react";
 
 function usePreviewImage(initialState, fileSize, setFieldValue, fieldName) {
-  const [imagePreview, setImagePreview] = useState(initialState);
+  let imagePreview = initialState;
+
+  const setImagePreview = (newState) => {
+    imagePreview = newState;
+  };
 
   const handleImageChange = (e) => {
     const file = e.currentTarget.files[0];
@@ -17,7 +22,7 @@ function usePreviewImage(initialState, fileSize, setFieldValue, fieldName) {
         file.preview = URL.createObjectURL(file);
         setImagePreview(file);
       } else {
-        console.log("Hình ảnh phải từ 2MB trở xuống");
+        emitToast("Hình ảnh phải từ 2MB trở xuống", "info");
       }
     }
   };

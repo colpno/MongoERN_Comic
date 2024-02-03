@@ -1,44 +1,57 @@
-import axiosClient from "./axiosClient";
+import { emitToast } from "features/Toast";
+import comicApi from "./comicApi";
 
-const url = "/users";
+const BASE_URL = "/users";
 
-const userApi = {
-  getAll: (params = {}) => {
-    return axiosClient.get(url, { params, withCredentials: true });
-  },
-
-  register: (data, setProgress = () => {}) => {
-    return axiosClient.post(`${url}/register`, data, {
-      onUploadProgress: (e) => {
-        const { loaded, total } = e;
-        const progress = (loaded / total) * 100;
-        setProgress(progress);
+const extendedApi = comicApi.injectEndpoints({
+  endpoints: (build) => ({
+    getUsers: build.query({
+      query: (params) => ({
+        method: "GET",
+        url: BASE_URL,
+        params,
+      }),
+      transformResponse: (response) => {
+        return response.data;
       },
-    });
-  },
-
-  update: (id, data, setProgress) => {
-    return axiosClient.put(`${url}/update/${id}`, data, {
-      withCredentials: true,
-      onUploadProgress: (e) => {
-        const { loaded, total } = e;
-        const progress = (loaded / total) * 100;
-        setProgress(progress);
+      keepUnusedDataFor: 60,
+      providesTags: ["User"],
+    }),
+    registerUser: build.mutation({
+      query: (data) => ({
+        method: "POST",
+        url: `${BASE_URL}/register`,
+        data,
+      }),
+    }),
+    updateUser: build.mutation({
+      query: (data) => ({
+        method: "PUT",
+        url: `${BASE_URL}/update`,
+        data,
+      }),
+      transformResponse: (response) => {
+        const { message, data } = response;
+        emitToast(message, "success");
+        return data;
       },
-    });
-  },
+      invalidatesTags: ["User"],
+    }),
+    deleteUser: build.mutation({
+      query: (filter) => ({
+        method: "DELETE",
+        url: `${BASE_URL}/delete`,
+        data: filter,
+      }),
+      invalidatesTags: ["User"],
+    }),
+  }),
+});
 
-  delete: (params, setProgress) => {
-    return axiosClient.delete(`${url}/delete`, {
-      params,
-      withCredentials: true,
-      onUploadProgress: (e) => {
-        const { loaded, total } = e;
-        const progress = (loaded / total) * 100;
-        setProgress(progress);
-      },
-    });
-  },
-};
-
-export default userApi;
+export const {
+  useGetUsersQuery,
+  useRegisterUserMutation,
+  useUpdateUserMutation,
+  useLazyGetUsersQuery,
+  useDeleteUserMutation,
+} = extendedApi;

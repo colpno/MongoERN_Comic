@@ -1,68 +1,36 @@
-import axiosClient from "./axiosClient";
+import { emitToast } from "features/Toast";
+import comicApi from "./comicApi";
 
-const url = "/titles";
+const BASE_URL = "/titles";
 
-const titleApi = {
-  getAll: (params = {}) => {
-    return axiosClient.get(url, { params, withCredentials: true });
-  },
-
-  getOne: (id) => {
-    return axiosClient.get(`${url}/${id}`, { withCredentials: true });
-  },
-
-  random: (count, params = {}) => {
-    return axiosClient.get(`${url}/random`, {
-      params: {
-        ...params,
-        count,
+const extendedApi = comicApi.injectEndpoints({
+  endpoints: (build) => ({
+    getTitles: build.query({
+      query: ({ params = {} }) => ({
+        url: BASE_URL,
+        method: "GET",
+        params,
+      }),
+      transformResponse: (response) => {
+        if (response.pagination) return response;
+        return response.data;
       },
-    });
-  },
-
-  add: (title, cover, author, summary, genres, coin, releaseDay, setProgress = () => {}) => {
-    return axiosClient.post(
-      `${url}/create`,
-      {
-        title,
-        cover,
-        author,
-        summary,
-        genres,
-        coin,
-        releaseDay,
-      },
-      {
-        withCredentials: true,
-        onUploadProgress: (e) => {
-          const { loaded, total } = e;
-          const percentage = (loaded / total) * 100;
-          setProgress(percentage);
-        },
-      }
-    );
-  },
-
-  update: (id, data, setProgress) =>
-    axiosClient.put(`${url}/update/${id}`, data, {
-      withCredentials: true,
-      onUploadProgress: (e) => {
-        const { loaded, total } = e;
-        const percentage = (loaded / total) * 100;
-        setProgress(percentage);
-      },
+      providesTags: ["Title"],
     }),
-
-  delete: (id, setProgress, params = {}) =>
-    axiosClient.delete(`${url}/delete/${id}`, {
-      params,
-      withCredentials: true,
-      onUploadProgress: (e) => {
-        const { loaded, total } = e;
-        const percentage = Math.floor((loaded / total) * 100);
-        setProgress(percentage);
+    updateTitle: build.mutation({
+      query: ({ id, data }) => ({
+        method: "PUT",
+        url: `${BASE_URL}/update/${id}`,
+        data,
+      }),
+      transformResponse: (response) => {
+        const { message, data } = response;
+        emitToast(message, "success");
+        return data;
       },
+      invalidatesTags: ["Title"],
     }),
-};
+  }),
+});
 
-export default titleApi;
+export const { useGetTitlesQuery, useLazyGetTitlesQuery, useUpdateTitleMutation } = extendedApi;

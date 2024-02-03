@@ -1,11 +1,20 @@
-import axiosClient from "./axiosClient";
+import comicApi from "./comicApi";
 
-const url = "/income-reports";
+const BASE_URL = "/income-reports";
 
-const incomeApi = {
-  getAll: (params = {}) => {
-    return axiosClient.get(url, { params, withCredentials: true });
-  },
-};
+const extendedApi = comicApi.injectEndpoints({
+  endpoints: (build) => ({
+    getIncomeReports: build.query({
+      query: (params) => ({
+        method: "GET",
+        url: BASE_URL,
+        params,
+      }),
+      transformResponse: (response) => {
+        return response.data;
+      },
+    }),
+  }),
+});
 
-export default incomeApi;
+export const { useGetIncomeReportsQuery, useLazyGetIncomeReportsQuery } = extendedApi;

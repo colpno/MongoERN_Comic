@@ -1,56 +1,85 @@
-import bcrypt from "bcryptjs";
-import axiosClient from "./axiosClient";
+import { emitToast } from "features/Toast";
+import comicApi from "./comicApi";
 
-const url = "/auth";
+const BASE_URL = "/auth";
 
-const authApi = {
-  verifyRegister: (token) => {
-    return axiosClient.put(`${url}/register/verify/${token}`);
-  },
+const extendedApi = comicApi.injectEndpoints({
+  endpoints: (build) => ({
+    login: build.mutation({
+      query: ({ username, password }) => ({
+        method: "POST",
+        url: `${BASE_URL}/login`,
+        data: { username, password },
+      }),
+    }),
+    logout: build.query({
+      query: () => ({
+        method: "GET",
+        url: `${BASE_URL}/logout`,
+      }),
+      transformResponse: (response) => {
+        emitToast(response.message, "success");
+        return response;
+      },
+      invalidatesTags: ["Chapter Transaction"],
+    }),
+    verifyRegister: build.mutation({
+      query: (token) => ({
+        method: "PUT",
+        url: `${BASE_URL}/register/verify/${token}`,
+      }),
+      transformResponse: (response) => {
+        emitToast(response.message, "success");
+        return response;
+      },
+    }),
+    verifyLogin: build.mutation({
+      query: ({ id, username, email, otp, oid }) => ({
+        method: "POST",
+        url: `${BASE_URL}/login/verify`,
+        data: { id, username, email, otp, oid },
+      }),
+      transformResponse: (response) => {
+        const { message, data } = response;
+        emitToast(message, "success");
+        return data;
+      },
+    }),
+    forgotPassword: build.mutation({
+      query: ({ username, email }) => ({
+        method: "POST",
+        url: `${BASE_URL}/forgot-password`,
+        data: { username, email },
+      }),
+    }),
+    resetPassword: build.mutation({
+      query: ({ password, token }) => ({
+        method: "PUT",
+        url: `${BASE_URL}/reset-password/${token}`,
+        data: { password },
+      }),
+      transformResponse: (response) => {
+        emitToast(response.message, "success");
+        return response;
+      },
+    }),
+    sendOTP: build.mutation({
+      query: ({ id, username, email }) => ({
+        method: "POST",
+        url: `${BASE_URL}/login/verify/re-send`,
+        data: { id, username, email },
+      }),
+    }),
+  }),
+});
 
-  login: async (username, password) => {
-    const saltRounds = 10;
-    const myPlaintext = process.env.REACT_APP_LOGIN_TOKEN;
-    const hash = await bcrypt.hash(myPlaintext, saltRounds);
-
-    return axiosClient.post(
-      `${url}/login`,
-      { username, password, security_token: hash },
-      { withCredentials: true }
-    );
-  },
-
-  verifyLogin: (data) => {
-    return axiosClient.post(`${url}/login/verify`, data, { withCredentials: true });
-  },
-
-  reSendOTP: (id, username, email) => {
-    return axiosClient.post(
-      `${url}/login/verify/re-send`,
-      { id, username, email },
-      { withCredentials: true }
-    );
-  },
-
-  logout: () => {
-    return axiosClient.get(`${url}/logout`, { withCredentials: true });
-  },
-
-  forgot: (username, email) => {
-    return axiosClient.post(
-      `${url}/forgot-password`,
-      { username, email },
-      { withCredentials: true }
-    );
-  },
-
-  reset: (userId, password, token) => {
-    return axiosClient.put(
-      `${url}/reset-password/${token}`,
-      { userId, password },
-      { withCredentials: true }
-    );
-  },
-};
-
-export default authApi;
+export const {
+  useForgotPasswordMutation,
+  useLazyLogoutQuery,
+  useLoginMutation,
+  useLogoutQuery,
+  useResetPasswordMutation,
+  useSendOTPMutation,
+  useVerifyLoginMutation,
+  useVerifyRegisterMutation,
+} = extendedApi;

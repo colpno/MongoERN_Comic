@@ -1,30 +1,22 @@
-import axiosClient from "./axiosClient";
+import comicApi from "./comicApi";
 
-const url = "/chapter-transactions";
+const BASE_URL = "/chapter-transactions";
 
-const chapterTransactionApi = {
-  getAll: (params) => axiosClient.get(url, { params, withCredentials: true }),
-
-  add: (titleId, chapterId, method, cost, expiredAt, setProgress = () => {}) => {
-    return axiosClient.post(
-      `${url}/create`,
-      {
-        titleId,
-        chapterId,
-        method,
-        cost,
-        expiredAt,
+const extendedApi = comicApi.injectEndpoints({
+  endpoints: (build) => ({
+    getChapterTransactions: build.query({
+      query: ({ params }) => ({
+        url: BASE_URL,
+        method: "GET",
+        params,
+      }),
+      transformResponse: (response) => {
+        if (response.pagination) return response;
+        return response.data;
       },
-      {
-        withCredentials: true,
-        onUploadProgress: (e) => {
-          const { loaded, total } = e;
-          const percentage = Math.floor((loaded / total) * 100);
-          setProgress(percentage);
-        },
-      }
-    );
-  },
-};
+      providesTags: ["Chapter Transaction"],
+    }),
+  }),
+});
 
-export default chapterTransactionApi;
+export const { useGetChapterTransactionsQuery, useLazyGetChapterTransactionsQuery } = extendedApi;

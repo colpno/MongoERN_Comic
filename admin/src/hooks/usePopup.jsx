@@ -1,14 +1,15 @@
 const { useState } = require("react");
 
-const usePopup = (initialState = {}) => {
+const usePopup = (initialState) => {
   const [data, setData] = useState({
-    isShown: false,
+    isTriggered: false,
+    variation: "normal",
     ...initialState,
   });
 
-  const triggerPopup = (trigger) => setData((prev) => ({ ...prev, isShown: trigger }));
+  const triggerPopup = (value = false) => setData((prev) => ({ ...prev, isTriggered: value }));
 
-  const setPopup = (state = {}) => {
+  const setPopup = (state) => {
     setData((prev) => ({
       ...prev,
       ...state,

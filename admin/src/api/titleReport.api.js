@@ -1,11 +1,21 @@
-import axiosClient from "./axiosClient";
+import comicApi from "./comicApi";
 
-const url = "/title-reports";
+const BASE_URL = "/title-reports";
 
-const titleReportApi = {
-  getAll: (params = {}) => {
-    return axiosClient.get(url, { params, withCredentials: true });
-  },
-};
+const extendedApi = comicApi.injectEndpoints({
+  endpoints: (build) => ({
+    getTitleReports: build.query({
+      query: (params = {}) => ({
+        method: "GET",
+        url: BASE_URL,
+        params,
+      }),
+      transformResponse: (response) => {
+        if (response.pagination) return response;
+        return response.data;
+      },
+    }),
+  }),
+});
 
-export default titleReportApi;
+export const { useGetTitleReportsQuery, useLazyGetTitleReportsQuery } = extendedApi;
