@@ -9,9 +9,9 @@ const authService = {
       return Promise.reject(error.data);
     }
   },
-  verifyLogin: async (id, username, email, otp) => {
+  verifyLogin: async (data) => {
     try {
-      const response = await authApi.verifyLogin(id, username, email, otp);
+      const response = await authApi.verifyLogin(data);
       return response;
     } catch (error) {
       return Promise.reject(error.data);

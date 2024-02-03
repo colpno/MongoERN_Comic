@@ -64,11 +64,17 @@ function VerifyLogin() {
       return;
     }
 
-    const { id, username, email } = loginInfo;
+    const { id, username, email, oid } = loginInfo;
 
-    if (!!id && !!username && !!email) {
+    if (!!id && !!username && !!email && !!oid) {
       authService
-        .verifyLogin(id, username, email, OTPString)
+        .verifyLogin({
+          id,
+          username,
+          email,
+          otp: OTPString,
+          oid,
+        })
         .then((response) => {
           // save user's account info to redux
           dispatch(setUser(response.data));

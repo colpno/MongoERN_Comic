@@ -20,12 +20,8 @@ const authApi = {
     );
   },
 
-  verifyLogin: (id, username, email, otp) => {
-    return axiosClient.post(
-      `${url}/login/verify`,
-      { id, username, email, otp },
-      { withCredentials: true }
-    );
+  verifyLogin: (data) => {
+    return axiosClient.post(`${url}/login/verify`, data, { withCredentials: true });
   },
 
   reSendOTP: (id, username, email) => {
