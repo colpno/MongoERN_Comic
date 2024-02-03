@@ -2,6 +2,7 @@ import classNames from "classnames/bind";
 import PropTypes from "prop-types";
 
 import { Table } from "components";
+import { renderEditTextarea } from "components/Table/components/EditTextArea";
 import moment from "moment";
 import styles from "../styles/NotificationTableRow.module.scss";
 
@@ -49,7 +50,11 @@ function NotificationTable({ notifications, onDelete, onUpdate, onAdd }) {
           flex: 2,
           minWidth: 200,
           editable: true,
-          renderCell: ({ value }) => <span title={value}>{value}</span>,
+          renderCell: ({ value }) => (
+            <span style={{ width: "100%" }} title={value}>
+              {value}
+            </span>
+          ),
         },
         {
           field: "subTitle",
@@ -60,17 +65,27 @@ function NotificationTable({ notifications, onDelete, onUpdate, onAdd }) {
           align: "center",
           headerAlign: "center",
           editable: true,
-          renderCell: ({ value }) => <span title={value}>{value}</span>,
+          renderCell: ({ value }) => (
+            <span style={{ width: "100%" }} title={value}>
+              {value}
+            </span>
+          ),
         },
         {
           headerName: "Nội dung",
           field: "content",
           align: "center",
-          flex: 2,
+          flex: 1,
           width: 300,
+          minWidth: 300,
           headerAlign: "center",
           editable: true,
-          renderCell: ({ value }) => <span title={value}>{value}</span>,
+          renderCell: ({ value }) => (
+            <span style={{ width: "100%" }} title={value}>
+              {value}
+            </span>
+          ),
+          renderEditCell: renderEditTextarea,
         },
         {
           field: "createdAt",

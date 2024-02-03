@@ -19,6 +19,7 @@ function TextArea({
   maxLength,
   readOnly,
   rows,
+  innerRef,
 }) {
   return (
     <div className={cx("wrapper")}>
@@ -34,6 +35,7 @@ function TextArea({
         isInvalid={touched && !!error}
         className={cx("textarea")}
         maxLength={maxLength}
+        ref={innerRef}
       />
       <span className={cx("text-length")}>{`${value.length}/${maxLength}`}</span>
       <Feedback type="invalid">{error}</Feedback>
@@ -57,6 +59,7 @@ TextArea.propTypes = {
   maxLength: PropTypes.number,
   readOnly: PropTypes.bool,
   rows: PropTypes.number,
+  innerRef: PropTypes.oneOfType([PropTypes.func, PropTypes.shape({})]),
 };
 
 TextArea.defaultProps = {
@@ -69,6 +72,7 @@ TextArea.defaultProps = {
   maxLength: 1000,
   readOnly: false,
   rows: 5,
+  innerRef: undefined,
 };
 
 export default TextArea;

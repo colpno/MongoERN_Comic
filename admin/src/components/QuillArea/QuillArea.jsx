@@ -27,6 +27,8 @@ function TextAreaQuill({
   image,
   video,
   link,
+  innerRef,
+  ...attributes
 }) {
   const textAreaOptions = {
     header,
@@ -113,16 +115,14 @@ function TextAreaQuill({
   return (
     <div className={cx("wrapper")}>
       <ReactQuill
+        {...attributes}
         modules={TextAreaQuill.modules}
         formats={TextAreaQuill.formats}
-        onChange={onChange(name)}
+        onChange={onChange}
         value={value}
         placeholder={placeholder}
+        ref={innerRef}
       />
-      {/* <span
-        className={cx("text-length")}
-      >{`${value.length}/${maxLength}`}</span>
-      <Feedback type="invalid">{error}</Feedback> */}
     </div>
   );
 }
@@ -156,7 +156,7 @@ TextAreaQuill.formats = [
 TextAreaQuill.propTypes = {
   name: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
   form: PropTypes.shape({
     touched: PropTypes.shape({}),
     errors: PropTypes.shape({}),
@@ -176,11 +176,12 @@ TextAreaQuill.propTypes = {
   image: PropTypes.bool,
   video: PropTypes.bool,
   link: PropTypes.bool,
+  innerRef: PropTypes.oneOfType([PropTypes.func, PropTypes.shape({})]),
 };
 
 TextAreaQuill.defaultProps = {
   form: {},
-
+  onChange: () => {},
   placeholder: "",
 
   header: false,
@@ -195,6 +196,7 @@ TextAreaQuill.defaultProps = {
   image: false,
   video: false,
   link: false,
+  innerRef: {},
 };
 
 export default memo(TextAreaQuill);

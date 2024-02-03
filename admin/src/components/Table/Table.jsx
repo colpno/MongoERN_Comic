@@ -7,7 +7,7 @@
   Table.scss
  */
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { DataGridPro, GridRowModes, viVN } from "@mui/x-data-grid-pro";
+import { DataGridPro, GridCellEditStopReasons, GridRowModes, viVN } from "@mui/x-data-grid-pro";
 import PropTypes from "prop-types";
 import { memo, useCallback, useEffect, useState } from "react";
 
@@ -15,6 +15,10 @@ import { Popup } from "features";
 import { usePopup } from "hooks";
 import { TableActions, TableFooter, TableToolBar } from "./components";
 import "./styles/Table.module.scss";
+
+function isKeyboardEvent(event) {
+  return !!event.key;
+}
 
 const theme = createTheme(
   {},
@@ -172,6 +176,14 @@ function Table({
           // Others
           checkboxSelection={allowDelete}
           experimentalFeatures={{ newEditingApi: true }}
+          onCellEditStop={(params, event) => {
+            if (params.reason !== GridCellEditStopReasons.enterKeyDown) {
+              return;
+            }
+            if (isKeyboardEvent(event) && !event.ctrlKey && !event.metaKey) {
+              event.defaultMuiPrevented = true;
+            }
+          }}
         />
       </ThemeProvider>
       {popup.isShown && <Popup data={popup} setShow={triggerPopup} width={400} />}
