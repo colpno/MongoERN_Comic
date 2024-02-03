@@ -26,18 +26,24 @@ function NotificationTable({ notifications, onDelete, onUpdate, onAdd }) {
         {
           field: "cover",
           headerName: "Cover",
-          flex: 1,
-          minWidth: 200,
-          maxWidth: 250,
+          headerAlign: "center",
+          width: 140,
           editable: true,
           valueGetter: ({ value }) => value?.source || value,
           renderCell: ({ value }) => {
             return (
-              <div className={cx("cover-wrapper")}>
+              <div
+                className={cx("cover-wrapper")}
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
                 <div className={cx("box-img")}>
                   <img src={value} alt={value} />
                 </div>
-                <span className={cx("title")}>{value}</span>
               </div>
             );
           },
@@ -47,8 +53,10 @@ function NotificationTable({ notifications, onDelete, onUpdate, onAdd }) {
           headerName: "Tiêu đề",
           align: "left",
           headerAlign: "center",
-          flex: 2,
-          minWidth: 200,
+          flex: 1,
+          width: 300,
+          maxWidth: 300,
+          minWidth: 300,
           editable: true,
           renderCell: ({ value }) => (
             <span style={{ width: "100%" }} title={value}>
@@ -59,9 +67,10 @@ function NotificationTable({ notifications, onDelete, onUpdate, onAdd }) {
         {
           field: "subTitle",
           headerName: "Tiêu đề phụ",
-          flex: 1,
+          flex: 2,
+          width: 140,
           minWidth: 140,
-          maxWidth: 200,
+          maxWidth: 140,
           align: "center",
           headerAlign: "center",
           editable: true,
@@ -76,8 +85,9 @@ function NotificationTable({ notifications, onDelete, onUpdate, onAdd }) {
           field: "content",
           align: "center",
           flex: 1,
-          width: 300,
-          minWidth: 300,
+          width: 400,
+          maxWidth: 400,
+          minWidth: 400,
           headerAlign: "center",
           editable: true,
           renderCell: ({ value }) => (
