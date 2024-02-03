@@ -1,7 +1,7 @@
 import classNames from "classnames/bind";
 import moment from "moment";
 import PropTypes from "prop-types";
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import { BsCurrencyDollar, BsEyeFill } from "react-icons/bs";
 import { FcLike } from "react-icons/fc";
 
@@ -11,11 +11,11 @@ import styles from "../styles/ChaptersTable.module.scss";
 
 const cx = classNames.bind(styles);
 
-function ChapterTable({ chapters, approvedStatuses, objectStatuses, onUpdate }) {
+function ChapterTable({ chapters, objectStatuses }) {
   const initialState = {
     sorting: {
       sortModel: [
-        { field: "approved_status_id", sort: "asc" },
+        { field: "updatedAt", sort: "desc" },
         { field: "order", sort: "desc" },
       ],
     },
@@ -25,38 +25,12 @@ function ChapterTable({ chapters, approvedStatuses, objectStatuses, onUpdate }) 
     },
   };
 
-  const approvedStatusOptions = useMemo(
-    () =>
-      approvedStatuses.map((status) => ({
-        value: status._id,
-        label: (
-          <span
-            style={{
-              color: status.color.hex,
-              fontWeight: 700,
-            }}
-          >
-            {status.status}
-          </span>
-        ),
-      })),
-    [approvedStatuses]
-  );
-
   const getObjectStatus = useCallback(
     (value) => {
       const objectStatus = objectStatuses.find((status) => status._id === value);
       return objectStatus;
     },
     [objectStatuses]
-  );
-
-  const getApprovedStatus = useCallback(
-    (value) => {
-      const status = approvedStatuses.find((apdStat) => apdStat._id === value);
-      return status;
-    },
-    [approvedStatuses]
   );
 
   return (
@@ -110,31 +84,6 @@ function ChapterTable({ chapters, approvedStatuses, objectStatuses, onUpdate }) 
                 }}
               >
                 {status}
-              </span>
-            );
-          },
-        },
-        {
-          headerName: "Duyệt",
-          field: "approved_status_id",
-          type: "singleSelect",
-          valueOptions: approvedStatusOptions,
-          width: 140,
-          headerAlign: "center",
-          align: "center",
-          editable: true,
-          valueGetter: ({ value }) => value._id || value,
-          renderCell: ({ value }) => {
-            const status = getApprovedStatus(value);
-            return (
-              <span
-                title={status.status}
-                style={{
-                  color: status.color.hex,
-                  fontWeight: 700,
-                }}
-              >
-                {status.status}
               </span>
             );
           },
@@ -203,26 +152,17 @@ function ChapterTable({ chapters, approvedStatuses, objectStatuses, onUpdate }) 
       height={700}
       rowHeight={100}
       initialState={initialState}
-      allowEdit
-      onUpdate={onUpdate}
     />
   );
 }
 
 ChapterTable.propTypes = {
   chapters: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired,
-  approvedStatuses: PropTypes.arrayOf(
-    PropTypes.shape({
-      code: PropTypes.string.isRequired,
-      status: PropTypes.string.isRequired,
-    }).isRequired
-  ).isRequired,
   objectStatuses: PropTypes.arrayOf(
     PropTypes.shape({
       status: PropTypes.string.isRequired,
     }).isRequired
   ).isRequired,
-  onUpdate: PropTypes.func.isRequired,
 };
 
 export default ChapterTable;

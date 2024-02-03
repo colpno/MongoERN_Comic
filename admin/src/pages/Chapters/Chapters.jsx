@@ -6,9 +6,8 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { FloatingContainer, Select } from "components";
 import { Loading } from "features";
 import { useToast } from "hooks";
-import { approvedStatusService, chapterService, objectStatusService, titleService } from "services";
+import { chapterService, objectStatusService, titleService } from "services";
 import { handlePromiseAllSettled, replaceAll } from "utils";
-import ChapterManagementCards from "./components/ChapterManagementCards";
 import ChapterTable from "./components/ChapterTable";
 import styles from "./styles/Chapters.module.scss";
 
@@ -20,10 +19,7 @@ const getQueryParams = () => {
   };
 
   const chapterParams = {
-    _embed: JSON.stringify([
-      { collection: "approved_status_id", fields: "code status color" },
-      { collection: "status_id", field: "-_id status" },
-    ]),
+    _embed: JSON.stringify([{ collection: "status_id", field: "-_id status" }]),
   };
 
   const approvedStatusParams = {
@@ -48,7 +44,6 @@ function Chapters() {
   const { Toast, options: toastOptions, toastEmitter } = useToast();
   const [chapters, setChapters] = useState([]);
   const [titles, setTitles] = useState([]);
-  const [approvedStatuses, setApprovedStatuses] = useState([]);
   const [objectStatuses, setObjectStatuses] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedTitleId, setSelectedTitleId] = useState({ value: "all", label: "Tất cả" });
@@ -61,52 +56,6 @@ function Chapters() {
       }),
     ];
   }, [titles]);
-
-  const approvedTitles = useMemo(() => {
-    return chapters.reduce(
-      (result, chapter) => {
-        switch (chapter.approved_status_id.code) {
-          case "wai":
-            return {
-              ...result,
-              waiting: result.waiting + 1,
-            };
-          case "apd":
-            return {
-              ...result,
-              accepted: result.accepted + 1,
-            };
-          case "rej":
-            return {
-              ...result,
-              rejected: result.rejected + 1,
-            };
-          default:
-            return { ...result };
-        }
-      },
-      {
-        waiting: 0,
-        accepted: 0,
-        rejected: 0,
-      }
-    );
-  }, [chapters]);
-
-  const handleUpdate = (data, setRowIdError) => {
-    const { _id, approved_status_id: approvedStatusId } = data;
-
-    chapterService
-      .update(_id, { approved_status_id: approvedStatusId })
-      .then((response) => {
-        setChapters((prev) => prev.map((item) => (item._id === _id ? response.data : item)));
-        toastEmitter(response.message);
-      })
-      .catch((error) => {
-        setRowIdError(_id);
-        toastEmitter(error, "error");
-      });
-  };
 
   const handleChangeTitle = (selectedValue) => {
     setLoading(true);
@@ -133,20 +82,17 @@ function Chapters() {
   useEffect(() => {
     (async () => {
       setLoading(true);
-      const { approvedStatusParams, objectStatusParams, chapterParams, titleParams } =
-        getQueryParams();
+      const { objectStatusParams, chapterParams, titleParams } = getQueryParams();
 
       const titlePromise = titleService.getAll(titleParams);
-      const approvedStatusPromise = approvedStatusService.getAll(approvedStatusParams);
       const objectStatusPromise = objectStatusService.getAll(objectStatusParams);
-      const promises = [titlePromise, approvedStatusPromise, objectStatusPromise];
+      const promises = [titlePromise, objectStatusPromise];
 
       const results = await Promise.allSettled(promises);
       const { fulfilledResults } = handlePromiseAllSettled(results, toastEmitter);
-      const [titleResult, approvedStatusResult, objectStatusResult] = fulfilledResults;
+      const [titleResult, objectStatusResult] = fulfilledResults;
 
       titleResult && setTitles(titleResult.data);
-      approvedStatusResult && setApprovedStatuses(approvedStatusResult.data);
       objectStatusResult && setObjectStatuses(objectStatusResult.data);
 
       /* 
@@ -178,14 +124,6 @@ function Chapters() {
   return (
     <>
       <Container>
-        <Row>
-          <ChapterManagementCards
-            totalChapters={chapters.length}
-            waiting={approvedTitles.waiting}
-            accepted={approvedTitles.accepted}
-            rejected={approvedTitles.rejected}
-          />
-        </Row>
         <Row className={cx("label-wrapper")}>
           <h4 className={cx("label")}>All Chapters of</h4>
           <Select
@@ -199,12 +137,7 @@ function Chapters() {
           />
         </Row>
         <FloatingContainer className={cx("data-rows")}>
-          <ChapterTable
-            chapters={chapters}
-            approvedStatuses={approvedStatuses}
-            objectStatuses={objectStatuses}
-            onUpdate={handleUpdate}
-          />
+          <ChapterTable chapters={chapters} objectStatuses={objectStatuses} />
         </FloatingContainer>
       </Container>
       <Toast {...toastOptions} />
