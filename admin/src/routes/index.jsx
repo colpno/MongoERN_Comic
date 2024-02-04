@@ -11,6 +11,8 @@ import {
   Notifications,
   PersonalNotifications,
   PaymentMethods,
+  TradingStatistic,
+  VisitStatistic,
 } from "pages";
 
 export const adminRoutes = [
@@ -69,16 +71,16 @@ export const adminRoutes = [
     component: PaymentMethods,
     layout: AdminLayout,
   },
-  // {
-  //   path: "/income",
-  //   component: IncomeStatistic,
-  //   layout: AdminLayout,
-  // },
-  // {
-  //   path: "/visit",
-  //   component: VisitStatistic,
-  //   layout: AdminLayout,
-  // },
+  {
+    path: "/income",
+    component: TradingStatistic,
+    layout: AdminLayout,
+  },
+  {
+    path: "/visit",
+    component: VisitStatistic,
+    layout: AdminLayout,
+  },
   {
     path: "/not-found",
     component: NotFound,
