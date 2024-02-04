@@ -1,10 +1,9 @@
 import classNames from "classnames/bind";
 import { Popup } from "features";
-import { usePopup, useToast } from "hooks";
+import { useLogin, usePopup } from "hooks";
 import { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { authService } from "services";
 
 import LoginForm from "./components/LoginForm";
 import styles from "./styles/Login.module.scss";
@@ -20,28 +19,23 @@ const checkLoggedInCanAccessURL = (url) => {
 
 function Login() {
   const navigate = useNavigate();
-  const { Toast, options: toastOptions, toastEmitter } = useToast();
-  const { popup, setPopup, triggerPopup } = usePopup({ isShown: false, content: "Nothing" });
+  const { popup, setPopup, triggerPopup } = usePopup({ isTriggered: false, content: "Nothing" });
   const isLoggingIn = useSelector((state) => state.user.isLoggingIn);
   const url = useLocation().pathname;
   const haveAccessed = useMemo(() => checkLoggedInCanAccessURL(url), [url]);
+  const { login } = useLogin();
 
   const handleSubmit = (values, { setSubmitting }) => {
     const { username, password } = values;
 
-    authService
-      .login(username, password)
-      .then((response) => {
-        setPopup({
-          isShown: true,
-          title: "Thông báo",
-          content: response.message,
-          onCancel: () => navigate("/verify"),
-        });
-      })
-      .catch((error) => {
-        toastEmitter(error, "error");
+    login({ username, password }).then((response) => {
+      setPopup({
+        isTriggered: true,
+        title: "Thông báo",
+        content: response.message,
+        onCancel: () => navigate("/verify"),
       });
+    });
 
     setSubmitting(false);
   };
@@ -59,8 +53,7 @@ function Login() {
             <LoginForm handleSubmit={handleSubmit} />
           </div>
         ))}
-      {popup.isShown && <Popup data={popup} setShow={() => triggerPopup(false)} />}
-      <Toast {...toastOptions} />
+      {popup.isTriggered && <Popup data={popup} setShow={() => triggerPopup(false)} />}
     </>
   );
 }

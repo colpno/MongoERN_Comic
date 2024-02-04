@@ -2,7 +2,7 @@ import moment from "moment";
 import PropTypes from "prop-types";
 
 import { Table } from "components";
-import useGetAllUsers from "hooks/useGetAllUsers";
+import { useGetUsers } from "hooks/index";
 import { memo, useMemo } from "react";
 
 function PersonalNotificationTable({ notifications, onDelete, onUpdate, onAdd }) {
@@ -18,8 +18,8 @@ function PersonalNotificationTable({ notifications, onDelete, onUpdate, onAdd })
     text: "",
   };
 
-  const userQueryParams = { role: "member", _fields: "username _id" };
-  const { users: members } = useGetAllUsers(userQueryParams);
+  const userQueryParams = { role: "member", _fields: "username" };
+  const { data: members } = useGetUsers(userQueryParams);
   const memberUsernames = useMemo(() => members.map((member) => member.username), [members]);
 
   return (

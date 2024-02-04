@@ -1,7 +1,7 @@
 export { default as Admins } from "./Admins/Admins";
 export { default as Chapters } from "./Chapters/Chapters";
 export { default as Genres } from "./Genres/Genres";
-export { default as IncomeStatistic } from "./IncomeStatistic/IncomeStatistic";
+export { default as TradingStatistic } from "./TradingStatistic/TradingStatistic";
 export { default as Login } from "./Login";
 export { default as LoginOTP } from "./VerifyLogin/VerifyLogin";
 export { default as Members } from "./Members/Members";

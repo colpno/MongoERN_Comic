@@ -1,17 +1,14 @@
 import classNames from "classnames/bind";
-import Cookies from "js-cookie";
 import moment from "moment";
 import { useEffect, useRef, useState } from "react";
 import { BsBoxArrowInRight } from "react-icons/bs";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { Button } from "components";
 import { Popup } from "features";
-import { usePopup, useToast } from "hooks";
-import { setLoginInfo as setLoginInfoStore } from "libs/redux/slices/login.slice";
-import { setUser } from "libs/redux/slices/user.slice";
-import { authService } from "services";
+import { emitToast } from "features/Toast";
+import { usePopup, useSendOTP, useVerifyLogin } from "hooks";
+import Cookies from "js-cookie";
 import Numpad from "./components/Numpad";
 import OTPHead from "./components/OTPHead";
 import OTPInput from "./components/OTPInput";
@@ -23,10 +20,7 @@ const cx = classNames.bind(styles);
 function VerifyLogin() {
   const RE_SEND_TIME = 5;
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const { Toast, options, toastEmitter } = useToast();
 
   const reSendCountdownRef = useRef(null);
   const expiredCountdownRef = useRef(null);
@@ -51,6 +45,8 @@ function VerifyLogin() {
     digit4: "",
   });
   const { popup, setPopup, triggerPopup } = usePopup();
+  const { verifyLogin } = useVerifyLogin();
+  const { sendOTP } = useSendOTP();
 
   const handleSubmit = () => {
     const OTPKeys = Object.keys(OTPValue);
@@ -60,32 +56,14 @@ function VerifyLogin() {
 
     // if the all inserted otp don't match total of otp slots
     if (OTPString.length !== OTPKeys.length) {
-      toastEmitter("Mã OTP không hợp lệ", "error");
+      emitToast("Mã OTP không hợp lệ", "error");
       return;
     }
 
     const { id, username, email, oid } = loginInfo;
 
-    if (!!id && !!username && !!email && !!oid) {
-      authService
-        .verifyLogin({
-          id,
-          username,
-          email,
-          otp: OTPString,
-          oid,
-        })
-        .then((response) => {
-          // save user's account info to redux
-          dispatch(setUser(response.data));
-
-          toastEmitter("Đăng nhập thành công", "success");
-
-          setTimeout(() => {
-            navigate("/titles");
-          }, 1000);
-        })
-        .catch((error) => toastEmitter(error, "error"));
+    if (!!id && !!username && !!email) {
+      verifyLogin({ id, username, email, otp: OTPString, oid });
     }
   };
 
@@ -159,7 +137,7 @@ function VerifyLogin() {
     // check if value user insert is number
     const match = value.match(/^(\s*|\d+)$/);
     if (!match) {
-      toastEmitter("Mã OTP phải là số", "error");
+      emitToast("Mã OTP phải là số", "error");
       return;
     }
 
@@ -220,13 +198,7 @@ function VerifyLogin() {
   const handleReSend = () => {
     const { id, username, email } = loginInfo;
 
-    authService
-      .sendOTP(id, username, email)
-      .then((response) => {
-        dispatch(setLoginInfoStore(response.data));
-        toastEmitter(response.message, "success");
-      })
-      .catch((error) => console.error(error));
+    sendOTP({ id, username, email });
 
     setReSend((prev) => ({ ...prev, disable: true }));
   };
@@ -278,13 +250,17 @@ function VerifyLogin() {
 
       //  show pop up
       setPopup({
-        isShown: true,
+        isTriggered: true,
         title: "Thông báo",
         content: "Mã OTP đã hết hạn, vui lòng đăng nhập lại.",
-        onConfirm: () => navigate(-1),
       });
     }
   }, [expiredCountdown]);
+
+  // Expired time reach end, and after close popup user will be navigated to previous page
+  useEffect(() => {
+    popup.isClosed && navigate(-1);
+  }, [popup.isClosed]);
 
   // Whenever re-send otp button is disabled
   useEffect(() => {
@@ -364,8 +340,7 @@ function VerifyLogin() {
           />
         </div>
       </div>
-      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
-      <Toast {...options} />
+      <Popup data={popup} trigger={triggerPopup} />
     </>
   );
 }
