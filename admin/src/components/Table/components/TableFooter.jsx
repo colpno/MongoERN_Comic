@@ -5,7 +5,7 @@ import {
   useGridApiContext,
   useGridSelector,
 } from "@mui/x-data-grid-pro";
-import { useCallback } from "react";
+import { memo, useCallback } from "react";
 
 function TableFooter() {
   const apiRef = useGridApiContext();
@@ -20,4 +20,4 @@ function TableFooter() {
   );
 }
 
-export default TableFooter;
+export default memo(TableFooter);

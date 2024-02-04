@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { GridActionsCellItem, GridRowModes, useGridApiContext } from "@mui/x-data-grid-pro";
 import PropTypes from "prop-types";
+import { memo } from "react";
 import { MdCancel, MdDelete, MdEdit, MdSave } from "react-icons/md";
 
 function TableActions({
@@ -49,7 +50,7 @@ function TableActions({
     );
 
     setPopup({
-      isShown: true,
+      isTriggered: true,
       title: "Xác nhận lưu",
       content: popupContent,
       type: "confirm",
@@ -61,7 +62,7 @@ function TableActions({
 
   const handleDelete = (_id) => () => {
     setPopup({
-      isShown: true,
+      isTriggered: true,
       title: "Xác nhận xóa",
       content: <p>Bạn có chắc chắn muốn xóa không?</p>,
       type: "confirm",
@@ -135,4 +136,4 @@ TableActions.defaultProps = {
   enableDelete: false,
 };
 
-export default TableActions;
+export default memo(TableActions);
