@@ -85,7 +85,10 @@ const userController = {
   update: async (req, res, next) => {
     try {
       const { userInfo, body } = req;
-      const { username, password, avatar, email, role, dateOfBirth, isBanned, isActivated } = body;
+      const { _id, username, password, avatar, email, role, dateOfBirth, isBanned, isActivated } =
+        body;
+
+      if (_id) userInfo.id = _id;
 
       const response = await userService.update(userInfo.id, {
         username,
