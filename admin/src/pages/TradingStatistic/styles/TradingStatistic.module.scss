@@ -1,0 +1,32 @@
+@use "assets/styles/variables" as var;
+
+.selector-container {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: row;
+}
+
+.select {
+  margin-left: 15px;
+}
+
+.amount {
+  color: var.$green;
+
+  &.minus {
+    color: var.$red;
+  }
+}
+
+.unit {
+  img {
+    $size: 24px;
+    width: $size;
+    height: $size;
+    margin-right: 6px;
+  }
+}

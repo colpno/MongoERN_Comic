@@ -1,10 +1,24 @@
-import React from "react";
+import { useState } from "react";
+import { Col, Container, Row } from "react-bootstrap";
+import ChapterReportStat from "./components/ChapterReportStat";
+import TitleReportStat from "./components/TitleReportStat";
 
 function VisitStatistic() {
+  const [selectedTitle, setSelectedTitle] = useState();
+
   return (
-    <div>
-      <span>VisitStatistic</span>
-    </div>
+    <Container>
+      <Row>
+        <Col>
+          <TitleReportStat selectedTitle={selectedTitle} setSelectedTitle={setSelectedTitle} />
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <ChapterReportStat selectedTitle={selectedTitle} />
+        </Col>
+      </Row>
+    </Container>
   );
 }
 
