@@ -10,7 +10,7 @@ import {
 
 const incomeSchema = mongoose.Schema(
   {
-    user_id: { type: mongoose.Types.ObjectId, ref: 'users', require: true },
+    user_id: { type: [mongoose.Types.ObjectId, null], ref: 'users', require: true },
     total_income: { type: Number, min: 0, default: 0 },
     purchased_chapter_income: { type: Number, min: 0, default: 0 },
     month: {
