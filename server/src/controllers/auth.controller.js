@@ -158,7 +158,7 @@ const authController = {
       const user = await userService.getOne({ username });
       if (!user) return next(createError(404, 'Không tìm thấy tài khoản'));
 
-      const { isActivated, role, password, ...others } = user._doc;
+      const { income, isBanned, isActivated, password, role, ...others } = user._doc;
       const token = jwt.sign({ id: user._id, role, isActivated }, process.env.ACCESS_TOKEN_KEY);
 
       await otpService.delete(username, email);
@@ -176,7 +176,10 @@ const authController = {
         .status(200)
         .json({
           code: 200,
-          data: others,
+          data: {
+            ...others,
+            role,
+          },
           message: 'Đăng nhập thành công',
         });
     } catch (error) {
