@@ -14,6 +14,26 @@ import {
 const chapterTransactionController = {
   getAll: async (req, res, next) => {
     try {
+      const params = transformQueryParams(req.query);
+      const response = await chapterTransactionService.getAll(params);
+
+      if (response.length === 0 || response.data?.length === 0) {
+        return res.status(200).json({
+          ...response,
+          code: 200,
+        });
+      }
+
+      return res.status(200).json({
+        ...response,
+        code: 200,
+      });
+    } catch (error) {
+      return next(error);
+    }
+  },
+  getAllOwned: async (req, res, next) => {
+    try {
       const { id: userId } = req.userInfo;
       req.query.user_id = userId;
 
@@ -56,7 +76,9 @@ const chapterTransactionController = {
         }
 
         let user = await userService.getOne({ _id: userId });
-        const sellerIncomeInDollar = incomeService.make(coinToDollar(coin));
+        const { sellerIncomeInDollar, platformIncomeInDollar } = incomeService.make(
+          coinToDollar(coin)
+        );
         const title = await titleService.getOne({ _id: titleId });
         const currentMonth = moment().month();
         const currentYear = moment().year();
@@ -107,8 +129,12 @@ const chapterTransactionController = {
 
             await transactionService.add(userId, 'Mua chương', 'chapter', -coin);
 
-            const incomeStat = await incomeService.getOne(title.user_id, currentMonth, currentYear);
-            if (incomeStat) {
+            const userIncomeStat = await incomeService.getOne(
+              title.user_id,
+              currentMonth,
+              currentYear
+            );
+            if (userIncomeStat) {
               await incomeService.update(
                 title.user_id,
                 currentMonth,
@@ -123,6 +149,19 @@ const chapterTransactionController = {
                 currentYear,
                 sellerIncomeInDollar
               );
+            }
+
+            const platformIncomeStat = await incomeService.getOne(null, currentMonth, currentYear);
+            if (platformIncomeStat) {
+              await incomeService.update(
+                null,
+                currentMonth,
+                currentYear,
+                'purchased_chapter_income',
+                platformIncomeInDollar
+              );
+            } else {
+              await incomeService.add(null, currentMonth, currentYear, platformIncomeInDollar);
             }
           }
         }

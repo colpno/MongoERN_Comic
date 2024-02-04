@@ -8,7 +8,7 @@ const extendedApi = comicApi.injectEndpoints({
     getTransactions: build.query({
       query: (params) => ({
         method: "GET",
-        url: BASE_URL,
+        url: `${BASE_URL}/owned`,
         params,
         withCredentials: true,
       }),

@@ -2,11 +2,31 @@ import transformQueryParams from '../helpers/transformQueryParams.js';
 import { transactionService, userService } from '../services/index.js';
 
 const transactionController = {
-  getAll: async (req, res, next) => {
+  getAllOwned: async (req, res, next) => {
     try {
       const { id: userId } = req.userInfo;
       req.query.user_id = userId;
 
+      const params = transformQueryParams(req.query);
+      const response = await transactionService.getAll(params);
+
+      if (response.length === 0 || response.data?.length === 0) {
+        return res.status(200).json({
+          ...response,
+          code: 200,
+        });
+      }
+
+      return res.status(200).json({
+        ...response,
+        code: 200,
+      });
+    } catch (error) {
+      return next(error);
+    }
+  },
+  getAll: async (req, res, next) => {
+    try {
       const params = transformQueryParams(req.query);
       const response = await transactionService.getAll(params);
 

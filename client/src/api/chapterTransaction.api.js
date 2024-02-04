@@ -3,15 +3,11 @@ import comicApi from "./comicApi.js";
 
 const BASE_URL = "/chapter-transactions";
 
-const chapterTransactionApi = {};
-
-export default chapterTransactionApi;
-
 const extendedApi = comicApi.injectEndpoints({
   endpoints: (build) => ({
     getChapterTransactions: build.query({
       query: ({ params, isPrivate }) => ({
-        url: BASE_URL,
+        url: `${BASE_URL}/owned`,
         method: "GET",
         params,
         withCredentials: isPrivate,
