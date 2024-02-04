@@ -7,10 +7,12 @@ import {
 } from "@mui/x-data-grid-pro";
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
-import { useCallback } from "react";
+import { memo, useCallback } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { BsQuestionCircle } from "react-icons/bs";
 
+import { Popup } from "features/index";
+import { usePopup } from "hooks/index";
 import styles from "../styles/TableToolbar.module.scss";
 import TableBottomToolBar from "./TableBottomToolBar";
 import TableGuide from "./TableGuide";
@@ -19,7 +21,6 @@ const cx = classNames.bind(styles);
 
 function TableToolBar({
   rowsPerPage,
-  setPopup,
 
   enableDelete,
   onDelete,
@@ -30,6 +31,12 @@ function TableToolBar({
   setRowModesModel,
 }) {
   const apiRef = useGridApiContext();
+  const { popup, triggerPopup, setPopup } = usePopup({
+    isTriggered: false,
+    title: "Các thao tác sẵn có",
+    content: <TableGuide />,
+    type: "normal",
+  });
 
   const handlePageChange = useCallback(
     ({ target }) => apiRef.current.setPageSize(target.value),
@@ -37,12 +44,7 @@ function TableToolBar({
   );
 
   const openTableGuide = () => {
-    setPopup({
-      isShown: true,
-      title: "Các thao tác sẵn có",
-      content: <TableGuide />,
-      type: "normal",
-    });
+    triggerPopup(true);
   };
 
   return (
@@ -77,13 +79,13 @@ function TableToolBar({
           />
         </Box>
       </Container>
+      {popup.isTriggered && <Popup data={popup} setShow={triggerPopup} width={400} />}
     </GridToolbarContainer>
   );
 }
 
 TableToolBar.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
-  setPopup: PropTypes.func.isRequired,
 
   enableDelete: PropTypes.bool,
   onDelete: PropTypes.func,
@@ -104,4 +106,4 @@ TableToolBar.defaultProps = {
   setRowModesModel: () => {},
 };
 
-export default TableToolBar;
+export default memo(TableToolBar);

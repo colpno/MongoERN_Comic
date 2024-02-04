@@ -67,7 +67,6 @@ function Table({
     componentsProps: {
       toolbar: {
         rowsPerPage,
-        setPopup,
       },
     },
     autoHeight: false,
@@ -186,7 +185,7 @@ function Table({
           }}
         />
       </ThemeProvider>
-      {popup.isShown && <Popup data={popup} setShow={triggerPopup} width={400} />}
+      {popup.isTriggered && <Popup data={popup} setShow={triggerPopup} width={400} />}
     </>
   );
 }
