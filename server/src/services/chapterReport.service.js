@@ -4,6 +4,7 @@ import handleMongoProjection from '../helpers/handleMongoProjection.js';
 import paginateSort from '../helpers/paginateSort.js';
 import { ChapterReport } from '../models/index.js';
 import { MAX_YEAR } from '../validations/index.js';
+import { afterEmbedding } from '../helpers/afterTransforming.js';
 
 const chapterReportService = {
   getAll: async (params = {}) => {
@@ -13,11 +14,14 @@ const chapterReportService = {
 
       if (_limit || _sort) {
         const response = await paginateSort(params, ChapterReport);
-        return response;
+        return {
+          ...response,
+          data: afterEmbedding(response.data, _embed),
+        };
       }
 
       const response = await ChapterReport.find(others).select(_fields).populate(_embed);
-      return { data: response };
+      return { data: afterEmbedding(response, _embed) };
     } catch (error) {
       throw new Error(error);
     }

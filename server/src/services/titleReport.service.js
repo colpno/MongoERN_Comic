@@ -3,6 +3,7 @@ import handleMongoProjection from '../helpers/handleMongoProjection.js';
 import paginateSort from '../helpers/paginateSort.js';
 import { TitleReport } from '../models/index.js';
 import { MAX_YEAR } from '../validations/index.js';
+import { afterEmbedding } from '../helpers/afterTransforming.js';
 
 const titleReportService = {
   getAll: async (params = {}) => {
@@ -12,11 +13,14 @@ const titleReportService = {
 
       if (_limit || _sort) {
         const response = await paginateSort(params, TitleReport);
-        return response;
+        return {
+          ...response,
+          data: afterEmbedding(response.data, _embed),
+        };
       }
 
       const response = await TitleReport.find(others).select(_fields).populate(_embed);
-      return { data: response };
+      return { data: afterEmbedding(response, _embed) };
     } catch (error) {
       throw new Error(error);
     }

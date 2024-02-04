@@ -3,6 +3,7 @@ import handleMongoProjection from '../helpers/handleMongoProjection.js';
 import paginateSort from '../helpers/paginateSort.js';
 import { Income } from '../models/index.js';
 import { MAX_YEAR, MIN_MONTH } from '../validations/index.js';
+import { afterEmbedding } from '../helpers/afterTransforming.js';
 
 dotenv.config();
 
@@ -14,11 +15,14 @@ const incomeService = {
 
       if (_limit || _sort) {
         const response = await paginateSort(params, Income);
-        return response;
+        return {
+          ...response,
+          data: afterEmbedding(response.data, _embed),
+        };
       }
 
       const response = await Income.find(others).select(_fields).populate(_embed);
-      return { data: response };
+      return { data: afterEmbedding(response, _embed) };
     } catch (error) {
       throw new Error(error);
     }
@@ -61,10 +65,15 @@ const incomeService = {
   },
   make: (dollar) => {
     const { SELLER_COMMISSION_RATE } = process.env;
+    const PLATFORM_COMMISSION_RATE = 1 - SELLER_COMMISSION_RATE;
 
     const sellerReceive = (dollar * Number.parseFloat(SELLER_COMMISSION_RATE)).toFixed(2);
+    const platformReceive = (dollar * Number.parseFloat(PLATFORM_COMMISSION_RATE)).toFixed(2);
 
-    return sellerReceive;
+    return {
+      sellerReceive,
+      platformReceive,
+    };
   },
 };
 

@@ -1,3 +1,4 @@
+import { afterEmbedding } from '../helpers/afterTransforming.js';
 import handleMongoProjection from '../helpers/handleMongoProjection.js';
 import paginateSort from '../helpers/paginateSort.js';
 import { ReadingHistory } from '../models/index.js';
@@ -10,11 +11,14 @@ const readingHistoryService = {
 
       if (_limit || _sort) {
         const response = await paginateSort(params, ReadingHistory);
-        return response;
+        return {
+          ...response,
+          data: afterEmbedding(response.data, _embed),
+        };
       }
 
       const response = await ReadingHistory.find(others).select(_fields).populate(_embed);
-      return { data: response };
+      return { data: afterEmbedding(response, _embed) };
     } catch (error) {
       throw new Error(error);
     }

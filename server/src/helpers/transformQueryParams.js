@@ -131,6 +131,31 @@ const convertNullValue = (value) => {
   return value;
 };
 
+const handleEmbed = (value) => {
+  const transform = (queryValue = []) =>
+    queryValue.map((parsedValue) => {
+      if ('match' in parsedValue) {
+        return {
+          ...parsedValue,
+          match: transformQueryParams(parsedValue.match),
+        };
+      }
+      return parsedValue;
+    });
+
+  if (!Array.isArray(value) && typeof value === 'string') {
+    const parsedQueryValue = JSON.parse(value);
+
+    if (!Array.isArray(parsedQueryValue)) {
+      throw new Error('Value of _embed must be an array of objects');
+    }
+
+    return transform(parsedQueryValue);
+  }
+
+  return transform(value);
+};
+
 function transformQueryParams(queries = {}) {
   const queryKeys = Object.keys(queries);
 
@@ -139,6 +164,10 @@ function transformQueryParams(queries = {}) {
     let newResult = {
       ...result,
     };
+
+    if (queryKey === '_embed') {
+      newResult[queryKey] = handleEmbed(queryValue);
+    }
 
     const { startOfSuffixIndex, suffix, field } = sliceKey(queryKey);
 

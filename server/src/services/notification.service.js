@@ -1,3 +1,4 @@
+import { afterEmbedding } from '../helpers/afterTransforming.js';
 import handleMongoProjection from '../helpers/handleMongoProjection.js';
 import paginateSort from '../helpers/paginateSort.js';
 import { Notification } from '../models/index.js';
@@ -11,11 +12,14 @@ const notificationService = {
 
       if (_limit || _sort) {
         const response = await paginateSort(params, Notification);
-        return response;
+        return {
+          ...response,
+          data: afterEmbedding(response.data, _embed),
+        };
       }
 
       const response = await Notification.find(others).select(_fields).populate(_embed);
-      return { data: response };
+      return { data: afterEmbedding(response, _embed) };
     } catch (error) {
       throw new Error(error);
     }

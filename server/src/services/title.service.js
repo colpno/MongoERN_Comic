@@ -1,4 +1,4 @@
-import { removeNullPopulate } from '../helpers/afterQuery.js';
+import { afterEmbedding } from '../helpers/afterTransforming.js';
 import handleMongoProjection from '../helpers/handleMongoProjection.js';
 import paginateSort from '../helpers/paginateSort.js';
 import { Title } from '../models/index.js';
@@ -18,13 +18,14 @@ const titleService = {
 
       if (_limit || _sort) {
         const response = await paginateSort(params, Title);
-        response.data = removeNullPopulate(response.data, _embed);
-        return response;
+        return {
+          ...response,
+          data: afterEmbedding(response.data, _embed),
+        };
       }
 
       const response = await Title.find(others).select(_fields).populate(_embed);
-      const result = removeNullPopulate(response, _embed);
-      return { data: result };
+      return { data: afterEmbedding(response, _embed) };
     } catch (error) {
       throw new Error(error);
     }

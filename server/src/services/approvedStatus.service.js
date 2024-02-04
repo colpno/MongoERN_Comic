@@ -1,3 +1,4 @@
+import { afterEmbedding } from '../helpers/afterTransforming.js';
 import handleMongoProjection from '../helpers/handleMongoProjection.js';
 import paginateSort from '../helpers/paginateSort.js';
 import { ApprovedStatus } from '../models/index.js';
@@ -10,11 +11,14 @@ const approvedStatusService = {
 
       if (_limit || _sort) {
         const response = await paginateSort(params, ApprovedStatus);
-        return response;
+        return {
+          ...response,
+          data: afterEmbedding(response.data),
+        };
       }
 
       const response = await ApprovedStatus.find(others).select(_fields);
-      return { data: response };
+      return { data: afterEmbedding(response) };
     } catch (error) {
       throw new Error(error);
     }

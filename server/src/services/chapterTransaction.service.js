@@ -1,3 +1,4 @@
+import { afterEmbedding } from '../helpers/afterTransforming.js';
 import handleMongoProjection from '../helpers/handleMongoProjection.js';
 import paginateSort from '../helpers/paginateSort.js';
 import { ChapterTransaction } from '../models/index.js';
@@ -12,14 +13,17 @@ const chapterTransactionService = {
         const response = await paginateSort(params, ChapterTransaction);
 
         if (response.data.length > 0) {
-          return { ...response };
+          return {
+            ...response,
+            data: afterEmbedding(response.data, _embed),
+          };
         }
 
         return response;
       }
 
       const response = await ChapterTransaction.find(others).select(_fields).populate(_embed);
-      return { data: response };
+      return { data: afterEmbedding(response, _embed) };
     } catch (error) {
       throw new Error(error);
     }
