@@ -1,6 +1,8 @@
 const paginateSort = async (queries, MongooseModel) => {
   if (!queries._page) queries._page = 1;
-  const { _page, _limit, _sort, _fields, _embed, ...others } = queries;
+  if (queries._sort) queries._sort = JSON.parse(queries._sort);
+
+  const { _sort, _page, _limit, _fields, _embed, ...others } = queries;
 
   if (_limit && _sort) {
     const data = await MongooseModel.find(others)
