@@ -21,7 +21,10 @@ function useGetObjectStatuses(params) {
     }
   }, [isFetching]);
 
-  return response;
+  return {
+    ...response,
+    data: response.data ?? [],
+  };
 }
 
 export default useGetObjectStatuses;

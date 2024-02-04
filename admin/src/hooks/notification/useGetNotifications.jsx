@@ -21,7 +21,10 @@ function useGetNotifications(params) {
     }
   }, [isFetching]);
 
-  return response;
+  return {
+    ...response,
+    data: response.data ?? [],
+  };
 }
 
 export default useGetNotifications;

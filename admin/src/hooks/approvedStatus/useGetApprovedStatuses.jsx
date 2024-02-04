@@ -1,11 +1,11 @@
-import { useGetChaptersQuery } from "api/chapter.api";
+import { useGetApprovedStatusesQuery } from "api/approvedStatus.api";
 import { setLoading } from "libs/redux/slices/common.slice";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-function useGetChapters(params) {
+function useGetApprovedStatuses(params) {
   const dispatch = useDispatch();
-  const response = useGetChaptersQuery(params);
+  const response = useGetApprovedStatusesQuery(params);
   const { isFetching, data } = response;
 
   if (data?.pagination) {
@@ -21,7 +21,10 @@ function useGetChapters(params) {
     }
   }, [isFetching]);
 
-  return response;
+  return {
+    ...response,
+    data: response.data ?? [],
+  };
 }
 
-export default useGetChapters;
+export default useGetApprovedStatuses;

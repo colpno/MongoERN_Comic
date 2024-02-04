@@ -21,7 +21,10 @@ function useGetGenres(params) {
     }
   }, [isFetching]);
 
-  return response;
+  return {
+    ...response,
+    data: response.data ?? [],
+  };
 }
 
 export default useGetGenres;

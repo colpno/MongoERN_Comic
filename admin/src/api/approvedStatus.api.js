@@ -1,10 +1,10 @@
 import comicApi from "./comicApi";
 
-const BASE_URL = "/chapter-transactions";
+const BASE_URL = "/approved-statuses";
 
 const extendedApi = comicApi.injectEndpoints({
   endpoints: (build) => ({
-    getChapterTransactions: build.query({
+    getApprovedStatuses: build.query({
       query: (params) => ({
         url: BASE_URL,
         method: "GET",
@@ -14,9 +14,8 @@ const extendedApi = comicApi.injectEndpoints({
         if (response.pagination) return response;
         return response.data;
       },
-      providesTags: ["Chapter Transaction"],
     }),
   }),
 });
 
-export const { useGetChapterTransactionsQuery, useLazyGetChapterTransactionsQuery } = extendedApi;
+export const { useGetApprovedStatusesQuery, useLazyGetApprovedStatusesQuery } = extendedApi;

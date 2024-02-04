@@ -21,7 +21,7 @@ function useGetChapterReports(params) {
     }
   }, [isFetching]);
 
-  return { get, ...response };
+  return { get, ...response, data: response.data ?? [] };
 }
 
 export default useGetChapterReports;

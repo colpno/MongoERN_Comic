@@ -21,7 +21,10 @@ function useGetTransactions(params) {
     }
   }, [isFetching]);
 
-  return response;
+  return {
+    ...response,
+    data: response.data ?? [],
+  };
 }
 
 export default useGetTransactions;

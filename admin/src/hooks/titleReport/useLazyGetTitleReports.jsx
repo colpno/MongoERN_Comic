@@ -21,7 +21,11 @@ function useLazyGetTitleReports() {
     }
   }, [isFetching]);
 
-  return { get, ...response };
+  return {
+    get,
+    ...response,
+    data: response.data ?? [],
+  };
 }
 
 export default useLazyGetTitleReports;

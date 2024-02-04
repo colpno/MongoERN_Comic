@@ -1,3 +1,4 @@
+import { emitToast } from "features/Toast";
 import comicApi from "./comicApi";
 
 const BASE_URL = "/notifications";
@@ -15,7 +16,49 @@ const extendedApi = comicApi.injectEndpoints({
         return response.data;
       },
     }),
+    addNotification: build.mutation({
+      query: (data) => ({
+        url: `${BASE_URL}/create`,
+        method: "POST",
+        data,
+      }),
+      transformResponse: (response) => {
+        const { message, data } = response;
+        emitToast(message, "success");
+        return data;
+      },
+    }),
+    updateNotification: build.mutation({
+      query: ({ id, data }) => ({
+        url: `${BASE_URL}/update/${id}`,
+        method: "PUT",
+        data,
+      }),
+      transformResponse: (response) => {
+        const { message, data } = response;
+        emitToast(message, "success");
+        return data;
+      },
+    }),
+    deleteNotification: build.mutation({
+      query: (filter) => ({
+        url: `${BASE_URL}/delete`,
+        method: "DELETE",
+        data: filter,
+      }),
+      transformResponse: (response) => {
+        const { message, data } = response;
+        emitToast(message, "success");
+        return data;
+      },
+    }),
   }),
 });
 
-export const { useGetNotificationsQuery, useLazyGetNotificationsQuery } = extendedApi;
+export const {
+  useGetNotificationsQuery,
+  useLazyGetNotificationsQuery,
+  useAddNotificationMutation,
+  useDeleteNotificationMutation,
+  useUpdateNotificationMutation,
+} = extendedApi;

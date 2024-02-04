@@ -21,7 +21,10 @@ function useGetPersonalNotifications(params) {
     }
   }, [isFetching]);
 
-  return response;
+  return {
+    ...response,
+    data: response.data ?? [],
+  };
 }
 
 export default useGetPersonalNotifications;

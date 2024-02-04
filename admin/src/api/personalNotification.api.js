@@ -17,6 +17,19 @@ const extendedApi = comicApi.injectEndpoints({
       },
       providesTags: ["Personal Notification"],
     }),
+    addPersonalNotification: build.mutation({
+      query: (data) => ({
+        url: `${BASE_URL}/create`,
+        method: "PUT",
+        data,
+      }),
+      transformResponse: (response) => {
+        const { message, data } = response;
+        emitToast(message, "success");
+        return data;
+      },
+      invalidatesTags: ["Personal Notification"],
+    }),
     updatePersonalNotification: build.mutation({
       query: ({ id, data, params = {} }) => ({
         url: `${BASE_URL}/update/${id}`,
@@ -52,4 +65,5 @@ export const {
   useGetPersonalNotificationsQuery,
   useUpdatePersonalNotificationMutation,
   useLazyGetPersonalNotificationsQuery,
+  useAddPersonalNotificationMutation,
 } = extendedApi;

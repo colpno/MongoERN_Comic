@@ -1,11 +1,11 @@
-import { useGetUsersQuery } from "api/user.api";
+import { useAddPersonalNotificationMutation } from "api/personalNotification.api";
 import { setLoading } from "libs/redux/slices/common.slice";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-function useGetUsers(params) {
+function useAddPersonalNotification() {
   const dispatch = useDispatch();
-  const response = useGetUsersQuery(params);
+  const [add, response] = useAddPersonalNotificationMutation();
   const { isLoading } = response;
 
   useEffect(() => {
@@ -16,10 +16,7 @@ function useGetUsers(params) {
     }
   }, [isLoading]);
 
-  return {
-    ...response,
-    data: response.data ?? [],
-  };
+  return { add, ...response };
 }
 
-export default useGetUsers;
+export default useAddPersonalNotification;
