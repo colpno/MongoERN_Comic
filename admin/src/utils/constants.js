@@ -1,7 +1,7 @@
-import { AiFillNotification } from "react-icons/ai";
+import { AiFillDollarCircle, AiFillNotification } from "react-icons/ai";
 import { BiCategoryAlt, BiSpreadsheet } from "react-icons/bi";
 import { BsFilePost } from "react-icons/bs";
-import { FaBell, FaUsers } from "react-icons/fa";
+import { FaBell, FaEye, FaUsers } from "react-icons/fa";
 import { MdAdminPanelSettings, MdPayment } from "react-icons/md";
 
 export function getAdminSideBarMenu() {
@@ -11,61 +11,61 @@ export function getAdminSideBarMenu() {
       subMenu: [
         {
           to: `/titles`,
-          icon: BsFilePost,
+          Icon: BsFilePost,
           label: "Titles",
         },
         {
           to: `/chapters`,
-          icon: BiSpreadsheet,
+          Icon: BiSpreadsheet,
           label: "Chapters",
         },
         {
           to: `/genres`,
-          icon: BiCategoryAlt,
+          Icon: BiCategoryAlt,
           label: "Genres",
         },
         {
           to: `/members`,
-          icon: FaUsers,
+          Icon: FaUsers,
           label: "Members",
         },
         {
           to: `/administrators`,
-          icon: MdAdminPanelSettings,
+          Icon: MdAdminPanelSettings,
           label: "Administrators",
         },
         {
           to: `/notifications`,
-          icon: AiFillNotification,
+          Icon: AiFillNotification,
           label: "Notifications",
         },
         {
           to: `/personal-notifications`,
-          icon: FaBell,
+          Icon: FaBell,
           label: "Personal Notifications",
         },
         {
           to: `/payment-methods`,
-          icon: MdPayment,
+          Icon: MdPayment,
           label: "Payment Methods",
         },
       ],
     },
-    // {
-    //   groupLabel: "Stats",
-    //   subMenu: [
-    //     {
-    //       to: `/income`,
-    //       icon: FaChartBar,
-    //       label: "Income",
-    //     },
-    //     // {
-    //     //   to: `${baseURL}/visit`,
-    //     //   icon: CircleC,
-    //     //   label: "Visits",
-    //     // },
-    //   ],
-    // },
+    {
+      groupLabel: "Statistic",
+      subMenu: [
+        {
+          to: `/income`,
+          Icon: AiFillDollarCircle,
+          label: "Income",
+        },
+        {
+          to: `/visit`,
+          Icon: FaEye,
+          label: "Visits",
+        },
+      ],
+    },
   ];
 }
 
