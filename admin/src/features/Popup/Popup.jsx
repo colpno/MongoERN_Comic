@@ -50,7 +50,7 @@ Popup.propTypes = {
     title: PropTypes.string,
     content: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
     type: PropTypes.oneOf(["confirm", "normal"]),
-    isShown: PropTypes.bool.isRequired,
+    isTriggered: PropTypes.bool.isRequired,
     onConfirm: PropTypes.func,
     onCancel: PropTypes.func,
   }),

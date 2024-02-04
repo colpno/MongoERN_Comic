@@ -34,7 +34,7 @@ function TableBottomToolBar({
     const rows = tableRef.current.getSelectedRows();
     if (rows.size > 0) {
       setPopup({
-        isShown: true,
+        isTriggered: true,
         title: "Xác nhận xóa",
         content: <p>Bạn có chắc chắn muốn xóa không?</p>,
         type: "confirm",
@@ -44,7 +44,7 @@ function TableBottomToolBar({
       });
     } else
       setPopup({
-        isShown: true,
+        isTriggered: true,
         title: "Thông báo",
         type: "normal",
         content:
