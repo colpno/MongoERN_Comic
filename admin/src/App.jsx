@@ -2,7 +2,7 @@ import { Fragment, useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 
-import { Popup } from "features";
+import { Popup, Toast } from "features";
 import { usePopup } from "hooks";
 import { AdminLayout } from "layouts";
 import { adminRoutes } from "routes";
@@ -24,7 +24,7 @@ function App() {
   useEffect(() => {
     if (haveAccessed && isLoggingIn) {
       setPopup({
-        isShown: true,
+        isTriggered: true,
         title: "Thông báo",
         content: "Bạn đã đăng nhập nên không thể truy cập vào trang",
         onConfirm: () => navigate("/titles"),
@@ -60,7 +60,8 @@ function App() {
         })}
         <Route path="*" element={<Navigate to="/not-found" />} />
       </Routes>
-      {popup.isShown && <Popup data={popup} setShow={triggerPopup} />}
+      {popup.isTriggered && <Popup data={popup} setShow={triggerPopup} />}
+      <Toast />
     </>
   );
 }
