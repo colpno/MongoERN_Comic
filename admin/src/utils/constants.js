@@ -62,7 +62,7 @@ export function getAdminSideBarMenu() {
         {
           to: `/visit`,
           Icon: FaEye,
-          label: "Visits",
+          label: "Visit",
         },
       ],
     },
