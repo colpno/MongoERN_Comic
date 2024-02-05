@@ -50,15 +50,25 @@ function AdminTable({ admins, onDelete, onAdd, onUpdate }) {
           field: "password",
           headerName: "Mật khẩu",
           headerAlign: "center",
+          align: "center",
           width: 140,
           editable: true,
+          renderCell: () => {
+            return "**************";
+          },
         },
         {
           field: "email",
           headerName: "Email",
           headerAlign: "center",
-          width: 140,
+          align: "center",
+          width: 250,
           editable: true,
+          renderCell: ({ value }) => {
+            const [username, domain] = value.split("@");
+            const maskedUsername = `${username.substring(0, 2)}******${username.slice(-2)}`;
+            return `${maskedUsername}@${domain}`;
+          },
         },
         {
           field: "isBanned",
@@ -92,6 +102,7 @@ function AdminTable({ admins, onDelete, onAdd, onUpdate }) {
           valueOptions: ["administrator"],
           headerAlign: "center",
           align: "center",
+          width: 160,
           editable: true,
         },
         {
