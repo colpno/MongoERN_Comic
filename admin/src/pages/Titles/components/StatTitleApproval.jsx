@@ -17,8 +17,6 @@ function StatTitleApproval({ titles, approvedStatuses }) {
     }
   );
 
-  const initData = Array(approvedStatuses.length).fill(0);
-
   const chartData = useMemo(() => {
     return titles.reduce(
       (result, title) => {
@@ -31,13 +29,13 @@ function StatTitleApproval({ titles, approvedStatuses }) {
         datasets: [
           {
             label: "",
-            data: initData,
+            data: Array(approvedStatuses.length).fill(0),
             backgroundColor: getChartColors().backgroundColors.slice(3, 6),
           },
         ],
       }
     );
-  }, [titles]);
+  }, [titles, approvedStatuses]);
 
   return <PieChart data={chartData} />;
 }
