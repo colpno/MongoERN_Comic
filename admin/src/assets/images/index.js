@@ -2,20 +2,8 @@ export { default as leftMouse } from "./mouse/left-click.svg";
 export { default as middleMouse } from "./mouse/middle-click.svg";
 export { default as rightMouse } from "./mouse/right-click.svg";
 
-export { default as imageSrcError } from "./bg_frame_275x275.jpg";
-
 export { default as checked } from "./checked.png";
 export { default as cancel } from "./cancel.png";
-
-export { default as Image1 } from "./title1.jpg";
-export { default as Image2 } from "./title2.png";
-export { default as AStore } from "./title2.png";
-
-export { default as wallet } from "./wallet.svg";
-export { default as backpack } from "./backpack.svg";
-export { default as coins } from "./coins.svg";
-export { default as topSales } from "./top-sales.svg";
-export { ReactComponent as ChargeIcon } from "./charge.svg";
 
 export { default as circleC } from "./currency/circle-c.svg";
 export { default as circleP } from "./currency/circle-p.svg";
@@ -27,6 +15,8 @@ export { ReactComponent as RentTicket } from "./ticket/rent-ticket.svg";
 
 export { ReactComponent as Logo } from "./logo/logo-white.svg";
 
+export { default as topSales } from "./top-sales.svg";
+
 export { default as noData } from "./not-found/no-data.svg";
 export { default as lostConnection } from "./not-found/lost-connection.svg";
 export { default as noFavorite } from "./not-found/no-favorite.svg";
@@ -34,11 +24,6 @@ export { default as noMessage } from "./not-found/no-message.svg";
 export { default as noNotification } from "./not-found/no-notification.svg";
 export { default as noSearchResult } from "./not-found/no-search-result.svg";
 export { default as notFoundSVG } from "./not-found/page-not-found.svg";
-
-export { default as toastErrorIcon } from "./toast/fail.svg";
-export { default as toastSuccessIcon } from "./toast/success.svg";
-export { default as toastErrorBubbles } from "./toast/Red bubbles.svg";
-export { default as toastSuccessBubbles } from "./toast/green bubbles.svg";
 
 export { default as robot1 } from "./avatars/robot/adarchitectodolorum.png";
 export { default as robot2 } from "./avatars/robot/estcorporisminus.png";
