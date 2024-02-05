@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { memo, useMemo } from "react";
+import { useMemo } from "react";
 
 import { PieChart } from "features";
 import { getChartColors } from "utils/constants";
@@ -47,4 +47,4 @@ StatTitleApproval.propTypes = {
   approvedStatuses: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired,
 };
 
-export default memo(StatTitleApproval);
+export default StatTitleApproval;
