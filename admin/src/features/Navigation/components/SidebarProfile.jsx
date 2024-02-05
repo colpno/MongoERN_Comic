@@ -19,7 +19,7 @@ function SidebarProfile() {
       <div className={cx("data_text")}>
         <span className={cx("name")}>{user.username}</span>
       </div>
-      <Button wrapper onClick={logout} className={cx("logout_btn")}>
+      <Button wrapper onClick={() => logout()} className={cx("logout_btn")}>
         <IoIosLogOut className={cx("logout-icon")} />
       </Button>
     </div>
