@@ -9,10 +9,11 @@ const commentController = {
       const { slug } = req.query;
       if (!!slug) {
         req.query.full_slug_like = slug;
+        req.query._sort = {
+          full_slug: 'desc',
+        };
         delete req.query.slug;
       }
-      req.query._sort = 'full_slug';
-      req.query._order = 'desc';
 
       const params = transformQueryParams(req.query);
 
