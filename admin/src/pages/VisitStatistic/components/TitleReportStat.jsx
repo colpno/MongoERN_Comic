@@ -3,7 +3,7 @@ import { useLazyGetTitleReports } from "hooks/index";
 import PropTypes from "prop-types";
 import { useEffect, useMemo, useState } from "react";
 import getYearOptions from "utils/getYearOptions";
-import TitleReportStatChart from "./ChapterReportStatChart";
+import TitleReportStatChart from "./TitleReportStatChart";
 import TitleReportStatSelector from "./TitleReportStatSelector";
 
 function TitleReportStat({ selectedTitle, setSelectedTitle }) {
@@ -51,11 +51,7 @@ function TitleReportStat({ selectedTitle, setSelectedTitle }) {
         reportOptions={reportOptions}
       />
       <FloatingContainer>
-        <TitleReportStatChart
-          selectedYear={selectedYear}
-          selectedTitle={selectedTitle}
-          reports={reports}
-        />
+        <TitleReportStatChart selectedYear={selectedYear} selectedTitle={selectedTitle} />
       </FloatingContainer>
     </>
   );
