@@ -13,6 +13,9 @@ function TableFooter() {
 
   const handlePageChange = useCallback((event, value) => apiRef.current.setPage(value - 1), []); // page start from 0
 
+  // eslint-disable-next-line react/jsx-no-useless-fragment
+  if (total === 0) return <></>;
+
   return (
     <GridFooterContainer sx={{ justifyContent: "center" }}>
       <Pagination count={total} onChange={handlePageChange} shape="rounded" siblingCount={3} />
