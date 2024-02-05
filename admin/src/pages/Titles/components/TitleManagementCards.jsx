@@ -3,7 +3,7 @@ import { memo, useMemo } from "react";
 import { Col } from "react-bootstrap";
 
 import { topSales } from "assets/images";
-import AdminCard from "layouts/AdminLayout/components/AdminCard";
+import StatisticCard from "components/StatisticCard/StatisticCard";
 import { getChartColors } from "utils/constants";
 
 const cardData = (textData, chartData) => {
@@ -107,16 +107,19 @@ function TitleManagementCards({ titles }) {
   return (
     <>
       <Col md={4}>
-        <AdminCard
+        <StatisticCard
           rawData={continuingCardData.rawData}
           chartProps={continuingCardData.chartProps}
         />
       </Col>
       <Col md={4}>
-        <AdminCard rawData={pausedCardData.rawData} chartProps={pausedCardData.chartProps} />
+        <StatisticCard rawData={pausedCardData.rawData} chartProps={pausedCardData.chartProps} />
       </Col>
       <Col md={4}>
-        <AdminCard rawData={finishedCardData.rawData} chartProps={finishedCardData.chartProps} />
+        <StatisticCard
+          rawData={finishedCardData.rawData}
+          chartProps={finishedCardData.chartProps}
+        />
       </Col>
     </>
   );

@@ -1,7 +1,7 @@
 import { Col } from "react-bootstrap";
 import PropTypes from "prop-types";
 
-import AdminCard from "layouts/AdminLayout/components/AdminCard";
+import StatisticCard from "components/StatisticCard/StatisticCard";
 import { topSales } from "assets/images";
 import { getChartColors } from "utils/constants";
 
@@ -89,13 +89,19 @@ function ChapterManagementCards({ totalChapters, waiting, accepted, rejected }) 
   return (
     <>
       <Col xs={12} md={12} lg={6} xl={4}>
-        <AdminCard rawData={waitingCardData.rawData} chartProps={waitingCardData.chartProps} />
+        <StatisticCard rawData={waitingCardData.rawData} chartProps={waitingCardData.chartProps} />
       </Col>
       <Col xs={12} md={12} lg={6} xl={4}>
-        <AdminCard rawData={acceptedCardData.rawData} chartProps={acceptedCardData.chartProps} />
+        <StatisticCard
+          rawData={acceptedCardData.rawData}
+          chartProps={acceptedCardData.chartProps}
+        />
       </Col>
       <Col xs={12} md={12} lg={{ span: 8, offset: 2 }} xl={{ span: 4, offset: 0 }}>
-        <AdminCard rawData={rejectedCardData.rawData} chartProps={rejectedCardData.chartProps} />
+        <StatisticCard
+          rawData={rejectedCardData.rawData}
+          chartProps={rejectedCardData.chartProps}
+        />
       </Col>
     </>
   );

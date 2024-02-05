@@ -1,7 +1,7 @@
 import { Col } from "react-bootstrap";
 import PropTypes from "prop-types";
 
-import AdminCard from "layouts/AdminLayout/components/AdminCard";
+import StatisticCard from "components/StatisticCard/StatisticCard";
 import { topSales } from "assets/images";
 import { getChartColors } from "utils/constants";
 
@@ -72,13 +72,13 @@ function MemberManagementCards({ totalCoin, totalIncome, highestCoin, highestInc
   return (
     <>
       <Col md={6}>
-        <AdminCard
+        <StatisticCard
           rawData={continuingCardData.rawData}
           chartProps={continuingCardData.chartProps}
         />
       </Col>
       <Col md={6}>
-        <AdminCard rawData={pausedCardData.rawData} chartProps={pausedCardData.chartProps} />
+        <StatisticCard rawData={pausedCardData.rawData} chartProps={pausedCardData.chartProps} />
       </Col>
     </>
   );
