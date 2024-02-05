@@ -1,19 +1,22 @@
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
 
-import AdminHeader from "./components/AdminHeader";
-import AdminSideBar from "./components/AdminSideBar";
-import styles from "./styles/AdminLayout.module.scss";
+import { Navigation } from "features/index";
+import { useState } from "react";
+import styles from "./AdminLayout.module.scss";
 
 const cx = classNames.bind(styles);
 
 function AdminLayout({ children }) {
+  const [sidebarWidth, setSidebarWidth] = useState(75);
+
   return (
     <div className={cx("admin-page")}>
-      <AdminHeader cx={cx} />
+      <Navigation setSidebarWidth={setSidebarWidth} />
       <div className={cx("body")}>
-        <AdminSideBar />
-        <main className={cx("content")}>{children}</main>
+        <main className={cx("content")} style={{ paddingLeft: `${sidebarWidth}px` }}>
+          {children}
+        </main>
       </div>
     </div>
   );
