@@ -1,4 +1,5 @@
 import classNames from "classnames/bind";
+import { Button } from "components";
 import PropTypes from "prop-types";
 import { useLocation } from "react-router-dom";
 import styles from "../styles/Sidebar.module.scss";
@@ -10,10 +11,10 @@ function SidebarMenuGroupItem({ Icon, label, to }) {
 
   return (
     <li className={cx("item")} key={label}>
-      <a href={to} className={cx("link", "flex", pathname === to && "active")}>
+      <Button to={to} className={cx("link", "flex", pathname === to && "active")} wrapper>
         <Icon className={cx("icon")} />
         <span>{label}</span>
-      </a>
+      </Button>
     </li>
   );
 }
