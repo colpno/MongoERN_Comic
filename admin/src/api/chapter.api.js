@@ -5,7 +5,7 @@ const BASE_URL = "/chapters";
 const extendedApi = comicApi.injectEndpoints({
   endpoints: (build) => ({
     getChapters: build.query({
-      query: ({ params }) => ({
+      query: (params) => ({
         url: BASE_URL,
         method: "GET",
         params,
