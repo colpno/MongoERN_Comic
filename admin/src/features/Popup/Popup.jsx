@@ -11,6 +11,10 @@ const cx = classNames.bind(styles);
 
 function Popup({ data, setShow, width, center }) {
   const { title, content, type, onConfirm, onCancel } = data;
+  const { isTriggered } = data;
+
+  // eslint-disable-next-line react/jsx-no-useless-fragment
+  if (!isTriggered) return <></>;
 
   const handleConfirm = () => {
     onConfirm && onConfirm();

@@ -2,7 +2,7 @@ import { Fragment, useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 
-import { Popup, Toast } from "features";
+import { Loading, Popup, Toast } from "features";
 import { usePopup } from "hooks";
 import { AdminLayout } from "layouts";
 import { adminRoutes } from "routes";
@@ -60,8 +60,9 @@ function App() {
         })}
         <Route path="*" element={<Navigate to="/not-found" />} />
       </Routes>
-      {popup.isTriggered && <Popup data={popup} setShow={triggerPopup} />}
+      <Popup data={popup} setShow={triggerPopup} />
       <Toast />
+      <Loading />
     </>
   );
 }

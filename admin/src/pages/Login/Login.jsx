@@ -53,7 +53,7 @@ function Login() {
             <LoginForm handleSubmit={handleSubmit} />
           </div>
         ))}
-      {popup.isTriggered && <Popup data={popup} setShow={() => triggerPopup(false)} />}
+      <Popup data={popup} setShow={() => triggerPopup(false)} />
     </>
   );
 }

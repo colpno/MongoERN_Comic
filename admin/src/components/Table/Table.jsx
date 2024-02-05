@@ -185,7 +185,7 @@ function Table({
           }}
         />
       </ThemeProvider>
-      {popup.isTriggered && <Popup data={popup} setShow={triggerPopup} width={400} />}
+      <Popup data={popup} setShow={triggerPopup} width={400} />
     </>
   );
 }

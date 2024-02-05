@@ -79,7 +79,7 @@ function TableToolBar({
           />
         </Box>
       </Container>
-      {popup.isTriggered && <Popup data={popup} setShow={triggerPopup} width={400} />}
+      <Popup data={popup} setShow={triggerPopup} width={400} />
     </GridToolbarContainer>
   );
 }
