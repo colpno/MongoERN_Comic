@@ -21,7 +21,6 @@ const handlePrivateRouteForGuess = (url, isLoggingIn) => {
 function App() {
   const navigate = useNavigate();
   const isLoggingIn = useSelector((state) => state.user.isLoggingIn);
-  const { isLoading } = useSelector((state) => state.common);
   const theme = useSelector((state) => state.theme.theme);
   const url = useLocation().pathname;
   const { popup, triggerPopup } = usePopup({
@@ -40,7 +39,7 @@ function App() {
     <div data-theme={theme}>
       <RouteHandler isLoggingIn={isLoggingIn} />
       <Popup data={popup} trigger={triggerPopup} />
-      {isLoading && <Loading />}
+      <Loading />
       <Toast />
     </div>
   );
