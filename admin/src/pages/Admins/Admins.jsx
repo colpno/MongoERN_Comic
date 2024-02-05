@@ -1,10 +1,13 @@
 import { Col, Container, Row } from "react-bootstrap";
 
 import { FloatingContainer } from "components";
+import { emitToast } from "features/Toast.jsx";
 import { useDeleteUser, useGetUsers, useRegisterUser, useUpdateUser } from "hooks";
+import { useSelector } from "react-redux";
 import AdminTable from "./components/AdminTable";
 
 function Admins() {
+  const user = useSelector((state) => state.user.user);
   const { data: admins } = useGetUsers({ role: "administrator" });
   const { register } = useRegisterUser();
   const { update: updateUser } = useUpdateUser();
@@ -18,6 +21,11 @@ function Admins() {
   };
 
   const handleUpdate = (data, setRowIdError) => {
+    if (user._id !== data._id && user.username !== data.username) {
+      emitToast("Only owner can update the account", "info");
+      return;
+    }
+
     updateUser(data).catch(() => {
       setRowIdError(data._id);
     });
