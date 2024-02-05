@@ -3,8 +3,12 @@ import { memo, useMemo } from "react";
 
 import { PieChart } from "features";
 import { getChartColors } from "utils/constants";
+import { useGetObjectStatuses } from "hooks/index.jsx";
 
-function StatTitleStatus({ titles, statuses }) {
+function StatTitleStatus({ titles }) {
+  const { data: statuses } = useGetObjectStatuses({
+    _fields: "code status",
+  });
   const status = statuses.reduce(
     (result, stt) => {
       result.status.push(stt.status);
@@ -44,7 +48,6 @@ function StatTitleStatus({ titles, statuses }) {
 
 StatTitleStatus.propTypes = {
   titles: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired,
-  statuses: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired,
 };
 
 export default memo(StatTitleStatus);
