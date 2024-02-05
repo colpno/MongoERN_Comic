@@ -1,7 +1,9 @@
 import { AiFillDollarCircle, AiFillNotification } from "react-icons/ai";
 import { BiCategoryAlt, BiSpreadsheet } from "react-icons/bi";
 import { BsFilePost } from "react-icons/bs";
-import { FaBell, FaEye, FaUsers } from "react-icons/fa";
+import { FaEye, FaUsers } from "react-icons/fa";
+import { IoIosChatbubbles } from "react-icons/io";
+import { IoChatboxEllipses } from "react-icons/io5";
 import { MdAdminPanelSettings, MdPayment } from "react-icons/md";
 
 export function getAdminSideBarMenu() {
@@ -41,13 +43,18 @@ export function getAdminSideBarMenu() {
         },
         {
           to: `/personal-notifications`,
-          Icon: FaBell,
+          Icon: IoChatboxEllipses,
           label: "Personal Notifications",
         },
         {
           to: `/payment-methods`,
           Icon: MdPayment,
           label: "Payment Methods",
+        },
+        {
+          to: `/comments`,
+          Icon: IoIosChatbubbles,
+          label: "Comments",
         },
       ],
     },

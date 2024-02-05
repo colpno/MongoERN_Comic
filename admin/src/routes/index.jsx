@@ -13,6 +13,7 @@ import {
   PaymentMethods,
   TradingStatistic,
   VisitStatistic,
+  Comment,
 } from "pages";
 
 export const adminRoutes = [
@@ -69,6 +70,11 @@ export const adminRoutes = [
   {
     path: "/payment-methods",
     component: PaymentMethods,
+    layout: AdminLayout,
+  },
+  {
+    path: "/comments",
+    component: Comment,
     layout: AdminLayout,
   },
   {
