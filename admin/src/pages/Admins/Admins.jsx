@@ -39,16 +39,20 @@ function Admins() {
           <h4>All Administrators</h4>
         </Col>
       </Row>
-      <FloatingContainer>
-        {admins.length > 0 && (
-          <AdminTable
-            admins={admins}
-            onDelete={handleDelete}
-            onAdd={handleAdd}
-            onUpdate={handleUpdate}
-          />
-        )}
-      </FloatingContainer>
+      <Row>
+        <Col>
+          <FloatingContainer>
+            {admins.length > 0 && (
+              <AdminTable
+                admins={admins}
+                onDelete={handleDelete}
+                onAdd={handleAdd}
+                onUpdate={handleUpdate}
+              />
+            )}
+          </FloatingContainer>
+        </Col>
+      </Row>
     </Container>
   );
 }

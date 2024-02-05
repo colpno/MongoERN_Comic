@@ -45,14 +45,18 @@ function PaymentMethods() {
           <h4 className={cx("label")}>All Payment Methods</h4>
         </Col>
       </Row>
-      <FloatingContainer>
-        <PaymentMethodsTable
-          paymentMethods={paymentMethods}
-          onDelete={handleDelete}
-          onUpdate={handleUpdate}
-          onAdd={handleAdd}
-        />
-      </FloatingContainer>
+      <Row>
+        <Col>
+          <FloatingContainer>
+            <PaymentMethodsTable
+              paymentMethods={paymentMethods}
+              onDelete={handleDelete}
+              onUpdate={handleUpdate}
+              onAdd={handleAdd}
+            />
+          </FloatingContainer>
+        </Col>
+      </Row>
     </Container>
   );
 }

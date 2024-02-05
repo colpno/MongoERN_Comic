@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Container, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 
 import { FloatingContainer } from "components";
 import { useGetUsers, useUpdateUser } from "hooks";
@@ -47,11 +47,17 @@ function Members() {
         />
       </Row>
       <Row>
-        <h4>All Members</h4>
+        <Col>
+          <h4>All Members</h4>
+        </Col>
       </Row>
-      <FloatingContainer>
-        <MemberTable members={members} onUpdate={handleUpdate} />
-      </FloatingContainer>
+      <Row>
+        <Col>
+          <FloatingContainer>
+            <MemberTable members={members} onUpdate={handleUpdate} />
+          </FloatingContainer>
+        </Col>
+      </Row>
     </Container>
   );
 }
