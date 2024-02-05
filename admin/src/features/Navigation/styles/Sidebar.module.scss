@@ -42,7 +42,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-right: 15px;
 }
 .logo_image {
   fill: #000;
@@ -66,9 +65,8 @@
 }
 .lock-icon,
 .close-icon {
-  padding: 10px;
   color: var(--primary);
-  font-size: 45px;
+  font-size: 28px;
   cursor: pointer;
   margin-left: -4px;
   transition: all 0.3s ease;

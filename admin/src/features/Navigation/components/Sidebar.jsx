@@ -1,8 +1,7 @@
 import { Logo } from "assets/images";
 import classNames from "classnames/bind";
 import { Button } from "components";
-// eslint-disable-next-line no-unused-vars
-import { useTheme } from "@mui/material";
+import { IconButton, useTheme } from "@mui/material";
 import { DarkModeToggle } from "features/index.jsx";
 import PropTypes from "prop-types";
 import { CiLock, CiUnlock } from "react-icons/ci";
@@ -13,9 +12,9 @@ import SidebarProfile from "./SidebarProfile";
 
 const cx = classNames.bind(styles);
 
-function LockButton({ isLocked, onClick }) {
-  if (isLocked) return <CiLock className={cx("lock-icon")} onClick={onClick} />;
-  return <CiUnlock className={cx("lock-icon")} onClick={onClick} />;
+function LockButton({ isLocked }) {
+  if (isLocked) return <CiLock className={cx("lock-icon")} />;
+  return <CiUnlock className={cx("lock-icon")} />;
 }
 
 function Sidebar({
@@ -47,8 +46,10 @@ function Sidebar({
             style={{ fill: theme.palette.mode === "light" ? "#000" : "#fff" }}
           />
         </Button>
-        <LockButton isLocked={isSidebarLocked} onClick={toggleLock} />
-        <IoClose className={cx("close-icon")} onClick={toggleSidebar} />
+        <IconButton onClick={toggleLock}>
+          <LockButton isLocked={isSidebarLocked} />
+          <IoClose className={cx("close-icon")} onClick={toggleSidebar} />
+        </IconButton>
       </div>
       <div className={cx("controls")}>
         <DarkModeToggle />
@@ -70,7 +71,6 @@ Sidebar.propTypes = {
 
 LockButton.propTypes = {
   isLocked: PropTypes.bool.isRequired,
-  onClick: PropTypes.func.isRequired,
 };
 
 export default Sidebar;
