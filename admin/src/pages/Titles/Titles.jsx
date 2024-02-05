@@ -51,11 +51,9 @@ function Titles() {
           </Row>
           <Row>
             <Col>
-              {titles.length > 0 && (
-                <FloatingContainer>
-                  <StatTitleReleaseDay titles={titles} />
-                </FloatingContainer>
-              )}
+              <FloatingContainer>
+                <StatTitleReleaseDay titles={titles} />
+              </FloatingContainer>
             </Col>
           </Row>
         </Col>
