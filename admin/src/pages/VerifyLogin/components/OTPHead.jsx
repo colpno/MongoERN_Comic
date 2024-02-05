@@ -19,7 +19,7 @@ function OTPHead({ expiredCountdown, email }) {
         </span>
         <p>
           Mã OTP sẽ hết hạn trong {}
-          <span className={cx("expire", "text-dark")}>{expiredCountdown}</span>
+          <span className={cx("expire")}>{expiredCountdown}</span>
         </p>
       </div>
     </div>

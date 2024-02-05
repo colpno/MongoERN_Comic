@@ -1,5 +1,8 @@
+@use "assets/styles/variables" as var;
+
 .title {
   margin-bottom: 20px;
+  color: var(--primary-font-color);
 
   display: flex;
   align-items: center;
@@ -26,6 +29,10 @@
   margin-bottom: 6px;
 
   p {
-    color: rgba(61, 61, 61, 0.8);
+    color: var(--primary-font-color);
   }
+}
+
+.expire {
+  font-weight: bold;
 }

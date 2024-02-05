@@ -1,9 +1,12 @@
 import { Logo } from "assets/images";
-import { IoClose } from "react-icons/io5";
 import classNames from "classnames/bind";
 import { Button } from "components";
+// eslint-disable-next-line no-unused-vars
+import { useTheme } from "@mui/material";
+import { DarkModeToggle } from "features/index.jsx";
 import PropTypes from "prop-types";
 import { CiLock, CiUnlock } from "react-icons/ci";
+import { IoClose } from "react-icons/io5";
 import styles from "../styles/Sidebar.module.scss";
 import SidebarMenu from "./SidebarMenu";
 import SidebarProfile from "./SidebarProfile";
@@ -23,6 +26,8 @@ function Sidebar({
   toggleLock,
   toggleSidebar,
 }) {
+  const theme = useTheme();
+
   return (
     <nav
       className={cx(
@@ -36,10 +41,17 @@ function Sidebar({
     >
       <div className={cx("logo_items", "flex")}>
         <Button wrapper to="/" className={cx("nav_image")}>
-          <Logo className={cx("logo_image")} title="Trang chủ" style={{ fill: "#000" }} />
+          <Logo
+            className={cx("logo_image")}
+            title="Trang chủ"
+            style={{ fill: theme.palette.mode === "light" ? "#000" : "#fff" }}
+          />
         </Button>
         <LockButton isLocked={isSidebarLocked} onClick={toggleLock} />
         <IoClose className={cx("close-icon")} onClick={toggleSidebar} />
+      </div>
+      <div className={cx("controls")}>
+        <DarkModeToggle />
       </div>
       <SidebarMenu />
       <SidebarProfile />

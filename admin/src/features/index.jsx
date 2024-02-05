@@ -9,3 +9,4 @@ export { default as PieChart } from "./Charts/PieChart";
 export { default as Popup } from "./Popup/Popup";
 export { default as Navigation } from "./Navigation/Navigation";
 export { default as Toast } from "./Toast";
+export { default as DarkModeToggle } from "./DarkModeToggle";

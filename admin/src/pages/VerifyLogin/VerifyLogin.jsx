@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { BsBoxArrowInRight } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 
-import { Button } from "components";
+import { Button, FloatingContainer } from "components";
 import { Popup } from "features";
 import { emitToast } from "features/Toast";
 import { usePopup, useSendOTP, useVerifyLogin } from "hooks";
@@ -313,33 +313,31 @@ function VerifyLogin() {
 
   return (
     <>
-      <div className={cx("container-content")}>
-        <div className={cx("otp-container")}>
-          <OTPHead cx={cx} expiredCountdown={expiredCountdown} email={loginInfo.email} />
-          <OTPInput
-            cx={cx}
-            handleChangeOTP={handleChangeOTP}
-            handleKeyPress={handleKeyPress}
-            firstDigitInputRef={firstDigitInputRef}
-            setCurrentDigit={setCurrentDigit}
-            OTPValue={OTPValue}
-          />
-          <Button primary className={cx("btn-verify")} onClick={handleSubmit}>
-            Xác thực <BsBoxArrowInRight className={cx("icon")} />
-          </Button>
-          <ReSend
-            cx={cx}
-            isDisabled={reSend.disable}
-            handleReSend={handleReSend}
-            countdown={reSend.countdown}
-          />
-          <Numpad
-            cx={cx}
-            handleNumpadClick={handleNumpadClick}
-            handleNumpadClearClick={handleNumpadClear}
-          />
-        </div>
-      </div>
+      <FloatingContainer className={cx("otp-container")}>
+        <OTPHead cx={cx} expiredCountdown={expiredCountdown} email={loginInfo.email} />
+        <OTPInput
+          cx={cx}
+          handleChangeOTP={handleChangeOTP}
+          handleKeyPress={handleKeyPress}
+          firstDigitInputRef={firstDigitInputRef}
+          setCurrentDigit={setCurrentDigit}
+          OTPValue={OTPValue}
+        />
+        <Button primary className={cx("btn-verify")} onClick={handleSubmit}>
+          Xác thực <BsBoxArrowInRight className={cx("icon")} />
+        </Button>
+        <ReSend
+          cx={cx}
+          isDisabled={reSend.disable}
+          handleReSend={handleReSend}
+          countdown={reSend.countdown}
+        />
+        <Numpad
+          cx={cx}
+          handleNumpadClick={handleNumpadClick}
+          handleNumpadClearClick={handleNumpadClear}
+        />
+      </FloatingContainer>
       <Popup data={popup} trigger={triggerPopup} />
     </>
   );

@@ -5,6 +5,7 @@ import { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import { FloatingContainer } from "components/index.jsx";
 import LoginForm from "./components/LoginForm";
 import styles from "./styles/Login.module.scss";
 
@@ -48,10 +49,10 @@ function Login() {
     <>
       {(!haveAccessed && !isLoggingIn) ||
         (!isLoggingIn && (
-          <div className={cx("login")}>
+          <FloatingContainer className={cx("login")}>
             <h2 className={cx("title")}>Đăng nhập</h2>
             <LoginForm handleSubmit={handleSubmit} />
-          </div>
+          </FloatingContainer>
         ))}
       <Popup data={popup} setShow={() => triggerPopup(false)} />
     </>

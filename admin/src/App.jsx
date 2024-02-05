@@ -1,12 +1,14 @@
+import CssBaseline from "@mui/material/CssBaseline";
+import { ThemeProvider } from "@mui/material/styles";
 import { Fragment, useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 
+import { createTheme } from "@mui/material";
 import { Loading, Popup, Toast } from "features";
 import { usePopup } from "hooks";
 import { AdminLayout } from "layouts";
 import { adminRoutes } from "routes";
-import { useTheme } from "@mui/material";
 
 const checkLoggedInCanAccessURL = (url) => {
   const array = ["login", "verify"];
@@ -21,7 +23,19 @@ function App() {
   const { isLoggingIn } = useSelector((state) => state.user);
   const url = useLocation().pathname;
   const haveAccessed = useMemo(() => checkLoggedInCanAccessURL(url), [url]);
-  const theme = useTheme();
+  const mode = useSelector((state) => state.common.theme);
+
+  const themeProvider = createTheme({
+    palette: {
+      mode,
+      primary: {
+        main: "#1cacdc",
+      },
+      secondary: {
+        main: "#f50000",
+      },
+    },
+  });
 
   useEffect(() => {
     if (haveAccessed && isLoggingIn) {
@@ -35,37 +49,40 @@ function App() {
   }, []);
 
   return (
-    <div data-theme={theme.palette.mode}>
-      <Routes>
-        {adminRoutes.map((route, index) => {
-          const { path, layout } = route;
-          const Component = route.component;
-          let Layout = AdminLayout;
+    <ThemeProvider theme={themeProvider}>
+      <CssBaseline />
+      <div data-theme={mode}>
+        <Routes>
+          {adminRoutes.map((route, index) => {
+            const { path, layout } = route;
+            const Component = route.component;
+            let Layout = AdminLayout;
 
-          if (layout) {
-            Layout = layout;
-          } else if (layout === null) {
-            Layout = Fragment;
-          }
+            if (layout) {
+              Layout = layout;
+            } else if (layout === null) {
+              Layout = Fragment;
+            }
 
-          return (
-            <Route
-              path={path}
-              key={index}
-              element={
-                <Layout>
-                  <Component />
-                </Layout>
-              }
-            />
-          );
-        })}
-        <Route path="*" element={<Navigate to="/not-found" />} />
-      </Routes>
-      <Popup data={popup} setShow={triggerPopup} />
-      <Toast />
-      <Loading />
-    </div>
+            return (
+              <Route
+                path={path}
+                key={index}
+                element={
+                  <Layout>
+                    <Component />
+                  </Layout>
+                }
+              />
+            );
+          })}
+          <Route path="*" element={<Navigate to="/not-found" />} />
+        </Routes>
+        <Popup data={popup} setShow={triggerPopup} />
+        <Toast />
+        <Loading />
+      </div>
+    </ThemeProvider>
   );
 }
 

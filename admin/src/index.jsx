@@ -1,5 +1,3 @@
-import CssBaseline from "@mui/material/CssBaseline";
-import { ThemeProvider } from "@mui/material/styles";
 import GlobalStyles from "assets/styles/GlobalStyles";
 import {
   ArcElement,
@@ -13,7 +11,6 @@ import {
   PointElement,
   Tooltip,
 } from "chart.js";
-import { theme } from "constants/theme.js";
 import store, { persistor } from "libs/redux/store";
 import React from "react";
 import ReactDOM from "react-dom/client";
@@ -43,10 +40,7 @@ root.render(
       <GlobalStyles>
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
-            <ThemeProvider theme={theme}>
-              <CssBaseline />
-              <App />
-            </ThemeProvider>
+            <App />
           </PersistGate>
         </Provider>
       </GlobalStyles>
