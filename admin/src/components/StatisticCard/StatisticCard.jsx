@@ -4,11 +4,11 @@ import { memo } from "react";
 
 import { FloatingContainer } from "components";
 import { DoughnutChart } from "features";
-import styles from "../styles/AdminCard.module.scss";
+import styles from "./StatisticCard.module.scss";
 
 const cx = classNames.bind(styles);
 
-function AdminCard({ rawData, chartProps }) {
+function StatisticCard({ rawData, chartProps }) {
   const { icon, label, amount, subLabel } = rawData;
 
   return (
@@ -28,7 +28,7 @@ function AdminCard({ rawData, chartProps }) {
   );
 }
 
-AdminCard.propTypes = {
+StatisticCard.propTypes = {
   rawData: PropTypes.shape({
     icon: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
@@ -38,4 +38,4 @@ AdminCard.propTypes = {
   chartProps: PropTypes.shape({}).isRequired,
 };
 
-export default memo(AdminCard);
+export default memo(StatisticCard);
