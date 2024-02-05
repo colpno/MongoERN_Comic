@@ -58,7 +58,7 @@ Popup.propTypes = {
     onConfirm: PropTypes.func,
     onCancel: PropTypes.func,
   }),
-  setShow: PropTypes.func.isRequired,
+  setShow: PropTypes.func,
 
   width: PropTypes.number,
   center: PropTypes.bool,
@@ -72,6 +72,7 @@ Popup.defaultProps = {
     onConfirm: () => {},
     onCancel: () => {},
   },
+  setShow: () => {},
   width: 400,
   center: false,
 };
