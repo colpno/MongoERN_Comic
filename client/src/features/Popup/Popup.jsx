@@ -33,7 +33,8 @@ function Popup(props) {
   const { data, trigger, variation, onConfirm, onCancel, sx, centerContent } = props;
   const { title, content } = data;
 
-  if (!data.isTriggered) return;
+  // eslint-disable-next-line react/jsx-no-useless-fragment
+  if (!data.isTriggered) return <></>;
 
   const handleConfirm = () => {
     if (data.onConfirm) {
@@ -59,7 +60,6 @@ function Popup(props) {
     trigger(false);
   };
 
-  // eslint-disable-next-line consistent-return
   return (
     <Dialog handleClickOutside={handleClickOutside}>
       <div className={cx("popup")} style={sx}>
