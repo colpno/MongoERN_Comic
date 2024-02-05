@@ -24,12 +24,12 @@
   left: 0;
   height: 100%;
   width: 270px;
-  background: #fff;
+  background-color: var(--island-background-color);
   padding: 15px 10px 20px;
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
   transition: all 0.4s ease;
   z-index: 100;
-  box-shadow: 0.5rem 0rem 1rem rgb(132 139 200 / 0.14);
+  box-shadow: var(--island-box-shadow);
+  border: var(--border);
 }
 .sidebar.close {
   width: calc(55px + 20px);
@@ -82,7 +82,7 @@
   font-size: 32px;
   width: 55;
   margin-right: 15px;
-  color: var.$secondary;
+  color: var.$primary;
 }
 .sidebar.close {
   .lock-icon,

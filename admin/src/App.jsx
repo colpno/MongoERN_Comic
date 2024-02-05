@@ -6,6 +6,7 @@ import { Loading, Popup, Toast } from "features";
 import { usePopup } from "hooks";
 import { AdminLayout } from "layouts";
 import { adminRoutes } from "routes";
+import { useTheme } from "@mui/material";
 
 const checkLoggedInCanAccessURL = (url) => {
   const array = ["login", "verify"];
@@ -20,6 +21,7 @@ function App() {
   const { isLoggingIn } = useSelector((state) => state.user);
   const url = useLocation().pathname;
   const haveAccessed = useMemo(() => checkLoggedInCanAccessURL(url), [url]);
+  const theme = useTheme();
 
   useEffect(() => {
     if (haveAccessed && isLoggingIn) {
@@ -33,7 +35,7 @@ function App() {
   }, []);
 
   return (
-    <>
+    <div data-theme={theme.palette.mode}>
       <Routes>
         {adminRoutes.map((route, index) => {
           const { path, layout } = route;
@@ -63,7 +65,7 @@ function App() {
       <Popup data={popup} setShow={triggerPopup} />
       <Toast />
       <Loading />
-    </>
+    </div>
   );
 }
 

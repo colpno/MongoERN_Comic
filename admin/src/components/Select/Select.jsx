@@ -1,6 +1,109 @@
+import { useTheme } from "@mui/material";
 import PropTypes from "prop-types";
 import { memo } from "react";
 import ReactSelect from "react-select";
+
+const getSelectTheme = (theme) => {
+  return {
+    /*
+     * multiValue(remove)/color:hover
+     */
+    danger: "purple",
+
+    /*
+     * multiValue(remove)/backgroundColor(focused)
+     * multiValue(remove)/backgroundColor:hover
+     */
+    dangerLight: theme.palette.grey[200],
+
+    /*
+     * control/backgroundColor
+     * menu/backgroundColor
+     * option/color(selected)
+     */
+    neutral0: theme.palette.background.default,
+
+    /*
+     * control/backgroundColor(disabled)
+     */
+    neutral5: "orange",
+
+    /*
+     * control/borderColor(disabled)
+     * multiValue/backgroundColor
+     * indicators(separator)/backgroundColor(disabled)
+     */
+    neutral10: "pink",
+
+    /*
+     * control/borderColor
+     * option/color(disabled)
+     * indicators/color
+     * indicators(separator)/backgroundColor
+     * indicators(loading)/color
+     */
+    neutral20: theme.palette.grey.A200,
+
+    /*
+     * control/borderColor(focused)
+     * control/borderColor:hover
+     */
+    // this should be the white, that's normally selected
+    neutral30: theme.palette.text.primary,
+
+    /*
+     * menu(notice)/color
+     * singleValue/color(disabled)
+     * indicators/color:hover
+     */
+    neutral40: theme.palette.primary.main,
+
+    /*
+     * placeholder/color
+     */
+    // seen in placeholder text
+    neutral50: theme.palette.grey.A200,
+
+    /*
+     * indicators/color(focused)
+     * indicators(loading)/color(focused)
+     */
+    neutral60: theme.palette.primary.main,
+    neutral70: theme.palette.primary.main,
+
+    /*
+     * input/color
+     * multiValue(label)/color
+     * singleValue/color
+     * indicators/color(focused)
+     * indicators/color:hover(focused)
+     */
+    neutral80: theme.palette.text.primary,
+
+    // no idea
+    neutral90: "pink",
+
+    /*
+     * control/boxShadow(focused)
+     * control/borderColor(focused)
+     * control/borderColor:hover(focused)
+     * option/backgroundColor(selected)
+     * option/backgroundColor:active(selected)
+     */
+    primary: theme.palette.text.primary,
+
+    /*
+     * option/backgroundColor(focused)
+     */
+    primary25: theme.palette.background.paper,
+
+    /*
+     * option/backgroundColor:active
+     */
+    primary50: theme.palette.background.paper,
+    primary75: theme.palette.background.paper,
+  };
+};
 
 const customStyles = (height) => {
   return {
@@ -56,6 +159,8 @@ function Select({
   className,
 }) {
   const styles = customStyles(height);
+  const MUITheme = useTheme();
+  const getTheme = getSelectTheme(MUITheme);
 
   const handleChange = (option) => {
     // name prop only for formik
@@ -70,6 +175,12 @@ function Select({
 
   return (
     <ReactSelect
+      theme={(theme) => ({
+        ...theme,
+        colors: {
+          ...getTheme,
+        },
+      })}
       value={value}
       onChange={handleChange}
       options={options}

@@ -2,6 +2,7 @@ const { createSlice } = require("@reduxjs/toolkit");
 
 const initialState = {
   isLoading: false,
+  theme: "light",
 };
 
 const commonSlice = createSlice({
@@ -11,11 +12,14 @@ const commonSlice = createSlice({
     setLoading: (state, action) => {
       state.isLoading = action.payload;
     },
+    toggleChangeTheme: (state) => {
+      state.theme = state.theme === "light" ? "dark" : "light";
+    },
   },
 });
 
 const { actions, reducer: commonReducer } = commonSlice;
 
-export const { setLoading } = actions;
+export const { setLoading, toggleChangeTheme } = actions;
 
 export default commonReducer;

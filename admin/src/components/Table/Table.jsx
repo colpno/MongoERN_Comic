@@ -6,24 +6,19 @@
   client/node_modules/@mui/x-license-pro/utils/licenseErrorMessageUtils.js
   Table.scss
  */
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { DataGridPro, GridCellEditStopReasons, GridRowModes, viVN } from "@mui/x-data-grid-pro";
-import PropTypes from "prop-types";
-import { memo, useCallback, useEffect, useState } from "react";
-
+import { useTheme } from "@mui/material";
+import { ThemeProvider } from "@mui/material/styles";
+import { DataGridPro, GridCellEditStopReasons, GridRowModes } from "@mui/x-data-grid-pro";
 import { Popup } from "features";
 import { usePopup } from "hooks";
+import PropTypes from "prop-types";
+import { memo, useCallback, useEffect, useState } from "react";
 import { TableActions, TableFooter, TableToolBar } from "./components";
 import "./styles/Table.module.scss";
 
 function isKeyboardEvent(event) {
   return !!event.key;
 }
-
-const theme = createTheme(
-  {},
-  viVN // x-data-grid translations
-);
 
 function Table({
   headers,
@@ -58,6 +53,7 @@ function Table({
   const [rowsPerPage, setRowsPerPage] = useState(rowsPerPageOptions[2]);
   const { popup, setPopup, triggerPopup } = usePopup();
   const [rowIdError, setRowIdError] = useState("");
+  const theme = useTheme();
 
   const dataGridProps = {
     components: {

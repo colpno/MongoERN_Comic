@@ -283,10 +283,10 @@ $cyan-900: shade-color($cyan, 80%);
 //   "cyan-900": $cyan-900,
 // );
 
-$primary: hsl(0, 100%, 48%);
-$primary-dark: rgb(204, 0, 0);
-$primary-admin: #fa5973;
-$secondary: #1cacdc;
+$primary: #1cacdc;
+$secondary: hsl(0, 100%, 48%);
+$secondary-dark: rgb(204, 0, 0);
+$secondary-admin: #fa5973;
 $success: $green;
 $info: $cyan;
 $warning: $yellow;
@@ -328,3 +328,24 @@ $floating-container-margin-top: 0.6rem;
 
 $field-height: 45px;
 $field-padding: 5px 10px;
+
+:root {
+  --primary: #{$primary};
+  --secondary: #{$secondary};
+  --background-color: #{$bgc-admin};
+  --primary-font-color: #{$txt-black};
+  --border: unset;
+  --island-background-color: unset;
+  --island-box-shadow: 0 2rem 3rem rgb(132 139 200 / 0.18);
+}
+
+[data-theme="dark"] {
+  --background-color: #121212;
+  --island-background-color: #202020;
+  --island-box-shadow: 0 1.5rem 2rem rgba(95, 96, 99, 0.22);
+  --border: 1px solid #282828;
+  --primary-font-color: #{$txt-white};
+
+  background-color: var(--background-color);
+  color: var(--primary-font-color);
+}

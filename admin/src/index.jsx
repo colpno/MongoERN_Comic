@@ -1,8 +1,6 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
-import { BrowserRouter } from "react-router-dom";
+import CssBaseline from "@mui/material/CssBaseline";
+import { ThemeProvider } from "@mui/material/styles";
+import GlobalStyles from "assets/styles/GlobalStyles";
 import {
   ArcElement,
   BarElement,
@@ -15,9 +13,13 @@ import {
   PointElement,
   Tooltip,
 } from "chart.js";
-
-import GlobalStyles from "assets/styles/GlobalStyles";
+import { theme } from "constants/theme.js";
 import store, { persistor } from "libs/redux/store";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
+import { PersistGate } from "redux-persist/integration/react";
 import App from "./App";
 
 Chart.register(
@@ -41,7 +43,10 @@ root.render(
       <GlobalStyles>
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
-            <App />
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
+              <App />
+            </ThemeProvider>
           </PersistGate>
         </Provider>
       </GlobalStyles>
