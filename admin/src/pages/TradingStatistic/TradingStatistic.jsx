@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { Col, Container, Row } from "react-bootstrap";
 import IncomeStat from "./components/IncomeStat";
 import PersonalIncomeStat from "./components/PersonalIncomeStat";
