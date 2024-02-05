@@ -3,7 +3,9 @@
 }
 
 .label-wrapper {
+  display: inline-flex;
   align-items: flex-end;
+  gap: 1rem;
 
   :global(.css-b62m3t-container) {
     width: fit-content;
