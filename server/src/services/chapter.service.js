@@ -39,7 +39,7 @@ const chapterService = {
         params._fields,
         '-__v -_guid -cover.cloud_public_id -content.cloud_public_id'
       );
-      const { _page, _limit, _sort, _fields, _order, _embed, ...others } = params;
+      const { _page, _limit, _sort, _fields, _embed, ...others } = params;
 
       if (_limit || _sort) {
         const response = await paginateSort(params, Chapter);
