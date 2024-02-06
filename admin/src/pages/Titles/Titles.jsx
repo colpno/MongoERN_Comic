@@ -36,21 +36,17 @@ function Titles() {
         </Col>
         <Col xs={12} lg={4}>
           <Row>
-            <Col>
+            <Col xs={6} lg={12}>
               <FloatingContainer>
                 <StatTitleApproval titles={titles} approvedStatuses={approvedStatuses} />
               </FloatingContainer>
             </Col>
-          </Row>
-          <Row>
-            <Col>
+            <Col xs={6} lg={12}>
               <FloatingContainer>
                 <StatTitleStatus titles={titles} />
               </FloatingContainer>
             </Col>
-          </Row>
-          <Row>
-            <Col>
+            <Col xs={12}>
               <FloatingContainer>
                 <StatTitleReleaseDay titles={titles} />
               </FloatingContainer>
