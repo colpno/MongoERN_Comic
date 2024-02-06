@@ -60,20 +60,6 @@
 
   position: relative;
 
-  &::before {
-    $size: 1.8rem;
-
-    height: $size;
-    background: linear-gradient(180deg, transparent, rgb(255 255 255 / 0.65) 60%);
-    border-bottom: 1px solid variables.$grey-400;
-
-    content: "";
-    position: absolute;
-    top: -$size;
-    left: 0;
-    right: 0;
-  }
-
   button {
     padding: 10px 60px;
     border: none;

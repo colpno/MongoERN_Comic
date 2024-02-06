@@ -24,22 +24,22 @@
 
 // Color
 .primary {
-  border: 1px solid var.$secondary-dark;
-  background-color: var.$secondary;
+  border: 1px solid var.$primary-dark;
+  background-color: var.$primary;
   color: var.$white;
-  box-shadow: 1px 2px var.$secondary-dark;
+  box-shadow: 1px 2px var.$primary-dark;
 
   &:hover {
-    background-color: var.$secondary;
+    background-color: var.$primary;
     color: var.$white;
   }
 }
 
 .secondary {
-  border: 1px solid #008cbb;
-  background-color: var.$primary;
+  background-color: var.$secondary;
+  border: var.$secondary-dark;
+  box-shadow: var.$secondary-dark;
   color: var.$white;
-  box-shadow: 1px 2px #008cbb;
 }
 
 .grey {
@@ -48,11 +48,11 @@
 }
 
 .outline {
-  border-color: var.$secondary-dark;
-  color: var.$secondary-dark;
+  border-color: var.$primary-dark;
+  color: var.$primary-dark;
 
   &:hover {
-    color: var.$secondary-dark;
+    color: var.$primary-dark;
   }
 }
 

@@ -284,6 +284,7 @@ $cyan-900: shade-color($cyan, 80%);
 // );
 
 $primary: #1cacdc;
+$primary-dark: #1792bc;
 $secondary: hsl(0, 100%, 48%);
 $secondary-dark: rgb(204, 0, 0);
 $secondary-admin: #fa5973;
@@ -342,10 +343,10 @@ $field-padding: 5px 10px;
 
 [data-theme="dark"] {
   --background-color: #121212;
-  --island-background-color: #202020;
-  --island-box-shadow: 0 1.5rem 2rem rgba(95, 96, 99, 0.22);
-  --border: 1px solid #282828;
+  --island-background-color: #212121;
+  --island-box-shadow: 0 2rem 3rem rgba(0, 0, 0, 0.42);
   --primary-font-color: #{$txt-white};
+  --border: #292929;
 
   background-color: var(--background-color);
   color: var(--primary-font-color);

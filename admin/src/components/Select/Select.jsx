@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useTheme } from "@mui/material";
 import PropTypes from "prop-types";
 import { memo } from "react";
@@ -10,6 +9,7 @@ const customStyles = (theme, height) => {
       ...base,
       minHeight: `${height}px`,
       height: `${height}px`,
+      backgroundColor: "var(--island-background-color)",
     }),
     singleValue: (base) => ({
       ...base,
@@ -23,8 +23,7 @@ const customStyles = (theme, height) => {
       ...base,
       height: `${height - 2}px`,
       padding: "0 6px",
-      backgroundColor: theme.palette.background.default,
-      border: "none",
+      backgroundColor: "var(--island-background-color)",
     }),
     input: (base) => ({
       ...base,
@@ -36,16 +35,16 @@ const customStyles = (theme, height) => {
     indicatorsContainer: (base) => ({
       ...base,
       height: `${height - 2}px`,
-      backgroundColor: theme.palette.background.default,
+      backgroundColor: "var(--island-background-color)",
     }),
     menu: (base) => ({
       ...base,
       width: "max-content",
       minWidth: "100%",
       zIndex: "5",
-      backgroundColor: theme.palette.background.default,
+      backgroundColor: "var(--island-background-color)",
     }),
-    option: (base, { data, isDisabled, isFocused, isSelected }) => {
+    option: (base, { isFocused, isSelected }) => {
       let backgroundColor = isFocused
         ? theme.palette.grey["800"]
         : theme.palette.background.default;
@@ -97,9 +96,7 @@ function Select({
       value={value}
       onChange={handleChange}
       options={options}
-      styles={{
-        ...styles,
-      }}
+      styles={styles}
       onBlur={onBlur}
       className={className}
       isMulti={multiple}

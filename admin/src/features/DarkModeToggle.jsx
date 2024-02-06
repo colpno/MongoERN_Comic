@@ -1,21 +1,23 @@
-import IconButton from "@mui/material/IconButton";
-import { toggleChangeTheme } from "libs/redux/slices/common.slice.js";
+import PropTypes from "prop-types";
 import { MdBrightness4, MdBrightness7 } from "react-icons/md";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
-function DarkModeToggle() {
-  const dispatch = useDispatch();
+function DarkModeToggle({ className }) {
   const theme = useSelector((state) => state.common.theme);
 
-  const toggleDarkMode = () => {
-    dispatch(toggleChangeTheme());
-  };
-
-  return (
-    <IconButton sx={{ ml: 1 }} onClick={toggleDarkMode} color="inherit">
-      {theme === "dark" ? <MdBrightness4 /> : <MdBrightness7 />}
-    </IconButton>
+  return theme === "dark" ? (
+    <MdBrightness4 className={className} />
+  ) : (
+    <MdBrightness7 className={className} />
   );
 }
+
+DarkModeToggle.propTypes = {
+  className: PropTypes.string,
+};
+
+DarkModeToggle.defaultProps = {
+  className: "",
+};
 
 export default DarkModeToggle;

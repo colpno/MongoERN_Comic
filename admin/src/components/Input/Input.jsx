@@ -1,6 +1,6 @@
+import classNames from "classnames/bind";
 import PropTypes from "prop-types";
 import { FormControl } from "react-bootstrap";
-import classNames from "classnames/bind";
 import Feedback from "react-bootstrap/esm/Feedback";
 
 import styles from "./Input.module.scss";
@@ -31,7 +31,20 @@ function Input({
     <div className={cx("wrapper")}>
       <FormControl
         className={cx("input", className)}
-        style={letterCount ? { paddingRight: "100px", width, height } : { width, height }}
+        style={
+          letterCount
+            ? {
+                paddingRight: "100px",
+                width,
+                height,
+                backgroundColor: "var(--island-background-color)",
+              }
+            : {
+                width,
+                height,
+                backgroundColor: "var(--island-background-color)",
+              }
+        }
         type={type}
         placeholder={placeholder}
         maxLength={maxLength}

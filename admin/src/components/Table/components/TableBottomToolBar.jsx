@@ -72,13 +72,13 @@ function TableBottomToolBar({
   return (
     <>
       {enableMultiDelete && (
-        <Button small primary className={cx("delete-button")} onClick={handleDelete}>
+        <Button small secondary className={cx("delete-button")} onClick={handleDelete}>
           <MdDelete className={cx("icon")} />
           <span>XÓA</span>
         </Button>
       )}
       {enableAddNewRow && (
-        <Button small secondary className={cx("add-button")} onClick={handleAdd}>
+        <Button small primary className={cx("add-button")} onClick={handleAdd}>
           <MdAdd className={cx("icon")} />
           <span>THÊM</span>
         </Button>

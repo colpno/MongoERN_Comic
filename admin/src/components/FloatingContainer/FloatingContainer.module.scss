@@ -3,7 +3,7 @@
 .floating-container {
   background-color: var(--island-background-color);
   box-shadow: var(--island-box-shadow);
-  border: var(--border);
+  border: 1px solid var(--border);
   padding: 1.8rem;
   border-radius: 2rem;
   margin-top: var.$floating-container-margin-top;

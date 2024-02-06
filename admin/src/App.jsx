@@ -4,11 +4,11 @@ import { Fragment, useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 
-import { createTheme } from "@mui/material";
 import { Loading, Popup, Toast } from "features";
 import { usePopup } from "hooks";
 import { AdminLayout } from "layouts";
 import { adminRoutes } from "routes";
+import { getTheme } from "utils/theme.js";
 
 const checkLoggedInCanAccessURL = (url) => {
   const array = ["login", "verify"];
@@ -25,18 +25,6 @@ function App() {
   const haveAccessed = useMemo(() => checkLoggedInCanAccessURL(url), [url]);
   const mode = useSelector((state) => state.common.theme);
 
-  const themeProvider = createTheme({
-    palette: {
-      mode,
-      primary: {
-        main: "#1cacdc",
-      },
-      secondary: {
-        main: "#f50000",
-      },
-    },
-  });
-
   useEffect(() => {
     if (haveAccessed && isLoggingIn) {
       setPopup({
@@ -49,7 +37,7 @@ function App() {
   }, []);
 
   return (
-    <ThemeProvider theme={themeProvider}>
+    <ThemeProvider theme={getTheme(mode)}>
       <CssBaseline />
       <div data-theme={mode}>
         <Routes>

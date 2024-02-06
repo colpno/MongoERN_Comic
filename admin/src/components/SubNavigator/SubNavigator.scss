@@ -6,7 +6,7 @@
 @import "swiper/css/autoplay";
 
 .sub-navbar {
-  border-bottom: 1px solid var.$border-grey;
+  border-bottom: 1px solid var(--border);
   padding: 0.6rem 0;
   background-color: var(--island-background-color);
 

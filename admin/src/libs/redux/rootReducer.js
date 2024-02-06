@@ -2,7 +2,7 @@ import { combineReducers } from "@reduxjs/toolkit";
 import { persistReducer } from "redux-persist";
 
 import comicApi from "api/comicApi";
-import { authPersistConfig } from "libs/redux-persist";
+import { authPersistConfig, commonPersistConfig } from "libs/redux-persist";
 import {
   commonReducer,
   globalReducer,
@@ -21,7 +21,7 @@ const rootReducer = combineReducers({
   selectField: selectFieldReducer,
   title: titleReducer,
   user: persistReducer(authPersistConfig, userReducer),
-  common: commonReducer,
+  common: persistReducer(commonPersistConfig, commonReducer),
 });
 
 export default rootReducer;
