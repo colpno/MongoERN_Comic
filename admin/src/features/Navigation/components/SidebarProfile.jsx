@@ -22,7 +22,7 @@ function SidebarProfile() {
           {user.username}
         </Button>
       </div>
-      <IconButton onClick={() => logout()} className={cx("logout_btn")}>
+      <IconButton onClick={() => logout()} className={cx("logout_btn")} title="Logout">
         <IoIosLogOut className={cx("logout-icon")} />
       </IconButton>
     </div>

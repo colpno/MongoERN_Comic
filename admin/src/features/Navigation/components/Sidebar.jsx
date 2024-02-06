@@ -45,7 +45,7 @@ function Sidebar({
             style={{ fill: theme.palette.mode === "light" ? "#000" : "#fff" }}
           />
         </Button>
-        <IconButton onClick={toggleLock}>
+        <IconButton onClick={toggleLock} title={`${isSidebarLocked ? "Unlock" : "Locl"} sidebar`}>
           <LockButton isLocked={isSidebarLocked} />
         </IconButton>
         <IconButton onClick={toggleSidebar} className={cx("close-icon-btn")}>
