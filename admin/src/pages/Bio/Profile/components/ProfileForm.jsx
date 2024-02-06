@@ -29,7 +29,7 @@ function ProfileForm({ initialValues, handleSubmit, handleOpenChooseAvatar }) {
                 height={150}
                 className={cx("avatar")}
               />
-              <Button grey dark80 small onClick={handleOpenChooseAvatar}>
+              <Button grey small onClick={handleOpenChooseAvatar}>
                 Đổi ảnh đại diện
               </Button>
             </div>
