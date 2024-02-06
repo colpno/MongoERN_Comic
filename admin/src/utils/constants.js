@@ -1,3 +1,14 @@
+import DarkModeToggle from "features/DarkModeToggle.jsx";
+import { toggleChangeTheme } from "libs/redux/slices/common.slice.js";
+import { AiFillDollarCircle, AiFillNotification } from "react-icons/ai";
+import { BiCategoryAlt, BiSpreadsheet } from "react-icons/bi";
+import { BsFilePost } from "react-icons/bs";
+import { FaEye, FaUsers } from "react-icons/fa";
+import { ImProfile } from "react-icons/im";
+import { IoIosChatbubbles } from "react-icons/io";
+import { IoChatboxEllipses } from "react-icons/io5";
+import { MdAdminPanelSettings, MdPayment } from "react-icons/md";
+import { useDispatch } from "react-redux";
 import {
   cat1,
   cat10,
@@ -40,18 +51,13 @@ import {
   robotHead8,
   robotHead9,
 } from "assets/images";
-import { AiFillDollarCircle, AiFillNotification } from "react-icons/ai";
-import { BiCategoryAlt, BiSpreadsheet } from "react-icons/bi";
-import { BsFilePost } from "react-icons/bs";
-import { FaEye, FaUsers } from "react-icons/fa";
-import { IoIosChatbubbles } from "react-icons/io";
-import { IoChatboxEllipses } from "react-icons/io5";
-import { MdAdminPanelSettings, MdPayment } from "react-icons/md";
 
 export function getAdminSideBarMenu() {
+  const dispatch = useDispatch();
+
   return [
     {
-      groupLabel: "Management",
+      groupLabel: "Managements",
       subMenu: [
         {
           to: `/titles`,
@@ -101,7 +107,7 @@ export function getAdminSideBarMenu() {
       ],
     },
     {
-      groupLabel: "Statistic",
+      groupLabel: "Statistics",
       subMenu: [
         {
           to: `/income`,
@@ -112,6 +118,21 @@ export function getAdminSideBarMenu() {
           to: `/visit`,
           Icon: FaEye,
           label: "Visit",
+        },
+      ],
+    },
+    {
+      groupLabel: "Settings",
+      subMenu: [
+        {
+          Icon: DarkModeToggle,
+          label: "Dark Theme",
+          onClick: () => dispatch(toggleChangeTheme()),
+        },
+        {
+          to: `/profile`,
+          Icon: ImProfile,
+          label: "Profile",
         },
       ],
     },
