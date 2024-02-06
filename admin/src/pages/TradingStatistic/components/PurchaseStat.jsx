@@ -62,7 +62,7 @@ function PurchaseStat() {
               field: "title_id",
               headerName: "Truyện",
               width: 300,
-              headerAlign: "left",
+              headerAlign: "center",
               align: "left",
               renderCell: ({ value }) => <span title={value.title}>{value.title}</span>,
             },
@@ -70,7 +70,7 @@ function PurchaseStat() {
               field: "chapter_id",
               headerName: "Chương",
               width: 200,
-              headerAlign: "left",
+              headerAlign: "center",
               align: "left",
               renderCell: ({ value }) => (
                 <span title={`Chương ${value.order}${value.title ? `: ${value.title}` : ""}`}>

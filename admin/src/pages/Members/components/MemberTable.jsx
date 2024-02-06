@@ -25,6 +25,7 @@ function MemberTable({ members, onUpdate }) {
         {
           field: "username",
           headerName: "Tên",
+          headerAlign: "center",
           flex: 1,
           minWidth: 200,
           maxWidth: 250,
