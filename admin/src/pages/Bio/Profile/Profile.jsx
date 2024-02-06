@@ -14,7 +14,7 @@ function Profile() {
     avatar: user.avatar,
     username: user.username,
     email: user.email,
-    paypalEmail: user.paypal_email,
+    paypalEmail: user?.paypal_email ?? "",
     dateOfBirth: user?.dateOfBirth ? moment(user.dateOfBirth, "DD/MM/YYYY").toString() : "",
   });
   const [isAvatarBoxOpened, setIsAvatarBoxOpened] = useState(false);
