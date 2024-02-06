@@ -1,19 +1,21 @@
-import { AdminLayout, LoginLayout } from "layouts";
+import { AdminLayout, BioLayout, LoginLayout } from "layouts";
 import {
   Admins,
+  ChangePassword,
   Chapters,
+  Comment,
   Genres,
   Login,
   LoginOTP,
   Members,
   NotFound,
-  Titles,
   Notifications,
-  PersonalNotifications,
   PaymentMethods,
+  PersonalNotifications,
+  Profile,
+  Titles,
   TradingStatistic,
   VisitStatistic,
-  Comment,
 } from "pages";
 
 export const adminRoutes = [
@@ -87,6 +89,8 @@ export const adminRoutes = [
     component: VisitStatistic,
     layout: AdminLayout,
   },
+  { path: "/profile", component: Profile, layout: BioLayout },
+  { path: "/profile/password", component: ChangePassword, layout: BioLayout },
   {
     path: "/not-found",
     component: NotFound,

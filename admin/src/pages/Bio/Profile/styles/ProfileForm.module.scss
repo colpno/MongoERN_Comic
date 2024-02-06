@@ -1,0 +1,26 @@
+@use "assets/styles/variables" as var;
+
+.form {
+  &__group {
+    margin-bottom: 20px;
+  }
+
+  &__submit {
+    margin-top: 30px;
+    width: 100%;
+  }
+}
+
+.avatar-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.avatar {
+  margin-bottom: 1.2rem;
+  border: 1px solid var.$grey-300;
+  border-radius: 100vw;
+  padding: 1.4rem;
+}

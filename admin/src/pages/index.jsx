@@ -12,3 +12,5 @@ export { default as VisitStatistic } from "./VisitStatistic/VisitStatistic";
 export { default as Notifications } from "./Notifications/Notifications";
 export { default as PersonalNotifications } from "./PersonalNotifications/PersonalNotifications";
 export { default as Comment } from "./Comment/Comment";
+export { default as Profile } from "./Bio/Profile/Profile";
+export { default as ChangePassword } from "./Bio/ChangePassword/ChangePassword";

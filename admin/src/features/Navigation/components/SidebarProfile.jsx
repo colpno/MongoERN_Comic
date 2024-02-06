@@ -13,11 +13,13 @@ function SidebarProfile() {
 
   return (
     <div className={cx("sidebar_profile", "flex")}>
-      <span className={cx("nav_image")}>
+      <Button wrapper to="/profile" className={cx("nav_image")}>
         <img src={user.avatar} alt="logo_img" />
-      </span>
+      </Button>
       <div className={cx("data_text")}>
-        <span className={cx("name")}>{user.username}</span>
+        <Button text to="/profile" className={cx("name")}>
+          {user.username}
+        </Button>
       </div>
       <Button wrapper onClick={() => logout()} className={cx("logout_btn")}>
         <IoIosLogOut className={cx("logout-icon")} />

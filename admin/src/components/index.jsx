@@ -7,3 +7,5 @@ export { default as Scrollbar } from "./Scrollbar/Scrollbar";
 export { default as Select } from "./Select/Select";
 export { default as Table } from "./Table/Table";
 export { default as StatisticCard } from "./StatisticCard/StatisticCard";
+export { default as FloatingForm } from "./FloatingForm/FloatingForm";
+export { default as SubNavigator } from "./SubNavigator/SubNavigator";

@@ -321,7 +321,7 @@ $border-grey-dark: #d9d9d9;
 $txt-white: #fff;
 $txt-black: #020202;
 
-$header-height: 72px;
+$header-height: 0px;
 $footer-height: 420px;
 
 $floating-container-margin-top: 0.6rem;
@@ -337,6 +337,7 @@ $field-padding: 5px 10px;
   --border: unset;
   --island-background-color: #fff;
   --island-box-shadow: 0 2rem 3rem rgb(132 139 200 / 0.18);
+  --mobile-header-height: 50px;
 }
 
 [data-theme="dark"] {

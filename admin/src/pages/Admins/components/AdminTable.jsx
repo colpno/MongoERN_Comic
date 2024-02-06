@@ -35,7 +35,6 @@ function AdminTable({ admins, onDelete, onAdd, onUpdate }) {
           headerAlign: "center",
           flex: 1,
           minWidth: 200,
-          editable: true,
           renderCell: ({ row }) => {
             const { username, avatar } = row;
             return (
@@ -52,7 +51,6 @@ function AdminTable({ admins, onDelete, onAdd, onUpdate }) {
           headerAlign: "center",
           align: "center",
           width: 140,
-          editable: true,
           renderCell: () => {
             return "**************";
           },
@@ -63,7 +61,6 @@ function AdminTable({ admins, onDelete, onAdd, onUpdate }) {
           headerAlign: "center",
           align: "center",
           width: 250,
-          editable: true,
           renderCell: ({ value }) => {
             const [username, domain] = value.split("@");
             const maskedUsername = `${username.substring(0, 2)}******${username.slice(-2)}`;
@@ -103,7 +100,6 @@ function AdminTable({ admins, onDelete, onAdd, onUpdate }) {
           headerAlign: "center",
           align: "center",
           width: 160,
-          editable: true,
         },
         {
           field: "createdAt",
