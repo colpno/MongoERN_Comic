@@ -7,9 +7,8 @@ const cx = classNames.bind(styles);
 
 function Dialog({ children, handleClickOutside }) {
   return (
-    <div className={cx("dialog")}>
-      {children}
-      <div className={cx("background")} onClick={handleClickOutside} />
+    <div className={cx("background")} onClick={handleClickOutside}>
+      <div className={cx("dialog")}>{children}</div>
     </div>
   );
 }
