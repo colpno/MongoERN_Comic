@@ -1,14 +1,15 @@
 import PropTypes from "prop-types";
-import { MdBrightness4, MdBrightness7 } from "react-icons/md";
+import { BsFillBrightnessHighFill } from "react-icons/bs";
+import { MdBrightness3 } from "react-icons/md";
 import { useSelector } from "react-redux";
 
 function DarkModeToggle({ className }) {
   const theme = useSelector((state) => state.common.theme);
 
   return theme === "dark" ? (
-    <MdBrightness4 className={className} />
+    <MdBrightness3 className={className} />
   ) : (
-    <MdBrightness7 className={className} />
+    <BsFillBrightnessHighFill className={className} />
   );
 }
 
