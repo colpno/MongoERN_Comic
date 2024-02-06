@@ -1,4 +1,4 @@
-const { useState } = require("react");
+import { useState } from "react";
 
 const usePopup = (initialState) => {
   const [data, setData] = useState({
