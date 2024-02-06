@@ -2,7 +2,6 @@ import { Logo } from "assets/images";
 import classNames from "classnames/bind";
 import { Button } from "components";
 import { IconButton, useTheme } from "@mui/material";
-import { DarkModeToggle } from "features/index.jsx";
 import PropTypes from "prop-types";
 import { CiLock, CiUnlock } from "react-icons/ci";
 import { IoClose } from "react-icons/io5";
@@ -48,11 +47,10 @@ function Sidebar({
         </Button>
         <IconButton onClick={toggleLock}>
           <LockButton isLocked={isSidebarLocked} />
-          <IoClose className={cx("close-icon")} onClick={toggleSidebar} />
         </IconButton>
-      </div>
-      <div className={cx("controls")}>
-        <DarkModeToggle />
+        <IconButton onClick={toggleSidebar} className={cx("close-icon-btn")}>
+          <IoClose className={cx("close-icon")} />
+        </IconButton>
       </div>
       <SidebarMenu />
       <SidebarProfile />

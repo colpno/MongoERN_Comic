@@ -12,8 +12,8 @@ function SidebarMenuGroup({ groupLabel, subMenu }) {
         <span className={cx("title")}>{groupLabel}</span>
         <span className={cx("line")} />
       </div>
-      {subMenu.map(({ Icon, to, label }) => (
-        <SidebarMenuGroupItem label={label} to={to} Icon={Icon} key={to} />
+      {subMenu.map((menu) => (
+        <SidebarMenuGroupItem {...menu} key={`${menu.to}-${menu.label}`} />
       ))}
     </ul>
   );

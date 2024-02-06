@@ -1,3 +1,4 @@
+import { IconButton } from "@mui/material";
 import classNames from "classnames/bind";
 import { Button } from "components/index";
 import { useLazyLogout } from "hooks/index";
@@ -21,9 +22,9 @@ function SidebarProfile() {
           {user.username}
         </Button>
       </div>
-      <Button wrapper onClick={() => logout()} className={cx("logout_btn")}>
+      <IconButton onClick={() => logout()} className={cx("logout_btn")}>
         <IoIosLogOut className={cx("logout-icon")} />
-      </Button>
+      </IconButton>
     </div>
   );
 }

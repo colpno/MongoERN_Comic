@@ -1,3 +1,4 @@
+import { IconButton } from "@mui/material";
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
 import { FaBars } from "react-icons/fa";
@@ -8,7 +9,9 @@ const cx = classNames.bind(styles);
 function Navbar({ toggleSidebar }) {
   return (
     <nav className={cx("navbar", "flex")}>
-      <FaBars className={cx("open-icon")} onClick={toggleSidebar} />
+      <IconButton>
+        <FaBars className={cx("open-icon")} onClick={toggleSidebar} />
+      </IconButton>
     </nav>
   );
 }
