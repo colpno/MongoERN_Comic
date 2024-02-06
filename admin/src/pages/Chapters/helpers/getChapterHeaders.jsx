@@ -1,5 +1,4 @@
 import classNames from "classnames/bind";
-import { Button } from "components";
 import moment from "moment";
 import { BsCurrencyDollar, BsEyeFill } from "react-icons/bs";
 import { FcLike } from "react-icons/fc";
@@ -29,14 +28,9 @@ export const getChapterHeaders = () => {
           <div className={cx("box-img")} title={row.title}>
             <img src={row.cover.source} alt={row.title} />
           </div>
-          <Button
-            text
-            to={`/comic/title/${row.title_id}/${row._id}`}
-            className={cx("title")}
-            title={row.title}
-          >
+          <span className={cx("title")} title={row.title}>
             {row.title}
-          </Button>
+          </span>
         </>
       ),
     },

@@ -1,6 +1,5 @@
 import { circleC } from "assets/images";
 import classNames from "classnames/bind";
-import { Button } from "components";
 import { convertTimeLabel } from "constants/time.constant";
 import moment from "moment";
 import { useMemo } from "react";
@@ -34,7 +33,6 @@ export const getTitleHeaders = (approvedStatuses) => {
     {
       headerName: "Truyện",
       field: "title",
-      maxWidth: 250,
       minWidth: 100,
       headerAlign: "center",
       resizable: true,
@@ -43,9 +41,9 @@ export const getTitleHeaders = (approvedStatuses) => {
           <div className={cx("box-img")}>
             <img src={row.cover.source} alt={value} />
           </div>
-          <Button text to={`/comic/title/${row._id}`} title={value} className={cx("title")}>
+          <span title={value} className={cx("title")}>
             {value}
-          </Button>
+          </span>
         </div>
       ),
     },
