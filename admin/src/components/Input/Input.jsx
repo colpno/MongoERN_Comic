@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 import { FormControl } from "react-bootstrap";
 import Feedback from "react-bootstrap/esm/Feedback";
 
-import styles from "./Input.module.scss";
+import CSSStyles from "./Input.module.scss";
 
-const cx = classNames.bind(styles);
+const cx = classNames.bind(CSSStyles);
 
 function Input({
   error,
@@ -27,6 +27,12 @@ function Input({
   letterCount,
   autoFocus,
 }) {
+  const styles = {
+    width,
+    height,
+    backgroundColor: "var(--island-background-color)",
+  };
+
   return (
     <div className={cx("wrapper")}>
       <FormControl
@@ -34,15 +40,13 @@ function Input({
         style={
           letterCount
             ? {
+                ...styles,
                 paddingRight: "100px",
-                width,
-                height,
-                backgroundColor: "var(--island-background-color)",
+                borderColor: "#ced4da",
               }
             : {
-                width,
-                height,
-                backgroundColor: "var(--island-background-color)",
+                ...styles,
+                borderColor: "#888",
               }
         }
         type={type}
