@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { FormControl } from "react-bootstrap";
 import Feedback from "react-bootstrap/esm/Feedback";
 
+import { useTheme } from "@mui/material";
 import CSSStyles from "./Input.module.scss";
 
 const cx = classNames.bind(CSSStyles);
@@ -27,10 +28,13 @@ function Input({
   letterCount,
   autoFocus,
 }) {
+  const theme = useTheme();
   const styles = {
     width,
     height,
     backgroundColor: "var(--island-background-color)",
+    borderColor: theme.palette.mode === "light" ? "#ced4da" : "#888",
+    color: theme.palette.text.primary,
   };
 
   return (
@@ -42,12 +46,8 @@ function Input({
             ? {
                 ...styles,
                 paddingRight: "100px",
-                borderColor: "#ced4da",
               }
-            : {
-                ...styles,
-                borderColor: "#888",
-              }
+            : styles
         }
         type={type}
         placeholder={placeholder}
