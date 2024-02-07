@@ -16,7 +16,7 @@ function StatTitleApproval({ titles, approvedStatuses }) {
       code: [],
     }
   );
-
+  const { backgroundColors } = getChartColors();
   const chartData = useMemo(() => {
     return titles.reduce(
       (result, title) => {
@@ -30,7 +30,7 @@ function StatTitleApproval({ titles, approvedStatuses }) {
           {
             label: "",
             data: Array(approvedStatuses.length).fill(0),
-            backgroundColor: getChartColors().backgroundColors.slice(3, 6),
+            backgroundColor: [backgroundColors[1], backgroundColors[0], backgroundColors[4]],
           },
         ],
       }

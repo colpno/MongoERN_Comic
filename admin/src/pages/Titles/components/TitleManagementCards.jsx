@@ -81,7 +81,7 @@ function TitleManagementCards({ titles }) {
       datasets: [
         {
           data: [paused, totalTitles - paused],
-          backgroundColor: [chartColors[7], "lightblue"],
+          backgroundColor: [chartColors[1], "lightblue"],
         },
       ],
     }
@@ -98,7 +98,7 @@ function TitleManagementCards({ titles }) {
       datasets: [
         {
           data: [finished, totalTitles - finished],
-          backgroundColor: ["#000", "lightblue"],
+          backgroundColor: [chartColors[4], "lightblue"],
         },
       ],
     }

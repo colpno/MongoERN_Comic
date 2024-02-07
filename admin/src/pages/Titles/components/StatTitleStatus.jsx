@@ -22,7 +22,7 @@ function StatTitleStatus({ titles }) {
   );
 
   const initData = Array(statuses.length).fill(0);
-
+  const { backgroundColors } = getChartColors();
   const chartData = useMemo(() => {
     return titles.reduce(
       (result, title) => {
@@ -36,7 +36,7 @@ function StatTitleStatus({ titles }) {
           {
             label: "Top 10 có số bình luận cao nhất",
             data: initData,
-            backgroundColor: getChartColors().backgroundColors.slice(1, 3),
+            backgroundColor: [backgroundColors[4], "grey"],
           },
         ],
       }
