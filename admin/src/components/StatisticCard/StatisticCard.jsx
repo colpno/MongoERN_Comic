@@ -8,9 +8,7 @@ import styles from "./StatisticCard.module.scss";
 
 const cx = classNames.bind(styles);
 
-function StatisticCard({ rawData, chartProps }) {
-  const { icon, label, amount, subLabel } = rawData;
-
+function StatisticCard({ icon, label, amount, subLabel, chartProps }) {
   return (
     <FloatingContainer className={cx("container")}>
       <div className={cx("text")}>
@@ -31,13 +29,16 @@ function StatisticCard({ rawData, chartProps }) {
 }
 
 StatisticCard.propTypes = {
-  rawData: PropTypes.shape({
-    icon: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
-    subLabel: PropTypes.string,
-    amount: PropTypes.number.isRequired,
-  }).isRequired,
+  icon: PropTypes.string,
+  label: PropTypes.string.isRequired,
+  subLabel: PropTypes.string,
+  amount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   chartProps: PropTypes.shape({}).isRequired,
+};
+
+StatisticCard.defaultProps = {
+  icon: undefined,
+  subLabel: undefined,
 };
 
 export default memo(StatisticCard);
