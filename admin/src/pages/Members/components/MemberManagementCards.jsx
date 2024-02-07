@@ -56,7 +56,7 @@ function MemberManagementCards({ totalCoin, totalIncome, highestCoin, highestInc
       icon: topSales,
       label: "Thu nhập cao nhất",
       subLabel: "Toàn thời gian",
-      amount: highestIncome,
+      amount: `$${highestIncome}`,
     },
     {
       labels: ["Thu nhập", "Tổng thu nhập"],
@@ -72,13 +72,10 @@ function MemberManagementCards({ totalCoin, totalIncome, highestCoin, highestInc
   return (
     <>
       <Col md={6}>
-        <StatisticCard
-          rawData={continuingCardData.rawData}
-          chartProps={continuingCardData.chartProps}
-        />
+        <StatisticCard {...continuingCardData.rawData} chartProps={continuingCardData.chartProps} />
       </Col>
       <Col md={6}>
-        <StatisticCard rawData={pausedCardData.rawData} chartProps={pausedCardData.chartProps} />
+        <StatisticCard {...pausedCardData.rawData} chartProps={pausedCardData.chartProps} />
       </Col>
     </>
   );

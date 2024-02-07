@@ -107,19 +107,13 @@ function TitleManagementCards({ titles }) {
   return (
     <>
       <Col md={4}>
-        <StatisticCard
-          rawData={continuingCardData.rawData}
-          chartProps={continuingCardData.chartProps}
-        />
+        <StatisticCard {...continuingCardData.rawData} chartProps={continuingCardData.chartProps} />
       </Col>
       <Col md={4}>
-        <StatisticCard rawData={pausedCardData.rawData} chartProps={pausedCardData.chartProps} />
+        <StatisticCard {...pausedCardData.rawData} chartProps={pausedCardData.chartProps} />
       </Col>
       <Col md={4}>
-        <StatisticCard
-          rawData={finishedCardData.rawData}
-          chartProps={finishedCardData.chartProps}
-        />
+        <StatisticCard {...finishedCardData.rawData} chartProps={finishedCardData.chartProps} />
       </Col>
     </>
   );
