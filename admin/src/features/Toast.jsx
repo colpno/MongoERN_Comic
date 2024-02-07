@@ -1,4 +1,5 @@
 import { memo } from "react";
+import { useSelector } from "react-redux";
 import { ToastContainer, toast as reactToast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 
@@ -13,7 +14,7 @@ export const options = {
   progress: undefined,
   rtl: false,
   newestOnTop: true,
-  theme: "light",
+  theme: "dark",
 };
 
 export const emitToast = (message, mode = "success") => {
@@ -37,7 +38,12 @@ export const emitToast = (message, mode = "success") => {
 };
 
 function Toast() {
-  return <ToastContainer {...options} />;
+  const theme = useSelector((state) => state.common.theme);
+  const customStyles = {
+    backgroundColor: "var(--island-background-color)",
+  };
+
+  return <ToastContainer {...options} theme={theme} toastStyle={customStyles} />;
 }
 
 export default memo(Toast);
