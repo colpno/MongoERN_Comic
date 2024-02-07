@@ -9,8 +9,8 @@ const cx = classNames.bind(styles);
 function Navbar({ toggleSidebar }) {
   return (
     <nav className={cx("navbar", "flex")}>
-      <IconButton>
-        <FaBars className={cx("open-icon")} onClick={toggleSidebar} />
+      <IconButton onClick={toggleSidebar}>
+        <FaBars className={cx("open-icon")} />
       </IconButton>
     </nav>
   );
