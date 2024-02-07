@@ -1,15 +1,12 @@
 import classNames from "classnames/bind";
 import { FloatingContainer, Table } from "components";
-import { useLazyGetChapters } from "hooks/index.jsx";
 import PropTypes from "prop-types";
-import { useEffect } from "react";
-import styles from "../styles/ChaptersTable.module.scss";
 import { getChapterHeaders } from "../helpers/getChapterHeaders.jsx";
+import styles from "../styles/ChaptersTable.module.scss";
 
 const cx = classNames.bind(styles);
 
-function ChapterTable({ selectedTitle }) {
-  const { get: getChapters, data: chapters } = useLazyGetChapters();
+function ChapterTable({ chapters }) {
   const initialState = {
     sorting: {
       sortModel: [
@@ -22,14 +19,6 @@ function ChapterTable({ selectedTitle }) {
       right: ["actions"],
     },
   };
-
-  useEffect(() => {
-    const { value: titleId } = selectedTitle;
-    getChapters({
-      title_id: titleId !== "all" ? titleId : undefined,
-      _embed: JSON.stringify([{ collection: "status_id", field: "-_id status color" }]),
-    });
-  }, [selectedTitle]);
 
   return (
     <FloatingContainer className={cx("data-rows")}>
@@ -46,10 +35,7 @@ function ChapterTable({ selectedTitle }) {
 }
 
 ChapterTable.propTypes = {
-  selectedTitle: PropTypes.shape({
-    value: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
-  }).isRequired,
+  chapters: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired,
 };
 
 export default ChapterTable;
