@@ -53,7 +53,14 @@ function ChapterReportStatChart({ selectedChapter, selectedYear }) {
     }
   }, [selectedChapter, selectedYear]);
 
-  return <LineChart beginAtZero labels={chartLabels} datasets={datasets} />;
+  return (
+    <LineChart
+      beginAtZero
+      labels={chartLabels}
+      datasets={datasets}
+      title="Lượt xem và thích của chương"
+    />
+  );
 }
 
 ChapterReportStatChart.propTypes = {

@@ -37,7 +37,7 @@ function StatTitleApproval({ titles, approvedStatuses }) {
     );
   }, [titles, approvedStatuses]);
 
-  return <PieChart data={chartData} />;
+  return <PieChart data={chartData} title="Trạng thái duyệt" legend={{ position: "right" }} />;
 }
 
 StatTitleApproval.propTypes = {

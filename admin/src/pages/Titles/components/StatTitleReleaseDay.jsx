@@ -18,7 +18,7 @@ function StatTitleReleaseDay({ titles }) {
         labels: daysOfWeek,
         datasets: [
           {
-            label: "Số lượng truyện theo ngày",
+            label: "Số lượng",
             data: Array(7).fill(0),
             backgroundColor: getChartColors().backgroundColors.slice(13, 20),
           },
@@ -27,7 +27,7 @@ function StatTitleReleaseDay({ titles }) {
     );
   }, [titles]);
 
-  return <BarChart data={chartData} />;
+  return <BarChart data={chartData} title="Truyện đăng theo ngày" />;
 }
 
 StatTitleReleaseDay.propTypes = {

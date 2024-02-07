@@ -43,7 +43,7 @@ function StatTitleStatus({ titles }) {
     );
   }, [titles]);
 
-  return <PieChart data={chartData} />;
+  return <PieChart data={chartData} title="Trạng thái xuất bản" legend={{ position: "right" }} />;
 }
 
 StatTitleStatus.propTypes = {

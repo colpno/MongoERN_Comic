@@ -30,7 +30,7 @@ function PersonalIncomeStatChart({ selectedYear, selectedUser }) {
       },
       [
         {
-          label: "Tổng thu nhập ($)",
+          label: "Tổng ($)",
           data: [...arrayOfZero],
           backgroundColor: borderColors[6],
           borderColor: backgroundColors[6],
@@ -38,7 +38,7 @@ function PersonalIncomeStatChart({ selectedYear, selectedUser }) {
           fill: true,
         },
         {
-          label: "Thu nhập từ bán comic ($)",
+          label: "Bán comic ($)",
           data: [...arrayOfZero],
           backgroundColor: borderColors[7],
           borderColor: backgroundColors[7],
@@ -58,7 +58,9 @@ function PersonalIncomeStatChart({ selectedYear, selectedUser }) {
     }
   }, [selectedYear, selectedUser]);
 
-  return <LineChart beginAtZero labels={chartLabels} datasets={datasets} />;
+  return (
+    <LineChart beginAtZero labels={chartLabels} datasets={datasets} title="Thu nhập cá nhân" />
+  );
 }
 
 PersonalIncomeStatChart.propTypes = {
