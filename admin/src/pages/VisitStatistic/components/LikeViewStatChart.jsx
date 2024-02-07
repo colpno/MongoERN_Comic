@@ -1,16 +1,16 @@
 import { LineChart } from "features";
-import { useLazyGetChapterReports } from "hooks/index";
+import { useLazyGetTitleReports } from "hooks/index";
 import moment from "moment";
 import PropTypes from "prop-types";
 import { memo, useEffect, useMemo } from "react";
 import { getChartColors, getMonthArray } from "utils/constants";
 
-function ChapterReportStatChart({ selectedChapter, selectedYear }) {
+function LikeViewStatChart({ selectedYear }) {
   const months = getMonthArray();
   const currentMonth = useMemo(() => moment().month() + 1, []);
   const arrayOfZero = useMemo(() => new Array(months.length).fill(0), [months]);
   const { backgroundColors, borderColors } = getChartColors();
-  const { get: getReports, data: reports } = useLazyGetChapterReports();
+  const { get: getReports, data: reports } = useLazyGetTitleReports();
   const chartLabels = useMemo(() => {
     return months.map((month) => {
       if (month.number === currentMonth) return `Tháng hiện tại (${currentMonth})`;
@@ -29,42 +29,36 @@ function ChapterReportStatChart({ selectedChapter, selectedYear }) {
         {
           label: "Số lượt thích",
           data: [...arrayOfZero],
-          backgroundColor: backgroundColors[6],
-          borderColor: borderColors[7],
+          backgroundColor: borderColors[7],
+          borderColor: backgroundColors[7],
           borderWidth: 3,
+          fill: true,
         },
         {
           label: "Số lượt xem",
           data: [...arrayOfZero],
-          backgroundColor: backgroundColors[7],
-          borderColor: borderColors[6],
+          backgroundColor: borderColors[6],
+          borderColor: backgroundColors[6],
           borderWidth: 3,
+          fill: true,
         },
       ]
     );
   }, [reports, arrayOfZero, backgroundColors, borderColors]);
 
   useEffect(() => {
-    if (selectedChapter?.value && selectedYear?.value) {
+    if (selectedYear?.value) {
       getReports({
         year: selectedYear.value,
-        chapter_id: selectedChapter.value,
       });
     }
-  }, [selectedChapter, selectedYear]);
+  }, [selectedYear]);
 
-  return (
-    <LineChart
-      beginAtZero
-      labels={chartLabels}
-      datasets={datasets}
-      title="Lượt xem và thích của chương"
-    />
-  );
+  return <LineChart beginAtZero labels={chartLabels} datasets={datasets} />;
 }
 
-ChapterReportStatChart.propTypes = {
-  selectedChapter: PropTypes.shape({
+LikeViewStatChart.propTypes = {
+  selectedTitle: PropTypes.shape({
     value: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
   }),
@@ -74,8 +68,8 @@ ChapterReportStatChart.propTypes = {
   }).isRequired,
 };
 
-ChapterReportStatChart.defaultProps = {
-  selectedChapter: undefined,
+LikeViewStatChart.defaultProps = {
+  selectedTitle: undefined,
 };
 
-export default memo(ChapterReportStatChart);
+export default memo(LikeViewStatChart);

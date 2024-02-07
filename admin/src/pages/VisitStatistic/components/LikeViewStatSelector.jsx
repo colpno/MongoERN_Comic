@@ -5,17 +5,10 @@ import styles from "../styles/VisitStatistic.module.scss";
 
 const cx = classNames.bind(styles);
 
-function ChapterReportStatSelector({
-  yearOptions,
-  selectedYear,
-  onChangeYear,
-  selectedChapter,
-  onChangeChapter,
-  reportOptions,
-}) {
+function LikeViewStatSelector({ selectedYear, onChangeYear, yearOptions }) {
   return (
     <div className={cx("selector-container")}>
-      <h4>Thống kê thông số chương</h4>
+      <h4>Thống kê tổng lượt thích và xem</h4>
       <Select
         className={cx("select")}
         options={yearOptions}
@@ -24,21 +17,11 @@ function ChapterReportStatSelector({
         searchable
         height={30}
       />
-      {reportOptions.length > 0 && (
-        <Select
-          className={cx("select")}
-          options={reportOptions}
-          value={selectedChapter ?? reportOptions[0]}
-          setValue={onChangeChapter}
-          searchable
-          height={30}
-        />
-      )}
     </div>
   );
 }
 
-ChapterReportStatSelector.propTypes = {
+LikeViewStatSelector.propTypes = {
   yearOptions: PropTypes.arrayOf(
     PropTypes.shape({
       value: PropTypes.string.isRequired,
@@ -50,22 +33,14 @@ ChapterReportStatSelector.propTypes = {
     label: PropTypes.string.isRequired,
   }).isRequired,
   onChangeYear: PropTypes.func.isRequired,
-  selectedChapter: PropTypes.shape({
+  selectedTitle: PropTypes.shape({
     value: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
   }),
-  onChangeChapter: PropTypes.func.isRequired,
-  reportOptions: PropTypes.arrayOf(
-    PropTypes.shape({
-      value: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
-    }).isRequired
-  ),
 };
 
-ChapterReportStatSelector.defaultProps = {
-  selectedChapter: undefined,
-  reportOptions: [],
+LikeViewStatSelector.defaultProps = {
+  selectedTitle: undefined,
 };
 
-export default ChapterReportStatSelector;
+export default LikeViewStatSelector;

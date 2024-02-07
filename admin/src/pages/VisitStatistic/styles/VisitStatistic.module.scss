@@ -8,8 +8,12 @@
   align-items: center;
   justify-content: flex-start;
   flex-direction: row;
+
+  .select {
+    margin-left: 15px;
+  }
 }
 
-.select {
-  margin-left: 15px;
+.detail-selector-container .select {
+  margin-bottom: 1rem;
 }
