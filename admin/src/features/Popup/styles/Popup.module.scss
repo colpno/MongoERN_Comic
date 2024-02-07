@@ -2,11 +2,12 @@
 @use "components/Scrollbar/Scrollbar.module.scss";
 
 .popup {
-  background-color: #fff;
+  background-color: var(--island-background-color);
   box-shadow: 0 0 10px rgb(0 0 0 / 0.2);
   border-radius: 10px;
   width: 400px;
   max-height: 70vh;
+  color: var(--primary-font-color);
 
   position: fixed;
   content: "";
@@ -21,7 +22,7 @@
 
 .header {
   padding: 10px 0;
-  border-bottom: 3px solid var.$secondary;
+  border-bottom: 3px solid var.$primary;
   font-size: 20px;
   font-weight: 700;
   text-align: center;
