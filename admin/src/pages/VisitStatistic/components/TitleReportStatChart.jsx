@@ -30,14 +30,14 @@ function TitleReportStatChart({ selectedTitle, selectedYear }) {
           label: "Số lượt thích",
           data: [...arrayOfZero],
           backgroundColor: backgroundColors[6],
-          borderColor: borderColors[6],
+          borderColor: borderColors[7],
           borderWidth: 3,
         },
         {
           label: "Số lượt xem",
           data: [...arrayOfZero],
           backgroundColor: backgroundColors[7],
-          borderColor: borderColors[7],
+          borderColor: borderColors[6],
           borderWidth: 3,
         },
       ]
