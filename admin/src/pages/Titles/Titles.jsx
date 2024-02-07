@@ -28,30 +28,28 @@ function Titles() {
         <TitleManagementCards titles={titles} />
       </Row>
       <Row>
-        <Col xs={12} lg={8}>
+        <Col xs={6} lg={3}>
+          <FloatingContainer>
+            <StatTitleApproval titles={titles} approvedStatuses={approvedStatuses} />
+          </FloatingContainer>
+        </Col>
+        <Col xs={6} lg={3}>
+          <FloatingContainer>
+            <StatTitleStatus titles={titles} />
+          </FloatingContainer>
+        </Col>
+        <Col xs={12} lg={6}>
+          <FloatingContainer>
+            <StatTitleReleaseDay titles={titles} />
+          </FloatingContainer>
+        </Col>
+      </Row>
+      <Row>
+        <Col xs={12}>
           <h4>All Titles</h4>
           <FloatingContainer>
             <TitleTable titles={titles} approvedStatuses={approvedStatuses} />
           </FloatingContainer>
-        </Col>
-        <Col xs={12} lg={4}>
-          <Row>
-            <Col xs={6} lg={12}>
-              <FloatingContainer>
-                <StatTitleApproval titles={titles} approvedStatuses={approvedStatuses} />
-              </FloatingContainer>
-            </Col>
-            <Col xs={6} lg={12}>
-              <FloatingContainer>
-                <StatTitleStatus titles={titles} />
-              </FloatingContainer>
-            </Col>
-            <Col xs={12}>
-              <FloatingContainer>
-                <StatTitleReleaseDay titles={titles} />
-              </FloatingContainer>
-            </Col>
-          </Row>
         </Col>
       </Row>
     </Container>
