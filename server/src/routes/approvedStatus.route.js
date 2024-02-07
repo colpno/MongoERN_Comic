@@ -8,6 +8,6 @@ route.get('/', approvedStatusController.getAll);
 route.get('/:id', approvedStatusController.getOne);
 route.post('/create', isAdmin, approvedStatusController.add);
 route.put('/update/:id', isAdmin, approvedStatusController.update);
-route.delete('/delete/:id', isAdmin, approvedStatusController.delete);
+route.delete('/delete', isAdmin, approvedStatusController.delete);
 
 export default route;
