@@ -13,13 +13,14 @@ import { useTheme } from "@mui/material";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-function BarChart({ data, width, height, title }) {
+function BarChart({ data, width, height, title, direction, legendPosition }) {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
   const fontColor = isDark ? "#fff" : "#666";
   const gridColor = isDark ? "#494949" : "#ddd";
 
   const options = {
+    indexAxis: direction === "horizontal" ? "y" : "x",
     interaction: {
       intersect: false,
     },
@@ -32,6 +33,7 @@ function BarChart({ data, width, height, title }) {
       legend: {
         labels: {
           color: fontColor,
+          position: legendPosition,
         },
       },
     },
@@ -99,6 +101,8 @@ BarChart.propTypes = {
   width: PropTypes.string,
   height: PropTypes.string,
   title: PropTypes.string,
+  direction: PropTypes.oneOf(["vertical", "horizontal"]),
+  legendPosition: PropTypes.oneOf(["left", "top", "right", "bottom"]),
 };
 
 BarChart.defaultProps = {
@@ -107,6 +111,8 @@ BarChart.defaultProps = {
   height: "100%",
   title: undefined,
   legend: undefined,
+  direction: "vertical",
+  legendPosition: "top",
 };
 
 export default BarChart;
