@@ -1,14 +1,3 @@
-import DarkModeToggle from "features/DarkModeToggle.jsx";
-import { toggleChangeTheme } from "libs/redux/slices/common.slice.js";
-import { AiFillDollarCircle, AiFillNotification } from "react-icons/ai";
-import { BiCategoryAlt, BiSpreadsheet } from "react-icons/bi";
-import { BsFilePost } from "react-icons/bs";
-import { FaEye, FaUsers } from "react-icons/fa";
-import { ImProfile } from "react-icons/im";
-import { IoIosChatbubbles } from "react-icons/io";
-import { IoChatboxEllipses } from "react-icons/io5";
-import { MdAdminPanelSettings, MdPayment } from "react-icons/md";
-import { useDispatch } from "react-redux";
 import {
   cat1,
   cat10,
@@ -51,6 +40,17 @@ import {
   robotHead8,
   robotHead9,
 } from "assets/images";
+import DarkModeToggle from "features/DarkModeToggle.jsx";
+import { toggleChangeTheme } from "libs/redux/slices/common.slice.js";
+import { AiFillDollarCircle, AiFillNotification } from "react-icons/ai";
+import { BiCategoryAlt, BiSpreadsheet } from "react-icons/bi";
+import { BsFilePost, BsFillLightningFill } from "react-icons/bs";
+import { FaEye, FaUsers } from "react-icons/fa";
+import { ImProfile } from "react-icons/im";
+import { IoIosChatbubbles } from "react-icons/io";
+import { IoChatboxEllipses } from "react-icons/io5";
+import { MdAdminPanelSettings, MdPayment } from "react-icons/md";
+import { useDispatch } from "react-redux";
 
 export function getAdminSideBarMenu() {
   const dispatch = useDispatch();
@@ -95,14 +95,19 @@ export function getAdminSideBarMenu() {
           label: "Personal Notifications",
         },
         {
+          to: `/comments`,
+          Icon: IoIosChatbubbles,
+          label: "Comments",
+        },
+        {
           to: `/payment-methods`,
           Icon: MdPayment,
           label: "Payment Methods",
         },
         {
-          to: `/comments`,
-          Icon: IoIosChatbubbles,
-          label: "Comments",
+          to: `/statuses`,
+          Icon: BsFillLightningFill,
+          label: "Statuses",
         },
       ],
     },

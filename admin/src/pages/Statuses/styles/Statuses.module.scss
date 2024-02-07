@@ -1,0 +1,12 @@
+.label-wrapper {
+  & > *:first-child {
+    display: flex;
+    align-items: flex-end;
+  }
+
+  & > *:last-child {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+}

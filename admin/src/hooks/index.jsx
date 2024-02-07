@@ -29,6 +29,9 @@ export { default as useUpdateNotification } from "./notification/useUpdateNotifi
 export { default as useDeleteNotification } from "./notification/useDeleteNotification";
 
 export { default as useGetObjectStatuses } from "./objectStatus/useGetObjectStatuses";
+export { default as useAddObjectStatus } from "./objectStatus/useAddObjectStatus";
+export { default as useUpdateObjectStatus } from "./objectStatus/useUpdateObjectStatus";
+export { default as useDeleteObjectStatus } from "./objectStatus/useDeleteObjectStatus";
 
 export { default as useGetPaymentMethods } from "./paymentMethod/useGetPaymentMethods";
 export { default as useAddPaymentMethod } from "./paymentMethod/useAddPaymentMethod";
@@ -36,6 +39,9 @@ export { default as useUpdatePaymentMethod } from "./paymentMethod/useUpdatePaym
 export { default as useDeletePaymentMethod } from "./paymentMethod/useDeletePaymentMethod";
 
 export { default as useGetApprovedStatuses } from "./approvedStatus/useGetApprovedStatuses";
+export { default as useAddApprovedStatus } from "./approvedStatus/useAddApprovedStatus";
+export { default as useUpdateApprovedStatus } from "./approvedStatus/useUpdateApprovedStatus";
+export { default as useDeleteApprovedStatus } from "./approvedStatus/useDeleteApprovedStatus";
 
 export { default as useAddPersonalNotification } from "./personalNotification/useAddPersonalNotification";
 export { default as useUpdatePersonalNotification } from "./personalNotification/useUpdatePersonalNotification";

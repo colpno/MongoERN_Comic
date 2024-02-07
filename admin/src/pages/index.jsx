@@ -14,3 +14,4 @@ export { default as PersonalNotifications } from "./PersonalNotifications/Person
 export { default as Comment } from "./Comment/Comment";
 export { default as Profile } from "./Bio/Profile/Profile";
 export { default as ChangePassword } from "./Bio/ChangePassword/ChangePassword";
+export { default as Statuses } from "./Statuses/Statuses";

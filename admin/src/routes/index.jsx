@@ -13,6 +13,7 @@ import {
   PaymentMethods,
   PersonalNotifications,
   Profile,
+  Statuses,
   Titles,
   TradingStatistic,
   VisitStatistic,
@@ -70,13 +71,18 @@ export const adminRoutes = [
     layout: AdminLayout,
   },
   {
+    path: "/comments",
+    component: Comment,
+    layout: AdminLayout,
+  },
+  {
     path: "/payment-methods",
     component: PaymentMethods,
     layout: AdminLayout,
   },
   {
-    path: "/comments",
-    component: Comment,
+    path: "/statuses",
+    component: Statuses,
     layout: AdminLayout,
   },
   {
