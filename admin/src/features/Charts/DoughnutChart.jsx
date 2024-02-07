@@ -1,8 +1,31 @@
-import React from "react";
+import { useTheme } from "@mui/material";
+import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
 import PropTypes from "prop-types";
 import { Doughnut } from "react-chartjs-2";
 
-function DoughnutChart({ data, options, width, height }) {
+ChartJS.register(ArcElement, Tooltip, Legend);
+
+function DoughnutChart({ data, width, height, title, legend }) {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
+  const fontColor = isDark ? "#fff" : "#666";
+
+  const options = {
+    plugins: {
+      title: {
+        display: true,
+        text: title,
+        color: fontColor,
+      },
+      legend: {
+        ...legend,
+        labels: {
+          color: fontColor,
+        },
+      },
+    },
+  };
+
   return (
     <div style={{ width, height }}>
       <Doughnut data={data} options={options} />
@@ -37,23 +60,26 @@ DoughnutChart.propTypes = {
       }),
     }),
   }),
+  legend: PropTypes.shape({
+    display: PropTypes.bool,
+  }),
   width: PropTypes.string,
   height: PropTypes.string,
+  title: PropTypes.string,
 };
 
 DoughnutChart.defaultProps = {
   options: {
     plugins: {
-      legend: {
-        display: true,
-      },
       tooltips: {
         enabled: true,
       },
     },
   },
+  legend: undefined,
   width: "100%",
   height: "100%",
+  title: undefined,
 };
 
 export default DoughnutChart;

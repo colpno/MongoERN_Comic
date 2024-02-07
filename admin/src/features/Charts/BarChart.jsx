@@ -1,7 +1,60 @@
 import PropTypes from "prop-types";
 import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { useTheme } from "@mui/material";
 
-function BarChart({ data, width, height, options }) {
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+
+function BarChart({ data, width, height, title }) {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
+  const fontColor = isDark ? "#fff" : "#666";
+  const gridColor = isDark ? "#666" : "#aaa";
+
+  const options = {
+    interaction: {
+      intersect: false,
+    },
+    plugins: {
+      title: {
+        display: true,
+        text: title,
+        color: fontColor,
+      },
+      legend: {
+        labels: {
+          color: fontColor,
+        },
+      },
+    },
+    scales: {
+      yAxes: {
+        grid: {
+          color: gridColor,
+        },
+        ticks: {
+          color: fontColor,
+        },
+      },
+      xAxes: {
+        grid: {
+          color: gridColor,
+        },
+        ticks: {
+          color: fontColor,
+        },
+      },
+    },
+  };
+
   return (
     <div style={{ width, height }}>
       <Bar data={data} options={options} />
@@ -38,14 +91,22 @@ BarChart.propTypes = {
       indexAxis: PropTypes.oneOf(["y", undefined]),
     }),
   }),
+  legend: PropTypes.shape({
+    display: PropTypes.bool,
+    position: PropTypes.oneOf(["top", "left", "bottom", "right"]),
+    align: PropTypes.oneOf(["start", "center", "end"]),
+  }),
   width: PropTypes.string,
   height: PropTypes.string,
+  title: PropTypes.string,
 };
 
 BarChart.defaultProps = {
   options: {},
   width: "100%",
   height: "100%",
+  title: undefined,
+  legend: undefined,
 };
 
 export default BarChart;
