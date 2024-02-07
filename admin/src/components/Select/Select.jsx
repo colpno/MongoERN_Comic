@@ -45,9 +45,11 @@ const customStyles = (theme, height) => {
       backgroundColor: "var(--island-background-color)",
     }),
     option: (base, { isFocused, isSelected }) => {
-      let backgroundColor = isFocused
-        ? theme.palette.grey["800"]
-        : theme.palette.background.default;
+      let backgroundColor = theme.palette.background.default;
+      const isDark = theme.palette.mode === "dark";
+
+      if (isFocused && isDark) backgroundColor = theme.palette.grey["800"];
+      if (isFocused && !isDark) backgroundColor = theme.palette.grey["200"];
       if (isSelected) backgroundColor = theme.palette.primary.main;
 
       return {
