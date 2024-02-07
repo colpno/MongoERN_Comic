@@ -33,7 +33,7 @@ function Login() {
       setPopup({
         isTriggered: true,
         title: "Thông báo",
-        content: response.message,
+        content: response.data.message,
         onCancel: () => navigate("/verify"),
       });
     });
