@@ -12,17 +12,19 @@ function StatisticCard({ rawData, chartProps }) {
   const { icon, label, amount, subLabel } = rawData;
 
   return (
-    <FloatingContainer>
-      <div className={cx("icon")}>
-        <img src={icon} alt={label} />
-      </div>
-      <div className={cx("content")}>
+    <FloatingContainer className={cx("container")}>
+      <div className={cx("text")}>
+        <div className={cx("icon")}>
+          <img src={icon} alt={label} />
+        </div>
         <div className={cx("text-wrapper")}>
           <p className={cx("label")}>{label}</p>
           <p className={cx("amount")}>{amount}</p>
           <p className={cx("sub-label")}>{subLabel}</p>
         </div>
-        <DoughnutChart width="120px" height="120px" {...chartProps} />
+      </div>
+      <div className={cx("chart")}>
+        <DoughnutChart width="160px" height="160px" {...chartProps} legend={{ display: false }} />
       </div>
     </FloatingContainer>
   );
