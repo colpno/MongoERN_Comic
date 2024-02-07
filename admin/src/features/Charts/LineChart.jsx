@@ -19,7 +19,7 @@ function LineChart({ labels, datasets, width, height, beginAtZero, title }) {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
   const fontColor = isDark ? "#fff" : "#666";
-  const gridColor = isDark ? "#666" : "#000";
+  const gridColor = isDark ? "#494949" : "#ddd";
 
   const options = {
     interaction: {

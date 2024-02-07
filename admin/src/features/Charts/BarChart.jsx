@@ -17,7 +17,7 @@ function BarChart({ data, width, height, title }) {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
   const fontColor = isDark ? "#fff" : "#666";
-  const gridColor = isDark ? "#666" : "#aaa";
+  const gridColor = isDark ? "#494949" : "#ddd";
 
   const options = {
     interaction: {
