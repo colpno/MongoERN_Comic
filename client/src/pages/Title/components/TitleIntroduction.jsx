@@ -2,7 +2,7 @@ import classNames from "classnames/bind";
 import { Button } from "components";
 import { emitToast } from "features/Toast.jsx";
 import { NoData } from "features/index.jsx";
-import { useGetChapterTransactions, useToggleFollow } from "hooks/index.jsx";
+import { useGetChapterTransactions, useGetChapters, useToggleFollow } from "hooks/index.jsx";
 import { memo } from "react";
 import { Col, Row } from "react-bootstrap";
 import { AiFillCopy, AiFillEye, AiFillHeart, AiFillStar } from "react-icons/ai";
@@ -27,9 +27,16 @@ function TitleIntroduction() {
     _embed: JSON.stringify([{ collection: "chapter_id", match: { order: 1 } }]),
     _fields: "_id",
   });
+  const { data: chapters = [] } = useGetChapters({
+    params: {
+      title_id: titleId,
+      order: 1,
+      _fields: "cost",
+    },
+  });
   const hasChapter = title?.total_chapter !== 0;
   const isOwned = firstChapter.length > 0 ? firstChapter[0] : false;
-  const isFree = firstChapter.length > 0 ? !firstChapter[0].cost : false;
+  const isFree = chapters.length === 1 ? !chapters[0].cost : false;
   const canRead = isOwned || isFree;
 
   const handleClickFirstChapter = () => {
