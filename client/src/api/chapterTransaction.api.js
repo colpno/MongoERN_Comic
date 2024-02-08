@@ -6,11 +6,11 @@ const BASE_URL = "/chapter-transactions";
 const extendedApi = comicApi.injectEndpoints({
   endpoints: (build) => ({
     getChapterTransactions: build.query({
-      query: ({ params, isPrivate }) => ({
+      query: (params) => ({
         url: `${BASE_URL}/owned`,
         method: "GET",
         params,
-        withCredentials: isPrivate,
+        withCredentials: true,
       }),
       transformResponse: (response) => {
         if (response.pagination) return response;
