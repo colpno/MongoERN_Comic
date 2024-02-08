@@ -16,7 +16,7 @@ export const options = {
   theme: "light",
 };
 
-export const emitToast = (message, mode) => {
+export const emitToast = (message, mode = "success") => {
   switch (mode) {
     case "success":
       reactToast.success(message, options);
