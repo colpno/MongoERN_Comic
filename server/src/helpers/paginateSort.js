@@ -1,6 +1,12 @@
 const paginateSort = async (queries, MongooseModel) => {
   if (!queries._page) queries._page = 1;
-  if (queries._sort) queries._sort = JSON.parse(queries._sort);
+  try {
+    if (queries._sort) queries._sort = JSON.parse(queries._sort);
+  } catch (error) {
+    if ('message' in error && !error.message.includes('not valid JSON')) {
+      throw new Error(error);
+    }
+  }
 
   const { _sort, _page, _limit, _fields, _embed, ...others } = queries;
 
