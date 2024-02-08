@@ -18,27 +18,23 @@ const extendedApi = comicApi.injectEndpoints({
       },
       async onCacheEntryAdded(arg, { updateCachedData, cacheDataLoaded, cacheEntryRemoved }) {
         if (socket) {
-          try {
-            await cacheDataLoaded;
+          await cacheDataLoaded;
 
-            socket.on("send-comment", (comment) => {
-              updateCachedData((draft) => [comment, ...draft]);
-            });
+          socket.on("send-comment", (comment) => {
+            updateCachedData((draft) => [comment, ...draft]);
+          });
 
-            socket.on("delete-comment", (comment) => {
-              updateCachedData((draft = []) => {
-                const newComments = draft.map((oldComment) => {
-                  if (oldComment._id === comment._id) {
-                    return comment;
-                  }
-                  return oldComment;
-                });
-                return newComments;
+          socket.on("delete-comment", (comment) => {
+            updateCachedData((draft = []) => {
+              const newComments = draft.map((oldComment) => {
+                if (oldComment._id === comment._id) {
+                  return comment;
+                }
+                return oldComment;
               });
+              return newComments;
             });
-          } catch {
-            /* empty */
-          }
+          });
         }
 
         await cacheEntryRemoved;
@@ -46,7 +42,7 @@ const extendedApi = comicApi.injectEndpoints({
     }),
     addComment: build.mutation({
       query: (data = {}) => ({
-        urL: `${BASE_URL}/create`,
+        url: `${BASE_URL}/create`,
         method: "POST",
         data,
         withCredentials: true,

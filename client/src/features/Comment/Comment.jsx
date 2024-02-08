@@ -24,6 +24,9 @@ function Comment() {
       { collection: "deletedBy", fields: "username" },
     ]),
     _fields: "author text slug parent_slug comment_replies_num createdAt deletedBy",
+    _sort: {
+      createdAt: -1,
+    },
   });
   const { add } = useAddComment();
   const { update } = useUpdateComment();
@@ -63,41 +66,24 @@ function Comment() {
       title: "Xóa bình luận",
       content: "Bạn có chắc chắn muốn xóa?",
       onConfirm: () => {
-        update(commentId, { deletedBy: user._id });
+        update({ id: commentId, data: { deletedBy: user._id } });
       },
     });
   };
 
-  // useEffect(() => {
-  //   if (socket) {
-  //     socket.on("send-comment", (comment) => {
-  //       setComments((prev) => [comment, ...prev]);
-  //     });
-  //     socket.on("delete-comment", (comment) => {
-  //       setComments((prev) => {
-  //         const newComments = prev.map((oldComment) => {
-  //           if (oldComment._id === comment._id) {
-  //             return comment;
-  //           }
-  //           return oldComment;
-  //         });
-  //         return newComments;
-  //       });
-  //     });
-  //   }
-  // }, [socket]);
-
   useEffect(() => {
-    const root = comments.filter((comment) => {
-      return comment.parent_slug === "";
-    });
-    const paginated = root.slice(
-      (paginate.page - 1) * paginate.limit,
-      paginate.limit * paginate.page
-    );
-    setPaginate((prev) => ({ ...prev, total: root.length }));
-    setRootComments(paginated);
-  }, [comments, paginate.page]);
+    if (comments.length > 0) {
+      const root = comments.filter((comment) => {
+        return comment.parent_slug === "";
+      });
+      const paginated = root.slice(
+        (paginate.page - 1) * paginate.limit,
+        paginate.limit * paginate.page
+      );
+      setPaginate((prev) => ({ ...prev, total: root.length }));
+      setRootComments(paginated);
+    }
+  }, [comments]);
 
   return (
     <>

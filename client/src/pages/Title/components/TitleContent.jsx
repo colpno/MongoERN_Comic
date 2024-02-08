@@ -1,5 +1,7 @@
 import classNames from "classnames/bind";
+import { socket } from "context/socketContext.js";
 import { useGetTitle } from "hooks/index.jsx";
+import { setCommentPlace } from "libs/redux/slices/comment.slice.js";
 import { setTitle } from "libs/redux/slices/title.slice.js";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -34,6 +36,16 @@ function TitleContent() {
     left: "0",
     right: "0",
   };
+
+  useEffect(() => {
+    if (socket && titleId) {
+      socket.emit("join-title", titleId);
+    }
+  }, [socket, titleId]);
+
+  useEffect(() => {
+    dispatch(setCommentPlace(`title_${titleId}`));
+  }, [titleId]);
 
   useEffect(() => {
     if (title) {
