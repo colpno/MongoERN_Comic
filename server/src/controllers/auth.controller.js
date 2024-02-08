@@ -15,11 +15,11 @@ const otpSender = async (id, username, email) => {
 
   const response = await await otpService.add(username, email, otp);
 
-  otpService.sendViaMail(email, otp);
+  // otpService.sendViaMail(email, otp);
 
   const expiredAt = moment().add(TOKEN_EXPIRED_TIME, 'm').toISOString();
 
-  return { id, username, email, expiredAt, oid: response._id };
+  return { id, username, email, expiredAt, oid: response._id, otp };
 };
 
 const authController = {
@@ -116,7 +116,7 @@ const authController = {
       const samePassword = bcrypt.compareSync(password, userPassword);
       if (!samePassword) return next(createError(401, 'Mật khẩu không chính xác'));
 
-      const { expiredAt, oid } = await otpSender(_id, username, email);
+      const { expiredAt, oid, otp } = await otpSender(_id, username, email);
       const cookieData = JSON.stringify({
         id: _id,
         oid,
@@ -134,7 +134,8 @@ const authController = {
         .status(200)
         .json({
           code: 200,
-          data: { id: _id, username, email, expiredAt },
+          // data: { id: _id, username, email, expiredAt },
+          data: { id: _id, username, email, expiredAt, otp },
           message: `OTP đã được gửi đến ${email}`,
         });
     } catch (error) {
