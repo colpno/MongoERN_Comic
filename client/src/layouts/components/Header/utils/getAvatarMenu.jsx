@@ -79,21 +79,21 @@ function getAvatarMenu(cx, user, isLoggingIn) {
         label: <span>Thông báo</span>,
         icon: <BsBellFill />,
       },
-      {
-        path: "login",
-        label: <span>FAQ</span>,
-        icon: <BsFillPatchQuestionFill />,
-      },
-      {
-        path: "/static/terms",
-        label: <span>Điều khoản sử dụng</span>,
-        icon: <BsFillFileEarmarkFontFill />,
-      },
-      {
-        path: "/static/privacy-policy",
-        label: <span>Điều khoản bảo mật</span>,
-        icon: <IoLockClosed />,
-      },
+      // {
+      //   path: "login",
+      //   label: <span>FAQ</span>,
+      //   icon: <BsFillPatchQuestionFill />,
+      // },
+      // {
+      //   path: "/static/terms",
+      //   label: <span>Điều khoản sử dụng</span>,
+      //   icon: <BsFillFileEarmarkFontFill />,
+      // },
+      // {
+      //   path: "/static/privacy-policy",
+      //   label: <span>Điều khoản bảo mật</span>,
+      //   icon: <IoLockClosed />,
+      // },
     ],
     [
       {
