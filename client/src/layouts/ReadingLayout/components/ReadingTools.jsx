@@ -2,14 +2,14 @@ import PropTypes from "prop-types";
 import { memo } from "react";
 import { ImHeart } from "react-icons/im";
 
-import { DarkModeToggle } from "features";
+// import { DarkModeToggle } from "features";
 
 function ReadingTools({ cx, onToggleFavorite, controls, chapter, user }) {
   const { isFavored } = controls;
 
   return (
     <div className={cx("reading-header__tools")}>
-      <DarkModeToggle />
+      {/* <DarkModeToggle /> */}
       {chapter.user_id !== user._id && (
         <ImHeart
           className={cx("reading-header__tools__like", isFavored ? "active" : "")}
