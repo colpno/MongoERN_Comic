@@ -38,7 +38,7 @@ const paypalController = {
         });
       }
 
-      const response = await paypalService.payout(amount, user.paypalEmail);
+      const response = await paypalService.payout(amount, user.paypal_email);
       const { batch_status = 'DENIED' } = response.data.batch_header;
 
       let returnedMessage = '';
