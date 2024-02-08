@@ -16,6 +16,7 @@ function CreateTitle() {
     release_day: "",
     // TODO largeCoverTemp: "",
   };
+  const { add } = useAddTitle();
 
   const handleCancel = () => {
     setPopup({
@@ -26,7 +27,7 @@ function CreateTitle() {
   };
 
   const handleSubmit = (values, { setSubmitting }) => {
-    const { add } = useAddTitle();
+    values.author = !!values.author ?? "Đang cập nhật";
     add(values);
     setSubmitting(false);
   };

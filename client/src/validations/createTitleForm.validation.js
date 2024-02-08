@@ -14,10 +14,7 @@ export const createTitleFormValidation = Yup.object({
   summary: Yup.string()
     .max(1000, "Giới hạn độ dài là 1000 ký tự.")
     .required("Mô tả không được để trống."),
-  author: Yup.string()
-    .trim()
-    .max(255, "Giới hạn độ dài là 255 ký tự.")
-    .required("Tác giả không được để trống."),
+  author: Yup.string().trim().max(255, "Giới hạn độ dài là 255 ký tự."),
   coin: Yup.string().max(3, "Giới hạn độ dài là 3 ký tự.").required("Coin không được để trống."),
   release_day: Yup.string().required("Ngày đăng hàng tuần phải không được để trống"),
   cover: Yup.string().required("Ảnh bìa không được để trống."),
