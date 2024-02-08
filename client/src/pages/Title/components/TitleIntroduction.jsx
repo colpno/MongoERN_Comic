@@ -30,7 +30,7 @@ function TitleIntroduction() {
   const hasChapter = title?.total_chapter !== 0;
   const isOwned = firstChapter.length > 0 ? firstChapter[0] : false;
   const isFree = firstChapter.length > 0 ? !firstChapter[0].cost : false;
-  const canRead = isOwned && isFree;
+  const canRead = isOwned || isFree;
 
   const handleClickFirstChapter = () => {
     if (!canRead) emitToast("Bạn cần phải mua chương 1 để có thể dọc", "info");

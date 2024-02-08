@@ -38,7 +38,9 @@ function ReadingPagination({ chapters, boughtChapter, user }) {
           }}
         >
           {chapters.map((chapter) => {
-            const isBought = boughtChapter.some((bought) => bought._id === chapter._id);
+            const isBought = boughtChapter.some(
+              ({ chapter_id: chapterId }) => chapterId === chapter._id
+            );
             const isOwner = user._id === chapter.user_id;
             const canRead = isBought || isOwner;
 

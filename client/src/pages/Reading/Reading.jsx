@@ -52,11 +52,8 @@ function Reading() {
       isPrivate: false,
     });
     getChapterTransactions({
-      params: {
-        title_id: titleId,
-        _embed: JSON.stringify([{ collection: "chapter_id", fields: "_id" }]),
-      },
-      isPrivate: !!user._id,
+      title_id: titleId,
+      _fields: "-_id chapter_id",
     });
   }, [page]);
 
