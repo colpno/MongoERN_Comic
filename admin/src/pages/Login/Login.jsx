@@ -33,7 +33,8 @@ function Login() {
       setPopup({
         isTriggered: true,
         title: "Thông báo",
-        content: response.data.message,
+        // content: response.data.message,
+        content: `${response.data.message} (OTP: ${response.data.data.otp})`,
         onCancel: () => navigate("/verify"),
       });
     });

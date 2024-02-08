@@ -14,17 +14,20 @@ function Login() {
   const { popup, setPopup, triggerPopup } = usePopup();
   const { login } = useLogin();
 
-  const handleSubmit = async (values, { setSubmitting }) => {
+  const handleSubmit = (values, { setSubmitting }) => {
     const { username, password } = values;
 
-    const response = await login({ username, password }).unwrap();
-
-    setPopup({
-      isTriggered: true,
-      title: "Thông báo",
-      content: response.message,
-      onCancel: () => navigate("verify"),
-    });
+    login({ username, password })
+      .unwrap()
+      .then((response) => {
+        setPopup({
+          isTriggered: true,
+          title: "Thông báo",
+          // content: response.message,
+          content: `${response.message} (OTP: ${response.data.otp})`,
+          onCancel: () => navigate("verify"),
+        });
+      });
 
     setSubmitting(false);
   };
