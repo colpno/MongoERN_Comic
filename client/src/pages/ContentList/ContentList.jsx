@@ -21,7 +21,7 @@ function ContentList() {
   const data = useMemo(
     () => ({
       name: genre.name,
-      titles: titles.data,
+      titles,
     }),
     [genre, titles]
   );
