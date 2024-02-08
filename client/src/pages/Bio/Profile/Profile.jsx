@@ -9,7 +9,7 @@ import AvatarBox from "./components/AvatarBox";
 
 function Profile() {
   const user = useSelector((state) => state.user.user);
-  const { updateUser } = useUpdateUser();
+  const { update: updateUser } = useUpdateUser();
   const [initialValues, setInitialValues] = useState({
     avatar: user.avatar,
     username: user.username,
