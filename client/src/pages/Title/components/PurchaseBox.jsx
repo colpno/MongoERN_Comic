@@ -13,7 +13,7 @@ import styles from "../styles/PurchaseBox.module.scss";
 
 const cx = classNames.bind(styles);
 
-function PurchaseBox({ purchase, chapter, payments, handleClose }) {
+function PurchaseBox({ onPurchase, chapter, payments, handleClose }) {
   const { titleId } = useParams();
   const { user, isLoggingIn } = useSelector((state) => state.user);
   const { handleLazyCheck } = useCheckUseService(true);
@@ -54,7 +54,7 @@ function PurchaseBox({ purchase, chapter, payments, handleClose }) {
       const rentList = ["rent ticket"];
       const expiredAt = rentList.includes(method) ? moment().add(5, "days").toISOString() : null;
 
-      await purchase({ titleId, chapterId, method, cost: amount, expiredAt }).unwrap();
+      await onPurchase({ titleId, chapterId, method, cost: amount, expiredAt }).unwrap();
     }
   };
 
@@ -105,7 +105,7 @@ PurchaseBox.propTypes = {
     }).isRequired
   ).isRequired,
   handleClose: PropTypes.func.isRequired,
-  purchase: PropTypes.func.isRequired,
+  onPurchase: PropTypes.func.isRequired,
 };
 
 export default memo(PurchaseBox);
