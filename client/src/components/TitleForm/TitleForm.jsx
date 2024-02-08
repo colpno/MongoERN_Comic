@@ -28,7 +28,7 @@ function TitleForm({ initialValues, validationSchema, handleCancel, handleSubmit
   const statusOptions = useMemo(
     () =>
       statuses.map((status) => {
-        return { value: status.code, label: status.status };
+        return { value: status._id, label: status.status };
       }),
     [statuses]
   );

@@ -10,7 +10,6 @@ function UpdateTitle() {
   const { data: title = {} } = useGetTitle({
     params: {
       _id: titleId,
-      _embed: JSON.stringify([{ collection: "status_id", fields: "-_id code" }]),
     },
     isPrivate: true,
   });
@@ -19,19 +18,19 @@ function UpdateTitle() {
   const INITIAL_VALUE = {
     title: title?.title ?? "",
     summary: title?.summary ?? "",
-    status_id: title?.status_id?.code ?? "",
+    status_id: title?.status_id ?? "",
     release_day: title?.release_day ?? "",
     genres: title?.genres ?? [],
     author: title?.author ?? "",
     coin: `${title?.coin}` ?? "",
     cover: title?.cover?.source ?? "",
   };
+  const { update: updateTitle } = useUpdateTitle();
 
   const handleUpdate = (values) => {
     const data = { ...values, guid: title._guid };
     if (values.cover) data.oldCover = title.cover;
 
-    const { update: updateTitle } = useUpdateTitle();
     updateTitle({ id: titleId, data });
   };
 
