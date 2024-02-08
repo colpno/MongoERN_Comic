@@ -16,7 +16,7 @@ function Follow() {
     _embed: JSON.stringify([{ collection: "title_id", fields: "title cover.source author" }]),
     _fields: "-user_id -__v",
   });
-  const { deleteFollow } = useDeleteFollow();
+  const { del: deleteFollow } = useDeleteFollow();
 
   const handleDelete = (data) => {
     const ids = data instanceof Map ? Array.from(data.keys()) : data;
