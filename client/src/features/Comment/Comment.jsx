@@ -9,12 +9,13 @@ import { CommentForm, CommentList, RequireSignIn } from "./components";
 import styles from "./styles/Comment.module.scss";
 
 const cx = classNames.bind(styles);
+const COMMENT_LIMIT = 15;
 
 function Comment() {
   const commentAt = useSelector((state) => state.comment.comment_at);
   const { user, isLoggingIn } = useSelector((state) => state.user);
   const [rootComments, setRootComments] = useState([]);
-  const [paginate, setPaginate] = useState({ page: 1, limit: 15, total: 0 });
+  const [paginate, setPaginate] = useState({ page: 1, limit: COMMENT_LIMIT, total: 0 });
   const { popup, setPopup, triggerPopup } = usePopup();
   const initialFormValues = { text: "" };
   const { data: comments = [] } = useGetComments({
@@ -27,6 +28,7 @@ function Comment() {
     _sort: {
       createdAt: -1,
     },
+    _limit: COMMENT_LIMIT,
   });
   const { add } = useAddComment();
   const { update } = useUpdateComment();
