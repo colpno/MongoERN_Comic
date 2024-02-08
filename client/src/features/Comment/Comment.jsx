@@ -18,7 +18,8 @@ function Comment() {
   const [paginate, setPaginate] = useState({ page: 1, limit: COMMENT_LIMIT, total: 0 });
   const { popup, setPopup, triggerPopup } = usePopup();
   const initialFormValues = { text: "" };
-  const { data: comments = [] } = useGetComments({
+  const [comments, setComments] = useState([]);
+  const { data: getData = [] } = useGetComments({
     comment_at: commentAt,
     _embed: JSON.stringify([
       { collection: "author", fields: "avatar username" },
@@ -32,6 +33,10 @@ function Comment() {
   });
   const { add } = useAddComment();
   const { update } = useUpdateComment();
+
+  useEffect(() => {
+    setComments(getData);
+  }, [getData, commentAt]);
 
   const handleSubmit = (values, { setSubmitting, resetForm }) => {
     const { text, slug } = values;
