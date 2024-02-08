@@ -16,15 +16,15 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <GlobalStyles>
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
-            <SocketContext.Provider value={socket}>
+        <SocketContext.Provider value={socket}>
+          <Provider store={store}>
+            <PersistGate loading={null} persistor={persistor}>
               <PayPalScriptProvider options={paypalConfigs}>
                 <App />
               </PayPalScriptProvider>
-            </SocketContext.Provider>
-          </PersistGate>
-        </Provider>
+            </PersistGate>
+          </Provider>
+        </SocketContext.Provider>
       </GlobalStyles>
     </BrowserRouter>
   </React.StrictMode>
