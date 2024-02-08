@@ -8,21 +8,23 @@ import { updateTitleFormValidation } from "validations/updateTitleForm.validatio
 function UpdateTitle() {
   const { titleId } = useParams();
   const { data: title = {} } = useGetTitle({
-    _id: titleId,
-    _fields: "title status_id genres summary author coin release_day cover",
-    _embed: JSON.stringify([{ collection: "status_id", fields: "-_id code" }]),
+    params: {
+      _id: titleId,
+      _embed: JSON.stringify([{ collection: "status_id", fields: "-_id code" }]),
+    },
+    isPrivate: true,
   });
   const { popup, setPopup, triggerPopup } = usePopup();
   const hasData = Object.keys(title).length > 0;
-  const INITIAL_VALUE = hasData && {
-    title: title.title,
-    summary: title.summary,
-    status_id: title.status_id.code,
-    release_day: title.release_day,
-    genres: title.genres,
-    author: title.author,
-    coin: `${title.coin}`,
-    cover: title.cover.source,
+  const INITIAL_VALUE = {
+    title: title?.title ?? "",
+    summary: title?.summary ?? "",
+    status_id: title?.status_id?.code ?? "",
+    release_day: title?.release_day ?? "",
+    genres: title?.genres ?? [],
+    author: title?.author ?? "",
+    coin: `${title?.coin}` ?? "",
+    cover: title?.cover?.source ?? "",
   };
 
   const handleUpdate = (values) => {
