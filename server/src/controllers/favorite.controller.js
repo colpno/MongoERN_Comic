@@ -73,7 +73,7 @@ const favoriteController = {
   delete: async (req, res, next) => {
     try {
       const { id: userId } = req.userInfo;
-      const { chapterId } = req.query;
+      const { chapterId } = req.body;
 
       const response = await favoriteService.delete(userId, chapterId);
 

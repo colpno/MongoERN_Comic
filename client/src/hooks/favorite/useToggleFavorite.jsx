@@ -1,15 +1,12 @@
 import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import {
-  useAddFavoriteMutation,
-  useDeleteFavoriteMutation,
-  useGetFavoritesQuery,
-} from "api/favorite.api.js";
+import { useAddFavoriteMutation, useDeleteFavoriteMutation } from "api/favorite.api.js";
 import { emitToast } from "features/Toast.jsx";
 import { setLoading } from "libs/redux/slices/common.slice.js";
 import { setFavorite } from "libs/redux/slices/readingChapter.slice";
 import { isEmpty } from "utils/isEmpty.js";
+import useGetFavorites from "./useGetFavorites.jsx";
 
 function useToggleFavorite(chapterId) {
   const dispatch = useDispatch();
@@ -17,14 +14,14 @@ function useToggleFavorite(chapterId) {
   const favorite = useSelector((state) => state.reading.favorite);
   const isFavored = useMemo(() => favorite && Object.keys(favorite).length > 0, [favorite]);
   const [add, addResponse] = useAddFavoriteMutation();
-  const { isLoading: isAddLoading } = addResponse;
+  const { isLoading: isAddLoading, isSuccess: isAddSuccess, data: addData } = addResponse;
   const [del, deleteResponse] = useDeleteFavoriteMutation();
-  const { isLoading: isDeleteLoading } = deleteResponse;
-  const getResponse = useGetFavoritesQuery({
+  const { isLoading: isDeleteLoading, isSuccess: isDeleteSuccess } = deleteResponse;
+  const getResponse = useGetFavorites({
     user_id: user._id,
     chapter_id: chapterId,
   });
-  const { data, isFetching: isGetFetching, isSuccess: isGetSuccess } = getResponse;
+  const { data: getData, isFetching: isGetFetching, isSuccess: isGetSuccess } = getResponse;
 
   useEffect(() => {
     dispatch(setLoading(isGetFetching));
@@ -39,9 +36,20 @@ function useToggleFavorite(chapterId) {
   }, [isDeleteLoading]);
 
   useEffect(() => {
+    if (isDeleteSuccess) {
+      dispatch(setFavorite({}));
+    }
+  }, [isDeleteSuccess]);
+
+  useEffect(() => {
+    if (isAddSuccess) {
+      dispatch(setFavorite(addData));
+    }
+  }, [isAddSuccess]);
+
+  useEffect(() => {
     if (isGetSuccess) {
-      if (!isFavored) dispatch(setFavorite(data.data));
-      else dispatch(setFavorite({}));
+      dispatch(setFavorite(getData[0]));
     }
   }, [isGetSuccess]);
 
