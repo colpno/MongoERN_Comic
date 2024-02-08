@@ -27,11 +27,13 @@ function Chapters() {
   const { popup, setPopup, triggerPopup } = usePopup();
   const { del: deleteTitle } = useDeleteTitle();
   const { del: deleteChapter } = useDeleteChapter();
-  const { data: title = [] } = useGetTitle({ _id: titleId });
+  const { data: title = [] } = useGetTitle({ params: { _id: titleId } });
   const { data: chapters = [] } = useGetChapters({
-    title_id: titleId,
-    _embed: JSON.stringify([{ collection: "status_id", fields: "-_id status" }]),
-    _fields: "-__v -_guid -cover.cloud_public_id -contents.cloud_public_id",
+    params: {
+      title_id: titleId,
+      _embed: JSON.stringify([{ collection: "status_id", fields: "-_id status" }]),
+      _fields: "-__v -_guid -cover.cloud_public_id -contents.cloud_public_id",
+    },
   });
 
   const handleDeleteTitle = (id) => {
