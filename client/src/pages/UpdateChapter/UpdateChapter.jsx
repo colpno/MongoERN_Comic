@@ -9,10 +9,7 @@ function UpdateChapter() {
   const { chapterId } = useParams();
   const { update: updateChapter } = useUpdateChapter();
   const { data: chapter = [] } = useGetChapter({
-    chapterId,
-    params: {
-      _embed: JSON.stringify([{ collection: "status_id", fields: "_id" }]),
-    },
+    id: chapterId,
   });
 
   const INITIAL_VALUE = useMemo(
@@ -20,7 +17,7 @@ function UpdateChapter() {
       Object.keys(chapter).length > 0
         ? {
             title: chapter.title,
-            status_id: chapter.status_id._id,
+            status_id: chapter.status_id,
             cost: `${chapter.cost}`,
             order: `${chapter.order}`,
             cover: chapter.cover.source,
@@ -91,7 +88,7 @@ function UpdateChapter() {
 
   return (
     <FormWrapper title="Chỉnh sửa chương">
-      {Object.keys(chapter).length && (
+      {Object.keys(chapter).length > 0 && (
         <ChapterForm
           handleSubmit={handleSubmit}
           initialValues={INITIAL_VALUE}

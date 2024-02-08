@@ -10,14 +10,16 @@ function CreateChapter() {
   const { popup, triggerPopup } = usePopup();
   const { add } = useAddChapter();
   const { data: chapters = {} } = useGetChapters({
-    title_id: titleId,
-    _sort: {
-      order: -1,
+    params: {
+      title_id: titleId,
+      _sort: {
+        order: -1,
+      },
+      _limit: 1,
     },
-    _limit: 1,
   });
   const INITIAL_VALUE = {
-    order: `${Number.parseInt(chapters.data[0]?.order || 0, 10) + 1}`,
+    order: chapters?.data ? `${Number.parseInt(chapters.data[0].order || 0, 10) + 1}` : "1",
     title: "",
     status_id: "",
     cost: "false",
