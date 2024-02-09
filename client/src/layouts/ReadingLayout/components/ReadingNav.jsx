@@ -6,7 +6,8 @@ import { Button } from "components";
 import { useGetChapterTransactions } from "hooks/index.jsx";
 import { useSelector } from "react-redux";
 
-function ReadingNav({ cx, chapter, totalChapter, titleId }) {
+function ReadingNav({ cx, chapter, totalChapter, title }) {
+  const titleId = title._id;
   const user = useSelector((state) => state.user.user);
   const { data: chapterTransactions = [] } = useGetChapterTransactions({
     user_id: user._id,
@@ -14,7 +15,10 @@ function ReadingNav({ cx, chapter, totalChapter, titleId }) {
     _embed: JSON.stringify([{ collection: "chapter_id", fields: "order" }]),
   });
   const [readLimit, setReadLimit] = useState(1);
-  const canNext = chapter.order < readLimit || chapter.order >= totalChapter;
+  const isOwner = title.user_id === user._id;
+  const isBought = chapter.order < readLimit;
+  const isInRange = chapter.order >= totalChapter;
+  const canNext = isBought || isInRange || isOwner;
 
   useEffect(() => {
     if (chapterTransactions.length > 0) {
@@ -62,7 +66,10 @@ ReadingNav.propTypes = {
     title: PropTypes.string.isRequired,
   }).isRequired,
   totalChapter: PropTypes.number.isRequired,
-  titleId: PropTypes.string.isRequired,
+  title: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    user_id: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default memo(ReadingNav);

@@ -16,7 +16,7 @@ function ReadingHeader() {
   const { titleId } = useParams();
   const user = useSelector((state) => state.user.user);
   const { chapter, favorite } = useSelector((state) => state.reading);
-  const { data: title = [] } = useGetTitle({ params: { _id: titleId }, isPrivate: false });
+  const { data: title = {} } = useGetTitle({ params: { _id: titleId }, isPrivate: false });
   const { handleToggle, isFavored } = useToggleFavorite(chapter._id);
   const [controls, setControls] = useState({ isFavored });
 
@@ -56,12 +56,7 @@ function ReadingHeader() {
               {title.title}
             </Button>
           </div>
-          <ReadingNav
-            cx={cx}
-            chapter={chapter}
-            totalChapter={title.total_chapter}
-            titleId={titleId}
-          />
+          <ReadingNav cx={cx} chapter={chapter} totalChapter={title.total_chapter} title={title} />
           <ReadingTools
             cx={cx}
             onToggleFavorite={handleToggle}
