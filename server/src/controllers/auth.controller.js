@@ -156,7 +156,7 @@ const authController = {
       const sameOTP = bcrypt.compareSync(userOTP, otp.code);
       if (!sameOTP) return next(createError(401, 'Mã OTP không chính xác'));
 
-      const user = await userService.getOne({ username });
+      const user = await userService.getOne({ username, _id: id });
       if (!user) return next(createError(404, 'Không tìm thấy tài khoản'));
 
       const { income, isBanned, isActivated, password, role, ...others } = user._doc;
