@@ -4,9 +4,12 @@ import { IoChevronBackCircleOutline, IoChevronForwardCircleOutline } from "react
 
 import { Button } from "components";
 import { useGetChapterTransactions } from "hooks/index.jsx";
+import { useSelector } from "react-redux";
 
 function ReadingNav({ cx, chapter, totalChapter, titleId }) {
+  const user = useSelector((state) => state.user.user);
   const { data: chapterTransactions = [] } = useGetChapterTransactions({
+    user_id: user._id,
     title_id: titleId,
     _embed: JSON.stringify([{ collection: "chapter_id", fields: "order" }]),
   });

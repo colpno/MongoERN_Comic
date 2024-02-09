@@ -52,6 +52,7 @@ function Reading() {
       isPrivate: false,
     });
     getChapterTransactions({
+      user_id: user._id,
       title_id: titleId,
       _fields: "-_id chapter_id",
     });

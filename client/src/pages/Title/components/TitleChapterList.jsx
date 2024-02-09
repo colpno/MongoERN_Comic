@@ -16,6 +16,7 @@ function TitleChapterList({ title, chapters }) {
   const { user } = useSelector((state) => state.user);
   const [selectedChapter, setSelectedChapter] = useState();
   const { data: chapterTransactions = [] } = useGetChapterTransactions({
+    user_id: user._id,
     title_id: titleId,
   });
   const { add: addChapterTransaction } = useAddChapterTransaction();

@@ -34,9 +34,6 @@ const chapterTransactionController = {
   },
   getAllOwned: async (req, res, next) => {
     try {
-      const { id: userId } = req.userInfo;
-      req.query.user_id = userId;
-
       const params = transformQueryParams(req.query);
       const response = await chapterTransactionService.getAll(params);
 

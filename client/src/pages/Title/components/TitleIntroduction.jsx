@@ -23,6 +23,7 @@ function TitleIntroduction() {
   const user = useSelector((state) => state.user.user);
   const { handleToggle: handleToggleFollow, isFollowed } = useToggleFollow(titleId);
   const { data: firstChapter = [] } = useGetChapterTransactions({
+    user_id: user._id,
     title_id: titleId,
     _embed: JSON.stringify([{ collection: "chapter_id", match: { order: 1 } }]),
     _fields: "_id",
