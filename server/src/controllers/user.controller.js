@@ -85,8 +85,22 @@ const userController = {
   update: async (req, res, next) => {
     try {
       const { userInfo, body } = req;
-      const { _id, username, password, avatar, email, role, dateOfBirth, isBanned, isActivated } =
-        body;
+      const {
+        _id,
+        username,
+        password,
+        avatar,
+        email,
+        role,
+        dateOfBirth,
+        isBanned,
+        isActivated,
+        paypalEmail,
+        coin,
+        point,
+        rentingTicket,
+        purchasingTicket,
+      } = body;
 
       if (_id) userInfo.id = _id;
 
@@ -99,6 +113,12 @@ const userController = {
         dateOfBirth,
         isBanned,
         isActivated,
+        coin,
+        point,
+        ticket_for_renting: rentingTicket,
+        ticket_for_buying: purchasingTicket,
+        date_of_birth: dateOfBirth,
+        paypal_email: paypalEmail,
       });
 
       if (!response) {
