@@ -36,6 +36,7 @@ function Comment() {
 
   useEffect(() => {
     setComments(getData);
+    return () => setComments([]);
   }, [getData, commentAt]);
 
   const handleSubmit = (values, { setSubmitting, resetForm }) => {
