@@ -37,6 +37,7 @@ function Notice() {
       <div className={cx("notice-page__middle")}>
         <p
           className={cx("content")}
+          // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(notification.content) }}
         />
       </div>
