@@ -110,7 +110,6 @@ const userController = {
         avatar,
         email,
         role,
-        dateOfBirth,
         isBanned,
         isActivated,
         coin,
