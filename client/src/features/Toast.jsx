@@ -1,9 +1,10 @@
 import { memo } from "react";
+import { useSelector } from "react-redux";
 import { ToastContainer, toast as reactToast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 
-export const options = {
-  position: "bottom-left",
+const getOptions = (theme = "light") => ({
+  position: "top-right",
   autoClose: 5000,
   hideProgressBar: false,
   closeOnClick: true,
@@ -13,10 +14,11 @@ export const options = {
   progress: undefined,
   rtl: false,
   newestOnTop: true,
-  theme: "light",
-};
+  theme,
+});
 
 export const emitToast = (message, mode = "success") => {
+  const options = getOptions(mode);
   switch (mode) {
     case "success":
       reactToast.success(message, options);
@@ -37,7 +39,14 @@ export const emitToast = (message, mode = "success") => {
 };
 
 function Toast() {
-  return <ToastContainer {...options} />;
+  const theme = useSelector((state) => state.common.theme);
+  const options = getOptions(theme);
+  const customStyles = {
+    backgroundColor: "var(--island-background-color)",
+    color: "var(--primary-font-color)",
+  };
+
+  return <ToastContainer {...options} theme={theme} toastStyle={customStyles} />;
 }
 
 export default memo(Toast);
