@@ -65,7 +65,7 @@ const authController = {
 
       return res
         .cookie('loginInfo', cookieData, {
-          maxAge: TOKEN_EXPIRED_TIME * 60 * 1000,
+          expires: TOKEN_EXPIRED_TIME * 60 * 1000,
           sameSite: 'none',
           secure: true,
         })
@@ -81,7 +81,7 @@ const authController = {
               name: 'loginInfo',
               payload: cookieData,
               options: {
-                maxAge: TOKEN_EXPIRED_TIME * 60 * 1000,
+                expires: TOKEN_EXPIRED_TIME * 60 * 1000,
                 sameSite: 'none',
                 secure: true,
               },
@@ -141,7 +141,7 @@ const authController = {
 
       return res
         .cookie('loginInfo', cookieData, {
-          maxAge: TOKEN_EXPIRED_TIME * 60 * 1000,
+          expires: TOKEN_EXPIRED_TIME * 60 * 1000,
           sameSite: 'none',
           secure: true,
         })
@@ -159,7 +159,7 @@ const authController = {
               name: 'loginInfo',
               payload: cookieData,
               options: {
-                maxAge: TOKEN_EXPIRED_TIME * 60 * 1000,
+                expires: TOKEN_EXPIRED_TIME * 60 * 1000,
                 sameSite: 'none',
                 secure: true,
               },
@@ -250,7 +250,7 @@ const authController = {
         .cookie('forgotPasswordToken', token, {
           sameSite: 'none',
           secure: true,
-          maxAge: TOKEN_EXPIRED_TIME * 60 * 1000,
+          expires: TOKEN_EXPIRED_TIME * 60 * 1000,
         })
         .status(200)
         .json({
@@ -263,7 +263,7 @@ const authController = {
               options: {
                 sameSite: 'none',
                 secure: true,
-                maxAge: TOKEN_EXPIRED_TIME * 60 * 1000,
+                expires: TOKEN_EXPIRED_TIME * 60 * 1000,
               },
             },
           },
