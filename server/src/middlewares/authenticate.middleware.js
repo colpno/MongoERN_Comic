@@ -8,7 +8,6 @@ const { ACCESS_TOKEN_KEY } = process.env;
 
 export const isAuthenticated = (req, res, next) => {
   const { accessToken } = req.cookies;
-  console.log('req:', req);
 
   if (!accessToken) {
     if (req.method === 'GET' && Object.keys(req.body).length <= 0) {
@@ -32,7 +31,6 @@ export const isAuthenticated = (req, res, next) => {
 
 export const isAdmin = (req, res, next) => {
   const { accessToken } = req.cookies;
-  console.log('req:', req);
 
   if (!accessToken) {
     if (req.method === 'GET' && Object.keys(req.body).length <= 0) {
