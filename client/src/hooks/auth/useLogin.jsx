@@ -8,7 +8,7 @@ import Cookies from "js-cookie";
 function useLogin() {
   const dispatch = useDispatch();
   const [login, response] = useLoginMutation();
-  const { isFetching, data, isSuccess } = response;
+  const { isLoading, data, isSuccess } = response;
 
   useEffect(() => {
     if (isSuccess) {
@@ -18,12 +18,12 @@ function useLogin() {
   }, [isSuccess]);
 
   useEffect(() => {
-    if (isFetching) {
+    if (isLoading) {
       dispatch(setLoading(true));
     } else {
       dispatch(setLoading(false));
     }
-  }, [isFetching]);
+  }, [isLoading]);
 
   return { login, ...response };
 }

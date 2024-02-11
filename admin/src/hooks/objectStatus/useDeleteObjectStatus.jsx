@@ -6,15 +6,15 @@ import { useDispatch } from "react-redux";
 function useDeleteObjectStatus() {
   const dispatch = useDispatch();
   const [del, response] = useDeleteObjectStatusMutation();
-  const { isFetching } = response;
+  const { isLoading } = response;
 
   useEffect(() => {
-    if (isFetching) {
+    if (isLoading) {
       dispatch(setLoading(true));
     } else {
       dispatch(setLoading(false));
     }
-  }, [isFetching]);
+  }, [isLoading]);
 
   return { del, ...response };
 }

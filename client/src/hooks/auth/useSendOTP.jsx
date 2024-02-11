@@ -9,7 +9,7 @@ import Cookies from "js-cookie";
 function useSendOTP() {
   const dispatch = useDispatch();
   const [sendOTP, response] = useSendOTPMutation();
-  const { isFetching, data, isSuccess } = response;
+  const { isLoading, data, isSuccess } = response;
 
   useEffect(() => {
     if (isSuccess) {
@@ -19,12 +19,12 @@ function useSendOTP() {
   }, [isSuccess]);
 
   useEffect(() => {
-    if (isFetching) {
+    if (isLoading) {
       dispatch(setLoading(true));
     } else {
       dispatch(setLoading(false));
     }
-  }, [isFetching]);
+  }, [isLoading]);
 
   return { sendOTP, ...response };
 }

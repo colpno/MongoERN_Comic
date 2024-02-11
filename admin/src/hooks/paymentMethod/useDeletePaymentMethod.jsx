@@ -6,15 +6,15 @@ import { useDispatch } from "react-redux";
 function useDeletePaymentMethod(params) {
   const dispatch = useDispatch();
   const [del, response] = useDeletePaymentMethodMutation(params);
-  const { isFetching } = response;
+  const { isLoading } = response;
 
   useEffect(() => {
-    if (isFetching) {
+    if (isLoading) {
       dispatch(setLoading(true));
     } else {
       dispatch(setLoading(false));
     }
-  }, [isFetching]);
+  }, [isLoading]);
 
   return { del, ...response };
 }

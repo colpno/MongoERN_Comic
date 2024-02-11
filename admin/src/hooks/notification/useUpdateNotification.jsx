@@ -6,15 +6,15 @@ import { useDispatch } from "react-redux";
 function useUpdateNotification() {
   const dispatch = useDispatch();
   const [update, response] = useUpdateNotificationMutation();
-  const { isFetching } = response;
+  const { isLoading } = response;
 
   useEffect(() => {
-    if (isFetching) {
+    if (isLoading) {
       dispatch(setLoading(true));
     } else {
       dispatch(setLoading(false));
     }
-  }, [isFetching]);
+  }, [isLoading]);
 
   return { update, ...response };
 }

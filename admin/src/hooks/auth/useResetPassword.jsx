@@ -9,7 +9,7 @@ function useResetPassword() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [resetPassword, response] = useResetPasswordMutation();
-  const { isFetching, isSuccess } = response;
+  const { isLoading, isSuccess } = response;
 
   useEffect(() => {
     if (isSuccess) {
@@ -18,12 +18,12 @@ function useResetPassword() {
   }, [isSuccess]);
 
   useEffect(() => {
-    if (isFetching) {
+    if (isLoading) {
       dispatch(setLoading(true));
     } else {
       dispatch(setLoading(false));
     }
-  }, [isFetching]);
+  }, [isLoading]);
 
   return { resetPassword, ...response };
 }

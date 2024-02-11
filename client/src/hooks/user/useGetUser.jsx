@@ -6,15 +6,15 @@ import { useDispatch } from "react-redux";
 function useGetUser(params) {
   const dispatch = useDispatch();
   const response = useGetUserQuery(params);
-  const { isLoading } = response;
+  const { isFetching } = response;
 
   useEffect(() => {
-    if (isLoading) {
+    if (isFetching) {
       dispatch(setLoading(true));
     } else {
       dispatch(setLoading(false));
     }
-  }, [isLoading]);
+  }, [isFetching]);
 
   return response;
 }

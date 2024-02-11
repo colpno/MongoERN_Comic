@@ -6,15 +6,15 @@ import { useDispatch } from "react-redux";
 function useLazyGetChapter(params) {
   const dispatch = useDispatch();
   const [get, response] = useLazyGetChapterQuery(params);
-  const { isLoading } = response;
+  const { isFetching } = response;
 
   useEffect(() => {
-    if (isLoading) {
+    if (isFetching) {
       dispatch(setLoading(true));
     } else {
       dispatch(setLoading(false));
     }
-  }, [isLoading]);
+  }, [isFetching]);
 
   return { get, ...response };
 }

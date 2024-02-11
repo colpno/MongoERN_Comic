@@ -8,7 +8,7 @@ import Cookies from "js-cookie";
 function useForgotPassword() {
   const dispatch = useDispatch();
   const [forgotPassword, response] = useForgotPasswordMutation();
-  const { data, isFetching, isSuccess } = response;
+  const { data, isLoading, isSuccess } = response;
 
   useEffect(() => {
     if (isSuccess) {
@@ -17,12 +17,12 @@ function useForgotPassword() {
   }, [isSuccess]);
 
   useEffect(() => {
-    if (isFetching) {
+    if (isLoading) {
       dispatch(setLoading(true));
     } else {
       dispatch(setLoading(false));
     }
-  }, [isFetching]);
+  }, [isLoading]);
 
   return { forgotPassword, ...response };
 }

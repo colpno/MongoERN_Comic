@@ -11,7 +11,7 @@ function useVerifyLogin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [verifyLogin, response] = useVerifyLoginMutation();
-  const { isFetching, data, isSuccess } = response;
+  const { isLoading, data, isSuccess } = response;
 
   useEffect(() => {
     if (isSuccess) {
@@ -23,12 +23,12 @@ function useVerifyLogin() {
   }, [isSuccess]);
 
   useEffect(() => {
-    if (isFetching) {
+    if (isLoading) {
       dispatch(setLoading(true));
     } else {
       dispatch(setLoading(false));
     }
-  }, [isFetching]);
+  }, [isLoading]);
 
   return { verifyLogin, ...response };
 }

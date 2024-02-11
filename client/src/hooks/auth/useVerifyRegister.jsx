@@ -9,7 +9,7 @@ function useVerifyRegister() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [verifyRegister, response] = useVerifyRegisterMutation();
-  const { isFetching, isSuccess } = response;
+  const { isLoading, isSuccess } = response;
 
   useEffect(() => {
     if (isSuccess) {
@@ -18,12 +18,12 @@ function useVerifyRegister() {
   }, [isSuccess]);
 
   useEffect(() => {
-    if (isFetching) {
+    if (isLoading) {
       dispatch(setLoading(true));
     } else {
       dispatch(setLoading(false));
     }
-  }, [isFetching]);
+  }, [isLoading]);
 
   return { verifyRegister, ...response };
 }
