@@ -15,9 +15,10 @@ function useVerifyLogin() {
 
   useEffect(() => {
     if (isSuccess) {
-      dispatch(setUser(data));
-      Cookies.set(data.data.cookie.name, data.data.cookie.payload, data.data.cookie.options);
-      navigate("/");
+      const { cookie, ...others } = data;
+      dispatch(setUser(others));
+      Cookies.set(cookie.name, cookie.payload, cookie.options);
+      navigate("/titles");
     }
   }, [isSuccess]);
 
