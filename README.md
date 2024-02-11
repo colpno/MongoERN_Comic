@@ -5,10 +5,6 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/github_username/repo_name">
-    <img src="misc/logo.png" alt="Logo" width="80" height="80">
-  </a>
-
 <h3 align="center">COMICO</h3>
 
   <p align="center">
@@ -131,22 +127,22 @@ Key Features:
 
 Screenshots of normal user:
 
-[![Weekly page][misc/weekly-page.png]](https://comico-comic.netlify.app/comic/weekly)
-[![Search page][misc/search-page.png]](https://comico-comic.netlify.app/search)
-[![Title page][misc/title-page.png]](https://comico-comic.netlify.app)
-[![Reading page][misc/reading-page.png]](https://comico-comic.netlify.app)
+[![Weekly page][Weekly-page]](https://comico-comic.netlify.app/comic/weekly)
+[![Search page][Search-page]](https://comico-comic.netlify.app/search)
+[![Title page][Title-page]](https://comico-comic.netlify.app)
+[![Reading page][Reading-page]](https://comico-comic.netlify.app)
 
 Screenshots of translator or author:
 
-[![Transaction page][misc/transaction-page.png]](https://comico-comic.netlify.app/coin/add)
-[![History page][misc/history-page.png]](https://comico-comic.netlify.app/bookshelf/follow)
-[![My title page][misc/my-title-page.png]](https://comico-comic.netlify.app/my-title)
-[![Chapters of my title  page][misc/my-title-chapter-page.png]](https://comico-comic.netlify.app/my-title)
+[![Transaction page][Transaction-page]](https://comico-comic.netlify.app/coin/add)
+[![History page][History-page]](https://comico-comic.netlify.app/bookshelf/follow)
+[![My title page][My-title-page]](https://comico-comic.netlify.app/my-title)
+[![Chapters of my title  page][Chapters-of-my-title-page]](https://comico-comic.netlify.app/my-title)
 
 Screenshots of administrator:
 
-[![Admin page][misc/admin-screenshot.png]](https://admin-comico.netlify.app/titles)
-[![Statistics from admin][misc/admin-statistics]](https://admin-comico.netlify.app/income)
+[![Admin page][Admin-page]](https://admin-comico.netlify.app/titles)
+[![Statistics from admin][Statistics-from-admin]](https://admin-comico.netlify.app/income)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -170,7 +166,6 @@ Project Link: [https://github.com/colpno/MongoERN_Comic](https://github.com/colp
 [Facebook-url]: https://www.facebook.com/profile.php?id=100005408149001
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/gia-vinh-t%E1%BA%A1-a2224b2a8
-[product-screenshot]: misc/comico-screenshot.png
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
 [React-url]: https://reactjs.org/
 [Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
@@ -182,8 +177,20 @@ Project Link: [https://github.com/colpno/MongoERN_Comic](https://github.com/colp
 [MongoDB-url]: https://www.mongodb.com/
 [MongoDB-badge]: https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=61DAFB 
 [NodeJS-url]: https://nodejs.org/en
-[NodeJS-badge]: https://img.shields.io/badge/NodeJS-339933?style=for-the-badglogo=nodedotjs&logoColor=61DAFB 
+[NodeJS-badge]: https://img.shields.io/badge/NodeJS-339933?style=for-the-bad&logo=nodedotjs&logoColor=61DAFB 
 [SASS-url]: https://sass-lang.com/
-[SASS-badge]: https://img.shields.io/badge/SASS-CC6699?style=for-the-badglogo=sass&logoColor=61DAFB 
+[SASS-badge]: https://img.shields.io/badge/SASS-CC6699?style=for-the-bad&logo=sass&logoColor=61DAFB 
 [Redux-url]: https://redux.js.org/
-[Redux-badge]: https://img.shields.io/badge/Redux-764ABC?style=for-the-badglogo=redux&logoColor=61DAFB 
+[Redux-badge]: https://img.shields.io/badge/Redux-764ABC?style=for-the-bad&logo=redux&logoColor=61DAFB 
+
+[product-screenshot]: misc/comico-screenshot.png
+[Weekly-page]: misc/weekly-page.png
+[Search-page]: misc/search-page.png
+[Title-page]: misc/title-page.png
+[Reading-page]: misc/reading-page.png
+[Transaction-page]: misc/transaction-page.png
+[History-page]: misc/history-page.png
+[My-title-page]: misc/my-title-page.png
+[Chapters-of-my-title-page]: misc/my-title-chapter-page.png
+[Admin-page]: misc/admin-screenshot.png
+[Statistics-from-admin]: misc/admin-statistics
