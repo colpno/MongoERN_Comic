@@ -41,12 +41,8 @@ export const emitToast = (message, mode = "success") => {
 function Toast() {
   const theme = useSelector((state) => state.common.theme);
   const options = getOptions(theme);
-  const customStyles = {
-    backgroundColor: "var(--island-background-color)",
-    color: "var(--primary-font-color)",
-  };
 
-  return <ToastContainer {...options} theme={theme} toastStyle={customStyles} />;
+  return <ToastContainer {...options} theme={theme} />;
 }
 
 export default memo(Toast);
