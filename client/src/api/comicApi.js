@@ -1,7 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import axios from "axios";
-import { options as toastOptions } from "features/Toast.jsx";
-import { toast } from "react-toastify";
+import { emitToast } from "features/Toast.jsx";
 
 const axiosBaseQuery =
   ({ baseUrl } = { baseUrl: "" }) =>
@@ -26,7 +25,7 @@ const axiosBaseQuery =
         window.location.href = "/not-found";
       }
 
-      toast.error(axiosError.response?.data || axiosError.message, toastOptions);
+      emitToast(axiosError.response?.data || axiosError.message);
 
       return {
         error: {
