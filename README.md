@@ -17,7 +17,9 @@
     <a href="https://github.com/colpno/MongoERN_Comic/tree/master/docs"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://comic-tau-umber.vercel.app/">View Demo</a>
+    <a href="https://comico-comic.netlify.app">View Client Demo</a>
+    ·
+    <a href="https://admin-comico.netlify.app">View Admin Demo</a>
     ·
     <a href="https://github.com/colpno/MongoERN_Comic/issues">Report Bug</a>
     ·
@@ -53,7 +55,7 @@
 
 ## About The Project
 
-[![COMICO Screen Shot][product-screenshot]](https://comic-tau-umber.vercel.app/)
+[![COMICO Screen Shot][product-screenshot]](https://comico-comic.netlify.app)
 
 COMICO is a comic website that offers a wide range of comics for readers to enjoy. It provides a platform where users can buy chapters to read or find free comics available for their entertainment. The website also offers the opportunity for users to become authors or translators, granted they have the appropriate permission or license and make money from it.
 
@@ -129,22 +131,22 @@ Key Features:
 
 Screenshots of normal user:
 
-![Weekly page](misc/weekly-page.png)
-![Search page](misc/search-page.png)
-![Title page](misc/title-page.png)
-![Reading page](misc/reading-page.png)
+[![Weekly page][misc/weekly-page.png]](https://comico-comic.netlify.app/comic/weekly)
+[![Search page][misc/search-page.png]](https://comico-comic.netlify.app/search)
+[![Title page][misc/title-page.png]](https://comico-comic.netlify.app)
+[![Reading page][misc/reading-page.png]](https://comico-comic.netlify.app)
 
 Screenshots of translator or author:
 
-![Transaction page](misc/transaction-page.png)
-![History page](misc/history-page.png)
-![My title page](misc/my-title-page.png)
-![Chapters of my title  page](misc/my-title-chapter-page.png)
+[![Transaction page][misc/transaction-page.png]](https://comico-comic.netlify.app/coin/add)
+[![History page][misc/history-page.png]](https://comico-comic.netlify.app/bookshelf/follow)
+[![My title page][misc/my-title-page.png]](https://comico-comic.netlify.app/my-title)
+[![Chapters of my title  page][misc/my-title-chapter-page.png]](https://comico-comic.netlify.app/my-title)
 
 Screenshots of administrator:
 
-![Admin page](misc/admin-screenshot.png)
-![Statistics from admin](misc/admin-statistics)
+[![Admin page][misc/admin-screenshot.png]](https://admin-comico.netlify.app/titles)
+[![Statistics from admin][misc/admin-statistics]](https://admin-comico.netlify.app/income)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
