@@ -3,8 +3,6 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import { config } from 'dotenv';
 
-import corsMiddleWare from './cors.middleware.js';
-
 config();
 
 const app = express();
@@ -21,7 +19,5 @@ app.use(
     credentials: true,
   })
 );
-
-app.use((req, res, next) => corsMiddleWare(req, res, next, corsURL.origin));
 
 export { app as middlewares, corsURL };

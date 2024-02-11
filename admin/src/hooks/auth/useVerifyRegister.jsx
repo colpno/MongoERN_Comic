@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 
-import { useVerifyRegisterMutation } from "api/auth.api";
-import { setLoading } from "libs/redux/slices/common.slice";
+import { useVerifyRegisterMutation } from "api/auth.api.js";
+import { setLoading } from "libs/redux/slices/common.slice.js";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 

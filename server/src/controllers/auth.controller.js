@@ -1,15 +1,10 @@
 import bcrypt from 'bcryptjs';
-import { config } from 'dotenv';
 import createError from 'http-errors';
 import jwt from 'jsonwebtoken';
 import moment from 'moment';
 
 import { authService, otpService, userService } from '../services/index.js';
 import { secureEmail } from '../helpers/secureEmail.js';
-
-config();
-
-const { CLIENT_URL } = process.env;
 
 const otpSender = async (id, username, email) => {
   const TOKEN_EXPIRED_TIME = 15;
@@ -73,12 +68,25 @@ const authController = {
           maxAge: TOKEN_EXPIRED_TIME * 60 * 1000,
           sameSite: 'none',
           secure: true,
-          domain: CLIENT_URL,
         })
         .status(200)
         .json({
           code: 200,
-          data: { id, username, email, expiredAt },
+          data: {
+            id,
+            username,
+            email,
+            expiredAt,
+            cookie: {
+              name: 'loginInfo',
+              payload: cookieData,
+              options: {
+                maxAge: TOKEN_EXPIRED_TIME * 60 * 1000,
+                sameSite: 'none',
+                secure: true,
+              },
+            },
+          },
           message: `OTP đã được gửi đến ${email}`,
         });
     } catch (error) {
@@ -136,13 +144,27 @@ const authController = {
           maxAge: TOKEN_EXPIRED_TIME * 60 * 1000,
           sameSite: 'none',
           secure: true,
-          domain: CLIENT_URL,
         })
         .status(200)
         .json({
           code: 200,
           // data: { id: _id, username, email, expiredAt },
-          data: { id: _id, username, email, expiredAt, otp },
+          data: {
+            id: _id,
+            username,
+            email,
+            expiredAt,
+            otp,
+            cookie: {
+              name: 'loginInfo',
+              payload: cookieData,
+              options: {
+                maxAge: TOKEN_EXPIRED_TIME * 60 * 1000,
+                sameSite: 'none',
+                secure: true,
+              },
+            },
+          },
           message: `OTP đã được gửi đến ${email}`,
         });
     } catch (error) {
@@ -180,7 +202,6 @@ const authController = {
         .cookie('accessToken', token, {
           sameSite: 'none',
           secure: true,
-          domain: CLIENT_URL,
         })
         .status(200)
         .json({
@@ -188,6 +209,14 @@ const authController = {
           data: {
             ...others,
             role,
+            cookie: {
+              name: 'accessToken',
+              payload: token,
+              options: {
+                sameSite: 'none',
+                secure: true,
+              },
+            },
           },
           message: 'Đăng nhập thành công',
         });
@@ -222,12 +251,22 @@ const authController = {
           sameSite: 'none',
           secure: true,
           maxAge: TOKEN_EXPIRED_TIME * 60 * 1000,
-          domain: CLIENT_URL,
         })
         .status(200)
         .json({
           code: 200,
           message: `Link thay đổi mật khẩu đã được gửi đến ${email}`,
+          data: {
+            cookie: {
+              name: 'forgotPasswordToken',
+              payload: token,
+              options: {
+                sameSite: 'none',
+                secure: true,
+                maxAge: TOKEN_EXPIRED_TIME * 60 * 1000,
+              },
+            },
+          },
         });
     } catch (error) {
       return next(createError(500, error));
