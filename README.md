@@ -177,11 +177,11 @@ Project Link: [https://github.com/colpno/MongoERN_Comic](https://github.com/colp
 [MongoDB-url]: https://www.mongodb.com/
 [MongoDB-badge]: https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=61DAFB 
 [NodeJS-url]: https://nodejs.org/en
-[NodeJS-badge]: https://img.shields.io/badge/NodeJS-339933?style=for-the-bad&logo=nodedotjs&logoColor=61DAFB 
+[NodeJS-badge]: https://img.shields.io/badge/NodeJS-339933?style=for-the-badge&logo=nodedotjs&logoColor=61DAFB 
 [SASS-url]: https://sass-lang.com/
-[SASS-badge]: https://img.shields.io/badge/SASS-CC6699?style=for-the-bad&logo=sass&logoColor=61DAFB 
+[SASS-badge]: https://img.shields.io/badge/SASS-CC6699?style=for-the-badge&logo=sass&logoColor=61DAFB 
 [Redux-url]: https://redux.js.org/
-[Redux-badge]: https://img.shields.io/badge/Redux-764ABC?style=for-the-bad&logo=redux&logoColor=61DAFB 
+[Redux-badge]: https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=redux&logoColor=61DAFB 
 
 [product-screenshot]: misc/comico-screenshot.png
 [Weekly-page]: misc/weekly-page.png
@@ -193,4 +193,4 @@ Project Link: [https://github.com/colpno/MongoERN_Comic](https://github.com/colp
 [My-title-page]: misc/my-title-page.png
 [Chapters-of-my-title-page]: misc/my-title-chapter-page.png
 [Admin-page]: misc/admin-screenshot.png
-[Statistics-from-admin]: misc/admin-statistics
+[Statistics-from-admin]: misc/admin-statistics.png
