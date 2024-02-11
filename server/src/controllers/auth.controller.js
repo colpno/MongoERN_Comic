@@ -1,10 +1,15 @@
 import bcrypt from 'bcryptjs';
+import { config } from 'dotenv';
 import createError from 'http-errors';
 import jwt from 'jsonwebtoken';
 import moment from 'moment';
 
 import { authService, otpService, userService } from '../services/index.js';
 import { secureEmail } from '../helpers/secureEmail.js';
+
+config();
+
+const { CLIENT_URL } = process.env;
 
 const otpSender = async (id, username, email) => {
   const TOKEN_EXPIRED_TIME = 15;
@@ -46,7 +51,7 @@ const authController = {
     res
       .clearCookie('accessToken', {
         httpOnly: true,
-        sameSite: 'strict',
+        sameSite: 'none',
         secure: true,
       })
       .status(200)
@@ -66,8 +71,9 @@ const authController = {
       return res
         .cookie('loginInfo', cookieData, {
           maxAge: TOKEN_EXPIRED_TIME * 60 * 1000,
-          sameSite: 'strict',
+          sameSite: 'none',
           secure: true,
+          domain: CLIENT_URL,
         })
         .status(200)
         .json({
@@ -128,8 +134,9 @@ const authController = {
       return res
         .cookie('loginInfo', cookieData, {
           maxAge: TOKEN_EXPIRED_TIME * 60 * 1000,
-          sameSite: 'strict',
+          sameSite: 'none',
           secure: true,
+          domain: CLIENT_URL,
         })
         .status(200)
         .json({
@@ -167,12 +174,13 @@ const authController = {
       return res
         .clearCookie('loginInfo', {
           httpOnly: true,
-          sameSite: 'strict',
+          sameSite: 'none',
           secure: true,
         })
         .cookie('accessToken', token, {
-          sameSite: 'strict',
+          sameSite: 'none',
           secure: true,
+          domain: CLIENT_URL,
         })
         .status(200)
         .json({
@@ -211,9 +219,10 @@ const authController = {
 
       return res
         .cookie('forgotPasswordToken', token, {
-          sameSite: 'strict',
+          sameSite: 'none',
           secure: true,
           maxAge: TOKEN_EXPIRED_TIME * 60 * 1000,
+          domain: CLIENT_URL,
         })
         .status(200)
         .json({
@@ -242,7 +251,7 @@ const authController = {
         return res
           .clearCookie('forgotPasswordToken', {
             httpOnly: true,
-            sameSite: 'strict',
+            sameSite: 'none',
             secure: true,
           })
           .status(200)
