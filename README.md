@@ -125,21 +125,21 @@ Key Features:
 
 ## Usage
 
-Screenshots of normal user:
+Screenshots of a normal user:
 
 [![Weekly page][Weekly-page]](https://comico-comic.netlify.app/comic/weekly)
 [![Search page][Search-page]](https://comico-comic.netlify.app/search)
 [![Title page][Title-page]](https://comico-comic.netlify.app)
 [![Reading page][Reading-page]](https://comico-comic.netlify.app)
 
-Screenshots of translator or author:
+Screenshots of a translator or an author:
 
 [![Transaction page][Transaction-page]](https://comico-comic.netlify.app/coin/add)
 [![History page][History-page]](https://comico-comic.netlify.app/bookshelf/follow)
 [![My title page][My-title-page]](https://comico-comic.netlify.app/my-title)
 [![Chapters of my title  page][Chapters-of-my-title-page]](https://comico-comic.netlify.app/my-title)
 
-Screenshots of administrator:
+Screenshots of an administrator:
 
 [![Admin page][Admin-page]](https://admin-comico.netlify.app/titles)
 [![Statistics from admin][Statistics-from-admin]](https://admin-comico.netlify.app/income)
