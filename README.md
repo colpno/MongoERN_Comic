@@ -33,6 +33,7 @@
       <a href="#about-the-project">About The Project</a>
       <ul>
         <li><a href="#built-with">Built With</a></li>
+        <li><a href="#which-features-this-project-deal-with">Which features this project deal with</a></li>
       </ul>
     </li>
     <li>
@@ -52,6 +53,10 @@
 ## About The Project
 
 [![COMICO Screen Shot][product-screenshot]](https://comico-comic.netlify.app)
+<div align="center">
+  <i>Trang chủ</i>
+</div>
+</br>
 
 COMICO is a comic website that offers a wide range of comics for readers to enjoy. It provides a platform where users can buy chapters to read or find free comics available for their entertainment. The website also offers the opportunity for users to become authors or translators, granted they have the appropriate permission or license and make money from it.
 
@@ -76,6 +81,53 @@ Key Features:
 * [![SASS][SASS-badge]][SASS-url]
 * [![Material UI][MUI-badge]][MUI-url]
 * [![Bootstrap][Bootstrap.com]][Bootstrap-url]
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+## Which features this project deal with
+
+### Frontend
+
+- Learn how to code with [ReactJS](https://react.dev/) and the basics of it like [Hooks](https://react.dev/reference/react/hooks), [ES6](https://www.w3schools.com/js/js_es6.asp), [Props](https://react.dev/learn/passing-props-to-a-component), [Functional Component](https://www.w3schools.com/react/react_components.asp).
+- How to use [formik](https://formik.org/) to manage all the forms.
+- How to use [dnd-kit](https://dndkit.com/) to create a sortably draggable box.
+- How to use [MUI X Data Grid](https://mui.com/x/react-data-grid/) to create a grid table and some other component [Date Picker]().
+- How to use [MUI Theme](https://mui.com/material-ui/customization/theming/) to manage application theme.
+- How to use [Yup](https://www.npmjs.com/package/yup) to validate form values.
+- How to use [Redux Toolkit](https://redux-toolkit.js.org/) to manage all states.
+- How to use [Redux Persist](https://www.npmjs.com/package/redux-persist) to persist some necessary states.
+- How to use [React Bootstrap](https://react-bootstrap.netlify.app/) to create a grid layout.
+- How to use [bcryptjs](https://www.npmjs.com/package/bcryptjs) to encrypt secret information.
+- How to use [React ChartJS 2](https://react-chartjs-2.js.org/) to create delightful charts.
+- How to use [React Quill](https://www.npmjs.com/package/react-quill) to create textarea that contains a multitude of features.
+- How to use [React Select](https://react-select.com/) to create advanced select component.
+- How to use [React Router Dom](https://reactrouter.com/en/main) to create advanced select component.
+- How to use [Socket IO](https://socket.io/) to create connection of all users to server or to each other.
+- How to use [Swiper](https://swiperjs.com/react) to create slideable component.
+- How to use [prop-types](https://www.npmjs.com/package/prop-types) to type checking and enforce type of props.
+- How to use [SASS](https://sass-lang.com/) to style the components with [Nested Selectors] and some logic.
+- How to Create and use [Custom Hooks](https://reactjs.org/docs/hooks-custom.html).
+- How to create protected routes with [React Router Dom](https://reactrouter.com/en/main).
+- How to implement [axios](https://axios-http.com/docs/intro) for requesting.
+- Implement cookie based site
+- Implement payment with [PayPal](https://developer.paypal.com/home)
+
+### Backend
+
+- Learn how to create a server with [ExpressJS](https://expressjs.com/) to watch the file changes.
+- How to create and use [Middleware](https://expressjs.com/en/guide/using-middleware.html#using-middleware).
+- How to create and use [Routes](https://expressjs.com/en/5x/api.html#router).
+- Implement [MVC Architecture](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller).
+- How to use [CORS](https://expressjs.com/en/resources/middleware/cors.html) to limit the incoming sources that request to the server.
+- How to use [MongoDB](https://www.mongodb.com/) as database and [Mongoose](https://mongoosejs.com/) tot simplify the query.
+- How to use [Nodemon](https://nodemon.io/) to watch the file changes.
+- How to implement [JWT](https://jwt.io/) to authorize the users.
+- How to use [Socket IO](https://socket.io/) to create connection of all users to server or to each other.
+- How to use [Nodemailer](https://www.nodemailer.com/) to send mail.
+- How to integrate [PayPal](https://developer.paypal.com/home) in transaction.
+- How to integrate [Cloudinary](https://cloudinary.com/) to store all the needed assets.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -128,21 +180,68 @@ Key Features:
 Screenshots of a normal user:
 
 [![Weekly page][Weekly-page]](https://comico-comic.netlify.app/comic/weekly)
+<div align="center">
+  <i>Truyện theo tuần</i>
+</div>
+</br>
+
 [![Search page][Search-page]](https://comico-comic.netlify.app/search)
+<div align="center">
+  <i>Bộ lọc</i>
+</div>
+</br>
+
 [![Title page][Title-page]](https://comico-comic.netlify.app)
+<div align="center">
+  <i>Trang truyện</i>
+</div>
+</br>
+
 [![Reading page][Reading-page]](https://comico-comic.netlify.app)
+<div align="center">
+  <i>Trang đọc truyện</i>
+</div>
+</br>
 
 Screenshots of a translator or an author:
 
 [![Transaction page][Transaction-page]](https://comico-comic.netlify.app/coin/add)
+<div align="center">
+  <i>Trang giao dịch</i>
+</div>
+</br>
+
 [![History page][History-page]](https://comico-comic.netlify.app/bookshelf/follow)
+<div align="center">
+  <i>Trang lịch sử</i>
+</div>
+</br>
+
 [![My title page][My-title-page]](https://comico-comic.netlify.app/my-title)
+<div align="center">
+  <i>Trang truyện của tôi</i>
+</div>
+</br>
+
 [![Chapters of my title  page][Chapters-of-my-title-page]](https://comico-comic.netlify.app/my-title)
+<div align="center">
+  <i>Trang quản lý các chương của truyện</i>
+</div>
+</br>
 
 Screenshots of an administrator:
 
 [![Admin page][Admin-page]](https://admin-comico.netlify.app/titles)
+<div align="center">
+  <i>Trang chủ Admin</i>
+</div>
+</br>
+
 [![Statistics from admin][Statistics-from-admin]](https://admin-comico.netlify.app/income)
+<div align="center">
+  <i>Trang thống kê, phân tích</i>
+</div>
+</br>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
