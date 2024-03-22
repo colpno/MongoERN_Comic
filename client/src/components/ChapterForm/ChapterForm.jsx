@@ -2,13 +2,14 @@ import { SortableContext } from "@dnd-kit/sortable";
 import classNames from "classnames/bind";
 import { FastField, Form, Formik } from "formik";
 import PropTypes from "prop-types";
-import { memo, useMemo, useRef, useState } from "react";
+import { memo, useRef, useState } from "react";
 import { Alert } from "react-bootstrap";
 import { IoCloseCircle } from "react-icons/io5";
 
 import { DndContext, closestCenter } from "@dnd-kit/core";
 import { Button, DnDSortable, Image, InputImage } from "components";
-import { useDragAndDrop, useGetObjectStatuses } from "hooks/index.jsx";
+import { useDragAndDrop } from "hooks/index.jsx";
+import useObjectStatusOptions from "hooks/useObjectStatusOptions.jsx";
 import { FormLabel, InputField, RadioGroup } from "libs/formik";
 import InputMultiFile from "./components/InputMultiFile";
 import styles from "./styles/ChapterForm.module.scss";
@@ -17,21 +18,13 @@ const cx = classNames.bind(styles);
 
 function ChapterForm({ initialValues, validationSchema, handleSubmit }) {
   const [blobs, setBlobs] = useState(initialValues.contents ? [...initialValues.contents] : []);
-  const { data: statuses = [] } = useGetObjectStatuses({ _fields: "status code" });
   const formikRef = useRef();
+  const statusOptions = useObjectStatusOptions();
 
   const costOptions = [
     { value: "false", label: "Miễn phí" },
     { value: "true", label: "Trả phí" },
   ];
-
-  const statusOptions = useMemo(
-    () =>
-      statuses.map((status) => {
-        return { value: status._id, label: status.status };
-      }),
-    [statuses]
-  );
 
   const handleDragAndDrop = (draggedItem, droppedItem) => {
     if (formikRef) {

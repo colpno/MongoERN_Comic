@@ -1,13 +1,8 @@
-import PropTypes from "prop-types";
-import { FiUpload } from "react-icons/fi";
-import { IoCloseCircle } from "react-icons/io5";
-
-import classNames from "classnames/bind";
 import { usePreviewImage } from "hooks";
+import PropTypes from "prop-types";
 import { useRef } from "react";
-import styles from "./InputImage.scss";
-
-const cx = classNames.bind(styles);
+import InputImagePlaceholder from "./components/InputImagePlaceholder";
+import InputImagePreview from "./components/InputImagePreview.jsx";
 
 function InputImage({
   children,
@@ -53,26 +48,8 @@ function InputImage({
         ref={inputRef}
       />
 
-      <span className="input-file-wrapper__custom">
-        <FiUpload className="input-file-wrapper__custom__icon" />
-        <p className="input-file-wrapper__custom_label">Kéo thả ảnh vào đây hoặc</p>
-        <p className="input-file-wrapper__custom__label--primary">Chọn ảnh</p>
-        <p className="input-file-wrapper__custom__requirement">
-          JPG/PNG {imageSize.width}
-          {imageSize.width && imageSize.height ? "x" : "px"}
-          {imageSize.height} ({fileSize}MB)
-        </p>
-      </span>
-      {imagePreview?.preview && (
-        <img
-          className="input-file-wrapper__custom-image-holder"
-          src={imagePreview.preview}
-          alt=""
-        />
-      )}
-      {removable && imagePreview?.preview && (
-        <IoCloseCircle className={cx("close-icon")} onClick={handleRemoveImage} />
-      )}
+      <InputImagePlaceholder fileSize={fileSize} imageSize={imageSize} />
+      <InputImagePreview onRemove={handleRemoveImage} preview={imagePreview?.preview} />
     </div>
   );
 }

@@ -42,8 +42,6 @@ function PayPalForm() {
   );
 }
 
-PayPalForm.propTypes = {};
-
 export default PayPalForm;
 
 // option(value='') Không chọn

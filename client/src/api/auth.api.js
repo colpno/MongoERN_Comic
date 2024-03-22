@@ -12,15 +12,6 @@ const extendedApi = comicApi.injectEndpoints({
         data: { username, password },
         withCredentials: true,
       }),
-      // queryFn: ({ username, password }, api, extraOptions, baseQuery) => {
-      //   const { user } = api.getState().user;
-      //   return baseQuery({
-      //     method: "POST",
-      //     url: `${BASE_URL}/login`,
-      //     data: { username, password, user },
-      //     withCredentials: true,
-      //   });
-      // },
     }),
     logout: build.query({
       query: () => ({

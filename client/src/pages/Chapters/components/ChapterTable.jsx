@@ -113,7 +113,6 @@ function ChapterTable({ chapters, onDelete }) {
     <Table
       headers={headers}
       data={chapters}
-      hasToolbar
       rowHeight={100}
       height={700}
       initialState={initialState}

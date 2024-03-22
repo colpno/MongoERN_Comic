@@ -55,7 +55,6 @@ function FollowTable({ follows, onDelete }) {
     <Table
       headers={getHeaders()}
       data={follows}
-      hasToolbar
       height={700}
       rowHeight={100}
       allowDelete

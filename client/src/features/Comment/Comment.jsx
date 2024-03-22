@@ -1,11 +1,14 @@
 import classNames from "classnames/bind";
-import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import { HeadTitleMark } from "components";
-import { Pagination, Popup } from "features";
-import { useAddComment, useGetComments, usePopup, useUpdateComment } from "hooks";
+import { Popup } from "features";
+import { useAddComment, usePopup, useUpdateComment } from "hooks";
+import { useState } from "react";
+import { Pagination } from "react-bootstrap";
 import { CommentForm, CommentList, RequireSignIn } from "./components";
+import useCommentReplies from "./hooks/useCommentReplies.jsx";
+import useComments from "./hooks/useComments.jsx";
 import styles from "./styles/Comment.module.scss";
 
 const cx = classNames.bind(styles);
@@ -14,30 +17,12 @@ const COMMENT_LIMIT = 15;
 function Comment() {
   const commentAt = useSelector((state) => state.comment.comment_at);
   const { user, isLoggingIn } = useSelector((state) => state.user);
-  const [rootComments, setRootComments] = useState([]);
-  const [paginate, setPaginate] = useState({ page: 1, limit: COMMENT_LIMIT, total: 0 });
   const { popup, setPopup, triggerPopup } = usePopup();
-  const initialFormValues = { text: "" };
-  const [comments, setComments] = useState([]);
-  const { data: getData = [] } = useGetComments({
-    comment_at: commentAt,
-    _embed: JSON.stringify([
-      { collection: "author", fields: "avatar username" },
-      { collection: "deletedBy", fields: "username" },
-    ]),
-    _fields: "author text slug parent_slug comment_replies_num createdAt deletedBy",
-    _sort: {
-      createdAt: -1,
-    },
-    _limit: COMMENT_LIMIT,
-  });
+  const [paginate, setPaginate] = useState({ page: 1, limit: COMMENT_LIMIT, total: 0 });
+  const { comments } = useComments(paginate, commentAt);
+  const getReplies = useCommentReplies(comments);
   const { add } = useAddComment();
   const { update } = useUpdateComment();
-
-  useEffect(() => {
-    setComments(getData);
-    return () => setComments([]);
-  }, [getData, commentAt]);
 
   const handleSubmit = (values, { setSubmitting, resetForm }) => {
     const { text, slug } = values;
@@ -57,16 +42,6 @@ function Comment() {
     setSubmitting(false);
   };
 
-  const getReplies = useCallback(
-    (slug, limit = 5, page = 1) => {
-      const replies = comments.filter((comment) => {
-        return !!comment.parent_slug && slug.includes(comment.parent_slug);
-      });
-      return replies.slice(0, limit * page);
-    },
-    [comments]
-  );
-
   const handleDelete = (commentId) => {
     setPopup({
       isTriggered: true,
@@ -79,33 +54,15 @@ function Comment() {
     });
   };
 
-  useEffect(() => {
-    if (comments.length > 0) {
-      const root = comments.filter((comment) => {
-        return comment.parent_slug === "";
-      });
-      const paginated = root.slice(
-        (paginate.page - 1) * paginate.limit,
-        paginate.limit * paginate.page
-      );
-      setPaginate((prev) => ({ ...prev, total: root.length }));
-      setRootComments(paginated);
-    }
-  }, [comments]);
-
   return (
     <>
       <section>
         <HeadTitleMark>
           <p className={cx("total-comments")}>Bình luận ({comments.length})</p>
         </HeadTitleMark>
-        {isLoggingIn ? (
-          <CommentForm handleSubmit={handleSubmit} initialValues={initialFormValues} />
-        ) : (
-          <RequireSignIn cx={cx} />
-        )}
+        {isLoggingIn ? <CommentForm handleSubmit={handleSubmit} /> : <RequireSignIn />}
         <CommentList
-          comments={rootComments}
+          comments={comments}
           getReplies={getReplies}
           handleSubmit={handleSubmit}
           handleDelete={handleDelete}

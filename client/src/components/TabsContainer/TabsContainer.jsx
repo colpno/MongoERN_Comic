@@ -1,24 +1,13 @@
 import PropTypes from "prop-types";
-import { Link, useSearchParams } from "react-router-dom";
+import TabsContainerItem from "./components/TabsContainerItem";
 
 import "./TabsContainer.scss";
 
 function TabsContainer({ menu }) {
-  const [searchParams] = useSearchParams();
-  const queryTab = searchParams.get("tab") || "";
-
   return (
     <div className="tabs-container">
       {menu.map((link) => {
-        return (
-          <Link
-            to={link.href}
-            className={`tabs__tab${queryTab === link.tab ? " active" : ""}`}
-            key={link.href}
-          >
-            {link.label}
-          </Link>
-        );
+        return <TabsContainerItem item={link} />;
       })}
     </div>
   );

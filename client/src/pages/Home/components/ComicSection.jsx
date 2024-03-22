@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { CardListWithTitle } from "components";
 import { useGetGenres, useGetTitles } from "hooks/index.jsx";
 import { setTop5Titles } from "libs/redux/slices/title.slice";
+import { sortTitlesByGenre } from "utils/sortTitlesByGenre.js";
 import styles from "../styles/ComicSection.module.scss";
 import ComicRankingSection from "./ComicRankingSection";
 
@@ -44,34 +45,7 @@ function ComicSection() {
     },
     false
   );
-  const titlesByGenre = useMemo(() => {
-    const checkIdList = [];
-
-    return genres.map((genre, genreIndex) => {
-      let count = 0;
-      const limit = genreIndex !== genres.length - 1 ? 6 : 3;
-      const result = [];
-      const titleLength = titles?.length || 0;
-
-      for (let i = 0; i < titleLength; i++) {
-        const title = titles[i];
-
-        if (title.genres.includes(genre.name) && !checkIdList.includes(title._id)) {
-          result.push(title);
-          checkIdList.push(title._id);
-
-          count += 1;
-          if (count >= limit) break;
-        }
-      }
-
-      return {
-        _id: genre._id,
-        name: genre.name,
-        titles: result,
-      };
-    });
-  }, [titles, genres]);
+  const titlesByGenre = useMemo(() => sortTitlesByGenre(genres, titles), [genres, titles]);
 
   useEffect(() => {
     if (top5.length > 0) {

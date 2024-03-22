@@ -210,7 +210,6 @@ function MyTitleTable({ titles }) {
     <Table
       headers={headers}
       data={titles}
-      hasToolbar
       height={700}
       rowHeight={100}
       initialState={initialState}

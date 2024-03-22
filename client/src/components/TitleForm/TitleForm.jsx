@@ -1,11 +1,11 @@
 import classNames from "classnames/bind";
 import { FastField, Form, Formik } from "formik";
 import PropTypes from "prop-types";
-import { useMemo } from "react";
 import { Alert } from "react-bootstrap";
 
 import { Button, InputImage } from "components";
-import { useGetGenres, useGetObjectStatuses } from "hooks/index.jsx";
+import useGenreOptions from "hooks/useGenreOptions.jsx";
+import useObjectStatusOptions from "hooks/useObjectStatusOptions.jsx";
 import { CheckBoxGroup, FormLabel, InputField, RadioGroup, TextAreaField } from "libs/formik";
 import { getReleaseDayOptions } from "utils";
 import styles from "./TitleForm.module.scss";
@@ -13,25 +13,9 @@ import styles from "./TitleForm.module.scss";
 const cx = classNames.bind(styles);
 
 function TitleForm({ initialValues, validationSchema, handleCancel, handleSubmit, imageBlob }) {
-  const { data: genres = [] } = useGetGenres({ _fields: "-_id name" });
-  const { data: statuses = [] } = useGetObjectStatuses({ _fields: "status code" });
   const releaseDayOptions = getReleaseDayOptions();
-
-  const genreOptions = useMemo(
-    () =>
-      genres.map((genre) => {
-        return { value: `${genre.name}`, label: genre.name };
-      }),
-    [genres]
-  );
-
-  const statusOptions = useMemo(
-    () =>
-      statuses.map((status) => {
-        return { value: status._id, label: status.status };
-      }),
-    [statuses]
-  );
+  const genreOptions = useGenreOptions();
+  const statusOptions = useObjectStatusOptions();
 
   const handleRemove = (value) => {
     console.log(value);

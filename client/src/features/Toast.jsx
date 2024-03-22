@@ -42,7 +42,7 @@ function Toast() {
   const theme = useSelector((state) => state.common.theme);
   const options = getOptions(theme);
 
-  return <ToastContainer {...options} theme={theme} />;
+  return <ToastContainer {...options} />;
 }
 
 export default memo(Toast);

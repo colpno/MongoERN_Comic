@@ -1,2 +1,2 @@
 export { default as ComicSection } from "./ComicSection";
-export { default as Notification } from "./Notification";
+export { default as Notification } from "./HomeNotification";

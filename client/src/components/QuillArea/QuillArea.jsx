@@ -5,6 +5,7 @@ import classNames from "classnames/bind";
 import { memo, useEffect } from "react";
 
 import styles from "./QuillArea.module.scss";
+import { showToolbarElement } from "./utils/showToolbarElement.jsx";
 
 const cx = classNames.bind(styles);
 
@@ -43,62 +44,9 @@ function TextAreaQuill({
     link,
   };
 
-  function showToolbarElement() {
-    const options = [["clean"]];
-
-    if (textAreaOptions.header) {
-      options.push([{ header: "1" }, { header: "2" }, { font: [] }]);
-    }
-
-    if (textAreaOptions.fontSize) {
-      options.push([{ size: [] }]);
-    }
-
-    const fontStyles = [];
-    if (textAreaOptions.bold) {
-      fontStyles.push("bold");
-    }
-    if (textAreaOptions.italic) {
-      fontStyles.push("italic");
-    }
-    if (textAreaOptions.underline) {
-      fontStyles.push("underline");
-    }
-    if (textAreaOptions.strike) {
-      fontStyles.push("strike");
-    }
-    if (textAreaOptions.blockquote) {
-      fontStyles.push("blockquote");
-    }
-    options.push(fontStyles);
-
-    const listOptions = [];
-    if (textAreaOptions.listHead) {
-      listOptions.push({ list: "ordered" }, { list: "bullet" });
-    }
-    if (textAreaOptions.indent) {
-      listOptions.push({ indent: "-1" }, { indent: "+1" });
-    }
-    options.push(listOptions);
-
-    const media = [];
-    if (textAreaOptions.link) {
-      media.push("link");
-    }
-    if (textAreaOptions.image) {
-      media.push("image");
-    }
-    if (textAreaOptions.video) {
-      media.push("video");
-    }
-    options.push(media);
-
-    return options;
-  }
-
   const getModules = () => {
     const modules = {
-      toolbar: showToolbarElement(),
+      toolbar: showToolbarElement(textAreaOptions),
       clipboard: { matchVisual: false },
     };
 
