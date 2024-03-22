@@ -1,34 +1,21 @@
 import classNames from "classnames/bind";
-import { useDebounce } from "hooks";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { IoSearchOutline } from "react-icons/io5";
-import { useDispatch, useSelector } from "react-redux";
 
-import { setSearchText } from "libs/redux/slices/global.slice";
 import styles from "./Search.module.scss";
+import useSearch from "./hooks/useSearch.jsx";
 
 const cx = classNames.bind(styles);
 
 function Search() {
-  const dispatch = useDispatch();
-  const searchText = useSelector((state) => state.global.searchText);
   const [searchValue, setSearchValue] = useState("");
-  const debounced = useDebounce(searchValue, 500);
 
   const handleClear = () => {
     setSearchValue("");
   };
 
-  useEffect(() => {
-    if (searchText.length === 0) {
-      handleClear();
-    }
-  }, [searchText]);
-
-  useEffect(() => {
-    dispatch(setSearchText(searchValue));
-  }, [debounced]);
+  useSearch(searchValue, handleClear);
 
   return (
     <div className={cx("search")}>

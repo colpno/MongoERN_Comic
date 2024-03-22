@@ -40,6 +40,7 @@ export { default as useLazyGetChapterTransactions } from "./chapterTransaction/u
 
 export { default as useUpdateComment } from "./comment/useUpdateComment";
 export { default as useGetComments } from "./comment/useGetComments";
+export { default as useLazyGetComments } from "./comment/useLazyGetComments";
 export { default as useAddComment } from "./comment/useAddComment";
 
 export { default as useGetFavorites } from "./favorite/useGetFavorites";

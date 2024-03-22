@@ -69,7 +69,6 @@ function PurchasedChaptersTable({ transactions, cx }) {
     <Table
       headers={headers}
       data={transactions}
-      hasToolbar
       height={700}
       rowHeight={100}
       initialState={initialState}

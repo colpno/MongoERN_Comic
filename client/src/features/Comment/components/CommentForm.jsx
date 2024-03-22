@@ -8,9 +8,11 @@ import styles from "../styles/CommentForm.module.scss";
 
 const cx = classNames.bind(styles);
 
-function CommentForm({ initialValues, handleSubmit }) {
+function CommentForm({ handleSubmit }) {
+  const initialFormValues = { text: "" };
+
   return (
-    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+    <Formik initialValues={initialFormValues} onSubmit={handleSubmit}>
       {() => {
         return (
           <Form>
@@ -29,7 +31,6 @@ function CommentForm({ initialValues, handleSubmit }) {
 }
 
 CommentForm.propTypes = {
-  initialValues: PropTypes.shape({}).isRequired,
   handleSubmit: PropTypes.func.isRequired,
 };
 

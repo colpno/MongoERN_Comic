@@ -1,5 +1,5 @@
 /* INFO
-  MUI license warn file path: 
+  MUI license warning file path:
   client/node_modules/@mui/x-license-pro/legacy/utils/licenseErrorMessageUtils.js
   client/node_modules/@mui/x-license-pro/modern/utils/licenseErrorMessageUtils.js
   client/node_modules/@mui/x-license-pro/node/utils/licenseErrorMessageUtils.js
@@ -7,18 +7,21 @@
   Table.scss
  */
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { DataGridPro, GridRowModes, viVN } from "@mui/x-data-grid-pro";
+import { DataGridPro, viVN } from "@mui/x-data-grid-pro";
 import PropTypes from "prop-types";
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 import { Popup } from "features";
 import { usePopup } from "hooks";
-import { TableActions, TableFooter, TableToolBar } from "./components";
+import useTableRowMode from "hooks/useTableRowMode.jsx";
+import useTableActions from "./hooks/useTableActions.jsx";
+import useTableProps from "./hooks/useTableProps.jsx";
+import useTableStyles from "./hooks/useTableStyles.jsx";
 import "./styles/Table.module.scss";
 
 const theme = createTheme(
   {},
-  viVN // x-data-grid translations
+  viVN // language
 );
 
 function Table({
@@ -33,7 +36,6 @@ function Table({
 
   initialState,
   rowsPerPageOptions,
-  hasToolbar,
 
   disableColumnFilter,
   disableDensitySelector,
@@ -50,96 +52,39 @@ function Table({
   initialNewRowData,
 }) {
   const [rows, setRows] = useState(data);
-  const [rowModesModel, setRowModesModel] = useState({});
   const [rowsPerPage, setRowsPerPage] = useState(rowsPerPageOptions[2]);
   const { popup, setPopup, triggerPopup } = usePopup();
-  const [rowIdError, setRowIdError] = useState("");
-
-  const dataGridProps = {
-    components: {
-      Footer: TableFooter,
-    },
+  const { rowModesModel, setRowIdError, setRowModesModel } = useTableRowMode();
+  const dataGridProps = useTableProps({
+    allowAdd,
+    allowDelete,
     initialState,
-    componentsProps: {
-      toolbar: {
-        rowsPerPage,
-        setPopup,
-      },
-    },
-    autoHeight: false,
-    sx: {},
-  };
+    rowsPerPage,
+    newRowInitialData: initialNewRowData,
+    setRows,
+    setPopup,
+    setRowMode: setRowModesModel,
+    onDelete,
+  });
+  const { preventDefaultRowEdit, processRowUpdate } = useTableActions({
+    allowDelete,
+    allowEdit,
+    customAction,
+    headers,
+    onAdd,
+    onDelete,
+    onUpdate,
+    setRows,
+    setPopup,
+    setRowIdError,
+    setRowMode: setRowModesModel,
+  });
 
-  if (hasToolbar) {
-    dataGridProps.components.Toolbar = TableToolBar;
-
-    if (allowAdd) {
-      dataGridProps.componentsProps.toolbar = {
-        ...dataGridProps.componentsProps.toolbar,
-        enableAdd: allowAdd,
-        initialNewRowData,
-        setRows,
-        setRowModesModel,
-      };
-    }
-
-    if (allowDelete) {
-      dataGridProps.componentsProps.toolbar = {
-        ...dataGridProps.componentsProps.toolbar,
-        enableDelete: allowDelete,
-        onDelete,
-      };
-    }
-  }
-  if (height) dataGridProps.sx.height = height;
-  if (autoHeight) dataGridProps.autoHeight = true;
-
-  const preventDefaultRowEdit = useCallback((params, event) => {
-    event.defaultMuiPrevented = true;
-  }, []);
-
-  const processRowUpdate = useCallback((newRow) => {
-    newRow.isNew ? onAdd(newRow, setRowIdError) : onUpdate(newRow, setRowIdError);
-    return newRow;
-  }, []);
-
-  useEffect(() => {
-    !!rowIdError &&
-      setRowModesModel((prev) => ({
-        ...prev,
-        [rowIdError]: { mode: GridRowModes.Edit },
-      }));
-  }, [rowIdError]);
-
-  if (allowEdit || allowDelete || customAction) {
-    headers.push({
-      field: "actions",
-      type: "actions",
-      width: 100,
-      getActions: (params) => {
-        const { id } = params;
-        const Component = (
-          <TableActions
-            id={id}
-            enableDelete={allowDelete}
-            onDelete={onDelete}
-            enableEdit={allowEdit}
-            setRows={setRows}
-            setRowModesModel={setRowModesModel}
-            setPopup={setPopup}
-            onAdd={onAdd}
-            onUpdate={onUpdate}
-          />
-        );
-
-        return customAction ? [...customAction(params), Component] : [Component];
-      },
-    });
-  }
+  useTableStyles(dataGridProps, { height, autoHeight });
 
   useEffect(() => {
     setRows(data);
-  }, [data]);
+  }, [data, setRows]);
 
   return (
     <>
@@ -255,7 +200,6 @@ Table.propTypes = {
     }),
   }),
   rowsPerPageOptions: PropTypes.arrayOf(PropTypes.number.isRequired),
-  hasToolbar: PropTypes.bool,
 
   height: PropTypes.number,
   autoHeight: PropTypes.bool,
@@ -281,7 +225,6 @@ Table.propTypes = {
 Table.defaultProps = {
   initialState: {},
   rowsPerPageOptions: [5, 10, 25, 50, 100],
-  hasToolbar: true,
 
   height: null,
   autoHeight: false,

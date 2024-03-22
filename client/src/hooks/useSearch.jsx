@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 const checkContains = (text, match) => {
   return text.toLowerCase().includes(match.toLowerCase());
 };

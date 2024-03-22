@@ -1,19 +1,31 @@
 import classNames from "classnames/bind";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 
 import { CardList, FormWrapper } from "components";
 import { SEARCH_PAGE_TITLES_PER_PAGE } from "constants/paginate.constant";
 import { NoData, Pagination } from "features";
-import { useGetGenres, useLazyGetTitles, usePagination } from "hooks";
+import { useLazyGetTitles, usePagination } from "hooks";
+import useGenreOptions from "hooks/useGenreOptions.jsx";
 import { isEmpty } from "utils";
 import SearchForm from "./components/SearchForm";
 import styles from "./styles/Search.module.scss";
 
 const cx = classNames.bind(styles);
 
+const sortOptions = [
+  { value: "updatedAt", label: "Ngày cập nhật" },
+  { value: "title", label: "Tên truyện" },
+  { value: "total_chapter", label: "Số chương" },
+  { value: "like", label: "Lượt thích" },
+  { value: "view", label: "Lượt xem" },
+];
+const orderOption = [
+  { value: "asc", label: "Tăng dần" },
+  { value: "desc", label: "Giảm dần" },
+];
+
 function Search() {
-  const { data: genres = [] } = useGetGenres();
   const { get: getTitles } = useLazyGetTitles();
   const [titles, setTitles] = useState([]);
   const { pagination, setPagination, setPaginationTotal } = usePagination(
@@ -36,25 +48,7 @@ function Search() {
       { collection: "status_id", fields: "-_id code", match: { code: "vis" } },
     ]),
   });
-  const genreOptions = useMemo(
-    () =>
-      genres.map((genre) => ({
-        value: genre.name,
-        label: genre.name,
-      })),
-    [genres]
-  );
-  const sortOptions = [
-    { value: "updatedAt", label: "Ngày cập nhật" },
-    { value: "title", label: "Tên truyện" },
-    { value: "total_chapter", label: "Số chương" },
-    { value: "like", label: "Lượt thích" },
-    { value: "view", label: "Lượt xem" },
-  ];
-  const orderOption = [
-    { value: "asc", label: "Tăng dần" },
-    { value: "desc", label: "Giảm dần" },
-  ];
+  const genreOptions = useGenreOptions();
 
   const fetchData = async (params = {}) => {
     const response = await getTitles({ params, isPrivate: false }).unwrap();

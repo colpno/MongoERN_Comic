@@ -1,9 +1,9 @@
 import classNames from "classnames/bind";
-import { Radio } from "components";
 import { useGetPaymentMethods } from "hooks/index.jsx";
 import PropTypes from "prop-types";
 import { useMemo } from "react";
 import styles from "./PaymentOptions.module.scss";
+import PaymentOptionItem from "./components/PaymentOptionItem";
 
 const cx = classNames.bind(styles);
 
@@ -36,23 +36,14 @@ function PaymentOptions({ selectedPayment, setSelectedPayment }) {
     <div>
       <p className={cx("title")}>Chọn phương thức thanh toán</p>
       <div className={cx("methods")}>
-        {options.map((method) => {
-          return (
-            <div className={cx("method")} key={method.value}>
-              <Radio
-                field={{
-                  name: "payMethod",
-                  onChange: handleMethodChange,
-                  value: selectedPayment.value,
-                }}
-                value={method.value}
-              >
-                <span>{method.label}</span>
-                {!!method.subLabel && <span className={cx("sub-label")}>{method.subLabel}</span>}
-              </Radio>
-            </div>
-          );
-        })}
+        {options.map((method) => (
+          <PaymentOptionItem
+            onChange={handleMethodChange}
+            option={method}
+            selectedOption={selectedPayment}
+            key={method.value}
+          />
+        ))}
       </div>
     </div>
   );

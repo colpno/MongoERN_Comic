@@ -34,7 +34,9 @@ function Reading() {
     getChapters({
       params: {
         title_id: titleId,
-        order: page,
+        _sort: {
+          order: 1,
+        },
       },
       isPrivate: false,
     })
@@ -42,15 +44,6 @@ function Reading() {
       .then((response) => {
         setChapter(response[0]);
       });
-    getChapters({
-      params: {
-        title_id: titleId,
-        _sort: {
-          order: 1,
-        },
-      },
-      isPrivate: false,
-    });
     getChapterTransactions({
       user_id: user._id,
       title_id: titleId,

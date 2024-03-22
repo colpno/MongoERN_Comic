@@ -62,7 +62,6 @@ function ReadingHistoryTable({ readingHistories }) {
     <Table
       headers={headers}
       data={readingHistories}
-      hasToolbar
       height={700}
       rowHeight={100}
       initialState={initialTableState}

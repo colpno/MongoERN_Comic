@@ -1,33 +1,12 @@
 import classNames from "classnames/bind";
+import { Scrollbar } from "components";
+import { Dialog } from "features";
 import PropTypes from "prop-types";
 import { memo } from "react";
-
-import { Button, Scrollbar } from "components";
-import { Dialog } from "features";
+import PopupButtonGroup from "./components/PopupButtonGroup";
 import styles from "./styles/Popup.module.scss";
 
 const cx = classNames.bind(styles);
-
-function ButtonGroup({ variation, onConfirm, onCancel }) {
-  if (variation === "confirm") {
-    return (
-      <>
-        <Button primary className={cx("btn--accept")} onClick={onConfirm}>
-          Đồng ý
-        </Button>
-        <Button outline grey className={cx("btn--close")} onClick={onCancel}>
-          Đóng
-        </Button>
-      </>
-    );
-  }
-
-  return (
-    <Button primary onClick={onCancel}>
-      Đóng
-    </Button>
-  );
-}
 
 function Popup(props) {
   const { data, trigger, variation, onConfirm, onCancel, sx, centerContent } = props;
@@ -72,7 +51,7 @@ function Popup(props) {
           {content}
         </Scrollbar>
         <div className={cx("btn-container")}>
-          <ButtonGroup
+          <PopupButtonGroup
             variation={variation || data.variation}
             onConfirm={handleConfirm}
             onCancel={handleCancel}
@@ -110,7 +89,7 @@ Popup.defaultProps = {
   centerContent: false,
 };
 
-ButtonGroup.propTypes = {
+PopupButtonGroup.propTypes = {
   variation: PropTypes.oneOf(["confirm", "normal"]).isRequired,
   onConfirm: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
