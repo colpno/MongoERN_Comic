@@ -25,7 +25,7 @@ const axiosBaseQuery =
         window.location.href = "/not-found";
       }
 
-      emitToast(axiosError.response?.data || axiosError.message);
+      emitToast(axiosError.response?.data || axiosError.message, "error");
 
       return {
         error: {
