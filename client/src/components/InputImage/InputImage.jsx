@@ -20,18 +20,11 @@ function InputImage({
   const { accept, multiple, disabled } = attributes;
   const { onBlur, name, value } = field;
   const inputRef = useRef();
-  const { imagePreview, setImagePreview, handleImageChange } = usePreviewImage(
-    {
-      preview: value || null,
-    },
-    fileSize,
-    setFieldValue,
-    name
-  );
+  const { imagePreview, removeBlob, handleImageChange } = usePreviewImage(value || null, fileSize);
 
   const handleRemoveImage = () => {
-    setImagePreview("");
-    setFieldValue(field.name, "");
+    removeBlob();
+    setFieldValue(name, "");
   };
 
   return (
@@ -39,7 +32,7 @@ function InputImage({
       <input
         name={name}
         onBlur={onBlur}
-        onChange={handleImageChange}
+        onChange={(e) => handleImageChange(e, (newBlob) => setFieldValue(name, newBlob))}
         type="file"
         accept={accept}
         multiple={multiple}
@@ -49,7 +42,7 @@ function InputImage({
       />
 
       <InputImagePlaceholder fileSize={fileSize} imageSize={imageSize} />
-      <InputImagePreview onRemove={handleRemoveImage} preview={imagePreview?.preview} />
+      <InputImagePreview onRemove={handleRemoveImage} preview={imagePreview} />
     </div>
   );
 }

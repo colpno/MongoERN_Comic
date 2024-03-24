@@ -1,14 +1,10 @@
 import { emitToast } from "features/Toast.jsx";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-function usePreviewImage(initialState, fileSize, setFieldValue, fieldName) {
-  let imagePreview = initialState;
+function usePreviewImage(initialState, fileSize) {
+  const [imagePreview, setImagePreview] = useState({ preview: initialState });
 
-  const setImagePreview = (newState) => {
-    imagePreview = newState;
-  };
-
-  const handleImageChange = (e) => {
+  const handleImageChange = (e, callback) => {
     const file = e.currentTarget.files[0];
 
     if (file) {
@@ -16,16 +12,18 @@ function usePreviewImage(initialState, fileSize, setFieldValue, fieldName) {
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onloadend = () => {
-          setFieldValue(fieldName, reader.result);
+          callback && callback(reader.result);
         };
 
         file.preview = URL.createObjectURL(file);
         setImagePreview(file);
       } else {
-        emitToast("Hình ảnh phải từ 2MB trở xuống", "info");
+        emitToast(`Hình ảnh phải từ ${fileSize}MB trở xuống`, "info");
       }
     }
   };
+
+  const removeBlob = () => setImagePreview("");
 
   useEffect(() => {
     return () => {
@@ -33,7 +31,7 @@ function usePreviewImage(initialState, fileSize, setFieldValue, fieldName) {
     };
   }, [imagePreview]);
 
-  return { imagePreview, setImagePreview, handleImageChange };
+  return { imagePreview: imagePreview.preview, removeBlob, handleImageChange };
 }
 
 export default usePreviewImage;
