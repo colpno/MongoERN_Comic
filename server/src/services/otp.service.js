@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
 
 import { sendMail } from '../helpers/sendMail.js';
-import { Otp } from '../models/index.js';
+import { Otp, User } from '../models/index.js';
 
 dotenv.config();
 
@@ -45,7 +45,12 @@ const otpService = {
       <p>Hết hạn sau <strong>15</strong> phút</p>
     `;
 
-      sendMail(email, subject, html);
+      if (process.env.NODE_ENV === 'development') {
+        console.log('file: auth.controller.js:47 ~ otp', otp);
+      }
+      if (process.env.NODE_ENV === 'production') {
+        sendMail(email, subject, html);
+      }
     } catch (error) {
       throw new Error(error);
     }
@@ -58,8 +63,14 @@ const otpService = {
       throw new Error(error);
     }
   },
-  async add(username, email, code) {
+  async add(username, _email, code) {
     try {
+      const user = await User.findOne({ username });
+
+      if (!user) throw new Error('User not found');
+
+      const { email } = user;
+
       const existedOTP = await Otp.findOne({ username, email });
       const hashedOTP = this.hashOTP(code);
 
