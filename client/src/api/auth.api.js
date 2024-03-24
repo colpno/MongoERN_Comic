@@ -74,6 +74,10 @@ const extendedApi = comicApi.injectEndpoints({
         data: { id, username, email },
         withCredentials: true,
       }),
+      transformResponse: (response) => {
+        emitToast(response.message, "success");
+        return response;
+      },
     }),
   }),
 });
