@@ -3,19 +3,18 @@ import createError from 'http-errors';
 import jwt from 'jsonwebtoken';
 import moment from 'moment';
 
-import { authService, otpService, userService } from '../services/index.js';
 import { secureEmail } from '../helpers/secureEmail.js';
+import { authService, otpService, userService } from '../services/index.js';
 
 const otpSender = async (id, username, email) => {
   const TOKEN_EXPIRED_TIME = 15;
   const OTP_LENGTH = 4;
 
   const { otp } = otpService.generateOTP(OTP_LENGTH);
-  console.log('file: auth.controller.js:47 ~ otp', otp);
 
-  const response = await await otpService.add(username, email, otp);
+  const response = await otpService.add(username, email, otp);
 
-  // otpService.sendViaMail(email, otp);
+  otpService.sendViaMail(email, otp);
 
   const expiredAt = moment().add(TOKEN_EXPIRED_TIME, 'm').toISOString();
 

@@ -1,48 +1,46 @@
 import { memo } from "react";
 import { useSelector } from "react-redux";
-import { ToastContainer, toast as reactToast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.min.css";
-
-const getOptions = (theme = "light") => ({
-  position: "top-right",
-  autoClose: 5000,
-  hideProgressBar: false,
-  closeOnClick: true,
-  draggable: false,
-  pauseOnHover: true,
-  pauseOnFocusLoss: true,
-  progress: undefined,
-  rtl: false,
-  newestOnTop: true,
-  theme,
-});
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const emitToast = (message, mode = "success") => {
-  const options = getOptions(mode);
   switch (mode) {
     case "success":
-      reactToast.success(message, options);
+      toast.success(message);
       break;
     case "error":
-      reactToast.error(message, options);
+      toast.error(message);
       break;
     case "warning":
-      reactToast.warn(message, options);
+      toast.warn(message);
       break;
     case "info":
-      reactToast.info(message, options);
+      toast.info(message);
       break;
     default:
-      reactToast.error(`Không tồn tại mode ${mode}`, options);
+      toast.error(`Không tồn tại mode ${mode}`);
       break;
   }
 };
 
 function Toast() {
   const theme = useSelector((state) => state.common.theme);
-  const options = getOptions(theme);
 
-  return <ToastContainer {...options} />;
+  return (
+    <ToastContainer
+      position="top-right"
+      autoClose={5000}
+      hideProgressBar={false}
+      closeOnClick
+      draggable={false}
+      pauseOnHover
+      pauseOnFocusLoss
+      progress={undefined}
+      rtl={false}
+      newestOnTop
+      theme={theme}
+    />
+  );
 }
 
 export default memo(Toast);

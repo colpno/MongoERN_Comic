@@ -4,10 +4,12 @@ const usePopup = (initialState) => {
   const [data, setData] = useState({
     isTriggered: false,
     variation: "normal",
+    isClosed: true,
     ...initialState,
   });
 
-  const triggerPopup = (value = false) => setData((prev) => ({ ...prev, isTriggered: value }));
+  const triggerPopup = (value = false) =>
+    setData((prev) => ({ ...prev, isTriggered: value, isClosed: !value }));
 
   const setPopup = (state) => {
     setData((prev) => ({

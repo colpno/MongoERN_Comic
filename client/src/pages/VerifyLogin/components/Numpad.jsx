@@ -1,13 +1,78 @@
-import { FaBackspace } from "react-icons/fa";
-import PropTypes from "prop-types";
 import classNames from "classnames/bind";
+import PropTypes from "prop-types";
+import { FaBackspace } from "react-icons/fa";
 
 import { Button } from "components";
+import { memo } from "react";
 import styles from "../styles/Numpad.module.scss";
 
 const cx = classNames.bind(styles);
 
-function Numpad({ handleNumpadClick, handleNumpadClearClick }) {
+function Numpad({ currentDigit, setOTPValue }) {
+  const handleNumpadClick = (e) => {
+    const { target } = e;
+
+    // the number present to the pressed key
+    const number = target.getAttribute("data-key");
+
+    // digit position
+    const digit = currentDigit.getAttribute("data-digit");
+
+    setOTPValue((prev) => ({
+      ...prev,
+      [`digit${digit}`]: number,
+    }));
+
+    const nextSibling = currentDigit.nextElementSibling;
+
+    // if current focus ele has next sibling
+    if (nextSibling) {
+      // move focus to that one
+      nextSibling.focus();
+    } else {
+      // else still focus on current one (reach end)
+      currentDigit.focus();
+    }
+  };
+
+  const handleClearNumpad = () => {
+    const digit = currentDigit.getAttribute("data-digit");
+
+    // if current focus ele has value
+    if (currentDigit.value !== "") {
+      // remove its value
+      setOTPValue((prev) => ({
+        ...prev,
+        [`digit${digit}`]: "",
+      }));
+
+      currentDigit.focus();
+    }
+
+    // if current focus ele empty
+    if (currentDigit.value === "") {
+      const prevSibling = currentDigit.previousElementSibling;
+
+      // and has previous sibling
+      if (prevSibling) {
+        // remove its value
+        setOTPValue((prev) => ({
+          ...prev,
+          [`digit${digit - 1}`]: "",
+        }));
+
+        // focus to the previous sibling
+        prevSibling.focus();
+      }
+
+      // if reach beginning
+      if (!prevSibling) {
+        // always focus on the first one
+        currentDigit.focus();
+      }
+    }
+  };
+
   return (
     <div className={cx("keyboard", "d-flex", "flex-wrap")}>
       <Button wrapper className={cx("num-1", "num")} data-key="1" onClick={handleNumpadClick}>
@@ -41,7 +106,7 @@ function Numpad({ handleNumpadClick, handleNumpadClearClick }) {
       <Button className={cx("num-0", "num")} data-key="0" onClick={handleNumpadClick}>
         0
       </Button>
-      <Button className={cx("remove")} data-key="backspace" onClick={handleNumpadClearClick}>
+      <Button className={cx("remove")} data-key="backspace" onClick={handleClearNumpad}>
         <FaBackspace className={cx("icon")} />
       </Button>
     </div>
@@ -49,8 +114,22 @@ function Numpad({ handleNumpadClick, handleNumpadClearClick }) {
 }
 
 Numpad.propTypes = {
-  handleNumpadClick: PropTypes.func.isRequired,
-  handleNumpadClearClick: PropTypes.func.isRequired,
+  currentDigit: PropTypes.shape({
+    getAttribute: PropTypes.func,
+    nextElementSibling: PropTypes.shape({
+      focus: PropTypes.func,
+    }),
+    previousElementSibling: PropTypes.shape({
+      focus: PropTypes.func,
+    }),
+    focus: PropTypes.func,
+    value: PropTypes.string,
+  }),
+  setOTPValue: PropTypes.func.isRequired,
 };
 
-export default Numpad;
+Numpad.defaultProps = {
+  currentDigit: null,
+};
+
+export default memo(Numpad);
