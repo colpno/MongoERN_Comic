@@ -13,10 +13,6 @@
     <a href="https://github.com/colpno/MongoERN_Comic/tree/master/docs"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://comico-comic.netlify.app">View Client Demo</a>
-    ·
-    <a href="https://admin-comico.netlify.app">View Admin Demo</a>
-    ·
     <a href="https://github.com/colpno/MongoERN_Comic/issues">Report Bug</a>
     ·
     <a href="https://github.com/colpno/MongoERN_Comic/issues">Request Feature</a>
@@ -250,10 +246,6 @@ Screenshots of an administrator:
 ## Contact
 
 Tạ Gia Vinh - gvinhh@gmail.com
-* [![LinkedIn][linkedin-shield]][linkedin-url]
-* [![Facebook][Facebook-shield]][Facebook-url]
-
-Project Link: [https://github.com/colpno/MongoERN_Comic](https://github.com/colpno/MongoERN_Comic)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
