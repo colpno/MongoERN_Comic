@@ -245,7 +245,7 @@ Screenshots of an administrator:
 
 ## Contact
 
-Tạ Gia Vinh - gvinhh@gmail.com
+Tạ Gia Vinh - tagiavinh12@gmail.com
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
